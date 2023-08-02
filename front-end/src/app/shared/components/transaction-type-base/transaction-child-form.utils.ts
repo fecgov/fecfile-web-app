@@ -13,6 +13,15 @@ import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
+function updatePurposeDescription(form: FormGroup, transaction: Transaction) {
+  if (transaction?.transactionType?.generatePurposeDescription) {
+    form.patchValue({
+      [transaction.transactionType.templateMap.purpose_description]:
+        transaction.transactionType.generatePurposeDescriptionWrapper(transaction),
+    });
+  }
+}
+
 export class TransactionChildFormUtils {
   static childOnInit(
     component: DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
@@ -47,7 +56,11 @@ export class TransactionChildFormUtils {
             const key = childTransaction.transactionType?.templateMap[triggerField] as keyof ScheduleTransaction;
             ((childTransaction as ScheduleTransaction)[key] as string) = value;
             (childTransaction as ScheduleTransaction).entity_type = childForm.get('entity_type')?.value;
-            this.updateParentPurposeDescription();
+            if (component.transaction) {
+              updatePurposeDescription(component.form, component.transaction);
+            } else {
+              throw new Error('Fecfile: Parent transaction not found for component');
+            }
           });
       }
     });
@@ -64,7 +77,7 @@ export class TransactionChildFormUtils {
           const key = component.templateMap[triggerField] as keyof ScheduleTransaction;
           ((component.transaction as ScheduleTransaction)[key] as string) = value;
           (component.transaction as ScheduleTransaction).entity_type = component.form.get('entity_type')?.value;
-          this.updateChildPurposeDescription();
+          updatePurposeDescription(childForm, childTransaction);
         });
     });
 
