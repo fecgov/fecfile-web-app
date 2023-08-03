@@ -163,7 +163,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.templateMap,
             config
           );
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
+          contactChanges.forEach(([property, value]: [keyof Contact, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             contact[property] = value as never;
           });
         }
@@ -252,7 +252,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       if (this.form.invalid || !this.transaction) {
         return;
       }
-      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: any) => {
+      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
       });

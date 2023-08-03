@@ -36,7 +36,7 @@ export class TransactionContactUtils {
     contact: Contact,
     templateMap: TransactionTemplateMapType,
     contactConfig: { [formField: string]: string }
-  ): any[] {
+  ): any[] { // eslint-disable-line @typescript-eslint/no-explicit-any
     return Object.entries(contactConfig)
       .map(([field, property]: string[]) => {
         const contactValue = contact[property as keyof Contact];
@@ -55,7 +55,7 @@ export class TransactionContactUtils {
         if (transaction[contactKey as keyof Transaction]) {
           const contact = transaction[contactKey as keyof Transaction] as Contact;
           const contactChanges = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
+          contactChanges.forEach(([property, value]: [keyof Contact, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             contact[property] = value as never;
           });
         }
@@ -63,8 +63,8 @@ export class TransactionContactUtils {
     );
   }
 
-  static getContactChangesMessage(contact: Contact, dateString: string, contactChanges: [string, any][]) {
-    const changeMessages = contactChanges.map(([property, value]: [string, any]) => {
+  static getContactChangesMessage(contact: Contact, dateString: string, contactChanges: [string, any][]) {// eslint-disable-line @typescript-eslint/no-explicit-any
+    const changeMessages = contactChanges.map(([property, value]: [string, any]) => {// eslint-disable-line @typescript-eslint/no-explicit-any
       if (!value) {
         return `<li>Removed ${ContactFields[property as keyof typeof ContactFields].toLowerCase()}</li>`;
       }

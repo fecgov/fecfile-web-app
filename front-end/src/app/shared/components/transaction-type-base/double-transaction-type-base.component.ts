@@ -213,7 +213,7 @@ export abstract class DoubleTransactionTypeBaseComponent
           this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
         ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
       }
-      confirmation$.subscribe((confirmed: any) => {
+      confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
       });
