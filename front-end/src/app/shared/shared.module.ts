@@ -44,6 +44,8 @@ import { MemoCodeInputComponent } from './components/inputs/memo-code/memo-code.
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LoanInfoInputComponent } from './components/inputs/loan-info-input/loan-info-input.component';
 import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/loan-terms-input.component';
+import { C1LoanInfoInputComponent } from './components/inputs/c1-loan-info-input/c1-loan-info-input.component';
+import { SignatureInputComponent } from './components/inputs/signature-input/signature-input.component';
 
 @NgModule({
   imports: [
@@ -98,6 +100,8 @@ import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/lo
     CalculationOverlayComponent,
     LoanInfoInputComponent,
     LoanTermsInputComponent,
+    C1LoanInfoInputComponent,
+    SignatureInputComponent,
   ],
   exports: [
     FecDatePipe,

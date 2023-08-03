@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DateUtils } from 'app/shared/utils/date.utils';
 
 function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {

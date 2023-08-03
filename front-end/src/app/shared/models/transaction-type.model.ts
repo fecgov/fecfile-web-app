@@ -102,13 +102,21 @@ export abstract class TransactionType {
     return '';
   }
 
-  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
+  /**
+   * Generates a list of fields names for the form controls in a transaction type input component
+   * @returns string[] - Array of field names.
+   */
+  getFormControlNames(): string[] {
     const templateFields = this.formFields
-      .map((name: string) => templateMap[name as TemplateMapKeyType])
+      .map((name: string) => {
+        return name in this.templateMap ? this.templateMap[name as TemplateMapKeyType] : name;
+      })
       .filter((field) => !!field);
     return ['entity_type', ...templateFields];
   }
 
+  // The following "has*" methonds and properties are boolean switches that show/hide
+  // a component or section in the transaction type input component
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
@@ -130,6 +138,7 @@ export abstract class TransactionType {
   hasLoanTermsFields(): boolean {
     return hasFields(this.formFields, LOAN_TERMS_FIELDS);
   }
+  hasAdditionalInfo = true;
 }
 
 export enum PurposeDescriptionLabelSuffix {
@@ -178,6 +187,24 @@ export type TransactionTemplateMapType = {
   category_code: string;
   election_code: string;
   election_other_description: string;
+  secondary_street_1: string;
+  secondary_street_2: string;
+  secondary_city: string;
+  secondary_state: string;
+  secondary_zip: string;
+  signatory_1_last_name: string;
+  signatory_1_first_name: string;
+  signatory_1_middle_name: string;
+  signatory_1_prefix: string;
+  signatory_1_suffix: string;
+  signatory_1_date: string;
+  signatory_2_last_name: string;
+  signatory_2_first_name: string;
+  signatory_2_middle_name: string;
+  signatory_2_prefix: string;
+  signatory_2_suffix: string;
+  signatory_2_title: string;
+  signatory_2_date: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;

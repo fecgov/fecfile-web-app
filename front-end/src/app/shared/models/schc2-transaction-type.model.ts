@@ -1,7 +1,7 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
 
 export abstract class SchC2TransactionType extends TransactionType {
-  scheduleId = 'C1';
+  scheduleId = 'C2';
   apiEndpoint = '/transactions/schedule-c2';
   override amountInputHeader = 'Loan information';
 
@@ -46,5 +46,23 @@ export abstract class SchC2TransactionType extends TransactionType {
     category_code: '',
     election_code: '',
     election_other_description: '',
+    secondary_street_1: '',
+    secondary_street_2: '',
+    secondary_city: '',
+    secondary_state: '',
+    secondary_zip: '',
+    signatory_1_last_name: '',
+    signatory_1_first_name: '',
+    signatory_1_middle_name: '',
+    signatory_1_prefix: '',
+    signatory_1_suffix: '',
+    signatory_1_date: '',
+    signatory_2_last_name: '',
+    signatory_2_first_name: '',
+    signatory_2_middle_name: '',
+    signatory_2_prefix: '',
+    signatory_2_suffix: '',
+    signatory_2_title: '',
+    signatory_2_date: '',
   };
 }

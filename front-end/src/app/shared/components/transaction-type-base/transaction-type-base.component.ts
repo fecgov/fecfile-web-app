@@ -65,7 +65,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
-    this.formProperties = this.transactionType.getFormControlNames(this.templateMap);
+    this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));

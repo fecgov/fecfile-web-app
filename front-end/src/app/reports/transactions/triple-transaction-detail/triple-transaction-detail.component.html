@@ -302,13 +302,15 @@
             ></app-loan-info-input>
             <p-divider></p-divider>
           </ng-container>
-          <h3>Additional information</h3>
-          <app-additional-info-input
-            [form]="childForm"
-            [formSubmitted]="formSubmitted"
-            [templateMap]="childTemplateMap"
-            [transaction]="childTransaction"
-          ></app-additional-info-input>
+          <ng-container *ngIf="childTransactionType?.hasAdditionalInfo">
+            <h3>Additional information</h3>
+            <app-additional-info-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap"
+              [transaction]="childTransaction"
+            ></app-additional-info-input>
+          </ng-container>
         </ng-container>
       </form>
     </div>
