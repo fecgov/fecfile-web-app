@@ -61,6 +61,11 @@
         label="NO"
         formControlName="secured"
         ariaLabel="This loan is not secured"
+        [class]="
+          securedControl?.invalid && (formSubmitted || securedControl?.dirty || securedControl?.touched)
+            ? 'ng-invalid ng-dirty'
+            : ''
+        "
       ></p-radioButton>
     </div>
     <div class="col-1">
@@ -70,6 +75,11 @@
         label="YES"
         formControlName="secured"
         ariaLabel="This loan is secured"
+        [class]="
+          securedControl?.invalid && (formSubmitted || securedControl?.dirty || securedControl?.touched)
+            ? 'ng-invalid ng-dirty'
+            : ''
+        "
       ></p-radioButton>
     </div>
   </div>
@@ -79,7 +89,7 @@
         [form]="form"
         fieldName="secured"
         [formSubmitted]="formSubmitted"
-        patternErrorMessage="Please select 'Yes' or 'No'"
+        patternErrorMessage="An answer is required"
       ></app-error-messages>
     </div>
   </div>

@@ -20,6 +20,7 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 
 export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   override formFields = [...CORE_FIELDS, ...ORG_FIELDS, ...LOAN_FINANCE_FIELDS, ...LOAN_TERMS_FIELDS];
@@ -28,18 +29,21 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
 
-  override description = 'Saving a loan received from individual will automatically create a related receipt.';
-  override accordionTitle = 'ENTER DATA';
-  override accordionSubText = 'Enter lender, loan, and terms information for a loan received from individual';
+  override description =
+    'Follow this two-step process to create both a loan received from the bank and a loan agreement. This loan type requires an associated receipt.';
+  override accordionTitle = 'STEP ONE';
+  override accordionSubText = 'Enter lender, loan, and terms information for a loan received for a bank';
   override formTitle = undefined;
-  override footer =
-    'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
+  override footer = 'Click STEP TWO below to enter loan agreement information.';
   override contactTitle = 'Lender';
   override contactLookupLabel = 'LENDER LOOKUP';
 
   schema = schema;
   override apiEndpoint = '/transactions/save-triple';
-  override dependentChildTransactionType = [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT];
+  override dependentChildTransactionType = [
+    ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
+    ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
+  ];
   override subTransactionConfig = new SubTransactionGroup('Guarantors', []);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [

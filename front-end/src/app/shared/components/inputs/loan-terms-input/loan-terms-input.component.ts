@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { take } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DateUtils } from 'app/shared/utils/date.utils';
 
 function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {
@@ -26,6 +26,8 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
   templateUrl: './loan-terms-input.component.html',
 })
 export class LoanTermsInputComponent extends BaseInputComponent implements OnInit {
+  securedControl: AbstractControl | null = null;
+
   constructor(private store: Store) {
     super();
   }
@@ -34,6 +36,8 @@ export class LoanTermsInputComponent extends BaseInputComponent implements OnIni
     // Set empty values until ticket #1156 implemented
     this.form.get('loan_due_date')?.setValue('-');
     this.form.get('loan_interest_rate')?.setValue('-');
+
+    this.securedControl = this.form.get(this.templateMap['secured']);
 
     // Add the date range validation check to the DATE INCURRED input
     this.store

@@ -24,11 +24,14 @@ export class TransactionContainerComponent extends DestroyerComponent {
     });
   }
 
-  isDoubleTransaction() {
+  isDoubleTransaction(): boolean {
     return this.transaction?.transactionType?.dependentChildTransactionType?.length === 1;
   }
 
-  isTripleTransaction() {
-    return this.transaction?.transactionType?.dependentChildTransactionType?.length === 2;
+  isTripleTransaction(): boolean {
+    if (this.transaction?.transactionType?.dependentChildTransactionType) {
+      return this.transaction?.transactionType?.dependentChildTransactionType?.length >= 2;
+    }
+    return false;
   }
 }
