@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from './BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
@@ -12,7 +11,6 @@ describe('BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   xit('#factory() should return a SchBTransaction', () => {

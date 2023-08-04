@@ -1,7 +1,6 @@
 import { REFUND_TO_UNREGISTERED_COMMITTEE } from './REFUND_TO_UNREGISTERED_COMMITTEE.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 
 describe('REFUND_TO_UNREGISTERED_COMMITTEE', () => {
   let transactionType: REFUND_TO_UNREGISTERED_COMMITTEE;
@@ -13,7 +12,6 @@ describe('REFUND_TO_UNREGISTERED_COMMITTEE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

@@ -2,7 +2,6 @@ import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.
 import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupPM } from '../transaction-groups/transaction-group-pm.model';
 
 describe('PAC_PAC_CONDUIT_EARMARK', () => {
   let transaction: SchATransaction;
@@ -14,7 +13,6 @@ describe('PAC_PAC_CONDUIT_EARMARK', () => {
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
     expect(transaction.transactionType?.scheduleId).toBe('A');
-    expect(transaction?.transactionType?.transactionGroup).toBeInstanceOf(TransactionGroupPM);
   });
 
   it('#factory() should return a SchATransaction', () => {

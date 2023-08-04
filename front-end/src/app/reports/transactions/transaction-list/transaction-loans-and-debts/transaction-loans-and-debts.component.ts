@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
+import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',
@@ -15,7 +16,11 @@ import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transac
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent implements OnInit {
-  scheduleTransactionTypeLabels: LabelList = ScheduleC1TransactionTypeLabels.concat(ScheduleC2TransactionTypeLabels);
+  scheduleTransactionTypeLabels: LabelList = [
+    ...ScheduleCTransactionTypeLabels,
+    ...ScheduleC1TransactionTypeLabels,
+    ...ScheduleC2TransactionTypeLabels,
+  ];
 
   constructor(
     protected override messageService: MessageService,

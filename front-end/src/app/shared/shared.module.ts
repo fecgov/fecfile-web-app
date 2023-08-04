@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -39,14 +40,17 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { CalculationOverlayComponent } from './components/calculation-overlay/calculation-overlay.component';
 import { CandidateInputComponent } from './components/inputs/candidate-input/candidate-input.component';
 import { CandidateOfficeInputComponent } from './components/inputs/candidate-office-input/candidate-office-input.component';
-import { MemoCodeInputComponent } from './components/inputs/amount-input/memo-code/memo-code.component';
+import { MemoCodeInputComponent } from './components/inputs/memo-code/memo-code.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { LoanInfoInputComponent } from './components/inputs/loan-info-input/loan-info-input.component';
+import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/loan-terms-input.component';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
+    RadioButtonModule,
     SelectButtonModule,
     TooltipModule,
     DropdownModule,
@@ -62,6 +66,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     DividerModule,
     ConfirmDialogModule,
     OverlayPanelModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     LabelPipe,
@@ -91,6 +96,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     NavigationControlBarComponent,
     TableActionsButtonComponent,
     CalculationOverlayComponent,
+    LoanInfoInputComponent,
+    LoanTermsInputComponent,
   ],
   exports: [
     FecDatePipe,
@@ -117,6 +124,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     ElectionInputComponent,
     TableActionsButtonComponent,
     CalculationOverlayComponent,
+    LoanInfoInputComponent,
+    LoanTermsInputComponent,
   ],
   providers: [DatePipe],
 })

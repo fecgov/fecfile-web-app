@@ -161,6 +161,7 @@ export enum ScheduleBTransactionTypes {
   CONDUIT_EARMARK_OUT = 'CONDUIT_EARMARK_OUT',
   CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
   CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
+  LOAN_MADE = 'LOAN_MADE',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -292,8 +293,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Credit Card Payment for 100% Federal Election Activity',
   ],
   [
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO, 
-    'Credit Card Memo for 100% Federal Election Activity'
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO,
+    'Credit Card Memo for 100% Federal Election Activity',
   ],
   [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
@@ -308,8 +309,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Payment to Payroll for 100% Federal Election Activity',
   ],
   [
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 
-    'Payroll Memo for 100% Federal Election Activity'
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
+    'Payroll Memo for 100% Federal Election Activity',
   ],
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity Payment'],
   [
@@ -334,4 +335,5 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT, 'Conduit Earmark Out'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
+  [ScheduleBTransactionTypes.LOAN_MADE, 'Loan Made'],
 ];

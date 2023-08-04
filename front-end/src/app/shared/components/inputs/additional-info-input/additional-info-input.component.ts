@@ -4,6 +4,7 @@ import { BaseInputComponent } from '../base-input.component';
 import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -15,6 +16,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   @Input() purposeDescriptionLabel = '';
   @Input() purposeDescriptionLabelNotice?: string;
   @Input() purposeDescriptionPrefix?: string;
+  @Input() transaction?: Transaction;
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {

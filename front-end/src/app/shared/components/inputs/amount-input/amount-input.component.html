@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="date">{{ templateMap['dateLabel'] }}</label>
+        <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
         <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
         <app-error-messages
           [form]="form"
@@ -19,9 +19,9 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
-          [overrideMemoCodeReadOnly]="memoCodeReadOnly"
           [overrideMemoItemHelpText]="memoItemHelpText"
           [transaction]="transaction"
+          [checkboxLabel]="memoCodeCheckboxLabel"
         ></app-memo-code>
       </div>
     </div>

@@ -15,6 +15,18 @@ export class DateUtils {
   }
 
   /**
+   * For given date, convert it to a string mm/dd/yyyy
+   * @param {Date} date
+   * @returns {string} mm/dd/yyyy formatted date string
+   */
+  public static convertDateToSlashFormat(date: Date | null | undefined) {
+    if (!date) {
+      return date;
+    }
+    return DateTime.fromJSDate(date).toFormat('MM/dd/yyyy');
+  }
+
+  /**
    *
    * @param date For given date string YYYYMMDD, return a Date object.
    * @returns {Date}

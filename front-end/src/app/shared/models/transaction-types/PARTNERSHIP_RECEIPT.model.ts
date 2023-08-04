@@ -4,21 +4,22 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
+import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_RECEIPT extends SchATransactionType {
-  transactionGroup = new TransactionGroupD();
+  formFields = ORGANIZATION_FORM_FIELDS;
+  contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   schema = schema;
-  override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_MEMO];
+  override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =
-    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
+    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not meet itemization threshold". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (transaction.children && transaction.children.length > 0) {
       return 'See Partnership Attribution(s) below';
     }
-    return 'Partnership attributions do not require itemization';
+    return 'Partnership attributions do not meet itemization threshold';
   }
 
   getNewTransaction() {

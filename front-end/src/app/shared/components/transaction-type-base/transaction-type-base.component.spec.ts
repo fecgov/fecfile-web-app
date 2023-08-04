@@ -15,7 +15,12 @@ import {
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { getTestTransactionByType, testIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
+import {
+  getTestTransactionByType,
+  testIndividualReceipt,
+  testMockStore,
+  testScheduleATransaction,
+} from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
@@ -24,7 +29,7 @@ import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
-  formProperties: string[] = [
+  override formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -136,6 +141,12 @@ describe('TransactionTypeBaseComponent', () => {
   function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
     if (component.transaction) {
       component.transaction.contact_1 = contact;
+      TransactionContactUtils.onContactLookupSelect(
+        { value: contact },
+        component.form,
+        component.transaction,
+        component.contactId$
+      );
     }
   }
 
@@ -178,7 +189,6 @@ describe('TransactionTypeBaseComponent', () => {
         return confirmation.accept();
       }
     });
-    component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.save(listSaveEvent);
     const testContact2 = new Contact();
@@ -652,10 +662,13 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.addControl('entity_type', { value: testEntityType });
     component.form.get('contribution_amount')?.setValue(1111);
     component.form.get('contribution_date')?.setValue('2022-03-02');
+    fixture.detectChanges();
 
     const getPreviousTransactionSpy = spyOn(testTransactionService, 'getPreviousTransaction').and.returnValue(
       of(testTransaction)
     );
+    expect(getPreviousTransactionSpy).toHaveBeenCalledTimes(0);
+    component.form.get('contribution_date')?.valueChanges.subscribe((date) => console.log(`date: ${date}`));
     component.onContactLookupSelect(testContactSelectItem);
     expect(getPreviousTransactionSpy).toHaveBeenCalledTimes(1);
   });
@@ -681,6 +694,9 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.id = '123';
     testContact.type = ContactTypes.ORGANIZATION;
     testContact.name = testOrganizationName;
+    component.transaction = Object.assign({}, testScheduleATransaction);
+    component.ngOnInit();
+    fixture.detectChanges();
 
     const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
@@ -690,7 +706,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.onContactLookupSelect(testContactSelectItem);
     const organizationNameFormControlValue = component.form.get('contributor_organization_name')?.value;
 
-    expect(organizationNameFormControlValue === testOrganizationName).toBeTrue();
+    expect(organizationNameFormControlValue).toEqual(testOrganizationName);
   });
 
   it('#onContactLookupSelect COMMITTEE should set fields', () => {
@@ -701,15 +717,20 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.type = ContactTypes.COMMITTEE;
     testContact.name = testCommitteeName;
 
+    component.transaction = testScheduleATransaction;
+    component.ngOnInit();
+    fixture.detectChanges();
+
     const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
     };
 
-    component.form.addControl('entity_type', { value: testEntityType });
+    component.form.get('entity_type')?.setValue(testEntityType);
     component.onContactLookupSelect(testContactSelectItem);
+
     const committeeNameFormControlValue = component.form.get('contributor_organization_name')?.value;
 
-    expect(committeeNameFormControlValue === testCommitteeName).toBeTrue();
+    expect(committeeNameFormControlValue).toEqual(testCommitteeName);
   });
 
   it('#onContactLookupSelect CANDIDATE should set fields', () => {
@@ -733,11 +754,15 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.state = 'testState';
     testContact.zip = 'testZip';
 
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
+    component.ngOnInit();
+    fixture.detectChanges();
+
     const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
     };
 
-    component.form.addControl('entity_type', { value: testEntityType });
+    component.form.get('entity_type')?.setValue(testEntityType);
     component.onSecondaryContactLookupSelect(testContactSelectItem);
     const candidateIdFormControlValue = component.form.get('donor_candidate_fec_id')?.value;
     const lastNameFormControlValue = component.form.get('donor_candidate_last_name')?.value;
@@ -749,15 +774,15 @@ describe('TransactionTypeBaseComponent', () => {
     const candidateStateFormControlValue = component.form.get('donor_candidate_state')?.value;
     const candidateDistrictFormControlValue = component.form.get('donor_candidate_district')?.value;
 
-    expect(candidateIdFormControlValue === testContact.candidate_id).toBeTrue();
-    expect(lastNameFormControlValue === testContact.last_name).toBeTrue();
-    expect(firstNameFormControlValue === testContact.first_name).toBeTrue();
-    expect(middleNameFormControlValue === testContact.middle_name).toBeTrue();
-    expect(prefixFormControlValue === testContact.prefix).toBeTrue();
-    expect(suffixFormControlValue === testContact.suffix).toBeTrue();
-    expect(candidateOfficeFormControlValue === testContact.candidate_office).toBeTrue();
-    expect(candidateStateFormControlValue === testContact.candidate_state).toBeTrue();
-    expect(candidateDistrictFormControlValue === testContact.candidate_district).toBeTrue();
+    expect(candidateIdFormControlValue).toEqual(testContact.candidate_id);
+    expect(lastNameFormControlValue).toEqual(testContact.last_name);
+    expect(firstNameFormControlValue).toEqual(testContact.first_name);
+    expect(middleNameFormControlValue).toEqual(testContact.middle_name);
+    expect(prefixFormControlValue).toEqual(testContact.prefix);
+    expect(suffixFormControlValue).toEqual(testContact.suffix);
+    expect(candidateOfficeFormControlValue).toEqual(testContact.candidate_office);
+    expect(candidateStateFormControlValue).toEqual(testContact.candidate_state);
+    expect(candidateDistrictFormControlValue).toEqual(testContact.candidate_district);
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {

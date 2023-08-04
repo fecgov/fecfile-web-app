@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactType } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -17,8 +16,13 @@ import { ContactFormComponent } from '../contact-form/contact-form.component';
   templateUrl: './transaction-contact-lookup.component.html',
 })
 export class TransactionContactLookupComponent {
+  @Input() form: FormGroup = new FormGroup([]);
+  @Input() formSubmitted = false;
+
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeFormControl: FormControl = new FormControl();
+  @Input() selectedContactFormControlName = '';
+
   @Input() contactTypeReadOnly = false;
 
   @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
@@ -38,7 +42,7 @@ export class TransactionContactLookupComponent {
     ])
   );
 
-  constructor(private formBuilder: FormBuilder, private fecApiService: FecApiService) {}
+  constructor(private formBuilder: FormBuilder) { }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {

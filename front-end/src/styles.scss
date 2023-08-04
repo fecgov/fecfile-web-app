@@ -1,5 +1,9 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
 
+p {
+  max-width: 100%;
+}
+
 .grid {
   margin: 0;
 }
@@ -36,7 +40,9 @@ p-dropdown.ng-invalid.ng-touched div.p-dropdown,
 .ng-submitted p-inputnumber.ng-invalid input.p-inputtext,
 p-inputnumber.ng-invalid.ng-touched input.p-inputtext,
 .ng-submitted p-calendar.ng-invalid input.p-inputtext,
-p-calendar.ng-invalid.ng-touched input.p-inputtext {
+p-calendar.ng-invalid.ng-touched input.p-inputtext,
+.ng-submitted p-autocomplete.ng-invalid input.p-inputtext,
+p-autocomplete.ng-invalid.ng-touched input.p-inputtext {
   border-color: #dc3545;
 }
 
@@ -325,4 +331,30 @@ label.disabled {
 .action-options .p-overlaypanel-content .p-button {
   width: 100%;
   text-align: inherit;
+}
+
+.p-button-primary.p-button {
+  border-width: 2px;
+  padding: 8px 20px;
+  font-size: 14px;
+}
+
+.p-button-primary.p-button:enabled:hover {
+  background-color: #164f85;
+  border-color: #164f85;
+}
+
+.p-button-secondary.p-button {
+  background-color: #aeb0b5;
+  border-color: #aeb0b5;
+  border-width: 2px;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: #212121;
+}
+
+.p-button-secondary.p-button:enabled:hover {
+  background-color: #e8e8e8;
+  border-color: #e8e8e8;
+  color: #212121;
 }

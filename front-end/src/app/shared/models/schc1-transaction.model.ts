@@ -2,7 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchC1Transaction extends Transaction {
   lender_organization_name: string | undefined;
@@ -61,11 +61,11 @@ export class SchC1Transaction extends Transaction {
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchC1Transaction.fromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
       transaction.children = transaction.children.map(function (child) {
-        return SchC1Transaction.fromJSON(child, depth - 1);
+        return getFromJSON(child, depth - 1);
       });
     }
     return transaction;

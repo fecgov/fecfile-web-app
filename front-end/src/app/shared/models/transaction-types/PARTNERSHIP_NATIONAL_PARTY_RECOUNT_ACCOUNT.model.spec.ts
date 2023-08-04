@@ -1,5 +1,4 @@
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
@@ -13,7 +12,6 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     expect(transactionType).toBeTruthy();
     if (transactionType) {
       expect(transactionType.scheduleId).toBe('A');
-      expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
     }
   });
 
@@ -26,13 +24,13 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   it('#generatePurposeDescription() should generate expected retval', () => {
     const txn = transactionType.getNewTransaction();
     const descrip = transactionType.generatePurposeDescription(txn);
-    expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)');
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
     const txn = transactionType.getNewTransaction();
     let descrip = transactionType.generatePurposeDescription(txn);
-    expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)');
 
     txn.children = [transactionType.getNewTransaction()];
     descrip = transactionType.generatePurposeDescription(txn);

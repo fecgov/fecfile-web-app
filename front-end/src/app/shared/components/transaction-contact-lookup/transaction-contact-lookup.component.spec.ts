@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -42,6 +42,8 @@ describe('TransactionContactLookupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionContactLookupComponent);
     component = fixture.componentInstance;
+    component.form.addControl('contact_1', new FormControl());
+    component.selectedContactFormControlName = 'contact_1';
 
     fixture.detectChanges();
   });

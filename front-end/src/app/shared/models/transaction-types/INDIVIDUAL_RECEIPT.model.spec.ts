@@ -1,7 +1,6 @@
 import { INDIVIDUAL_RECEIPT } from './INDIVIDUAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('INDIVIDUAL_RECEIPT', () => {
   let transactionType: INDIVIDUAL_RECEIPT;
@@ -13,7 +12,6 @@ describe('INDIVIDUAL_RECEIPT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

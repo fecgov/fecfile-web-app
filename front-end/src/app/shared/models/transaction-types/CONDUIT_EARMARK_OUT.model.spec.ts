@@ -1,6 +1,5 @@
 import { CONDUIT_EARMARK_OUT } from './CONDUIT_EARMARK_OUT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { ContactTypes } from '../contact.model';
@@ -17,7 +16,6 @@ describe('CONDUIT_EARMARK_OUT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupNM);
   });
 
   it('#factory() should return a SchATransaction', () => {

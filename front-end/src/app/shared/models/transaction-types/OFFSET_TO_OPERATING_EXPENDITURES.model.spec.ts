@@ -1,7 +1,6 @@
 import { OFFSET_TO_OPERATING_EXPENDITURES } from './OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 
 describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
   let transactionType: OFFSET_TO_OPERATING_EXPENDITURES;
@@ -13,7 +12,6 @@ describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchATransaction', () => {

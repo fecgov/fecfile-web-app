@@ -1,6 +1,5 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 
 describe('PAC_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;
@@ -16,7 +15,6 @@ describe('PAC_JF_TRANSFER_MEMO', () => {
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
     expect(transaction.transactionType?.scheduleId).toBe('A');
-    expect(transaction?.transactionType?.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchATransaction', () => {

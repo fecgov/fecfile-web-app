@@ -16,6 +16,17 @@ describe('DateUtils', () => {
     expect(stringDate).toBe('1995-12-17');
   });
 
+  it('#convertDateToSlashFormat(date: Date | null) should return a MM/DD/YYYY string', () => {
+    const dateDate: Date = new Date('December 17, 1995 03:24:00');
+    let stringDate: string | null | undefined;
+
+    stringDate = DateUtils.convertDateToSlashFormat(null);
+    expect(stringDate).toBeNull();
+
+    stringDate = DateUtils.convertDateToSlashFormat(dateDate);
+    expect(stringDate).toBe('12/17/1995');
+  });
+
   it('#areOverlapping should detect overlaps', () => {
     const januaryFirst = new Date('01/01/2023');
     const januarySecond = new Date('01/02/2023');

@@ -22,7 +22,7 @@ import { Contact } from 'app/shared/models/contact.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
-  formProperties: string[] = [
+  override formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -44,8 +44,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'memo_code',
     'text4000',
   ];
-
-  childFormProperties: string[] = [
+  override childFormProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -141,20 +140,22 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
-    component.childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL
-    );
-    component.childOnInit();
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
+    const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    childTransaction.parent_transaction = component.transaction;
+    component.transaction.children = [childTransaction];
+    component.ngOnInit();
 
     component.childForm.patchValue({ contribution_amount: 2 });
-    expect(component.childForm.value.contribution_amount).toBe(-2);
+    expect(component.childForm.get('contribution_amount')?.value).toBe(-2);
   });
 
   it("should auto-generate the child transaction's purpose description", () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
-    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
-    component.childTransaction.parent_transaction = component.transaction;
-    component.childOnInit();
+    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    childTransaction.parent_transaction = component.transaction;
+    component.transaction.children = [childTransaction];
+    component.ngOnInit();
 
     component.form.get(component.templateMap.first_name)?.setValue('First');
     component.form.get(component.templateMap.last_name)?.setValue('Last');
@@ -188,10 +189,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     // Save valid form values
     component.form.patchValue({
-      entity_type: 'IND',
+      entity_type: 'COM',
       contributor_organization_name: 'org222 name',
-      contributor_last_name: 'fname',
-      contributor_first_name: 'lname',
       contributor_middle_name: '',
       contributor_prefix: '',
       contributor_suffix: '',
@@ -206,6 +205,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_amount: 5,
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
+      donor_committee_fec_id: 'C12345678',
+      donor_committee_name: 'name',
       memo_code: '',
       text4000: '',
     });

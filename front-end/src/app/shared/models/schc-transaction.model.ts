@@ -2,7 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchCTransaction extends Transaction {
   entity_type: string | undefined;
@@ -21,11 +21,11 @@ export class SchCTransaction extends Transaction {
   election_code: string | undefined;
   election_other_description: string | undefined;
   loan_amount: number | undefined;
-  @Transform(BaseModel.dateTransform) loan_payment_to_date: Date | undefined;
+  loan_payment_to_date: number | undefined;
   loan_balance: number | undefined;
   @Transform(BaseModel.dateTransform) loan_incurred_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) loan_due_date: Date | undefined;
-  loan_interest_rate: number | undefined;
+  loan_due_date: string | undefined;
+  loan_interest_rate: string | undefined;
   secured: boolean | undefined;
   personal_funds: boolean | undefined;
   lender_committee_id_number: string | undefined;
@@ -51,11 +51,11 @@ export class SchCTransaction extends Transaction {
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchCTransaction.fromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
       transaction.children = transaction.children.map(function (child) {
-        return SchCTransaction.fromJSON(child, depth - 1);
+        return getFromJSON(child, depth - 1);
       });
     }
     return transaction;
@@ -70,11 +70,13 @@ export enum ScheduleCTransactionGroups {
 export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.LOANS | ScheduleCTransactionGroups.DEBTS;
 
 export enum ScheduleCTransactionTypes {
-  LOANS_RECEIVED_FROM_INDIVIDUAL = 'LOANS_RECEIVED_FROM_INDIVIDUAL',
-  LOANS_RECEIVED_FROM_BANK = 'LOANS_RECEIVED_FROM_BANK',
+  LOAN_RECEIVED_FROM_INDIVIDUAL = 'LOAN_RECEIVED_FROM_INDIVIDUAL',
+  LOAN_RECEIVED_FROM_BANK = 'LOAN_RECEIVED_FROM_BANK',
+  LOAN_BY_COMMITTEE = 'LOAN_BY_COMMITTEE',
 }
 
 export const ScheduleCTransactionTypeLabels: LabelList = [
-  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_INDIVIDUAL, 'Loan Received from Individual'],
-  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_BANK, 'Loan Received from Bank'],
+  [ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL, 'Loan Received from Individual'],
+  [ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK, 'Loan Received from Bank'],
+  [ScheduleCTransactionTypes.LOAN_BY_COMMITTEE, 'Loan By Committee'],
 ];

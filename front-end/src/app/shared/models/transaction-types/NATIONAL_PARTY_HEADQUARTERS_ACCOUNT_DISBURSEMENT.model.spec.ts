@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT } from './NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT.model';
 
 describe('NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT', () => {
@@ -12,7 +11,6 @@ describe('NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

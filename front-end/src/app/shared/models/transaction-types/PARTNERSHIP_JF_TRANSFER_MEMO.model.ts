@@ -4,20 +4,19 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
-import { ContactTypes } from '../contact.model';
 import { SubTransactionGroup } from '../transaction-type.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
+import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
-  transactionGroup = new TransactionGroupD();
+  formFields = ORGANIZATION_FORM_FIELDS;
+  contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';
-  override contactTypeOptions = [ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup('Partnership Receipt JF Transfer Memo', [
-    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
   ]);
 
   getNewTransaction() {
@@ -35,7 +34,7 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
     const hasChildren = transaction.children && transaction.children.length > 0;
     const parenthetical = hasChildren
       ? ' (See Partnership Attribution(s) below)'
-      : ' (Partnership attributions do not require itemization)';
+      : ' (Partnership attributions do not meet itemization threshold)';
     if ((committeeClause + parenthetical).length > 100) {
       committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
     }
@@ -43,5 +42,5 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
   }
 
   override purposeDescriptionLabelNotice =
-    'If transaction has no associated Partnership memos, reads "JF Memo: XX (Partnership attributions do not require itemization)". Otherwise, reads "JF Memo: XX (See Partnership Attribution(s) below)"';
+    'If transaction has no associated Partnership memos, reads "JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "JF Memo: XX (See Partnership Attribution(s) below)"';
 }

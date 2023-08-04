@@ -1,6 +1,5 @@
 import { EARMARK_MEMO_RECOUNT_ACCOUNT } from './EARMARK_MEMO_RECOUNT_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 
 describe('EARMARK_MEMO_RECOUNT_ACCOUNT', () => {
   let transactionType: EARMARK_MEMO_RECOUNT_ACCOUNT;
@@ -12,7 +11,6 @@ describe('EARMARK_MEMO_RECOUNT_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupAG);
   });
 
   it('#factory() should return a SchATransaction', () => {

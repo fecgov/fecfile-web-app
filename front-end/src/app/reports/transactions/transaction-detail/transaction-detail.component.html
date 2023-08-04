@@ -10,8 +10,11 @@
         <div class="field">
           <label for="entity_type">CONTACT TYPE</label>
           <app-transaction-contact-lookup
-            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
+            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            selectedContactFormControlName="contact_1"
             [contactTypeReadOnly]="contactTypeOptions.length === 1"
             (contactSelect)="onContactLookupSelect($event)"
           >
@@ -28,7 +31,7 @@
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
-          [includeFecId]="hasCommitteeFecIdInput"
+          [includeFecId]="!!transactionType?.hasCommitteeFecId()"
         ></app-committee-input>
       </ng-container>
       <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
@@ -38,7 +41,7 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="hasEmployerInput">
+      <ng-container *ngIf="transactionType?.hasEmployeeFields() && entityTypeControl?.value == ContactTypes.INDIVIDUAL">
         <h3>Employer</h3>
         <app-employer-input
           [form]="form"
@@ -47,20 +50,43 @@
         ></app-employer-input>
         <p-divider></p-divider>
       </ng-container>
-      <h3>{{ templateMap.amountInputHeader }}</h3>
-      <app-amount-input
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        [templateMap]="templateMap"
-        [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
-        [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
-        [showAggregate]="!!transaction?.transactionType?.showAggregate"
-        [transaction]="transaction"
-      ></app-amount-input>
-      <p-divider></p-divider>
-      <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
-        <h3>{{ templateMap['candidateInputHeader'] }}</h3>
-        <app-committee-input *ngIf="this.hasCandidateCommitteeInput"
+      <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
+        <h3>{{ transaction?.transactionType?.amountInputHeader }}</h3>
+        <app-amount-input
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
+          [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
+          [showAggregate]="!!transaction?.transactionType?.showAggregate"
+          [transaction]="transaction"
+          [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
+        ></app-amount-input>
+        <p-divider></p-divider>
+      </ng-container>
+      <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
+        <h3>Loan information</h3>
+        <app-loan-info-input
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
+          [readonly]="false"
+          [transaction]="transaction"
+        ></app-loan-info-input>
+        <p-divider></p-divider>
+      </ng-container>
+      <ng-container *ngIf="transactionType?.hasLoanTermsFields()">
+        <h3>Terms</h3>
+        <app-loan-terms-input
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
+        ></app-loan-terms-input>
+        <p-divider></p-divider>
+      </ng-container>
+      <ng-container *ngIf="transactionType?.hasCandidateInformation()">
+        <h3>Committee/Candidate Information</h3>
+        <app-committee-input
+          *ngIf="transaction?.transactionType?.hasCandidateCommittee"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
@@ -69,8 +95,11 @@
           [readonly]="true"
         ></app-committee-input>
         <app-transaction-contact-lookup
-          [contactTypeFormControl]="candidateContactTypeFormControl"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
           [contactTypeOptions]="candidateContactTypeOption"
+          [contactTypeFormControl]="candidateContactTypeFormControl"
+          selectedContactFormControlName="contact_2"
           [contactTypeReadOnly]="true"
           (contactSelect)="onSecondaryContactLookupSelect($event)"
         ></app-transaction-contact-lookup>
@@ -79,13 +108,13 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
-            [hasCandidateOfficeInput]="hasCandidateOfficeInput"
+            [hasCandidateOfficeInput]="!!transactionType?.hasCandidateOffice()"
           ></app-candidate-input>
         </ng-container>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="hasElectionInformationInput">
-        <h3>Election Information</h3>
+      <ng-container *ngIf="transactionType?.hasElectionInformation()">
+        <h3>Election information</h3>
         <app-election-input
           [form]="form"
           [formSubmitted]="formSubmitted"
@@ -93,11 +122,12 @@
         ></app-election-input>
         <p-divider></p-divider>
       </ng-container>
-      <h3>Additional Information</h3>
+      <h3>Additional information</h3>
       <app-additional-info-input
         [form]="form"
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
+        [transaction]="transaction"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="purposeDescriptionLabel"
         [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"
