@@ -238,7 +238,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: true,
       text4000: '',
     });
-    component.save(navEvent);
+    component.handleNavigate(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
 });
