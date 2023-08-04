@@ -192,7 +192,3 @@ export class SubTransactionGroup {
     this.subTransactionTypes = subTransactionTypes;
   }
 }
-
-export const CONTACT_1 = 'contact_1';
-export const CONTACT_2 = 'contact_2';
-export const CONTACT_3 = 'contact_3';
