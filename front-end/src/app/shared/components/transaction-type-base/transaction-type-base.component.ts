@@ -163,7 +163,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.templateMap,
             config
           );
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
+            // eslint-disable-line @typescript-eslint/no-explicit-any
             contact[property] = value as never;
           });
         }
