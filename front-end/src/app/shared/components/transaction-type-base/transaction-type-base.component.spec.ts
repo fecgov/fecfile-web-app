@@ -2,53 +2,28 @@ import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { MemoText } from 'app/shared/models/memo-text.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { testIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SchATransaction } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
-
-const initTransactionData = {
-  id: undefined,
-  report_id: undefined,
-  contact: undefined,
-  contact_1_id: undefined,
-  form_type: undefined,
-  transaction_id: null,
-  transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-  contribution_purpose_descrip: undefined,
-  parent_transaction_id: undefined,
-  children: undefined,
-  parent_transaction: undefined,
-  fields_to_validate: undefined,
-  itemized: false,
-  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  memo_text_id: 'ID Goes Here',
-};
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 let testTransaction: SchATransaction;
 
 describe('TransactionTypeBaseComponent', () => {
   let component: TransactionTypeBaseComponent;
   let fixture: ComponentFixture<TransactionTypeBaseComponent>;
-  let testMessageService: MessageService;
-  let testRouter: Router;
-  let testApiService: ApiService;
   let testConfirmationService: ConfirmationService;
-  let fecDatePipe: FecDatePipe;
 
   //spys
   let navigateToSpy: jasmine.Spy;
@@ -70,12 +45,8 @@ describe('TransactionTypeBaseComponent', () => {
       ],
     }).compileComponents();
 
-    testMessageService = TestBed.inject(MessageService);
-    testRouter = TestBed.inject(Router);
     transactionServiceSpy = TestBed.inject(TransactionService) as jasmine.SpyObj<TransactionService>;
-    testApiService = TestBed.inject(ApiService);
     testConfirmationService = TestBed.inject(ConfirmationService);
-    fecDatePipe = TestBed.inject(FecDatePipe);
 
     testTransaction = testIndividualReceipt;
     fixture = TestBed.createComponent(TransactionDetailComponent);
@@ -93,7 +64,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('should save on save event', fakeAsync(() => {
-    transactionServiceSpy.update.and.returnValue(of(component.transaction!));
+    if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction));
     confirmSpy.and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
