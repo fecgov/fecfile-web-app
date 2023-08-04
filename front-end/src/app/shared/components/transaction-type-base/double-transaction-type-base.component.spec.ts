@@ -16,7 +16,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { Contact } from 'app/shared/models/contact.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
@@ -106,6 +106,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     reportService = TestBed.inject(ReportService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) return confirmation?.accept();
+    });
     transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
