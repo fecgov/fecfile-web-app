@@ -31,7 +31,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
     ...LOAN_TERMS_FIELDS,
   ];
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
-  override showStandardAmount = false;
+  override hasAmountInput = false;
   override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
 

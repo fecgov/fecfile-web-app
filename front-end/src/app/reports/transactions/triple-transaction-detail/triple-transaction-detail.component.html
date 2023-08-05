@@ -65,7 +65,7 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transactionType?.showStandardAmount">
+          <ng-container *ngIf="transactionType?.hasAmountInput">
             <h3>{{ transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="form"
@@ -277,7 +277,7 @@
             ></app-election-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.showStandardAmount">
+          <ng-container *ngIf="childTransaction?.transactionType?.hasAmountInput">
             <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="childForm"
@@ -291,7 +291,7 @@
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransactionType?.hasLoanFinanceFields()">
+          <ng-container *ngIf="childTransactionType?.hasLoanFinanceFields() && !childTransactionType?.hasLoanAgreement">
             <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-loan-info-input
               [form]="childForm"
@@ -300,6 +300,35 @@
               [readonly]="false"
               [transaction]="childTransaction"
             ></app-loan-info-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransactionType?.hasLoanAgreement">
+            <h3>Loan information</h3>
+            <app-loan-agreement-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap"
+            ></app-loan-agreement-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransactionType?.hasSignature1">
+            <h3>{{ childTransactionType?.signatoryOneTitle }}</h3>
+            <app-signature-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap"
+              templateMapKeyPrefix="signatory_1"
+            ></app-signature-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransactionType?.hasSignature2">
+            <h3>{{ childTransactionType?.signatoryTwoTitle }}</h3>
+            <app-signature-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap"
+              templateMapKeyPrefix="signatory_2"
+            ></app-signature-input>
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="childTransactionType?.hasAdditionalInfo">
@@ -311,6 +340,9 @@
               [transaction]="childTransaction"
             ></app-additional-info-input>
           </ng-container>
+          <div class="grid" style="flex-direction: row-reverse">
+            <p style="font-style: italic">{{ childTransactionType?.footer }}</p>
+          </div>
         </ng-container>
       </form>
     </div>
@@ -428,7 +460,7 @@
             ></app-election-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction_2?.transactionType?.showStandardAmount">
+          <ng-container *ngIf="childTransaction_2?.transactionType?.hasAmountInput">
             <h3>{{ childTransaction_2?.transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="childForm_2"

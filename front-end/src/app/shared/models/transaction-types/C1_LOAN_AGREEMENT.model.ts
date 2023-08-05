@@ -51,6 +51,10 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   title = 'Loan agreement';
   schema = schema;
   override useParentContact = true;
+  override hasAmountInput = false;
+  override hasLoanAgreement = true;
+  override hasSignature1 = true;
+  override hasSignature2 = true;
   override hasAdditionalInfo = false;
 
   override inheritedFields = [
@@ -66,14 +70,15 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'interest_rate',
   ] as TemplateMapKeyType[];
 
-  override description =
-    'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
+  // override description =
+  //   'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
   override accordionTitle = 'STEP TWO';
   override accordionSubText =
     'Enter contact, loan, terms, collateral, and future income information for the loan agreeement';
   override formTitle = 'Receipt';
-  override footer = undefined;
-  override contactTitle = 'Contact';
+  override footer =
+    'The information in this loan  will automatically create a related disbursement. Review the disbursement; enter a purpose of disbursement or note/memo text; or continue without reviewing and "Save transactions."';
+  override contactTitle = undefined;
 
   getNewTransaction() {
     return SchC1Transaction.fromJSON({

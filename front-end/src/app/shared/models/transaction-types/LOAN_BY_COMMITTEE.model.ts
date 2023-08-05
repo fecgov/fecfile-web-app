@@ -37,7 +37,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     'text4000',
   ];
   contactTypeOptions = COMMITTEE;
-  override showStandardAmount = false;
+  override hasAmountInput = false;
   override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_BY_COMMITTEE);
 

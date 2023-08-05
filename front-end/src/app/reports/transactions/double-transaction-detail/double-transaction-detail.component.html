@@ -65,7 +65,7 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transactionType?.showStandardAmount">
+          <ng-container *ngIf="transactionType?.hasAmountInput">
             <h3>{{ transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="form"
@@ -277,7 +277,7 @@
             ></app-election-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.showStandardAmount">
+          <ng-container *ngIf="childTransaction?.transactionType?.hasAmountInput">
             <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="childForm"

@@ -31,8 +31,6 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
-  showStandardAmount = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
-  hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
 
   // Double-entry settings
@@ -63,7 +61,6 @@ export abstract class TransactionType {
   dateLabel = 'DATE';
   amountInputHeader = '';
   purposeDescripLabel = '';
-
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
   accordionSubText?: string; // Text after title in accordion handle
@@ -71,6 +68,8 @@ export abstract class TransactionType {
   footer?: string; // Text at the end of form
   contactTitle?: string; // Title for primary contact
   contactLookupLabel?: string; //Label above contact lookup
+  signatoryOneTitle = 'Committee treasurer';
+  signatoryTwoTitle = 'Authorized representative';
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -115,8 +114,10 @@ export abstract class TransactionType {
     return ['entity_type', ...templateFields];
   }
 
-  // The following "has*" methonds and properties are boolean switches that show/hide
+  // The following "has*" methods and properties are boolean switches that show/hide
   // a component or section in the transaction type input component
+  hasAmountInput = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
+  hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
@@ -139,6 +140,9 @@ export abstract class TransactionType {
     return hasFields(this.formFields, LOAN_TERMS_FIELDS);
   }
   hasAdditionalInfo = true;
+  hasLoanAgreement = false;
+  hasSignature1 = false;
+  hasSignature2 = false;
 }
 
 export enum PurposeDescriptionLabelSuffix {

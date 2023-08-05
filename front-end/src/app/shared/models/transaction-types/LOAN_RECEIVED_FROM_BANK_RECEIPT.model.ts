@@ -3,12 +3,7 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import {
-  ORGANIZATION_FORM_FIELDS,
-  ORGANIZATION,
-  ORG_FIELDS,
-  CORE_FIELDS,
-} from 'app/shared/utils/transaction-type-properties';
+import { ORGANIZATION_FORM_FIELDS, ORGANIZATION, ORG_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override formFields = ORGANIZATION_FORM_FIELDS;
@@ -18,7 +13,17 @@ export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   title = 'Receipt';
   schema = schema;
   override useParentContact = true;
-  override inheritedFields = [...CORE_FIELDS, ...ORG_FIELDS] as TemplateMapKeyType[];
+  override inheritedFields = [
+    ...ORG_FIELDS,
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    'date',
+    'amount',
+    'memo_code',
+  ] as TemplateMapKeyType[];
 
   override description =
     'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
@@ -26,8 +31,7 @@ export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override accordionSubText = 'Review information and enter purpose of description or note/memo text for this receipt';
   override formTitle = 'Receipt';
   override footer = undefined;
-  override contactTitle = 'Contact';
-  override contactLookupLabel = 'CONTACT LOOKUP';
+  override contactTitle = 'Lender';
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

@@ -25,7 +25,7 @@ import { ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   override formFields = [...CORE_FIELDS, ...ORG_FIELDS, ...LOAN_FINANCE_FIELDS, ...LOAN_TERMS_FIELDS];
   contactTypeOptions = ORGANIZATION;
-  override showStandardAmount = false;
+  override hasAmountInput = false;
   override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
 
