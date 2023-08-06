@@ -26,6 +26,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'date',
     'amount',
     'balance',
+    'secondary_name',
 
     // C1 only fields not declared in the templateMap.
     // They are referenced directly and not via the templateMap
@@ -42,7 +43,6 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'desc_specification_of_the_above',
     'estimated_value',
     'depository_account_established_date',
-    'ind_name_account_location',
     'basis_of_loan_description',
   ];
   override contactTypeOptions = ORGANIZATION;

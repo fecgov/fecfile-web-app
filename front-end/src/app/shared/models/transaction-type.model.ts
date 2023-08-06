@@ -191,6 +191,7 @@ export type TransactionTemplateMapType = {
   category_code: string;
   election_code: string;
   election_other_description: string;
+  secondary_name: string;
   secondary_street_1: string;
   secondary_street_2: string;
   secondary_city: string;

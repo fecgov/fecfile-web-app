@@ -8,11 +8,11 @@ import { BaseInputComponent } from '../base-input.component';
 export class NameInputComponent extends BaseInputComponent implements OnInit {
   @Input() templateMapKeyPrefix = '';
 
-  lastNameFieldName = this.templateMap['last_name'];
-  firstNameFieldName = this.templateMap['first_name'];
-  middleNameFieldName = this.templateMap['middle_name'];
-  prefixFieldName = this.templateMap['prefix'];
-  suffixFieldName = this.templateMap['suffix'];
+  lastNameFieldName = '';
+  firstNameFieldName = '';
+  middleNameFieldName = '';
+  prefixFieldName = '';
+  suffixFieldName = '';
 
   ngOnInit(): void {
     switch (this.templateMapKeyPrefix) {
@@ -30,6 +30,12 @@ export class NameInputComponent extends BaseInputComponent implements OnInit {
         this.prefixFieldName = this.templateMap['signatory_2_prefix'];
         this.suffixFieldName = this.templateMap['signatory_2_suffix'];
         break;
+      default:
+        this.lastNameFieldName = this.templateMap['last_name'];
+        this.firstNameFieldName = this.templateMap['first_name'];
+        this.middleNameFieldName = this.templateMap['middle_name'];
+        this.prefixFieldName = this.templateMap['prefix'];
+        this.suffixFieldName = this.templateMap['suffix'];
     }
   }
 }

@@ -48,6 +48,7 @@ export abstract class SchC1TransactionType extends TransactionType {
     category_code: '',
     election_code: '',
     election_other_description: '',
+    secondary_name: 'ind_name_account_location',
     secondary_street_1: 'account_street_1',
     secondary_street_2: 'account_street_2',
     secondary_city: 'account_city',
