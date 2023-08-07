@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
@@ -105,6 +105,18 @@ export class TransactionFormUtils {
         });
     }
 
+    // Add form controls to bubble up validate error messages from the Contact Lookup component
+    form.addControl('contact_1', new FormControl());
+    form.addControl(
+      'contact_2',
+      new FormControl(null, () => {
+        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+
     const schema = transaction.transactionType?.schema;
     if (schema) {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
@@ -189,5 +201,4 @@ export class TransactionFormUtils {
     // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
     return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
   }
-
 }

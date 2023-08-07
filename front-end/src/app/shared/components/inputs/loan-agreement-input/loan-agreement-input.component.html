@@ -246,12 +246,13 @@
       </div>
     </div>
     <div class="grid">
-      <!-- START HERE -->
       <app-transaction-contact-lookup
         [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="contactTypeOptions"
+        [contactTypeFormControl]="contactTypeFormControl"
         selectedContactFormControlName="contact_2"
+        [contactTypeReadOnly]="true"
         (contactSelect)="onContactLookupSelect($event)"
       ></app-transaction-contact-lookup>
     </div>

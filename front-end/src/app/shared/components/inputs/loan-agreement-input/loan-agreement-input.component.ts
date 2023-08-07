@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -14,6 +14,8 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
   styleUrls: ['./loan-agreement-input.component.scss'],
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
+  @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
+
   // Switches to show/hide groups of form input values
   showLoanRestructured = false;
   showLineOfCredit = false;
@@ -21,6 +23,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   showSecured = false;
   showFutureIncome = false;
 
+  contactTypeFormControl: FormControl = new FormControl(ContactTypes.ORGANIZATION);
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION);
 
   ngOnInit(): void {
@@ -94,6 +97,6 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    // TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
+    this.contactSelect.emit(selectItem);
   }
 }

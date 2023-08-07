@@ -36,7 +36,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   transactionType?: TransactionType;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
   candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -69,17 +69,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
-
-    this.form.addControl('contact_1', new FormControl());
-    this.form.addControl(
-      'contact_2',
-      new FormControl(null, () => {
-        if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 

@@ -308,6 +308,7 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
+              (contactSelect)="childOnSecondaryContactLookupSelect($event)"
             ></app-loan-agreement-input>
             <p-divider></p-divider>
           </ng-container>
