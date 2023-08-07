@@ -18,6 +18,7 @@ import {
   ScheduleC2TransactionTypes,
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
+import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -158,21 +159,24 @@ export type ScheduleTransaction =
   | SchCTransaction
   | SchC1Transaction
   | SchC2Transaction
-  | SchDTransaction;
+  | SchDTransaction
+  | SchETransaction;
 export type TransactionTypes =
   | ScheduleATransactionTypes
   | ScheduleBTransactionTypes
   | ScheduleCTransactionTypes
   | ScheduleC1TransactionTypes
   | ScheduleC2TransactionTypes
-  | ScheduleDTransactionTypes;
+  | ScheduleDTransactionTypes
+  | ScheduleETransactionTypes;
 export type TransactionGroupTypes =
   | ScheduleATransactionGroupsType
   | ScheduleBTransactionGroupsType
   | ScheduleCTransactionGroupsType
   | ScheduleC1TransactionGroupsType
   | ScheduleC2TransactionGroupsType
-  | ScheduleDTransactionGroupsType;
+  | ScheduleDTransactionGroupsType
+  | ScheduleETransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
