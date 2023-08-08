@@ -38,7 +38,7 @@ export class TransactionContactUtils {
     contact: Contact,
     templateMap: TransactionTemplateMapType,
     contactConfig: { [formField: string]: string }
-    // eslint-disable--next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any[] {
     return Object.entries(contactConfig)
       .map(([field, property]: string[]) => {
@@ -58,7 +58,7 @@ export class TransactionContactUtils {
         if (transaction[contactKey as keyof Transaction]) {
           const contact = transaction[contactKey as keyof Transaction] as Contact;
           const contactChanges = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
-          // eslint-disable--next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
             contact[property] = value as never;
           });
