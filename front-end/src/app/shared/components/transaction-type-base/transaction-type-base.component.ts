@@ -144,22 +144,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   save(navigationEvent: NavigationEvent) {
     // update all contacts with changes from form.
-    Object.entries(this.transactionType?.contactConfig ?? {}).forEach(
-      ([contactKey, config]: [string, { [formField: string]: string }]) => {
-        if (this.transaction && this.transaction[contactKey as keyof Transaction]) {
-          const contact = this.transaction[contactKey as keyof Transaction] as Contact;
-          const contactChanges = TransactionContactUtils.getContactChanges(
-            this.form,
-            contact,
-            this.templateMap,
-            config
-          );
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-            contact[property] = value as never;
-          });
-        }
-      }
-    );
+    if (this.transaction) {
+      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
+    } else {
+      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+    }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,

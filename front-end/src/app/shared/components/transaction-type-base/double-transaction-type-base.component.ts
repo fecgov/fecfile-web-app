@@ -171,8 +171,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override save(navigationEvent: NavigationEvent) {
-    this.formSubmitted = true;
-
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction) {
       TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
@@ -202,6 +200,8 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override handleNavigate(navigationEvent: NavigationEvent): void {
+    this.formSubmitted = true;
+
     if (navigationEvent.action === NavigationAction.SAVE) {
       if (this.childForm.invalid || this.form.invalid || !this.transaction || !this.childTransaction) {
         return;
