@@ -11,7 +11,7 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -21,7 +21,19 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, map, of, Subject, takeUntil, startWith } from 'rxjs';
+import {
+  BehaviorSubject,
+  map,
+  of,
+  Subject,
+  takeUntil,
+  startWith,
+  Observable,
+  delay,
+  from,
+  concatAll,
+  reduce,
+} from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -122,11 +134,20 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigationEvent: NavigationEvent) {
-    this.formSubmitted = true;
+  writeToApi(payload: Transaction): Observable<Transaction> {
+    if (payload.id) {
+      return this.transactionService.update(payload);
+    } else {
+      return this.transactionService.create(payload);
+    }
+  }
 
-    if (this.form.invalid) {
-      return;
+  save(navigationEvent: NavigationEvent) {
+    // update all contacts with changes from form.
+    if (this.transaction) {
+      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
+    } else {
+      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -134,108 +155,65 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.formProperties
     );
-
-    this.confirmSave(payload, this.form, this.doSave, navigationEvent, payload);
-  }
-
-  protected confirmSave(
-    confirmTransaction: Transaction,
-    form: FormGroup,
-    acceptCallback: (navigationEvent: NavigationEvent, payload: Transaction) => void,
-    navigationEvent: NavigationEvent,
-    payload: Transaction,
-    targetDialog: 'dialog' | 'childDialog' = 'dialog'
-  ) {
-    if (
-      confirmTransaction.contact_1_id &&
-      confirmTransaction.contact_1 &&
-      confirmTransaction?.transactionType?.templateMap
-    ) {
-      const transactionContactChanges = TransactionContactUtils.setTransactionContactFormChanges(
-        form,
-        confirmTransaction.contact_1,
-        confirmTransaction.transactionType.templateMap
-      );
-      if (transactionContactChanges?.length) {
-        const confirmationMessage = TransactionContactUtils.getEditTransactionContactConfirmationMessage(
-          transactionContactChanges,
-          confirmTransaction.contact_1,
-          form,
-          this.fecDatePipe,
-          confirmTransaction.transactionType.templateMap
-        );
-        this.confirmationService.confirm({
-          key: targetDialog,
-          header: 'Confirm',
-          icon: 'pi pi-info-circle',
-          message: confirmationMessage,
-          acceptLabel: 'Continue',
-          rejectLabel: 'Cancel',
-          accept: () => {
-            acceptCallback.call(this, navigationEvent, payload);
-          },
-          reject: () => {
-            return;
-          },
-        });
-      } else {
-        acceptCallback.call(this, navigationEvent, payload);
-      }
-    } else {
-      if (confirmTransaction?.transactionType?.templateMap) {
-        const confirmationMessage = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-          (confirmTransaction as ScheduleTransaction).entity_type as ContactTypes,
-          form,
-          confirmTransaction.transactionType.templateMap
-        );
-        this.confirmationService.confirm({
-          key: targetDialog,
-          header: 'Confirm',
-          icon: 'pi pi-info-circle',
-          message: confirmationMessage,
-          acceptLabel: 'Continue',
-          rejectLabel: 'Cancel',
-          accept: () => {
-            acceptCallback.call(this, navigationEvent, payload);
-          },
-          reject: () => {
-            return;
-          },
-        });
-      } else {
-        throw new Error('Fecfile: Cannot find template map when confirming transaction');
-      }
-    }
-  }
-
-  protected doSave(navigationEvent: NavigationEvent, payload: Transaction) {
     if (payload.transaction_type_identifier) {
-      const originalTransaction = payload;
-      // Reorganize the payload if this transaction type can update its parent transaction
-      // This will break the scenario where the user creates a grandparent, then child, then tries
-      // to create a grandchild transaction because we won't know which child transaction of the grandparent
-      // was the original transaction it's id was generated on the api.  the middle child's
-      // id is necessary to generate the url for creating the grandchild.
-      if (payload.transactionType?.updateParentOnSave) {
-        payload = payload.getUpdatedParent();
-      }
-
-      if (payload.id) {
-        this.transactionService.update(payload).subscribe((transaction) => {
-          navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
-            ? originalTransaction
-            : transaction;
-          this.navigateTo(navigationEvent);
-        });
-      } else {
-        this.transactionService.create(payload).subscribe((transaction) => {
-          navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
-            ? originalTransaction
-            : transaction;
-          this.navigateTo(navigationEvent);
-        });
-      }
+      const responseFromApi = this.writeToApi(payload);
+      responseFromApi.subscribe((transaction) => {
+        navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
+        this.navigateTo(navigationEvent);
+      });
     }
+  }
+
+  confirmWithUser(transaction: Transaction, form: FormGroup, targetDialog: 'dialog' | 'childDialog' = 'dialog') {
+    const templateMap = transaction.transactionType?.templateMap;
+    if (!templateMap) {
+      throw new Error('Fecfile: Cannot find template map when confirming transaction');
+    }
+    const confirmations$ = Object.entries(transaction.transactionType?.contactConfig ?? {})
+      .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
+        if (transaction[contactKey as keyof Transaction]) {
+          const contact = transaction[contactKey as keyof Transaction] as Contact;
+          if (!contact.id) {
+            return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+              contact.type,
+              form,
+              templateMap
+            );
+          }
+          const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
+          const dateString = this.fecDatePipe.transform(form.get(templateMap.date)?.value);
+          if (changes.length > 0) {
+            return TransactionContactUtils.getContactChangesMessage(contact, dateString, changes);
+          }
+        }
+        return '';
+      })
+      .filter((message) => !!message)
+      .map((message: string) => {
+        return new Observable<boolean>((subscriber) => {
+          this.confirmationService.confirm({
+            key: targetDialog,
+            header: 'Confirm',
+            icon: 'pi pi-info-circle',
+            message: message,
+            acceptLabel: 'Continue',
+            rejectLabel: 'Cancel',
+            accept: () => {
+              subscriber.next(true);
+              subscriber.complete();
+            },
+            reject: () => {
+              subscriber.next(false);
+              subscriber.complete();
+            },
+          });
+        }).pipe(delay(500));
+      });
+
+    return from([of(true), ...confirmations$]).pipe(
+      concatAll(),
+      reduce((accumulator, confirmed) => accumulator && confirmed)
+    );
   }
 
   getNavigationControls(): TransactionNavigationControls {
@@ -248,8 +226,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {
+    this.formSubmitted = true;
+
     if (navigationEvent.action === NavigationAction.SAVE) {
-      this.save(navigationEvent);
+      if (this.form.invalid || !this.transaction) {
+        return;
+      }
+      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: boolean) => {
+        // if every confirmation was accepted
+        if (confirmed) this.save(navigationEvent);
+      });
     } else {
       this.navigateTo(navigationEvent);
     }

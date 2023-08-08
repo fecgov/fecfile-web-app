@@ -1,7 +1,7 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { ContactTypes } from '../contact.model';
+import { ContactTypes, STANDARD_AND_CANDIDATE } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
 import {
   COMMITTEE,
@@ -12,6 +12,7 @@ import { CONDUIT_EARMARK_OUT as CommonConduitEarmarkOut } from './common-types/C
 export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
+  override contactConfig = STANDARD_AND_CANDIDATE;
   title = 'Conduit Earmark Out';
   schema = schema;
   override parentTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
