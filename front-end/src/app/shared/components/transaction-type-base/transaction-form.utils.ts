@@ -133,12 +133,10 @@ export class TransactionFormUtils {
     if (!transaction) {
       throw new Error('Fecfile: Payload transaction not found');
     }
+
     // Remove parent transaction links within the parent-child hierarchy in the
     // transaction objects to avoid a recursion overflow from the class-transformer
     // plainToClass() converter
-    if (transaction?.parent_transaction) {
-      transaction.parent_transaction = undefined;
-    }
     if (transaction?.children) {
       transaction.children.forEach((child) => {
         child.parent_transaction = undefined;
@@ -148,15 +146,21 @@ export class TransactionFormUtils {
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
 
-    const payload: ScheduleTransaction = getFromJSON({
+    let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
-
     if (payload.children) {
       payload.children = payload.updateChildren();
     }
-
+    // Reorganize the payload if this transaction type can update its parent transaction
+    // This will break the scenario where the user creates a grandparent, then child, then tries
+    // to create a grandchild transaction because we won't know which child transaction of the grandparent
+    // was the original transaction it's id was generated on the api.  the middle child's
+    // id is necessary to generate the url for creating the grandchild.
+    if (transaction.transactionType?.updateParentOnSave) {
+      payload = payload.getUpdatedParent() as ScheduleTransaction;
+    }
     return payload;
   }
 

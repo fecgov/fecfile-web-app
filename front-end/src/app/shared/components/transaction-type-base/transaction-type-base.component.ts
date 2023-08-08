@@ -135,15 +135,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   writeToApi(payload: Transaction): Observable<Transaction> {
-    // Reorganize the payload if this transaction type can update its parent transaction
-    // This will break the scenario where the user creates a grandparent, then child, then tries
-    // to create a grandchild transaction because we won't know which child transaction of the grandparent
-    // was the original transaction it's id was generated on the api.  the middle child's
-    // id is necessary to generate the url for creating the grandchild.
-    if (payload.transactionType?.updateParentOnSave) {
-      payload = payload.getUpdatedParent();
-    }
-
     if (payload.id) {
       return this.transactionService.update(payload);
     } else {
