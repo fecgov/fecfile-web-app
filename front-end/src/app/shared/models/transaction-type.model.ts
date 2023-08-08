@@ -8,7 +8,7 @@ import {
   LOAN_TERMS_FIELDS,
   hasFields,
 } from '../utils/transaction-type-properties';
-import { ContactType } from './contact.model';
+import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
 
@@ -21,6 +21,7 @@ export abstract class TransactionType {
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
+  contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates

@@ -142,7 +142,7 @@
             [templateMap]="templateMap"
             [transaction]="transaction"
           ></app-additional-info-input>
-          <ng-container *ngIf="isEditable">
+          <ng-container *ngIf="isEditable && getInlineControls().length > 0">
             <p-divider></p-divider>
             <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
               <div class="grid">

@@ -16,10 +16,12 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { Contact } from 'app/shared/models/contact.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [
@@ -73,7 +75,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
+  let transactionService: TransactionService;
   let reportService: ReportService;
+  let testRouter: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -93,13 +97,19 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   beforeEach(() => {
+    testRouter = TestBed.inject(Router);
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    testTransaction.report_id = '123';
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
     reportService = TestBed.inject(ReportService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) return confirmation?.accept();
+    });
+    transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -178,16 +188,15 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('should save a parent and child transaction', () => {
-    const componentNavigateToSpy = spyOn(testConfirmationService, 'confirm');
+    const apiPostSpy = spyOn(transactionService, 'create').and.returnValue(of(testTransaction));
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
 
     if (testTransaction.children) {
       component.childTransaction = testTransaction.children[0];
       component.childTransaction.parent_transaction = component.transaction;
     }
 
-    // Save invalid form values
     const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
-    component.save(navEvent);
 
     // Save valid form values
     component.form.patchValue({
@@ -234,7 +243,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: true,
       text4000: '',
     });
-    component.save(navEvent);
-    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+    component.handleNavigate(navEvent);
+    expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
 });

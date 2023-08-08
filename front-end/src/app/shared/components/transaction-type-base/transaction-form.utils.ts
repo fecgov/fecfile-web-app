@@ -9,7 +9,6 @@ import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeU
 import { ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
-import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -148,26 +147,33 @@ export class TransactionFormUtils {
       throw new Error('Fecfile: Payload transaction not found');
     }
 
-    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
-    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
-    if (transaction.transactionType?.templateMap) {
-      // Update contact object in transaction with new form values
-      TransactionContactUtils.setTransactionContactFormChanges(
-        form,
-        transaction.contact_1,
-        transaction.transactionType.templateMap
-      );
+    // Remove parent transaction links within the parent-child hierarchy in the
+    // transaction objects to avoid a recursion overflow from the class-transformer
+    // plainToClass() converter
+    if (transaction?.children) {
+      transaction.children.forEach((child) => {
+        child.parent_transaction = undefined;
+      });
     }
 
-    const payload: ScheduleTransaction = getFromJSON({
+    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+
+    let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
-
     if (payload.children) {
       payload.children = payload.updateChildren();
     }
-
+    // Reorganize the payload if this transaction type can update its parent transaction
+    // This will break the scenario where the user creates a grandparent, then child, then tries
+    // to create a grandchild transaction because we won't know which child transaction of the grandparent
+    // was the original transaction it's id was generated on the api.  the middle child's
+    // id is necessary to generate the url for creating the grandchild.
+    if (transaction.transactionType?.updateParentOnSave) {
+      payload = payload.getUpdatedParent() as ScheduleTransaction;
+    }
     return payload;
   }
 
