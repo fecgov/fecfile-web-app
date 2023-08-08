@@ -6,7 +6,7 @@ import {
   TransactionTemplateMapType,
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -81,8 +81,8 @@ export abstract class DoubleTransactionTypeBaseComponent
   override save(navigationEvent: NavigationEvent) {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction) {
-      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
-      TransactionContactUtils.updateContactWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
@@ -135,16 +135,16 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
   }
 
-  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
-    super.onContactLookupSelect(selectItem);
+  override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
+    super.updateFormWithPrimaryContact(selectItem);
     if (this.childTransaction?.transactionType?.useParentContact && this.transaction?.contact_1) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
       this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
 
-  childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(
+  childUpdateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithPrimaryContact(
       selectItem,
       this.childForm,
       this.childTransaction,
@@ -163,7 +163,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.
 
-    this.childTransactionType?.inheritedFields?.forEach((inherittedField) => {
+    childTransaction.transactionType?.inheritedFields?.forEach((inherittedField) => {
       if (childTransaction.transactionType) {
         const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
         childFieldControl?.enable();
@@ -179,7 +179,11 @@ export abstract class DoubleTransactionTypeBaseComponent
     });
   }
 
-  childOnSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.childForm, this.childTransaction);
+  childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithCandidateContact(selectItem, this.childForm, this.childTransaction);
+  }
+
+  childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, this.childForm, this.childTransaction);
   }
 }

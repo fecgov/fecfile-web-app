@@ -253,7 +253,7 @@
         [contactTypeFormControl]="contactTypeFormControl"
         selectedContactFormControlName="contact_2"
         [contactTypeReadOnly]="true"
-        (contactSelect)="onContactLookupSelect($event)"
+        (contactSelect)="updateFormWithPrimaryContact($event)"
       ></app-transaction-contact-lookup>
     </div>
     <div class="grid">

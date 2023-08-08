@@ -39,7 +39,7 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   override contactLookupLabel = 'LENDER LOOKUP';
 
   schema = schema;
-  override apiEndpoint = '/transactions/save-triple';
+  override apiEndpoint = '/transactions/save';
   override dependentChildTransactionType = [
     ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
     ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,

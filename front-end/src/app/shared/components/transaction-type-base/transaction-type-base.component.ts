@@ -127,7 +127,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   save(navigationEvent: NavigationEvent) {
     // update all contacts with changes from form.
     if (this.transaction) {
-      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
@@ -146,7 +146,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  confirmWithUser(transaction: Transaction, form: FormGroup, targetDialog: 'dialog' | 'childDialog' = 'dialog') {
+  confirmWithUser(
+    transaction: Transaction,
+    form: FormGroup,
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
+  ) {
     const templateMap = transaction.transactionType?.templateMap;
     if (!templateMap) {
       throw new Error('Fecfile: Cannot find template map when confirming transaction');
@@ -264,11 +268,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
   }
 
-  onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(selectItem, this.form, this.transaction, this.contactId$);
+  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, this.form, this.transaction, this.contactId$);
   }
-  onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
+  updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithCandidateContact(selectItem, this.form, this.transaction);
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {

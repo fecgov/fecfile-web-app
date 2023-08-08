@@ -96,7 +96,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
       });
   }
 
-  onContactLookupSelect(selectItem: SelectItem<Contact>) {
+  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
     this.contactSelect.emit(selectItem);
   }
 }

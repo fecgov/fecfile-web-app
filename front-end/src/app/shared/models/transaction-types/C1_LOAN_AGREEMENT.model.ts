@@ -10,6 +10,7 @@ import {
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { STANDARD_AND_SECONDARY } from '../contact.model';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [
@@ -45,6 +46,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'depository_account_established_date',
     'basis_of_loan_description',
   ];
+  override contactConfig = STANDARD_AND_SECONDARY;
   override contactTypeOptions = ORGANIZATION;
   override isDependentChild = true;
   override doMemoCodeDateCheck = false;

@@ -26,7 +26,7 @@
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               selectedContactFormControlName="contact_1"
               [contactTypeReadOnly]="contactTypeOptions.length === 1"
-              (contactSelect)="onContactLookupSelect($event)"
+              (contactSelect)="updateFormWithPrimaryContact($event)"
             >
             </app-transaction-contact-lookup>
           </div>
@@ -115,7 +115,7 @@
               [contactTypeFormControl]="candidateContactTypeFormControl"
               selectedContactFormControlName="contact_2"
               [contactTypeReadOnly]="true"
-              (contactSelect)="onSecondaryContactLookupSelect($event)"
+              (contactSelect)="updateFormWithCandidateContact($event)"
             ></app-transaction-contact-lookup>
             <ng-container *ngIf="transaction?.contact_2">
               <app-candidate-input
@@ -190,7 +190,7 @@
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 selectedContactFormControlName="contact_1"
                 [contactTypeReadOnly]="childContactTypeOptions.length === 1"
-                (contactSelect)="childOnContactLookupSelect($event)"
+                (contactSelect)="childUpdateFormWithPrimaryContact($event)"
               >
               </app-transaction-contact-lookup>
             </div>
@@ -257,7 +257,7 @@
               [contactTypeFormControl]="candidateContactTypeFormControl"
               selectedContactFormControlName="contact_2"
               [contactTypeReadOnly]="true"
-              (contactSelect)="childOnSecondaryContactLookupSelect($event)"
+              (contactSelect)="childUpdateFormWithCandidateContact($event)"
             ></app-transaction-contact-lookup>
             <ng-container *ngIf="childTransaction?.contact_2">
               <app-candidate-input
@@ -308,7 +308,7 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              (contactSelect)="childOnSecondaryContactLookupSelect($event)"
+              (contactSelect)="childUpdateFormWithSecondaryContact($event)"
             ></app-loan-agreement-input>
             <p-divider></p-divider>
           </ng-container>
@@ -374,7 +374,7 @@
                 [contactTypeFormControl]="$any(childForm_2).controls['entity_type']"
                 selectedContactFormControlName="contact_1"
                 [contactTypeReadOnly]="childContactTypeOptions_2.length === 1"
-                (contactSelect)="childOnContactLookupSelect($event)"
+                (contactSelect)="childUpdateFormWithPrimaryContact($event)"
               >
               </app-transaction-contact-lookup>
             </div>
@@ -441,7 +441,7 @@
               [contactTypeFormControl]="candidateContactTypeFormControl"
               selectedContactFormControlName="contact_2"
               [contactTypeReadOnly]="true"
-              (contactSelect)="childOnSecondaryContactLookupSelect($event)"
+              (contactSelect)="childUpdateFormWithCandidateContact($event)"
             ></app-transaction-contact-lookup>
             <ng-container *ngIf="childTransaction_2?.contact_2">
               <app-candidate-input

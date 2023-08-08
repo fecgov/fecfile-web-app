@@ -9,11 +9,13 @@ import {
   Contact,
   ContactTypeLabels,
   ContactTypes,
-  FecApiCommitteeLookupData, FecfileCandidateLookupData, FecfileCommitteeLookupData,
+  FecApiCommitteeLookupData,
+  FecfileCandidateLookupData,
+  FecfileCommitteeLookupData,
   FecfileIndividualLookupData,
   FecfileOrganizationLookupData,
   IndividualLookupResponse,
-  OrganizationLookupResponse
+  OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -59,8 +61,7 @@ describe('ContactLookupComponent', () => {
   });
 
   it('#ngOnInit', () => {
-    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels,
-      [ContactTypes.INDIVIDUAL]);
+    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
     component.ngOnInit();
     component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
     expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);
@@ -116,8 +117,8 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(
-      JSON.stringify(component.contactLookupList) === JSON.stringify(
-        testCandidateLookupResponse.toSelectItemGroups(true))
+      JSON.stringify(component.contactLookupList) ===
+        JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true))
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -178,7 +179,8 @@ describe('ContactLookupComponent', () => {
     component.contactTypeFormControl.setValue('COM');
     component.onDropdownSearch(testEvent);
     expect(
-      JSON.stringify(component.contactLookupList) === JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true))
+      JSON.stringify(component.contactLookupList) ===
+        JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true))
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -252,7 +254,7 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups())
+        JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups())
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -264,7 +266,7 @@ describe('ContactLookupComponent', () => {
     ).toBeTrue();
   }));
 
-  it('#onContactLookupSelect Contact happy path', fakeAsync(() => {
+  it('#updateFormWithPrimaryContact Contact happy path', fakeAsync(() => {
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
     const testContact = Contact.fromJSON({
       id: 123,
@@ -275,7 +277,7 @@ describe('ContactLookupComponent', () => {
     const testValue = {
       value: testContact,
     } as SelectItem<Contact>;
-    component.onContactLookupSelect(testValue);
+    component.updateFormWithPrimaryContact(testValue);
     tick(500);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
   }));
@@ -293,5 +295,4 @@ describe('ContactLookupComponent', () => {
 
     expect(retval).toEqual(expectedRetval);
   });
-
 });

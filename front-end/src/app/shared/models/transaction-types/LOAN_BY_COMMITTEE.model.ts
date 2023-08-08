@@ -52,7 +52,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override contactLookupLabel = 'LENDEE LOOKUP';
 
   schema = schema;
-  override apiEndpoint = '/transactions/save-pair';
+  override apiEndpoint = '/transactions/save';
   override dependentChildTransactionType = [ScheduleBTransactionTypes.LOAN_MADE];
   override subTransactionConfig = new SubTransactionGroup('Guarantors', []);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(

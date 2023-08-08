@@ -147,7 +147,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       value: contact,
     };
 
-    component.onContactLookupSelect(selectContact);
+    component.updateFormWithPrimaryContact(selectContact);
     expect(component.childTransaction.contact_1?.name).toEqual('Name');
   });
 

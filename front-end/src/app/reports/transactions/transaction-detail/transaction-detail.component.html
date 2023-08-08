@@ -16,7 +16,7 @@
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             selectedContactFormControlName="contact_1"
             [contactTypeReadOnly]="contactTypeOptions.length === 1"
-            (contactSelect)="onContactLookupSelect($event)"
+            (contactSelect)="updateFormWithPrimaryContact($event)"
           >
           </app-transaction-contact-lookup>
         </div>
@@ -105,7 +105,7 @@
           [contactTypeFormControl]="candidateContactTypeFormControl"
           selectedContactFormControlName="contact_2"
           [contactTypeReadOnly]="true"
-          (contactSelect)="onSecondaryContactLookupSelect($event)"
+          (contactSelect)="updateFormWithCandidateContact($event)"
         ></app-transaction-contact-lookup>
         <ng-container *ngIf="transaction?.contact_2">
           <app-candidate-input

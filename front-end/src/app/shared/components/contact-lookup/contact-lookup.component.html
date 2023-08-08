@@ -24,7 +24,7 @@
         [formControlName]="selectedContactFormControlName"
         placeholder="Search for a contact"
         [forceSelection]="true"
-        (onSelect)="onContactLookupSelect($event)"
+        (onSelect)="updateFormWithPrimaryContact($event)"
       >
         <ng-template let-group pTemplate="group">
           <div>{{ group.label }}</div>
