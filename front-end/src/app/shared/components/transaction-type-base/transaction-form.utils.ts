@@ -158,6 +158,7 @@ export class TransactionFormUtils {
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+    formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
 
     let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
@@ -175,6 +176,22 @@ export class TransactionFormUtils {
       payload = payload.getUpdatedParent() as ScheduleTransaction;
     }
     return payload;
+  }
+
+  /**
+   * Some form fields are not part of the FEC spec but internal state variables for the front-end. Add them to the payload.
+   * @param form
+   * @param transaction
+   * @param contactTypeOptions
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static addExtraFormFields(transaction: Transaction, form: FormGroup, formValues: any) {
+    transaction.transactionType?.formFields.forEach((field) => {
+      if (!(field in formValues)) {
+        formValues[field] = form.get(field)?.value ?? null;
+      }
+    });
+    return formValues;
   }
 
   static resetForm(form: FormGroup, transaction: Transaction | undefined, contactTypeOptions: PrimeOptions) {

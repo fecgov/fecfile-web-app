@@ -27,10 +27,6 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION);
 
   ngOnInit(): void {
-    // Make a placeholder form control for line of credit Yes/No radio buttons,
-    // which is not in the spec and its value is not saved in the transaction.
-    this.form.addControl('lineOfCredit', new FormControl(null));
-
     this.form
       .get('loan_restructured')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -40,9 +36,10 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
           this.form.get('loan_originally_incurred_date')?.setValue(null);
         }
       });
+    this.form.get('loan_restructured')?.updateValueAndValidity();
 
     this.form
-      .get('lineOfCredit')
+      .get('line_of_credit')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
         this.showLineOfCredit = value;
@@ -53,6 +50,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
           });
         }
       });
+    this.form.get('line_of_credit')?.updateValueAndValidity();
 
     this.form
       .get('others_liable')
@@ -60,6 +58,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
       .subscribe((value) => {
         this.showOthersLiable = value;
       });
+    this.form.get('others_liable')?.updateValueAndValidity();
 
     this.form
       .get(this.templateMap['secured'])
@@ -74,6 +73,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
           });
         }
       });
+    this.form.get(this.templateMap['secured'])?.updateValueAndValidity();
 
     this.form
       .get('future_income')
@@ -94,6 +94,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
           });
         }
       });
+    this.form.get('future_income')?.updateValueAndValidity();
   }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {

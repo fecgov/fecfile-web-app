@@ -50,7 +50,13 @@ export abstract class TripleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childTransaction_2 = (this.transaction?.children ?? [])[1];
+    this.childTransaction_2 = this.transaction?.children?.filter(
+      (child) =>
+        child.transaction_type_identifier === this.transaction?.transactionType?.dependentChildTransactionTypes?.[1]
+    )[0];
+    if (!this.childTransaction_2) {
+      throw new Error('Fecfile: Child 2 transaction not found for component');
+    }
     this.childTransactionType_2 = this.childTransaction_2?.transactionType;
     if (!this.childTransactionType_2?.templateMap) {
       throw new Error('Fecfile: Template map not found for double transaction component');

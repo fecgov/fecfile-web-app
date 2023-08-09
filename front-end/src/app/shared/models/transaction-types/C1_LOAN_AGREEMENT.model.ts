@@ -45,6 +45,10 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'estimated_value',
     'depository_account_established_date',
     'basis_of_loan_description',
+
+    // The line_of_credit field is strictly to save UI state on the front-end
+    // and is not part of the SchC1 spec
+    'line_of_credit',
   ];
   override contactConfig = STANDARD_AND_SECONDARY;
   override contactTypeOptions = ORGANIZATION;

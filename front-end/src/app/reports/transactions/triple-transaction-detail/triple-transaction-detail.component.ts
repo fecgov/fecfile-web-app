@@ -50,5 +50,8 @@ export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseC
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
       this.accordionActiveIndex = 1;
     }
+    if (this.childTransaction_2 && transactionId && this.childTransaction_2?.id === transactionId) {
+      this.accordionActiveIndex = 2;
+    }
   }
 }

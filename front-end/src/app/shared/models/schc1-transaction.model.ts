@@ -53,6 +53,10 @@ export class SchC1Transaction extends Transaction {
   entity_type: string | undefined;
   aggregation_group: AggregationGroups | undefined;
 
+  // The line_of_credit field is strictly to save front-end UI state and is not
+  // part of the SchC1 spec
+  line_of_credit: boolean | undefined;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchC1Transaction {
     const transaction = plainToClass(SchC1Transaction, json);
