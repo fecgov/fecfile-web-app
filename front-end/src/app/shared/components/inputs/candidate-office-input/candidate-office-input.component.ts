@@ -30,14 +30,14 @@ export class CandidateOfficeInputComponent extends DestroyerComponent implements
       .subscribe((value: string) => {
         if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
           this.form.patchValue({
-            [this.candidateStateFormControlName]: '',
-            [this.candidateDistrictFormControlName]: '',
+            [this.candidateStateFormControlName]: null,
+            [this.candidateDistrictFormControlName]: null,
           });
           this.form.get(this.candidateStateFormControlName)?.disable();
           this.form.get(this.candidateDistrictFormControlName)?.disable();
         } else if (value === CandidateOfficeTypes.SENATE) {
           this.form.patchValue({
-            [this.candidateDistrictFormControlName]: '',
+            [this.candidateDistrictFormControlName]: null,
           });
           this.form.get(this.candidateStateFormControlName)?.enable();
           this.form.get(this.candidateDistrictFormControlName)?.disable();
