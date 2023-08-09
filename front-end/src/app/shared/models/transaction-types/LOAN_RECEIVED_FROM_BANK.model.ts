@@ -30,11 +30,12 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
 
   override description =
-    'Follow this two-step process to create both a loan received from the bank and a loan agreement. This loan type requires an associated receipt.';
+    'Follow this two-step process to create both a loan received from the bank and a loan agreement. This loan type requires an associated transaction.';
   override accordionTitle = 'STEP ONE';
   override accordionSubText = 'Enter lender, loan, and terms information for a loan received for a bank';
   override formTitle = undefined;
-  override footer = 'Click STEP TWO below to enter loan agreement information.';
+  override footer =
+    'This loan requires a related transaction. Click STEP TWO below to enter loan agreement information.';
   override contactTitle = 'Lender';
   override contactLookupLabel = 'LENDER LOOKUP';
 

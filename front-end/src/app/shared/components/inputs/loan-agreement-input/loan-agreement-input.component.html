@@ -246,15 +246,26 @@
       </div>
     </div>
     <div class="grid">
-      <app-transaction-contact-lookup
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        [contactTypeOptions]="contactTypeOptions"
-        [contactTypeFormControl]="contactTypeFormControl"
-        selectedContactFormControlName="contact_2"
-        [contactTypeReadOnly]="true"
-        (contactSelect)="updateFormWithPrimaryContact($event)"
-      ></app-transaction-contact-lookup>
+      <div class="col-12">
+        <div class="field">
+          <label for="location_of_account">LOCATION OF ACCOUNT</label>
+          <span
+            class="pi pi-info-circle"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
+            pTooltip="{{ locationOfAccountHelpText }}"
+          ></span>
+          <app-transaction-contact-lookup
+            id="location_of_account"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [contactTypeOptions]="contactTypeOptions"
+            [contactTypeFormControl]="contactTypeFormControl"
+            selectedContactFormControlName="contact_2"
+            [contactTypeReadOnly]="true"
+            (contactSelect)="updateFormWithLocationOfAccountContact($event)"
+          ></app-transaction-contact-lookup>
+        </div>
+      </div>
     </div>
     <div class="grid">
       <div class="col-12">

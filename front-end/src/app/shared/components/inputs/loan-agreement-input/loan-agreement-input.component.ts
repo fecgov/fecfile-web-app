@@ -26,6 +26,9 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   contactTypeFormControl: FormControl = new FormControl(ContactTypes.ORGANIZATION);
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION);
 
+  locationOfAccountHelpText =
+    'Provide the full name and address of the depository institution where the account was established.';
+
   ngOnInit(): void {
     this.form
       .get('loan_restructured')
@@ -107,7 +110,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
     this.form.get('future_income')?.updateValueAndValidity();
   }
 
-  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+  updateFormWithLocationOfAccountContact(selectItem: SelectItem<Contact>) {
     this.contactSelect.emit(selectItem);
   }
 }
