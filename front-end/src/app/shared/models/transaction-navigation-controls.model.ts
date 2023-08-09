@@ -91,6 +91,14 @@ export const SAVE_DOUBLE_ENTRY_LIST_CONTROL = new NavigationControl(
   hasNoContact
 );
 
+export const SAVE_TRIPLE_ENTRY_LIST_CONTROL = new NavigationControl(
+  NavigationAction.SAVE,
+  NavigationDestination.LIST,
+  'Save transactions',
+  'p-button-primary',
+  hasNoContact
+);
+
 export const SAVE_ANOTHER_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.ANOTHER,

@@ -4,7 +4,7 @@ import { SchCTransactionType } from '../schc-transaction-type.model';
 import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import {
   CANCEL_CONTROL,
-  SAVE_DOUBLE_ENTRY_LIST_CONTROL,
+  SAVE_TRIPLE_ENTRY_LIST_CONTROL,
   TransactionNavigationControls,
   NavigationControl,
   NavigationAction,
@@ -58,7 +58,7 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
+    [SAVE_TRIPLE_ENTRY_LIST_CONTROL]
   );
 
   getNewTransaction() {

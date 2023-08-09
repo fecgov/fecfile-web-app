@@ -52,6 +52,16 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
       });
     this.form.get('line_of_credit')?.updateValueAndValidity();
 
+    // We need to update the TOTAL OUTSTANDING BALANCE field when
+    // the CREDIT AMOUNT THIS DRAW field is updated to ensure validation
+    // keeps in the former keeps up with changes in the latter.
+    this.form
+      .get('credit_amount_this_draw')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.form.get(this.templateMap['balance'])?.updateValueAndValidity();
+      });
+
     this.form
       .get('others_liable')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
