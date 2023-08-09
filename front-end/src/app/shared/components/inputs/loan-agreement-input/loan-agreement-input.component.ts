@@ -22,6 +22,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   showOthersLiable = false;
   showSecured = false;
   showFutureIncome = false;
+  showLocationOfAccount = false;
 
   contactTypeFormControl: FormControl = new FormControl(ContactTypes.ORGANIZATION);
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION);
@@ -108,6 +109,18 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
         }
       });
     this.form.get('future_income')?.updateValueAndValidity();
+
+    // Watch the Location of Account org name for changes and open the
+    // container holding the input forms when an org has been selected
+    this.form
+      .get(this.templateMap['secondary_name'])
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (value) {
+          this.showLocationOfAccount = true;
+        }
+      });
+    this.form.get(this.templateMap['secondary_name'])?.updateValueAndValidity();
   }
 
   updateFormWithLocationOfAccountContact(selectItem: SelectItem<Contact>) {
