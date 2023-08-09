@@ -59,7 +59,7 @@ export abstract class TripleTransactionTypeBaseComponent
     }
     this.childTransactionType_2 = this.childTransaction_2?.transactionType;
     if (!this.childTransactionType_2?.templateMap) {
-      throw new Error('Fecfile: Template map not found for double transaction component');
+      throw new Error('Fecfile: Template map not found for triple transaction component');
     }
     this.childTemplateMap_2 = this.childTransactionType_2.templateMap;
     this.childContactTypeOptions_2 = getContactTypeOptions(this.childTransactionType_2.contactTypeOptions ?? []);
@@ -137,19 +137,21 @@ export abstract class TripleTransactionTypeBaseComponent
       ) {
         return;
       }
+
       let confirmation$ = this.confirmWithUser(this.transaction, this.form);
-      if (!this.childTransactionType?.useParentContact) {
-        confirmation$ = concat(
-          confirmation$,
-          this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-        ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-      }
-      if (this.childTransaction_2 && !this.childTransactionType_2?.useParentContact) {
+
+      confirmation$ = concat(
+        confirmation$,
+        this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
+      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+
+      if (this.childTransaction_2) {
         confirmation$ = concat(
           confirmation$,
           this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2')
         ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
       }
+
       confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);

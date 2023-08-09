@@ -158,6 +158,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const confirmations$ = Object.entries(transaction.transactionType?.contactConfig ?? {})
       .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
+          if (transaction.transactionType?.useParentContact && contactKey === 'contact_1') {
+            return '';
+          }
           const contact = transaction[contactKey as keyof Transaction] as Contact;
           if (!contact.id) {
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
