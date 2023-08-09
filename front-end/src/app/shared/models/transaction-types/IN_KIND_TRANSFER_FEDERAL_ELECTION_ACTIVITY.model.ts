@@ -11,7 +11,7 @@ export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends IN_KIND {
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY
   );
   schema = schema;
-  override dependentChildTransactionType = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT];
+  override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT];
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

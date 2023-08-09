@@ -11,7 +11,7 @@ export class PAC_EARMARK_RECEIPT extends EARMARK {
   override contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   schema = schema;
-  override dependentChildTransactionType = [ScheduleATransactionTypes.PAC_EARMARK_MEMO];
+  override dependentChildTransactionTypes = [ScheduleATransactionTypes.PAC_EARMARK_MEMO];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';

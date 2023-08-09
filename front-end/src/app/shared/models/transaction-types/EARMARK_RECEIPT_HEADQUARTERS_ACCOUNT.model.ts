@@ -11,7 +11,7 @@ export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends EARMARK {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override dependentChildTransactionType = [ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT];
+  override dependentChildTransactionTypes = [ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';

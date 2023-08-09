@@ -8,7 +8,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionResolver  {
+export class TransactionResolver {
   constructor(public transactionService: TransactionService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
@@ -34,8 +34,10 @@ export class TransactionResolver  {
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_id = String(reportId);
 
-    if (transactionType.dependentChildTransactionType) {
-      transaction.children = transactionType.dependentChildTransactionType.map(this.getNewChildTransaction.bind(null, transaction));
+    if (transactionType.dependentChildTransactionTypes) {
+      transaction.children = transactionType.dependentChildTransactionTypes.map(
+        this.getNewChildTransaction.bind(null, transaction)
+      );
     }
 
     return of(transaction);

@@ -25,12 +25,12 @@ export class TransactionContainerComponent extends DestroyerComponent {
   }
 
   isDoubleTransaction(): boolean {
-    return this.transaction?.transactionType?.dependentChildTransactionType?.length === 1;
+    return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 1;
   }
 
   isTripleTransaction(): boolean {
-    if (this.transaction?.transactionType?.dependentChildTransactionType) {
-      return this.transaction?.transactionType?.dependentChildTransactionType?.length >= 2;
+    if (this.transaction?.transactionType?.dependentChildTransactionTypes) {
+      return this.transaction?.transactionType?.dependentChildTransactionTypes?.length >= 2;
     }
     return false;
   }
