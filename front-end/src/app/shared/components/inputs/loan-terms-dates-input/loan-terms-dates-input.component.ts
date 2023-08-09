@@ -32,8 +32,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   ngOnInit(): void {
     // Set empty values until ticket #1156 implemented
-    this.form.get('loan_due_date')?.setValue('-');
-    this.form.get('loan_interest_rate')?.setValue('-');
+    this.form.get(this.templateMap['due_date'])?.setValue('-');
+    this.form.get(this.templateMap['interest_rate'])?.setValue('-');
 
     // Add the date range validation check to the DATE INCURRED input
     this.store

@@ -13,36 +13,32 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="loan_due_date">DATE DUE</label>
+        <label for="due_date">DATE DUE</label>
         <input
           type="text"
           pInputText
-          id="loan_due_date"
-          formControlName="loan_due_date"
+          id="due_date"
+          [formControlName]="templateMap['due_date']"
           [readOnly]="true"
           class="readonly"
         />
-        <app-error-messages
-          [form]="form"
-          fieldName="loan_due_date"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <app-error-messages [form]="form" fieldName="due_date" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="loan_interest_rate">INTEREST RATE (%)</label>
+        <label for="interest_rate">INTEREST RATE (%)</label>
         <input
           type="text"
           pInputText
-          id="loan_interest_rate"
-          formControlName="loan_interest_rate"
+          id="interest_rate"
+          [formControlName]="templateMap['interest_rate']"
           [readOnly]="true"
           class="readonly"
         />
         <app-error-messages
           [form]="form"
-          fieldName="loan_interest_rate"
+          fieldName="interest_rate"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
