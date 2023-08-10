@@ -12,13 +12,12 @@ describe('C1_LOAN_AGREEMENT', () => {
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
+    expect(transactionType.scheduleId).toBe('C1');
   });
 
   it('#factory() should return a SchATransaction', () => {
     const transaction: SchC1Transaction = transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SA13');
-    expect(transaction.aggregation_group).toBe(AggregationGroups.GENERAL);
+    expect(transaction.form_type).toBe('SC1/10');
     expect(transaction.transaction_type_identifier).toBe(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT);
   });
 

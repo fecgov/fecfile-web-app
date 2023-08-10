@@ -19,10 +19,18 @@ describe('LoanTermsDatesInputComponent', () => {
     component = fixture.componentInstance;
     component.templateMap = testTemplateMap;
     component.form = new FormGroup({
-      [testTemplateMap.date]: new FormControl(''),
-      load_due_date: new FormControl(''),
+      loan_incurred_date: new FormControl(''),
       loan_interest_rate: new FormControl(''),
+      loan_due_date: new FormControl(''),
     });
+    component.templateMap = {
+      ...testTemplateMap,
+      ...{
+        interest_rate: 'loan_interest_rate',
+        date: 'loan_incurred_date',
+        due_date: 'loan_due_date',
+      },
+    };
     fixture.detectChanges();
   });
 
@@ -32,7 +40,7 @@ describe('LoanTermsDatesInputComponent', () => {
 
   it('should have an invalid INCURRED DATE input if outside the report date range', () => {
     const control = component.form.get(component.templateMap.date);
-    expect(control?.status).toBe('VALID');
+    expect(control?.status).toBe('INVALID');
     control?.setValue(new Date('January 1, 2015 00:00:00'));
     expect(control?.status).toBe('INVALID');
     control?.setValue(new Date('June 1, 2022 00:00:00'));

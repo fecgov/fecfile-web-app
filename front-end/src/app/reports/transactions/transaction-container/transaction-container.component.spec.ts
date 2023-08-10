@@ -45,9 +45,8 @@ describe('TransactionContainerComponent', () => {
         InputNumberModule,
         InputTextareaModule,
         ConfirmDialogModule,
-        TransactionDetailComponent,
       ],
-      declarations: [TransactionContainerComponent, ConfirmDialog],
+      declarations: [TransactionContainerComponent, ConfirmDialog, TransactionDetailComponent],
       providers: [
         FormBuilder,
         MessageService,

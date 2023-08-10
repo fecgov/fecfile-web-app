@@ -21,19 +21,19 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="loan_payment_to_date">PAYMENT TO DATE</label>
+        <label for="payment_to_date">PAYMENT TO DATE</label>
         <p-inputNumber
-          inputId="loan_payment_to_date"
+          inputId="payment_to_date"
           mode="currency"
           currency="USD"
           locale="en-US"
-          formControlName="loan_payment_to_date"
+          [formControlName]="templateMap['payment_to_date']"
           inputStyleClass="readonly"
           [readonly]="true"
         ></p-inputNumber>
         <app-error-messages
           [form]="form"
-          fieldName="loan_payment_to_date"
+          [fieldName]="templateMap['payment_to_date']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

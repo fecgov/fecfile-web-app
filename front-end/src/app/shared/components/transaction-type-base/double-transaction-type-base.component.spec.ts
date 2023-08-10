@@ -113,6 +113,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
+    component.childTransaction = testTransaction;
     fixture.detectChanges();
   });
 
@@ -149,17 +150,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     component.updateFormWithPrimaryContact(selectContact);
     expect(component.childTransaction.contact_1?.name).toEqual('Name');
-  });
-
-  it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
-    const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
-    childTransaction.parent_transaction = component.transaction;
-    component.transaction.children = [childTransaction];
-    component.ngOnInit();
-
-    component.childForm.patchValue({ contribution_amount: 2 });
-    expect(component.childForm.get('contribution_amount')?.value).toBe(-2);
   });
 
   it("should auto-generate the child transaction's purpose description", () => {

@@ -22,7 +22,11 @@
           [readOnly]="true"
           class="readonly"
         />
-        <app-error-messages [form]="form" fieldName="due_date" [formSubmitted]="formSubmitted"></app-error-messages>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['due_date']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
@@ -38,7 +42,7 @@
         />
         <app-error-messages
           [form]="form"
-          fieldName="interest_rate"
+          [fieldName]="templateMap['interest_rate']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

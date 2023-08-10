@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SharedModule } from 'app/shared/shared.module';
 import { YesNoRadioInputComponent } from './yes-no-radio-input.component';
 
@@ -13,6 +14,13 @@ describe('YesNoRadioInputComponent', () => {
     });
     fixture = TestBed.createComponent(YesNoRadioInputComponent);
     component = fixture.componentInstance;
+
+    // Set up component with form control
+    const form = new FormGroup({
+      test: new FormControl(),
+    });
+    component.form = form;
+    component.controlName = 'test';
     fixture.detectChanges();
   });
 

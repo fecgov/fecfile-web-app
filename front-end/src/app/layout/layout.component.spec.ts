@@ -22,7 +22,7 @@ describe('LayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, CommitteeBannerComponent],
+      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule],
       declarations: [
         LayoutComponent,
         SidebarComponent,
@@ -30,6 +30,7 @@ describe('LayoutComponent', () => {
         BannerComponent,
         MenuReportComponent,
         FooterComponent,
+        CommitteeBannerComponent,
       ],
       providers: [LayoutComponent, provideMockStore(testMockStore)],
     }).compileComponents();

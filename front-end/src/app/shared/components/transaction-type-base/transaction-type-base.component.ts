@@ -85,20 +85,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
-    this.parentOnInit();
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.isEditable = this.reportService.isEditable(report);
-        if (!this.isEditable) this.form.disable();
-      });
-  }
 
-  parentOnInit() {
-    const transactionType = this.transactionType;
     // Determine if amount should always be negative and then force it to be so if needed
-    if (transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+    if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
       this.form
         .get(this.templateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -108,6 +97,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
+
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.isEditable = this.reportService.isEditable(report);
+        if (!this.isEditable) this.form.disable();
+      });
   }
 
   ngOnDestroy(): void {

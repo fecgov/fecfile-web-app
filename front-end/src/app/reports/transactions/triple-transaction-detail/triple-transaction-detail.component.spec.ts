@@ -19,14 +19,18 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../../shared/shared.module';
 import { TripleTransactionDetailComponent } from './triple-transaction-detail.component';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 
-describe('DoubleTransactionDetailComponent', () => {
+describe('TripleTransactionDetailComponent', () => {
   let component: TripleTransactionDetailComponent;
   let fixture: ComponentFixture<TripleTransactionDetailComponent>;
 
-  const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
-  const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO);
-  transaction.children = [childTransaction];
+  const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+  transaction.children = [
+    getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
+    getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
