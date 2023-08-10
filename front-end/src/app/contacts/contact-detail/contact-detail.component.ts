@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -51,12 +51,13 @@ export class ContactDetailComponent {
     private messageService: MessageService,
     private contactService: ContactService,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   public onOpenDetail() {
     this.resetForm();
     this.form.patchValue(this.contact);
-    this.form.setControl('contact_1', new FormControl(this.contact));
+    this.form?.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+    this.form?.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
   }
 
   public saveItem(closeDetail = true) {

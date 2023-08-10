@@ -16,7 +16,7 @@ import {
   ContactTypeLabels,
   ContactTypes,
   FecApiCandidateLookupData,
-  FecApiCommitteeLookupData
+  FecApiCommitteeLookupData,
 } from '../../models/contact.model';
 import { DestroyerComponent } from '../app-destroyer.component';
 
@@ -108,8 +108,6 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
           this.candidateDistrictOptions = [];
         }
       });
-    this.form?.get('candidate_id')?.addAsyncValidators(this.contactService.fecIdValidator);
-    this.form?.get('committee_id')?.addAsyncValidators(this.contactService.fecIdValidator);
   }
 
   /**

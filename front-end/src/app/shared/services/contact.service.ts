@@ -14,7 +14,7 @@ import {
   Contact,
   ContactTypes,
   IndividualLookupResponse,
-  OrganizationLookupResponse
+  OrganizationLookupResponse,
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
@@ -23,7 +23,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class ContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
@@ -85,26 +85,27 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
 
-  public checkFecIdForUniqness(fec_id: string, contact_id?: string): Observable<boolean> {
-    if (fec_id) {
-      const url = `/contacts/fec_id_is_unique/?fec_id=${fec_id}`.concat(
-        contact_id ? `&contact_id=${contact_id}` : '');
-      return this.apiService.get<boolean>(url);
+  public checkFecIdForUniqness(fecId: string, contactId?: string): Observable<boolean> {
+    if (fecId) {
+      return this.apiService
+        .get<string>(`/contacts/get_contact_id/`, { fec_id: fecId })
+        .pipe(map((matchingContactId) => matchingContactId == '' || matchingContactId == (contactId ?? '')));
     }
     return of(true);
   }
 
-  public fecIdValidator: AsyncValidatorFn = (control: AbstractControl) => {
-    return of(control.value).pipe(
-      switchMap((fecId) =>
-        this.checkFecIdForUniqness(fecId, (control.parent?.get(
-          'contact_1')?.value as Contact)?.id).pipe(
+  public getFecIdValidator = (contactId?: string) => {
+    return (control: AbstractControl) => {
+      return of(control.value).pipe(
+        switchMap((fecId) =>
+          this.checkFecIdForUniqness(fecId, contactId).pipe(
             map((isUnique: boolean) => {
               return isUnique ? null : { fecIdMustBeUnique: true };
             })
           )
-      )
-    );
+        )
+      );
+    };
   };
 
   public individualLookup(search: string, maxFecfileResults: number): Observable<IndividualLookupResponse> {
@@ -149,7 +150,7 @@ export class ContactService implements TableListService<Contact> {
   providedIn: 'root',
 })
 export class DeletedContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
