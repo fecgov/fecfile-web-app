@@ -49,40 +49,37 @@ describe('CandidateOfficeInputComponent', () => {
 
   it('test PRESIDENTIAL office', () => {
     component.form.patchValue({
-      [testCandidateOfficeFormControlName]:
-        CandidateOfficeTypes.PRESIDENTIAL
+      [testCandidateOfficeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL,
     });
     const stateFormControl = component.form.get(component.candidateStateFormControlName);
     const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
 
-    expect(stateFormControl?.value).toBe('');
+    expect(stateFormControl?.value).toBeNull();
     expect(stateFormControl?.disabled).toBe(true);
 
-    expect(districtFormControl?.value).toBe('');
+    expect(districtFormControl?.value).toBeNull();
     expect(districtFormControl?.disabled).toBe(true);
   });
 
   it('test SENATE office', () => {
     component.form.patchValue({
-      [testCandidateOfficeFormControlName]:
-        CandidateOfficeTypes.SENATE
+      [testCandidateOfficeFormControlName]: CandidateOfficeTypes.SENATE,
     });
     const stateFormControl = component.form.get(component.candidateStateFormControlName);
     const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
 
     expect(stateFormControl?.disabled).toBe(false);
 
-    expect(districtFormControl?.value).toBe('');
+    expect(districtFormControl?.value).toBeNull();
     expect(districtFormControl?.disabled).toBe(true);
   });
 
   it('test HOUSE office', () => {
     component.form.patchValue({
-      [testCandidateOfficeFormControlName]:
-        CandidateOfficeTypes.HOUSE
+      [testCandidateOfficeFormControlName]: CandidateOfficeTypes.HOUSE,
     });
     component.form.patchValue({
-      [testCandidateStateFormControlName]: 'FL'
+      [testCandidateStateFormControlName]: 'FL',
     });
     const stateFormControl = component.form.get(component.candidateStateFormControlName);
     const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
@@ -90,8 +87,8 @@ describe('CandidateOfficeInputComponent', () => {
     expect(stateFormControl?.disabled).toBe(false);
     expect(districtFormControl?.disabled).toBe(false);
 
-    expect(component.candidateDistrictOptions).toEqual(LabelUtils.getPrimeOptions(
-      LabelUtils.getCongressionalDistrictLabels('FL')));
+    expect(component.candidateDistrictOptions).toEqual(
+      LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels('FL'))
+    );
   });
-
 });
