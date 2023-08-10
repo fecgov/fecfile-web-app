@@ -9,11 +9,10 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { Router } from '@angular/router';
 
 class TestDoubleTransactionTypeBaseComponent extends TripleTransactionTypeBaseComponent {
   override formProperties: string[] = [

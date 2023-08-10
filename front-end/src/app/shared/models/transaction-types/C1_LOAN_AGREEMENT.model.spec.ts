@@ -1,6 +1,5 @@
 import { C1_LOAN_AGREEMENT } from './C1_LOAN_AGREEMENT.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
-import { AggregationGroups } from '../transaction.model';
 
 describe('C1_LOAN_AGREEMENT', () => {
   let transactionType: C1_LOAN_AGREEMENT;
