@@ -128,6 +128,7 @@ import { YesNoRadioInputComponent } from './components/inputs/yes-no-radio-input
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
+    MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,
     TableActionsButtonComponent,

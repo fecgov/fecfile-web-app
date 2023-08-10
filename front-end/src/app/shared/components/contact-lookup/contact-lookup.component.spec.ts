@@ -17,6 +17,7 @@ import {
   IndividualLookupResponse,
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
+import { SharedModule } from 'app/shared/shared.module';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
@@ -44,6 +45,7 @@ describe('ContactLookupComponent', () => {
         HttpClientTestingModule,
         DropdownModule,
         AutoCompleteModule,
+        SharedModule,
       ],
       providers: [FormBuilder, ContactService, EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();

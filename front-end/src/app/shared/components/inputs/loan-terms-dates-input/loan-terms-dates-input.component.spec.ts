@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { LoanTermsDatesInputComponent } from './loan-terms-dates-input.component';
+import { SharedModule } from 'app/shared/shared.module';
 
 describe('LoanTermsDatesInputComponent', () => {
   let component: LoanTermsDatesInputComponent;
@@ -10,6 +11,7 @@ describe('LoanTermsDatesInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [SharedModule],
       declarations: [LoanTermsDatesInputComponent],
       providers: [provideMockStore(testMockStore)],
     });

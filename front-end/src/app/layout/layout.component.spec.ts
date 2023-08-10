@@ -13,6 +13,7 @@ import { BannerComponent } from './banner/banner.component';
 import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
+import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -21,7 +22,7 @@ describe('LayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule],
+      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, CommitteeBannerComponent],
       declarations: [
         LayoutComponent,
         SidebarComponent,

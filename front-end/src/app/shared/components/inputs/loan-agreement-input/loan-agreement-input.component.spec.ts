@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { C1LoanInfoInputComponent } from './loan-agreement-input.component';
+import { LoanAgreementInputComponent } from './loan-agreement-input.component';
 
-describe('C1LoanInfoInputComponent', () => {
-  let component: C1LoanInfoInputComponent;
-  let fixture: ComponentFixture<C1LoanInfoInputComponent>;
+describe('LoanAgreementInputComponent', () => {
+  let component: LoanAgreementInputComponent;
+  let fixture: ComponentFixture<LoanAgreementInputComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [C1LoanInfoInputComponent],
+      declarations: [LoanAgreementInputComponent],
     });
-    fixture = TestBed.createComponent(C1LoanInfoInputComponent);
+    fixture = TestBed.createComponent(LoanAgreementInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

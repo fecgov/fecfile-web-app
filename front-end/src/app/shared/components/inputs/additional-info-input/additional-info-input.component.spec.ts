@@ -23,8 +23,8 @@ describe('AdditionalInfoInputComponent', () => {
       text4000: new FormControl(''),
     });
     component.templateMap = testTemplateMap;
-    component.descriptionIsSystemGenerated = true;
-    component.purposeDescriptionPrefix = 'Prefix: ';
+    if (component.transaction?.transactionType?.purposeDescriptionPrefix)
+      component.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
     fixture.detectChanges();
   });
 
@@ -38,7 +38,6 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should have a mutable cpd if not system generated', () => {
-    component.descriptionIsSystemGenerated = false;
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
@@ -48,13 +47,15 @@ describe('AdditionalInfoInputComponent', () => {
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'abc',
     });
-    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(component.purposeDescriptionPrefix);
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+      component.transaction?.transactionType?.purposeDescriptionPrefix
+    );
 
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'Prefax: abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.purposeDescriptionPrefix + 'abc'
+      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc'
     );
   });
 });

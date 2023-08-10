@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { SharedModule } from 'app/shared/shared.module';
 import { SignatureInputComponent } from './signature-input.component';
 
 describe('SignatureInputComponent', () => {
@@ -8,7 +8,8 @@ describe('SignatureInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SignatureInputComponent]
+      imports: [SharedModule],
+      declarations: [SignatureInputComponent],
     });
     fixture = TestBed.createComponent(SignatureInputComponent);
     component = fixture.componentInstance;

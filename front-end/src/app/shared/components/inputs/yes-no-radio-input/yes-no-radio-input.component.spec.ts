@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { SharedModule } from 'app/shared/shared.module';
 import { YesNoRadioInputComponent } from './yes-no-radio-input.component';
 
 describe('YesNoRadioInputComponent', () => {
@@ -8,7 +8,8 @@ describe('YesNoRadioInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [YesNoRadioInputComponent]
+      imports: [SharedModule],
+      declarations: [YesNoRadioInputComponent],
     });
     fixture = TestBed.createComponent(YesNoRadioInputComponent);
     component = fixture.componentInstance;

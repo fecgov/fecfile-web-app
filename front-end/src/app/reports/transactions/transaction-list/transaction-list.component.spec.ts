@@ -12,6 +12,7 @@ import { TableModule } from 'primeng/table';
 import { SharedModule } from 'app/shared/shared.module';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -20,7 +21,14 @@ describe('TransactionListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
+      imports: [
+        ToolbarModule,
+        TableModule,
+        SharedModule,
+        RouterTestingModule,
+        ConfirmDialogModule,
+        RouterTestingModule.withRoutes([]),
+      ],
       declarations: [TransactionListComponent],
       providers: [
         MessageService,
