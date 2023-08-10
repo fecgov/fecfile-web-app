@@ -1,17 +1,8 @@
 import { FormGroup } from '@angular/forms';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
-import { PrimeOptions } from 'app/shared/utils/label.utils';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { ContactTypes } from '../../models/contact.model';
+import { takeUntil } from 'rxjs';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
-import { TransactionContactUtils } from './transaction-contact.utils';
-import { TransactionMemoUtils } from './transaction-memo.utils';
-import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 function updatePurposeDescription(form: FormGroup, transaction: Transaction) {
   if (transaction?.transactionType?.generatePurposeDescription) {
