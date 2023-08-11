@@ -54,6 +54,10 @@ export abstract class Transaction extends BaseModel {
   contact_2: Contact | undefined;
   contact_2_id: string | undefined; // Foreign key to the Contact db record
 
+  @Type(() => Contact)
+  contact_3: Contact | undefined;
+  contact_3_id: string | undefined; // Foreign key to the Contact db record
+
   @Type(() => MemoText)
   memo_text: MemoText | undefined;
   memo_text_id: string | undefined;

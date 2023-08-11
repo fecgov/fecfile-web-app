@@ -91,6 +91,7 @@ export type ScheduleBTransactionGroupsType =
 
 export enum ScheduleBTransactionTypes {
   IN_KIND_OUT = 'IN_KIND_OUT',
+  IN_KIND_CONTRIBUTION_TO_CANDIDATE = 'IN_KIND_CONTRIBUTION_TO_CANDIDATE',
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT',
@@ -166,6 +167,7 @@ export enum ScheduleBTransactionTypes {
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
+  [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE, 'In-kind Contribution to Candidate'],
   [
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Refund - Non-contribution Account',

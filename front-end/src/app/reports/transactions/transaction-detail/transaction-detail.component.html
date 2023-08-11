@@ -87,15 +87,38 @@
       </ng-container>
       <ng-container *ngIf="transactionType?.hasCandidateInformation()">
         <h3>Committee/Candidate Information</h3>
-        <app-committee-input
-          *ngIf="transaction?.transactionType?.hasCandidateCommittee"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [templateMap]="templateMap"
-          entityRole="COMMITTEE"
-          [includeFecId]="true"
-          [readonly]="true"
-        ></app-committee-input>
+        <ng-container *ngIf="!transactionType?.contact3IsRequired">
+          <app-committee-input
+            *ngIf="transaction?.transactionType?.hasCandidateCommittee"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMap"
+            entityRole="COMMITTEE"
+            [includeFecId]="true"
+            [readonly]="true"
+          ></app-committee-input>
+        </ng-container>
+        <ng-container *ngIf="transactionType?.contact3IsRequired">
+          <app-transaction-contact-lookup
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [contactTypeOptions]="committeeContactTypeOption"
+            [contactTypeFormControl]="committeeContactTypeFormControl"
+            selectedContactFormControlName="contact_3"
+            [contactTypeReadOnly]="true"
+            (contactSelect)="onTertiaryContactLookupSelect($event)"
+          ></app-transaction-contact-lookup>
+          <app-committee-input
+            *ngIf="transaction?.contact_3"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMap"
+            entityRole="COMMITTEE"
+            [includeFecId]="true"
+            nameField="committee_name"
+            [readonly]="false"
+          ></app-committee-input>
+        </ng-container>
         <app-transaction-contact-lookup
           [form]="form"
           [formSubmitted]="formSubmitted"

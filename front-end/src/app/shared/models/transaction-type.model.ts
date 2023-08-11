@@ -35,6 +35,7 @@ export abstract class TransactionType {
   showStandardAmount = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
+  contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page

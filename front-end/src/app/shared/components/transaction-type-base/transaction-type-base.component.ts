@@ -51,6 +51,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   entityTypeControl?: FormControl;
   candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
   candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  committeeContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
@@ -89,6 +91,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       'contact_2',
       new FormControl(null, () => {
         if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+
+    this.form.addControl(
+      'contact_3',
+      new FormControl(null, () => {
+        if (!this.transaction?.contact_3 && this.transactionType?.contact3IsRequired) {
           return { required: true };
         }
         return null;
@@ -292,6 +304,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
   onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
+  }
+  onTertiaryContactLookupSelect(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.onTertiaryContactLookupSelect(selectItem, this.form, this.transaction);
   }
 
   getEntityType(): string {
