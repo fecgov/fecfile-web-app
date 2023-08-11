@@ -164,7 +164,7 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
-    Object.entries(this.childContactIdMap).forEach(([_, id$]) => id$.complete());
+    Object.values(this.childContactIdMap).forEach((id$) => id$.complete());
   }
 
   private updateParentPurposeDescription() {

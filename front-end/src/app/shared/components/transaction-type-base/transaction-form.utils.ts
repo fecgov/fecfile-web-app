@@ -117,7 +117,7 @@ export class TransactionFormUtils {
     Object.entries(contactIdMap).forEach(([contact, id$]) => {
       const contactConfig = transactionType.contactConfig[contact];
       id$.pipe(takeUntil(component.destroy$)).subscribe((id) => {
-        for (let field of ['committee_fec_id', 'candidate_fec_id']) {
+        for (const field of ['committee_fec_id', 'candidate_fec_id']) {
           if (contactConfig[field]) {
             form.get(templateMap[field as keyof TransactionTemplateMapType])?.clearAsyncValidators();
             form
