@@ -143,7 +143,7 @@
             [purposeDescriptionLabel]="purposeDescriptionLabel"
             [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
-          <ng-container *ngIf="isEditable">
+          <ng-container *ngIf="isEditable && getInlineControls().length > 0">
             <p-divider></p-divider>
             <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
               <div class="grid">
@@ -199,7 +199,7 @@
         </div>
         <ng-container *ngIf="childTransaction?.contact_1">
           <ng-container
-            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
+            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(childForm.get('entity_type')?.value)"
           >
             <app-committee-input
               [form]="childForm"
@@ -250,7 +250,7 @@
               [readonly]="true"
             ></app-committee-input>
             <app-transaction-contact-lookup
-              [form]="form"
+              [form]="childForm"
               [formSubmitted]="formSubmitted"
               [contactTypeOptions]="candidateContactTypeOption"
               [contactTypeFormControl]="candidateContactTypeFormControl"

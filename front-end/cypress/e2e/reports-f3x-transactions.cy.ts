@@ -158,7 +158,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     // Create memo transaction
-    cy.contains('a', 'Create a new contact').should('exist').wait(500); // Race condition with clicking 'Create a new contact' link being ready
+    cy.contains('h1', 'Partnership Attribution').should('exist');
     PageUtils.clickLink('Create a new contact');
     ContactListPage.enterFormData(defaultContactFormData, true);
     PageUtils.clickButton('Save & continue');
@@ -172,6 +172,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     // Create a second memo transaction so we can check the aggregate value
+    cy.contains('Transactions in this report').should('exist');
     PageUtils.clickLink('Partnership Receipt');
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
     cy.contains('Partnership Attribution').wait(500);
@@ -541,7 +542,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     // Create Partnership Receipt Joint Fundraising Transfer Memo
-    cy.contains('a', 'Create a new contact').should('exist').wait(500); // Race condition with clicking 'Create a new contact' link being ready
+    cy.contains('h1', 'Partnership Receipt Joint Fundraising Transfer Memo').should('exist');
     PageUtils.clickLink('Create a new contact');
     const organizationFormContactData = {
       ...defaultContactFormData,
@@ -559,7 +560,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     // Create Partnership Individual Joint Fundraising Transfer Memo
-    cy.contains('a', 'Create a new contact').should('exist').wait(500); // Race condition with clicking 'Create a new contact' link being ready
+    cy.contains('h1', 'Individual Joint Fundraising Transfer Memo').should('exist');
     PageUtils.clickLink('Create a new contact');
     const individualFormContactData = {
       ...defaultContactFormData,
