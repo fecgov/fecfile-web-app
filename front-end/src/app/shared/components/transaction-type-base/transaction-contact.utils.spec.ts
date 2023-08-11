@@ -9,7 +9,6 @@ import {
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { Subject } from 'rxjs';
 import { SelectItem } from 'primeng/api';
-import { C1_LOAN_AGREEMENT } from 'app/shared/models/transaction-types/C1_LOAN_AGREEMENT.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 
 describe('ContactUtils', () => {
@@ -43,12 +42,12 @@ describe('ContactUtils', () => {
       donor_candidate_office: new FormControl(''),
       donor_candidate_state: new FormControl(''),
       donor_candidate_district: new FormControl(''),
-      ind_name_account_location: new FormControl('Super PAC'),
-      account_street_1: new FormControl('123 Main St'),
-      account_street_2: new FormControl('Apt A'),
-      account_city: new FormControl('New York'),
-      account_state: new FormControl('NY'),
-      account_zip: new FormControl('33303'),
+      ind_name_account_location: new FormControl(''),
+      account_street_1: new FormControl(''),
+      account_street_2: new FormControl(''),
+      account_city: new FormControl(''),
+      account_state: new FormControl(''),
+      account_zip: new FormControl(''),
     });
 
     selectItem = {
@@ -143,13 +142,13 @@ describe('ContactUtils', () => {
 
   it('test updateFormWithSecondaryContact', () => {
     const transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
-    TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, transaction);
-    expect(form.get('ind_name_account_location')?.value).toBe('Super PAC');
+    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction);
+    expect(form.get('ind_name_account_location')?.value).toBe('Organization LLC');
     expect(form.get('account_street_1')?.value).toBe('123 Main St');
-    expect(form.get('account_street_2')?.value).toBe('Apt A');
-    expect(form.get('account_city')?.value).toBe('New York');
-    expect(form.get('account_state')?.value).toBe('NY');
-    expect(form.get('account_zip')?.value).toBe('33303');
+    expect(form.get('account_street_2')?.value).toBe('Apt B');
+    expect(form.get('account_city')?.value).toBe('Anytown');
+    expect(form.get('account_state')?.value).toBe('VA');
+    expect(form.get('account_zip')?.value).toBe('22201');
     expect(transaction.contact_2).toBeTruthy();
   });
 });

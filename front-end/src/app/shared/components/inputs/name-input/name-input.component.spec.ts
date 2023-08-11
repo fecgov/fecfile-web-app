@@ -18,7 +18,6 @@ describe('NameInputComponent', () => {
 
     fixture = TestBed.createComponent(NameInputComponent);
     component = fixture.componentInstance;
-    // component.templateMapKeyPrefix = 'signatory_1';
     component.templateMap = testTemplateMap;
     component.form = new FormGroup({
       contributor_last_name: new FormControl(''),
