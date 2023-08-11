@@ -166,6 +166,7 @@ import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/tr
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO.model';
 import { LOAN_MADE } from '../models/transaction-types/LOAN_MADE.model';
 import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
+import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 
 // Schedule C /////////////////////////////////////////////////////
 
@@ -279,6 +280,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
   INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
   IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+  IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
   OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,

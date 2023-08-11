@@ -185,6 +185,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+          ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
         ];
       case ScheduleBTransactionGroups.OTHER_EXPENDITURES:
         return [
