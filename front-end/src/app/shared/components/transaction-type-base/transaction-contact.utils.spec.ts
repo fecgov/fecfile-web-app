@@ -150,6 +150,6 @@ describe('ContactUtils', () => {
     expect(form.get('account_city')?.value).toBe('New York');
     expect(form.get('account_state')?.value).toBe('NY');
     expect(form.get('account_zip')?.value).toBe('33303');
-    expect(testScheduleATransaction.contact_2).toBeTruthy();
+    expect(transaction.contact_2).toBeTruthy();
   });
 });
