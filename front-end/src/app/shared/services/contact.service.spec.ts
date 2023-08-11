@@ -241,7 +241,7 @@ describe('ContactService', () => {
   it('#checkFecIdForUniqness should return true if contact matches', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
-    const apiServiceGetSpy = spyOn(testApiService, 'get')
+    spyOn(testApiService, 'get')
       .withArgs('/contacts/get_contact_id/', {
         fec_id: fecId,
       })
@@ -254,7 +254,7 @@ describe('ContactService', () => {
   it('#checkFecIdForUniqness should return false if server comes back with differnt contact id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
-    const apiServiceGetSpy = spyOn(testApiService, 'get')
+    spyOn(testApiService, 'get')
       .withArgs('/contacts/get_contact_id/', {
         fec_id: fecId,
       })
@@ -266,7 +266,7 @@ describe('ContactService', () => {
   it('#checkFecIdForUniqness should return true if server comes back no id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
-    const apiServiceGetSpy = spyOn(testApiService, 'get')
+    spyOn(testApiService, 'get')
       .withArgs('/contacts/get_contact_id/', {
         fec_id: fecId,
       })
