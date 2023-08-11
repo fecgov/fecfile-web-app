@@ -124,6 +124,7 @@ export abstract class TripleTransactionTypeBaseComponent
   }
 
   override handleNavigate(navigationEvent: NavigationEvent): void {
+    debugger;
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {

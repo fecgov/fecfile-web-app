@@ -10,18 +10,15 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { testMockStore, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { testIndividualReceipt, testMockStore, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
-let testTransaction: Transaction;
+let testTransaction: SchATransaction;
 
 describe('TransactionTypeBaseComponent', () => {
   let component: TransactionTypeBaseComponent;
@@ -58,11 +55,7 @@ describe('TransactionTypeBaseComponent', () => {
     transactionServiceSpy = TestBed.inject(TransactionService) as jasmine.SpyObj<TransactionService>;
     testConfirmationService = TestBed.inject(ConfirmationService);
 
-    testTransaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
-    testTransaction.children = [
-      getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
-      getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
-    ];
+    testTransaction = testIndividualReceipt;
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -72,13 +65,13 @@ describe('TransactionTypeBaseComponent', () => {
     confirmSpy = spyOn(testConfirmationService, 'confirm');
   });
 
-  it('should initialize Loan By Bank', () => {
+  it('should initialize Individual Receipt', () => {
     expect(component).toBeTruthy();
-    expect(component.transactionType?.title).toBe('Loan Received from Bank');
+    expect(component.transactionType?.title).toBe('Individual Receipt');
   });
 
   it('should save on save event', fakeAsync(() => {
-    if (component.transaction) transactionServiceSpy.create.and.returnValue(of(component.transaction));
+    if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction));
     confirmSpy.and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
@@ -86,7 +79,15 @@ describe('TransactionTypeBaseComponent', () => {
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
     component.handleNavigate(listSaveEvent);
     tick(500);
-    expect(transactionServiceSpy.create).toHaveBeenCalled();
+    expect(transactionServiceSpy.update).toHaveBeenCalled();
     expect(navigateToSpy).toHaveBeenCalled();
   }));
+
+  it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    component.ngOnInit();
+
+    component.form.patchValue({ contribution_amount: 2 });
+    expect(component.form.get('contribution_amount')?.value).toBe(-2);
+  });
 });
