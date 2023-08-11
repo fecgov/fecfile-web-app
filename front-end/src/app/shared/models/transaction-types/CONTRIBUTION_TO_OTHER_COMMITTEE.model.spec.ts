@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from './CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 
 describe('CONTRIBUTION_TO_OTHER_COMMITTEE', () => {
@@ -12,7 +11,6 @@ describe('CONTRIBUTION_TO_OTHER_COMMITTEE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchBTransaction', () => {

@@ -16,13 +16,15 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { Contact } from 'app/shared/models/contact.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
-  formProperties: string[] = [
+  override formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -44,8 +46,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'memo_code',
     'text4000',
   ];
-
-  childFormProperties: string[] = [
+  override childFormProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -74,7 +75,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
+  let transactionService: TransactionService;
   let reportService: ReportService;
+  let testRouter: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -94,13 +97,19 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   beforeEach(() => {
+    testRouter = TestBed.inject(Router);
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    testTransaction.report_id = '123';
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
     reportService = TestBed.inject(ReportService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) return confirmation?.accept();
+    });
+    transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -141,10 +150,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
-    component.childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL
-    );
-    component.childOnInit();
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
+    const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    childTransaction.parent_transaction = component.transaction;
+    component.transaction.children = [childTransaction];
+    component.ngOnInit();
 
     component.childForm.patchValue({ contribution_amount: 2 });
     expect(component.childForm.get('contribution_amount')?.value).toBe(-2);
@@ -152,9 +162,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   it("should auto-generate the child transaction's purpose description", () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
-    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
-    component.childTransaction.parent_transaction = component.transaction;
-    component.childOnInit();
+    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    childTransaction.parent_transaction = component.transaction;
+    component.transaction.children = [childTransaction];
+    component.ngOnInit();
 
     component.form.get(component.templateMap.first_name)?.setValue('First');
     component.form.get(component.templateMap.last_name)?.setValue('Last');
@@ -175,23 +186,20 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('should save a parent and child transaction', () => {
-    const componentNavigateToSpy = spyOn(testConfirmationService, 'confirm');
+    const apiPostSpy = spyOn(transactionService, 'create').and.returnValue(of(testTransaction));
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
 
     if (testTransaction.children) {
       component.childTransaction = testTransaction.children[0];
       component.childTransaction.parent_transaction = component.transaction;
     }
 
-    // Save invalid form values
     const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
-    component.save(navEvent);
 
     // Save valid form values
     component.form.patchValue({
-      entity_type: 'IND',
+      entity_type: 'COM',
       contributor_organization_name: 'org222 name',
-      contributor_last_name: 'fname',
-      contributor_first_name: 'lname',
       contributor_middle_name: '',
       contributor_prefix: '',
       contributor_suffix: '',
@@ -206,6 +214,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_amount: 5,
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
+      donor_committee_fec_id: 'C12345678',
+      donor_committee_name: 'name',
       memo_code: '',
       text4000: '',
     });
@@ -231,7 +241,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: true,
       text4000: '',
     });
-    component.save(navEvent);
-    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+    component.handleNavigate(navEvent);
+    expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
 });

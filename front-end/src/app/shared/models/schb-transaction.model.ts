@@ -162,6 +162,7 @@ export enum ScheduleBTransactionTypes {
   CONDUIT_EARMARK_OUT = 'CONDUIT_EARMARK_OUT',
   CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
   CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
+  LOAN_MADE = 'LOAN_MADE',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -336,4 +337,5 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT, 'Conduit Earmark Out'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
+  [ScheduleBTransactionTypes.LOAN_MADE, 'Loan Made'],
 ];

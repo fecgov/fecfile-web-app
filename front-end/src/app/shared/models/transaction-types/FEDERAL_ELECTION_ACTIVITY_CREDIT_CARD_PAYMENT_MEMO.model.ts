@@ -1,22 +1,25 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_MEMOS_FEA';
-import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupO } from '../transaction-groups/transaction-group-o.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import {
+  INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
+import { STANDARD_AND_CANDIDATE } from '../contact.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
-  transactionGroup = new TransactionGroupO();
+  formFields = INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS;
+  contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
+  override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO
   );
   schema = schema;
-  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
-  override hasCandidateLookup = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
-import { BaseInputComponent } from '../../base-input.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-memo-code',
@@ -14,9 +15,8 @@ import { Transaction } from 'app/shared/models/transaction.model';
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   @Input() overrideMemoItemHelpText: string | undefined;
-  @Input() overrideMemoCodeReadOnly: boolean | undefined;
   @Input() transaction: Transaction | undefined;
-  @Input() checkboxLabel = 'MEMO ITEM';
+  @Input() checkboxLabel = '';
 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   memoCodeReadOnly = false;
@@ -47,7 +47,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
         this.updateMemoItemWithDate(date);
       });
 
-    if (this.overrideMemoCodeReadOnly) this.memoCodeReadOnly = this.overrideMemoCodeReadOnly;
+    this.memoCodeReadOnly = TransactionFormUtils.isMemoCodeReadOnly(this.transaction?.transactionType);
     if (this.overrideMemoItemHelpText) this.memoItemHelpText = this.overrideMemoItemHelpText;
 
     this.memoControl = (this.form.get(this.templateMap.memo_code) as FormControl) || this.memoControl;

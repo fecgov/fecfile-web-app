@@ -4,6 +4,10 @@ export abstract class SchBTransactionType extends TransactionType {
   scheduleId = 'B';
   apiEndpoint = '/transactions/schedule-b';
 
+  // Labels
+  override amountInputHeader = 'Expenditure information';
+  override purposeDescripLabel = 'PURPOSE OF DISBURSEMENT';
+
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
     // Form fields
@@ -35,17 +39,15 @@ export abstract class SchBTransactionType extends TransactionType {
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
     balance: '',
+    payment_to_date: '',
+    interest_rate: '',
+    due_date: '',
+    secured: '',
     aggregate: 'aggregate_amount',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',
     category_code: 'category_code',
     election_code: 'election_code',
     election_other_description: 'election_other_description',
-
-    // Labels and text strings
-    dateLabel: 'DATE',
-    amountInputHeader: 'Expenditure Information',
-    purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
-    candidateInputHeader: 'Committee/Candidate Information',
   };
 }

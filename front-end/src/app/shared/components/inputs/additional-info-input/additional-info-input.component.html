@@ -3,7 +3,7 @@
     <ng-container *ngIf="templateMap.purpose_description">
       <div class="col-12">
         <label for="purpose_description">
-          {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }}
+          {{ transaction?.transactionType?.purposeDescripLabel }} {{ purposeDescriptionLabel }}
         </label>
         <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
         <div>

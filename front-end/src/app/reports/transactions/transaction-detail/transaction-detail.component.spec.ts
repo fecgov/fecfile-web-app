@@ -74,7 +74,7 @@ describe('TransactionDetailComponent', () => {
     component = fixture.componentInstance;
     component.transaction = transaction;
     component.templateMap = testTemplateMap;
-    component.ngOnChanges();
+    component.ngOnInit();
   });
 
   it('should create', () => {
@@ -82,9 +82,9 @@ describe('TransactionDetailComponent', () => {
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('#save() should not save an invalid record', () => {
+  it('#handleNavigate() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
+    component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
       `${environment.apiUrl}/transactions/schedule-a/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`

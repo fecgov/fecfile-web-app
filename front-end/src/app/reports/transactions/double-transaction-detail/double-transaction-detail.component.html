@@ -1,22 +1,24 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
-<p class="group-description">{{ groupDescription }}</p>
+<p class="group-description">{{ transactionType?.description }}</p>
 <p-accordion [activeIndex]="accordionActiveIndex">
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>{{ parentAccordionTitle }}:</strong>
-      <p style="font-weight: normal">{{ parentAccordionSubTitle }}</p></ng-template
+      <strong>{{ transactionType?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ transactionType?.accordionSubText }}
+      </p></ng-template
     >
     <div class="p-fluid">
-      <h2 *ngIf="parentTransactionTitle">
-        {{ transaction?.transactionType?.alternateTitle || parentTransactionTitle }}
+      <h2 *ngIf="transactionType?.formTitle">
+        {{ transactionType?.formTitle }}
       </h2>
-      <h3>{{ transaction?.transactionType?.contactHeaderLabel }}</h3>
+      <h3>{{ transactionType?.contactTitle }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable">
           <div class="col-12">
-            <label for="entity_type">{{ transaction?.transactionType?.contactDropdownLabel }}</label>
+            <label for="entity_type">{{ transactionType?.contactLookupLabel }}</label>
             <app-transaction-contact-lookup
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -52,7 +54,7 @@
             [templateMap]="templateMap"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="hasEmployerInput">
+          <ng-container *ngIf="transactionType?.hasEmployeeFields() && getEntityType() === ContactTypes.INDIVIDUAL">
             <h3>Employer</h3>
             <app-employer-input
               [form]="form"
@@ -61,32 +63,31 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.hasAmountInput">
-            <h3>{{ templateMap.amountInputHeader }}</h3>
+          <ng-container *ngIf="transactionType?.showStandardAmount">
+            <h3>{{ transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="form"
               [formSubmitted]="formSubmitted"
               [templateMap]="templateMap"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
               [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
               [showAggregate]="!!transaction?.transactionType?.showAggregate"
               [transaction]="transaction"
+              [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.hasLoanInfoInput">
-            <h3>Loan information</h3>
+          <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
+            <h3>{{ transactionType?.amountInputHeader }}</h3>
             <app-loan-info-input
               [form]="form"
               [formSubmitted]="formSubmitted"
               [templateMap]="templateMap"
               [readonly]="false"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
               [transaction]="transaction"
             ></app-loan-info-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.hasLoanTermsInput">
+          <ng-container *ngIf="transactionType?.hasLoanTermsFields()">
             <h3>Terms</h3>
             <app-loan-terms-input
               [form]="form"
@@ -95,8 +96,8 @@
             ></app-loan-terms-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="this.hasParentCandidateInformationInput">
-            <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+          <ng-container *ngIf="transactionType?.hasCandidateInformation()">
+            <h3>Committee/Candidate Information</h3>
             <app-committee-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -123,8 +124,8 @@
             </ng-container>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="hasParentElectionInformationInput">
-            <h3>Election Information</h3>
+          <ng-container *ngIf="transactionType?.hasElectionInformation()">
+            <h3>Election information</h3>
             <app-election-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -137,11 +138,12 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
+            [transaction]="transaction"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
             [purposeDescriptionLabel]="purposeDescriptionLabel"
             [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
-          <ng-container *ngIf="isEditable">
+          <ng-container *ngIf="isEditable && getInlineControls().length > 0">
             <p-divider></p-divider>
             <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
               <div class="grid">
@@ -156,8 +158,8 @@
             </ng-template>
             <p-divider></p-divider>
           </ng-container>
-          <div class="grid">
-            <p style="font-style: italic">{{ parentFooter }}</p>
+          <div class="grid" style="flex-direction: row-reverse">
+            <p style="font-style: italic">{{ transactionType?.footer }}</p>
           </div>
         </ng-container>
       </form>
@@ -166,15 +168,17 @@
 
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>{{ childAccordionTitle }}:</strong>
-      <p style="font-weight: normal">{{ childAccordionSubTitle }}</p></ng-template
+      <strong>{{ childTransactionType?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ childTransactionType?.accordionSubText }}
+      </p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{ childTransaction?.transactionType?.alternateTitle || childTransaction?.transactionType?.title }}</h2>
-      <p *ngIf="childTransactionSubTitle">
-        <em>{{ childTransactionSubTitle }}</em>
+      <h2>{{ childTransaction?.transactionType?.title }}</h2>
+      <p *ngIf="childTransactionType?.description">
+        <em [innerHtml]="childTransactionType?.description"></em>
       </p>
-      <h3>{{ childContactLabel }}</h3>
+      <h3>{{ childTransactionType?.contactTitle }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable && !useParentContact">
           <div class="col-12">
@@ -195,7 +199,7 @@
         </div>
         <ng-container *ngIf="childTransaction?.contact_1">
           <ng-container
-            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
+            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(childForm.get('entity_type')?.value)"
           >
             <app-committee-input
               [form]="childForm"
@@ -222,7 +226,10 @@
           ></app-address-input>
           <p-divider></p-divider>
           <ng-container
-            *ngIf="childHasEmployerInput && childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
+            *ngIf="
+              childTransactionType?.hasEmployeeFields() &&
+              childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL
+            "
           >
             <h3>Employer</h3>
             <app-employer-input
@@ -232,8 +239,8 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="this.hasChildCandidateInformationInput">
-            <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+          <ng-container *ngIf="childTransactionType?.hasCandidateInformation()">
+            <h3>Committee/Candidate Information</h3>
             <app-committee-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
@@ -243,7 +250,7 @@
               [readonly]="true"
             ></app-committee-input>
             <app-transaction-contact-lookup
-              [form]="form"
+              [form]="childForm"
               [formSubmitted]="formSubmitted"
               [contactTypeOptions]="candidateContactTypeOption"
               [contactTypeFormControl]="candidateContactTypeFormControl"
@@ -260,8 +267,8 @@
             </ng-container>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="hasChildElectionInformationInput">
-            <h3>Election Information</h3>
+          <ng-container *ngIf="childTransactionType?.hasElectionInformation()">
+            <h3>Election information</h3>
             <app-election-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
@@ -269,28 +276,27 @@
             ></app-election-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.hasAmountInput">
-            <h3>{{ childTemplateMap.amountInputHeader }}</h3>
+          <ng-container *ngIf="childTransaction?.transactionType?.showStandardAmount">
+            <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
               [contributionAmountReadOnly]="true"
               [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
               [showAggregate]="!!childTransaction?.transactionType?.showAggregate"
               [transaction]="childTransaction"
+              [memoCodeCheckboxLabel]="(childMemoCodeCheckboxLabel$ | async)!"
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.hasLoanInfoInput">
-            <h3>Loan information</h3>
+          <ng-container *ngIf="childTransactionType?.hasLoanFinanceFields()">
+            <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-loan-info-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
               [readonly]="false"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
               [transaction]="childTransaction"
             ></app-loan-info-input>
             <p-divider></p-divider>
@@ -300,6 +306,7 @@
             [form]="childForm"
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
+            [transaction]="childTransaction"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
             [purposeDescriptionLabel]="childPurposeDescriptionLabel"
             [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"

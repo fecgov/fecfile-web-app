@@ -1,4 +1,5 @@
 import { FormGroup } from '@angular/forms';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -9,8 +10,6 @@ import { ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { TransactionContactUtils } from './transaction-contact.utils';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 export class TransactionFormUtils {
   /**
@@ -135,26 +134,33 @@ export class TransactionFormUtils {
       throw new Error('Fecfile: Payload transaction not found');
     }
 
-    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
-    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
-    if (transaction.transactionType?.templateMap) {
-      // Update contact object in transaction with new form values
-      TransactionContactUtils.setTransactionContactFormChanges(
-        form,
-        transaction.contact_1,
-        transaction.transactionType.templateMap
-      );
+    // Remove parent transaction links within the parent-child hierarchy in the
+    // transaction objects to avoid a recursion overflow from the class-transformer
+    // plainToClass() converter
+    if (transaction?.children) {
+      transaction.children.forEach((child) => {
+        child.parent_transaction = undefined;
+      });
     }
 
-    const payload: ScheduleTransaction = getFromJSON({
+    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+
+    let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
-
     if (payload.children) {
       payload.children = payload.updateChildren();
     }
-
+    // Reorganize the payload if this transaction type can update its parent transaction
+    // This will break the scenario where the user creates a grandparent, then child, then tries
+    // to create a grandchild transaction because we won't know which child transaction of the grandparent
+    // was the original transaction it's id was generated on the api.  the middle child's
+    // id is necessary to generate the url for creating the grandchild.
+    if (transaction.transactionType?.updateParentOnSave) {
+      payload = payload.getUpdatedParent() as ScheduleTransaction;
+    }
     return payload;
   }
 
@@ -163,12 +169,7 @@ export class TransactionFormUtils {
     form.markAsPristine();
     form.markAsUntouched();
 
-    // Override the default entity_type value if called for by the defaultContactTypeOption
-    // in the TransactionType
-    let defaultContactTypeOption: string = contactTypeOptions[0]?.value;
-    if (transaction?.transactionType?.defaultContactTypeOption) {
-      defaultContactTypeOption = transaction.transactionType.defaultContactTypeOption;
-    }
+    const defaultContactTypeOption: string = contactTypeOptions[0]?.value;
 
     if (transaction?.transactionType) {
       form.patchValue({
@@ -187,5 +188,10 @@ export class TransactionFormUtils {
      */
     const memoCodeSchema = transactionType?.schema.properties['memo_code'];
     return memoCodeSchema?.const as boolean | undefined;
+  }
+
+  static isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
+    // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
+    return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
   }
 }
