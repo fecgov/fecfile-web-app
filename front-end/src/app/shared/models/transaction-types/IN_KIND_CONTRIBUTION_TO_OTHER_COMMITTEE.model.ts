@@ -5,12 +5,12 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ORGANIZATION_INDIVIDUAL,
-  INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
+  INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE_AND_COMMITTEE } from '../contact.model';
 
 export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType {
-  formFields = INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
+  formFields = INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_B_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION_INDIVIDUAL;
   override contactConfig = STANDARD_AND_CANDIDATE_AND_COMMITTEE;
   title = LabelUtils.get(
