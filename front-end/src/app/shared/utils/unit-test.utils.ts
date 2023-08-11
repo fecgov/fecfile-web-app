@@ -8,7 +8,7 @@ import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { CashOnHand } from '../interfaces/report.interface';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { Contact, ContactTypes } from '../models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
@@ -126,6 +126,35 @@ export const testMockStore = {
     { selector: selectCashOnHand, value: testCashOnHand },
   ],
 };
+
+export const testContact = Contact.fromJSON({
+  id: '111',
+  type: ContactTypes.INDIVIDUAL,
+  candidate_id: '999',
+  committee_id: '888',
+  name: 'Organization LLC',
+  last_name: 'Smith',
+  first_name: 'Joe',
+  middle_name: 'James',
+  prefix: 'Mr',
+  suffix: 'Jr',
+  street_1: '123 Main St',
+  street_2: 'Apt B',
+  city: 'Anytown',
+  state: 'VA',
+  zip: '22201',
+  employer: 'Plumbing, Inc.',
+  occupation: 'plumber',
+  candidate_office: CandidateOfficeTypes.HOUSE,
+  candidate_state: 'VA',
+  candidate_district: '1',
+  telephone: '555-555-5555',
+  country: 'USA',
+  created: '8/27/2023',
+  updated: null,
+  deleted: null,
+  transaction_count: 3,
+});
 
 export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   id: '123',
