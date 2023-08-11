@@ -77,7 +77,6 @@ export class TransactionContactUtils {
       return `<li>Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to ${value}</li>`;
     });
     const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
-    console.log(contact);
     return (
       `By saving this transaction, you are also updating the contact for ` +
       `<b>${contact.getNameString()}</b>. This change will only affect transactions with ` +
