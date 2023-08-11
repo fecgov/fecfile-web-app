@@ -237,4 +237,42 @@ describe('ContactService', () => {
     req.flush(mockResponse);
     httpTestingController.verify();
   });
+
+  it('#checkFecIdForUniqness should return true if contact matches', () => {
+    const fecId = 'fecId';
+    const contactId = 'contactId';
+    const apiServiceGetSpy = spyOn(testApiService, 'get')
+      .withArgs('/contacts/get_contact_id/', {
+        fec_id: fecId,
+      })
+      .and.returnValue(of('contactId' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+    service.checkFecIdForUniqness(fecId, contactId).subscribe((isUnique) => {
+      expect(isUnique).toBeTrue();
+    });
+  });
+  it('#checkFecIdForUniqness should return false if server comes back with differnt contact id', () => {
+    const fecId = 'fecId';
+    const contactId = 'contactId';
+    const apiServiceGetSpy = spyOn(testApiService, 'get')
+      .withArgs('/contacts/get_contact_id/', {
+        fec_id: fecId,
+      })
+      .and.returnValue(of('different id' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    service.checkFecIdForUniqness(fecId, contactId).subscribe((isUnique) => {
+      expect(isUnique).toBeFalse();
+    });
+  });
+  it('#checkFecIdForUniqness should return true if server comes back no id', () => {
+    const fecId = 'fecId';
+    const contactId = 'contactId';
+    const apiServiceGetSpy = spyOn(testApiService, 'get')
+      .withArgs('/contacts/get_contact_id/', {
+        fec_id: fecId,
+      })
+      .and.returnValue(of('' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    service.checkFecIdForUniqness(fecId, contactId).subscribe((isUnique) => {
+      expect(isUnique).toBeTrue();
+    });
+  });
 });
