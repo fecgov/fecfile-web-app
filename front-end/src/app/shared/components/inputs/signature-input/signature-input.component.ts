@@ -4,7 +4,6 @@ import { BaseInputComponent } from '../base-input.component';
 @Component({
   selector: 'app-signature-input',
   templateUrl: './signature-input.component.html',
-  styleUrls: ['./signature-input.component.scss'],
 })
 export class SignatureInputComponent extends BaseInputComponent implements OnInit {
   @Input() templateMapKeyPrefix = 'signatory_1';

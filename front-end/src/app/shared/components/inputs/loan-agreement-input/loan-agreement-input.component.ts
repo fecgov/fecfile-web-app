@@ -4,14 +4,12 @@ import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
-import { ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-loan-agreement-input',
   templateUrl: './loan-agreement-input.component.html',
-  styleUrls: ['./loan-agreement-input.component.scss'],
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
   @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();

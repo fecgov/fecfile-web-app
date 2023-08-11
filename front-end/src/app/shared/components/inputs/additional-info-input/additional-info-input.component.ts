@@ -31,10 +31,10 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
         .get(this.templateMap.purpose_description)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((value: string) => {
-          if (purposeDescriptionPrefix && value.length < purposeDescriptionPrefix.length) {
+          if (value.length < purposeDescriptionPrefix.length) {
             // Ensure prefix is the first part of the string in the textarea if no user text added
             this.form.get(this.templateMap.purpose_description)?.setValue(purposeDescriptionPrefix);
-          } else if (purposeDescriptionPrefix && !value.startsWith(purposeDescriptionPrefix)) {
+          } else if (!value.startsWith(purposeDescriptionPrefix)) {
             // Retain user text in textarea if possible if user changes prefix
             this.form
               .get(this.templateMap.purpose_description)
