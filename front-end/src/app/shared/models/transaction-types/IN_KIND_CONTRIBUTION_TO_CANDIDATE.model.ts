@@ -20,6 +20,7 @@ export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = true;
   override contact3IsRequired = true;
+  override purposeDescriptionPrefix? = 'In-Kind: ';
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

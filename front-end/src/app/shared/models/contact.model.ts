@@ -183,11 +183,6 @@ export const STANDARD_AND_CANDIDATE_AND_COMMITTEE = {
   contact_3: {
     committee_name: 'name',
     committee_fec_id: 'committee_id',
-    street_1: 'street_1',
-    street_2: 'street_2',
-    city: 'city',
-    state: 'state',
-    zip: 'zip',
   },
 };
 
