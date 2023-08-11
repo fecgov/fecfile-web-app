@@ -42,7 +42,7 @@ export class TransactionContactLookupComponent {
     ])
   );
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
@@ -64,6 +64,8 @@ export class TransactionContactLookupComponent {
     const typeFormControl = this.createContactForm.get('type');
     typeFormControl?.setValue(this.contactTypeFormControl.value);
     typeFormControl?.disable();
+    this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
+    this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
     this.createContactDialogVisible = true;
   }
 
