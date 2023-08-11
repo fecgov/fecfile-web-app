@@ -154,8 +154,6 @@ export const STANDARD_AND_CANDIDATE = {
 export const STANDARD_AND_CANDIDATE_AND_COMMITTEE = {
   contact_1: {
     organization_name: 'name',
-    committee_name: 'name',
-    committee_fec_id: 'committee_id',
     last_name: 'last_name',
     first_name: 'first_name',
     middle_name: 'middle_name',
