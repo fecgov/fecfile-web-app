@@ -50,10 +50,11 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childTransaction = this.transaction?.children?.filter(
-      (child) =>
-        child.transaction_type_identifier === this.transaction?.transactionType?.dependentChildTransactionTypes?.[0]
-    )[0];
+    if (this.transaction) {
+      this.childTransaction = this.getChildTransaction(this.transaction, 0);
+    } else {
+      throw new Error('Fecfile: Transaction not found for component');
+    }
     if (!this.childTransaction) {
       throw new Error('Fecfile: Child transaction not found for component');
     }
@@ -82,6 +83,27 @@ export abstract class DoubleTransactionTypeBaseComponent
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.childContactId$.complete();
+  }
+
+  /**
+   * For certain transactions, like CONDUIT_EARMARK_OUT, the transaction_type_identifier
+   * will not match the transaction type model name because it is assigned DEPOSITED
+   * and UNDEPOSITED variations of the model name for its TTI. We account for that here
+   * when comparing the child to the transaction types dependent on the parent
+   * @param transaction
+   * @param index
+   * @returns
+   */
+  getChildTransaction(transaction: Transaction, index: number): Transaction | undefined {
+    return transaction?.children?.filter((child) => {
+      const transactionTypeId = transaction?.transactionType?.dependentChildTransactionTypes?.[index];
+      const transactionTypeIdVariations = [
+        transactionTypeId,
+        `${transactionTypeId}_DEPOSITED`,
+        `${transactionTypeId}_UNDEPOSITED`,
+      ];
+      return transactionTypeIdVariations.includes(child.transaction_type_identifier);
+    })[0];
   }
 
   override save(navigationEvent: NavigationEvent) {

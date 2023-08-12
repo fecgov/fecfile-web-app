@@ -20,8 +20,14 @@ export class TransactionContainerComponent extends DestroyerComponent {
       if (this.transaction) {
         const title: string = this.transaction.transactionType?.title ?? '';
         this.titleService.setTitle(title);
+      } else {
+        throw new Error('Fecfile: No transaction found in TransactionContainerComponent');
       }
     });
+  }
+
+  isSingleTransaction(): boolean {
+    return !this.transaction?.transactionType?.dependentChildTransactionTypes?.length;
   }
 
   isDoubleTransaction(): boolean {

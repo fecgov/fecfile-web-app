@@ -50,10 +50,11 @@ export abstract class TripleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childTransaction_2 = this.transaction?.children?.filter(
-      (child) =>
-        child.transaction_type_identifier === this.transaction?.transactionType?.dependentChildTransactionTypes?.[1]
-    )[0];
+    if (this.transaction) {
+      this.childTransaction_2 = this.getChildTransaction(this.transaction, 1);
+    } else {
+      throw new Error('Fecfile: Transaction not found for component');
+    }
     if (!this.childTransaction_2) {
       throw new Error('Fecfile: Child 2 transaction not found for component');
     }

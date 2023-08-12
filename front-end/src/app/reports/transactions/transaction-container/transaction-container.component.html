@@ -1,4 +1,4 @@
-<ng-container *ngIf="!transaction?.transactionType?.dependentChildTransactionTypes?.length">
+<ng-container *ngIf="isSingleTransaction()">
   <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
 </ng-container>
 <ng-container *ngIf="isDoubleTransaction()">

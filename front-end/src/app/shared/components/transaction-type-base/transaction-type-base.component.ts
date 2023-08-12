@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -34,7 +34,7 @@ import {
   concatAll,
   reduce,
 } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 
@@ -46,11 +46,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   formProperties: string[] = [];
   transactionType?: TransactionType;
-  ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
-  candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
-  stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
@@ -271,8 +267,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithPrimaryContact(selectItem, this.form, this.transaction, this.contactId$);
   }
+
   updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithCandidateContact(selectItem, this.form, this.transaction);
+  }
+
+  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, this.form, this.transaction);
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
