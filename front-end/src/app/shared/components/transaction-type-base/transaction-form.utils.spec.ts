@@ -34,7 +34,7 @@ describe('FormUtils', () => {
 
     TransactionFormUtils.updateAggregate(
       form,
-      transaction.transactionType?.templateMap as TransactionTemplateMapType,
+      transaction.transactionType.templateMap as TransactionTemplateMapType,
       transaction,
       previous_transaction,
       transaction.contribution_amount as number
@@ -66,7 +66,7 @@ describe('FormUtils', () => {
 
     TransactionFormUtils.updateAggregate(
       form,
-      transaction.transactionType?.templateMap as TransactionTemplateMapType,
+      transaction.transactionType.templateMap as TransactionTemplateMapType,
       transaction,
       previous_transaction,
       transaction.expenditure_amount as number

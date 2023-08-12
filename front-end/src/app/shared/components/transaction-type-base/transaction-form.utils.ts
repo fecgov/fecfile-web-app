@@ -35,7 +35,7 @@ export class TransactionFormUtils {
       TransactionMemoUtils.patchMemoText(transaction, form);
 
       form.get('entity_type')?.disable();
-      contactId$.next(transaction.contact_1_id || '');
+      contactId$.next(transaction.contact_1_id ?? '');
     } else {
       component.resetForm();
       form.get('entity_type')?.enable();
