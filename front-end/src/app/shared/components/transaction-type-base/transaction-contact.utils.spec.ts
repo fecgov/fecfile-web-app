@@ -127,7 +127,12 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithCandidateContact', () => {
-    TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, testScheduleATransaction);
+    TransactionContactUtils.updateFormWithCandidateContact(
+      selectItem,
+      form,
+      testScheduleATransaction,
+      new Subject<string>()
+    );
     expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Smith');
     expect(form.get('donor_candidate_first_name')?.value).toBe('Joe');
@@ -142,7 +147,7 @@ describe('ContactUtils', () => {
 
   it('test updateFormWithSecondaryContact', () => {
     const transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
-    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction);
+    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('ind_name_account_location')?.value).toBe('Organization LLC');
     expect(form.get('account_street_1')?.value).toBe('123 Main St');
     expect(form.get('account_street_2')?.value).toBe('Apt B');

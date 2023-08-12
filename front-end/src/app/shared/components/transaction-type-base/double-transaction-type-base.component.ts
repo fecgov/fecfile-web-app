@@ -11,9 +11,9 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject, concat, of, reduce } from 'rxjs';
+import { concat, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
@@ -24,10 +24,7 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
  *
  * The primany transaction code is inherited from the TransactionTypeBaseComponent. This
  * abstract component class adds a child transaction that is defined in the parent
- * transaction's TransactionType class. (e.g. TransactionType.childTransactionType)
- *
- * See the transaction-group-ag component for an example of how to implement a
- * two-transaction input form.
+ * transaction's TransactionType class.
  */
 @Component({
   template: '',
@@ -41,7 +38,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
-  childContactId$: Subject<string> = new BehaviorSubject<string>('');
+  childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel$ = of('');
 
@@ -53,14 +50,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (this.transaction) {
       this.childTransaction = this.getChildTransaction(this.transaction, 0);
     } else {
-      throw new Error('Fecfile: Transaction not found for component');
+      throw new Error('Fecfile: Transaction not found for double-entry transaction form');
     }
     if (!this.childTransaction) {
-      throw new Error('Fecfile: Child transaction not found for component');
+      throw new Error('Fecfile: Child transaction not found for double-entry transaction form');
     }
     this.childTransactionType = this.childTransaction?.transactionType;
     if (!this.childTransactionType?.templateMap) {
-      throw new Error('Fecfile: Template map not found for double transaction component');
+      throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
     }
     this.childTemplateMap = this.childTransactionType.templateMap;
     this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
@@ -76,13 +73,19 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
     }
 
-    TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
+    TransactionFormUtils.onInit(
+      this,
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap,
+      this.contactService
+    );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.childContactId$.complete();
+    Object.values(this.childContactIdMap).forEach((id$) => id$.complete());
   }
 
   /**
@@ -176,7 +179,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactId$
+      this.childContactIdMap['contact_1']
     );
 
     if (this.childTransaction) {
@@ -208,10 +211,20 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithCandidateContact(selectItem, this.childForm, this.childTransaction);
+    TransactionContactUtils.updateFormWithCandidateContact(
+      selectItem,
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap['contact_2']
+    );
   }
 
   childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, this.childForm, this.childTransaction);
+    TransactionContactUtils.updateFormWithSecondaryContact(
+      selectItem,
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap['contact_2']
+    );
   }
 }

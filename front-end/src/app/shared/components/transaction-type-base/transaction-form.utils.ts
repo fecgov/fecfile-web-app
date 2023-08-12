@@ -6,11 +6,13 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { ContactIdMapType } from './transaction-contact.utils';
+import { ContactService } from 'app/shared/services/contact.service';
 
 export class TransactionFormUtils {
   /**
@@ -21,31 +23,35 @@ export class TransactionFormUtils {
    * @param component
    * @param form - parent or child (i.e. form or childForm)
    * @param transaction - parent or child
-   * @param contactId$ - parent or child (i.e. contactId$ or childContactId$)
+   * @param contactIdMap - parent or child
    */
   static onInit(
     component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>
+    contactIdMap: ContactIdMapType,
+    contactService: ContactService
   ): void {
     if (transaction && transaction.id) {
       form.patchValue({ ...transaction });
 
       TransactionMemoUtils.patchMemoText(transaction, form);
-
       form.get('entity_type')?.disable();
-      contactId$.next(transaction.contact_1_id ?? '');
     } else {
       component.resetForm();
       form.get('entity_type')?.enable();
-      contactId$.next('');
     }
 
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!templateMap) {
+    const transactionType = transaction?.transactionType;
+    const templateMap = transactionType?.templateMap;
+    if (!transactionType || !templateMap) {
       throw new Error('Fecfile: Cannot find template map when initializing transaction form');
     }
+
+    Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
+      contactIdMap[contact] = new Subject<string>();
+      contactIdMap[contact].next((transaction[contact as keyof Transaction] as Contact)?.id ?? '');
+    });
 
     form
       .get('entity_type')
@@ -83,11 +89,11 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transaction.transactionType?.showAggregate) {
+    if (transactionType.showAggregate) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),
-          combineLatestWith(contactId$),
+          combineLatestWith(contactIdMap['contact_1']),
           switchMap(([contribution_date, contactId]) => {
             return component.transactionService.getPreviousTransaction(transaction, contactId, contribution_date);
           })
@@ -120,6 +126,20 @@ export class TransactionFormUtils {
     if (schema) {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
     }
+
+    Object.entries(contactIdMap).forEach(([contact, id$]) => {
+      const contactConfig = transactionType.contactConfig[contact];
+      id$.pipe(takeUntil(component.destroy$)).subscribe((id) => {
+        for (const field of ['committee_fec_id', 'candidate_fec_id']) {
+          if (contactConfig[field]) {
+            form.get(templateMap[field as keyof TransactionTemplateMapType])?.clearAsyncValidators();
+            form
+              .get(templateMap[field as keyof TransactionTemplateMapType])
+              ?.addAsyncValidators(contactService.getFecIdValidator(id));
+          }
+        }
+      });
+    });
   }
 
   static updateAggregate(

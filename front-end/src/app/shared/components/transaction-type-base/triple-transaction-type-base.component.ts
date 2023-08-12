@@ -11,23 +11,21 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject, concat, of, reduce } from 'rxjs';
+import { concat, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 
 /**
- * This component is to help manage a form that contains 2 transactions that the
+ * This component is to help manage a form that contains 3 transactions that the
  * user needs to fill out and submit to the back end.
  *
- * The primany transaction code is inherited from the TransactionTypeBaseComponent. This
- * abstract component class adds a child transaction that is defined in the parent
- * transaction's TransactionType class. (e.g. TransactionType.childTransactionType)
- *
- * See the transaction-group-ag component for an example of how to implement a
- * two-transaction input form.
+ * The primany transaction code is inherited from the TransactionTypeBaseComponent and
+ * the secondary transaction code is inherited from the DoubleTransactionTypeBaseComponent
+ * in turn. This abstract component class adds a child_2 transaction that is defined in the parent
+ * transaction's TransactionType class.
  */
 @Component({
   template: '',
@@ -41,26 +39,26 @@ export abstract class TripleTransactionTypeBaseComponent
   childTransaction_2?: Transaction;
   childContactTypeOptions_2: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm_2: FormGroup = this.fb.group({});
-  childContactId_2$: Subject<string> = new BehaviorSubject<string>('');
+  childContactIdMap_2: ContactIdMapType = {};
   childTemplateMap_2: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel_2$ = of('');
 
   override ngOnInit(): void {
-    // Initialize primary form.
+    // Initialize primary and secondary forms.
     super.ngOnInit();
 
     // Initialize child form.
     if (this.transaction) {
       this.childTransaction_2 = this.getChildTransaction(this.transaction, 1);
     } else {
-      throw new Error('Fecfile: Transaction not found for component');
+      throw new Error('Fecfile: Transaction not found for triple-entry transaction form');
     }
     if (!this.childTransaction_2) {
-      throw new Error('Fecfile: Child 2 transaction not found for component');
+      throw new Error('Fecfile: Child 2 transaction not found for triple-entry transaction form');
     }
     this.childTransactionType_2 = this.childTransaction_2?.transactionType;
     if (!this.childTransactionType_2?.templateMap) {
-      throw new Error('Fecfile: Template map not found for triple transaction component');
+      throw new Error('Fecfile: Template map not found for triple transaction triple-entry transaction form');
     }
     this.childTemplateMap_2 = this.childTransactionType_2.templateMap;
     this.childContactTypeOptions_2 = getContactTypeOptions(this.childTransactionType_2.contactTypeOptions ?? []);
@@ -79,13 +77,19 @@ export abstract class TripleTransactionTypeBaseComponent
       );
     }
 
-    TransactionFormUtils.onInit(this, this.childForm_2, this.childTransaction_2, this.childContactId_2$);
+    TransactionFormUtils.onInit(
+      this,
+      this.childForm_2,
+      this.childTransaction_2,
+      this.childContactIdMap_2,
+      this.contactService
+    );
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.childContactId_2$.complete();
+    Object.values(this.childContactIdMap_2).forEach((id$) => id$.complete());
   }
 
   override save(navigationEvent: NavigationEvent) {
@@ -99,7 +103,7 @@ export abstract class TripleTransactionTypeBaseComponent
         this.childForm_2
       );
     } else {
-      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+      throw new Error('Fecfile: No transactions submitted for triple-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -140,17 +144,20 @@ export abstract class TripleTransactionTypeBaseComponent
       }
 
       let confirmation$ = this.confirmWithUser(this.transaction, this.form);
+      if (!this.childTransactionType?.useParentContact) {
+        confirmation$ = concat(
+          confirmation$,
+          this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
+        ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+      }
 
-      confirmation$ = concat(
-        confirmation$,
-        this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-
-      if (this.childTransaction_2) {
+      if (this.childTransaction_2 && !this.childTransactionType_2?.useParentContact) {
         confirmation$ = concat(
           confirmation$,
           this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2')
         ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+      } else if (!this.childTransaction_2) {
+        throw new Error('Fecfile: Did not find 3rd transaction when saving');
       }
 
       confirmation$.subscribe((confirmed: boolean) => {
@@ -180,7 +187,7 @@ export abstract class TripleTransactionTypeBaseComponent
       selectItem,
       this.childForm_2,
       this.childTransaction_2,
-      this.childContactId_2$
+      this.childContactIdMap_2['contact_1']
     );
 
     if (this.childTransaction_2) {
@@ -191,10 +198,20 @@ export abstract class TripleTransactionTypeBaseComponent
   }
 
   childUpdateFormWithCandidateContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithCandidateContact(selectItem, this.childForm_2, this.childTransaction_2);
+    TransactionContactUtils.updateFormWithCandidateContact(
+      selectItem,
+      this.childForm_2,
+      this.childTransaction_2,
+      this.childContactIdMap_2['contact_2']
+    );
   }
 
   childUpdateFormWithSecondaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, this.childForm_2, this.childTransaction_2);
+    TransactionContactUtils.updateFormWithSecondaryContact(
+      selectItem,
+      this.childForm_2,
+      this.childTransaction_2,
+      this.childContactIdMap_2['contact_2']
+    );
   }
 }

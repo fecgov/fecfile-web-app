@@ -21,21 +21,9 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import {
-  BehaviorSubject,
-  map,
-  of,
-  Subject,
-  takeUntil,
-  startWith,
-  Observable,
-  delay,
-  from,
-  concatAll,
-  reduce,
-} from 'rxjs';
+import { map, of, Subject, takeUntil, startWith, Observable, delay, from, concatAll, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 
 @Component({
@@ -48,7 +36,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   transactionType?: TransactionType;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   destroy$: Subject<boolean> = new Subject<boolean>();
-  contactId$: Subject<string> = new BehaviorSubject<string>('');
+  contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
@@ -80,7 +68,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
+    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
 
     // Determine if amount should always be negative and then force it to be so if needed
     if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
@@ -106,7 +94,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.contactId$.complete();
+    Object.values(this.contactIdMap).forEach((id$) => id$.complete());
   }
 
   writeToApi(payload: Transaction): Observable<Transaction> {
@@ -265,15 +253,30 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, this.form, this.transaction, this.contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_1']
+    );
   }
 
   updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithCandidateContact(selectItem, this.form, this.transaction);
+    TransactionContactUtils.updateFormWithCandidateContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_2']
+    );
   }
 
   updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, this.form, this.transaction);
+    TransactionContactUtils.updateFormWithSecondaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_2']
+    );
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {

@@ -161,7 +161,7 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_1 = contact;
     }
-    contactId$.next(contact.id || '');
+    contactId$.next(contact.id ?? '');
   }
 
   /**
@@ -175,7 +175,8 @@ export class TransactionContactUtils {
   static updateFormWithCandidateContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
-    transaction: Transaction | undefined
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -192,6 +193,7 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_2 = contact;
     }
+    contactId$.next(contact.id ?? '');
   }
 
   /**
@@ -205,7 +207,8 @@ export class TransactionContactUtils {
   static updateFormWithSecondaryContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
-    transaction: Transaction | undefined
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -216,9 +219,11 @@ export class TransactionContactUtils {
     form.get(templateMap.secondary_city)?.setValue(contact.city);
     form.get(templateMap.secondary_state)?.setValue(contact.state);
     form.get(templateMap.secondary_zip)?.setValue(contact.zip);
-
     if (transaction) {
       transaction.contact_2 = contact;
     }
+    contactId$.next(contact.id ?? '');
   }
 }
+
+export type ContactIdMapType = { [contact: string]: Subject<string> };
