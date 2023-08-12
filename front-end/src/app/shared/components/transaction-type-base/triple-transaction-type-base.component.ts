@@ -144,19 +144,16 @@ export abstract class TripleTransactionTypeBaseComponent
       }
 
       let confirmation$ = this.confirmWithUser(this.transaction, this.form);
-      if (!this.childTransactionType?.useParentContact) {
-        confirmation$ = concat(
-          confirmation$,
-          this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-        ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-      }
-
-      if (this.childTransaction_2 && !this.childTransactionType_2?.useParentContact) {
+      confirmation$ = concat(
+        confirmation$,
+        this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
+      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+      if (this.childTransaction_2) {
         confirmation$ = concat(
           confirmation$,
           this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2')
         ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-      } else if (!this.childTransaction_2) {
+      } else {
         throw new Error('Fecfile: Did not find 3rd transaction when saving');
       }
 

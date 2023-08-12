@@ -146,12 +146,11 @@ export abstract class DoubleTransactionTypeBaseComponent
         return;
       }
       let confirmation$ = this.confirmWithUser(this.transaction, this.form);
-      if (!this.childTransactionType?.useParentContact) {
-        confirmation$ = concat(
-          confirmation$,
-          this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-        ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-      }
+      confirmation$ = concat(
+        confirmation$,
+        this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
+      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+
       confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
