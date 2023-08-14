@@ -17,7 +17,8 @@ export class TransactionContactUtils {
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
-    templateMap: TransactionTemplateMapType
+    templateMap: TransactionTemplateMapType,
+    contactKey: string
   ): string {
     let confirmationContactTitle = '';
     switch (contactType) {
@@ -30,7 +31,11 @@ export class TransactionContactUtils {
         confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
         break;
       case ContactTypes.ORGANIZATION:
-        confirmationContactTitle = `organization contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        confirmationContactTitle = `organization contact for <b> ${
+          contactKey === 'contact_2'
+            ? form.get(templateMap.secondary_name)?.value
+            : form.get(templateMap.organization_name)?.value
+        }</b>`;
         break;
       case ContactTypes.CANDIDATE:
         confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${
