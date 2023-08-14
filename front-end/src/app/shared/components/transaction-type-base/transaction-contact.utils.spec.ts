@@ -66,7 +66,8 @@ describe('ContactUtils', () => {
     let output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.INDIVIDUAL,
       form,
-      testTemplateMap
+      testTemplateMap,
+      'contact_1'
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new individual contact for <b> test_ln, test_fn</b>."
@@ -75,7 +76,8 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.COMMITTEE,
       form,
-      testTemplateMap
+      testTemplateMap,
+      'contact_1'
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new committee contact for <b> test_org_name</b>."
@@ -84,7 +86,8 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.ORGANIZATION,
       form,
-      testTemplateMap
+      testTemplateMap,
+      'contact_1'
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new organization contact for <b> test_org_name</b>."
@@ -93,7 +96,8 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.CANDIDATE,
       form,
-      testTemplateMap
+      testTemplateMap,
+      'contact_2'
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new candidate contact for <b> test_candidate_ln, test_candidate_fn</b>."
