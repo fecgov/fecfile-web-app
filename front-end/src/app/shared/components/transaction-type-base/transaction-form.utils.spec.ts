@@ -1,7 +1,6 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
 
