@@ -108,8 +108,6 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
           this.candidateDistrictOptions = [];
         }
       });
-    this.form?.get('candidate_id')?.addAsyncValidators(this.contactService.fecIdValidator);
-    this.form?.get('committee_id')?.addAsyncValidators(this.contactService.fecIdValidator);
   }
 
   /**

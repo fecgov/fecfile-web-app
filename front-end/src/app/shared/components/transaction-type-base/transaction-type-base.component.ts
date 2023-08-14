@@ -21,21 +21,9 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import {
-  BehaviorSubject,
-  map,
-  of,
-  Subject,
-  takeUntil,
-  startWith,
-  Observable,
-  delay,
-  from,
-  concatAll,
-  reduce,
-} from 'rxjs';
+import { map, of, Subject, takeUntil, startWith, Observable, delay, from, concatAll, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 
 @Component({
@@ -55,7 +43,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
-  contactId$: Subject<string> = new BehaviorSubject<string>('');
+  contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
   purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
@@ -109,7 +97,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
+    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
     this.entityTypeControl = this.form.get('entity_type') as FormControl;
     this.parentOnInit();
     this.store
@@ -143,7 +131,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.contactId$.complete();
+    Object.values(this.contactIdMap).forEach((id$) => id$.complete());
   }
 
   writeToApi(payload: Transaction): Observable<Transaction> {
@@ -300,10 +288,20 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(selectItem, this.form, this.transaction, this.contactId$);
+    TransactionContactUtils.onContactLookupSelect(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_1']
+    );
   }
   onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
+    TransactionContactUtils.onSecondaryContactLookupSelect(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_2']
+    );
   }
   onTertiaryContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onTertiaryContactLookupSelect(selectItem, this.form, this.transaction);

@@ -126,7 +126,8 @@ export class TransactionContactUtils {
   static onSecondaryContactLookupSelect(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
-    transaction: Transaction | undefined
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -143,6 +144,7 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_2 = contact;
     }
+    contactId$.next(contact.id || '');
   }
 
   static onTertiaryContactLookupSelect(
@@ -160,3 +162,5 @@ export class TransactionContactUtils {
     }
   }
 }
+
+export type ContactIdMapType = { [contact: string]: Subject<string> };

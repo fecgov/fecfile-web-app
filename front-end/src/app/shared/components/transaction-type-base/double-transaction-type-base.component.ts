@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { NavigationAction, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
@@ -11,9 +11,9 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject, concat, of, reduce, takeUntil } from 'rxjs';
+import { concat, of, reduce, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -40,7 +40,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
-  childContactId$: Subject<string> = new BehaviorSubject<string>('');
+  childContactIdMap: ContactIdMapType = {};
   childPurposeDescriptionLabel = '';
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   useParentContact = false;
@@ -70,7 +70,24 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
     }
 
-    TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
+    this.childForm.addControl('contact_1', new FormControl());
+    this.childForm.addControl(
+      'contact_2',
+      new FormControl(null, () => {
+        if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+
+    TransactionFormUtils.onInit(
+      this,
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap,
+      this.contactService
+    );
     this.childOnInit();
   }
 
@@ -147,7 +164,7 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.childContactId$.complete();
+    Object.values(this.childContactIdMap).forEach((id$) => id$.complete());
   }
 
   private updateParentPurposeDescription() {
@@ -233,7 +250,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactId$
+      this.childContactIdMap['contact_1']
     );
 
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
@@ -252,6 +269,11 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   childOnSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.childForm, this.childTransaction);
+    TransactionContactUtils.onSecondaryContactLookupSelect(
+      selectItem,
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap['contact_2']
+    );
   }
 }
