@@ -81,6 +81,7 @@ export abstract class Transaction extends BaseModel {
   setMetaProperties(transactionType: TransactionType): void {
     this.contact_1_id = this.contact_1?.id;
     this.contact_2_id = this.contact_2?.id;
+    this.contact_3_id = this.contact_3?.id;
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
     const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
