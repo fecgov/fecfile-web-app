@@ -32,6 +32,7 @@
           [templateMap]="templateMap"
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
           [includeFecId]="!!transactionType?.hasCommitteeFecId()"
+          [transaction]="transaction"
         ></app-committee-input>
       </ng-container>
       <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
@@ -96,6 +97,7 @@
             entityRole="COMMITTEE"
             [includeFecId]="true"
             [readonly]="true"
+            [transaction]="transaction"
           ></app-committee-input>
         </ng-container>
         <ng-container *ngIf="transactionType?.contact3IsRequired">
@@ -117,6 +119,7 @@
             [includeFecId]="true"
             nameField="committee_name"
             [readonly]="false"
+            [transaction]="transaction"
           ></app-committee-input>
         </ng-container>
         <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">

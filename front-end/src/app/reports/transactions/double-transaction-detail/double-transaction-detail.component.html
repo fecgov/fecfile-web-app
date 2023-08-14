@@ -41,6 +41,7 @@
               [templateMap]="templateMap"
               [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
               [includeFecId]="true"
+              [transaction]="transaction"
             ></app-committee-input>
           </ng-container>
           <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
@@ -105,6 +106,7 @@
               entityRole="COMMITTEE"
               [includeFecId]="true"
               [readonly]="true"
+              [transaction]="transaction"
             ></app-committee-input>
             <app-transaction-contact-lookup
               [form]="form"
@@ -207,6 +209,7 @@
               [templateMap]="childTemplateMap"
               [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
               [includeFecId]="true"
+              [transaction]="childTransaction"
             ></app-committee-input>
           </ng-container>
           <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
@@ -248,6 +251,7 @@
               entityRole="COMMITTEE"
               [includeFecId]="true"
               [readonly]="true"
+              [transaction]="childTransaction"
             ></app-committee-input>
             <app-transaction-contact-lookup
               [form]="childForm"

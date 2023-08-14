@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
+import { TemplateMapKeyType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
@@ -12,6 +13,7 @@ export class CommitteeInputComponent extends BaseInputComponent implements OnIni
   @Input() entityRole = 'CONTACT';
   @Input() includeFecId = false;
   @Input() readonly = false;
+  @Input() nameField: TemplateMapKeyType = 'organization_name';
   @Input() transaction?: Transaction;
 
   ngOnInit(): void {
