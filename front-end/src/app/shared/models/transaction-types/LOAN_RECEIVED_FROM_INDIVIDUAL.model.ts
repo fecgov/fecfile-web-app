@@ -31,7 +31,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
     ...LOAN_TERMS_FIELDS,
   ];
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
-  override showStandardAmount = false;
+  override hasAmountInput = false;
   override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
 
@@ -45,8 +45,8 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override contactLookupLabel = 'LENDER LOOKUP';
 
   schema = schema;
-  override apiEndpoint = '/transactions/save-pair';
-  override dependentChildTransactionType = ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT;
+  override apiEndpoint = '/transactions/save';
+  override dependentChildTransactionTypes = [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT];
   override subTransactionConfig = new SubTransactionGroup('Guarantors', []);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [

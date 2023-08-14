@@ -9,7 +9,7 @@ export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
   contactTypeOptions = INDIVIDUAL;
   title = 'Conduit Earmark';
   schema = schema;
-  override dependentChildTransactionType = ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT;
+  override dependentChildTransactionTypes = [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT];
   override memoCodeTransactionTypes = {
     true: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
     false: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,

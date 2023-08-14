@@ -174,7 +174,7 @@ describe('TransactionResolver', () => {
     });
   });
 
-  it('should add new child transaction to new parent if parent has a dependentChildTransactionType', () => {
+  it('should add new child transaction to new parent if parent has a dependentChildTransactionTypes', () => {
     resolver
       .resolve_new_transaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
       .subscribe((transaction: Transaction | undefined) => {

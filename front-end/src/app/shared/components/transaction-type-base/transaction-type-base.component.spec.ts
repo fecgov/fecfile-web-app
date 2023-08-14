@@ -10,10 +10,10 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { testIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testIndividualReceipt, testMockStore, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -38,7 +38,14 @@ describe('TransactionTypeBaseComponent', () => {
         DatePipe,
         MessageService,
         FormBuilder,
-        { provide: TransactionService, useValue: jasmine.createSpyObj('TransactionService', ['update', 'create']) },
+        {
+          provide: TransactionService,
+          useValue: jasmine.createSpyObj('TransactionService', {
+            update: of(undefined),
+            create: of(undefined),
+            getPreviousTransaction: of(undefined),
+          }),
+        },
         ConfirmationService,
         provideMockStore(testMockStore),
         FecDatePipe,
@@ -52,7 +59,7 @@ describe('TransactionTypeBaseComponent', () => {
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
-    fixture.detectChanges(); //ngOnInit
+    fixture.detectChanges();
 
     navigateToSpy = spyOn(component, 'navigateTo');
     confirmSpy = spyOn(testConfirmationService, 'confirm');
@@ -75,4 +82,12 @@ describe('TransactionTypeBaseComponent', () => {
     expect(transactionServiceSpy.update).toHaveBeenCalled();
     expect(navigateToSpy).toHaveBeenCalled();
   }));
+
+  it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    component.ngOnInit();
+
+    component.form.patchValue({ contribution_amount: 2 });
+    expect(component.form.get('contribution_amount')?.value).toBe(-2);
+  });
 });

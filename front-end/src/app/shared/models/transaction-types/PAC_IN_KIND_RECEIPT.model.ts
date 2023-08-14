@@ -8,7 +8,7 @@ import { IN_KIND } from './common-types/IN_KIND.model';
 export class PAC_IN_KIND_RECEIPT extends IN_KIND {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT);
   schema = schema;
-  override dependentChildTransactionType = ScheduleBTransactionTypes.PAC_IN_KIND_OUT;
+  override dependentChildTransactionTypes = [ScheduleBTransactionTypes.PAC_IN_KIND_OUT];
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

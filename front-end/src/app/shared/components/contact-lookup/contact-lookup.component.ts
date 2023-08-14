@@ -84,7 +84,7 @@ export class ContactLookupComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onContactLookupSelect(event: any) {
+  updateFormWithPrimaryContact(event: any) {
     this.contactLookupSelect.emit(event);
     this.form.get(this.selectedContactFormControlName)?.patchValue('');
   }

@@ -6,10 +6,19 @@ import { Subject } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
 export class TransactionContactUtils {
+  /**
+   * Generate a message string that alerts the user that a new contact will be created
+   * when the transaction is saved.
+   * @param contactType
+   * @param form
+   * @param templateMap
+   * @returns {string}
+   */
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
-    templateMap: TransactionTemplateMapType
+    templateMap: TransactionTemplateMapType,
+    contactKey: string
   ): string {
     let confirmationContactTitle = '';
     switch (contactType) {
@@ -22,7 +31,11 @@ export class TransactionContactUtils {
         confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
         break;
       case ContactTypes.ORGANIZATION:
-        confirmationContactTitle = `organization contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        confirmationContactTitle = `organization contact for <b> ${
+          contactKey === 'contact_2'
+            ? form.get(templateMap.secondary_name)?.value
+            : form.get(templateMap.organization_name)?.value
+        }</b>`;
         break;
       case ContactTypes.CANDIDATE:
         confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${
@@ -33,6 +46,15 @@ export class TransactionContactUtils {
     return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`;
   }
 
+  /**
+   * Given a FormGroup and a Contact object, the method returns an array of data pairs (pairs in an array)
+   * containing the contact property and the new contact property value from the form.
+   * @param form
+   * @param contact
+   * @param templateMap
+   * @param contactConfig
+   * @returns
+   */
   static getContactChanges(
     form: FormGroup,
     contact: Contact,
@@ -52,21 +74,14 @@ export class TransactionContactUtils {
       .filter((change) => !!change);
   }
 
-  static updateContactWithForm(transaction: Transaction, templateMap: TransactionTemplateMapType, form: FormGroup) {
-    Object.entries(transaction.transactionType?.contactConfig ?? {}).forEach(
-      ([contactKey, config]: [string, { [formField: string]: string }]) => {
-        if (transaction[contactKey as keyof Transaction]) {
-          const contact = transaction[contactKey as keyof Transaction] as Contact;
-          const contactChanges = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
-            contact[property] = value as never;
-          });
-        }
-      }
-    );
-  }
-
+  /**
+   * Build and return the message string to display to the user in the pop-up when
+   * being alerted that a contact will be updated in the database.
+   * @param contact
+   * @param dateString
+   * @param contactChanges
+   * @returns
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getContactChangesMessage(contact: Contact, dateString: string, contactChanges: [string, any][]) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,7 +99,38 @@ export class TransactionContactUtils {
     );
   }
 
-  static onContactLookupSelect(
+  /**
+   * Loop though the contact records attached to a transaction object (i.e. 'contact_1', 'contact_2', etc)
+   * and update the contact objects in place with the values entered into the transaction form for that contact.
+   * @param transaction
+   * @param templateMap
+   * @param form
+   */
+  static updateContactsWithForm(transaction: Transaction, templateMap: TransactionTemplateMapType, form: FormGroup) {
+    Object.entries(transaction.transactionType?.contactConfig ?? {}).forEach(
+      ([contactKey, config]: [string, { [formField: string]: string }]) => {
+        if (transaction[contactKey as keyof Transaction]) {
+          const contact = transaction[contactKey as keyof Transaction] as Contact;
+          const contactChanges = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
+            contact[property] = value as never;
+          });
+        }
+      }
+    );
+  }
+
+  /**
+   * Update the transaction form values for the first contact form fields (i.e. 'contact_1')
+   * when a user has selected a contact from the lookup.
+   * @param selectItem
+   * @param form
+   * @param transaction
+   * @param contactId$
+   * @returns
+   */
+  static updateFormWithPrimaryContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
@@ -120,10 +166,18 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_1 = contact;
     }
-    contactId$.next(contact.id || '');
+    contactId$.next(contact.id ?? '');
   }
 
-  static onSecondaryContactLookupSelect(
+  /**
+   * Update the transaction form values for the second CANDIDATE contact form fields (i.e. 'contact_2')
+   * when a user has selected a contact from a contact lookup on the form.
+   * @param selectItem
+   * @param form
+   * @param transaction
+   * @returns
+   */
+  static updateFormWithCandidateContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
@@ -144,7 +198,36 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_2 = contact;
     }
-    contactId$.next(contact.id || '');
+    contactId$.next(contact.id ?? '');
+  }
+
+  /**
+   * Update the transaction form values for the SECONDARY contact form fields (i.e. 'contact_2')
+   * when a user has selected a contact from a contact lookup on the form.
+   * @param selectItem
+   * @param form
+   * @param transaction
+   * @returns
+   */
+  static updateFormWithSecondaryContact(
+    selectItem: SelectItem<Contact>,
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>
+  ) {
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    form.get(templateMap.secondary_name)?.setValue(contact.name);
+    form.get(templateMap.secondary_street_1)?.setValue(contact.street_1);
+    form.get(templateMap.secondary_street_2)?.setValue(contact.street_2);
+    form.get(templateMap.secondary_city)?.setValue(contact.city);
+    form.get(templateMap.secondary_state)?.setValue(contact.state);
+    form.get(templateMap.secondary_zip)?.setValue(contact.zip);
+    if (transaction) {
+      transaction.contact_2 = contact;
+    }
+    contactId$.next(contact.id ?? '');
   }
 }
 

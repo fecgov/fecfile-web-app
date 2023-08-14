@@ -20,6 +20,7 @@ export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
     true: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,
     false: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED,
   };
+  override contactLookupLabel = 'ENTITY LOOKUP';
 
   override generatePurposeDescription(transaction: SchBTransaction): string {
     if (!transaction.parent_transaction) return '';

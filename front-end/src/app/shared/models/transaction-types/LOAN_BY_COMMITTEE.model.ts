@@ -37,7 +37,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     'text4000',
   ];
   contactTypeOptions = COMMITTEE;
-  override showStandardAmount = false;
+  override hasAmountInput = false;
   override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_BY_COMMITTEE);
 
@@ -52,8 +52,8 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override contactLookupLabel = 'LENDEE LOOKUP';
 
   schema = schema;
-  override apiEndpoint = '/transactions/save-pair';
-  override dependentChildTransactionType = ScheduleBTransactionTypes.LOAN_MADE;
+  override apiEndpoint = '/transactions/save';
+  override dependentChildTransactionTypes = [ScheduleBTransactionTypes.LOAN_MADE];
   override subTransactionConfig = new SubTransactionGroup('Guarantors', []);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [

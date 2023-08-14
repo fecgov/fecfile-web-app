@@ -1,0 +1,319 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-8">
+      <div class="field">
+        <label for="amount">ORIGINAL AMOUNT</label>
+        <p-inputNumber
+          inputId="amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [formControlName]="templateMap['amount']"
+          inputStyleClass="readonly"
+          [readonly]="true"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['amount']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <p-divider></p-divider>
+  <h3>Terms</h3>
+  <app-loan-terms-dates-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+  ></app-loan-terms-dates-input>
+  <app-yes-no-radio-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    controlName="loan_restructured"
+    label="Has loan been restructured? (OPTIONAL)"
+    ariaLabelYes="This loan has been restructured"
+    ariaLabelNo="This loan has not been restructured"
+  ></app-yes-no-radio-input>
+  <ng-container *ngIf="showLoanRestructured">
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="loan_originally_incurred_date">DATE ORIGINALLY INCURRED</label>
+          <p-calendar
+            inputId="loan_originally_incurred_date"
+            name="date_signed"
+            formControlName="loan_originally_incurred_date"
+          ></p-calendar>
+          <app-error-messages
+            [form]="form"
+            fieldName="loan_originally_incurred_date"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <app-yes-no-radio-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    controlName="line_of_credit"
+    label="Is there a line of credit?"
+    ariaLabelYes="There is a line of credit"
+    ariaLabelNo="There is not a line of credit"
+  ></app-yes-no-radio-input>
+  <ng-container *ngIf="showLineOfCredit">
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW</label>
+          <p-inputNumber
+            inputId="credit_amount_this_draw"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            formControlName="credit_amount_this_draw"
+          ></p-inputNumber>
+          <app-error-messages
+            [form]="form"
+            fieldName="credit_amount_this_draw"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="balance">TOTAL OUTSTANDING BALANCE</label>
+          <p-inputNumber
+            inputId="balance"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            [formControlName]="templateMap['balance']"
+          ></p-inputNumber>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['balance']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <p-divider></p-divider>
+  <h3>Others liable</h3>
+  <app-yes-no-radio-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    controlName="others_liable"
+    label="Are other parties secondarily liable for the debt incurred?"
+    ariaLabelYes="Other parties are secondarily liable"
+    ariaLabelNo="Other parties are not secondarily liable"
+  ></app-yes-no-radio-input>
+  <ng-container *ngIf="showOthersLiable">
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <span class="bold"
+            >Endorsers and guarantors must be reported on Schedule C - Loan received from bank in STEP ONE</span
+          >
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <p-divider></p-divider>
+  <h3>Collateral</h3>
+  <app-yes-no-radio-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [controlName]="templateMap['secured']"
+    label="Are any of the following pledged as collateral for the loan: real estate, personal property, goods, negotiable instruments, certificates of deposit, chattel papers, stocks, accounts receivable, cash on deposit, or other similar traditional collateral?"
+    ariaLabelYes="Collateral has been pledged"
+    ariaLabelNo="Collateral has not been pledged"
+  ></app-yes-no-radio-input>
+  <ng-container *ngIf="showSecured">
+    <div class="grid">
+      <div class="col-12">
+        <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
+        <div>
+          <textarea
+            id="desc_collateral"
+            [rows]="5"
+            [cols]="30"
+            pInputTextarea
+            [autoResize]="true"
+            formControlName="desc_collateral"
+          ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="desc_collateral"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
+          <p-inputNumber
+            inputId="collateral_value_amount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            formControlName="collateral_value_amount"
+          ></p-inputNumber>
+          <app-error-messages
+            [form]="form"
+            fieldName="collateral_value_amount"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <app-yes-no-radio-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      controlName="perfected_interest"
+      label="Does the lender have a perfected security interest in it? (OPTIONAL)"
+      ariaLabelYes="Lender has a perfected security interest"
+      ariaLabelNo="Lender does not have a perfected security interest"
+    ></app-yes-no-radio-input>
+  </ng-container>
+  <p-divider></p-divider>
+  <h3>Future income</h3>
+  <app-yes-no-radio-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    controlName="future_income"
+    label="Are any future contributions or future receipts of interest income, pledged as collateral for the loan?"
+    ariaLabelYes="Future income has been pledged"
+    ariaLabelNo="Future income has not been pledged"
+  ></app-yes-no-radio-input>
+  <ng-container *ngIf="showFutureIncome">
+    <div class="grid">
+      <div class="col-12">
+        <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
+        <div>
+          <textarea
+            id="desc_specification_of_the_above"
+            [rows]="5"
+            [cols]="30"
+            pInputTextarea
+            [autoResize]="true"
+            formControlName="desc_specification_of_the_above"
+          ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="desc_specification_of_the_above"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-5">
+        <div class="field">
+          <label for="estimated_value">ESTIMATED VALUE</label>
+          <p-inputNumber
+            inputId="estimated_value"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            formControlName="estimated_value"
+          ></p-inputNumber>
+          <app-error-messages
+            [form]="form"
+            fieldName="estimated_value"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-5">
+        <div class="field">
+          <label for="depository_account_established_date">DEPOSITORY ACCOUNT ESTABLISHED</label>
+          <p-calendar
+            inputId="depository_account_established_date"
+            name="date_signed"
+            formControlName="depository_account_established_date"
+          ></p-calendar>
+          <app-error-messages
+            [form]="form"
+            fieldName="depository_account_established_date"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="location_of_account">LOCATION OF ACCOUNT</label>
+          <span
+            class="pi pi-info-circle"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
+            pTooltip="{{ locationOfAccountHelpText }}"
+          ></span>
+          <app-transaction-contact-lookup
+            id="location_of_account"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [contactTypeOptions]="contactTypeOptions"
+            [contactTypeFormControl]="contactTypeFormControl"
+            selectedContactFormControlName="contact_2"
+            [contactTypeReadOnly]="true"
+            (contactSelect)="updateFormWithLocationOfAccountContact($event)"
+          ></app-transaction-contact-lookup>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="showLocationOfAccount">
+      <div class="grid">
+        <div class="col-12">
+          <div class="field">
+            <label for="secondary_name">ORGANIZATION NAME</label>
+            <input type="text" pInputText id="secondary_name" [formControlName]="templateMap['secondary_name']" />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['secondary_name']"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+      </div>
+      <app-address-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [templateMap]="templateMap"
+        templateMapKeyPrefix="secondary"
+      ></app-address-input>
+    </ng-container>
+  </ng-container>
+  <p-divider></p-divider>
+  <h3>Basis of loan</h3>
+  <div class="grid">
+    <div class="col-12">
+      <p>
+        If neither of the types of collateral described above was pledged for this loan, or if the amount pledged does
+        not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
+        assures repayment.
+      </p>
+      <label for="basis_of_loan_description">DESCRIPTION (OPTIONAL)</label>
+      <div>
+        <textarea
+          id="basis_of_loan_description"
+          [rows]="5"
+          [cols]="30"
+          pInputTextarea
+          [autoResize]="true"
+          formControlName="basis_of_loan_description"
+        ></textarea>
+        <app-error-messages
+          [form]="form"
+          fieldName="basis_of_loan_description"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+</div>

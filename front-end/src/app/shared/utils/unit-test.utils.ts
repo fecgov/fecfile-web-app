@@ -8,7 +8,7 @@ import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { CashOnHand } from '../interfaces/report.interface';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { Contact, ContactTypes } from '../models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
@@ -126,6 +126,35 @@ export const testMockStore = {
     { selector: selectCashOnHand, value: testCashOnHand },
   ],
 };
+
+export const testContact = Contact.fromJSON({
+  id: '111',
+  type: ContactTypes.INDIVIDUAL,
+  candidate_id: '999',
+  committee_id: '888',
+  name: 'Organization LLC',
+  last_name: 'Smith',
+  first_name: 'Joe',
+  middle_name: 'James',
+  prefix: 'Mr',
+  suffix: 'Jr',
+  street_1: '123 Main St',
+  street_2: 'Apt B',
+  city: 'Anytown',
+  state: 'VA',
+  zip: '22201',
+  employer: 'Plumbing, Inc.',
+  occupation: 'plumber',
+  candidate_office: CandidateOfficeTypes.HOUSE,
+  candidate_state: 'VA',
+  candidate_district: '1',
+  telephone: '555-555-5555',
+  country: 'USA',
+  created: '8/27/2023',
+  updated: null,
+  deleted: null,
+  transaction_count: 3,
+});
 
 export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   id: '123',
@@ -246,4 +275,23 @@ export const testTemplateMap: TransactionTemplateMapType = {
   due_date: '',
   secured: '',
   interest_rate: '',
+  secondary_name: 'ind_name_account_location',
+  secondary_street_1: 'account_street_1',
+  secondary_street_2: 'account_street_2',
+  secondary_city: 'account_city',
+  secondary_state: 'account_state',
+  secondary_zip: 'account_zip',
+  signatory_1_last_name: 'treasurer_last_name',
+  signatory_1_first_name: 'treasurer_first_name',
+  signatory_1_middle_name: 'treasurer_middle_name',
+  signatory_1_prefix: 'treasurer_prefix',
+  signatory_1_suffix: 'treasurer_suffix',
+  signatory_1_date: 'treasurer_date_signed',
+  signatory_2_last_name: 'authorized_last_name',
+  signatory_2_first_name: 'authorized_first_name',
+  signatory_2_middle_name: 'authorized_middle_name',
+  signatory_2_prefix: 'authorized_prefix',
+  signatory_2_suffix: 'authorized_suffix',
+  signatory_2_title: 'authorized_title',
+  signatory_2_date: 'authorized_date_signed',
 };

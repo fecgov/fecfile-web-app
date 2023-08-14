@@ -52,7 +52,7 @@ describe('TransactionContactLookupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#onContactLookupSelect Contact happy path', fakeAsync(() => {
+  it('#updateFormWithPrimaryContact Contact happy path', fakeAsync(() => {
     const eventEmitterEmitSpy = spyOn(component.contactSelect, 'emit');
     const testContact = Contact.fromJSON({
       id: 123,
@@ -63,12 +63,12 @@ describe('TransactionContactLookupComponent', () => {
     const testValue = {
       value: testContact,
     } as SelectItem<Contact>;
-    component.onContactLookupSelect(testValue);
+    component.updateFormWithPrimaryContact(testValue);
     tick(500);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
   }));
 
-  it('#onContactLookupSelect FecApiLookupData createContactForm null vals', fakeAsync(() => {
+  it('#updateFormWithPrimaryContact FecApiLookupData createContactForm null vals', fakeAsync(() => {
     const testFecApiLookupData = new FecApiCommitteeLookupData({ id: 'C12345678' } as FecApiCommitteeLookupData);
     const testValue = {
       value: testFecApiLookupData,
@@ -81,19 +81,19 @@ describe('TransactionContactLookupComponent', () => {
     component.createContactForm.removeControl('city');
     component.createContactForm.removeControl('state');
     component.createContactForm.removeControl('zip');
-    component.onContactLookupSelect(testValue);
+    component.updateFormWithPrimaryContact(testValue);
     tick(500);
     expect(component.createContactDialogVisible).toEqual(true);
   }));
 
-  it('#onContactLookupSelect FecApiLookupData happy path', fakeAsync(() => {
+  it('#updateFormWithPrimaryContact FecApiLookupData happy path', fakeAsync(() => {
     const testFecApiLookupData = new FecApiCommitteeLookupData({ id: 'C12345678' } as FecApiCommitteeLookupData);
     const testValue = {
       value: testFecApiLookupData,
     } as SelectItem<FecApiLookupData>;
     spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(new CommitteeAccount()));
 
-    component.onContactLookupSelect(testValue);
+    component.updateFormWithPrimaryContact(testValue);
     tick(500);
     expect(component.createContactDialogVisible).toEqual(true);
   }));
@@ -102,9 +102,7 @@ describe('TransactionContactLookupComponent', () => {
     component.onCreateNewContactSelect();
     component.closeCreateContactDialog();
     component.createContactSave();
-    expect(component.createContactForm.get('committee_id')?.value).toBe(
-      null
-    );
+    expect(component.createContactForm.get('committee_id')?.value).toBe(null);
     component.onCreateContactDialogClose();
     expect(component.createContactFormSubmitted).toBeFalse();
   });
