@@ -117,6 +117,9 @@ export abstract class TransactionType {
   hasCandidateInformation(): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
+  hasCommitteeOrCandidateInformation(): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired;
+  }
   hasCommitteeFecId(): boolean {
     return hasFields(this.formFields, ['committee_fec_id']);
   }
