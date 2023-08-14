@@ -85,7 +85,7 @@
         ></app-loan-terms-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transactionType?.hasCandidateInformation()">
+      <ng-container *ngIf="transactionType?.hasCommitteeOrCandidateInformation()">
         <h3>Committee/Candidate Information</h3>
         <ng-container *ngIf="!transactionType?.contact3IsRequired">
           <app-committee-input
@@ -119,22 +119,24 @@
             [readonly]="false"
           ></app-committee-input>
         </ng-container>
-        <app-transaction-contact-lookup
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [contactTypeOptions]="candidateContactTypeOption"
-          [contactTypeFormControl]="candidateContactTypeFormControl"
-          selectedContactFormControlName="contact_2"
-          [contactTypeReadOnly]="true"
-          (contactSelect)="onSecondaryContactLookupSelect($event)"
-        ></app-transaction-contact-lookup>
-        <ng-container *ngIf="transaction?.contact_2">
-          <app-candidate-input
+        <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
+          <app-transaction-contact-lookup
             [form]="form"
             [formSubmitted]="formSubmitted"
-            [templateMap]="templateMap"
-            [hasCandidateOfficeInput]="!!transactionType?.hasCandidateOffice()"
-          ></app-candidate-input>
+            [contactTypeOptions]="candidateContactTypeOption"
+            [contactTypeFormControl]="candidateContactTypeFormControl"
+            selectedContactFormControlName="contact_2"
+            [contactTypeReadOnly]="true"
+            (contactSelect)="onSecondaryContactLookupSelect($event)"
+          ></app-transaction-contact-lookup>
+          <ng-container *ngIf="transaction?.contact_2">
+            <app-candidate-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="templateMap"
+              [hasCandidateOfficeInput]="!!transactionType?.hasCandidateOffice()"
+            ></app-candidate-input>
+          </ng-container>
         </ng-container>
         <p-divider></p-divider>
       </ng-container>
