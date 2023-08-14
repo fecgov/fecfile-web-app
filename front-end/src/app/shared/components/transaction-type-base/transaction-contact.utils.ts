@@ -9,9 +9,13 @@ export class TransactionContactUtils {
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
-    templateMap: TransactionTemplateMapType
+    transaction: Transaction
   ): string {
     let confirmationContactTitle = '';
+    const templateMap = transaction.transactionType?.templateMap;
+    if (!templateMap) {
+      throw new Error('Fecfile: templateMap not found in getCreateTransactionContactconfirmationMessage');
+    }
     switch (contactType) {
       case ContactTypes.INDIVIDUAL:
         confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${
@@ -19,7 +23,11 @@ export class TransactionContactUtils {
         }</b>`;
         break;
       case ContactTypes.COMMITTEE:
-        confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        if (transaction.transactionType && transaction.transactionType.synchronizeOrgComNameValues) {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        } else {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.committee_name)?.value}</b>`;
+        }
         break;
       case ContactTypes.ORGANIZATION:
         confirmationContactTitle = `organization contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
