@@ -35,9 +35,6 @@ export class TransactionContainerComponent extends DestroyerComponent {
   }
 
   isTripleTransaction(): boolean {
-    if (this.transaction?.transactionType?.dependentChildTransactionTypes) {
-      return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 2;
-    }
-    return false;
+    return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 2;
   }
 }

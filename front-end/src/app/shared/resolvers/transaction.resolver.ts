@@ -35,8 +35,8 @@ export class TransactionResolver {
     transaction.report_id = String(reportId);
 
     if (transactionType.dependentChildTransactionTypes) {
-      transaction.children = transactionType.dependentChildTransactionTypes.map(
-        this.getNewChildTransaction.bind(null, transaction)
+      transaction.children = transactionType.dependentChildTransactionTypes.map((type) =>
+        this.getNewChildTransaction(transaction, type)
       );
     }
 
@@ -99,6 +99,13 @@ export class TransactionResolver {
     );
   }
 
+  /**
+   * Build out a child transaction given the parent and the transaction type wanted
+   * for the new child transaction.
+   * @param parentTransaction
+   * @param childTransactionTypeName
+   * @returns {Transaction}
+   */
   private getNewChildTransaction(parentTransaction: Transaction, childTransactionTypeName: string): Transaction {
     const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName);
     const childTransaction = childTransactionType.getNewTransaction();

@@ -69,8 +69,8 @@ export abstract class TransactionType {
   footer?: string; // Text at the end of form
   contactTitle?: string; // Title for primary contact
   contactLookupLabel?: string; //Label above contact lookup
-  signatoryOneTitle = 'Committee treasurer';
-  signatoryTwoTitle = 'Authorized representative';
+  signatoryOneTitle?: string; // Label for the signatory_1 section in the form
+  signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
