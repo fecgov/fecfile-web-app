@@ -20,7 +20,7 @@ export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   override hasCandidateCommittee = true;
   override contact2IsRequired = true;
   override contact3IsRequired = true;
-  override purposeDescriptionPrefix? = 'In-Kind: ';
+  override purposeDescriptionPrefix? = 'In-kind: ';
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
