@@ -1,0 +1,32 @@
+<div [formGroup]="form">
+  <app-name-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+    [templateMapKeyPrefix]="templateMapKeyPrefix"
+  ></app-name-input>
+  <div class="grid">
+    <div class="col-4" *ngIf="titleFieldName">
+      <div class="field">
+        <label for="title">TITLE</label>
+        <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="titleFieldName"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="date_signed">DATE SIGNED</label>
+        <p-calendar inputId="date_signed" name="date_signed" [formControlName]="dateSignedFieldName"></p-calendar>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="dateSignedFieldName"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+</div>

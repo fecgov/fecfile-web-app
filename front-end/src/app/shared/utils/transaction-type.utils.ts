@@ -90,6 +90,7 @@ import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOU
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
+import { LOAN_RECEIVED_FROM_BANK_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_BANK_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -171,7 +172,12 @@ import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-t
 // Schedule C /////////////////////////////////////////////////////
 
 import { LOAN_RECEIVED_FROM_INDIVIDUAL } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL.model';
+import { LOAN_RECEIVED_FROM_BANK } from '../models/transaction-types/LOAN_RECEIVED_FROM_BANK.model';
 import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE.model';
+
+// Schedule C1 ////////////////////////////////////////////////////
+
+import { C1_LOAN_AGREEMENT } from '../models/transaction-types/C1_LOAN_AGREEMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -268,6 +274,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
+  LOAN_RECEIVED_FROM_BANK_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   PAC_CONDUIT_EARMARK_OUT,
   PAC_CONDUIT_EARMARK_OUT_DEPOSITED: PAC_CONDUIT_EARMARK_OUT,
@@ -344,7 +351,10 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   LOAN_MADE,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
+  LOAN_RECEIVED_FROM_BANK,
   LOAN_BY_COMMITTEE,
+  // Schedule C1 ////////////////////////////////////////////////////
+  C1_LOAN_AGREEMENT,
 }
 
 export class TransactionTypeUtils {

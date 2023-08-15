@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -13,6 +14,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
+import { DropdownModule } from 'primeng/dropdown';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -22,7 +24,7 @@ describe('TransactionReceiptsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule],
+      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
       declarations: [TransactionLoansAndDebtsComponent],
       providers: [
         MessageService,

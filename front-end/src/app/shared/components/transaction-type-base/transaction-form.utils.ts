@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
@@ -8,6 +8,7 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
@@ -25,7 +26,7 @@ export class TransactionFormUtils {
    * @param contactIdMap - parent or child
    */
   static onInit(
-    component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent,
+    component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
@@ -109,7 +110,19 @@ export class TransactionFormUtils {
         });
     }
 
-    const schema = transactionType.schema;
+    // Add form controls to bubble up validate error messages from the Contact Lookup component
+    form.addControl('contact_1', new FormControl());
+    form.addControl(
+      'contact_2',
+      new FormControl(null, () => {
+        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+
+    const schema = transaction.transactionType?.schema;
     if (schema) {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
     }
@@ -165,6 +178,7 @@ export class TransactionFormUtils {
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+    formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
 
     let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
@@ -182,6 +196,22 @@ export class TransactionFormUtils {
       payload = payload.getUpdatedParent() as ScheduleTransaction;
     }
     return payload;
+  }
+
+  /**
+   * Some form fields are not part of the FEC spec but internal state variables for the front-end. Add them to the payload.
+   * @param form
+   * @param transaction
+   * @param contactTypeOptions
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static addExtraFormFields(transaction: Transaction, form: FormGroup, formValues: any) {
+    transaction.transactionType?.formFields.forEach((field) => {
+      if (!(field in formValues)) {
+        formValues[field] = form.get(field)?.value ?? null;
+      }
+    });
+    return formValues;
   }
 
   static resetForm(form: FormGroup, transaction: Transaction | undefined, contactTypeOptions: PrimeOptions) {

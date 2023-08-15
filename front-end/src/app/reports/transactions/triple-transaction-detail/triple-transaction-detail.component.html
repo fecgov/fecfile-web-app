@@ -1,0 +1,115 @@
+<p-toast></p-toast>
+<h1>{{ transaction?.transactionType?.title }}</h1>
+<h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
+<p class="group-description">{{ transactionType?.description }}</p>
+<p-accordion [activeIndex]="accordionActiveIndex">
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      <strong>{{ transactionType?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ transactionType?.accordionSubText }}
+      </p></ng-template
+    >
+    <div class="p-fluid">
+      <h2 *ngIf="transactionType?.formTitle">
+        {{ transactionType?.formTitle }}
+      </h2>
+      <h3>{{ transactionType?.contactTitle }}</h3>
+      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+        <app-transaction-input
+          [isEditable]="isEditable"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [transaction]="transaction"
+          [contactTypeOptions]="contactTypeOptions"
+          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+          (candidateContactSelect)="updateFormWithCandidateContact($event)"
+          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
+          [getInlineControls]="getInlineControls.bind(this)"
+          (navigate)="handleNavigate($event)"
+        >
+        </app-transaction-input>
+      </form>
+    </div>
+  </p-accordionTab>
+
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      <strong>{{ childTransactionType?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ childTransactionType?.accordionSubText }}
+      </p></ng-template
+    >
+    <div class="p-fluid">
+      <h2>{{ childTransaction?.transactionType?.title }}</h2>
+      <p *ngIf="childTransactionType?.description">
+        <em [innerHtml]="childTransactionType?.description"></em>
+      </p>
+      <h3>{{ childTransactionType?.contactTitle }}</h3>
+      <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
+        <app-transaction-input
+          [isEditable]="isEditable"
+          [form]="childForm"
+          [formSubmitted]="formSubmitted"
+          [transaction]="childTransaction"
+          [contactTypeOptions]="childContactTypeOptions"
+          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
+          [contributionAmountReadOnly]="true"
+          contactLookupLabel="ENTITY LOOKUP"
+          candidateInfoPosition="high"
+          (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
+          (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
+          (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
+        >
+        </app-transaction-input>
+      </form>
+    </div>
+  </p-accordionTab>
+
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      <strong>{{ childTransactionType_2?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ childTransactionType_2?.accordionSubText }}
+      </p></ng-template
+    >
+    <div class="p-fluid">
+      <h2>{{ childTransaction_2?.transactionType?.title }}</h2>
+      <p *ngIf="childTransactionType_2?.description">
+        <em [innerHtml]="childTransactionType_2?.description"></em>
+      </p>
+      <h3>{{ childTransactionType_2?.contactTitle }}</h3>
+      <form id="childForm_2" [formGroup]="childForm_2" [ngClass]="{ 'ng-submitted': formSubmitted }">
+        <app-transaction-input
+          [isEditable]="isEditable"
+          [form]="childForm_2"
+          [formSubmitted]="formSubmitted"
+          [transaction]="childTransaction_2"
+          [contactTypeOptions]="childContactTypeOptions_2"
+          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel_2$"
+          [contributionAmountReadOnly]="true"
+          contactLookupLabel="ENTITY LOOKUP"
+          candidateInfoPosition="high"
+          (primaryContactSelect)="childUpdateFormWithPrimaryContact_2($event)"
+          (candidateContactSelect)="childUpdateFormWithCandidateContact_2($event)"
+          (secondaryContactSelect)="childUpdateFormWithSecondaryContact_2($event)"
+        >
+        </app-transaction-input>
+      </form>
+    </div>
+  </p-accordionTab>
+</p-accordion>
+
+<div class="p-fluid">
+  <app-navigation-control-bar
+    [navigationControls]="getNavigationControls()"
+    [transaction]="transaction"
+    (navigate)="handleNavigate($event)"
+    [class]="isEditable ? '' : 'flex-center'"
+  ></app-navigation-control-bar>
+</div>
+
+<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="childDialog_2" [style]="{ width: '450px' }"></p-confirmDialog>

@@ -44,6 +44,10 @@ import { MemoCodeInputComponent } from './components/inputs/memo-code/memo-code.
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LoanInfoInputComponent } from './components/inputs/loan-info-input/loan-info-input.component';
 import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/loan-terms-input.component';
+import { LoanTermsDatesInputComponent } from './components/inputs/loan-terms-dates-input/loan-terms-dates-input.component';
+import { LoanAgreementInputComponent } from './components/inputs/loan-agreement-input/loan-agreement-input.component';
+import { SignatureInputComponent } from './components/inputs/signature-input/signature-input.component';
+import { YesNoRadioInputComponent } from './components/inputs/yes-no-radio-input/yes-no-radio-input.component';
 
 @NgModule({
   imports: [
@@ -98,6 +102,10 @@ import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/lo
     CalculationOverlayComponent,
     LoanInfoInputComponent,
     LoanTermsInputComponent,
+    LoanTermsDatesInputComponent,
+    LoanAgreementInputComponent,
+    SignatureInputComponent,
+    YesNoRadioInputComponent,
   ],
   exports: [
     FecDatePipe,
@@ -120,12 +128,17 @@ import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/lo
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
+    MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,
     TableActionsButtonComponent,
     CalculationOverlayComponent,
     LoanInfoInputComponent,
     LoanTermsInputComponent,
+    LoanTermsDatesInputComponent,
+    LoanAgreementInputComponent,
+    SignatureInputComponent,
+    YesNoRadioInputComponent,
   ],
   providers: [DatePipe],
 })

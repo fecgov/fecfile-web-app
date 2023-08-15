@@ -102,6 +102,11 @@ export class Contact extends BaseModel {
   }
 }
 
+/**
+ * The following maps have:
+ * KEY = the key to a templateMap entry for the transaction forms
+ * VALUE = the key to the contact field
+ */
 export const STANDARD_SINGLE_CONTACT = {
   contact_1: {
     organization_name: 'name',
@@ -151,9 +156,12 @@ export const STANDARD_AND_CANDIDATE = {
     candidate_district: 'candidate_district',
   },
 };
-export const STANDARD_AND_CANDIDATE_AND_COMMITTEE = {
+
+export const STANDARD_AND_SECONDARY = {
   contact_1: {
     organization_name: 'name',
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
     last_name: 'last_name',
     first_name: 'first_name',
     middle_name: 'middle_name',
@@ -168,19 +176,68 @@ export const STANDARD_AND_CANDIDATE_AND_COMMITTEE = {
     occupation: 'occupation',
   },
   contact_2: {
-    candidate_fec_id: 'candidate_id',
-    candidate_last_name: 'last_name',
-    candidate_first_name: 'first_name',
-    candidate_middle_name: 'middle_name',
-    candidate_prefix: 'prefix',
-    candidate_suffix: 'suffix',
-    candidate_office: 'candidate_office',
-    candidate_state: 'candidate_state',
-    candidate_district: 'candidate_district',
+    secondary_name: 'name',
+    secondary_street_1: 'street_1',
+    secondary_street_2: 'street_2',
+    secondary_city: 'city',
+    secondary_state: 'state',
+    secondary_zip: 'zip',
   },
-  contact_3: {
+};
+
+export const STANDARD_AND_TERTIARY = {
+  contact_1: {
+    organization_name: 'name',
     committee_name: 'name',
     committee_fec_id: 'committee_id',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  },
+  contact_3: {
+    tertiary_committee_name: 'name',
+    tertiary_committee_fec_id: 'committee_id',
+  },
+};
+
+export const STANDARD_AND_SECONDARY_AND_TERTIARY = {
+  contact_1: {
+    organization_name: 'name',
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  },
+  contact_2: {
+    secondary_name: 'name',
+    secondary_street_1: 'street_1',
+    secondary_street_2: 'street_2',
+    secondary_city: 'city',
+    secondary_state: 'state',
+    secondary_zip: 'zip',
+  },
+  contact_3: {
+    tertiary_committee_name: 'name',
+    tertiary_committee_fec_id: 'committee_id',
   },
 };
 

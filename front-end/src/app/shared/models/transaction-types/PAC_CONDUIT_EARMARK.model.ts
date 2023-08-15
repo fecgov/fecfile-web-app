@@ -9,7 +9,7 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
   contactTypeOptions = COMMITTEE;
   title = 'PAC Conduit Earmark';
   schema = schema;
-  override dependentChildTransactionType = ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT;
+  override dependentChildTransactionTypes = [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT];
   override memoCodeTransactionTypes = {
     true: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
     false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,

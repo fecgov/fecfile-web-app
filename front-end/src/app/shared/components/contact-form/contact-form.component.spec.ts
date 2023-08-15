@@ -102,7 +102,7 @@ describe('ContactFormComponent', () => {
     expect(component.form.get('state')?.value).toBe('ZZ');
   });
 
-  it('#onContactLookupSelect CANDIDATE Contact happy path', () => {
+  it('#updateFormWithPrimaryContact CANDIDATE Contact happy path', () => {
     const testContact = new Contact();
     const testLastName = 'testLastName';
     const testZip = '12345';
@@ -110,16 +110,16 @@ describe('ContactFormComponent', () => {
     testContact.last_name = testLastName;
     testContact.zip = testZip;
 
-    component.onContactLookupSelect({ value: testContact });
+    component.updateFormWithPrimaryContact({ value: testContact });
 
     expect(component.form.get('last_name')?.value).toBe(testLastName);
     expect(component.form.get('zip')?.value).toBe(testZip);
 
     component.form = new FormGroup({});
-    component.onContactLookupSelect({ value: testContact });
+    component.updateFormWithPrimaryContact({ value: testContact });
   });
 
-  it('#onContactLookupSelect COMMITTEE Contact happy path', () => {
+  it('#updateFormWithPrimaryContact COMMITTEE Contact happy path', () => {
     const testContact = new Contact();
     const testCommitteeId = 'C1234568';
     const testZip = '12345';
@@ -127,16 +127,16 @@ describe('ContactFormComponent', () => {
     testContact.committee_id = testCommitteeId;
     testContact.zip = testZip;
 
-    component.onContactLookupSelect({ value: testContact });
+    component.updateFormWithPrimaryContact({ value: testContact });
 
     expect(component.form.get('committee_id')?.value).toBe(testCommitteeId);
     expect(component.form.get('zip')?.value).toBe(testZip);
 
     component.form = new FormGroup({});
-    component.onContactLookupSelect({ value: testContact });
+    component.updateFormWithPrimaryContact({ value: testContact });
   });
 
-  it('#onContactLookupSelect FecApiCandidateLookupData happy path', () => {
+  it('#updateFormWithPrimaryContact FecApiCandidateLookupData happy path', () => {
     const testId = 'P12345678';
     const testOfficeSought = 'P';
     const testName = 'testName';
@@ -152,17 +152,17 @@ describe('ContactFormComponent', () => {
 
     spyOn(testFecApiService, 'getCandidateDetails').and.returnValue(of(testResponse));
 
-    component.onContactLookupSelect({ value: testFecApiCandidateLookupData });
+    component.updateFormWithPrimaryContact({ value: testFecApiCandidateLookupData });
 
     expect(component.form.get('type')?.value).toBe(ContactTypes.CANDIDATE);
     expect(component.form.get('candidate_id')?.value).toBe(testId);
     expect(component.form.get('city')?.value).toBe(testAddressCity);
 
     component.form = new FormGroup({});
-    component.onContactLookupSelect({ value: testFecApiCandidateLookupData });
+    component.updateFormWithPrimaryContact({ value: testFecApiCandidateLookupData });
   });
 
-  it('#onContactLookupSelect FecApiCommitteeLookupData happy path', () => {
+  it('#updateFormWithPrimaryContact FecApiCommitteeLookupData happy path', () => {
     const testId = 'C12345678';
     const testIsActive = true;
     const testName = 'testName';
@@ -178,13 +178,13 @@ describe('ContactFormComponent', () => {
 
     spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(testResponse));
 
-    component.onContactLookupSelect({ value: testFecApiCommitteeLookupData });
+    component.updateFormWithPrimaryContact({ value: testFecApiCommitteeLookupData });
 
     expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
     expect(component.form.get('committee_id')?.value).toBe(testId);
     expect(component.form.get('telephone')?.value).toBe('+1 ' + testPhone);
 
     component.form = new FormGroup({});
-    component.onContactLookupSelect({ value: testFecApiCommitteeLookupData });
+    component.updateFormWithPrimaryContact({ value: testFecApiCommitteeLookupData });
   });
 });

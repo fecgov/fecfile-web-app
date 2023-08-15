@@ -1,21 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NavigationAction, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { concat, of, reduce, takeUntil } from 'rxjs';
+import { concat, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionChildFormUtils } from './transaction-child-form.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -23,10 +24,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
  *
  * The primany transaction code is inherited from the TransactionTypeBaseComponent. This
  * abstract component class adds a child transaction that is defined in the parent
- * transaction's TransactionType class. (e.g. TransactionType.childTransactionType)
- *
- * See the transaction-group-ag component for an example of how to implement a
- * two-transaction input form.
+ * transaction's TransactionType class.
  */
 @Component({
   template: '',
@@ -41,9 +39,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
   childContactIdMap: ContactIdMapType = {};
-  childPurposeDescriptionLabel = '';
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  useParentContact = false;
   childMemoCodeCheckboxLabel$ = of('');
 
   override ngOnInit(): void {
@@ -51,14 +47,21 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childTransaction = (this.transaction?.children ?? [])[0];
+    if (this.transaction) {
+      this.childTransaction = this.getChildTransaction(this.transaction, 0);
+    } else {
+      throw new Error('Fecfile: Transaction not found for double-entry transaction form');
+    }
+    if (!this.childTransaction) {
+      throw new Error('Fecfile: Child transaction not found for double-entry transaction form');
+    }
     this.childTransactionType = this.childTransaction?.transactionType;
     if (!this.childTransactionType?.templateMap) {
-      throw new Error('Fecfile: Template map not found for double transaction component');
+      throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
     }
     this.childTemplateMap = this.childTransactionType.templateMap;
     this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
-    this.childFormProperties = this.childTransactionType.getFormControlNames(this.childTemplateMap);
+    this.childFormProperties = this.childTransactionType.getFormControlNames();
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
 
     if (
@@ -70,17 +73,6 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
     }
 
-    this.childForm.addControl('contact_1', new FormControl());
-    this.childForm.addControl(
-      'contact_2',
-      new FormControl(null, () => {
-        if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-
     TransactionFormUtils.onInit(
       this,
       this.childForm,
@@ -88,78 +80,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childContactIdMap,
       this.contactService
     );
-    this.childOnInit();
-  }
-
-  childOnInit() {
-    // Determine if amount should always be negative and then force it to be so if needed
-    if (this.childTransactionType?.negativeAmountValueOnly && this.childTemplateMap?.amount) {
-      this.childForm
-        .get(this.childTemplateMap.amount)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((amount) => {
-          if (+amount > 0) {
-            this.childForm.get(this.childTemplateMap.amount)?.setValue(-1 * amount);
-          }
-        });
-    }
-
-    if (this.childTransactionType?.generatePurposeDescriptionLabel) {
-      this.childPurposeDescriptionLabel = this.childTransactionType?.generatePurposeDescriptionLabel();
-    }
-
-    // Parent contribution purpose description updates with configured child fields update.
-    this.transaction?.transactionType?.childTriggerFields?.forEach((triggerField) => {
-      this.childForm
-        .get(this.childTemplateMap[triggerField])
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          /** Before updating the parent description, manually update the child
-           * fields because they will not be updated by the time this hook is called
-           **/
-          const key = this.childTemplateMap[triggerField] as keyof ScheduleTransaction;
-          ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-          (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
-          this.updateParentPurposeDescription();
-        });
-    });
-
-    // Child contribution purpose description updates with configured parent fields update.
-    this.childTransactionType?.parentTriggerFields?.forEach((triggerField) => {
-      this.form
-        .get(this.templateMap[triggerField])
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          /** Before updating the parent description, manually update the child
-           * fields because they will not be updated by the time this hook is called
-           **/
-          const key = this.templateMap[triggerField] as keyof ScheduleTransaction;
-          ((this.transaction as ScheduleTransaction)[key] as string) = value;
-          (this.transaction as ScheduleTransaction).entity_type = this.form.get('entity_type')?.value;
-          this.updateChildPurposeDescription();
-        });
-    });
-
-    this.useParentContact = !!this.childTransactionType?.useParentContact;
-
-    // Inheritted fields must match parent values
-    this.childTransactionType?.inheritedFields?.forEach((inherittedField) => {
-      this.form
-        .get(this.templateMap[inherittedField])
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          this.childForm.get(this.childTemplateMap[inherittedField])?.setValue(value);
-        });
-      this.childForm.get(this.childTemplateMap[inherittedField])?.disable();
-    });
-  }
-
-  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
-    super.onContactLookupSelect(selectItem);
-    if (this.useParentContact && this.childTransaction && this.transaction?.contact_1) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
-    }
+    TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
   }
 
   override ngOnDestroy(): void {
@@ -167,31 +88,32 @@ export abstract class DoubleTransactionTypeBaseComponent
     Object.values(this.childContactIdMap).forEach((id$) => id$.complete());
   }
 
-  private updateParentPurposeDescription() {
-    if (this.transaction?.transactionType?.generatePurposeDescription) {
-      this.form.patchValue({
-        [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
-          this.transaction
-        ),
-      });
-    }
-  }
-
-  private updateChildPurposeDescription() {
-    if (this.childTransaction?.transactionType?.generatePurposeDescription) {
-      this.childForm.patchValue({
-        [this.childTemplateMap.purpose_description]: this.childTransactionType?.generatePurposeDescriptionWrapper(
-          this.childTransaction
-        ),
-      });
-    }
+  /**
+   * For certain transactions, like CONDUIT_EARMARK_OUT, the transaction_type_identifier
+   * will not match the transaction type model name because it is assigned DEPOSITED
+   * and UNDEPOSITED variations of the model name for its TTI. We account for that here
+   * when comparing the child to the transaction types dependent on the parent
+   * @param transaction
+   * @param index
+   * @returns
+   */
+  getChildTransaction(transaction: Transaction, index: number): Transaction | undefined {
+    return transaction?.children?.filter((child) => {
+      const transactionTypeId = transaction?.transactionType?.dependentChildTransactionTypes?.[index];
+      const transactionTypeIdVariations = [
+        transactionTypeId,
+        `${transactionTypeId}_DEPOSITED`,
+        `${transactionTypeId}_UNDEPOSITED`,
+      ];
+      return transactionTypeIdVariations.includes(child.transaction_type_identifier);
+    })[0];
   }
 
   override save(navigationEvent: NavigationEvent) {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction) {
-      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
-      TransactionContactUtils.updateContactWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
@@ -224,12 +146,11 @@ export abstract class DoubleTransactionTypeBaseComponent
         return;
       }
       let confirmation$ = this.confirmWithUser(this.transaction, this.form);
-      if (!this.childTransactionType?.useParentContact) {
-        confirmation$ = concat(
-          confirmation$,
-          this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-        ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-      }
+      confirmation$ = concat(
+        confirmation$,
+        this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
+      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+
       confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
@@ -240,36 +161,65 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override resetForm() {
-    this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
+    super.resetForm();
     TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
   }
 
-  childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(
+  override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
+    super.updateFormWithPrimaryContact(selectItem);
+    if (this.childTransaction?.transactionType?.useParentContact && this.transaction?.contact_1) {
+      this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+    }
+  }
+
+  childUpdateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithPrimaryContact(
       selectItem,
       this.childForm,
       this.childTransaction,
       this.childContactIdMap['contact_1']
     );
 
+    if (this.childTransaction) {
+      this.updateInheritedFields(this.childForm, this.childTransaction);
+    } else {
+      throw new Error('Fecfile: Missing child transaction.');
+    }
+  }
+
+  protected updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.
-    this.childTransactionType?.inheritedFields?.forEach((inherittedField) => {
-      const childFieldControl = this.childForm.get(this.childTemplateMap[inherittedField]);
-      childFieldControl?.enable();
-      const value = this.form.get(this.templateMap[inherittedField])?.value;
-      if (value !== undefined) {
-        childFieldControl?.setValue(value);
-        childFieldControl?.updateValueAndValidity();
+
+    childTransaction.transactionType?.inheritedFields?.forEach((inherittedField) => {
+      if (childTransaction.transactionType) {
+        const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
+        childFieldControl?.enable();
+        const value = this.form.get(this.templateMap[inherittedField])?.value;
+        if (value !== undefined) {
+          childFieldControl?.setValue(value);
+          childFieldControl?.updateValueAndValidity();
+        }
+        childFieldControl?.disable();
+      } else {
+        throw new Error('Fecfile: Transaction missing transactionType.');
       }
-      childFieldControl?.disable();
     });
   }
 
-  childOnSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(
+  childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithCandidateContact(
+      selectItem,
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap['contact_2']
+    );
+  }
+
+  childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithSecondaryContact(
       selectItem,
       this.childForm,
       this.childTransaction,

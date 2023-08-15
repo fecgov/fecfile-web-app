@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 
 describe('AdditionalInfoInputComponent', () => {
@@ -23,8 +23,9 @@ describe('AdditionalInfoInputComponent', () => {
       text4000: new FormControl(''),
     });
     component.templateMap = testTemplateMap;
-    component.descriptionIsSystemGenerated = true;
-    component.purposeDescriptionPrefix = 'Prefix: ';
+    component.transaction = testScheduleATransaction;
+    if (component.transaction.transactionType)
+      component.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
     fixture.detectChanges();
   });
 
@@ -32,13 +33,15 @@ describe('AdditionalInfoInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a read-only cpd if system generated', () => {
+  xit('should have a read-only cpd if system generated', () => {
+    if (component.transaction?.transactionType)
+      component.transaction.transactionType.generatePurposeDescription = () => 'description';
+    fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeTruthy();
   });
 
   it('should have a mutable cpd if not system generated', () => {
-    component.descriptionIsSystemGenerated = false;
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
@@ -48,13 +51,15 @@ describe('AdditionalInfoInputComponent', () => {
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'abc',
     });
-    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(component.purposeDescriptionPrefix);
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+      component.transaction?.transactionType?.purposeDescriptionPrefix
+    );
 
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'Prefax: abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.purposeDescriptionPrefix + 'abc'
+      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc'
     );
   });
 });

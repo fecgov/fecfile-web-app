@@ -24,7 +24,7 @@ export abstract class Transaction extends BaseModel {
   id: string | undefined;
 
   @Type(() => TransactionType)
-  transactionType: TransactionType | undefined;
+  transactionType: TransactionType = {} as TransactionType;
 
   // FECFile spec properties
 

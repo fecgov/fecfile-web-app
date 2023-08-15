@@ -45,8 +45,8 @@ export class TransactionContactLookupComponent {
   constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onContactLookupSelect(event: any) {
-    this.contactForm?.onContactLookupSelect(event);
+  updateFormWithPrimaryContact(event: any) {
+    this.contactForm?.updateFormWithPrimaryContact(event);
     if (!(event?.value instanceof Contact)) {
       this.openCreateContactDialog();
     } else {

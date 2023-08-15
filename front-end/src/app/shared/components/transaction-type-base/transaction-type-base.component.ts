@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -22,7 +22,7 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { map, of, Subject, takeUntil, startWith, Observable, delay, from, concatAll, reduce } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 
@@ -34,18 +34,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   formProperties: string[] = [];
   transactionType?: TransactionType;
-  ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  entityTypeControl?: FormControl;
-  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
-  committeeContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
-  committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
-  purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
@@ -69,50 +61,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
-    this.formProperties = this.transactionType.getFormControlNames(this.templateMap);
+    this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
-    this.form.addControl('contact_1', new FormControl());
-    this.form.addControl(
-      'contact_2',
-      new FormControl(null, () => {
-        if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-
-    this.form.addControl(
-      'contact_3',
-      new FormControl(null, () => {
-        if (!this.transaction?.contact_3 && this.transactionType?.contact3IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
-    this.entityTypeControl = this.form.get('entity_type') as FormControl;
-    this.parentOnInit();
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.isEditable = this.reportService.isEditable(report);
-        if (!this.isEditable) this.form.disable();
-      });
-  }
 
-  parentOnInit() {
-    const transactionType = this.transactionType;
     // Determine if amount should always be negative and then force it to be so if needed
-    if (transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+    if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
       this.form
         .get(this.templateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -123,9 +82,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         });
     }
 
-    if (transactionType?.generatePurposeDescriptionLabel) {
-      this.purposeDescriptionLabel = transactionType.generatePurposeDescriptionLabel();
-    }
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.isEditable = this.reportService.isEditable(report);
+        if (!this.isEditable) this.form.disable();
+      });
   }
 
   ngOnDestroy(): void {
@@ -145,7 +108,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   save(navigationEvent: NavigationEvent) {
     // update all contacts with changes from form.
     if (this.transaction) {
-      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
@@ -164,7 +127,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  confirmWithUser(transaction: Transaction, form: FormGroup, targetDialog: 'dialog' | 'childDialog' = 'dialog') {
+  confirmWithUser(
+    transaction: Transaction,
+    form: FormGroup,
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
+  ) {
     const templateMap = transaction.transactionType?.templateMap;
     if (!templateMap) {
       throw new Error('Fecfile: Cannot find template map when confirming transaction');
@@ -172,12 +139,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const confirmations$ = Object.entries(transaction.transactionType?.contactConfig ?? {})
       .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
+          if (transaction.transactionType?.useParentContact && contactKey === 'contact_1') {
+            return '';
+          }
           const contact = transaction[contactKey as keyof Transaction] as Contact;
           if (!contact.id) {
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
-              transaction
+              transaction,
+              templateMap,
+              contactKey
             );
           }
           const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
@@ -282,33 +254,40 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
   }
 
-  isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
-    // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return transactionType?.generatePurposeDescription !== undefined;
-  }
-
-  onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(
+  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithPrimaryContact(
       selectItem,
       this.form,
       this.transaction,
       this.contactIdMap['contact_1']
     );
   }
-  onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(
+
+  updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithCandidateContact(
       selectItem,
       this.form,
       this.transaction,
       this.contactIdMap['contact_2']
     );
   }
-  onTertiaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onTertiaryContactLookupSelect(selectItem, this.form, this.transaction);
+
+  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithSecondaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_2']
+    );
   }
 
-  getEntityType(): string {
-    return this.form.get('entity_type')?.value || '';
+  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithTertiaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_3']
+    );
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {

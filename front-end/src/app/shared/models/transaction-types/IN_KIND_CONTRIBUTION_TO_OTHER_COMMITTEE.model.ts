@@ -7,12 +7,12 @@ import {
   ORGANIZATION_INDIVIDUAL,
   INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE_AND_COMMITTEE } from '../contact.model';
+import { STANDARD_AND_TERTIARY } from '../contact.model';
 
 export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType {
   formFields = INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_B_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION_INDIVIDUAL;
-  override contactConfig = STANDARD_AND_CANDIDATE_AND_COMMITTEE;
+  override contactConfig = STANDARD_AND_TERTIARY;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE

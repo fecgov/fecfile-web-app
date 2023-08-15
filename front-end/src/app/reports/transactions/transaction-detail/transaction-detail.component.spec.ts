@@ -27,6 +27,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from 'app/shared/shared.module';
 import { TransactionDetailComponent } from './transaction-detail.component';
+import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
+import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
 
 describe('TransactionDetailComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -54,7 +56,7 @@ describe('TransactionDetailComponent', () => {
         InputNumberModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionDetailComponent],
+      declarations: [TransactionDetailComponent, AmountInputComponent, NavigationControlComponent],
       providers: [
         MessageService,
         ConfirmationService,

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,6 +13,8 @@ import { TableModule } from 'primeng/table';
 import { SharedModule } from 'app/shared/shared.module';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -20,8 +23,16 @@ describe('TransactionListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [TransactionListComponent],
+      imports: [
+        ToolbarModule,
+        TableModule,
+        SharedModule,
+        RouterTestingModule,
+        ConfirmDialogModule,
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      declarations: [TransactionListComponent, TransactionLoansAndDebtsComponent],
       providers: [
         MessageService,
         ConfirmationService,

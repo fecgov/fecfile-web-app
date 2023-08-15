@@ -21,6 +21,7 @@ import { of } from 'rxjs';
 import { SharedModule } from 'app/shared/shared.module';
 import { TransactionContainerComponent } from './transaction-container.component';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TransactionDetailComponent } from '../transaction-detail/transaction-detail.component';
 
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
@@ -45,7 +46,7 @@ describe('TransactionContainerComponent', () => {
         InputTextareaModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionContainerComponent, ConfirmDialog],
+      declarations: [TransactionContainerComponent, ConfirmDialog, TransactionDetailComponent],
       providers: [
         FormBuilder,
         MessageService,

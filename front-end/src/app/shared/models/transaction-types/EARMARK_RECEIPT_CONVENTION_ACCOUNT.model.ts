@@ -11,7 +11,7 @@ export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends EARMARK {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override dependentChildTransactionType = ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT;
+  override dependentChildTransactionTypes = [ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';
