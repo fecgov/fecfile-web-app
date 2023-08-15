@@ -22,6 +22,10 @@ export class TransactionInputComponent implements OnInit {
     ContactTypes.CANDIDATE,
   ]);
   @Input() candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
+  @Input() committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+  ]);
+  @Input() committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
   @Input() contactLookupLabel = 'CONTACT LOOKUP';

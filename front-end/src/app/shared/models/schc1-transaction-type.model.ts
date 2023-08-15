@@ -67,5 +67,7 @@ export abstract class SchC1TransactionType extends TransactionType {
     signatory_2_suffix: 'authorized_suffix',
     signatory_2_title: 'authorized_title',
     signatory_2_date: 'authorized_date_signed',
+    tertiary_committee_name: '',
+    tertiary_committee_fec_id: '',
   };
 }

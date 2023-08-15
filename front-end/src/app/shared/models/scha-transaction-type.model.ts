@@ -69,5 +69,7 @@ export abstract class SchATransactionType extends TransactionType {
     signatory_2_suffix: '',
     signatory_2_title: '',
     signatory_2_date: '',
+    tertiary_committee_name: '',
+    tertiary_committee_fec_id: '',
   };
 }

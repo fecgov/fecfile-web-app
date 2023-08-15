@@ -35,7 +35,11 @@ export class TransactionContactUtils {
         if (transaction.transactionType && transaction.transactionType.synchronizeOrgComNameValues) {
           confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
         } else {
-          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.committee_name)?.value}</b>`;
+          confirmationContactTitle = `committee contact for <b> ${
+            contactKey === 'contact_3'
+              ? form.get(templateMap.tertiary_committee_name)?.value
+              : form.get(templateMap.committee_name)?.value
+          }</b>`;
         }
         break;
       case ContactTypes.ORGANIZATION:

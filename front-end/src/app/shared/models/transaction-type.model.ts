@@ -216,6 +216,8 @@ export type TransactionTemplateMapType = {
   signatory_2_suffix: string;
   signatory_2_title: string;
   signatory_2_date: string;
+  tertiary_committee_name: string;
+  tertiary_committee_fec_id: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;
