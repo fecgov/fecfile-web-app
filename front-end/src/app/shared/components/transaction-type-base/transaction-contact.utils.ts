@@ -246,7 +246,6 @@ export class TransactionContactUtils {
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
-    console.log(templateMap);
     if (!(contact && templateMap)) return;
     form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
     form.get(templateMap.committee_name)?.setValue(contact.name);
