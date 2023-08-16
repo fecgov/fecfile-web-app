@@ -7,15 +7,13 @@
           type="text"
           pInputText
           id="organization_name"
-          [formControlName]="
-            tertiaryContact ? templateMap['tertiary_committee_name'] : templateMap['organization_name']
-          "
+          [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
-          [fieldName]="tertiaryContact ? templateMap['tertiary_committee_name'] : templateMap['organization_name']"
+          [fieldName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -27,15 +25,13 @@
           type="text"
           pInputText
           id="committee_fec_id"
-          [formControlName]="
-            tertiaryContact ? templateMap['tertiary_committee_fec_id'] : templateMap['committee_fec_id']
-          "
+          [formControlName]="templateMap['committee_fec_id']"
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
-          [fieldName]="tertiaryContact ? templateMap['tertiary_committee_fec_id'] : templateMap['committee_fec_id']"
+          [fieldName]="templateMap['committee_fec_id']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

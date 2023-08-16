@@ -136,7 +136,6 @@ export class TransactionFormUtils {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
     }
 
-    console.log(contactIdMap);
     Object.entries(contactIdMap).forEach(([contact, id$]) => {
       const contactConfig = transactionType.contactConfig[contact];
       id$.pipe(takeUntil(component.destroy$)).subscribe((id) => {
