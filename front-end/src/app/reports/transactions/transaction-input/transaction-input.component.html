@@ -31,18 +31,18 @@
   <p-divider></p-divider>
   <h3>Address</h3>
   <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
-  <p-divider></p-divider>
   <ng-container
     *ngIf="transactionType?.hasEmployeeFields() && form.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
   >
+    <p-divider></p-divider>
     <h3>Employer</h3>
     <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-employer-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="candidateInfoPosition === 'high'">
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   </ng-container>
   <ng-container *ngIf="transaction?.transactionType?.hasAmountInput">
+    <p-divider></p-divider>
     <h3>{{ transaction?.transactionType?.amountInputHeader }}</h3>
     <app-amount-input
       [form]="form"
@@ -54,9 +54,9 @@
       [transaction]="transaction"
       [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
     ></app-amount-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
+    <p-divider></p-divider>
     <h3>{{ transactionType.amountInputHeader }}</h3>
     <app-loan-info-input
       [form]="form"
@@ -65,18 +65,18 @@
       [readonly]="false"
       [transaction]="transaction"
     ></app-loan-info-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanTermsFields() && !transactionType?.hasLoanAgreement">
+    <p-divider></p-divider>
     <h3>Terms</h3>
     <app-loan-terms-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
     ></app-loan-terms-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanAgreement">
+    <p-divider></p-divider>
     <h3>Loan information</h3>
     <app-loan-agreement-input
       [form]="form"
@@ -84,9 +84,9 @@
       [templateMap]="templateMap"
       (contactSelect)="updateFormWithSecondaryContact($event)"
     ></app-loan-agreement-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasSignature1">
+    <p-divider></p-divider>
     <h3>{{ transactionType.signatoryOneTitle }}</h3>
     <app-signature-input
       [form]="form"
@@ -94,9 +94,9 @@
       [templateMap]="templateMap"
       templateMapKeyPrefix="signatory_1"
     ></app-signature-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasSignature2">
+    <p-divider></p-divider>
     <h3>{{ transactionType.signatoryTwoTitle }}</h3>
     <app-signature-input
       [form]="form"
@@ -104,12 +104,12 @@
       [templateMap]="templateMap"
       templateMapKeyPrefix="signatory_2"
     ></app-signature-input>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="candidateInfoPosition === 'low'">
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasAdditionalInfo">
+    <p-divider></p-divider>
     <h3>Additional information</h3>
     <app-additional-info-input
       [form]="form"
@@ -117,31 +117,20 @@
       [templateMap]="templateMap"
       [transaction]="transaction"
     ></app-additional-info-input>
-    <p-divider></p-divider>
-  </ng-container>
-  <ng-container *ngIf="isEditable && getInlineControls().length > 0">
-    <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
-      <div class="grid">
-        <div class="col-4">
-          <app-navigation-control
-            [navigationControl]="navigationControl"
-            [transaction]="transaction"
-            (navigate)="handleNavigate($event)"
-          ></app-navigation-control>
-        </div>
-      </div>
-    </ng-template>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType.footer">
+    <p-divider></p-divider>
     <div class="grid" style="flex-direction: row-reverse">
-      <p style="font-style: italic">{{ transactionType.footer }}</p>
+      <span style="font-style: italic">
+        <b>{{ transactionType.footer }}</b>
+      </span>
     </div>
   </ng-container>
 </ng-container>
 
 <ng-template #candidateInfo>
   <ng-container *ngIf="transactionType?.hasCandidateInformation()">
+    <p-divider></p-divider>
     <h3>Committee/Candidate Information</h3>
     <app-committee-input
       *ngIf="transaction?.transactionType?.hasCandidateCommittee"
@@ -169,11 +158,10 @@
         [hasCandidateOfficeInput]="!!transactionType.hasCandidateOffice()"
       ></app-candidate-input>
     </ng-container>
-    <p-divider></p-divider>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasElectionInformation()">
+    <p-divider></p-divider>
     <h3>Election information</h3>
     <app-election-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-election-input>
-    <p-divider></p-divider>
   </ng-container>
 </ng-template>

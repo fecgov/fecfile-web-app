@@ -29,6 +29,7 @@ import { TransactionLoansAndDebtsComponent } from './transaction-list/transactio
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionInputComponent } from './transaction-input/transaction-input.component';
+import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TransactionInputComponent } from './transaction-input/transaction-input
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,
+    TransactionNavigationComponent,
   ],
   imports: [
     AccordionModule,

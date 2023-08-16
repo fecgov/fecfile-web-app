@@ -31,9 +31,6 @@ export class TransactionInputComponent implements OnInit {
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
 
-  @Input() getInlineControls = () => [] as NavigationControl[];
-  @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
-
   ContactTypes = ContactTypes;
   transactionType: TransactionType = {} as TransactionType;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
@@ -57,9 +54,5 @@ export class TransactionInputComponent implements OnInit {
 
   updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
     this.secondaryContactSelect.emit(selectItem);
-  }
-
-  handleNavigate($event: NavigationEvent) {
-    this.navigate.emit($event);
   }
 }

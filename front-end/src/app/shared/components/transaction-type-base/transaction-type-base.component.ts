@@ -187,15 +187,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     );
   }
 
-  getNavigationControls(): TransactionNavigationControls {
-    if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
-    return this.transactionType?.navigationControls ?? new TransactionNavigationControls([], [], []);
-  }
-
-  getInlineControls(): NavigationControl[] {
-    return this.getNavigationControls().getNavigationControls('inline', this.transaction);
-  }
-
   handleNavigate(navigationEvent: NavigationEvent): void {
     this.formSubmitted = true;
 
