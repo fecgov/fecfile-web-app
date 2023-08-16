@@ -7,34 +7,35 @@
           type="text"
           pInputText
           id="organization_name"
-          [formControlName]="templateMap[nameField]"
+          [formControlName]="
+            tertiaryContact ? templateMap['tertiary_committee_name'] : templateMap['organization_name']
+          "
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap[nameField]"
+          [fieldName]="tertiaryContact ? templateMap['tertiary_committee_name'] : templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
-    <div
-      class="col-4"
-      *ngIf="includeFecId && (form.get('entity_type')?.value === 'COM' || nameField !== 'organization_name')"
-    >
+    <div class="col-4" *ngIf="includeFecId && (form.get('entity_type')?.value === 'COM' || tertiaryContact)">
       <div class="field">
         <label for="committee_fec_id">{{ entityRole }} FEC ID</label>
         <input
           type="text"
           pInputText
           id="committee_fec_id"
-          [formControlName]="templateMap['committee_fec_id']"
+          [formControlName]="
+            tertiaryContact ? templateMap['tertiary_committee_fec_id'] : templateMap['committee_fec_id']
+          "
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['committee_fec_id']"
+          [fieldName]="tertiaryContact ? templateMap['tertiary_committee_fec_id'] : templateMap['committee_fec_id']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

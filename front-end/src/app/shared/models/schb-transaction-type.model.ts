@@ -68,7 +68,7 @@ export abstract class SchBTransactionType extends TransactionType {
     signatory_2_suffix: '',
     signatory_2_title: '',
     signatory_2_date: '',
-    tertiary_committee_name: '',
-    tertiary_committee_fec_id: '',
+    tertiary_committee_name: 'beneficiary_committee_name',
+    tertiary_committee_fec_id: 'beneficiary_committee_fec_id',
   };
 }

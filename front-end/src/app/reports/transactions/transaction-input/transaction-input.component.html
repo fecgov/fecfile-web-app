@@ -172,9 +172,9 @@
         [templateMap]="templateMap"
         entityRole="COMMITTEE"
         [includeFecId]="true"
-        nameField="committee_name"
         [readonly]="false"
         [transaction]="transaction"
+        [tertiaryContact]="true"
       ></app-committee-input>
     </ng-container>
     <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
@@ -185,7 +185,7 @@
         [contactTypeFormControl]="candidateContactTypeFormControl"
         selectedContactFormControlName="contact_2"
         [contactTypeReadOnly]="true"
-        (contactSelect)="updateFormWithSecondaryContact($event)"
+        (contactSelect)="updateFormWithCandidateContact($event)"
       ></app-transaction-contact-lookup>
       <ng-container *ngIf="transaction?.contact_2">
         <app-candidate-input
