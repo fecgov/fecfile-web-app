@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { SelectItem } from 'primeng/api';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -211,7 +211,7 @@ describe('ContactUtils', () => {
   it('test updateFormWithSecondaryContact', () => {
     const transaction = getTestTransactionByType(
       ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE
-    ) as SchC1Transaction;
+    ) as SchBTransaction;
     TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
