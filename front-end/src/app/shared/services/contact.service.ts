@@ -86,7 +86,6 @@ export class ContactService implements TableListService<Contact> {
   }
 
   public checkFecIdForUniqness(fecId: string, contactId?: string): Observable<boolean> {
-    console.log(contactId);
     if (fecId) {
       return this.apiService
         .get<string>(`/contacts/get_contact_id/`, { fec_id: fecId })
