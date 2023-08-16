@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 import { SelectItem } from 'primeng/api';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -39,7 +40,7 @@ describe('ContactUtils', () => {
       donor_candidate_last_name: new FormControl('test_candidate_ln'),
       donor_candidate_first_name: new FormControl('test_candidate_fn'),
       donor_committee_fec_id: new FormControl(''),
-      donor_committee_name: new FormControl(''),
+      donor_committee_name: new FormControl('test_com_name'),
       donor_candidate_fec_id: new FormControl(''),
       donor_candidate_middle_name: new FormControl(''),
       donor_candidate_prefix: new FormControl(''),
@@ -47,12 +48,14 @@ describe('ContactUtils', () => {
       donor_candidate_office: new FormControl(''),
       donor_candidate_state: new FormControl(''),
       donor_candidate_district: new FormControl(''),
-      ind_name_account_location: new FormControl(''),
+      ind_name_account_location: new FormControl('secondary_org_name'),
       account_street_1: new FormControl(''),
       account_street_2: new FormControl(''),
       account_city: new FormControl(''),
       account_state: new FormControl(''),
       account_zip: new FormControl(''),
+      beneficiary_committee_fec_id: new FormControl(''),
+      beneficiary_committee_name: new FormControl(''),
     });
 
     selectItem = {
@@ -104,6 +107,17 @@ describe('ContactUtils', () => {
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+      ContactTypes.COMMITTEE,
+      form,
+      testCommitteeTransaction,
+      testTemplateMap,
+      'contact_3'
+    );
+    expect(output).toBe(
+      "By saving this transaction, you're also creating a new committee contact for <b> test_com_name</b>."
+    );
+
+    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.ORGANIZATION,
       form,
       testOrganizationTransaction,
@@ -112,6 +126,17 @@ describe('ContactUtils', () => {
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new organization contact for <b> test_org_name</b>."
+    );
+
+    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+      ContactTypes.ORGANIZATION,
+      form,
+      testOrganizationTransaction,
+      testTemplateMap,
+      'contact_2'
+    );
+    expect(output).toBe(
+      "By saving this transaction, you're also creating a new organization contact for <b> secondary_org_name</b>."
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
@@ -181,5 +206,15 @@ describe('ContactUtils', () => {
     expect(form.get('account_state')?.value).toBe('VA');
     expect(form.get('account_zip')?.value).toBe('22201');
     expect(transaction.contact_2).toBeTruthy();
+  });
+
+  it('test updateFormWithSecondaryContact', () => {
+    const transaction = getTestTransactionByType(
+      ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE
+    ) as SchC1Transaction;
+    TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, new Subject<string>());
+    expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
+    expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
+    expect(transaction.contact_3).toBeTruthy();
   });
 });
