@@ -5,7 +5,6 @@ import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/t
 import { Contact, ContactTypes, ContactTypeLabels } from 'app/shared/models/contact.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
-import { NavigationControl, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
@@ -31,9 +30,6 @@ export class TransactionInputComponent implements OnInit {
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
 
-  @Input() getInlineControls = () => [] as NavigationControl[];
-  @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
-
   ContactTypes = ContactTypes;
   transactionType: TransactionType = {} as TransactionType;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
@@ -57,9 +53,5 @@ export class TransactionInputComponent implements OnInit {
 
   updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
     this.secondaryContactSelect.emit(selectItem);
-  }
-
-  handleNavigate($event: NavigationEvent) {
-    this.navigate.emit($event);
   }
 }
