@@ -144,6 +144,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
+              transaction,
               templateMap,
               contactKey
             );
@@ -265,6 +266,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.transaction,
       this.contactIdMap['contact_2']
+    );
+  }
+
+  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithTertiaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_3']
     );
   }
 

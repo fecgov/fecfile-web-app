@@ -156,6 +156,7 @@ export const STANDARD_AND_CANDIDATE = {
     candidate_district: 'candidate_district',
   },
 };
+
 export const STANDARD_AND_SECONDARY = {
   contact_1: {
     organization_name: 'name',
@@ -181,6 +182,58 @@ export const STANDARD_AND_SECONDARY = {
     secondary_city: 'city',
     secondary_state: 'state',
     secondary_zip: 'zip',
+  },
+};
+
+export const STANDARD_AND_TERTIARY = {
+  contact_1: {
+    organization_name: 'name',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  },
+  contact_3: {
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+  },
+};
+
+export const STANDARD_AND_SECONDARY_AND_TERTIARY = {
+  contact_1: {
+    organization_name: 'name',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  },
+  contact_2: {
+    secondary_name: 'name',
+    secondary_street_1: 'street_1',
+    secondary_street_2: 'street_2',
+    secondary_city: 'city',
+    secondary_state: 'state',
+    secondary_zip: 'zip',
+  },
+  contact_3: {
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
   },
 };
 

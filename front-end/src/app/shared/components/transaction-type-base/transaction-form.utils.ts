@@ -121,6 +121,15 @@ export class TransactionFormUtils {
         return null;
       })
     );
+    form.addControl(
+      'contact_3',
+      new FormControl(null, () => {
+        if (!transaction?.contact_3 && transaction.transactionType?.contact3IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
 
     const schema = transaction.transactionType?.schema;
     if (schema) {

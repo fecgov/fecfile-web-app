@@ -21,6 +21,10 @@ export class TransactionInputComponent implements OnInit {
     ContactTypes.CANDIDATE,
   ]);
   @Input() candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
+  @Input() committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+  ]);
+  @Input() committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
   @Input() contactLookupLabel = 'CONTACT LOOKUP';
@@ -29,6 +33,7 @@ export class TransactionInputComponent implements OnInit {
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
 
   ContactTypes = ContactTypes;
   transactionType: TransactionType = {} as TransactionType;
@@ -53,5 +58,9 @@ export class TransactionInputComponent implements OnInit {
 
   updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
     this.secondaryContactSelect.emit(selectItem);
+  }
+
+  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
+    this.tertiaryContactSelect.emit(selectItem);
   }
 }

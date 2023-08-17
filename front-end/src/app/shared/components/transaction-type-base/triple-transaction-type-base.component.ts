@@ -207,4 +207,13 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childContactIdMap_2['contact_2']
     );
   }
+
+  childUpdateFormWithTertiaryContact_2(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithSecondaryContact(
+      selectItem,
+      this.childForm_2,
+      this.childTransaction_2,
+      this.childContactIdMap_2['contact_3']
+    );
+  }
 }

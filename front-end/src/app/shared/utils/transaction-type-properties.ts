@@ -49,6 +49,7 @@ export const INDIVIDUAL_FIELDS: string[] = ['last_name', 'first_name', 'middle_n
 export const ORG_FIELDS: string[] = ['organization_name'];
 
 export const COM_FIELDS: string[] = ['organization_name', 'committee_fec_id', 'committee_name'];
+export const COM_FIELDS_SHORT: string[] = ['committee_fec_id', 'committee_name'];
 
 export const EMPLOYEE_INFO_FIELDS: string[] = ['employer', 'occupation'];
 
@@ -142,6 +143,23 @@ export const COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS = [
   ...CANDIDATE_FIELDS,
   ...CANDIDATE_OFFICE_FIELDS,
   ...ELECTION_FIELDS,
+  ...CATEGORY_CODE,
+];
+export const INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_AND_ELECTION_B_FORM_FIELDS = [
+  ...CORE_FIELDS,
+  ...ORG_FIELDS,
+  ...INDIVIDUAL_FIELDS,
+  ...COM_FIELDS_SHORT,
+  ...CANDIDATE_FIELDS,
+  ...CANDIDATE_OFFICE_FIELDS,
+  ...ELECTION_FIELDS,
+  ...CATEGORY_CODE,
+];
+export const INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_B_FORM_FIELDS = [
+  ...CORE_FIELDS,
+  ...ORG_FIELDS,
+  ...INDIVIDUAL_FIELDS,
+  ...COM_FIELDS_SHORT,
   ...CATEGORY_CODE,
 ];
 export const INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS = [
