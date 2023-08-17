@@ -55,7 +55,6 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override contactTypeOptions = ORGANIZATION;
   override isDependentChild = true;
   override doMemoCodeDateCheck = false;
-  title = 'Loan agreement';
   schema = schema;
   override useParentContact = true;
   override hasAmountInput = false;
@@ -86,8 +85,9 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'Enter contact, loan, terms, collateral, and future income information for the loan agreeement';
   override formTitle = 'Receipt';
   override footer =
-    'The information in this loan  will automatically create a related disbursement. Review the disbursement; enter a purpose of disbursement or note/memo text; or continue without reviewing and "Save transactions."';
-  override contactTitle = undefined;
+    'The information in this loan  will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and "Save transactions."';
+  title = 'Loan Agreement';
+  override contactTitle = 'Lender';
 
   getNewTransaction() {
     return SchC1Transaction.fromJSON({
