@@ -3,12 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
-  GO_BACK_CONTROL,
   NavigationAction,
-  NavigationControl,
   NavigationDestination,
   NavigationEvent,
-  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -186,15 +183,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       concatAll(),
       reduce((accumulator, confirmed) => accumulator && confirmed)
     );
-  }
-
-  getNavigationControls(): TransactionNavigationControls {
-    if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
-    return this.transactionType?.navigationControls ?? new TransactionNavigationControls([], [], []);
-  }
-
-  getInlineControls(): NavigationControl[] {
-    return this.getNavigationControls().getNavigationControls('inline', this.transaction);
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {

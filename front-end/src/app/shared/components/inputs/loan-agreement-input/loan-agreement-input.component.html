@@ -31,7 +31,7 @@
     [form]="form"
     [formSubmitted]="formSubmitted"
     controlName="loan_restructured"
-    label="Has loan been restructured? (OPTIONAL)"
+    label="Has loan been restructured?"
     ariaLabelYes="This loan has been restructured"
     ariaLabelNo="This loan has not been restructured"
   ></app-yes-no-radio-input>
@@ -39,7 +39,7 @@
     <div class="grid">
       <div class="col-4">
         <div class="field">
-          <label for="loan_originally_incurred_date">DATE ORIGINALLY INCURRED</label>
+          <label for="loan_originally_incurred_date">DATE OF ORIGINAL LOAN</label>
           <p-calendar
             inputId="loan_originally_incurred_date"
             name="date_signed"
@@ -58,7 +58,7 @@
     [form]="form"
     [formSubmitted]="formSubmitted"
     controlName="line_of_credit"
-    label="Is there a line of credit?"
+    label="Is there a line of credit? (OPTIONAL)"
     ariaLabelYes="There is a line of credit"
     ariaLabelNo="There is not a line of credit"
   ></app-yes-no-radio-input>
@@ -66,7 +66,7 @@
     <div class="grid">
       <div class="col-4">
         <div class="field">
-          <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW</label>
+          <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
           <p-inputNumber
             inputId="credit_amount_this_draw"
             mode="currency"
@@ -83,7 +83,7 @@
       </div>
       <div class="col-4">
         <div class="field">
-          <label for="balance">TOTAL OUTSTANDING BALANCE</label>
+          <label for="balance">TOTAL BALANCE</label>
           <p-inputNumber
             inputId="balance"
             mode="currency"

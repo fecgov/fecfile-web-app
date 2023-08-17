@@ -10,7 +10,6 @@ export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override contactTypeOptions = ORGANIZATION;
   override isDependentChild = true;
   override doMemoCodeDateCheck = false;
-  title = 'Receipt';
   schema = schema;
   override useParentContact = true;
   override inheritedFields = [
@@ -26,11 +25,11 @@ export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   ] as TemplateMapKeyType[];
 
   override description =
-    'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
+    'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
   override accordionTitle = 'AUTO-POPULATED';
   override accordionSubText = 'Review information and enter purpose of description or note/memo text for this receipt';
-  override formTitle = 'Receipt';
   override footer = undefined;
+  title = 'Loan Receipt';
   override contactTitle = 'Lender';
 
   getNewTransaction() {
