@@ -50,6 +50,6 @@
     [form]="form"
     [fieldName]="selectedContactFormControlName"
     [formSubmitted]="formSubmitted"
-    [requiredErrorMessage]="requiredErrorMessage"
+    [requiredErrorMessage]="(contactTypeFormControl.value | label : contactTypeLabels) + ' information is required'"
   ></app-error-messages>
 </form>
