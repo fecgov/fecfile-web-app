@@ -131,7 +131,7 @@
 <ng-template #candidateInfo>
   <ng-container *ngIf="transactionType?.hasCommitteeOrCandidateInformation()">
     <p-divider></p-divider>
-    <h3>Committee/Candidate Information</h3>
+    <h3>Committee/Candidate information</h3>
     <ng-container *ngIf="!transactionType?.contact3IsRequired">
       <app-committee-input
         *ngIf="transaction?.transactionType?.hasCandidateCommittee"
