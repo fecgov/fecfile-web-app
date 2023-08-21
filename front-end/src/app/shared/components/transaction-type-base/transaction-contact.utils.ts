@@ -17,10 +17,14 @@ export class TransactionContactUtils {
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
+    transaction: Transaction,
     templateMap: TransactionTemplateMapType,
     contactKey: string
   ): string {
     let confirmationContactTitle = '';
+    if (!templateMap) {
+      throw new Error('Fecfile: templateMap not found in getCreateTransactionContactconfirmationMessage');
+    }
     switch (contactType) {
       case ContactTypes.INDIVIDUAL:
         confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${
@@ -28,7 +32,11 @@ export class TransactionContactUtils {
         }</b>`;
         break;
       case ContactTypes.COMMITTEE:
-        confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        if (contactKey === 'contact_1') {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        } else {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.committee_name)?.value}</b>`;
+        }
         break;
       case ContactTypes.ORGANIZATION:
         confirmationContactTitle = `organization contact for <b> ${
@@ -226,6 +234,23 @@ export class TransactionContactUtils {
     form.get(templateMap.secondary_zip)?.setValue(contact.zip);
     if (transaction) {
       transaction.contact_2 = contact;
+    }
+    contactId$.next(contact.id ?? '');
+  }
+
+  static updateFormWithTertiaryContact(
+    selectItem: SelectItem<Contact>,
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>
+  ) {
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
+    form.get(templateMap.committee_name)?.setValue(contact.name);
+    if (transaction) {
+      transaction.contact_3 = contact;
     }
     contactId$.next(contact.id ?? '');
   }

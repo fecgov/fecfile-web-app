@@ -26,8 +26,7 @@
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          [getInlineControls]="getInlineControls.bind(this)"
-          (navigate)="handleNavigate($event)"
+          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>
@@ -61,6 +60,7 @@
           (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
           (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
+          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>
@@ -94,6 +94,7 @@
           (primaryContactSelect)="childUpdateFormWithPrimaryContact_2($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact_2($event)"
           (secondaryContactSelect)="childUpdateFormWithSecondaryContact_2($event)"
+          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact_2($event)"
         >
         </app-transaction-input>
       </form>
@@ -101,14 +102,11 @@
   </p-accordionTab>
 </p-accordion>
 
-<div class="p-fluid">
-  <app-navigation-control-bar
-    [navigationControls]="getNavigationControls()"
-    [transaction]="transaction"
-    (navigate)="handleNavigate($event)"
-    [class]="isEditable ? '' : 'flex-center'"
-  ></app-navigation-control-bar>
-</div>
+<app-transaction-navigation
+  [isEditable]="isEditable"
+  [transaction]="transaction"
+  (navigate)="handleNavigate($event)"
+></app-transaction-navigation>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
 <p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>

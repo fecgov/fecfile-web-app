@@ -5,7 +5,6 @@ import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/t
 import { Contact, ContactTypes, ContactTypeLabels } from 'app/shared/models/contact.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
-import { NavigationControl, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
@@ -22,6 +21,10 @@ export class TransactionInputComponent implements OnInit {
     ContactTypes.CANDIDATE,
   ]);
   @Input() candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
+  @Input() committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+  ]);
+  @Input() committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
   @Input() contactLookupLabel = 'CONTACT LOOKUP';
@@ -30,9 +33,7 @@ export class TransactionInputComponent implements OnInit {
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-
-  @Input() getInlineControls = () => [] as NavigationControl[];
-  @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
+  @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
 
   ContactTypes = ContactTypes;
   transactionType: TransactionType = {} as TransactionType;
@@ -59,7 +60,7 @@ export class TransactionInputComponent implements OnInit {
     this.secondaryContactSelect.emit(selectItem);
   }
 
-  handleNavigate($event: NavigationEvent) {
-    this.navigate.emit($event);
+  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
+    this.tertiaryContactSelect.emit(selectItem);
   }
 }

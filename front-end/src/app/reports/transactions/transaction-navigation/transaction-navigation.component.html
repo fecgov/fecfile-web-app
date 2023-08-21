@@ -1,0 +1,23 @@
+<ng-container *ngIf="isEditable && getInlineControls().length > 0">
+  <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
+    <div class="grid">
+      <div class="col-4">
+        <app-navigation-control
+          [navigationControl]="navigationControl"
+          [transaction]="transaction"
+          (navigate)="handleNavigate($event)"
+        ></app-navigation-control>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<div class="p-fluid">
+  <p-divider></p-divider>
+  <app-navigation-control-bar
+    [navigationControls]="getNavigationControls()"
+    [transaction]="transaction"
+    (navigate)="handleNavigate($event)"
+    [class]="isEditable ? '' : 'flex-center'"
+  ></app-navigation-control-bar>
+</div>

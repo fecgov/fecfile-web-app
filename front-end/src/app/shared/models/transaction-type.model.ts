@@ -27,12 +27,14 @@ export abstract class TransactionType {
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
+  synchronizeOrgComNameValues = true; // When the COM name value is saved in the ORG model property per the FEC specification, "true" indicates that it is also copied into the COM model property as well
 
   // Form display settings
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
+  contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -124,6 +126,9 @@ export abstract class TransactionType {
   }
   hasCandidateInformation(): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
+  }
+  hasCommitteeOrCandidateInformation(): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired;
   }
   hasCommitteeFecId(): boolean {
     return hasFields(this.formFields, ['committee_fec_id']);
