@@ -34,7 +34,6 @@ export class ContactLookupComponent implements OnInit {
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   searchTerm = '';
-  requiredErrorMessage = '';
 
   constructor(private contactService: ContactService) {}
   ngOnInit(): void {

@@ -20,6 +20,7 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { ContactFormComponent } from './contact-form.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
@@ -34,6 +35,7 @@ describe('ContactFormComponent', () => {
         ErrorMessagesComponent,
         FecInternationalPhoneInputComponent,
         ContactLookupComponent,
+        LabelPipe,
       ],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
