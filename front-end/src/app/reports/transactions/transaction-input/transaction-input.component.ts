@@ -27,7 +27,7 @@ export class TransactionInputComponent implements OnInit {
   @Input() committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
-  @Input() contactLookupLabel = 'CONTACT LOOKUP';
+  @Input() contactLookupLabel = 'CONTACT TYPE';
   @Input() candidateInfoPosition = 'low';
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
