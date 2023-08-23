@@ -1,6 +1,6 @@
 <div [formGroup]="form">
   <div class="grid">
-    <div class="col-4">
+    <div class="col-6">
       <div class="field">
         <label for="date">DATE INCURRED</label>
         <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
@@ -11,41 +11,100 @@
         ></app-error-messages>
       </div>
     </div>
-    <div class="col-4">
+    <div class="col-6"></div>
+    <div class="col-6">
       <div class="field">
-        <label for="due_date">DATE DUE</label>
-        <input
-          type="text"
-          pInputText
-          id="due_date"
-          [formControlName]="templateMap['due_date']"
-          [readOnly]="true"
-          class="readonly"
-        />
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['due_date']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <label for="due_date_setting">DATE DUE</label>
+        <p-dropdown
+          inputId="due_date_setting"
+          formControlName="due_date_setting"
+          [options]="dueDateSettingOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages>
+          [form]="form" (fieldName)="due_date_setting" [formSubmitted]="formSubmitted"
+        </app-error-messages>
       </div>
     </div>
-    <div class="col-4">
+    <ng-container *ngIf="this.form.get('due_date_setting')?.value === 'user-defined'">
+      <div class="col-6">
+        <div class="field">
+          <label for="due_date">DATE DUE (USER DEFINED)</label>
+          <input type="text" pInputText id="due_date" [formControlName]="templateMap['due_date']" />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['due_date']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="this.form.get('due_date_setting')?.value === 'specific'">
+      <div class="col-6">
+        <div class="field">
+          <label for="due_date">SPECIFIC DATE</label>
+          <p-calendar inputId="due_date" name="due_date" [formControlName]="templateMap['due_date']"></p-calendar>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['due_date']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!this.form.get('due_date_setting')?.value">
+      <div class="col-6"></div>
+    </ng-container>
+    <div class="col-6">
       <div class="field">
-        <label for="interest_rate">INTEREST RATE (%)</label>
-        <input
-          type="text"
-          pInputText
-          id="interest_rate"
-          [formControlName]="templateMap['interest_rate']"
-          [readOnly]="true"
-          class="readonly"
-        />
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['interest_rate']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <label for="interest_rate_setting">INTEREST RATE</label>
+        <p-dropdown
+          inputId="interest_rate_setting"
+          formControlName="interest_rate_setting"
+          [options]="interestRateSettingOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages>
+          [form]="form" (fieldName)="interest_rate_setting" [formSubmitted]="formSubmitted"
+        </app-error-messages>
       </div>
     </div>
+    <ng-container *ngIf="this.form.get('interest_rate_setting')?.value === 'user-defined'">
+      <div class="col-6">
+        <div class="field">
+          <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
+          <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['interest_rate']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="this.form.get('interest_rate_setting')?.value === 'percentage'">
+      <div class="col-6">
+        <div class="field">
+          <label for="interest_rate">EXACT PERCENTAGE (%)</label>
+          <input
+            #interestRatePercentage
+            type="text"
+            pInputText
+            id="interest_rate"
+            [formControlName]="templateMap['interest_rate']"
+          />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['interest_rate']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!this.form.get('interest_rate_setting')?.value">
+      <div class="col-6"></div>
+    </ng-container>
   </div>
 </div>
