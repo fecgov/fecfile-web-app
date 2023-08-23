@@ -18,7 +18,7 @@ export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override hasCandidateCommittee = true;
-  override contact2IsRequired = true;
+  override contact2IsRequired = () => true;
   override contact3IsRequired = true;
   override purposeDescriptionPrefix? = 'In-kind: ';
   override synchronizeOrgComNameValues = false;

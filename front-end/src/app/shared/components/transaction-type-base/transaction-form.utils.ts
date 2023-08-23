@@ -115,7 +115,7 @@ export class TransactionFormUtils {
     form.addControl(
       'contact_2',
       new FormControl(null, () => {
-        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired) {
+        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired(form)) {
           return { required: true };
         }
         return null;

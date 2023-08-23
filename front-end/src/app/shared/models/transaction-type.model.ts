@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
   CANDIDATE_FIELDS,
@@ -33,7 +34,7 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
-  contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
+  contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
 
   // Double-entry settings
