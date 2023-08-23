@@ -155,7 +155,7 @@ describe('TransactionService', () => {
       transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
     });
 
-    service.delete(schATransaction).subscribe((response) => {
+    service.delete(schATransaction).subscribe(() => {
       expect(true).toBeTrue();
     });
 
