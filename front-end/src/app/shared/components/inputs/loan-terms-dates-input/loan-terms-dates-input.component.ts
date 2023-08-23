@@ -74,9 +74,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   }
 
   onInterestRateInput(value: string) {
+    const interestField = this.form.get(this.templateMap.interest_rate);
     if (this.form.get('interest_rate_setting')?.value === 'percentage') {
-      const interestField = this.form.get(this.templateMap.interest_rate);
-
       let textInput!: HTMLInputElement;
       let initialSelectionStart = 0;
       let initialSelectionEnd = 0;
@@ -107,6 +106,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         interestField?.setValue('');
       }
     }
+
+    interestField?.markAsTouched();
   }
 
   convertDueDate(dueDateSetting: string) {
@@ -127,7 +128,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       }
 
       due_date.markAsTouched();
-      due_date.updateValueAndValidity();
     }
   }
 }
