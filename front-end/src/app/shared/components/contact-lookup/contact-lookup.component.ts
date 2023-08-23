@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelList, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 
 @Component({
@@ -31,15 +31,12 @@ export class ContactLookupComponent implements OnInit {
   @Output() createNewContactSelect = new EventEmitter<void>();
 
   contactLookupList: SelectItemGroup[] = [];
+  contactTypeLabels: LabelList = ContactTypeLabels;
 
   searchTerm = '';
-  requiredErrorMessage = '';
 
   constructor(private contactService: ContactService) {}
   ngOnInit(): void {
-    this.contactTypeFormControl.valueChanges.subscribe((contactType) => {
-      this.requiredErrorMessage = LabelUtils.get(ContactTypeLabels, contactType) + ' information is required';
-    });
     if (!this.contactTypeFormControl.value && this.contactTypeOptions && this.contactTypeOptions.length > 0) {
       this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
     }

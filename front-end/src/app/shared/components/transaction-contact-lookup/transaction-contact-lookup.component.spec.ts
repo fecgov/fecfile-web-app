@@ -15,6 +15,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -24,7 +25,7 @@ describe('TransactionContactLookupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TransactionContactLookupComponent, ContactLookupComponent],
+      declarations: [TransactionContactLookupComponent, ContactLookupComponent, LabelPipe],
       imports: [
         FormsModule,
         ReactiveFormsModule,
