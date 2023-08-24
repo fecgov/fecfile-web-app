@@ -146,9 +146,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         if (!(due_date.value instanceof Date) && due_date.value?.length > 0) {
           // Convert the value to a date object
           const date = new Date(due_date.value);
-          console.log(due_date.value, date);
-          console.log(this.form.get(this.templateMap.date)?.value);
-          //
+          // If the date converts nicely to a number, it's valid
           if (!isNaN(date as unknown as number)) {
             due_date.setValue(date);
           } else {
