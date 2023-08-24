@@ -125,8 +125,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         if (this.interestInput) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           textInput = (this.interestInput as any).nativeElement as HTMLInputElement;
-          initialSelectionStart = textInput.selectionStart || 0;
-          initialSelectionEnd = textInput.selectionEnd || 0;
+          initialSelectionStart = textInput.selectionStart ?? 0;
+          initialSelectionEnd = textInput.selectionEnd ?? 0;
         }
 
         const validNumber = newInterestRate.replaceAll(/[^0-9.%]/g, '');
