@@ -50,4 +50,30 @@ describe('LoanTermsDatesInputComponent', () => {
     control?.setValue(new Date('June 1, 2022 00:00:00'));
     expect(control?.status).toBe('VALID');
   });
+
+  it('should handle percentage inputs right', () => {
+    const settingField = component.form.get(component.templateMap.interest_rate_setting);
+    const rateField = component.form.get(component.templateMap.interest_rate);
+
+    // Changing the interest rate setting to user_defined should not change the value
+    rateField?.setValue('48%');
+    settingField?.setValue(component.termFieldSettings.user_defined);
+    expect(rateField?.value).toEqual('48%');
+
+    // While user_defined, non-percentage values should go unchanged
+    rateField?.setValue('48');
+    expect(rateField?.value).toEqual('48');
+
+    // Changing the interest rate setting to exact_percentage should change the value
+    settingField?.setValue(component.termFieldSettings.exact_percentage);
+    expect(rateField?.value).toEqual('48%');
+
+    // You should be unable to delete the % symbol
+    rateField?.setValue('48');
+    expect(rateField?.value).toEqual('48%');
+
+    // Inappropriate characters should be cleared from the value
+    rateField?.setValue('4a8b');
+    expect(rateField?.value).toEqual('48%');
+  });
 });
