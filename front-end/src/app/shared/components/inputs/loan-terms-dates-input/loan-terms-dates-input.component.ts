@@ -146,11 +146,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         if (!(due_date.value instanceof Date) && due_date.value?.length > 0) {
           // Convert the value to a date object
           const date = new Date(due_date.value);
-          // If no timezone and no hour was specified, adjust accordingly
-          if (
-            (due_date.value as string).includes('GMT') !== true &&
-            (due_date.value as string).includes(':') !== true
-          ) {
+          // If the date is formatted yyyy-mm-dd, counteract timezone adjustment
+          if ((due_date.value as string).search(/\d{4}-\d{2}-\d{2}$/) !== -1) {
             date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
           }
           // If the date converts nicely to a number, it's valid
