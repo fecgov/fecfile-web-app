@@ -21,14 +21,18 @@ describe('LoanTermsDatesInputComponent', () => {
     component.form = new FormGroup({
       loan_incurred_date: new FormControl(''),
       loan_interest_rate: new FormControl(''),
+      loan_interest_rate_field_setting: new FormControl(''),
       loan_due_date: new FormControl(''),
+      loan_due_date_field_setting: new FormControl(''),
     });
     component.templateMap = {
       ...testTemplateMap,
       ...{
         interest_rate: 'loan_interest_rate',
+        interest_rate_setting: 'loan_interest_rate_field_setting',
         date: 'loan_incurred_date',
         due_date: 'loan_due_date',
+        due_date_setting: 'loan_due_date_field_setting',
       },
     };
     fixture.detectChanges();
