@@ -76,7 +76,12 @@ describe('LoanTermsDatesInputComponent', () => {
     rateField?.setValue('1a2b.3');
     expect(rateField?.value).toEqual('12.3%');
 
+    // If the value would only be '%', clear the field
+    rateField?.setValue('%');
+    expect(rateField?.value).toEqual('');
+
     // Changing back and forth between field settings shouldn't change the value
+    rateField?.setValue('12.3%');
     settingField?.setValue(component.termFieldSettings.user_defined);
     settingField?.setValue(component.termFieldSettings.exact_percentage);
     expect(rateField?.value).toEqual('12.3%');
