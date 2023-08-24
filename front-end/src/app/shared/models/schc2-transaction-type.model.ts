@@ -35,6 +35,8 @@ export abstract class SchC2TransactionType extends TransactionType {
     payment_to_date: '',
     interest_rate: '',
     due_date: '',
+    interest_rate_setting: '',
+    due_date_setting: '',
     secured: '',
     date: '',
     memo_code: '',

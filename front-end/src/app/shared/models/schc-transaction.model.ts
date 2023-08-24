@@ -25,7 +25,9 @@ export class SchCTransaction extends Transaction {
   loan_balance: number | undefined;
   @Transform(BaseModel.dateTransform) loan_incurred_date: Date | undefined;
   loan_due_date: string | undefined;
+  loan_due_date_field_setting: string | undefined;
   loan_interest_rate: string | undefined;
+  loan_interest_rate_field_setting: string | undefined;
   secured: boolean | undefined;
   personal_funds: boolean | undefined;
   lender_committee_id_number: string | undefined;

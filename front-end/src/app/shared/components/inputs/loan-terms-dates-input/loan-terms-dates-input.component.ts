@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { take, takeUntil } from 'rxjs';
@@ -27,7 +27,7 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
   selector: 'app-loan-terms-dates-input',
   templateUrl: './loan-terms-dates-input.component.html',
 })
-export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit {
+export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
   constructor(private store: Store) {
     super();
@@ -54,13 +54,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
       });
 
-    this.convertDueDate(this.form.get('due_date_setting')?.value);
-    this.form.get('due_date_setting')?.valueChanges?.subscribe((dueDateSetting) => {
+    this.convertDueDate(this.form.get(this.templateMap['due_date_setting'])?.value);
+    this.form.get(this.templateMap['due_date_setting'])?.valueChanges?.subscribe((dueDateSetting) => {
       this.convertDueDate(dueDateSetting);
     });
 
     this.onInterestRateInput(this.form.get(this.templateMap.interest_rate)?.value);
-    this.form.get('interest_rate_setting')?.valueChanges?.subscribe(() => {
+    this.form.get(this.templateMap['interest_rate_setting'])?.valueChanges?.subscribe(() => {
       this.onInterestRateInput(this.form.get(this.templateMap.interest_rate)?.value);
     });
 
@@ -73,9 +73,37 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       });
   }
 
+  ngAfterViewInit(): void {
+    // If the interest rate converts nicely to a percentage field, then do so
+    const interest_rate_field = this.form.get(this.templateMap['interest_rate']);
+    const interest_rate_setting_field = this.form.get(this.templateMap['interest_rate_setting']);
+    if (!interest_rate_setting_field?.value && interest_rate_field?.value) {
+      const starting_interest_rate = interest_rate_field?.value;
+      interest_rate_setting_field?.setValue('percentage');
+      // Otherwise, set the field setting to user-defined and restore the original value
+      if (starting_interest_rate !== interest_rate_field?.value) {
+        interest_rate_setting_field?.setValue('user-defined');
+        interest_rate_field.setValue(starting_interest_rate);
+      }
+    }
+
+    // If the due date converts nicely to a Date object, then do so
+    const due_date_field = this.form.get(this.templateMap['due_date']);
+    const due_date_setting_field = this.form.get(this.templateMap['due_date_setting']);
+    if (!due_date_setting_field?.value && due_date_field?.value) {
+      const starting_due_date = due_date_field?.value;
+      due_date_setting_field?.setValue('specific');
+      // Otherwise, set the field setting to user-defined and restore the original value
+      if (!(due_date_field?.value instanceof Date)) {
+        due_date_setting_field?.setValue('user-defined');
+        due_date_field?.setValue(starting_due_date);
+      }
+    }
+  }
+
   onInterestRateInput(value: string) {
     const interestField = this.form.get(this.templateMap.interest_rate);
-    if (this.form.get('interest_rate_setting')?.value === 'percentage') {
+    if (this.form.get(this.templateMap['interest_rate_setting'])?.value === 'percentage') {
       let textInput!: HTMLInputElement;
       let initialSelectionStart = 0;
       let initialSelectionEnd = 0;
@@ -102,7 +130,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           textInput?.setSelectionRange(value.length, value.length);
         }
       }
-      if (interestField?.value.length == 1) {
+      if (interestField?.value?.length === 1) {
         interestField?.setValue('');
       }
     }
@@ -114,10 +142,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     const due_date = this.form.get(this.templateMap['due_date']);
     if (due_date) {
       if (dueDateSetting === 'specific') {
-        // If the due date is not a valid Date object
-        if (!(due_date.value instanceof Date)) {
+        // If there is a due date and it is not a Date object
+        if (!(due_date.value instanceof Date) && due_date.value?.length > 0) {
+          // Convert the value to a date object
           const date = new Date(due_date.value);
-          // Convert the value to a Date object if possible
+          console.log(due_date.value, date);
+          console.log(this.form.get(this.templateMap.date)?.value);
+          //
           if (!isNaN(date as unknown as number)) {
             due_date.setValue(date);
           } else {

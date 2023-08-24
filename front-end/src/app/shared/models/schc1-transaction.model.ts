@@ -13,8 +13,10 @@ export class SchC1Transaction extends Transaction {
   lender_zip: string | undefined;
   loan_amount: number | undefined;
   loan_interest_rate: string | undefined;
+  loan_interest_rate_field_setting: string | undefined;
   @Transform(BaseModel.dateTransform) loan_incurred_date: Date | undefined;
   loan_due_date: string | undefined;
+  loan_due_date_field_setting: string | undefined;
   loan_restructured: boolean | undefined;
   @Transform(BaseModel.dateTransform) loan_originally_incurred_date: Date | undefined;
   credit_amount_this_draw: number | undefined;

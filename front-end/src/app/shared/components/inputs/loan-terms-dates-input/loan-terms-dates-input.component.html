@@ -14,20 +14,20 @@
     <div class="col-6"></div>
     <div class="col-6">
       <div class="field">
-        <label for="due_date_setting">DATE DUE</label>
+        <label for="templateMap['due_date_setting']">DATE DUE</label>
         <p-dropdown
-          inputId="due_date_setting"
-          formControlName="due_date_setting"
+          [inputId]="templateMap['due_date_setting']"
+          [formControlName]="templateMap['due_date_setting']"
           [options]="dueDateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
         <app-error-messages>
-          [form]="form" (fieldName)="due_date_setting" [formSubmitted]="formSubmitted"
+          [form]="form" (fieldName)="templateMap['due_date_setting']" [formSubmitted]="formSubmitted"
         </app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="this.form.get('due_date_setting')?.value === 'user-defined'">
+    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === 'user-defined'">
       <div class="col-6">
         <div class="field">
           <label for="due_date">DATE DUE (USER DEFINED)</label>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="this.form.get('due_date_setting')?.value === 'specific'">
+    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === 'specific'">
       <div class="col-6">
         <div class="field">
           <label for="due_date">SPECIFIC DATE</label>
@@ -53,25 +53,25 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="!this.form.get('due_date_setting')?.value">
+    <ng-container *ngIf="!this.form.get(templateMap['due_date_setting'])?.value">
       <div class="col-6"></div>
     </ng-container>
     <div class="col-6">
       <div class="field">
-        <label for="interest_rate_setting">INTEREST RATE</label>
+        <label for="templateMap['interest_rate_setting']">INTEREST RATE</label>
         <p-dropdown
-          inputId="interest_rate_setting"
-          formControlName="interest_rate_setting"
+          [inputId]="templateMap['interest_rate_setting']"
+          [formControlName]="templateMap['interest_rate_setting']"
           [options]="interestRateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
         <app-error-messages>
-          [form]="form" (fieldName)="interest_rate_setting" [formSubmitted]="formSubmitted"
+          [form]="form" (fieldName)="templateMap['interest_rate_setting']" [formSubmitted]="formSubmitted"
         </app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="this.form.get('interest_rate_setting')?.value === 'user-defined'">
+    <ng-container *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === 'user-defined'">
       <div class="col-6">
         <div class="field">
           <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
@@ -84,7 +84,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="this.form.get('interest_rate_setting')?.value === 'percentage'">
+    <ng-container *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === 'percentage'">
       <div class="col-6">
         <div class="field">
           <label for="interest_rate">EXACT PERCENTAGE (%)</label>
@@ -103,7 +103,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="!this.form.get('interest_rate_setting')?.value">
+    <ng-container *ngIf="!this.form.get(templateMap['interest_rate_setting'])?.value">
       <div class="col-6"></div>
     </ng-container>
   </div>
