@@ -48,7 +48,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
-      'Loan Repayment Received',
+      'Receive loan repayment',
       this.createLoanRepaymentReceived.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE && this.reportIsEditable,
