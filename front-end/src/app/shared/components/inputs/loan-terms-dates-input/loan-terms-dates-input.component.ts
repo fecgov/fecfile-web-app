@@ -124,8 +124,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   onInterestRateInput(newInterestRateSetting: string) {
     const interestField = this.form.get(this.templateMap.interest_rate);
     if (interestField) {
-      const oldInterestRate = interestField.value;
-      let newInterestRate = oldInterestRate;
+      const previousInterestRate = interestField.value;
+      let newInterestRate = previousInterestRate ?? '';
       if (newInterestRateSetting === LoanTermsFieldSettings.exact_percentage) {
         let textInput!: HTMLInputElement;
         let initialSelectionStart = 0;
@@ -157,7 +157,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
             textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
           }
         }
-        if (interestField.value.length === 1) {
+        if (interestField.value === '%') {
           interestField.setValue('');
         }
       }
@@ -170,7 +170,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     const due_date_field = this.form.get(this.templateMap['due_date']);
     const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
     if (due_date_field) {
-      const previous_due_date = due_date_field.value;
+      const previous_due_date = due_date_field.value ?? '';
       if (newDueDateSetting === LoanTermsFieldSettings.specific_date) {
         if (previous_due_date.search(fecDateFormat) !== -1) {
           due_date_field.setValue(DateUtils.convertFecFormatToDate(previous_due_date));
