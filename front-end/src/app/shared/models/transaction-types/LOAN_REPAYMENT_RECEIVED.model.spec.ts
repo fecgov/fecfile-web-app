@@ -1,23 +1,24 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { LOAN_REPAYMENT_RECEIVED } from './LOAN_REPAYMENT_RECEIVED.model';
 
 describe('LOAN_REPAYMENT_RECEIVED', () => {
-  let transaction: SchATransaction;
+  let transactionType: LOAN_REPAYMENT_RECEIVED;
 
   beforeEach(() => {
-    transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED) as SchATransaction;
+    transactionType = new LOAN_REPAYMENT_RECEIVED();
   });
 
   it('should create an instance', () => {
-    expect(transaction.transactionType).toBeTruthy();
-    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transactionType).toBeTruthy();
+    expect(transactionType.scheduleId).toBe('A');
   });
 
   it('#factory() should return a SchATransaction', () => {
+    const transaction: SchATransaction = transactionType.getNewTransaction();
     expect(transaction.form_type).toBe('SA14');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED);
   });
   it('#generatePurposeDescription() should generate loan repayment', () => {
-    expect(transaction.transactionType?.generatePurposeDescription).toEqual('Loan Repayment');
+    expect(transactionType.generatePurposeDescription()).toEqual('Loan Repayment');
   });
 });

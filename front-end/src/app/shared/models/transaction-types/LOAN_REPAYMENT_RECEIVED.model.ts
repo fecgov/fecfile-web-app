@@ -21,7 +21,7 @@ export class LOAN_REPAYMENT_RECEIVED extends SchATransactionType {
     });
   }
 
-  override generatePurposeDescription(transaction: Transaction): string {
+  override generatePurposeDescription(): string {
     return 'Loan Repayment';
   }
 }
