@@ -9,6 +9,8 @@ import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 @Component({
   template: '',
@@ -43,6 +45,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'Unitemize',
       this.forceUnitemize.bind(this),
       (transaction: Transaction) => transaction.itemized === true && this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Loan Repayment Received',
+      this.createLoanRepaymentReceived.bind(this),
+      (transaction: Transaction) =>
+        transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE && this.reportIsEditable,
       () => true
     ),
   ];
@@ -105,6 +114,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public forceUnitemize(transaction: Transaction): void {
     transaction.force_itemized = false;
     this.updateItem(transaction);
+  }
+  public createLoanRepaymentReceived(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
+    );
   }
 
   public updateItem(item: Transaction) {
