@@ -184,6 +184,7 @@ export enum ScheduleATransactionTypes {
   PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT = 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT',
   LOAN_RECEIVED_FROM_BANK_RECEIPT = 'LOAN_RECEIVED_FROM_BANK_RECEIPT',
+  LOAN_REPAYMENT_RECEIVED = 'LOAN_REPAYMENT_RECEIVED',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -438,6 +439,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT, 'Loan Received from Individual'],
   [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT, 'Loan Received from Bank'],
+  [ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED, 'Loan Repayment Received'],
 ];
 
 export const UnimplementedTypeEntityCategories: LabelList = [

@@ -185,6 +185,7 @@ export type TransactionGroupTypes =
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
+  LINE_14 = 'LINE_14',
   LINE_15 = 'LINE_15',
   LINE_16 = 'LINE_16',
   NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
