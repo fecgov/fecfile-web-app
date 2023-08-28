@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_REPAYMENT
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { AggregationGroups, Transaction } from '../transaction.model';
+import { AggregationGroups } from '../transaction.model';
 import { COMMITTEE, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_REPAYMENT_RECEIVED extends SchATransactionType {
