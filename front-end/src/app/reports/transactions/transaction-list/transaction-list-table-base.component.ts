@@ -54,6 +54,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE && this.reportIsEditable,
       () => true
     ),
+    new TableAction(
+      'Review loan agreement',
+      this.editFirstChild.bind(this),
+      (transaction: Transaction) =>
+        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+      () => true
+    ),
   ];
 
   constructor(
@@ -104,6 +111,16 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override editItem(item: Transaction): void {
     this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
+  }
+
+  public editFirstChild(item: Transaction): void {
+    if (item.children?.length && item.children.length > 0)
+      this.router.navigate([`${item.children[0].id}`], { relativeTo: this.activatedRoute });
+  }
+
+  public editSecondChild(item: Transaction): void {
+    if (item.children?.length && item.children.length > 1)
+      this.router.navigate([`${item.children[1].id}`], { relativeTo: this.activatedRoute });
   }
 
   public forceItemize(transaction: Transaction): void {
