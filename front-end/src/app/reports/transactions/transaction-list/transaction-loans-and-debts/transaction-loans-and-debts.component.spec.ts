@@ -89,20 +89,6 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[3].isEnabled({})).toEqual(true);
   });
 
-  it('test forceItemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceItemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(true);
-  });
-
-  it('test forceUnitemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceUnitemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(false);
-  });
-
   it('test editItem', () => {
     const navigateSpy = spyOn(router, 'navigate');
     const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
