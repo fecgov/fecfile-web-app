@@ -13,7 +13,7 @@ describe('LOAN_RECEIVED_FROM_BANK', () => {
     expect(transaction.transactionType?.scheduleId).toBe('C');
   });
 
-  it('#factory() should return a SchATransaction', () => {
+  it('#factory() should return a SchCTransaction', () => {
     expect(transaction.form_type).toBe('SC/10');
     expect(transaction.transaction_type_identifier).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
   });

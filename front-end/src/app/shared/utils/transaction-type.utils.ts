@@ -91,6 +91,7 @@ import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UN
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
 import { LOAN_RECEIVED_FROM_BANK_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_BANK_RECEIPT.model';
+import { LOAN_REPAYMENT_RECEIVED } from '../models/transaction-types/LOAN_REPAYMENT_RECEIVED.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -275,6 +276,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
   LOAN_RECEIVED_FROM_BANK_RECEIPT,
+  LOAN_REPAYMENT_RECEIVED,
   // Schedule B /////////////////////////////////////////////////////
   PAC_CONDUIT_EARMARK_OUT,
   PAC_CONDUIT_EARMARK_OUT_DEPOSITED: PAC_CONDUIT_EARMARK_OUT,
