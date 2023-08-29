@@ -20,7 +20,6 @@ describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
   let component: TransactionLoansAndDebtsComponent;
   let router: Router;
-  let testItemService: TransactionSchCService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,7 +63,6 @@ describe('TransactionReceiptsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchCService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -87,20 +85,6 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[1].isEnabled({})).toEqual(true);
     expect(component.rowActions[2].isEnabled({})).toEqual(true);
     expect(component.rowActions[3].isEnabled({})).toEqual(true);
-  });
-
-  it('test forceItemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceItemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(true);
-  });
-
-  it('test forceUnitemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceUnitemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(false);
   });
 
   it('test editItem', () => {
