@@ -54,7 +54,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   ];
   override contactConfig = STANDARD_AND_SECONDARY;
   override contactTypeOptions = ORGANIZATION;
-  override contact2IsRequired = (form: FormGroup) => form.get('future_income')?.value;
+  override contact2IsRequired = (form: FormGroup) => form?.get('future_income')?.value;
   override isDependentChild = true;
   override doMemoCodeDateCheck = false;
   schema = schema;
