@@ -20,11 +20,21 @@ export class TransactionContainerComponent extends DestroyerComponent {
       if (this.transaction) {
         const title: string = this.transaction.transactionType?.title ?? '';
         this.titleService.setTitle(title);
+      } else {
+        throw new Error('Fecfile: No transaction found in TransactionContainerComponent');
       }
     });
   }
 
-  isDoubleTransaction() {
-    return !!this.transaction?.transactionType?.dependentChildTransactionType;
+  isSingleTransaction(): boolean {
+    return !this.transaction?.transactionType?.dependentChildTransactionTypes?.length;
+  }
+
+  isDoubleTransaction(): boolean {
+    return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 1;
+  }
+
+  isTripleTransaction(): boolean {
+    return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 2;
   }
 }

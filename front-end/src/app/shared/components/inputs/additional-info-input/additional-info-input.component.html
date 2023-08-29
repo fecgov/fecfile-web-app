@@ -3,9 +3,12 @@
     <ng-container *ngIf="templateMap.purpose_description">
       <div class="col-12">
         <label for="purpose_description">
-          {{ transaction?.transactionType?.purposeDescripLabel }} {{ purposeDescriptionLabel }}
+          {{ transaction?.transactionType?.purposeDescripLabel }}
+          {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
         </label>
-        <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
+        <em *ngIf="transaction?.transactionType?.purposeDescriptionLabelNotice">{{
+          transaction?.transactionType?.purposeDescriptionLabelNotice
+        }}</em>
         <div>
           <textarea
             id="purpose_description"
@@ -14,8 +17,8 @@
             pInputTextarea
             [autoResize]="true"
             [formControlName]="templateMap['purpose_description']"
-            [ngClass]="{ readonly: descriptionIsSystemGenerated }"
-            [readonly]="descriptionIsSystemGenerated"
+            [ngClass]="{ readonly: isDescriptionSystemGenerated() }"
+            [readonly]="isDescriptionSystemGenerated()"
           ></textarea>
           <app-error-messages
             [form]="form"

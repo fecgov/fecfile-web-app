@@ -3,10 +3,10 @@
     <div class="col-6">
       <div class="field">
         <label for="street_1">STREET ADDRESS</label>
-        <input type="text" pInputText id="street_1" [formControlName]="templateMap['street_1']" />
+        <input type="text" pInputText id="street_1" [formControlName]="streetOneFieldName" />
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['street_1']"
+          [fieldName]="streetOneFieldName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -14,10 +14,10 @@
     <div class="col-6">
       <div class="field">
         <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-        <input type="text" pInputText id="street_2" [formControlName]="templateMap['street_2']" />
+        <input type="text" pInputText id="street_2" [formControlName]="streetTwoFieldName" />
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['street_2']"
+          [fieldName]="streetTwoFieldName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -27,10 +27,10 @@
     <div class="col-6">
       <div class="field">
         <label for="city">CITY</label>
-        <input type="text" pInputText id="city" [formControlName]="templateMap['city']" />
+        <input type="text" pInputText id="city" [formControlName]="cityFieldName" />
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['city']"
+          [fieldName]="cityFieldName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -40,14 +40,14 @@
         <label for="state">STATE/PROVINCE</label>
         <p-dropdown
           inputId="state"
-          [formControlName]="templateMap['state']"
+          [formControlName]="stateFieldName"
           [options]="stateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['state']"
+          [fieldName]="stateFieldName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -55,10 +55,10 @@
     <div class="col-3">
       <div class="field">
         <label for="zip">ZIP/POSTAL CODE</label>
-        <input type="text" pInputText id="zip" [formControlName]="templateMap['zip']" />
+        <input type="text" pInputText id="zip" [formControlName]="zipFieldName" />
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['zip']"
+          [fieldName]="zipFieldName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

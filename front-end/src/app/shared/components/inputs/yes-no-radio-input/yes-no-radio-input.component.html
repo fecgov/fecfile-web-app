@@ -1,0 +1,39 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-12">
+      <label [for]="controlName">{{ label }}</label>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-1">
+      <p-radioButton
+        [name]="controlName"
+        [value]="false"
+        label="NO"
+        [formControlName]="controlName"
+        [ariaLabel]="ariaLabelNo"
+        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+      ></p-radioButton>
+    </div>
+    <div class="col-1">
+      <p-radioButton
+        [name]="controlName"
+        [value]="true"
+        label="YES"
+        [formControlName]="controlName"
+        [ariaLabel]="ariaLabelYes"
+        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+      ></p-radioButton>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <app-error-messages
+        [form]="form"
+        [fieldName]="controlName"
+        [formSubmitted]="formSubmitted"
+        [patternErrorMessage]="errorMessage"
+      ></app-error-messages>
+    </div>
+  </div>
+</div>

@@ -14,3 +14,21 @@
 .sub-heading {
   font-size: 0.8em;
 }
+
+::ng-deep .p-panelmenu-header-action {
+  height: 48px;
+  font-weight: bold;
+  padding-left: 6px;
+}
+
+::ng-deep .p-panelmenu-root-list {
+  padding-left: 0px !important;
+}
+
+::ng-deep p-panelmenu > div > div > div > div > a > chevrondownicon > .p-submenu-icon {
+  visibility: hidden;
+}
+
+::ng-deep p-panelmenu > div > div > div > div > a > chevronrighticon > .p-submenu-icon {
+  visibility: hidden;
+}

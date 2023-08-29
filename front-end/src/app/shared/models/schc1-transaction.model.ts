@@ -12,9 +12,9 @@ export class SchC1Transaction extends Transaction {
   lender_state: string | undefined;
   lender_zip: string | undefined;
   loan_amount: number | undefined;
-  loan_interest_rate: number | undefined;
+  loan_interest_rate: string | undefined;
   @Transform(BaseModel.dateTransform) loan_incurred_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) loan_due_date: Date | undefined;
+  loan_due_date: string | undefined;
   loan_restructured: boolean | undefined;
   @Transform(BaseModel.dateTransform) loan_originally_incurred_date: Date | undefined;
   credit_amount_this_draw: number | undefined;
@@ -53,6 +53,10 @@ export class SchC1Transaction extends Transaction {
   entity_type: string | undefined;
   aggregation_group: AggregationGroups | undefined;
 
+  // The line_of_credit field is strictly to save front-end UI state and is not
+  // part of the SchC1 spec
+  line_of_credit: boolean | undefined;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchC1Transaction {
     const transaction = plainToClass(SchC1Transaction, json);
@@ -79,9 +83,9 @@ export enum ScheduleC1TransactionGroups {
 export type ScheduleC1TransactionGroupsType = ScheduleC1TransactionGroups.SCHEDULE_C1;
 
 export enum ScheduleC1TransactionTypes {
-  LOAN_AGREEMENT = 'LOAN_AGREEMENT',
+  C1_LOAN_AGREEMENT = 'C1_LOAN_AGREEMENT',
 }
 
 export const ScheduleC1TransactionTypeLabels: LabelList = [
-  [ScheduleC1TransactionTypes.LOAN_AGREEMENT, 'Loan Agreement'],
+  [ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT, 'Loan Agreement'],
 ];

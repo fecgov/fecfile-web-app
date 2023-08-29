@@ -7,8 +7,8 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { MessageService } from 'primeng/api';
-import { Contact, ContactType } from '../../shared/models/contact.model';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { Contact, ContactType } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -56,6 +56,8 @@ export class ContactDetailComponent {
   public onOpenDetail() {
     this.resetForm();
     this.form.patchValue(this.contact);
+    this.form?.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+    this.form?.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
   }
 
   public saveItem(closeDetail = true) {

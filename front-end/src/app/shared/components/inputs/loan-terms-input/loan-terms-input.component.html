@@ -1,86 +1,15 @@
 <div [formGroup]="form">
-  <div class="grid">
-    <div class="col-4">
-      <div class="field">
-        <label for="date">DATE INCURRED</label>
-        <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['date']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
-    </div>
-    <div class="col-4">
-      <div class="field">
-        <label for="loan_due_date">DATE DUE</label>
-        <input
-          type="text"
-          pInputText
-          id="loan_due_date"
-          formControlName="loan_due_date"
-          [readOnly]="true"
-          class="readonly"
-        />
-        <app-error-messages
-          [form]="form"
-          fieldName="loan_due_date"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
-    </div>
-    <div class="col-4">
-      <div class="field">
-        <label for="loan_interest_rate">INTEREST RATE</label>
-        <input
-          type="text"
-          pInputText
-          id="loan_interest_rate"
-          formControlName="loan_interest_rate"
-          [readOnly]="true"
-          class="readonly"
-        />
-        <app-error-messages
-          [form]="form"
-          fieldName="loan_interest_rate"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      <label for="secured">Is this loan secured?</label>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-1">
-      <p-radioButton
-        name="secured"
-        [value]="false"
-        label="NO"
-        formControlName="secured"
-        ariaLabel="This loan is not secured"
-      ></p-radioButton>
-    </div>
-    <div class="col-1">
-      <p-radioButton
-        name="secured"
-        [value]="true"
-        label="YES"
-        formControlName="secured"
-        ariaLabel="This loan is secured"
-      ></p-radioButton>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      <app-error-messages
-        [form]="form"
-        fieldName="secured"
-        [formSubmitted]="formSubmitted"
-        patternErrorMessage="Please select 'Yes' or 'No'"
-      ></app-error-messages>
-    </div>
-  </div>
+  <app-loan-terms-dates-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+  ></app-loan-terms-dates-input>
+  <app-yes-no-radio-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [controlName]="templateMap['secured']"
+    label="Is this loan secured?"
+    ariaLabelYes="This loan is secured"
+    ariaLabelNo="This loan is not secured"
+  ></app-yes-no-radio-input>
 </div>

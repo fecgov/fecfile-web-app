@@ -9,10 +9,12 @@ import {
   INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
+import { STANDARD_AND_CANDIDATE } from '../contact.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
   formFields = INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
+  override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { OverlayModule } from 'primeng/overlay';
 import { CalculationOverlayComponent } from './calculation-overlay.component';
 
 describe('CalculationOverlayComponent', () => {
@@ -8,9 +8,9 @@ describe('CalculationOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CalculationOverlayComponent ]
-    })
-    .compileComponents();
+      imports: [OverlayModule],
+      declarations: [CalculationOverlayComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CalculationOverlayComponent);
     component = fixture.componentInstance;

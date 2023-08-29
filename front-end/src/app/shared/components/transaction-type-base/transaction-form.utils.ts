@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
@@ -6,11 +6,13 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { ContactIdMapType } from './transaction-contact.utils';
+import { ContactService } from 'app/shared/services/contact.service';
 
 export class TransactionFormUtils {
   /**
@@ -21,31 +23,35 @@ export class TransactionFormUtils {
    * @param component
    * @param form - parent or child (i.e. form or childForm)
    * @param transaction - parent or child
-   * @param contactId$ - parent or child (i.e. contactId$ or childContactId$)
+   * @param contactIdMap - parent or child
    */
   static onInit(
-    component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent,
+    component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>
+    contactIdMap: ContactIdMapType,
+    contactService: ContactService
   ): void {
     if (transaction && transaction.id) {
       form.patchValue({ ...transaction });
 
       TransactionMemoUtils.patchMemoText(transaction, form);
-
       form.get('entity_type')?.disable();
-      contactId$.next(transaction.contact_1_id || '');
     } else {
       component.resetForm();
       form.get('entity_type')?.enable();
-      contactId$.next('');
     }
 
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!templateMap) {
+    const transactionType = transaction?.transactionType;
+    const templateMap = transactionType?.templateMap;
+    if (!transactionType || !templateMap) {
       throw new Error('Fecfile: Cannot find template map when initializing transaction form');
     }
+
+    Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
+      contactIdMap[contact] = new Subject<string>();
+      contactIdMap[contact].next((transaction[contact as keyof Transaction] as Contact)?.id ?? '');
+    });
 
     form
       .get('entity_type')
@@ -83,11 +89,11 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transaction.transactionType?.showAggregate) {
+    if (transactionType.showAggregate) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),
-          combineLatestWith(contactId$),
+          combineLatestWith(contactIdMap['contact_1']),
           switchMap(([contribution_date, contactId]) => {
             return component.transactionService.getPreviousTransaction(transaction, contactId, contribution_date);
           })
@@ -104,10 +110,36 @@ export class TransactionFormUtils {
         });
     }
 
+    // Add form controls to bubble up validate error messages from the Contact Lookup component
+    form.addControl('contact_1', new FormControl());
+    form.addControl(
+      'contact_2',
+      new FormControl(null, () => {
+        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+
     const schema = transaction.transactionType?.schema;
     if (schema) {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
     }
+
+    Object.entries(contactIdMap).forEach(([contact, id$]) => {
+      const contactConfig = transactionType.contactConfig[contact];
+      id$.pipe(takeUntil(component.destroy$)).subscribe((id) => {
+        for (const field of ['committee_fec_id', 'candidate_fec_id']) {
+          if (contactConfig[field]) {
+            form.get(templateMap[field as keyof TransactionTemplateMapType])?.clearAsyncValidators();
+            form
+              .get(templateMap[field as keyof TransactionTemplateMapType])
+              ?.addAsyncValidators(contactService.getFecIdValidator(id));
+          }
+        }
+      });
+    });
   }
 
   static updateAggregate(
@@ -135,27 +167,51 @@ export class TransactionFormUtils {
       throw new Error('Fecfile: Payload transaction not found');
     }
 
-    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
-    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
-    if (transaction.transactionType?.templateMap) {
-      // Update contact object in transaction with new form values
-      TransactionContactUtils.setTransactionContactFormChanges(
-        form,
-        transaction.contact_1,
-        transaction.transactionType.templateMap
-      );
+    // Remove parent transaction links within the parent-child hierarchy in the
+    // transaction objects to avoid a recursion overflow from the class-transformer
+    // plainToClass() converter
+    if (transaction?.children) {
+      transaction.children.forEach((child) => {
+        child.parent_transaction = undefined;
+      });
     }
 
-    const payload: ScheduleTransaction = getFromJSON({
+    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+    formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
+
+    let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
-
     if (payload.children) {
       payload.children = payload.updateChildren();
     }
-
+    // Reorganize the payload if this transaction type can update its parent transaction
+    // This will break the scenario where the user creates a grandparent, then child, then tries
+    // to create a grandchild transaction because we won't know which child transaction of the grandparent
+    // was the original transaction it's id was generated on the api.  the middle child's
+    // id is necessary to generate the url for creating the grandchild.
+    if (transaction.transactionType?.updateParentOnSave) {
+      payload = payload.getUpdatedParent() as ScheduleTransaction;
+    }
     return payload;
+  }
+
+  /**
+   * Some form fields are not part of the FEC spec but internal state variables for the front-end. Add them to the payload.
+   * @param form
+   * @param transaction
+   * @param contactTypeOptions
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static addExtraFormFields(transaction: Transaction, form: FormGroup, formValues: any) {
+    transaction.transactionType?.formFields.forEach((field) => {
+      if (!(field in formValues)) {
+        formValues[field] = form.get(field)?.value ?? null;
+      }
+    });
+    return formValues;
   }
 
   static resetForm(form: FormGroup, transaction: Transaction | undefined, contactTypeOptions: PrimeOptions) {
@@ -188,5 +244,4 @@ export class TransactionFormUtils {
     // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
     return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
   }
-
 }

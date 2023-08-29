@@ -1,17 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
-  GO_BACK_CONTROL,
   NavigationAction,
-  NavigationControl,
   NavigationDestination,
   NavigationEvent,
-  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -21,9 +18,9 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, map, of, Subject, takeUntil, startWith } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { map, of, Subject, takeUntil, startWith, Observable, delay, from, concatAll, reduce } from 'rxjs';
+import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 
 @Component({
@@ -34,16 +31,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   formProperties: string[] = [];
   transactionType?: TransactionType;
-  ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  entityTypeControl?: FormControl;
-  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
-  stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
-  contactId$: Subject<string> = new BehaviorSubject<string>('');
+  contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
-  purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
@@ -67,40 +58,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
-    this.formProperties = this.transactionType.getFormControlNames(this.templateMap);
+    this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
-    this.form.addControl('contact_1', new FormControl());
-    this.form.addControl(
-      'contact_2',
-      new FormControl(null, () => {
-        if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
-    this.entityTypeControl = this.form.get('entity_type') as FormControl;
-    this.parentOnInit();
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.isEditable = this.reportService.isEditable(report);
-        if (!this.isEditable) this.form.disable();
-      });
-  }
+    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
 
-  parentOnInit() {
-    const transactionType = this.transactionType;
     // Determine if amount should always be negative and then force it to be so if needed
-    if (transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+    if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
       this.form
         .get(this.templateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -111,22 +79,35 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         });
     }
 
-    if (transactionType?.generatePurposeDescriptionLabel) {
-      this.purposeDescriptionLabel = transactionType.generatePurposeDescriptionLabel();
-    }
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.isEditable = this.reportService.isEditable(report);
+        if (!this.isEditable) this.form.disable();
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.contactId$.complete();
+    Object.values(this.contactIdMap).forEach((id$) => id$.complete());
+  }
+
+  writeToApi(payload: Transaction): Observable<Transaction> {
+    if (payload.id) {
+      return this.transactionService.update(payload);
+    } else {
+      return this.transactionService.create(payload);
+    }
   }
 
   save(navigationEvent: NavigationEvent) {
-    this.formSubmitted = true;
-
-    if (this.form.invalid) {
-      return;
+    // update all contacts with changes from form.
+    if (this.transaction) {
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+    } else {
+      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -134,122 +115,86 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.formProperties
     );
-
-    this.confirmSave(payload, this.form, this.doSave, navigationEvent, payload);
-  }
-
-  protected confirmSave(
-    confirmTransaction: Transaction,
-    form: FormGroup,
-    acceptCallback: (navigationEvent: NavigationEvent, payload: Transaction) => void,
-    navigationEvent: NavigationEvent,
-    payload: Transaction,
-    targetDialog: 'dialog' | 'childDialog' = 'dialog'
-  ) {
-    if (
-      confirmTransaction.contact_1_id &&
-      confirmTransaction.contact_1 &&
-      confirmTransaction?.transactionType?.templateMap
-    ) {
-      const transactionContactChanges = TransactionContactUtils.setTransactionContactFormChanges(
-        form,
-        confirmTransaction.contact_1,
-        confirmTransaction.transactionType.templateMap
-      );
-      if (transactionContactChanges?.length) {
-        const confirmationMessage = TransactionContactUtils.getEditTransactionContactConfirmationMessage(
-          transactionContactChanges,
-          confirmTransaction.contact_1,
-          form,
-          this.fecDatePipe,
-          confirmTransaction.transactionType.templateMap
-        );
-        this.confirmationService.confirm({
-          key: targetDialog,
-          header: 'Confirm',
-          icon: 'pi pi-info-circle',
-          message: confirmationMessage,
-          acceptLabel: 'Continue',
-          rejectLabel: 'Cancel',
-          accept: () => {
-            acceptCallback.call(this, navigationEvent, payload);
-          },
-          reject: () => {
-            return;
-          },
-        });
-      } else {
-        acceptCallback.call(this, navigationEvent, payload);
-      }
-    } else {
-      if (confirmTransaction?.transactionType?.templateMap) {
-        const confirmationMessage = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-          (confirmTransaction as ScheduleTransaction).entity_type as ContactTypes,
-          form,
-          confirmTransaction.transactionType.templateMap
-        );
-        this.confirmationService.confirm({
-          key: targetDialog,
-          header: 'Confirm',
-          icon: 'pi pi-info-circle',
-          message: confirmationMessage,
-          acceptLabel: 'Continue',
-          rejectLabel: 'Cancel',
-          accept: () => {
-            acceptCallback.call(this, navigationEvent, payload);
-          },
-          reject: () => {
-            return;
-          },
-        });
-      } else {
-        throw new Error('Fecfile: Cannot find template map when confirming transaction');
-      }
-    }
-  }
-
-  protected doSave(navigationEvent: NavigationEvent, payload: Transaction) {
     if (payload.transaction_type_identifier) {
-      const originalTransaction = payload;
-      // Reorganize the payload if this transaction type can update its parent transaction
-      // This will break the scenario where the user creates a grandparent, then child, then tries
-      // to create a grandchild transaction because we won't know which child transaction of the grandparent
-      // was the original transaction it's id was generated on the api.  the middle child's
-      // id is necessary to generate the url for creating the grandchild.
-      if (payload.transactionType?.updateParentOnSave) {
-        payload = payload.getUpdatedParent();
-      }
-
-      if (payload.id) {
-        this.transactionService.update(payload).subscribe((transaction) => {
-          navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
-            ? originalTransaction
-            : transaction;
-          this.navigateTo(navigationEvent);
-        });
-      } else {
-        this.transactionService.create(payload).subscribe((transaction) => {
-          navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
-            ? originalTransaction
-            : transaction;
-          this.navigateTo(navigationEvent);
-        });
-      }
+      const responseFromApi = this.writeToApi(payload);
+      responseFromApi.subscribe((transaction) => {
+        navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
+        this.navigateTo(navigationEvent);
+      });
     }
   }
 
-  getNavigationControls(): TransactionNavigationControls {
-    if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
-    return this.transactionType?.navigationControls ?? new TransactionNavigationControls([], [], []);
-  }
+  confirmWithUser(
+    transaction: Transaction,
+    form: FormGroup,
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
+  ) {
+    const templateMap = transaction.transactionType?.templateMap;
+    if (!templateMap) {
+      throw new Error('Fecfile: Cannot find template map when confirming transaction');
+    }
+    const confirmations$ = Object.entries(transaction.transactionType?.contactConfig ?? {})
+      .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
+        if (transaction[contactKey as keyof Transaction]) {
+          if (transaction.transactionType?.useParentContact && contactKey === 'contact_1') {
+            return '';
+          }
+          const contact = transaction[contactKey as keyof Transaction] as Contact;
+          if (!contact.id) {
+            return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+              contact.type,
+              form,
+              templateMap,
+              contactKey
+            );
+          }
+          const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
+          const dateString = this.fecDatePipe.transform(form.get(templateMap.date)?.value);
+          if (changes.length > 0) {
+            return TransactionContactUtils.getContactChangesMessage(contact, dateString, changes);
+          }
+        }
+        return '';
+      })
+      .filter((message) => !!message)
+      .map((message: string) => {
+        return new Observable<boolean>((subscriber) => {
+          this.confirmationService.confirm({
+            key: targetDialog,
+            header: 'Confirm',
+            icon: 'pi pi-info-circle',
+            message: message,
+            acceptLabel: 'Continue',
+            rejectLabel: 'Cancel',
+            accept: () => {
+              subscriber.next(true);
+              subscriber.complete();
+            },
+            reject: () => {
+              subscriber.next(false);
+              subscriber.complete();
+            },
+          });
+        }).pipe(delay(500));
+      });
 
-  getInlineControls(): NavigationControl[] {
-    return this.getNavigationControls().getNavigationControls('inline', this.transaction);
+    return from([of(true), ...confirmations$]).pipe(
+      concatAll(),
+      reduce((accumulator, confirmed) => accumulator && confirmed)
+    );
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {
+    this.formSubmitted = true;
+
     if (navigationEvent.action === NavigationAction.SAVE) {
-      this.save(navigationEvent);
+      if (this.form.invalid || !this.transaction) {
+        return;
+      }
+      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: boolean) => {
+        // if every confirmation was accepted
+        if (confirmed) this.save(navigationEvent);
+      });
     } else {
       this.navigateTo(navigationEvent);
     }
@@ -271,10 +216,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         this.router.navigateByUrl(
           `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
         );
-        this.resetForm();
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
-        this.resetForm();
       }
     } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
@@ -298,20 +241,31 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
   }
 
-  isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
-    // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return transactionType?.generatePurposeDescription !== undefined;
+  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithPrimaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_1']
+    );
   }
 
-  onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(selectItem, this.form, this.transaction, this.contactId$);
-  }
-  onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
+  updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithCandidateContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_2']
+    );
   }
 
-  getEntityType(): string {
-    return this.form.get('entity_type')?.value || '';
+  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithSecondaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_2']
+    );
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {

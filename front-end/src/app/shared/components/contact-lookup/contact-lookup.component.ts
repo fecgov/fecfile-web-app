@@ -35,15 +35,12 @@ export class ContactLookupComponent implements OnInit {
   searchTerm = '';
   requiredErrorMessage = '';
 
-  constructor(
-    private contactService: ContactService
-  ) { }
+  constructor(private contactService: ContactService) {}
   ngOnInit(): void {
     this.contactTypeFormControl.valueChanges.subscribe((contactType) => {
-      this.requiredErrorMessage = LabelUtils.get(
-        ContactTypeLabels, contactType) + ' information is required';
+      this.requiredErrorMessage = LabelUtils.get(ContactTypeLabels, contactType) + ' information is required';
     });
-    if (this.contactTypeOptions && this.contactTypeOptions.length > 0) {
+    if (!this.contactTypeFormControl.value && this.contactTypeOptions && this.contactTypeOptions.length > 0) {
       this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
     }
   }
@@ -87,7 +84,7 @@ export class ContactLookupComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onContactLookupSelect(event: any) {
+  updateFormWithPrimaryContact(event: any) {
     this.contactLookupSelect.emit(event);
     this.form.get(this.selectedContactFormControlName)?.patchValue('');
   }

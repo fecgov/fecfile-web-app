@@ -8,7 +8,7 @@ import {
   LOAN_TERMS_FIELDS,
   hasFields,
 } from '../utils/transaction-type-properties';
-import { ContactType } from './contact.model';
+import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
 
@@ -21,6 +21,7 @@ export abstract class TransactionType {
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
+  contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
@@ -31,13 +32,11 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
-  showStandardAmount = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
-  hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
-  dependentChildTransactionType?: TransactionTypes; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
+  dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
@@ -63,7 +62,6 @@ export abstract class TransactionType {
   dateLabel = 'DATE';
   amountInputHeader = '';
   purposeDescripLabel = '';
-
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
   accordionSubText?: string; // Text after title in accordion handle
@@ -71,6 +69,8 @@ export abstract class TransactionType {
   footer?: string; // Text at the end of form
   contactTitle?: string; // Title for primary contact
   contactLookupLabel?: string; //Label above contact lookup
+  signatoryOneTitle?: string; // Label for the signatory_1 section in the form
+  signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -102,13 +102,23 @@ export abstract class TransactionType {
     return '';
   }
 
-  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
+  /**
+   * Generates a list of fields names for the form controls in a transaction type input component
+   * @returns string[] - Array of field names.
+   */
+  getFormControlNames(): string[] {
     const templateFields = this.formFields
-      .map((name: string) => templateMap[name as TemplateMapKeyType])
+      .map((name: string) => {
+        return name in this.templateMap ? this.templateMap[name as TemplateMapKeyType] : name;
+      })
       .filter((field) => !!field);
     return ['entity_type', ...templateFields];
   }
 
+  // The following "has*" methods and properties are boolean switches that show/hide
+  // a component or section in the transaction type input component
+  hasAmountInput = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
+  hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
@@ -130,6 +140,10 @@ export abstract class TransactionType {
   hasLoanTermsFields(): boolean {
     return hasFields(this.formFields, LOAN_TERMS_FIELDS);
   }
+  hasAdditionalInfo = true;
+  hasLoanAgreement = false;
+  hasSignature1 = false;
+  hasSignature2 = false;
 }
 
 export enum PurposeDescriptionLabelSuffix {
@@ -178,6 +192,25 @@ export type TransactionTemplateMapType = {
   category_code: string;
   election_code: string;
   election_other_description: string;
+  secondary_name: string;
+  secondary_street_1: string;
+  secondary_street_2: string;
+  secondary_city: string;
+  secondary_state: string;
+  secondary_zip: string;
+  signatory_1_last_name: string;
+  signatory_1_first_name: string;
+  signatory_1_middle_name: string;
+  signatory_1_prefix: string;
+  signatory_1_suffix: string;
+  signatory_1_date: string;
+  signatory_2_last_name: string;
+  signatory_2_first_name: string;
+  signatory_2_middle_name: string;
+  signatory_2_prefix: string;
+  signatory_2_suffix: string;
+  signatory_2_title: string;
+  signatory_2_date: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;

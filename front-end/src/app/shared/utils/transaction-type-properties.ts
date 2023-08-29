@@ -72,6 +72,31 @@ export const CATEGORY_CODE: string[] = ['category_code'];
 export const LOAN_FINANCE_FIELDS: string[] = ['payment_to_date', 'balance'];
 export const LOAN_TERMS_FIELDS: string[] = ['due_date', 'interest_rate', 'secured'];
 
+export const SECONDARY_ADDRESS_FIELDS: string[] = [
+  'secondary_street_1',
+  'secondary_street_2',
+  'secondary_city',
+  'secondary_state',
+  'secondary_zip',
+];
+export const SIGNATORY_1_FIELDS: string[] = [
+  'signatory_1_last_name',
+  'signatory_1_first_name',
+  'signatory_1_middle_name',
+  'signatory_1_prefix',
+  'signatory_1_suffix',
+  'signatory_1_date',
+];
+export const SIGNATORY_2_FIELDS: string[] = [
+  'signatory_2_last_name',
+  'signatory_2_first_name',
+  'signatory_2_middle_name',
+  'signatory_2_prefix',
+  'signatory_2_suffix',
+  'signatory_2_title',
+  'signatory_2_date',
+];
+
 export function hasFields(formFields: string[], fieldsToHave: string[]): boolean {
   return fieldsToHave.reduce((result, election_field) => result && formFields.includes(election_field), true);
 }

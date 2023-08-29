@@ -19,6 +19,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SharedModule } from 'app/shared/shared.module';
 import { DoubleTransactionDetailComponent } from './double-transaction-detail/double-transaction-detail.component';
+import { TripleTransactionDetailComponent } from './triple-transaction-detail/triple-transaction-detail.component';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { TransactionDisbursementsComponent } from './transaction-list/transaction-disbursements/transaction-disbursements.component';
@@ -27,6 +28,8 @@ import { TransactionReceiptsComponent } from './transaction-list/transaction-rec
 import { TransactionLoansAndDebtsComponent } from './transaction-list/transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
+import { TransactionInputComponent } from './transaction-input/transaction-input.component';
+import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 
 @NgModule({
   declarations: [
@@ -34,11 +37,14 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionTypePickerComponent,
     TransactionListComponent,
     DoubleTransactionDetailComponent,
+    TripleTransactionDetailComponent,
     TransactionDetailComponent,
     MemoCodePipe,
     TransactionReceiptsComponent,
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,
+    TransactionInputComponent,
+    TransactionNavigationComponent,
   ],
   imports: [
     AccordionModule,

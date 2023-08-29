@@ -6,7 +6,7 @@ import {
 } from '../../transaction-navigation-controls.model';
 
 export abstract class IN_KIND extends SchATransactionType {
-  override apiEndpoint = '/transactions/save-pair';
+  override apiEndpoint = '/transactions/save';
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;

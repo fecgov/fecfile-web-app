@@ -27,6 +27,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from 'app/shared/shared.module';
 import { TransactionDetailComponent } from './transaction-detail.component';
+import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
+import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
 
 describe('TransactionDetailComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -54,7 +56,7 @@ describe('TransactionDetailComponent', () => {
         InputNumberModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionDetailComponent],
+      declarations: [TransactionDetailComponent, AmountInputComponent, NavigationControlComponent],
       providers: [
         MessageService,
         ConfirmationService,
@@ -82,9 +84,9 @@ describe('TransactionDetailComponent', () => {
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('#save() should not save an invalid record', () => {
+  it('#handleNavigate() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
+    component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
       `${environment.apiUrl}/transactions/schedule-a/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`

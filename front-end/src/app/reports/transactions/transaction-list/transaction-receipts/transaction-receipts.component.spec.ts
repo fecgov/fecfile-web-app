@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -7,6 +8,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -22,7 +24,7 @@ describe('TransactionReceiptsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule],
+      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
       declarations: [TransactionReceiptsComponent],
       providers: [
         MessageService,
