@@ -20,7 +20,6 @@ describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
   let component: TransactionLoansAndDebtsComponent;
   let router: Router;
-  let testItemService: TransactionSchCService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,7 +63,6 @@ describe('TransactionReceiptsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchCService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
