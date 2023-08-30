@@ -30,6 +30,7 @@ import { TransactionTypePickerComponent } from './transaction-type-picker/transa
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionInputComponent } from './transaction-input/transaction-input.component';
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
+import { TransactionChildrenComponent } from './transaction-list/transaction-children/transaction-children.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { TransactionNavigationComponent } from './transaction-navigation/transac
     TransactionDetailComponent,
     MemoCodePipe,
     TransactionReceiptsComponent,
+    TransactionChildrenComponent,
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,
