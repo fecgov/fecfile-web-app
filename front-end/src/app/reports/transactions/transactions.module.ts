@@ -31,6 +31,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionInputComponent } from './transaction-input/transaction-input.component';
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 import { TransactionChildrenComponent } from './transaction-list/transaction-children/transaction-children.component';
+import { TransactionGuarantorComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TransactionChildrenComponent } from './transaction-list/transaction-chi
     MemoCodePipe,
     TransactionReceiptsComponent,
     TransactionChildrenComponent,
+    TransactionGuarantorComponent,
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,

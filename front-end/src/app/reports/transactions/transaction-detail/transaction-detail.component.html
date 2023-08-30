@@ -19,6 +19,7 @@
     >
     </app-transaction-input>
   </form>
+  <app-transaction-guarantors [transactions]="transaction?.children ?? []"></app-transaction-guarantors>
 </div>
 
 <app-transaction-navigation
