@@ -19,7 +19,7 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { map, of, Subject, takeUntil, startWith, Observable, delay, from, concatAll, reduce } from 'rxjs';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 
@@ -77,6 +77,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
           }
         });
+    }
+
+    // If this single-entry transaction has inherited fields from its parent, load values
+    // from parent on create and set field to read-only. For edit, just make
+    // the fields read-only
+    if (this.transaction.transactionType.inheritedFields) {
+      this.initInheritedFieldsFromParent();
     }
 
     this.store
@@ -294,5 +301,48 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       startWith(optionalLabel),
       takeUntil(this.destroy$)
     );
+  }
+
+  /**
+   * If the transaction being created/edited has inheritedFields, populate the form values
+   * from the parent_transaction on create. On edit, simply make the fields read-only.
+   *
+   * The entity_type is handled as a special case because it does not exist in the templateMap.
+   */
+  initInheritedFieldsFromParent(): void {
+    if (!this.transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
+
+    // If creating a new transaction, set both form and contact_1 values from parent transaction
+    if (!this.transaction.id) {
+      this.transaction.contact_1 = this.transaction.parent_transaction?.contact_1;
+      this.transaction.contact_1_id = this.transaction.parent_transaction?.contact_1_id;
+
+      const entityTypeValue = this.transaction?.parent_transaction?.contact_1?.type;
+      if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);
+      this.form.get('entity_type')?.updateValueAndValidity();
+
+      this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
+        if (this.transaction && this.transaction.parent_transaction) {
+          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+          const value =
+            this.transaction.parent_transaction[
+              `${this.transaction.parent_transaction?.transactionType.templateMap[inherittedField]}` as keyof Transaction
+            ];
+          if (value !== undefined) {
+            fieldControl?.setValue(value);
+            fieldControl?.updateValueAndValidity();
+          }
+        }
+      });
+    }
+
+    // Set fields to read-only
+    this.form.get('entity_type')?.disable();
+    this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
+      if (this.transaction) {
+        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+        fieldControl?.disable();
+      }
+    });
   }
 }
