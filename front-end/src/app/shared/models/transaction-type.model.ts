@@ -191,7 +191,9 @@ export type TransactionTemplateMapType = {
   balance: string;
   payment_to_date: string;
   due_date: string;
+  due_date_setting: string;
   interest_rate: string;
+  interest_rate_setting: string;
   secured: string;
   aggregate: string;
   purpose_description: string;

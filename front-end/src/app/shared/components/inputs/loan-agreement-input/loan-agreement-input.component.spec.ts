@@ -22,7 +22,9 @@ describe('LoanAgreementInputComponent', () => {
     const form = new FormGroup({
       lender_organization_name: new FormControl(),
       loan_interest_rate: new FormControl(),
+      loan_interest_rate_field_setting: new FormControl(),
       loan_due_date: new FormControl(),
+      loan_due_date_field_setting: new FormControl(),
       collateral: new FormControl(),
       ind_name_account_location: new FormControl(),
       account_street_1: new FormControl(),
@@ -72,7 +74,9 @@ describe('LoanAgreementInputComponent', () => {
       ...{
         organization_name: 'lender_organization_name',
         interest_rate: 'loan_interest_rate',
+        interest_rate_setting: 'loan_interest_rate_field_setting',
         due_date: 'loan_due_date',
+        due_date_setting: 'loan_due_date_field_setting',
         secured: 'collateral',
         secondary_name: 'ind_name_account_location',
         secondary_street_1: 'account_street_1',

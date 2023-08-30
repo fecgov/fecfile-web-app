@@ -42,6 +42,8 @@ export abstract class SchBTransactionType extends TransactionType {
     payment_to_date: '',
     interest_rate: '',
     due_date: '',
+    interest_rate_setting: '',
+    due_date_setting: '',
     secured: '',
     aggregate: 'aggregate_amount',
     purpose_description: 'expenditure_purpose_descrip',
