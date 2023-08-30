@@ -14,24 +14,26 @@
     <div class="col-6"></div>
     <div class="col-6">
       <div class="field">
-        <label for="templateMap['due_date_setting']">DATE DUE</label>
+        <label for="due_date_setting">DATE DUE</label>
         <p-dropdown
-          [inputId]="templateMap['due_date_setting']"
+          inputId="due_date_setting"
           [formControlName]="templateMap['due_date_setting']"
           [options]="dueDateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
-        <app-error-messages>
-          [form]="form" (fieldName)="templateMap['due_date_setting']" [formSubmitted]="formSubmitted"
-        </app-error-messages>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['due_date_setting']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
     </div>
     <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.USER_DEFINED">
       <div class="col-6">
         <div class="field">
           <label for="due_date">DATE DUE (USER DEFINED)</label>
-          <input type="text" pInputText id="due_date" [formControlName]="templateMap['due_date']" />
+          <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['due_date']"
@@ -58,16 +60,19 @@
     </ng-container>
     <div class="col-6">
       <div class="field">
-        <label for="templateMap['interest_rate_setting']">INTEREST RATE</label>
+        <label for="interest_rate_setting">INTEREST RATE</label>
         <p-dropdown
-          [inputId]="templateMap['interest_rate_setting']"
+          inputId="interest_rate_setting"
           [formControlName]="templateMap['interest_rate_setting']"
           [options]="interestRateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
-        <app-error-messages>
-          [form]="form" (fieldName)="templateMap['interest_rate_setting']" [formSubmitted]="formSubmitted"
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['interest_rate_setting']"
+          [formSubmitted]="formSubmitted"
+        >
         </app-error-messages>
       </div>
     </div>
