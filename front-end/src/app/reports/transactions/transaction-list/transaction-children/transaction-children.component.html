@@ -1,7 +1,7 @@
 <div class="card">
   <p-table
     #dt
-    [value]="transactions"
+    [value]="transactions ?? []"
     responsiveLayout="scroll"
     dataKey="id"
     [paginator]="true"

@@ -19,8 +19,8 @@ import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transacti
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionChildrenComponent extends TransactionListTableBaseComponent implements OnInit {
-  @Input() transactions: Transaction[] = [];
-  @Input() tableLabel = 'children';
+  @Input() transactions?: Transaction[];
+  @Input() tableLabel = 'Children';
   // eslint-disable-next-line @typescript-eslint/ban-types
   scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleATransactionTypeLabels,
@@ -52,7 +52,7 @@ export class TransactionChildrenComponent extends TransactionListTableBaseCompon
   override ngOnInit(): void {
     super.ngOnInit();
 
-    this.transactions = this.transactions.filter((transaction: Transaction) => {
+    this.transactions = this.transactions?.filter((transaction: Transaction) => {
       if (this.transactionFilter) {
         return this.transactionFilter?.(transaction);
       } else {

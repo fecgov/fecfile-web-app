@@ -19,8 +19,9 @@
     >
     </app-transaction-input>
   </form>
-  <app-transaction-guarantors [transactions]="transaction?.children ?? []"></app-transaction-guarantors>
 </div>
+
+<app-transaction-children-tables [transaction]="transaction"></app-transaction-children-tables>
 
 <app-transaction-navigation
   [isEditable]="isEditable"

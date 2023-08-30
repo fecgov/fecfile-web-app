@@ -21,6 +21,9 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
   ]);
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
+  override showChildrenTable = true;
+  override showGuarantorTable = true;
+
   override generatePurposeDescription(): string {
     return 'Transfer of Joint Fundraising Proceeds';
   }
