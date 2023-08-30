@@ -7,7 +7,7 @@
     [paginator]="true"
     [rows]="rowsPerPage"
     [totalRecords]="totalItems"
-    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} {{tableLabel}}'"
+    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} ' + tableLabel"
     [showCurrentPageReport]="true"
     sortField="form_type,created"
   >
