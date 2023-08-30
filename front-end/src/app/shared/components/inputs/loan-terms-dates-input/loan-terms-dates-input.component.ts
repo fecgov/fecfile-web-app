@@ -9,9 +9,9 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { InputText } from 'primeng/inputtext';
 
 enum LoanTermsFieldSettings {
-  specific_date = 'specific-date',
-  user_defined = 'user-defined',
-  exact_percentage = 'exact-percentage',
+  SPECIFIC_DATE = 'specific-date',
+  USER_DEFINED = 'user-defined',
+  EXACT_PERCENTAGE = 'exact-percentage',
 }
 
 function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {
@@ -42,13 +42,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   termFieldSettings = LoanTermsFieldSettings;
 
   dueDateSettingOptions = LabelUtils.getPrimeOptions([
-    [LoanTermsFieldSettings.specific_date, 'Enter a specific date'],
-    [LoanTermsFieldSettings.user_defined, 'Enter a user defined value'],
+    [LoanTermsFieldSettings.SPECIFIC_DATE, 'Enter a specific date'],
+    [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
   interestRateSettingOptions = LabelUtils.getPrimeOptions([
-    [LoanTermsFieldSettings.exact_percentage, 'Enter an exact percentage'],
-    [LoanTermsFieldSettings.user_defined, 'Enter a user defined value'],
+    [LoanTermsFieldSettings.EXACT_PERCENTAGE, 'Enter an exact percentage'],
+    [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
   percentageValidator?: ValidatorFn;
@@ -78,9 +78,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.form.get(this.templateMap['interest_rate_setting'])?.valueChanges?.subscribe((interestRateSetting) => {
       const interestRateField = this.form.get(this.templateMap['interest_rate']);
       if (interestRateField) {
-        if (interestRateSetting === LoanTermsFieldSettings.exact_percentage) {
+        if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
           interestRateField.addValidators(this.percentageValidator as ValidatorFn);
-        } else if (interestRateSetting === LoanTermsFieldSettings.user_defined) {
+        } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
           interestRateField.removeValidators(this.percentageValidator as ValidatorFn);
         }
       }
@@ -102,10 +102,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     // If the interest rate converts nicely to a percentage field, then do so
     if (!interest_rate_setting_field?.value && interest_rate_field?.value) {
       const starting_interest_rate = interest_rate_field?.value;
-      interest_rate_setting_field?.setValue(LoanTermsFieldSettings.exact_percentage);
+      interest_rate_setting_field?.setValue(LoanTermsFieldSettings.EXACT_PERCENTAGE);
       // Otherwise, set the field setting to user-defined and restore the original value
       if (starting_interest_rate !== interest_rate_field?.value) {
-        interest_rate_setting_field?.setValue(LoanTermsFieldSettings.user_defined);
+        interest_rate_setting_field?.setValue(LoanTermsFieldSettings.USER_DEFINED);
         interest_rate_field.setValue(starting_interest_rate);
       }
     }
@@ -115,10 +115,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     // If the due date converts nicely to a Date object, then do so
     if (!due_date_setting_field?.value && due_date_field?.value) {
       const starting_due_date = due_date_field?.value;
-      due_date_setting_field?.setValue(LoanTermsFieldSettings.specific_date);
+      due_date_setting_field?.setValue(LoanTermsFieldSettings.SPECIFIC_DATE);
       // Otherwise, set the field setting to user-defined and restore the original value
       if (!(due_date_field?.value instanceof Date)) {
-        due_date_setting_field?.setValue(LoanTermsFieldSettings.user_defined);
+        due_date_setting_field?.setValue(LoanTermsFieldSettings.USER_DEFINED);
         due_date_field?.setValue(starting_due_date);
       }
     }
@@ -129,7 +129,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     if (interestField) {
       const previousInterestRate = interestField.value;
       let newInterestRate = previousInterestRate ?? '';
-      if (newInterestRateSetting === LoanTermsFieldSettings.exact_percentage) {
+      if (newInterestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
         let textInput!: HTMLInputElement;
         let initialSelectionStart = 0;
         let initialSelectionEnd = 0;
@@ -174,13 +174,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
     if (due_date_field) {
       const previous_due_date = due_date_field.value ?? '';
-      if (newDueDateSetting === LoanTermsFieldSettings.specific_date) {
+      if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
         if (previous_due_date.search(fecDateFormat) !== -1) {
           due_date_field.setValue(DateUtils.convertFecFormatToDate(previous_due_date));
         } else {
           due_date_field.setValue(undefined);
         }
-      } else if (newDueDateSetting === LoanTermsFieldSettings.user_defined) {
+      } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
         if (previous_due_date instanceof Date) {
           due_date_field.setValue(DateUtils.convertDateToFecFormat(previous_due_date));
         } else {

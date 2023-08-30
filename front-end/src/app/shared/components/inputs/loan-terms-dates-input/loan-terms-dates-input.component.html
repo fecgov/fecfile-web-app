@@ -27,7 +27,7 @@
         </app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.user_defined">
+    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.USER_DEFINED">
       <div class="col-6">
         <div class="field">
           <label for="due_date">DATE DUE (USER DEFINED)</label>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.specific_date">
+    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.SPECIFIC_DATE">
       <div class="col-6">
         <div class="field">
           <label for="due_date">SPECIFIC DATE</label>
@@ -71,7 +71,7 @@
         </app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === termFieldSettings.user_defined">
+    <ng-container *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === termFieldSettings.USER_DEFINED">
       <div class="col-6">
         <div class="field">
           <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
@@ -85,7 +85,7 @@
       </div>
     </ng-container>
     <ng-container
-      *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === termFieldSettings.exact_percentage"
+      *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === termFieldSettings.EXACT_PERCENTAGE"
     >
       <div class="col-6">
         <div class="field">
