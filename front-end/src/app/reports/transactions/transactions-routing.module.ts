@@ -71,6 +71,7 @@ const routes: Routes = [
     // the transaction form components are destroyed and recreated so initialization
     // of the new transaction form happens correctly.
     data: { noComponentReuse: true }, // Handled in src/app/custom-route-reuse-strategy.ts
+    runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
 ];

@@ -79,10 +79,10 @@ export class SchC1Transaction extends Transaction {
 }
 
 export enum ScheduleC1TransactionGroups {
-  SCHEDULE_C1 = 'Schedule C-1',
+  LOAN_AGREEMENTS = 'LOAN AGGREEMENTS',
 }
 
-export type ScheduleC1TransactionGroupsType = ScheduleC1TransactionGroups.SCHEDULE_C1;
+export type ScheduleC1TransactionGroupsType = ScheduleC1TransactionGroups.LOAN_AGREEMENTS;
 
 export enum ScheduleC1TransactionTypes {
   C1_LOAN_AGREEMENT = 'C1_LOAN_AGREEMENT',
