@@ -18,8 +18,6 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { LOAN_RECEIVED_FROM_INDIVIDUAL } from 'app/shared/models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL.model';
 
 let testTransaction: SchATransaction;
 
@@ -98,7 +96,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
     component.transaction.parent_transaction = testTransaction;
     component.ngOnInit();
-    expect(component.transaction.contact_1?.street_1).toBe('testStreet1');
+    expect(component.transaction.contact_1?.street_1).toBe('123 Main St');
     expect(component.transaction.contact_1_id).toBe('testId');
   });
 });
