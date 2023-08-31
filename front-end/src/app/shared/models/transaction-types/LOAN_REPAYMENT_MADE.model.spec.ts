@@ -21,6 +21,7 @@ describe('LOAN_REPAYMENT_MADE', () => {
   });
 
   it('#generatePurposeDescription() should be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toBe('Loan Repayment');
+    const descrip = transactionType.generatePurposeDescription();
+    expect(descrip).toBe('Loan Repayment');
   });
 });
