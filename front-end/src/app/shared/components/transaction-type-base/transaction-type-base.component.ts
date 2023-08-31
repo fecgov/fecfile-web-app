@@ -322,7 +322,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form.get('entity_type')?.updateValueAndValidity();
 
       this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
-        if (this.transaction && this.transaction.parent_transaction) {
+        if (this.transaction?.parent_transaction) {
           const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
           const value =
             this.transaction.parent_transaction[

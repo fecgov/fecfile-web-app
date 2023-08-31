@@ -100,4 +100,11 @@ describe('TransactionReceiptsComponent', () => {
     component.createLoanRepaymentReceived(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
+
+  it('test createLoanRepaymentMade', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    component.createLoanRepaymentMade(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
 });
