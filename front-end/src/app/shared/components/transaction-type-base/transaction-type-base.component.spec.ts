@@ -96,7 +96,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
     component.transaction.parent_transaction = testTransaction;
     component.ngOnInit();
-    expect(component.transaction.contact_1?.street_1).toBe('123 Main St');
+    expect(component.transaction.contact_1?.street_1).toBe('testStreet1');
     expect(component.transaction.contact_1_id).toBe('testId');
   });
 });
