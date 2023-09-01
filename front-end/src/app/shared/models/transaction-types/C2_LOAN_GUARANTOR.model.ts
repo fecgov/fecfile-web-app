@@ -47,6 +47,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   override hasAmountInput = true;
   override hasAdditionalInfo = false;
   override showAggregate = false;
+  override contactLookupLabel = 'GUARANTOR LOOKUP';
 
   getNewTransaction() {
     return SchC2Transaction.fromJSON({
