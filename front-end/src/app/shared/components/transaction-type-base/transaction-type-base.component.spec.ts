@@ -94,9 +94,11 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('inherited fields should use the parent transaction to initialize the form values', () => {
     component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
-    component.transaction.parent_transaction = testTransaction;
+    component.transaction.parent_transaction = testIndividualReceipt;
+    if (component.transaction.parent_transaction.contact_1)
+      component.transaction.parent_transaction.contact_1.street_1 = 'Parent Street 1';
     component.ngOnInit();
-    expect(component.transaction.contact_1?.street_1).toBe('testStreet1');
+    expect(component.transaction.contact_1?.street_1).toBe('Parent Street 1');
     expect(component.transaction.contact_1_id).toBe('testId');
   });
 });
