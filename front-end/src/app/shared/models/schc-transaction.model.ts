@@ -45,6 +45,15 @@ export class SchCTransaction extends Transaction {
 
   aggregation_group: AggregationGroups | undefined;
 
+  // loan_payment_to_date and loan_balance are dynamically calculated on the back-end
+  // and not saved in the database
+  override getFieldsNotToValidate(): string[] {
+    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToValidate()];
+  }
+  override getFieldsNotToSave(): string[] {
+    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToSave()];
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchCTransaction {
     const transaction = plainToClass(SchCTransaction, json);
