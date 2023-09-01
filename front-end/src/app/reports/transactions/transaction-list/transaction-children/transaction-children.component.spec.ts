@@ -131,7 +131,6 @@ describe('TransactionChildrenComponent', () => {
     };
 
     component.sortMethod(event$);
-    console.log(event$);
     expect(event$.data[0].amount).toEqual(1);
     expect(event$.data[1].amount).toEqual(4);
     expect(event$.data[2].amount).toEqual(7);

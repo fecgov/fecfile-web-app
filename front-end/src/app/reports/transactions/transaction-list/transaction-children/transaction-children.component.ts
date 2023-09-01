@@ -12,7 +12,6 @@ import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transacti
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
 
 @Component({
   selector: 'app-transaction-children',
@@ -60,8 +59,6 @@ export class TransactionChildrenComponent extends TransactionListTableBaseCompon
         return true;
       }
     });
-
-    console.log(this.transactions, typeof this.transactions?.[0]);
   }
 
   override onRowsPerPageChange(): void {
