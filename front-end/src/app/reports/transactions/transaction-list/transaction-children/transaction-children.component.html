@@ -30,9 +30,11 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th pSortableColumn="name" id="name-column" role="columnheader">Name <p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" id="name-column" role="columnheader">
+          {{ nameHeader }} <p-sortIcon field="name"></p-sortIcon>
+        </th>
         <th pSortableColumn="amount" id="amount-column" role="columnheader">
-          Amount <p-sortIcon field="amount"></p-sortIcon>
+          {{ amountHeader }} <p-sortIcon field="amount"></p-sortIcon>
         </th>
         <th id="buttons" role="columnheader">Actions</th>
       </tr>

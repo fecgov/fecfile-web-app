@@ -21,6 +21,10 @@ import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transacti
 export class TransactionChildrenComponent extends TransactionListTableBaseComponent implements OnInit {
   @Input() transactions?: Transaction[];
   @Input() tableLabel = 'Children';
+
+  nameHeader = 'Name';
+  amountHeader = 'Amount';
+
   // eslint-disable-next-line @typescript-eslint/ban-types
   scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleATransactionTypeLabels,

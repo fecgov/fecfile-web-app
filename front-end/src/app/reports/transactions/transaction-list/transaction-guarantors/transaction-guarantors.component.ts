@@ -10,6 +10,7 @@ import { ScheduleC2TransactionTypes } from 'app/shared/models/schc2-transaction.
 })
 export class TransactionGuarantorsComponent extends TransactionChildrenComponent implements OnInit {
   override tableLabel = 'Guarantors';
+  override amountHeader = 'Guaranteed financial information amount';
 
   public override transactionFilter(transaction: Transaction): boolean {
     return transaction.transaction_type_identifier === ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR;
