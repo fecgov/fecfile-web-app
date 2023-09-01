@@ -13,13 +13,15 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_SINGLE_CONTACT } from '../contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { NavigationControl } from '../transaction-navigation-controls.model';
-import { NavigationAction } from '../transaction-navigation-controls.model';
-import { NavigationDestination } from '../transaction-navigation-controls.model';
+import {
+  TransactionNavigationControls,
+  NavigationControl,
+  NavigationAction,
+  NavigationDestination,
+  CANCEL_CONTROL,
+  SAVE_LIST_CONTROL,
+} from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
-import { CANCEL_CONTROL } from '../transaction-navigation-controls.model';
-import { SAVE_LIST_CONTROL } from '../transaction-navigation-controls.model';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
