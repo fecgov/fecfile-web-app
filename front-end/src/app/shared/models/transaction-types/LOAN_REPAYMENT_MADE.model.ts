@@ -5,14 +5,15 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ORG_FIELDS,
-  CORE_FIELDS,
+  ADDRESS_FIELDS,
+  COMMON_FIELDS,
   INDIVIDUAL_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 import { TemplateMapKeyType } from '../transaction-type.model';
 
 export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
-  formFields = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
+  formFields = [...ADDRESS_FIELDS, ...COMMON_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
   contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
   schema = schema;
