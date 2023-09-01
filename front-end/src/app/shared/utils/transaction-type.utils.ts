@@ -169,6 +169,7 @@ import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/tra
 import { LOAN_MADE } from '../models/transaction-types/LOAN_MADE.model';
 import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
 import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE.model';
+import { LOAN_REPAYMENT_MADE } from '../models/transaction-types/LOAN_REPAYMENT_MADE.model';
 
 // Schedule C /////////////////////////////////////////////////////
 
@@ -355,6 +356,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
   LOAN_MADE,
+  LOAN_REPAYMENT_MADE,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
   LOAN_RECEIVED_FROM_BANK,
