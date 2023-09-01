@@ -10,12 +10,12 @@ describe('C2_LOAN_GUARANTOR', () => {
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('C1');
+    expect(transactionType.scheduleId).toBe('C2');
   });
 
-  it('#factory() should return a SchATransaction', () => {
+  it('#factory() should return a SchC2Transaction', () => {
     const transaction: SchC2Transaction = transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SC1/10');
+    expect(transaction.form_type).toBe('SC2/10');
     expect(transaction.transaction_type_identifier).toBe(ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
   });
 
