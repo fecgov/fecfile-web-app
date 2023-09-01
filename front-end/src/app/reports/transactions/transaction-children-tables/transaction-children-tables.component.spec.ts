@@ -10,16 +10,14 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
-import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
+import { TransactionChildrenTablesComponent } from './transaction-children-tables.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
-describe('TransactionGuarantorsComponent', () => {
-  let fixture: ComponentFixture<TransactionGuarantorsComponent>;
-  let component: TransactionGuarantorsComponent;
+describe('TransactionChildrenTablesComponent', () => {
+  let fixture: ComponentFixture<TransactionChildrenTablesComponent>;
+  let component: TransactionChildrenTablesComponent;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let router: Router;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,7 +26,7 @@ describe('TransactionGuarantorsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
-      declarations: [TransactionGuarantorsComponent],
+      declarations: [TransactionChildrenTablesComponent],
       providers: [
         MessageService,
         ConfirmationService,
@@ -65,7 +63,7 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionGuarantorsComponent);
+    fixture = TestBed.createComponent(TransactionChildrenTablesComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
     component = fixture.componentInstance;
@@ -74,29 +72,5 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should filter to only the loan guarantors', () => {
-    component.transactions = [
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
-      }),
-    ];
-    fixture.detectChanges();
-    component.ngOnInit();
-
-    expect(component.transactions?.length).toEqual(1);
-    expect(component.transactions?.[0]?.transaction_type_identifier).toEqual(
-      ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO
-    );
   });
 });

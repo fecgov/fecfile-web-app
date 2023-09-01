@@ -32,7 +32,7 @@ import { TransactionInputComponent } from './transaction-input/transaction-input
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 import { TransactionChildrenComponent } from './transaction-list/transaction-children/transaction-children.component';
 import { TransactionGuarantorsComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
-import { TransactionChildrenTablesComponent } from './transaction-children-tables/transaction-children-tables';
+import { TransactionChildrenTablesComponent } from './transaction-children-tables/transaction-children-tables.component';
 
 @NgModule({
   declarations: [
