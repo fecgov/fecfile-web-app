@@ -22,6 +22,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
+  showDate = true;
+  showMemo = true;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
@@ -31,6 +33,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.contributionAmountReadOnly) {
       this.contributionAmountInputStyleClass = 'readonly';
     }
+    this.showDate = !!this.transaction?.transactionType.hasDate();
+    this.showMemo = !!this.transaction?.transactionType.hasMemoCode();
   }
 
   ngOnChanges(): void {

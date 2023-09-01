@@ -151,6 +151,12 @@ export abstract class TransactionType {
   hasCategoryCode(): boolean {
     return hasFields(this.formFields, CATEGORY_CODE);
   }
+  hasDate(): boolean {
+    return hasFields(this.formFields, ['date']);
+  }
+  hasMemoCode(): boolean {
+    return hasFields(this.formFields, ['memo_code']);
+  }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
   hasSignature1 = false;

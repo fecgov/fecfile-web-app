@@ -3,7 +3,7 @@ import { TransactionType, TransactionTemplateMapType } from './transaction-type.
 export abstract class SchC2TransactionType extends TransactionType {
   scheduleId = 'C2';
   apiEndpoint = '/transactions/schedule-c2';
-  override amountInputHeader = 'Loan information';
+  override amountInputHeader = 'Guaranteed financial information';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
