@@ -30,9 +30,9 @@ import { TransactionTypePickerComponent } from './transaction-type-picker/transa
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionInputComponent } from './transaction-input/transaction-input.component';
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
-import { TransactionChildrenComponent } from './transaction-list/transaction-children/transaction-children.component';
+import { TransactionChildrenComponent } from './transaction-list/transaction-children-list-table-base.component';
 import { TransactionGuarantorsComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
-import { TransactionChildrenTablesComponent } from './transaction-children-tables/transaction-children-tables.component';
+import { TransactionChildrenListContainerComponent } from './transaction-children-list-container/transaction-children-list-container.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { TransactionChildrenTablesComponent } from './transaction-children-table
     MemoCodePipe,
     TransactionReceiptsComponent,
     TransactionChildrenComponent,
-    TransactionChildrenTablesComponent,
+    TransactionChildrenListContainerComponent,
     TransactionGuarantorsComponent,
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,

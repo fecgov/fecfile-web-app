@@ -10,7 +10,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
-import { TransactionChildrenComponent } from './transaction-children.component';
+import { TransactionChildrenComponent } from './transaction-children-list-table-base.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';

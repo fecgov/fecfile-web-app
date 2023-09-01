@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
+import { TransactionListTableBaseComponent } from './transaction-list-table-base.component';
 import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -14,9 +14,8 @@ import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transacti
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 
 @Component({
-  selector: 'app-transaction-children',
-  templateUrl: './transaction-children.component.html',
-  styleUrls: ['../../transaction.scss'],
+  template: '',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionChildrenComponent extends TransactionListTableBaseComponent implements OnInit {
   @Input() transactions?: Transaction[];

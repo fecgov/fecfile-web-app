@@ -10,19 +10,19 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
-import { TransactionChildrenTablesComponent } from './transaction-children-tables.component';
+import { TransactionChildrenListContainerComponent } from './transaction-children-list-container.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
-describe('TransactionChildrenTablesComponent', () => {
-  let fixture: ComponentFixture<TransactionChildrenTablesComponent>;
-  let component: TransactionChildrenTablesComponent;
+describe('TransactionChildrenListContainerComponent', () => {
+  let fixture: ComponentFixture<TransactionChildrenListContainerComponent>;
+  let component: TransactionChildrenListContainerComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
-      declarations: [TransactionChildrenTablesComponent],
+      declarations: [TransactionChildrenListContainerComponent],
       providers: [
         MessageService,
         ConfirmationService,
@@ -59,7 +59,7 @@ describe('TransactionChildrenTablesComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionChildrenTablesComponent);
+    fixture = TestBed.createComponent(TransactionChildrenListContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

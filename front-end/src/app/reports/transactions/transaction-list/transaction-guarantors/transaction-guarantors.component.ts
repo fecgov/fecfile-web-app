@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { TransactionChildrenComponent } from '../transaction-children/transaction-children.component';
+import { TransactionChildrenComponent } from '../transaction-children-list-table-base.component';
 import { ScheduleC2TransactionTypes } from 'app/shared/models/schc2-transaction.model';
 
 @Component({
   selector: 'app-transaction-guarantors',
-  templateUrl: '../transaction-children/transaction-children.component.html',
+  templateUrl: './transaction-guarantors.component.html',
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionGuarantorsComponent extends TransactionChildrenComponent implements OnInit {
