@@ -79,7 +79,7 @@ export class SchETransaction extends Transaction {
 }
 
 export enum ScheduleETransactionGroups {
-  INDEPENDENT_EXPENDITURES = 'INDEPENDENT_EXPENDITURES',
+  INDEPENDENT_EXPENDITURES = 'INDEPENDENT EXPENDITURES',
 }
 
 export type ScheduleETransactionGroupsType = ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES;

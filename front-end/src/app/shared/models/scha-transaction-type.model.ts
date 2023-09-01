@@ -43,6 +43,8 @@ export abstract class SchATransactionType extends TransactionType {
     payment_to_date: '',
     interest_rate: '',
     due_date: '',
+    interest_rate_setting: '',
+    due_date_setting: '',
     secured: '',
     aggregate: 'contribution_aggregate',
     purpose_description: 'contribution_purpose_descrip',

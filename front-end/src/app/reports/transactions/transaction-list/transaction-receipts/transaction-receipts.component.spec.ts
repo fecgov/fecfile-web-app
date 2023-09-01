@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
@@ -21,6 +21,8 @@ describe('TransactionReceiptsComponent', () => {
   let component: TransactionReceiptsComponent;
   let router: Router;
   let testItemService: TransactionSchAService;
+  let testConfirmationService: ConfirmationService;
+  let confirmSpy: jasmine.Spy;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -59,13 +61,15 @@ describe('TransactionReceiptsComponent', () => {
         },
       ],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
+    testConfirmationService = TestBed.inject(ConfirmationService);
     component = fixture.componentInstance;
+    confirmSpy = spyOn(testConfirmationService, 'confirm');
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) return confirmation?.accept();
+    });
     fixture.detectChanges();
   });
 
@@ -89,19 +93,21 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[3].isEnabled({})).toEqual(true);
   });
 
-  it('test forceItemize', () => {
+  it('test forceItemize', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceItemize(testTransaction);
+    tick(500);
     expect(testTransaction.force_itemized).toBe(true);
-  });
+  }));
 
-  it('test forceUnitemize', () => {
+  it('test forceUnitemize', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceUnitemize(testTransaction);
+    tick(500);
     expect(testTransaction.force_itemized).toBe(false);
-  });
+  }));
 
   it('test editItem', () => {
     const navigateSpy = spyOn(router, 'navigate');

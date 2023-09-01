@@ -31,4 +31,11 @@
   <app-transaction-loans-and-debts></app-transaction-loans-and-debts>
 </div>
 
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog #cd [style]="{ width: '450px' }">
+  <ng-template pTemplate="footer">
+    <span class="confirm-footer">
+      <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
+      <button type="button" pButton label="Confirm" (click)="cd.accept()"></button>
+    </span>
+  </ng-template>
+</p-confirmDialog>

@@ -9,8 +9,9 @@ import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 
 @Component({
   template: '',
@@ -38,13 +39,21 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === false && this.reportIsEditable,
+      (transaction: Transaction) =>
+        transaction.itemized === false &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id,
       () => true
     ),
     new TableAction(
       'Unitemize',
       this.forceUnitemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === true && this.reportIsEditable,
+      (transaction: Transaction) =>
+        transaction.itemized === true &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id,
       () => true
     ),
     new TableAction(
@@ -59,6 +68,16 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       this.editSecondChild.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+      () => true
+    ),
+    new TableAction(
+      'Make loan repayment',
+      this.createLoanRepaymentMade.bind(this),
+      (transaction: Transaction) =>
+        [
+          ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
+          ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+        ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable,
       () => true
     ),
   ];
@@ -124,17 +143,34 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public forceItemize(transaction: Transaction): void {
-    transaction.force_itemized = true;
-    this.updateItem(transaction);
+    this.forceItemization(transaction, true);
   }
 
   public forceUnitemize(transaction: Transaction): void {
-    transaction.force_itemized = false;
-    this.updateItem(transaction);
+    this.forceItemization(transaction, false);
   }
+
+  public forceItemization(transaction: Transaction, itemized: boolean) {
+    this.confirmationService.confirm({
+      message:
+        'Changing the itemization status of this transaction will affect its associated transactions (such as memos).',
+      header: 'Heads up!',
+      accept: () => {
+        transaction.force_itemized = itemized;
+        this.updateItem(transaction);
+      },
+    });
+  }
+
   public createLoanRepaymentReceived(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
+    );
+  }
+
+  public createLoanRepaymentMade(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}`
     );
   }
 

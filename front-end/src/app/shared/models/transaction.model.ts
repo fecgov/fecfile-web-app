@@ -5,7 +5,7 @@ import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsT
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
 import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { ValidateUtils } from '../utils/validate.utils';
 import {
   SchC1Transaction,
@@ -24,6 +24,7 @@ export abstract class Transaction extends BaseModel {
   id: string | undefined;
 
   @Type(() => TransactionType)
+  @Exclude({ toPlainOnly: true })
   transactionType: TransactionType = {} as TransactionType;
 
   // FECFile spec properties

@@ -169,6 +169,7 @@ import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/tra
 import { LOAN_MADE } from '../models/transaction-types/LOAN_MADE.model';
 import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
 import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE.model';
+import { LOAN_REPAYMENT_MADE } from '../models/transaction-types/LOAN_REPAYMENT_MADE.model';
 
 // Schedule C /////////////////////////////////////////////////////
 
@@ -179,6 +180,10 @@ import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE
 // Schedule C1 ////////////////////////////////////////////////////
 
 import { C1_LOAN_AGREEMENT } from '../models/transaction-types/C1_LOAN_AGREEMENT.model';
+
+// Schedule C2 ////////////////////////////////////////////////////
+
+import { C2_LOAN_GUARANTOR } from '../models/transaction-types/C2_LOAN_GUARANTOR.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -351,12 +356,15 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
   LOAN_MADE,
+  LOAN_REPAYMENT_MADE,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
   LOAN_RECEIVED_FROM_BANK,
   LOAN_BY_COMMITTEE,
   // Schedule C1 ////////////////////////////////////////////////////
   C1_LOAN_AGREEMENT,
+  // Schedule C2 ////////////////////////////////////////////////////
+  C2_LOAN_GUARANTOR,
 }
 
 export class TransactionTypeUtils {
