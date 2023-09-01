@@ -60,4 +60,8 @@ export class TransactionChildrenComponent extends TransactionListTableBaseCompon
       }
     });
   }
+
+  override onRowsPerPageChange(): void {
+    return;
+  }
 }
