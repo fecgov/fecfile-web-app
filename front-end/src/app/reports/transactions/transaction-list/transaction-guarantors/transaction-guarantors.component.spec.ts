@@ -16,6 +16,7 @@ import { TransactionSchAService } from 'app/shared/services/transaction-schA.ser
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { SchC2Transaction, ScheduleC2TransactionTypes } from 'app/shared/models/schc2-transaction.model';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -84,13 +85,16 @@ describe('TransactionGuarantorsComponent', () => {
       SchATransaction.fromJSON({
         transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
       }),
+      SchC2Transaction.fromJSON({
+        transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
+      }),
     ];
     fixture.detectChanges();
     component.ngOnInit();
 
     expect(component.transactions?.length).toEqual(1);
     expect(component.transactions?.[0]?.transaction_type_identifier).toEqual(
-      ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO
+      ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR
     );
   });
 });

@@ -12,6 +12,7 @@ import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transacti
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction-type.model';
 
 @Component({
   selector: 'app-transaction-children',
@@ -59,9 +60,45 @@ export class TransactionChildrenComponent extends TransactionListTableBaseCompon
         return true;
       }
     });
+
+    console.log(this.transactions, typeof this.transactions?.[0]);
   }
 
   override onRowsPerPageChange(): void {
     return;
+  }
+
+  override editItem(item: Transaction) {
+    this.router.navigateByUrl(`reports/transactions/report/${item.report_id}/list/${item.id}`);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sortMethod(event$: any) {
+    let transactions = (event$.data ?? []) as Transaction[];
+    if (event$.field === 'name') {
+      transactions = transactions.sort((a, b) => {
+        const nameA = a.contact_1?.name ?? `${a.contact_1?.last_name}, ${a.contact_1?.first_name}`;
+        const nameB = b.contact_1?.name ?? `${b.contact_1?.last_name}, ${b.contact_1?.first_name}`;
+        if (nameA < nameB) {
+          return -1;
+        } else if (nameA > nameB) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if (event$.field === 'amount') {
+      transactions = transactions.sort((a, b) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (a as any).amount - (b as any).amount;
+      });
+    }
+
+    if (event$.order === -1) {
+      transactions = transactions.reverse();
+    }
+
+    //Modify the event data in place in order to alter the sorting.
+    event$.data = transactions;
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { TransactionChildrenComponent } from '../transaction-children/transaction-children.component';
+import { ScheduleC2TransactionTypes } from 'app/shared/models/schc2-transaction.model';
 
 @Component({
   selector: 'app-transaction-guarantors',
@@ -12,6 +12,6 @@ export class TransactionGuarantorsComponent extends TransactionChildrenComponent
   override tableLabel = 'Guarantors';
 
   public override transactionFilter(transaction: Transaction): boolean {
-    return transaction.transaction_type_identifier === ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO;
+    return transaction.transaction_type_identifier === ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR;
   }
 }
