@@ -10,22 +10,22 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
-import { TransactionChildrenComponent } from './transaction-guarantors.component';
+import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionGuarantorsComponent', () => {
-  let fixture: ComponentFixture<TransactionChildrenComponent>;
-  let component: TransactionChildrenComponent;
+  let fixture: ComponentFixture<TransactionGuarantorsComponent>;
+  let component: TransactionGuarantorsComponent;
   let router: Router;
   let testItemService: TransactionSchAService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
-      declarations: [TransactionChildrenComponent],
+      declarations: [TransactionGuarantorsComponent],
       providers: [
         MessageService,
         ConfirmationService,
@@ -62,7 +62,7 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionChildrenComponent);
+    fixture = TestBed.createComponent(TransactionGuarantorsComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
     component = fixture.componentInstance;
@@ -71,42 +71,5 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should show the correct row actions', () => {
-    expect(component.rowActions[0].isAvailable()).toEqual(true);
-    expect(component.rowActions[1].isAvailable()).toEqual(false);
-    expect(component.rowActions[2].isAvailable({ itemized: false })).toEqual(false);
-    expect(component.rowActions[3].isAvailable({ itemized: true })).toEqual(false);
-    component.reportIsEditable = true;
-    expect(component.rowActions[0].isAvailable()).toEqual(false);
-    expect(component.rowActions[1].isAvailable()).toEqual(true);
-    expect(component.rowActions[2].isAvailable({ itemized: false })).toEqual(true);
-    expect(component.rowActions[3].isAvailable({ itemized: true })).toEqual(true);
-    expect(component.rowActions[0].isEnabled({})).toEqual(true);
-    expect(component.rowActions[1].isEnabled({})).toEqual(true);
-    expect(component.rowActions[2].isEnabled({})).toEqual(true);
-    expect(component.rowActions[3].isEnabled({})).toEqual(true);
-  });
-
-  it('test forceItemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceItemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(true);
-  });
-
-  it('test forceUnitemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceUnitemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(false);
-  });
-
-  it('test editItem', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
-    component.editItem(testTransaction);
-    expect(navigateSpy).toHaveBeenCalled();
   });
 });

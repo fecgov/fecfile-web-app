@@ -8,7 +8,7 @@ import { TransactionChildrenComponent } from '../transaction-children/transactio
   templateUrl: '../transaction-children/transaction-children.component.html',
   styleUrls: ['../../transaction.scss'],
 })
-export class TransactionGuarantorComponent extends TransactionChildrenComponent implements OnInit {
+export class TransactionGuarantorsComponent extends TransactionChildrenComponent implements OnInit {
   override tableLabel = 'Guarantors';
 
   public override transactionFilter(transaction: Transaction): boolean {

@@ -31,7 +31,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionInputComponent } from './transaction-input/transaction-input.component';
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 import { TransactionChildrenComponent } from './transaction-list/transaction-children/transaction-children.component';
-import { TransactionGuarantorComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
+import { TransactionGuarantorsComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
 import { TransactionChildrenTablesComponent } from './transaction-children-tables/transaction-children-tables';
 
 @NgModule({
@@ -46,7 +46,7 @@ import { TransactionChildrenTablesComponent } from './transaction-children-table
     TransactionReceiptsComponent,
     TransactionChildrenComponent,
     TransactionChildrenTablesComponent,
-    TransactionGuarantorComponent,
+    TransactionGuarantorsComponent,
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,
