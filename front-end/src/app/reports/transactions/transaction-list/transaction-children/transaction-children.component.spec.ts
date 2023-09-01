@@ -13,13 +13,16 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TransactionChildrenComponent } from './transaction-children.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 describe('TransactionChildrenComponent', () => {
   let fixture: ComponentFixture<TransactionChildrenComponent>;
   let component: TransactionChildrenComponent;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let router: Router;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let testItemService: TransactionSchAService;
 
   beforeEach(async () => {
@@ -71,5 +74,26 @@ describe('TransactionChildrenComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should not filter out any transactions', () => {
+    component.transactions = [
+      SchATransaction.fromJSON({
+        transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+      }),
+      SchATransaction.fromJSON({
+        transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,
+      }),
+      SchATransaction.fromJSON({
+        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
+      }),
+      SchATransaction.fromJSON({
+        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
+      }),
+    ];
+    fixture.detectChanges();
+    component.ngOnInit();
+
+    expect(component.transactions?.length).toEqual(4);
   });
 });
