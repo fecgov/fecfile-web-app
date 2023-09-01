@@ -18,10 +18,6 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 describe('TransactionChildrenTablesComponent', () => {
   let fixture: ComponentFixture<TransactionChildrenTablesComponent>;
   let component: TransactionChildrenTablesComponent;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let router: Router;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let testItemService: TransactionSchAService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,8 +60,6 @@ describe('TransactionChildrenTablesComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionChildrenTablesComponent);
-    router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchAService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

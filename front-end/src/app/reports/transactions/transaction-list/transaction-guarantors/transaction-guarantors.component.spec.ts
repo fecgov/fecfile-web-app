@@ -20,10 +20,6 @@ import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.mo
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
   let component: TransactionGuarantorsComponent;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let router: Router;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let testItemService: TransactionSchAService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -66,8 +62,6 @@ describe('TransactionGuarantorsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGuarantorsComponent);
-    router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchAService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

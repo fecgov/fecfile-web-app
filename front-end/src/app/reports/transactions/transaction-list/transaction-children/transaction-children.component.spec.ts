@@ -20,10 +20,6 @@ import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.mo
 describe('TransactionChildrenComponent', () => {
   let fixture: ComponentFixture<TransactionChildrenComponent>;
   let component: TransactionChildrenComponent;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let router: Router;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let testItemService: TransactionSchAService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -66,8 +62,6 @@ describe('TransactionChildrenComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionChildrenComponent);
-    router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchAService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
