@@ -188,7 +188,7 @@ describe('Transactions', () => {
       .find('td')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Attribution');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('not.contain', 'Unitemized');
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Unitemized');
     cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
     cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$201.10');
 
@@ -593,7 +593,7 @@ describe('Transactions', () => {
       .find('td')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Receipt Joint Fundraising Transfer Memo');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Unitemized');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('not.contain', 'Unitemized');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
 

@@ -180,6 +180,10 @@ import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE
 
 import { C1_LOAN_AGREEMENT } from '../models/transaction-types/C1_LOAN_AGREEMENT.model';
 
+// Schedule C2 ////////////////////////////////////////////////////
+
+import { C2_LOAN_GUARANTOR } from '../models/transaction-types/C2_LOAN_GUARANTOR.model';
+
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
   // Schedule A /////////////////////////////////////////////////////
@@ -357,6 +361,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   LOAN_BY_COMMITTEE,
   // Schedule C1 ////////////////////////////////////////////////////
   C1_LOAN_AGREEMENT,
+  // Schedule C2 ////////////////////////////////////////////////////
+  C2_LOAN_GUARANTOR,
 }
 
 export class TransactionTypeUtils {

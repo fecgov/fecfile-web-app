@@ -3,10 +3,10 @@ import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLab
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { COMMITTEE, CORE_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMON_FIELDS, ADDRESS_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_MADE extends SchBTransactionType {
-  override formFields = [...CORE_FIELDS, 'organization_name', 'committee_fec_id'];
+  override formFields = [...COMMON_FIELDS, ...ADDRESS_FIELDS, 'organization_name', 'committee_fec_id'];
   contactTypeOptions = COMMITTEE;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_MADE);

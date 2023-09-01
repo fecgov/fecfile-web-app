@@ -11,19 +11,26 @@ import {
   NavigationDestination,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
-  CORE_FIELDS,
+  COMMON_FIELDS,
+  ADDRESS_FIELDS,
   ORG_FIELDS,
   ORGANIZATION,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { ScheduleC1TransactionTypes } from '../schc1-transaction.model';
+import { ScheduleC2TransactionTypes } from '../schc2-transaction.model';
 
 export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
-  override formFields = [...CORE_FIELDS, ...ORG_FIELDS, ...LOAN_FINANCE_FIELDS, ...LOAN_TERMS_FIELDS];
+  override formFields = [
+    ...COMMON_FIELDS,
+    ...ADDRESS_FIELDS,
+    ...ORG_FIELDS,
+    ...LOAN_FINANCE_FIELDS,
+    ...LOAN_TERMS_FIELDS,
+  ];
   contactTypeOptions = ORGANIZATION;
   override hasAmountInput = false;
   override doMemoCodeDateCheck = false;
@@ -46,13 +53,13 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
     ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
     ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
   ];
-  override subTransactionConfig = new SubTransactionGroup('Guarantors', []);
+  override subTransactionConfig = [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR];
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
         NavigationDestination.CHILD,
-        'Add loan guarantor',
+        'Save & add loan guarantor',
         'p-button-warning',
         hasNoContact,
         () => true,

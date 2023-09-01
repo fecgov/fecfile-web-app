@@ -149,6 +149,12 @@ export abstract class TransactionType {
   hasLoanTermsFields(): boolean {
     return hasFields(this.formFields, LOAN_TERMS_FIELDS);
   }
+  hasDate(): boolean {
+    return hasFields(this.formFields, ['date']);
+  }
+  hasMemoCode(): boolean {
+    return hasFields(this.formFields, ['memo_code']);
+  }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
   hasSignature1 = false;
@@ -193,7 +199,9 @@ export type TransactionTemplateMapType = {
   balance: string;
   payment_to_date: string;
   due_date: string;
+  due_date_setting: string;
   interest_rate: string;
+  interest_rate_setting: string;
   secured: string;
   aggregate: string;
   purpose_description: string;
