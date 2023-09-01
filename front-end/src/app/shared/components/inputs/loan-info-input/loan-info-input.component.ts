@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { Component, Input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 
