@@ -90,4 +90,58 @@ describe('TransactionChildrenComponent', () => {
 
     expect(component.transactions?.length).toEqual(4);
   });
+
+  it('should sort by name', () => {
+    const event$ = {
+      data: [
+        { contact_1: { first_name: 'A', last_name: 'Z' } },
+        { contact_1: { first_name: 'Z', last_name: 'Z' } },
+        { contact_1: { first_name: 'A', last_name: 'A' } },
+        { contact_1: { name: 'A, Z' } },
+      ],
+      field: 'name',
+      order: 1,
+    };
+
+    component.sortMethod(event$);
+    expect(event$.data[0].contact_1.last_name).toEqual('A');
+    expect(event$.data[0].contact_1.first_name).toEqual('A');
+    expect(event$.data[1].contact_1.name).toEqual('A, Z');
+    expect(event$.data[2].contact_1.last_name).toEqual('Z');
+    expect(event$.data[2].contact_1.first_name).toEqual('A');
+    expect(event$.data[3].contact_1.last_name).toEqual('Z');
+    expect(event$.data[3].contact_1.first_name).toEqual('Z');
+
+    event$.order = -1;
+    component.sortMethod(event$);
+    expect(event$.data[3].contact_1.last_name).toEqual('A');
+    expect(event$.data[3].contact_1.first_name).toEqual('A');
+    expect(event$.data[2].contact_1.name).toEqual('A, Z');
+    expect(event$.data[1].contact_1.last_name).toEqual('Z');
+    expect(event$.data[1].contact_1.first_name).toEqual('A');
+    expect(event$.data[0].contact_1.last_name).toEqual('Z');
+    expect(event$.data[0].contact_1.first_name).toEqual('Z');
+  });
+
+  it('should sort by amount', () => {
+    const event$ = {
+      data: [{ amount: 10 }, { amount: 1 }, { amount: 7 }, { amount: 4 }],
+      field: 'amount',
+      order: 1,
+    };
+
+    component.sortMethod(event$);
+    console.log(event$);
+    expect(event$.data[0].amount).toEqual(1);
+    expect(event$.data[1].amount).toEqual(4);
+    expect(event$.data[2].amount).toEqual(7);
+    expect(event$.data[3].amount).toEqual(10);
+
+    event$.order = -1;
+    component.sortMethod(event$);
+    expect(event$.data[0].amount).toEqual(10);
+    expect(event$.data[1].amount).toEqual(7);
+    expect(event$.data[2].amount).toEqual(4);
+    expect(event$.data[3].amount).toEqual(1);
+  });
 });
