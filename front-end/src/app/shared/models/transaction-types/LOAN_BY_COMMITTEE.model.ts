@@ -46,6 +46,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     'The information in this loan will automatically create a related disbursement. Review the disbursement; enter a purpose of disbursement or note/memo text; or continue without reviewing and “Save transactions.”';
   override contactTitle = 'Lendee';
   override contactLookupLabel = 'LENDEE LOOKUP';
+  override showGuarantorTable = true;
 
   schema = schema;
   override apiEndpoint = '/transactions/save';

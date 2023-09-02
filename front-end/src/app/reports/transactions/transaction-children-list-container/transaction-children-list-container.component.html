@@ -1,0 +1,3 @@
+<ng-container *ngIf="transaction?.transactionType?.showGuarantorTable">
+  <app-transaction-guarantors [transactions]="transaction?.children"></app-transaction-guarantors>
+</ng-container>
