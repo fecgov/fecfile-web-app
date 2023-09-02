@@ -73,6 +73,15 @@ export abstract class Transaction extends BaseModel {
   schema_name: string | undefined;
 
   /**
+   * Some fields, such as ones in the spec but calculated by the backend, are listed
+   * here so we don't try to save them to the database in the backend.
+   * @returns list of property fields of the model not to send to the backend and not saved to the database
+   */
+  getFieldsNotToSave(): string[] {
+    return [];
+  }
+
+  /**
    * Perform bookkeeping updates to the transaction when it is created via fromJSON()
    * We have to pass the transactionType instead of getting from TransactonTypeUtils
    * in the method because that throw the error:

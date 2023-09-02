@@ -17,6 +17,7 @@ import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-tr
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 let testTransaction: SchATransaction;
 
@@ -89,5 +90,15 @@ describe('TransactionTypeBaseComponent', () => {
 
     component.form.patchValue({ contribution_amount: 2 });
     expect(component.form.get('contribution_amount')?.value).toBe(-2);
+  });
+
+  it('inherited fields should use the parent transaction to initialize the form values', () => {
+    component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
+    component.transaction.parent_transaction = testIndividualReceipt;
+    if (component.transaction.parent_transaction.contact_1)
+      component.transaction.parent_transaction.contact_1.street_1 = 'Parent Street 1';
+    component.ngOnInit();
+    expect(component.transaction.contact_1?.street_1).toBe('Parent Street 1');
+    expect(component.transaction.contact_1_id).toBe('testId');
   });
 });
