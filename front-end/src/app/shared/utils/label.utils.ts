@@ -251,4 +251,7 @@ export const LineIdentifierLabels: LabelList = [
   // Schedule C
   ['SC/10', '10'],
   ['SC/9', '9'],
+  // Schedule D
+  ['SD9', '9'],
+  ['SD10', '10'],
 ];
