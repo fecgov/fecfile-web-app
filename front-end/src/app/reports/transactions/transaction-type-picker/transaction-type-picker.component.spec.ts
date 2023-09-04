@@ -11,8 +11,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { of } from 'rxjs';
 import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionGroups } from 'app/shared/models/schc-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleCTransactionGroups, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
@@ -61,7 +60,6 @@ describe('TransactionTypePickerComponent', () => {
 
   it('should change for loans and debts category', () => {
     component.category = 'loans-and-debts';
-    // fixture.detectChanges();
     const groups = component.getTransactionGroups();
     expect(groups[0]).toBe(ScheduleCTransactionGroups.LOANS);
 
