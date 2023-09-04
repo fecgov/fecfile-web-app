@@ -66,6 +66,8 @@ export class TransactionContactLookupComponent {
     typeFormControl?.disable();
     this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
     this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
+    // Fixes bug where the form fields would all have 'required:true' errors when the contact form is opened
+    this.createContactForm.reset();
     this.createContactDialogVisible = true;
   }
 
