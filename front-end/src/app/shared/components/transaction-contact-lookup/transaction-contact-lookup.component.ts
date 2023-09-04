@@ -66,6 +66,11 @@ export class TransactionContactLookupComponent {
     typeFormControl?.disable();
     this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
     this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
+    // Ensure invalid form elements are reset to valid when form opened
+    this.createContactForm.reset();
+    for (const controlName of Object.keys(this.createContactForm.controls)) {
+      this.createContactForm.get(controlName)?.setErrors(null);
+    }
     this.createContactDialogVisible = true;
   }
 
