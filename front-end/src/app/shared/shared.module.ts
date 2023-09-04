@@ -48,6 +48,7 @@ import { LoanTermsDatesInputComponent } from './components/inputs/loan-terms-dat
 import { LoanAgreementInputComponent } from './components/inputs/loan-agreement-input/loan-agreement-input.component';
 import { SignatureInputComponent } from './components/inputs/signature-input/signature-input.component';
 import { YesNoRadioInputComponent } from './components/inputs/yes-no-radio-input/yes-no-radio-input.component';
+import { DebtInputComponent } from './components/inputs/debt-input/debt-input.component';
 
 @NgModule({
   imports: [
@@ -106,6 +107,7 @@ import { YesNoRadioInputComponent } from './components/inputs/yes-no-radio-input
     LoanAgreementInputComponent,
     SignatureInputComponent,
     YesNoRadioInputComponent,
+    DebtInputComponent,
   ],
   exports: [
     FecDatePipe,
@@ -139,6 +141,7 @@ import { YesNoRadioInputComponent } from './components/inputs/yes-no-radio-input
     LoanAgreementInputComponent,
     SignatureInputComponent,
     YesNoRadioInputComponent,
+    DebtInputComponent,
   ],
   providers: [DatePipe],
 })

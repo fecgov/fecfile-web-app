@@ -3,6 +3,7 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { SchCTransaction } from '../models/schc-transaction.model';
 import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
+import { SchDTransaction } from '../models/schd-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
@@ -185,6 +186,11 @@ import { C1_LOAN_AGREEMENT } from '../models/transaction-types/C1_LOAN_AGREEMENT
 
 import { C2_LOAN_GUARANTOR } from '../models/transaction-types/C2_LOAN_GUARANTOR.model';
 
+// Schedule D ////////////////////////////////////////////////////
+
+import { DEBT_OWED_BY_COMMITTEE } from '../models/transaction-types/DEBT_OWED_BY_COMMITTEE.model';
+import { DEBT_OWED_TO_COMMITTEE } from '../models/transaction-types/DEBT_OWED_TO_COMMITTEE.model';
+
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
   // Schedule A /////////////////////////////////////////////////////
@@ -365,6 +371,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   C1_LOAN_AGREEMENT,
   // Schedule C2 ////////////////////////////////////////////////////
   C2_LOAN_GUARANTOR,
+  // Schedule D ////////////////////////////////////////////////////
+  DEBT_OWED_BY_COMMITTEE,
+  DEBT_OWED_TO_COMMITTEE,
 }
 
 export class TransactionTypeUtils {
@@ -401,6 +410,7 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
     if (transactionType.scheduleId === 'C') return SchCTransaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'C1') return SchC1Transaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'C2') return SchC2Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'D') return SchDTransaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
