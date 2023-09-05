@@ -18,7 +18,6 @@ export class DEBT_OWED_TO_COMMITTEE extends SchDTransactionType {
     'amount',
     'balance',
     'purpose_description',
-    'text4000',
     // Fields specific to Schedule D and not in templateMap
     'payment_amount',
     'balance_at_close',

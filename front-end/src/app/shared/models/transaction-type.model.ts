@@ -160,6 +160,9 @@ export abstract class TransactionType {
   hasMemoCode(): boolean {
     return hasFields(this.formFields, ['memo_code']);
   }
+  hasMemoText(): boolean {
+    return hasFields(this.formFields, ['text4000']);
+  }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
   hasSignature1 = false;

@@ -47,7 +47,7 @@ export abstract class SchDTransactionType extends TransactionType {
     secured: '',
     aggregate: '',
     purpose_description: 'purpose_of_debt_or_obligation',
-    text4000: 'text4000',
+    text4000: '',
     category_code: '',
     election_code: '',
     election_other_description: '',

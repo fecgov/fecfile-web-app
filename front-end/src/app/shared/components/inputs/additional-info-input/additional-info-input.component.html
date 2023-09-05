@@ -1,35 +1,33 @@
 <div [formGroup]="form">
-  <div class="grid">
-    <ng-container *ngIf="templateMap.purpose_description">
-      <div class="col-12">
-        <label for="purpose_description">
-          {{ transaction?.transactionType?.purposeDescripLabel }}
-          {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
-        </label>
-        <em *ngIf="transaction?.transactionType?.purposeDescriptionLabelNotice">{{
-          transaction?.transactionType?.purposeDescriptionLabelNotice
-        }}</em>
-        <div>
-          <textarea
-            id="purpose_description"
-            [rows]="4"
-            [cols]="30"
-            pInputTextarea
-            [autoResize]="true"
-            [formControlName]="templateMap['purpose_description']"
-            [ngClass]="{ readonly: isDescriptionSystemGenerated() }"
-            [readonly]="isDescriptionSystemGenerated()"
-          ></textarea>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['purpose_description']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+  <div class="grid" *ngIf="templateMap.purpose_description">
+    <div class="col-12">
+      <label for="purpose_description">
+        {{ transaction?.transactionType?.purposeDescripLabel }}
+        {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
+      </label>
+      <em *ngIf="transaction?.transactionType?.purposeDescriptionLabelNotice">{{
+        transaction?.transactionType?.purposeDescriptionLabelNotice
+      }}</em>
+      <div>
+        <textarea
+          id="purpose_description"
+          [rows]="4"
+          [cols]="30"
+          pInputTextarea
+          [autoResize]="true"
+          [formControlName]="templateMap['purpose_description']"
+          [ngClass]="{ readonly: isDescriptionSystemGenerated() }"
+          [readonly]="isDescriptionSystemGenerated()"
+        ></textarea>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['purpose_description']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
-    </ng-container>
+    </div>
   </div>
-  <div class="grid">
+  <div class="grid" *ngIf="transaction?.transactionType?.hasMemoText()">
     <div class="col-12">
       <label for="text4000">NOTE OR MEMO TEXT (OPTIONAL)</label>
       <div>
