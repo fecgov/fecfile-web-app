@@ -72,26 +72,10 @@ export class TransactionContactLookupComponent {
 
   // Ensure invalid form elements are reset to valid when form opened
   clearErrorsFromContactForm() {
-    const requiredMap = new Map();
+    this.createContactForm.reset();
     for (const controlName of Object.keys(this.createContactForm.controls)) {
-      const control = this.createContactForm.get(controlName);
-      requiredMap.set(controlName, control?.hasValidator(Validators.required));
-      control?.removeValidators(Validators.required);
-      console.log('Before set:', control?.errors);
-      control?.setErrors(null);
-      console.log('After set:', control?.errors);
-      control?.markAsPristine();
-      console.log('After pristine:', control?.errors);
-      console.log('From the source:', this.createContactForm.get(controlName)?.errors);
+      this.createContactForm.get(controlName)?.setErrors(null);
     }
-    console.log('Out of loop, pre-set:', this.createContactForm.get('last_name')?.errors);
-    this.createContactForm.setErrors(null);
-    console.log('Out of loop, post-set:', this.createContactForm.get('last_name')?.errors);
-    this.createContactForm.markAsPristine();
-    console.log('Out of loop, post-pristine:', this.createContactForm.get('last_name')?.errors);
-    console.log(this.createContactForm.get('last_name'));
-    console.log(this.createContactForm.get('last_name')?.hasValidator(Validators.required));
-    console.log('Out of loop, post-log?:', this.createContactForm.get('last_name')?.errors);
   }
 
   closeCreateContactDialog() {
