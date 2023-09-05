@@ -69,7 +69,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.form.get(this.templateMap.interest_rate_setting)?.addValidators([Validators.required]);
     this.form.get(this.templateMap.due_date_setting)?.addValidators([Validators.required]);
 
-    this.convertDueDate(this.form.get(this.templateMap['due_date_setting'])?.value);
     this.form.get(this.templateMap['due_date_setting'])?.valueChanges?.subscribe((dueDateSetting) => {
       this.convertDueDate(dueDateSetting);
     });
