@@ -58,7 +58,7 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.CHILD,
+        NavigationDestination.CHILD_BUTTON,
         'Save & add loan guarantor',
         'p-button-warning',
         hasNoContact,

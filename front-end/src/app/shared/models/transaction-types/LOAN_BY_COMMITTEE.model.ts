@@ -56,7 +56,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.CHILD,
+        NavigationDestination.CHILD_BUTTON,
         'Save & add loan guarantor',
         'p-button-warning',
         hasNoContact,
