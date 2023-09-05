@@ -64,7 +64,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
-      'View loan agreement',
+      'Review loan agreement',
       this.editSecondChild.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
