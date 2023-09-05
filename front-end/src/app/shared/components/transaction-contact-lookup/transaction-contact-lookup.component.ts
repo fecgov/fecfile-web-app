@@ -66,7 +66,7 @@ export class TransactionContactLookupComponent {
     typeFormControl?.disable();
     this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
     this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
-    this.clearErrorsFromContactForm();
+    //this.clearErrorsFromContactForm();
     this.createContactDialogVisible = true;
   }
 
