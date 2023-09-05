@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { Contact, ContactType } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -66,12 +66,32 @@ export class TransactionContactLookupComponent {
     typeFormControl?.disable();
     this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
     this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
-    // Ensure invalid form elements are reset to valid when form opened
-    this.createContactForm.reset();
-    for (const controlName of Object.keys(this.createContactForm.controls)) {
-      this.createContactForm.get(controlName)?.setErrors(null);
-    }
+    this.clearErrorsFromContactForm();
     this.createContactDialogVisible = true;
+  }
+
+  // Ensure invalid form elements are reset to valid when form opened
+  clearErrorsFromContactForm() {
+    const requiredMap = new Map();
+    for (const controlName of Object.keys(this.createContactForm.controls)) {
+      const control = this.createContactForm.get(controlName);
+      requiredMap.set(controlName, control?.hasValidator(Validators.required));
+      control?.removeValidators(Validators.required);
+      console.log('Before set:', control?.errors);
+      control?.setErrors(null);
+      console.log('After set:', control?.errors);
+      control?.markAsPristine();
+      console.log('After pristine:', control?.errors);
+      console.log('From the source:', this.createContactForm.get(controlName)?.errors);
+    }
+    console.log('Out of loop, pre-set:', this.createContactForm.get('last_name')?.errors);
+    this.createContactForm.setErrors(null);
+    console.log('Out of loop, post-set:', this.createContactForm.get('last_name')?.errors);
+    this.createContactForm.markAsPristine();
+    console.log('Out of loop, post-pristine:', this.createContactForm.get('last_name')?.errors);
+    console.log(this.createContactForm.get('last_name'));
+    console.log(this.createContactForm.get('last_name')?.hasValidator(Validators.required));
+    console.log('Out of loop, post-log?:', this.createContactForm.get('last_name')?.errors);
   }
 
   closeCreateContactDialog() {
