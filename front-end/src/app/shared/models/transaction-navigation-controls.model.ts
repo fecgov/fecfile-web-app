@@ -11,7 +11,9 @@ export enum NavigationDestination {
   PARENT,
   ANOTHER,
   ANOTHER_CHILD,
+  ANOTHER_CHILD_BUTTON,
   CHILD,
+  CHILD_BUTTON,
 }
 
 export class NavigationEvent {
