@@ -67,6 +67,7 @@ export abstract class TransactionType {
   // Labels
   dateLabel = 'DATE';
   amountInputHeader = '';
+  debtInputHeader = '';
   purposeDescripLabel = '';
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
@@ -124,6 +125,7 @@ export abstract class TransactionType {
   // The following "has*" methods and properties are boolean switches that show/hide
   // a component or section in the transaction type input component
   hasAmountInput = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
+  hasDebtInput = false;
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
@@ -157,6 +159,9 @@ export abstract class TransactionType {
   }
   hasMemoCode(): boolean {
     return hasFields(this.formFields, ['memo_code']);
+  }
+  hasMemoText(): boolean {
+    return hasFields(this.formFields, ['text4000']);
   }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;

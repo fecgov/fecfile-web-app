@@ -26,6 +26,11 @@ import {
   ScheduleCTransactionTypeLabels,
   ScheduleCTransactionTypes,
 } from 'app/shared/models/schc-transaction.model';
+import {
+  ScheduleDTransactionGroups,
+  ScheduleDTransactionTypeLabels,
+  ScheduleDTransactionTypes,
+} from 'app/shared/models/schd-transaction.model';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -39,6 +44,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleATransactionTypeLabels,
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleCTransactionTypeLabels,
+    ...ScheduleDTransactionTypeLabels,
   ];
   report: Report | undefined;
   category: Categories = 'receipt';
@@ -86,7 +92,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       ];
     }
     if (this.category === 'loans-and-debts') {
-      return [ScheduleCTransactionGroups.LOANS, ScheduleCTransactionGroups.DEBTS];
+      return [ScheduleCTransactionGroups.LOANS, ScheduleDTransactionGroups.DEBTS];
     }
     return [
       ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS,
@@ -240,8 +246,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
           ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
         ];
-      case ScheduleCTransactionGroups.DEBTS:
-        return [];
+      case ScheduleDTransactionGroups.DEBTS:
+        return [ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE, ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE];
       default:
         return [];
     }

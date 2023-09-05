@@ -20,6 +20,11 @@ export const ORGANIZATION_INDIVIDUAL_COMMITTEE = [
   ContactTypes.INDIVIDUAL,
   ContactTypes.COMMITTEE,
 ];
+export const COMMITTEE_ORGANIZATION_INDIVIDUAL = [
+  ContactTypes.COMMITTEE,
+  ContactTypes.ORGANIZATION,
+  ContactTypes.INDIVIDUAL,
+];
 
 export function getContactTypeOptions(contactTypes: ContactTypes[]) {
   return LabelUtils.getPrimeOptions(ContactTypeLabels, contactTypes);

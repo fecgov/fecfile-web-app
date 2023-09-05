@@ -55,6 +55,16 @@
       [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
     ></app-amount-input>
   </ng-container>
+  <ng-container *ngIf="transaction?.transactionType?.hasDebtInput">
+    <p-divider></p-divider>
+    <h3>{{ transaction?.transactionType?.debtInputHeader }}</h3>
+    <app-debt-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [templateMap]="templateMap"
+      [transaction]="transaction"
+    ></app-debt-input>
+  </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
     <p-divider></p-divider>
     <h3>{{ transactionType.amountInputHeader }}</h3>
