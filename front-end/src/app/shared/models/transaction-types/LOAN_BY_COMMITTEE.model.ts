@@ -58,7 +58,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
         NavigationAction.SAVE,
         NavigationDestination.CHILD_BUTTON,
         'Save & add loan guarantor',
-        'p-button-warning',
+        'add-button',
         hasNoContact,
         () => true,
         'pi pi-plus'

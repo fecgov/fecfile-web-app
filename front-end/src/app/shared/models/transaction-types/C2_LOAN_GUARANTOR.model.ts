@@ -33,7 +33,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
         NavigationAction.SAVE,
         NavigationDestination.ANOTHER_CHILD_BUTTON,
         'Save & add loan guarantor',
-        'p-button-warning',
+        'add-button',
         hasNoContact,
         () => true,
         'pi pi-plus'
