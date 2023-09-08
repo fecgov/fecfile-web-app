@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTION_MEMOS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
@@ -17,7 +17,7 @@ export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransa
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
+  override navigationControls = CHILD_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

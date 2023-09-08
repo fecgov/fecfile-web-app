@@ -20,6 +20,7 @@ import {
   NavigationDestination,
   CANCEL_CONTROL,
   SAVE_LIST_CONTROL,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 
@@ -31,12 +32,13 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.ANOTHER_CHILD_BUTTON,
+        NavigationDestination.ANOTHER_CHILD,
         'Save & add loan guarantor',
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus'
+        'pi pi-plus',
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],

@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
+import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 
@@ -16,7 +16,7 @@ export class PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO extends SchATransactionTyp
   override updateParentOnSave = true;
   schema = schema;
   override shortName = 'Partnership Attribution';
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
+  override navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     let committeeClause = `JF Memo: ${

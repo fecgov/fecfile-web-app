@@ -167,6 +167,9 @@ export function isNewTransaction(transaction?: Transaction): boolean {
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
 }
+export function isExistingTransaction(transaction?: Transaction): boolean {
+  return !!transaction?.id;
+}
 
 export type ScheduleTransaction =
   | SchATransaction

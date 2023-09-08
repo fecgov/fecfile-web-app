@@ -212,8 +212,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const reportPath = `/reports/transactions/report/${event.transaction?.report_id}`;
     if (
       event.destination === NavigationDestination.ANOTHER ||
-      event.destination === NavigationDestination.ANOTHER_CHILD ||
-      event.destination === NavigationDestination.ANOTHER_CHILD_BUTTON
+      event.destination === NavigationDestination.ANOTHER_CHILD
     ) {
       this.messageService.add({
         severity: 'success',
@@ -228,10 +227,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
       }
-    } else if (
-      event.destination === NavigationDestination.CHILD ||
-      event.destination === NavigationDestination.CHILD_BUTTON
-    ) {
+    } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
