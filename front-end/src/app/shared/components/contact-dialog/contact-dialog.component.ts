@@ -26,6 +26,7 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
   templateUrl: './contact-dialog.component.html',
 })
 export class ContactDialogComponent extends DestroyerComponent implements OnInit {
+  @Input() contactTypeReadOnly = false;
   @Input() contact: Contact = new Contact();
   @Input() detailVisible = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -46,7 +47,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   formSubmitted = false;
 
   isNewItem = true;
-  contactTypeReadOnly = false;
   contactType = ContactTypes.INDIVIDUAL;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = [];
@@ -180,10 +180,17 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.resetForm();
   }
 
+  /**
+   * Callback passed to the contact-lookup component to show/hide lookup input box
+   * @returns boolean
+   */
+  public showSearchBox() {
+    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
+  }
+
   private resetForm() {
     this.form.reset();
     this.isNewItem = true;
-    this.contactTypeReadOnly = false;
     this.contactTypeChanged(ContactTypes.INDIVIDUAL);
     this.formSubmitted = false;
   }

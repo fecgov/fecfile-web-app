@@ -6,5 +6,9 @@
     (createNewContactSelect)="onCreateNewContactSelect()"
   >
   </app-contact-lookup>
-  <app-contact-dialog [detailVisible]="detailVisible" (savedContact)="saveContact($event)"></app-contact-dialog>
+  <app-contact-dialog
+    [detailVisible]="detailVisible"
+    (savedContact)="saveContact($event)"
+    [contactTypeReadOnly]="contactTypeReadOnly"
+  ></app-contact-dialog>
 </div>

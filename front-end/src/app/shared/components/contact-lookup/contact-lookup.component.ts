@@ -17,6 +17,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeReadOnly = false;
   @Input() showCreateNewContactButton = true;
+  @Input() showSearchBoxCallback = () => true;
 
   @Input() maxFecCommitteeResults = 5;
   @Input() maxFecfileCommitteeResults = 5;
@@ -51,10 +52,6 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       this.contactType = contactType;
       this.contactTypeSelect.emit(contactType);
     });
-  }
-
-  showSearchBox() {
-    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
