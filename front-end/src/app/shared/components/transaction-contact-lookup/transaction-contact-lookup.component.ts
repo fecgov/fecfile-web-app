@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactType } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -9,7 +9,6 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem } from 'primeng/api';
-import { ContactFormComponent } from '../contact-form/contact-form.component';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
@@ -27,7 +26,7 @@ export class TransactionContactLookupComponent {
 
   @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
 
-  @ViewChild(ContactFormComponent) contactForm: ContactFormComponent | undefined;
+  detailVisible = false;
 
   createContactDialogVisible = false;
   createContactFormSubmitted = false;
@@ -46,63 +45,29 @@ export class TransactionContactLookupComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateFormWithPrimaryContact(event: any) {
-    this.contactForm?.updateFormWithPrimaryContact(event);
-    if (!(event?.value instanceof Contact)) {
-      this.openCreateContactDialog();
-    } else {
-      this.contactSelect.emit(event);
-    }
+    this.contactSelect.emit(event);
   }
 
   onCreateNewContactSelect() {
-    this.openCreateContactDialog();
+    this.detailVisible = true;
   }
 
-  openCreateContactDialog() {
-    this.createContactForm.reset();
-    this.createContactFormSubmitted = false;
-    const typeFormControl = this.createContactForm.get('type');
-    typeFormControl?.setValue(this.contactTypeFormControl.value);
-    typeFormControl?.disable();
-    this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
-    this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
-    //this.clearErrorsFromContactForm();
-    this.createContactDialogVisible = true;
-  }
+  // openCreateContactDialog() {
+  //   this.createContactForm.reset();
+  //   this.createContactFormSubmitted = false;
+  //   const typeFormControl = this.createContactForm.get('type');
+  //   typeFormControl?.setValue(this.contactTypeFormControl.value);
+  //   typeFormControl?.disable();
+  //   this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
+  //   this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
+  //   this.createContactDialogVisible = true;
+  // }
 
-  // Ensure invalid form elements are reset to valid when form opened
-  clearErrorsFromContactForm() {
-    this.createContactForm.reset();
-    for (const controlName of Object.keys(this.createContactForm.controls)) {
-      this.createContactForm.get(controlName)?.setErrors(null);
-    }
-  }
-
-  closeCreateContactDialog() {
-    this.createContactDialogVisible = false;
-  }
-
-  createContactSave() {
-    this.createContactFormSubmitted = true;
-    if (this.createContactForm.invalid) {
-      return;
-    }
-
-    const createdContact = Contact.fromJSON({
-      ...ValidateUtils.getFormValues(
-        this.createContactForm,
-        ContactService.getSchemaByType(this.createContactForm.get('type')?.value as ContactType)
-      ),
-    });
+  saveContact($event: any) {
+    const contact = $event.value;
     this.contactSelect.emit({
-      value: createdContact,
+      value: contact,
     });
-    this.closeCreateContactDialog();
-  }
-
-  onCreateContactDialogClose() {
-    this.createContactForm.reset();
-    this.createContactFormSubmitted = false;
-    this.createContactDialogVisible = false;
+    this.detailVisible = false;
   }
 }

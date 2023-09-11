@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -19,13 +19,21 @@ import {
   FecApiCommitteeLookupData,
 } from '../../models/contact.model';
 import { DestroyerComponent } from '../app-destroyer.component';
+import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 
 @Component({
-  selector: 'app-contact-form',
-  templateUrl: './contact-form.component.html',
+  selector: 'app-contact-dialog',
+  templateUrl: './contact-dialog.component.html',
 })
-export class ContactFormComponent extends DestroyerComponent implements OnInit {
-  @Input() form: FormGroup = this.fb.group(
+export class ContactDialogComponent extends DestroyerComponent implements OnInit {
+  @Input() contact: Contact = new Contact();
+  @Input() detailVisible = false;
+  @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
+
+  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
+
+  form: FormGroup = this.fb.group(
     ValidateUtils.getFormGroupFields([
       ...new Set([
         ...ValidateUtils.getSchemaProperties(contactIndividualSchema),
@@ -35,8 +43,11 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
       ]),
     ])
   );
-  @Input() formSubmitted = false;
+  formSubmitted = false;
 
+  isNewItem = true;
+  contactTypeReadOnly = false;
+  contactType = ContactTypes.INDIVIDUAL;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = [];
   candidateOfficeTypeOptions: PrimeOptions = [];
@@ -44,42 +55,18 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
   countryOptions: PrimeOptions = [];
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
+  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
 
   constructor(private fb: FormBuilder, private fecApiService: FecApiService, private contactService: ContactService) {
     super();
   }
 
   ngOnInit(): void {
-    this.form.addControl('contact_1', new FormControl());
     this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-
-    this.form
-      ?.get('type')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        const schema = ContactService.getSchemaByType(value as ContactTypes);
-        ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
-
-        // Clear out non-schema form values
-        const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const schemaProperties: string[] = ValidateUtils.getSchemaProperties(schema);
-        Object.keys(this.form.controls).forEach((property: string) => {
-          if (!schemaProperties.includes(property)) {
-            formValues[property] = '';
-          }
-        });
-        this.form.patchValue(formValues);
-
-        if (value === ContactTypes.CANDIDATE) {
-          this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-        } else {
-          this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-        }
-      });
 
     this.form
       ?.get('country')
@@ -108,6 +95,58 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
           this.candidateDistrictOptions = [];
         }
       });
+
+    this.contactTypeChanged(this.contactType);
+  }
+
+  /**
+   * Add or remove the FEC ID unique validation check for a FormControl
+   * @param formId
+   * @param contactId
+   * @param enableValidator
+   */
+  refreshFecIdValidator(formId: string, contactId: string | undefined, enableValidator: boolean) {
+    this.form?.get(formId)?.clearAsyncValidators();
+    if (enableValidator) {
+      this.form?.get(formId)?.addAsyncValidators(this.contactService.getFecIdValidator(contactId));
+    }
+    this.form?.get(formId)?.updateValueAndValidity();
+  }
+
+  /**
+   * On ngOnInit and when a user changes the selection of the ContactType for the contact
+   * entry form (as known by the emitter from the contact-lookup component), update the necessary
+   * FormControl elements for the ContactType selected by the user.
+   * @param contactType
+   */
+  contactTypeChanged(contactType: ContactTypes) {
+    this.contactType = contactType;
+
+    // The type form control is not displayed on the form page because we are
+    // displaying the contact lookup component which operates independently so
+    // we keep the 'type' value on the contact dialog form up-to-date in the background.
+    this.form.get('type')?.setValue(contactType);
+
+    const schema = ContactService.getSchemaByType(contactType);
+    ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
+    this.refreshFecIdValidator('candidate_id', this.contact.id, contactType === ContactTypes.CANDIDATE);
+    this.refreshFecIdValidator('committee_id', this.contact.id, contactType === ContactTypes.COMMITTEE);
+
+    // Clear out non-schema form values
+    const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const schemaProperties: string[] = ValidateUtils.getSchemaProperties(schema);
+    Object.keys(this.form.controls).forEach((property: string) => {
+      if (!schemaProperties.includes(property)) {
+        formValues[property] = null;
+      }
+    });
+    this.form.patchValue(formValues);
+
+    if (contactType === ContactTypes.CANDIDATE) {
+      this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+    } else {
+      this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+    }
   }
 
   /**
@@ -117,8 +156,40 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
     return CandidateOfficeTypes;
   }
 
+  public openDialog() {
+    this.resetForm();
+    this.form.patchValue(this.contact);
+    if (this.contact.id) {
+      this.isNewItem = false;
+      this.contactTypeReadOnly = true;
+      this.contactType = this.contact.type;
+    }
+
+    // Update the value of the Contact Type select box in the Contact Lookup
+    // component because the Contact Dialog is hidden and not destroyed on close
+    // so we need to directly update the lookup "type" form control value
+    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
+
+    this.dialogVisible = true;
+  }
+
+  public closeDialog() {
+    this.detailVisibleChange.emit(false);
+    this.detailVisible = false;
+    this.dialogVisible = false;
+    this.resetForm();
+  }
+
+  private resetForm() {
+    this.form.reset();
+    this.isNewItem = true;
+    this.contactTypeReadOnly = false;
+    this.contactTypeChanged(ContactTypes.INDIVIDUAL);
+    this.formSubmitted = false;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateFormWithPrimaryContact(event: any) {
+  updateFormWithSelectedContact(event: any) {
     if (event && event.value) {
       if (event.value instanceof Contact) {
         this.onContactSelect(event.value);
@@ -134,7 +205,6 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
     if (contact) {
       switch (contact.type) {
         case ContactTypes.CANDIDATE:
-          this.form.get('type')?.setValue(contact.type);
           this.form.get('candidate_id')?.setValue(contact.candidate_id);
           this.form.get('last_name')?.setValue(contact.last_name);
           this.form.get('first_name')?.setValue(contact.first_name);
@@ -148,7 +218,6 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
           this.form.get('candidate_district')?.setValue(contact.candidate_district);
           break;
         case ContactTypes.COMMITTEE:
-          this.form.get('type')?.setValue(contact.type);
           this.form.get('committee_id')?.setValue(contact.committee_id);
           this.form.get('name')?.setValue(contact.name);
           break;
@@ -208,5 +277,25 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
         this.form.get('telephone')?.setValue(phone);
       });
     }
+  }
+
+  public saveContact(closeDialog = true) {
+    this.formSubmitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    const contact: Contact = Contact.fromJSON({
+      ...this.contact,
+      ...ValidateUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
+    });
+    this.savedContact.emit(contact);
+
+    if (closeDialog) {
+      this.closeDialog();
+    }
+    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+    this.resetForm();
   }
 }

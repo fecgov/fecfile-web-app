@@ -1,24 +1,21 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
+import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
 })
-export class ContactLookupComponent implements OnInit {
-  @Input() form: FormGroup = new FormGroup([]);
-  @Input() formSubmitted = false;
-
+export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+  @Input() contactType?: ContactTypes;
   @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() contactTypeFormControl: FormControl = new FormControl();
-  @Input() selectedContactFormControlName = '';
   @Input() contactTypeReadOnly = false;
-  @Input() showSearchBox = true;
   @Input() showCreateNewContactButton = true;
 
   @Input() maxFecCommitteeResults = 5;
@@ -27,19 +24,37 @@ export class ContactLookupComponent implements OnInit {
   @Input() maxFecfileOrganizationResults = 10;
   @Input() includeFecfileResults = true;
 
+  @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactLookupSelect = new EventEmitter<Contact | FecApiLookupData>();
   @Output() createNewContactSelect = new EventEmitter<void>();
 
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
 
+  contactTypeFormControl = new FormControl();
+  searchBoxFormControl = new FormControl();
+
   searchTerm = '';
 
-  constructor(private contactService: ContactService) {}
+  constructor(private contactService: ContactService) {
+    super();
+  }
+
   ngOnInit(): void {
-    if (!this.contactTypeFormControl.value && this.contactTypeOptions && this.contactTypeOptions.length > 0) {
+    if (!this.contactType && this.contactTypeOptions && this.contactTypeOptions.length > 0) {
       this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
+    } else {
+      this.contactTypeFormControl.setValue(this.contactType);
     }
+
+    this.contactTypeFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((contactType: ContactTypes) => {
+      this.contactType = contactType;
+      this.contactTypeSelect.emit(contactType);
+    });
+  }
+
+  showSearchBox() {
+    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,9 +96,9 @@ export class ContactLookupComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateFormWithPrimaryContact(event: any) {
+  onContactLookupSelect(event: any) {
     this.contactLookupSelect.emit(event);
-    this.form.get(this.selectedContactFormControlName)?.patchValue('');
+    this.searchBoxFormControl.patchValue('');
   }
 
   onCreateNewContactSelect() {

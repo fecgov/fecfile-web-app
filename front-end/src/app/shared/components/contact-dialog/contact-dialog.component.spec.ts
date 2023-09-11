@@ -17,21 +17,21 @@ import { DropdownModule } from 'primeng/dropdown';
 import { of } from 'rxjs';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
-import { ContactFormComponent } from './contact-form.component';
+import { ContactDialogComponent } from './contact-dialog.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 
-describe('ContactFormComponent', () => {
-  let component: ContactFormComponent;
-  let fixture: ComponentFixture<ContactFormComponent>;
+describe('ContactDialogComponent', () => {
+  let component: ContactDialogComponent;
+  let fixture: ComponentFixture<ContactDialogComponent>;
   let testFecApiService: FecApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule, DropdownModule, AutoCompleteModule],
       declarations: [
-        ContactFormComponent,
+        ContactDialogComponent,
         ErrorMessagesComponent,
         FecInternationalPhoneInputComponent,
         ContactLookupComponent,
@@ -43,7 +43,7 @@ describe('ContactFormComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContactFormComponent);
+    fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
     component.ngOnInit();
   });
@@ -104,7 +104,7 @@ describe('ContactFormComponent', () => {
     expect(component.form.get('state')?.value).toBe('ZZ');
   });
 
-  it('#updateFormWithPrimaryContact CANDIDATE Contact happy path', () => {
+  it('#updateFormWithSelectedContact CANDIDATE Contact happy path', () => {
     const testContact = new Contact();
     const testLastName = 'testLastName';
     const testZip = '12345';
@@ -112,16 +112,16 @@ describe('ContactFormComponent', () => {
     testContact.last_name = testLastName;
     testContact.zip = testZip;
 
-    component.updateFormWithPrimaryContact({ value: testContact });
+    component.updateFormWithSelectedContact({ value: testContact });
 
     expect(component.form.get('last_name')?.value).toBe(testLastName);
     expect(component.form.get('zip')?.value).toBe(testZip);
 
     component.form = new FormGroup({});
-    component.updateFormWithPrimaryContact({ value: testContact });
+    component.updateFormWithSelectedContact({ value: testContact });
   });
 
-  it('#updateFormWithPrimaryContact COMMITTEE Contact happy path', () => {
+  it('#updateFormWithSelectedContact COMMITTEE Contact happy path', () => {
     const testContact = new Contact();
     const testCommitteeId = 'C1234568';
     const testZip = '12345';
@@ -129,16 +129,16 @@ describe('ContactFormComponent', () => {
     testContact.committee_id = testCommitteeId;
     testContact.zip = testZip;
 
-    component.updateFormWithPrimaryContact({ value: testContact });
+    component.updateFormWithSelectedContact({ value: testContact });
 
     expect(component.form.get('committee_id')?.value).toBe(testCommitteeId);
     expect(component.form.get('zip')?.value).toBe(testZip);
 
     component.form = new FormGroup({});
-    component.updateFormWithPrimaryContact({ value: testContact });
+    component.updateFormWithSelectedContact({ value: testContact });
   });
 
-  it('#updateFormWithPrimaryContact FecApiCandidateLookupData happy path', () => {
+  it('#updateFormWithSelectedContact FecApiCandidateLookupData happy path', () => {
     const testId = 'P12345678';
     const testOfficeSought = 'P';
     const testName = 'testName';
@@ -154,17 +154,17 @@ describe('ContactFormComponent', () => {
 
     spyOn(testFecApiService, 'getCandidateDetails').and.returnValue(of(testResponse));
 
-    component.updateFormWithPrimaryContact({ value: testFecApiCandidateLookupData });
+    component.updateFormWithSelectedContact({ value: testFecApiCandidateLookupData });
 
     expect(component.form.get('type')?.value).toBe(ContactTypes.CANDIDATE);
     expect(component.form.get('candidate_id')?.value).toBe(testId);
     expect(component.form.get('city')?.value).toBe(testAddressCity);
 
     component.form = new FormGroup({});
-    component.updateFormWithPrimaryContact({ value: testFecApiCandidateLookupData });
+    component.updateFormWithSelectedContact({ value: testFecApiCandidateLookupData });
   });
 
-  it('#updateFormWithPrimaryContact FecApiCommitteeLookupData happy path', () => {
+  it('#updateFormWithSelectedContact FecApiCommitteeLookupData happy path', () => {
     const testId = 'C12345678';
     const testIsActive = true;
     const testName = 'testName';
@@ -180,13 +180,13 @@ describe('ContactFormComponent', () => {
 
     spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(testResponse));
 
-    component.updateFormWithPrimaryContact({ value: testFecApiCommitteeLookupData });
+    component.updateFormWithSelectedContact({ value: testFecApiCommitteeLookupData });
 
     expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
     expect(component.form.get('committee_id')?.value).toBe(testId);
     expect(component.form.get('telephone')?.value).toBe('+1 ' + testPhone);
 
     component.form = new FormGroup({});
-    component.updateFormWithPrimaryContact({ value: testFecApiCommitteeLookupData });
+    component.updateFormWithSelectedContact({ value: testFecApiCommitteeLookupData });
   });
 });
