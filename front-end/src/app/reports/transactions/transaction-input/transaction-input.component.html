@@ -8,7 +8,6 @@
         [contactTypeOptions]="contactTypeOptions"
         [contactTypeFormControl]="$any(form).controls['entity_type']"
         selectedContactFormControlName="contact_1"
-        [contactTypeReadOnly]="contactTypeOptions.length === 1"
         (contactSelect)="updateFormWithPrimaryContact($event)"
       >
       </app-transaction-contact-lookup>
@@ -161,7 +160,6 @@
         [contactTypeOptions]="committeeContactTypeOptions"
         [contactTypeFormControl]="committeeContactTypeFormControl"
         selectedContactFormControlName="contact_3"
-        [contactTypeReadOnly]="true"
         (contactSelect)="updateFormWithTertiaryContact($event)"
       ></app-transaction-contact-lookup>
       <app-committee-input
@@ -183,7 +181,6 @@
         [contactTypeOptions]="candidateContactTypeOptions"
         [contactTypeFormControl]="candidateContactTypeFormControl"
         selectedContactFormControlName="contact_2"
-        [contactTypeReadOnly]="true"
         (contactSelect)="updateFormWithCandidateContact($event)"
       ></app-transaction-contact-lookup>
       <ng-container *ngIf="transaction?.contact_2">

@@ -13,9 +13,7 @@ import { DestroyerComponent } from '../app-destroyer.component';
   styleUrls: ['./contact-lookup.component.scss'],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
-  @Input() contactType?: ContactTypes;
   @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() contactTypeReadOnly = false;
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;
 
@@ -29,6 +27,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Output() contactLookupSelect = new EventEmitter<Contact | FecApiLookupData>();
   @Output() createNewContactSelect = new EventEmitter<void>();
 
+  contactType = ContactTypes.INDIVIDUAL;
+  contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
 
@@ -42,11 +42,9 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    if (!this.contactType && this.contactTypeOptions && this.contactTypeOptions.length > 0) {
-      this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
-    } else {
-      this.contactTypeFormControl.setValue(this.contactType);
-    }
+    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
+    this.contactTypeFormControl.setValue(this.contactType);
+    this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
 
     this.contactTypeFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((contactType: ContactTypes) => {
       this.contactType = contactType;

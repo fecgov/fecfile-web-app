@@ -26,8 +26,8 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
   templateUrl: './contact-dialog.component.html',
 })
 export class ContactDialogComponent extends DestroyerComponent implements OnInit {
-  @Input() contactTypeReadOnly = false;
   @Input() contact: Contact = new Contact();
+  @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
@@ -49,7 +49,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   isNewItem = true;
   contactType = ContactTypes.INDIVIDUAL;
   ContactTypes = ContactTypes;
-  contactTypeOptions: PrimeOptions = [];
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -62,7 +61,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    if (this.contactTypeOptions.length === 0) {
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    }
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
@@ -161,15 +162,14 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.patchValue(this.contact);
     if (this.contact.id) {
       this.isNewItem = false;
-      this.contactTypeReadOnly = true;
-      this.contactType = this.contact.type;
+      // Update the value of the Contact Type select box in the Contact Lookup
+      // component because the Contact Dialog is hidden and not destroyed on close
+      // so we need to directly update the lookup "type" form control value
+      this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
+      this.contactLookup.contactTypeReadOnly = true;
+    } else if (this.contactTypeOptions.length === 1) {
+      this.contactLookup.contactTypeReadOnly = true;
     }
-
-    // Update the value of the Contact Type select box in the Contact Lookup
-    // component because the Contact Dialog is hidden and not destroyed on close
-    // so we need to directly update the lookup "type" form control value
-    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
-
     this.dialogVisible = true;
   }
 
@@ -177,7 +177,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.detailVisibleChange.emit(false);
     this.detailVisible = false;
     this.dialogVisible = false;
-    this.resetForm();
   }
 
   /**
@@ -191,7 +190,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   private resetForm() {
     this.form.reset();
     this.isNewItem = true;
-    this.contactTypeChanged(ContactTypes.INDIVIDUAL);
+    this.contactLookup.contactTypeReadOnly = false;
+    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
     this.formSubmitted = false;
   }
 
@@ -302,7 +302,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     if (closeDialog) {
       this.closeDialog();
     }
-    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
     this.resetForm();
   }
 }

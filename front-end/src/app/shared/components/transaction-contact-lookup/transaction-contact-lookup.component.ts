@@ -17,12 +17,9 @@ import { SelectItem } from 'primeng/api';
 export class TransactionContactLookupComponent {
   @Input() form: FormGroup = new FormGroup([]);
   @Input() formSubmitted = false;
-
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeFormControl: FormControl = new FormControl();
   @Input() selectedContactFormControlName = '';
-
-  @Input() contactTypeReadOnly = false;
 
   @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
 
@@ -64,6 +61,7 @@ export class TransactionContactLookupComponent {
   // }
 
   saveContact($event: any) {
+    debugger;
     const contact = $event.value;
     this.contactSelect.emit({
       value: contact,
