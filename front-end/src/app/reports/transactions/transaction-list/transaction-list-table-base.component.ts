@@ -12,6 +12,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 
 @Component({
   template: '',
@@ -78,6 +79,22 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
         ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Make debt repayment',
+      this.createDebtRepaymentMade.bind(this),
+      (transaction: Transaction) =>
+        transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
+        this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Receive debt repayment',
+      this.createDebtRepaymentReceived.bind(this),
+      (transaction: Transaction) =>
+        transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
+        this.reportIsEditable,
       () => true
     ),
   ];
@@ -167,11 +184,33 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
     );
   }
+  public createDebtRepaymentReceived(transaction: Transaction): void {
+    this.confirmationService.confirm({
+      header: 'Select a transaction',
+      key: 'debt-repayment',
+      accept: (transactionType: any) => {
+        this.router.navigateByUrl(
+          `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${transactionType}`
+        );
+      },
+    });
+  }
 
   public createLoanRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}`
     );
+  }
+  public createDebtRepaymentMade(transaction: Transaction): void {
+    this.confirmationService.confirm({
+      header: 'Select a transaction',
+      key: 'debt-repayment',
+      accept: (transactionType: any) => {
+        this.router.navigateByUrl(
+          `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${transactionType}`
+        );
+      },
+    });
   }
 
   public updateItem(item: Transaction) {
