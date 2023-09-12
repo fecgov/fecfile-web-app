@@ -1,13 +1,14 @@
 <div class="p-fluid">
   <app-contact-lookup
     [contactTypeOptions]="contactTypeOptions"
+    (contactTypeSelect)="contactTypeSelected($event)"
     (contactLookupSelect)="updateFormWithPrimaryContact($event)"
     (createNewContactSelect)="onCreateNewContactSelect()"
   >
   </app-contact-lookup>
   <app-contact-dialog
-    [contactTypeOptions]="contactTypeOptions"
-    [detailVisible]="detailVisible"
+    [contactTypeOptions]="dialogContactTypeOptions"
+    [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"
   ></app-contact-dialog>
 </div>

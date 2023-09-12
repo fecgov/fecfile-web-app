@@ -170,6 +170,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     } else if (this.contactTypeOptions.length === 1) {
       this.contactLookup.contactTypeReadOnly = true;
     }
+    // this.form.markAsPristine();
+    // this.form.markAsUntouched();
     this.dialogVisible = true;
   }
 
