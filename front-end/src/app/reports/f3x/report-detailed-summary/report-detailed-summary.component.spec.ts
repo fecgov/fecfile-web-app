@@ -4,7 +4,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ActivatedRoute } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xReport } from 'app/shared/models/report-types/f3x-report.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 
@@ -17,7 +17,7 @@ import { ApiService } from 'app/shared/services/api.service';
 describe('ReportDetailedSummaryComponent', () => {
   let component: ReportDetailedSummaryComponent;
   let fixture: ComponentFixture<ReportDetailedSummaryComponent>;
-  const f3x: F3xSummary = F3xSummary.fromJSON({
+  const f3x: F3xReport = F3xReport.fromJSON({
     id: '999',
     coverage_from_date: '2022-05-25',
     form_type: 'F3XN',

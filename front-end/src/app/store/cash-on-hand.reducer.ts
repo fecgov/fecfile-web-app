@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CashOnHand } from 'app/shared/interfaces/report.interface';
+import { CashOnHand } from 'app/shared/interfaces/cash-on-hand.interface';
 import { setCashOnHandAction } from './cash-on-hand.actions';
 
 export const initialState: CashOnHand = {

@@ -7,6 +7,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@ang
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { InputText } from 'primeng/inputtext';
+import { F3xReport } from 'app/shared/models/report-types/f3x-report.model';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -59,9 +60,11 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       .select(selectActiveReport)
       .pipe(take(1))
       .subscribe((report) => {
-        this.form
-          .get(this.templateMap.date)
-          ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
+        if (report instanceof F3xReport) {
+          this.form
+            .get(this.templateMap.date)
+            ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
+        }
       });
 
     this.percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil } from 'rxjs';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xReport } from 'app/shared/models/report-types/f3x-report.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -104,7 +104,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       });
   }
 
-  public onTableActionClick(action: TableAction, report?: F3xSummary) {
+  public onTableActionClick(action: TableAction, report?: F3xReport) {
     action.action(report);
   }
 

@@ -1,10 +1,8 @@
-import { plainToClass, Transform, Type } from 'class-transformer';
-import { Report } from '../interfaces/report.interface';
-import { LabelList } from '../utils/label.utils';
-import { F3xReportCodes } from '../utils/report-code.utils';
-import { BaseModel } from './base.model';
-import { UploadSubmission } from './upload-submission.model';
-import { WebPrintSubmission } from './webprint-submission.model';
+import { plainToClass, Transform } from 'class-transformer';
+import { FormType, Report } from './report.model';
+import { LabelList } from '../../utils/label.utils';
+import { F3xReportCodes } from '../../utils/report-code.utils';
+import { BaseModel } from '../base.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -36,10 +34,9 @@ export class F3xCoverageDates {
   }
 }
 
-export class F3xSummary extends BaseModel implements Report {
-  id: string | undefined;
+export class F3xReport extends Report {
+  override form_type = F3xFormTypes.F3XT;
 
-  form_type: F3xFormType = F3xFormTypes.F3XT;
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;
@@ -47,12 +44,9 @@ export class F3xSummary extends BaseModel implements Report {
   city: string | undefined;
   state: string | undefined;
   zip: string | undefined;
-  report_code: F3xReportCodes | undefined;
   election_code: string | undefined;
   @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
   state_of_election: string | undefined;
-  @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
   qualified_committee: boolean | undefined;
   treasurer_last_name: string | undefined;
   treasurer_first_name: string | undefined;
@@ -62,16 +56,6 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_1: string | undefined;
   confirmation_email_2: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-
-  @Type(() => UploadSubmission)
-  @Transform(UploadSubmission.transform)
-  upload_submission: UploadSubmission | undefined;
-  report_status: string | undefined;
-  @Type(() => WebPrintSubmission)
-  @Transform(WebPrintSubmission.transform)
-  webprint_submission: WebPrintSubmission | undefined;
-
-  calculation_status: string | undefined;
 
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | undefined;
   L6b_cash_on_hand_beginning_period: number | undefined;
@@ -176,16 +160,8 @@ export class F3xSummary extends BaseModel implements Report {
   L37_offsets_to_operating_expenditures_ytd: number | undefined;
   L38_net_operating_expenditures_ytd: number | undefined;
 
-  @Type(() => Date)
-  @Transform(BaseModel.dateTransform)
-  created: Date | undefined;
-  @Type(() => Date)
-  @Transform(BaseModel.dateTransform)
-  updated: Date | undefined;
-  deleted: string | undefined;
-
   // prettier-ignore
-  static fromJSON(json: any): F3xSummary { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(F3xSummary, json);
+  static fromJSON(json: any): F3xReport { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(F3xReport, json);
   }
 }

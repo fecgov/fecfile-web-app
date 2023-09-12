@@ -3,18 +3,19 @@ import { Observable, map, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
-import { Report, CashOnHand } from '../interfaces/report.interface';
+import { CashOnHand } from '../interfaces/cash-on-hand.interface';
+import { Report } from '../models/report-types/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
-import { F3xSummaryService } from './f3x-summary.service';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { F3xReportService } from './f3x-report.service';
+import { F3xReport } from '../models/report-types/f3x-report.model';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReportService implements TableListService<Report> {
-  constructor(private apiService: ApiService, private f3xSummaryService: F3xSummaryService, private store: Store) {}
+  constructor(private apiService: ApiService, private f3xReportService: F3xReportService, private store: Store) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
@@ -23,7 +24,7 @@ export class ReportService implements TableListService<Report> {
     // Pull list from F3X Summaries until we have more report models built
     return this.apiService.get<ListRestResponse>(`/f3x-summaries/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => F3xSummary.fromJSON(item));
+        response.results = response.results.map((item) => F3xReport.fromJSON(item));
         this.setStoreCashOnHand(response.results);
         return response;
       })
@@ -31,11 +32,11 @@ export class ReportService implements TableListService<Report> {
   }
 
   public get(reportId: string): Observable<Report> {
-    return this.f3xSummaryService.get(reportId);
+    return this.f3xReportService.get(reportId);
   }
 
   public delete(report: Report): Observable<null> {
-    return this.f3xSummaryService.delete(report as F3xSummary);
+    return this.f3xReportService.delete(report as F3xReport);
   }
 
   /**
@@ -51,8 +52,8 @@ export class ReportService implements TableListService<Report> {
         value: undefined,
       };
     } else if (reports.length > 0) {
-      const report: F3xSummary = reports[0] as F3xSummary;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.00;
+      const report: F3xReport = reports[0] as F3xReport;
+      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
       payload = {
         report_id: report.id,
         value: value,
@@ -72,7 +73,7 @@ export class ReportService implements TableListService<Report> {
     if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {
-        return this.store.dispatch(setActiveReportAction({ payload: report || new F3xSummary() }));
+        return this.store.dispatch(setActiveReportAction({ payload: report || new F3xReport() }));
       })
     );
   }

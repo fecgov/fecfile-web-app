@@ -5,8 +5,8 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../../../shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { F3xReport } from 'app/shared/models/report-types/f3x-report.model';
+import { F3xReportService } from 'app/shared/services/f3x-report.service';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { SharedModule } from 'app/shared/shared.module';
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
+import { F3xCoverageDates } from '../../../shared/models/report-types/f3x-report.model';
 import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
@@ -26,9 +26,9 @@ describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
   let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
-  let f3xSummaryService: F3xSummaryService;
+  let F3xReportService: F3xReportService;
   let reportService: ReportService;
-  const f3x: F3xSummary = F3xSummary.fromJSON({
+  const f3x: F3xReport = F3xReport.fromJSON({
     id: '999',
     coverage_from_date: '2022-05-25',
     coverage_through_date: '2022-06-25',
@@ -69,12 +69,12 @@ describe('CreateF3XStep1Component', () => {
         RouterTestingModule.withRoutes([]),
       ],
       declarations: [CreateF3XStep1Component, LabelPipe, AppSelectButtonComponent],
-      providers: [F3xSummaryService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
+      providers: [F3xReportService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     }).compileComponents();
 
     router = TestBed.inject(Router);
-    f3xSummaryService = TestBed.inject(F3xSummaryService);
-    f3xSummaryService.getF3xCoverageDates = () => of([]);
+    F3xReportService = TestBed.inject(F3xReportService);
+    F3xReportService.getF3xCoverageDates = () => of([]);
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
@@ -102,8 +102,8 @@ describe('CreateF3XStep1Component', () => {
   describe('with existing coverage', () => {
     beforeEach(async () => {
       router = TestBed.inject(Router);
-      f3xSummaryService = TestBed.inject(F3xSummaryService);
-      f3xSummaryService.getF3xCoverageDates = () => of([thirdThroughFifth]);
+      F3xReportService = TestBed.inject(F3xReportService);
+      F3xReportService.getF3xCoverageDates = () => of([thirdThroughFifth]);
       reportService = TestBed.inject(ReportService);
       fixture = TestBed.createComponent(CreateF3XStep1Component);
       component = fixture.componentInstance;
@@ -124,7 +124,7 @@ describe('CreateF3XStep1Component', () => {
       previous: '/',
       results: [],
     } as ListRestResponse;
-    spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    spyOn(F3xReportService, 'create').and.returnValue(of(f3x));
     spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
@@ -140,7 +140,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should not save with invalid f3x record', () => {
-    spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    spyOn(F3xReportService, 'create').and.returnValue(of(f3x));
     component.form.patchValue({ ...f3x });
     component.form.patchValue({ form_type: 'NO-GOOD' });
     component.save();

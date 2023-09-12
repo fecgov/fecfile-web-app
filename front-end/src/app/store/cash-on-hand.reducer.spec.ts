@@ -1,6 +1,6 @@
 import { cashOnHandReducer } from './cash-on-hand.reducer';
 import { setCashOnHandAction } from './cash-on-hand.actions';
-import { CashOnHand } from 'app/shared/interfaces/report.interface';
+import { CashOnHand } from 'app/shared/interfaces/cash-on-hand.interface';
 
 describe('Cash On Hand Reducer', () => {
   it('it should store the boolean status', () => {

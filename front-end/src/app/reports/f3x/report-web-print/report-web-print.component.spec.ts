@@ -2,19 +2,19 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xReport } from 'app/shared/models/report-types/f3x-report.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { ReportWebPrintComponent } from './report-web-print.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
+import { F3xReportService } from '../../../shared/services/f3x-report.service';
 import { of } from 'rxjs';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
-  let reportService: F3xSummaryService;
+  let reportService: F3xReportService;
   let webPrintService: WebPrintService;
 
   beforeEach(() => {
@@ -24,10 +24,10 @@ describe('ReportWebPrintComponent', () => {
       providers: [ReportWebPrintComponent, provideMockStore(testMockStore)],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
-    reportService = TestBed.inject(F3xSummaryService);
+    reportService = TestBed.inject(F3xReportService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
+    spyOn(reportService, 'get').and.returnValue(of(F3xReport.fromJSON({})));
     fixture.detectChanges();
   });
 
@@ -53,7 +53,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Updates with a failed report', () => {
-    const testF3x: F3xSummary = F3xSummary.fromJSON({
+    const testF3x: F3xReport = F3xReport.fromJSON({
       webprint_submission: {
         fec_status: 'FAILED',
         fecfile_error: "Things didn't work out...",
@@ -66,7 +66,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Updates with an unsubmitted report', () => {
-    const testF3x: F3xSummary = F3xSummary.fromJSON({
+    const testF3x: F3xReport = F3xReport.fromJSON({
       webprint_submission: null,
     });
 
@@ -75,7 +75,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Updates with a processing report', () => {
-    const testF3x: F3xSummary = F3xSummary.fromJSON({
+    const testF3x: F3xReport = F3xReport.fromJSON({
       webprint_submission: {
         fec_status: 'PROCESSING',
       },

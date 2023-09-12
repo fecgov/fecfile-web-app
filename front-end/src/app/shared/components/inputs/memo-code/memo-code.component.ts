@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xReport } from 'app/shared/models/report-types/f3x-report.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
@@ -22,7 +22,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   memoCodeReadOnly = false;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  report?: F3xSummary;
+  report?: F3xReport;
 
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
@@ -37,7 +37,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report as F3xReport;
       });
 
     this.form

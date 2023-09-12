@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report } from 'app/shared/interfaces/report.interface';
+import { Report } from 'app/shared/models/report-types/report.model';
 import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,

@@ -1,6 +1,6 @@
 import { WebPrintSubmission } from './webprint-submission.model';
 
-describe('F3XSummary', () => {
+describe('F3xReport', () => {
   it('should create an instance', () => {
     expect(new WebPrintSubmission()).toBeTruthy();
   });
