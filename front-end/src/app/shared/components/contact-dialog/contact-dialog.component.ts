@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -55,7 +54,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   candidateDistrictOptions: PrimeOptions = [];
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
 
-  constructor(private fb: FormBuilder, private fecApiService: FecApiService, private contactService: ContactService) {
+  constructor(private fb: FormBuilder, private contactService: ContactService) {
     super();
   }
 
@@ -169,8 +168,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     } else if (this.contactTypeOptions.length === 1) {
       this.contactLookup.contactTypeReadOnly = true;
     }
-    // this.form.markAsPristine();
-    // this.form.markAsUntouched();
     this.dialogVisible = true;
   }
 
@@ -196,7 +193,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.formSubmitted = false;
   }
 
-  updateContact(contact: any) {
+  updateContact(contact: Contact) {
     this.contact = contact;
     this.form.patchValue(contact);
   }

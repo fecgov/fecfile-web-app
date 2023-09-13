@@ -54,20 +54,27 @@ export class TransactionContactLookupComponent implements OnInit {
     }
   }
 
+  /**
+   * Once a contact has been selected from the lookup or entered in the
+   * contact dialog, we put an arbitrary string in our error message FormControl
+   * that is tracking whether to show/hide the required error message in the UI
+   */
   markContactSelected() {
-    this.errorMessageFormControl.setValue('candidate chosen');
+    this.errorMessageFormControl.setValue('contact selected');
   }
 
+  /**
+   * As the user selects contact types in the lookup, communicate that to the
+   * second contact lookup in the contact dialog so that it can set the selection
+   * value and set its dropdown as readonly.
+   * @param contactType
+   */
   contactTypeSelected(contactType: ContactTypes) {
-    // As the user selects contact types in the lookup, communicate that to the
-    // second contact lookup in the contact dialog so that it can set the selection
-    // value and set the dropdown is as readonly.
     this.contactDialog.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]);
     this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
     this.contactTypeSelect.emit(contactType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contactLookupSelected(contact: Contact) {
     this.markContactSelected();
     if (contact.id) {
@@ -81,10 +88,10 @@ export class TransactionContactLookupComponent implements OnInit {
   }
 
   createNewContactSelected() {
+    this.contactDialog.updateContact(Contact.fromJSON({}));
     this.detailVisible = true;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   saveContact(contact: Contact) {
     this.markContactSelected();
     this.contactSelect.emit({

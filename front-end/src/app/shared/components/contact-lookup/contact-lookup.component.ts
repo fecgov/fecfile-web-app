@@ -1,12 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
+import {
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
+  FecApiLookupData,
+  FecApiCandidateLookupData,
+  FecApiCommitteeLookupData,
+} from 'app/shared/models/contact.model';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
-import { FecApiCandidateLookupData, FecApiCommitteeLookupData } from '../../models/contact.model';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -38,7 +45,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   searchTerm = '';
 
-  constructor(private contactService: ContactService) {
+  constructor(private contactService: ContactService, private fecApiService: FecApiService) {
     super();
   }
 
@@ -91,6 +98,14 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }
   }
 
+  onCreateNewContactSelect() {
+    this.createNewContactSelect.emit();
+  }
+
+  isContact(value: Contact | FecApiLookupData) {
+    return value instanceof Contact;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
     if (event && event.value) {
@@ -106,89 +121,63 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     this.searchBoxFormControl.patchValue('');
   }
 
-  onCreateNewContactSelect() {
-    this.createNewContactSelect.emit();
-  }
-
-  isContact(value: Contact | FecApiLookupData) {
-    return value instanceof Contact;
-  }
-
   onContactSelect(contact: Contact) {
-    this.contactLookupSelect.emit(contact);
-    // if (contact) {
-    //   switch (contact.type) {
-    //     case ContactTypes.CANDIDATE:
-    //       this.form.get('candidate_id')?.setValue(contact.candidate_id);
-    //       this.form.get('last_name')?.setValue(contact.last_name);
-    //       this.form.get('first_name')?.setValue(contact.first_name);
-    //       this.form.get('middle_name')?.setValue(contact.middle_name);
-    //       this.form.get('prefix')?.setValue(contact.prefix);
-    //       this.form.get('suffix')?.setValue(contact.suffix);
-    //       this.form.get('employer')?.setValue(contact.employer);
-    //       this.form.get('occupation')?.setValue(contact.occupation);
-    //       this.form.get('candidate_office')?.setValue(contact.candidate_office);
-    //       this.form.get('candidate_state')?.setValue(contact.candidate_state);
-    //       this.form.get('candidate_district')?.setValue(contact.candidate_district);
-    //       break;
-    //     case ContactTypes.COMMITTEE:
-    //       this.form.get('committee_id')?.setValue(contact.committee_id);
-    //       this.form.get('name')?.setValue(contact.name);
-    //       break;
-    //   }
-    //   this.form.get('country')?.setValue(contact.country);
-    //   this.form.get('street_1')?.setValue(contact.street_1);
-    //   this.form.get('street_2')?.setValue(contact.street_2);
-    //   this.form.get('city')?.setValue(contact.city);
-    //   this.form.get('state')?.setValue(contact.state);
-    //   this.form.get('zip')?.setValue(contact.zip);
-    //   this.form.get('telephone')?.setValue(contact.telephone);
-    // }
+    if (contact) {
+      this.contactLookupSelect.emit(contact);
+    }
   }
 
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
     if (data.id) {
-      // this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
-      //   // TODO: fix once we get info from api and set all names below properly
-      //   const nameSplit = candidate.name?.split(', ');
-      //   this.form.get('type')?.setValue(ContactTypes.CANDIDATE);
-      //   this.form.get('candidate_id')?.setValue(candidate.candidate_id);
-      //   this.form.get('last_name')?.setValue(nameSplit?.[0]);
-      //   this.form.get('first_name')?.setValue(nameSplit?.[1]);
-      //   this.form.get('middle_name')?.setValue('');
-      //   this.form.get('prefix')?.setValue('');
-      //   this.form.get('suffix')?.setValue('');
-      //   this.form.get('street_1')?.setValue(candidate.address_street_1);
-      //   this.form.get('street_2')?.setValue(candidate.address_street_2);
-      //   this.form.get('city')?.setValue(candidate.address_city);
-      //   this.form.get('state')?.setValue(candidate.address_state);
-      //   this.form.get('zip')?.setValue(candidate.address_zip);
-      //   this.form.get('employer')?.setValue('');
-      //   this.form.get('occupation')?.setValue('');
-      //   this.form.get('candidate_office')?.setValue(candidate.office);
-      //   this.form.get('candidate_state')?.setValue(candidate.state);
-      //   this.form.get('candidate_district')?.setValue(candidate.district);
-      // });
+      this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
+        // TODO: fix once we get info from api and set all names below properly
+        const nameSplit = candidate.name?.split(', ');
+        this.contactLookupSelect.emit(
+          Contact.fromJSON({
+            type: ContactTypes.CANDIDATE,
+            candidate_id: candidate.candidate_id,
+            last_name: nameSplit?.[0],
+            first_name: nameSplit?.[1],
+            middle_name: '',
+            prefix: '',
+            suffix: '',
+            street_1: candidate.address_street_1,
+            street_2: candidate.address_street_2,
+            city: candidate.address_city,
+            state: candidate.address_state,
+            zip: candidate.address_zip,
+            employer: '',
+            occupation: '',
+            candidate_office: candidate.office,
+            candidate_state: candidate.state,
+            candidate_district: candidate.district,
+          })
+        );
+      });
     }
   }
 
   onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
     if (data.id) {
-      // this.fecApiService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
-      //   let phone;
-      //   if (committeeAccount?.treasurer_phone) {
-      //     phone = '+1 ' + committeeAccount.treasurer_phone;
-      //   }
-      //   this.form.get('type')?.setValue(ContactTypes.COMMITTEE);
-      //   this.form.get('committee_id')?.setValue(committeeAccount.committee_id);
-      //   this.form.get('name')?.setValue(committeeAccount.name);
-      //   this.form.get('street_1')?.setValue(committeeAccount.street_1);
-      //   this.form.get('street_2')?.setValue(committeeAccount.street_2);
-      //   this.form.get('city')?.setValue(committeeAccount.city);
-      //   this.form.get('state')?.setValue(committeeAccount.state);
-      //   this.form.get('zip')?.setValue(committeeAccount.zip);
-      //   this.form.get('telephone')?.setValue(phone);
-      // });
+      this.fecApiService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
+        let phone;
+        if (committeeAccount?.treasurer_phone) {
+          phone = '+1 ' + committeeAccount.treasurer_phone;
+        }
+        this.contactLookupSelect.emit(
+          Contact.fromJSON({
+            type: ContactTypes.COMMITTEE,
+            committee_id: committeeAccount.committee_id,
+            name: committeeAccount.name,
+            street_1: committeeAccount.street_1,
+            street_2: committeeAccount.street_2,
+            city: committeeAccount.city,
+            state: committeeAccount.state,
+            zip: committeeAccount.zip,
+            telephone: phone,
+          })
+        );
+      });
     }
   }
 }
