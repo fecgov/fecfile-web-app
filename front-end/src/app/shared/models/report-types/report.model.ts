@@ -17,6 +17,20 @@ export abstract class Report extends BaseModel {
   @Transform(BaseModel.dateTransform) coverage_from_date?: Date;
   @Transform(BaseModel.dateTransform) coverage_through_date?: Date;
 
+  committee_name: string | undefined;
+
+  street_1: string | undefined;
+  street_2: string | undefined;
+  city: string | undefined;
+  state: string | undefined;
+  zip: string | undefined;
+
+  treasurer_last_name: string | undefined;
+  treasurer_first_name: string | undefined;
+  treasurer_middle_name: string | undefined;
+  treasurer_prefix: string | undefined;
+  treasurer_suffix: string | undefined;
+
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission?: UploadSubmission;

@@ -23,20 +23,7 @@ export const F3xFormVersionLabels: LabelList = [
 export class F24 extends Report {
   override form_type = F24FormTypes.F24A;
 
-  committee_name: string | undefined;
-  street_1: string | undefined;
-  street_2: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  zip: string | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
-  treasurer_last_name: string | undefined;
-  treasurer_first_name: string | undefined;
-  treasurer_middle_name: string | undefined;
-  treasurer_prefix: string | undefined;
-  treasurer_suffix: string | undefined;
-  confirmation_email_1: string | undefined;
-  confirmation_email_2: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
 
   // prettier-ignore

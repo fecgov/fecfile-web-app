@@ -37,22 +37,11 @@ export class F3xCoverageDates {
 export class F3xReport extends Report {
   override form_type = F3xFormTypes.F3XT;
 
-  committee_name: string | undefined;
   change_of_address: boolean | undefined;
-  street_1: string | undefined;
-  street_2: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  zip: string | undefined;
   election_code: string | undefined;
   @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
   state_of_election: string | undefined;
   qualified_committee: boolean | undefined;
-  treasurer_last_name: string | undefined;
-  treasurer_first_name: string | undefined;
-  treasurer_middle_name: string | undefined;
-  treasurer_prefix: string | undefined;
-  treasurer_suffix: string | undefined;
   confirmation_email_1: string | undefined;
   confirmation_email_2: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
