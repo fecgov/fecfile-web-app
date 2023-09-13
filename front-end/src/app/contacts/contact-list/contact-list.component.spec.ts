@@ -12,7 +12,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Contact, ContactTypes } from '../../shared/models/contact.model';
-import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
+import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { ContactListComponent } from './contact-list.component';
 import { of } from 'rxjs';
@@ -38,7 +38,7 @@ describe('ContactListComponent', () => {
         ConfirmDialogModule,
         SharedModule,
       ],
-      declarations: [ContactListComponent, ContactDetailComponent, DeletedContactDialogComponent],
+      declarations: [ContactListComponent, ContactDialogComponent, DeletedContactDialogComponent],
       providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
