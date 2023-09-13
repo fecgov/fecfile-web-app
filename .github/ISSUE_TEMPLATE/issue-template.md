@@ -18,5 +18,6 @@ As a [role], I will be able to [blank] so that I can [business reason]
 **Then** [result]
 
 ### QA Notes
+- [ ] BA/Design Quality Checklist complete
 
 ### DEV Notes
