@@ -76,7 +76,6 @@ export abstract class TransactionType {
   formTitle?: string; // Title of form within accordion section
   footer?: string; // Text at the end of form
   contactTitle?: string; // Title for primary contact
-  contactLookupLabel = "LOOKUP"; // Set label for all lookups
   signatoryOneTitle?: string; // Label for the signatory_1 section in the form
   signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
 

@@ -39,7 +39,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   form: FormGroup = this.fb.group({});
   isEditable = true;
   memoCodeCheckboxLabel$ = of('');
-  contactLookupLabel = "LOOKUP";
 
   constructor(
     protected messageService: MessageService,
