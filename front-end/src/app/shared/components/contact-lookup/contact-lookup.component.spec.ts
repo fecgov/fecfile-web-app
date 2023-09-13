@@ -27,7 +27,6 @@ import {
   IndividualLookupResponse,
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
-import { Candidate } from 'app/shared/models/candidate.model';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
