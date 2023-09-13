@@ -21,7 +21,8 @@ describe('CashOnHandComponent', () => {
   let component: CashOnHandComponent;
   let router: Router;
   let fixture: ComponentFixture<CashOnHandComponent>;
-  let F3xReportService: F3xReportService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let f3xReportService: F3xReportService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -44,7 +45,7 @@ describe('CashOnHandComponent', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
-    F3xReportService = TestBed.inject(F3xReportService);
+    f3xReportService = TestBed.inject(F3xReportService);
     fixture = TestBed.createComponent(CashOnHandComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -56,7 +57,7 @@ describe('CashOnHandComponent', () => {
 
   it('should save', () => {
     const f3x = F3xReport.fromJSON({ id: '999' });
-    spyOn(F3xReportService, 'update').and.returnValue(of(f3x));
+    spyOn(f3xReportService, 'update').and.returnValue(of(f3x));
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.report = f3x;
     component.form.patchValue({

@@ -8,7 +8,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { F3xReport, F3xFormTypes } from '../../shared/models/report-types/f3x-report.model';
-import { Report } from '../../shared/interfaces/cash-on-hand.interface';
+import { Report } from 'app/shared/models/report-types/report.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';

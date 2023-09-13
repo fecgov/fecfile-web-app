@@ -26,7 +26,7 @@ describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
   let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
-  let F3xReportService: F3xReportService;
+  let f3xReportService: F3xReportService;
   let reportService: ReportService;
   const f3x: F3xReport = F3xReport.fromJSON({
     id: '999',
@@ -73,8 +73,8 @@ describe('CreateF3XStep1Component', () => {
     }).compileComponents();
 
     router = TestBed.inject(Router);
-    F3xReportService = TestBed.inject(F3xReportService);
-    F3xReportService.getF3xCoverageDates = () => of([]);
+    f3xReportService = TestBed.inject(F3xReportService);
+    f3xReportService.getF3xCoverageDates = () => of([]);
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
@@ -102,8 +102,8 @@ describe('CreateF3XStep1Component', () => {
   describe('with existing coverage', () => {
     beforeEach(async () => {
       router = TestBed.inject(Router);
-      F3xReportService = TestBed.inject(F3xReportService);
-      F3xReportService.getF3xCoverageDates = () => of([thirdThroughFifth]);
+      f3xReportService = TestBed.inject(F3xReportService);
+      f3xReportService.getF3xCoverageDates = () => of([thirdThroughFifth]);
       reportService = TestBed.inject(ReportService);
       fixture = TestBed.createComponent(CreateF3XStep1Component);
       component = fixture.componentInstance;
@@ -124,7 +124,7 @@ describe('CreateF3XStep1Component', () => {
       previous: '/',
       results: [],
     } as ListRestResponse;
-    spyOn(F3xReportService, 'create').and.returnValue(of(f3x));
+    spyOn(f3xReportService, 'create').and.returnValue(of(f3x));
     spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
@@ -140,7 +140,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should not save with invalid f3x record', () => {
-    spyOn(F3xReportService, 'create').and.returnValue(of(f3x));
+    spyOn(f3xReportService, 'create').and.returnValue(of(f3x));
     component.form.patchValue({ ...f3x });
     component.form.patchValue({ form_type: 'NO-GOOD' });
     component.save();
