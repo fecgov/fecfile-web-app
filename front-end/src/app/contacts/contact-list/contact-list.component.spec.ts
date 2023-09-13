@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from 'app/shared/shared.module';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -25,6 +25,13 @@ describe('ContactListComponent', () => {
   contact.first_name = 'Jane';
   contact.last_name = 'Smith';
   contact.name = 'ABC Inc';
+  const tableDataResponse = {
+    count: 2,
+    pageNumber: 1,
+    next: 'https://next',
+    previous: 'https://previous',
+    results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,7 +46,7 @@ describe('ContactListComponent', () => {
         SharedModule,
       ],
       declarations: [ContactListComponent, ContactDialogComponent, DeletedContactDialogComponent],
-      providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [ConfirmationService, FormBuilder, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
@@ -95,15 +102,7 @@ describe('ContactListComponent', () => {
   });
 
   it('#onSelectAllChange set properties', () => {
-    spyOn(component.itemService, 'getTableData').and.returnValue(
-      of({
-        count: 2,
-        pageNumber: 1,
-        next: 'https://next',
-        previous: 'https://previous',
-        results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
-      })
-    );
+    spyOn(component.itemService, 'getTableData').and.returnValue(of(tableDataResponse));
     component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeFalse();
     expect(component.selectedItems).toEqual([]);
@@ -116,5 +115,17 @@ describe('ContactListComponent', () => {
   it('#restoreButton should make dialog visible', () => {
     component.onRestoreClick();
     expect(component.restoreDialogIsVisible).toBeTrue();
+  });
+
+  it('#saveContact calls itemService', () => {
+    spyOn(component.itemService, 'update').and.returnValue(of(testContact));
+    spyOn(component.itemService, 'create').and.returnValue(of(testContact));
+    spyOn(component.itemService, 'getTableData').and.returnValue(of(tableDataResponse));
+    const contact = testContact;
+    component.saveContact(contact);
+    expect(component.itemService.update).toHaveBeenCalledTimes(1);
+    contact.id = undefined;
+    component.saveContact(contact);
+    expect(component.itemService.create).toHaveBeenCalledTimes(1);
   });
 });
