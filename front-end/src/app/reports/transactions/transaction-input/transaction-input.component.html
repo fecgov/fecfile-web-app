@@ -3,7 +3,9 @@
     <div class="field">
       <label for="entity_type">{{ transactionType.contactLookupLabel ?? contactLookupLabel }}</label>
       <app-transaction-contact-lookup
-        [contactProperty]="transaction?.contact_1"
+        contactProperty="contact_1"
+        [transaction]="transaction"
+        [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="contactTypeOptions"
         (contactTypeSelect)="contactTypeSelected($event)"
@@ -90,7 +92,7 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
-      [contactProperty]="transaction?.contact_2"
+      [transaction]="transaction"
       (contactSelect)="updateFormWithSecondaryContact($event)"
     ></app-loan-agreement-input>
   </ng-container>
@@ -155,7 +157,9 @@
     </ng-container>
     <ng-container *ngIf="transactionType?.contact3IsRequired">
       <app-transaction-contact-lookup
-        [contactProperty]="transaction?.contact_3"
+        contactProperty="contact_3"
+        [transaction]="transaction"
+        [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="committeeContactTypeOptions"
         (contactSelect)="updateFormWithTertiaryContact($event)"
@@ -174,7 +178,9 @@
     </ng-container>
     <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
       <app-transaction-contact-lookup
-        [contactProperty]="transaction?.contact_2"
+        contactProperty="contact_2"
+        [transaction]="transaction"
+        [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="candidateContactTypeOptions"
         (contactSelect)="updateFormWithCandidateContact($event)"

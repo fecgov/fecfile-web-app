@@ -5,13 +5,14 @@ import { SelectItem } from 'primeng/api';
 import { Contact } from 'app/shared/models/contact.model';
 import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-loan-agreement-input',
   templateUrl: './loan-agreement-input.component.html',
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
-  @Input() contactProperty?: Contact;
+  @Input() transaction?: Transaction;
   @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
 
   // Switches to show/hide groups of form input values

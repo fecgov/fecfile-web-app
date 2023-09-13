@@ -1,4 +1,4 @@
-<div class="p-fluid" [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl.status === 'INVALID' }">
+<div class="p-fluid" [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl?.status === 'INVALID' }">
   <app-contact-lookup
     [contactTypeOptions]="contactTypeOptions"
     (contactTypeSelect)="contactTypeSelected($event)"
@@ -14,6 +14,7 @@
   ></app-contact-dialog>
 </div>
 <app-error-messages
+  *ngIf="errorMessageFormControl"
   [formControl]="errorMessageFormControl"
   [formSubmitted]="formSubmitted"
   [requiredErrorMessage]="currentContactLabel + ' information is required'"

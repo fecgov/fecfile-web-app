@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -10,13 +10,16 @@ import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_vali
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
   templateUrl: './transaction-contact-lookup.component.html',
 })
 export class TransactionContactLookupComponent implements OnInit {
-  @Input() contactProperty?: Contact;
+  @Input() contactProperty?: string;
+  @Input() transaction?: Transaction;
+  @Input() form: FormGroup = new FormGroup({});
   @Input() formSubmitted = false;
   @Input() contactTypeOptions: PrimeOptions = [];
 
@@ -37,7 +40,7 @@ export class TransactionContactLookupComponent implements OnInit {
       ]),
     ])
   );
-  errorMessageFormControl = new FormControl('', Validators.required);
+  errorMessageFormControl?: FormControl;
   currentContactLabel = 'Individual';
 
   constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
@@ -49,18 +52,27 @@ export class TransactionContactLookupComponent implements OnInit {
     this.dialogContactTypeOptions = [this.contactTypeOptions[0]];
     this.currentContactLabel = this.contactTypeOptions[0].label;
 
-    if (this.contactProperty) {
-      this.markContactSelected();
+    // If needed, create a local form control to manage validation and add the
+    // new form control to the parent form so that a validation check occurs
+    // when the parent form is submitted and blocks submit if validation fails.
+    if (this.contactProperty === 'contact_2') {
+      this.errorMessageFormControl = new FormControl(null, () => {
+        if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired(this.form)) {
+          return { required: true };
+        }
+        return null;
+      });
+      this.form.addControl('contact_2_lookup', this.errorMessageFormControl);
     }
-  }
-
-  /**
-   * Once a contact has been selected from the lookup or entered in the
-   * contact dialog, we put an arbitrary string in our error message FormControl
-   * that is tracking whether to show/hide the required error message in the UI
-   */
-  markContactSelected() {
-    this.errorMessageFormControl.setValue('contact selected');
+    if (this.contactProperty === 'contact_3') {
+      this.errorMessageFormControl = new FormControl(null, () => {
+        if (!this.transaction?.contact_3 && this.transaction?.transactionType?.contact3IsRequired) {
+          return { required: true };
+        }
+        return null;
+      });
+      this.form.addControl('contact_3_lookup', this.errorMessageFormControl);
+    }
   }
 
   /**
@@ -76,7 +88,6 @@ export class TransactionContactLookupComponent implements OnInit {
   }
 
   contactLookupSelected(contact: Contact) {
-    this.markContactSelected();
     if (contact.id) {
       this.contactSelect.emit({
         value: contact,
@@ -93,7 +104,6 @@ export class TransactionContactLookupComponent implements OnInit {
   }
 
   saveContact(contact: Contact) {
-    this.markContactSelected();
     this.contactSelect.emit({
       value: contact,
     });

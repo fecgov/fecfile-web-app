@@ -110,27 +110,6 @@ export class TransactionFormUtils {
         });
     }
 
-    // Add form controls to bubble up validate error messages from the Contact Lookup component
-    form.addControl('contact_1', new FormControl());
-    form.addControl(
-      'contact_2',
-      new FormControl(null, () => {
-        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired(form)) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-    form.addControl(
-      'contact_3',
-      new FormControl(null, () => {
-        if (!transaction?.contact_3 && transaction.transactionType?.contact3IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-
     const schema = transaction.transactionType?.schema;
     if (schema) {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);

@@ -255,7 +255,9 @@
             pTooltip="{{ locationOfAccountHelpText }}"
           ></span>
           <app-transaction-contact-lookup
-            [contactProperty]="contactProperty"
+            contactProperty="contact_2"
+            [transaction]="transaction"
+            [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
             (contactSelect)="updateFormWithLocationOfAccountContact($event)"
