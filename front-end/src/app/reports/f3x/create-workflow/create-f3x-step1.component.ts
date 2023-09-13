@@ -67,7 +67,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     private store: Store,
     private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
-    private F3xReportService: F3xReportService,
+    private f3xReportService: F3xReportService,
     private messageService: MessageService,
     protected router: Router,
     private activatedRoute: ActivatedRoute,
@@ -87,7 +87,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         }
       });
 
-    combineLatest([this.store.select(selectCommitteeAccount), this.F3xReportService.getF3xCoverageDates()])
+    combineLatest([this.store.select(selectCommitteeAccount), this.f3xReportService.getF3xCoverageDates()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([committeeAccount, existingCoverage]) => {
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
@@ -252,7 +252,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     }
 
     //Observables are *defined* here ahead of their execution
-    const create$ = this.F3xReportService.create(summary, this.formProperties);
+    const create$ = this.f3xReportService.create(summary, this.formProperties);
     // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
     const tableData$ = this.reportService.getTableData();
     const cashOnHand$ = this.store.select(selectCashOnHand);

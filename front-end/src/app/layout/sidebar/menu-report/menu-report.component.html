@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="title-2">REPORT PROGRESS</div>
       <div class="report-type">{{ (activeReport$ | async)?.form_type | label : f3xFormTypeLabels }}</div>
-      <div *ngIf="'report_code'; in: activeReport$ | async" class="sub-heading">
+      <div class="sub-heading">
         {{ (activeReport$ | async)?.report_code | reportCodeLabel }}
       </div>
       <div class="sub-heading">

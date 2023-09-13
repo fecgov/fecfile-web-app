@@ -24,7 +24,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private F3xReportService: F3xReportService,
+    private f3xReportService: F3xReportService,
     private fb: FormBuilder,
     private messageService: MessageService,
     private store: Store
@@ -62,7 +62,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.F3xReportService.update(payload, this.formProperties).subscribe(() => {
+    this.f3xReportService.update(payload, this.formProperties).subscribe(() => {
       // Write cash on hand to store
       this.store.dispatch(
         setCashOnHandAction({

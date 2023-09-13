@@ -43,7 +43,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private F3xReportService: F3xReportService,
+    private f3xReportService: F3xReportService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
@@ -162,7 +162,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });
 
-    return this.F3xReportService.update(payload, this.formProperties);
+    return this.f3xReportService.update(payload, this.formProperties);
   }
 
   private submitReport(): Observable<boolean> {

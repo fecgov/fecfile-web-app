@@ -38,7 +38,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private F3xReportService: F3xReportService,
+    private f3xReportService: F3xReportService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService
@@ -153,7 +153,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.F3xReportService.update(payload, this.formProperties).subscribe(() => {
+    this.f3xReportService.update(payload, this.formProperties).subscribe(() => {
       if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }
