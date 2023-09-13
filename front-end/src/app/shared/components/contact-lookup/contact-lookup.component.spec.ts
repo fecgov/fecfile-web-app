@@ -6,14 +6,13 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from 'app/shared/shared.module';
 import { ContactService } from 'app/shared/services/contact.service';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from './contact-lookup.component';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { SelectItem } from 'primeng/api';
 import {
   CandidateLookupResponse,
   CommitteeLookupResponse,
@@ -28,6 +27,7 @@ import {
   IndividualLookupResponse,
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
+import { Candidate } from 'app/shared/models/candidate.model';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -293,4 +293,10 @@ describe('ContactLookupComponent', () => {
 
     expect(retval).toEqual(expectedRetval);
   });
+
+  it('#onContactLookupSelect should call proper lookup', fakeAsync(() => {
+    spyOn(component, 'onContactSelect');
+    component.onContactLookupSelect({ value: testContact });
+    expect(component.onContactSelect).toHaveBeenCalledWith(testContact);
+  }));
 });
