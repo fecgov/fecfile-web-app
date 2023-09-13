@@ -39,6 +39,7 @@ export abstract class TransactionType {
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
+  
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -75,7 +76,7 @@ export abstract class TransactionType {
   formTitle?: string; // Title of form within accordion section
   footer?: string; // Text at the end of form
   contactTitle?: string; // Title for primary contact
-  contactLookupLabel?: string; //Label above contact lookup
+  contactLookupLabel = "LOOKUP"; // Set label for all lookups
   signatoryOneTitle?: string; // Label for the signatory_1 section in the form
   signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
 

@@ -55,7 +55,7 @@
           [contactTypeOptions]="childContactTypeOptions"
           [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
           [contributionAmountReadOnly]="true"
-          contactLookupLabel="ENTITY LOOKUP"
+          (contactLookupLabel)="contactLookupLabel"
           candidateInfoPosition="high"
           (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"

@@ -44,7 +44,6 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override footer =
     'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
   override contactTitle = 'Lender';
-  override contactLookupLabel = 'LENDER LOOKUP';
   override showGuarantorTable = true;
 
   schema = schema;

@@ -1,7 +1,7 @@
 <div class="grid" *ngIf="isEditable && !!!transactionType?.useParentContact">
   <div class="col-12">
     <div class="field">
-      <label for="entity_type">{{ transactionType.contactLookupLabel ?? contactLookupLabel }}</label>
+      <label for="entity_type">{{contactLookupLabel}} </label>
       <app-transaction-contact-lookup
         [form]="form"
         [formSubmitted]="formSubmitted"

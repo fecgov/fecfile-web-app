@@ -15,7 +15,6 @@ export abstract class EARMARK_MEMO extends SchATransactionType {
   override formTitle = undefined;
   override footer = undefined;
   override contactTitle = 'Conduit';
-  override contactLookupLabel = 'CONTACT LOOKUP';
   override generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';
   }
