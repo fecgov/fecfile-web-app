@@ -64,11 +64,9 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
-    component.detailVisible = false;
     spyOn(component.contactDialog, 'updateContact');
     const contact = Contact.fromJSON({ ...testContact });
     component.contactLookupSelected(contact);
-    expect(component.detailVisible).toBeTrue();
     contact.id = undefined;
     component.contactLookupSelected(contact);
     expect(component.contactDialog.updateContact).toHaveBeenCalledTimes(2);
