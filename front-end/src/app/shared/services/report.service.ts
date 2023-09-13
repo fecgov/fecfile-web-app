@@ -53,7 +53,7 @@ export class ReportService implements TableListService<Report> {
       };
     } else if (reports.length > 0) {
       const report: F3xReport = reports[0] as F3xReport;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
+      const value = report.L6a_cash_on_hand_jan_1_ytd ?? 1.0;
       payload = {
         report_id: report.id,
         value: value,
