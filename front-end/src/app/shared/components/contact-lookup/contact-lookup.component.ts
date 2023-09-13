@@ -108,7 +108,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
-    if (event && event.value) {
+    if (event?.value) {
       if (event.value instanceof Contact) {
         this.onContactSelect(event.value);
       } else if (event.value instanceof FecApiCandidateLookupData) {
@@ -117,7 +117,6 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
         this.onFecApiCommitteeLookupDataSelect(event.value);
       }
     }
-    // this.contactLookupSelect.emit(event);
     this.searchBoxFormControl.patchValue('');
   }
 
