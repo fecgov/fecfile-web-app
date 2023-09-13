@@ -1,15 +1,21 @@
 import { Component, Input, OnInit, LOCALE_ID, Inject } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-error-messages',
   templateUrl: './error-messages.component.html',
 })
 export class ErrorMessagesComponent implements OnInit {
-  @Input() form: FormGroup | undefined;
+  // Pass the form and fieldName OR pass the formControl itself.
+  @Input() form?: FormGroup;
   @Input() fieldName = '';
+  @Input() formControl?: FormControl;
+
+  // We need the submitted status of the parent form to control the hide/show
+  // of the error message
   @Input() formSubmitted = false;
+
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() requiredTrueErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
@@ -131,11 +137,15 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
-  control: FormGroup | undefined;
+  control?: FormControl;
 
   constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
-    this.control = this.form?.get(this.fieldName) as FormGroup;
+    if (this.formControl) {
+      this.control = this.formControl;
+    } else {
+      this.control = this.form?.get(this.fieldName) as FormControl;
+    }
   }
 }

@@ -3,11 +3,10 @@
     <div class="field">
       <label for="entity_type">{{ transactionType.contactLookupLabel ?? contactLookupLabel }}</label>
       <app-transaction-contact-lookup
-        [form]="form"
+        [contactProperty]="transaction?.contact_1"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="contactTypeOptions"
-        [contactTypeFormControl]="$any(form).controls['entity_type']"
-        selectedContactFormControlName="contact_1"
+        (contactTypeSelect)="contactTypeSelected($event)"
         (contactSelect)="updateFormWithPrimaryContact($event)"
       >
       </app-transaction-contact-lookup>
@@ -91,6 +90,7 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
+      [contactProperty]="transaction?.contact_2"
       (contactSelect)="updateFormWithSecondaryContact($event)"
     ></app-loan-agreement-input>
   </ng-container>
@@ -155,11 +155,9 @@
     </ng-container>
     <ng-container *ngIf="transactionType?.contact3IsRequired">
       <app-transaction-contact-lookup
-        [form]="form"
+        [contactProperty]="transaction?.contact_3"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="committeeContactTypeOptions"
-        [contactTypeFormControl]="committeeContactTypeFormControl"
-        selectedContactFormControlName="contact_3"
         (contactSelect)="updateFormWithTertiaryContact($event)"
       ></app-transaction-contact-lookup>
       <app-committee-input
@@ -176,11 +174,9 @@
     </ng-container>
     <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
       <app-transaction-contact-lookup
-        [form]="form"
+        [contactProperty]="transaction?.contact_2"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="candidateContactTypeOptions"
-        [contactTypeFormControl]="candidateContactTypeFormControl"
-        selectedContactFormControlName="contact_2"
         (contactSelect)="updateFormWithCandidateContact($event)"
       ></app-transaction-contact-lookup>
       <ng-container *ngIf="transaction?.contact_2">

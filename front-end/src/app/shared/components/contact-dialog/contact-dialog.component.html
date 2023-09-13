@@ -1,8 +1,11 @@
-<div [ngStyle]="{ display: dialogVisible ? '' : 'none' }">
+<div
+  [ngStyle]="{ display: dialogVisible ? '' : 'none' }"
+  [ngClass]="{ 'contact-dialog-not-submitted': !formSubmitted }"
+>
   <p-dialog
     [visible]="detailVisible"
     [style]="{ width: '90%' }"
-    [header]="isNewItem ? 'Add Contact' : 'Edit Contact'"
+    [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
     styleClass="p-fluid"
     (onShow)="openDialog()"
@@ -25,7 +28,7 @@
                 [showCreateNewContactButton]="false"
                 [includeFecfileResults]="false"
                 (contactTypeSelect)="contactTypeChanged($event)"
-                (contactLookupSelect)="updateFormWithSelectedContact($event)"
+                (contactLookupSelect)="updateContact($event)"
               >
               </app-contact-lookup>
             </div>
@@ -297,27 +300,41 @@
           ></button>
         </div>
         <div class="col-11">
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Save"
-            icon="pi pi-check"
-            class="p-button-primary"
-            (click)="saveContact()"
-          ></button>
-          <button
-            type="button"
-            *ngIf="isNewItem"
-            pButton
-            pRipple
-            label="Save & Add More"
-            icon="pi pi-check"
-            class="p-button-info"
-            (click)="saveContact(false)"
-          ></button>
+          <ng-container *ngIf="!headerTitle; else transactionContactLookupButton">
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-primary"
+              (click)="saveContact()"
+            ></button>
+            <button
+              type="button"
+              *ngIf="isNewItem"
+              pButton
+              pRipple
+              label="Save & Add More"
+              icon="pi pi-check"
+              class="p-button-info"
+              (click)="saveContact(false)"
+            ></button>
+          </ng-container>
         </div>
       </div>
     </ng-template>
   </p-dialog>
 </div>
+
+<ng-template #transactionContactLookupButton>
+  <button
+    type="button"
+    pButton
+    pRipple
+    label="Save & continue"
+    icon="pi pi-check"
+    class="p-button-info"
+    (click)="saveContact()"
+  ></button>
+</ng-template>

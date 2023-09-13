@@ -1,14 +1,20 @@
-<div class="p-fluid">
+<div class="p-fluid" [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl.status === 'INVALID' }">
   <app-contact-lookup
     [contactTypeOptions]="contactTypeOptions"
     (contactTypeSelect)="contactTypeSelected($event)"
-    (contactLookupSelect)="updateFormWithPrimaryContact($event)"
-    (createNewContactSelect)="onCreateNewContactSelect()"
+    (contactLookupSelect)="contactLookupSelected($event)"
+    (createNewContactSelect)="createNewContactSelected()"
   >
   </app-contact-lookup>
   <app-contact-dialog
+    headerTitle="Create a new contact"
     [contactTypeOptions]="dialogContactTypeOptions"
     [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"
   ></app-contact-dialog>
 </div>
+<app-error-messages
+  [formControl]="errorMessageFormControl"
+  [formSubmitted]="formSubmitted"
+  [requiredErrorMessage]="currentContactLabel + ' information is required'"
+></app-error-messages>
