@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
@@ -117,5 +117,14 @@ describe('ErrorMessagesComponent', () => {
     expect(component.exclusiveMaxErrorMessage).toBe('My custom exclusive max error message');
     component.exclusiveMinErrorMessage = 'My custom exclusive min error message';
     expect(component.exclusiveMinErrorMessage).toBe('My custom exclusive min error message');
+  });
+
+  it('should use a form control passed to it before using a named one passed as Input', () => {
+    const fb: FormBuilder = new FormBuilder();
+    const form = fb.group({});
+    component.form = form;
+    component.formControl = new FormControl('my control');
+    component.ngOnInit();
+    expect(component.control?.value).toBe('my control');
   });
 });
