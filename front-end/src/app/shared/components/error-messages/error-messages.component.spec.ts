@@ -123,7 +123,7 @@ describe('ErrorMessagesComponent', () => {
     const fb: FormBuilder = new FormBuilder();
     const form = fb.group({});
     component.form = form;
-    component.formControl = new FormControl('my control');
+    component.formController = new FormControl('my control');
     component.ngOnInit();
     expect(component.control?.value).toBe('my control');
   });
