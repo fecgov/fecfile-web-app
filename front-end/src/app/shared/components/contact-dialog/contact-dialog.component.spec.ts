@@ -11,7 +11,6 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
-import { PrimeOptions } from 'app/shared/utils/label.utils';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;

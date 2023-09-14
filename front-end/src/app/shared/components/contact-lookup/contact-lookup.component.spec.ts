@@ -27,15 +27,12 @@ import {
   IndividualLookupResponse,
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
-import { FecApiService } from 'app/shared/services/fec-api.service';
-import { Candidate } from 'app/shared/models/candidate.model';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
   let fixture: ComponentFixture<ContactLookupComponent>;
 
   let testContactService: ContactService;
-  let testFecApiService: FecApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -53,7 +50,6 @@ describe('ContactLookupComponent', () => {
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
-    testFecApiService = TestBed.inject(FecApiService);
   });
 
   beforeEach(() => {
