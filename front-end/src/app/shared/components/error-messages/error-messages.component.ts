@@ -10,7 +10,7 @@ export class ErrorMessagesComponent implements OnInit {
   // Pass the form and fieldName OR pass the formControl itself.
   @Input() form?: FormGroup;
   @Input() fieldName = '';
-  @Input() formController?: FormControl;
+  @Input() control?: FormControl;
 
   // We need the submitted status of the parent form to control the hide/show
   // of the error message
@@ -137,14 +137,10 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
-  control?: FormControl;
-
   constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
-    if (this.formController) {
-      this.control = this.formController;
-    } else {
+    if (!this.control) {
       this.control = this.form?.get(this.fieldName) as FormControl;
     }
   }

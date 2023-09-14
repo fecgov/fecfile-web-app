@@ -15,7 +15,7 @@
 </div>
 <app-error-messages
   *ngIf="errorMessageFormControl"
-  [formController]="errorMessageFormControl"
+  [control]="errorMessageFormControl"
   [formSubmitted]="formSubmitted"
   [requiredErrorMessage]="currentContactLabel + ' information is required'"
 ></app-error-messages>
