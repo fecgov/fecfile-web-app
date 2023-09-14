@@ -71,12 +71,14 @@ describe('ErrorMessagesComponent', () => {
     expect(component.requiredErrorMessage).toBe('This is a required field.');
     expect(component.requiredTrueErrorMessage).toBe('This is a required field.');
     component.fieldName = 'low_high';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ low_high: -100 });
     expect(component.minErrorMessage).toBe('This field must be greater than or equal to $0.00.');
     component.form.patchValue({ low_high: 100 });
     expect(component.maxErrorMessage).toBe('This field must be less than or equal to $10.00.');
     component.fieldName = 'exclusive_low_high';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ exclusive_low_high: 0 });
     expect(component.exclusiveMinErrorMessage).toBe('This field must be greater than $0.00.');
