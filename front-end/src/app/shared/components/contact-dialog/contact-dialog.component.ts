@@ -62,6 +62,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     if (this.contactTypeOptions.length === 0) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     }
+    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
@@ -209,6 +210,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       ...this.contact,
       ...ValidateUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
     });
+    contact.type = this.contactType;
     this.savedContact.emit(contact);
 
     if (closeDialog) {

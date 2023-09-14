@@ -10,7 +10,7 @@ import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_vali
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
@@ -51,6 +51,13 @@ export class TransactionContactLookupComponent implements OnInit {
     // content type from the transaction contact lookup and make the second in the lookup in the dialog to readonly.
     this.dialogContactTypeOptions = [this.contactTypeOptions[0]];
     this.currentContactLabel = this.contactTypeOptions[0].label;
+
+    // Limit contact type options in contact lookup to one when editing a transaction
+    if (this.transaction?.id) {
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+        (this.transaction as ScheduleTransaction).entity_type as ContactTypes,
+      ]);
+    }
 
     // If needed, create a local form control to manage validation and add the
     // new form control to the parent form so that a validation check occurs
