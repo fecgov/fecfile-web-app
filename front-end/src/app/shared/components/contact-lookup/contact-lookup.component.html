@@ -9,7 +9,6 @@
         styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
         [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : ''"
         id="entity_type_dropdown"
-        [autofocus]="true"
       >
       </p-dropdown>
     </div>
@@ -50,6 +49,6 @@
     [form]="form"
     [fieldName]="selectedContactFormControlName"
     [formSubmitted]="formSubmitted"
-    [requiredErrorMessage]="requiredErrorMessage"
+    [requiredErrorMessage]="(contactTypeFormControl.value | label : contactTypeLabels) + ' information is required'"
   ></app-error-messages>
 </form>

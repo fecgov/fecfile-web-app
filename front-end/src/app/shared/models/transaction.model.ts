@@ -5,7 +5,7 @@ import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsT
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
 import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { ValidateUtils } from '../utils/validate.utils';
 import {
   SchC1Transaction,
@@ -24,6 +24,7 @@ export abstract class Transaction extends BaseModel {
   id: string | undefined;
 
   @Type(() => TransactionType)
+  @Exclude({ toPlainOnly: true })
   transactionType: TransactionType = {} as TransactionType;
 
   // FECFile spec properties
@@ -54,6 +55,10 @@ export abstract class Transaction extends BaseModel {
   contact_2: Contact | undefined;
   contact_2_id: string | undefined; // Foreign key to the Contact db record
 
+  @Type(() => Contact)
+  contact_3: Contact | undefined;
+  contact_3_id: string | undefined; // Foreign key to the Contact db record
+
   @Type(() => MemoText)
   memo_text: MemoText | undefined;
   memo_text_id: string | undefined;
@@ -68,6 +73,15 @@ export abstract class Transaction extends BaseModel {
   schema_name: string | undefined;
 
   /**
+   * Some fields, such as ones in the spec but calculated by the backend, are listed
+   * here so we don't try to save them to the database in the backend.
+   * @returns list of property fields of the model not to send to the backend and not saved to the database
+   */
+  getFieldsNotToSave(): string[] {
+    return [];
+  }
+
+  /**
    * Perform bookkeeping updates to the transaction when it is created via fromJSON()
    * We have to pass the transactionType instead of getting from TransactonTypeUtils
    * in the method because that throw the error:
@@ -77,6 +91,7 @@ export abstract class Transaction extends BaseModel {
   setMetaProperties(transactionType: TransactionType): void {
     this.contact_1_id = this.contact_1?.id;
     this.contact_2_id = this.contact_2?.id;
+    this.contact_3_id = this.contact_3?.id;
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
     const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
@@ -180,6 +195,7 @@ export type TransactionGroupTypes =
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
+  LINE_14 = 'LINE_14',
   LINE_15 = 'LINE_15',
   LINE_16 = 'LINE_16',
   NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',

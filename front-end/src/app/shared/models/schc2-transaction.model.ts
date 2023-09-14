@@ -41,15 +41,15 @@ export class SchC2Transaction extends Transaction {
 }
 
 export enum ScheduleC2TransactionGroups {
-  SCHEDULE_C2 = 'Schedule C-2',
+  LOAN_GUARANTORS = 'LOAN GUARANTORS',
 }
 
-export type ScheduleC2TransactionGroupsType = ScheduleC2TransactionGroups.SCHEDULE_C2;
+export type ScheduleC2TransactionGroupsType = ScheduleC2TransactionGroups.LOAN_GUARANTORS;
 
 export enum ScheduleC2TransactionTypes {
-  LOAN_GUARANTOR_INFORMATION = 'LOAN_GUARANTOR_INFORMATION',
+  C2_LOAN_GUARANTOR = 'C2_LOAN_GUARANTOR',
 }
 
 export const ScheduleC2TransactionTypeLabels: LabelList = [
-  [ScheduleC2TransactionTypes.LOAN_GUARANTOR_INFORMATION, 'Loan Guarantor Information'],
+  [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR, 'Guarantors to loan source'],
 ];

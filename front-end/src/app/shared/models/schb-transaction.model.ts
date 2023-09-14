@@ -91,6 +91,8 @@ export type ScheduleBTransactionGroupsType =
 
 export enum ScheduleBTransactionTypes {
   IN_KIND_OUT = 'IN_KIND_OUT',
+  IN_KIND_CONTRIBUTION_TO_CANDIDATE = 'IN_KIND_CONTRIBUTION_TO_CANDIDATE',
+  IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE = 'IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE',
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT',
@@ -162,10 +164,13 @@ export enum ScheduleBTransactionTypes {
   CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
   CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
   LOAN_MADE = 'LOAN_MADE',
+  LOAN_REPAYMENT_MADE = 'LOAN_REPAYMENT_MADE',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
+  [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE, 'In-kind Contribution to Candidate'],
+  [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE, 'In-kind Contribution to Other Committee'],
   [
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Refund - Non-contribution Account',
@@ -336,4 +341,5 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
   [ScheduleBTransactionTypes.LOAN_MADE, 'Loan Made'],
+  [ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE, 'Loan Repayment Made'],
 ];

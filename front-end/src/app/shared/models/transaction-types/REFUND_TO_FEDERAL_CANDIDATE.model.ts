@@ -15,7 +15,7 @@ export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   schema = schema;
   override hasCandidateCommittee = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override contact2IsRequired = true;
+  override contact2IsRequired = () => true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

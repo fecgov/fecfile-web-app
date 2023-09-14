@@ -9,6 +9,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
+import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',
@@ -20,6 +21,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleC1TransactionTypeLabels,
     ...ScheduleC2TransactionTypeLabels,
+    ...ScheduleDTransactionTypeLabels,
   ];
 
   constructor(

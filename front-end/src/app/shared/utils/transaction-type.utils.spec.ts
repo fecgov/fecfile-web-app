@@ -16,7 +16,11 @@ describe('LabelUtils', () => {
       transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
     };
 
-    const scheduleObject = getFromJSON(testJSON);
+    let scheduleObject = getFromJSON(testJSON);
     expect(scheduleObject.constructor.name).toBe('SchCTransaction');
+
+    testJSON.transaction_type_identifier = 'DEBT_OWED_TO_COMMITTEE';
+    scheduleObject = getFromJSON(testJSON);
+    expect(scheduleObject.constructor.name).toBe('SchDTransaction');
   });
 });

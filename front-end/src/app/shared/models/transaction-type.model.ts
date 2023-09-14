@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
   CANDIDATE_FIELDS,
@@ -6,6 +7,7 @@ import {
   EMPLOYEE_INFO_FIELDS,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
+  CATEGORY_CODE,
   hasFields,
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
@@ -27,12 +29,16 @@ export abstract class TransactionType {
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
+  synchronizeOrgComNameValues = true; // When the COM name value is saved in the ORG model property per the FEC specification, "true" indicates that it is also copied into the COM model property as well
 
   // Form display settings
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
-  contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
+  contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
+  showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -61,6 +67,7 @@ export abstract class TransactionType {
   // Labels
   dateLabel = 'DATE';
   amountInputHeader = '';
+  debtInputHeader = '';
   purposeDescripLabel = '';
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
@@ -118,12 +125,16 @@ export abstract class TransactionType {
   // The following "has*" methods and properties are boolean switches that show/hide
   // a component or section in the transaction type input component
   hasAmountInput = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
+  hasDebtInput = false;
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
   hasCandidateInformation(): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
+  }
+  hasCommitteeOrCandidateInformation(): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired;
   }
   hasCommitteeFecId(): boolean {
     return hasFields(this.formFields, ['committee_fec_id']);
@@ -139,6 +150,18 @@ export abstract class TransactionType {
   }
   hasLoanTermsFields(): boolean {
     return hasFields(this.formFields, LOAN_TERMS_FIELDS);
+  }
+  hasCategoryCode(): boolean {
+    return hasFields(this.formFields, CATEGORY_CODE);
+  }
+  hasDate(): boolean {
+    return hasFields(this.formFields, ['date']);
+  }
+  hasMemoCode(): boolean {
+    return hasFields(this.formFields, ['memo_code']);
+  }
+  hasMemoText(): boolean {
+    return hasFields(this.formFields, ['text4000']);
   }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
@@ -184,7 +207,9 @@ export type TransactionTemplateMapType = {
   balance: string;
   payment_to_date: string;
   due_date: string;
+  due_date_setting: string;
   interest_rate: string;
+  interest_rate_setting: string;
   secured: string;
   aggregate: string;
   purpose_description: string;

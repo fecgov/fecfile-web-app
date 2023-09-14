@@ -9,8 +9,10 @@ import {
   LOAN_TERMS_FIELDS,
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
+  ADDRESS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_SECONDARY } from '../contact.model';
+import { FormGroup } from '@angular/forms';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [
@@ -19,11 +21,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     ...SECONDARY_ADDRESS_FIELDS,
     ...SIGNATORY_1_FIELDS,
     ...SIGNATORY_2_FIELDS,
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
+    ...ADDRESS_FIELDS,
     'date',
     'amount',
     'balance',
@@ -53,6 +51,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   ];
   override contactConfig = STANDARD_AND_SECONDARY;
   override contactTypeOptions = ORGANIZATION;
+  override contact2IsRequired = (form: FormGroup) => form.get('future_income')?.value;
   override isDependentChild = true;
   override doMemoCodeDateCheck = false;
   schema = schema;
@@ -75,7 +74,9 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'amount',
     'date',
     'due_date',
+    'due_date_setting',
     'interest_rate',
+    'interest_rate_setting',
   ] as TemplateMapKeyType[];
 
   // override description =

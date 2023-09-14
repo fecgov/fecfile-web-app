@@ -1,0 +1,72 @@
+<div class="card">
+  <p-table
+    #dt
+    [value]="transactions ?? []"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalItems"
+    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} ' + tableLabel"
+    [showCurrentPageReport]="true"
+    sortField="created"
+    [customSort]="true"
+    (sortFunction)="sortMethod($event)"
+  >
+    <ng-template pTemplate="caption">
+      <div class="grid">
+        <div class="col-9 flex align-items-center justify-content-between">
+          <h5 class="gandhi-bold size-24">{{ tableLabel }}</h5>
+        </div>
+        <div class="col-3 align-right">
+          Results per table:
+          <p-dropdown
+            [options]="paginationPageSizeOptions"
+            [(ngModel)]="rowsPerPage"
+            (onChange)="onRowsPerPageChange()"
+          ></p-dropdown>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr role="row">
+        <th pSortableColumn="name" id="name-column" role="columnheader">
+          {{ nameHeader }} <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="amount" id="amount-column" role="columnheader">
+          {{ amountHeader }} <p-sortIcon field="amount"></p-sortIcon>
+        </th>
+        <th id="buttons" role="columnheader">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr role="row">
+        <td>
+          <a (click)="this.editItem(item)">
+            {{
+              item[item.transactionType.templateMap.organization_name] ||
+                item[item.transactionType.templateMap.last_name] +
+                  ', ' +
+                  item[item.transactionType.templateMap.first_name]
+            }}
+          </a>
+        </td>
+        <td>
+          <span class="float-right">
+            {{ item[item.transactionType.templateMap.amount] | currency }}
+          </span>
+        </td>
+        <td>
+          <app-table-actions-button
+            [tableActions]="rowActions"
+            [actionItem]="item"
+            [tableActionClick]="onRowActionClick"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="p-button-text"
+            buttonAriaLabel="action"
+          ></app-table-actions-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

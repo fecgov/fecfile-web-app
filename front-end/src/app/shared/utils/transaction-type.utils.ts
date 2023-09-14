@@ -3,6 +3,7 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { SchCTransaction } from '../models/schc-transaction.model';
 import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
+import { SchDTransaction } from '../models/schd-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
@@ -91,6 +92,7 @@ import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UN
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
 import { LOAN_RECEIVED_FROM_BANK_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_BANK_RECEIPT.model';
+import { LOAN_REPAYMENT_RECEIVED } from '../models/transaction-types/LOAN_REPAYMENT_RECEIVED.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -166,6 +168,9 @@ import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TR
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO.model';
 import { LOAN_MADE } from '../models/transaction-types/LOAN_MADE.model';
+import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
+import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE.model';
+import { LOAN_REPAYMENT_MADE } from '../models/transaction-types/LOAN_REPAYMENT_MADE.model';
 
 // Schedule C /////////////////////////////////////////////////////
 
@@ -176,6 +181,15 @@ import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE
 // Schedule C1 ////////////////////////////////////////////////////
 
 import { C1_LOAN_AGREEMENT } from '../models/transaction-types/C1_LOAN_AGREEMENT.model';
+
+// Schedule C2 ////////////////////////////////////////////////////
+
+import { C2_LOAN_GUARANTOR } from '../models/transaction-types/C2_LOAN_GUARANTOR.model';
+
+// Schedule D ////////////////////////////////////////////////////
+
+import { DEBT_OWED_BY_COMMITTEE } from '../models/transaction-types/DEBT_OWED_BY_COMMITTEE.model';
+import { DEBT_OWED_TO_COMMITTEE } from '../models/transaction-types/DEBT_OWED_TO_COMMITTEE.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -273,6 +287,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
   LOAN_RECEIVED_FROM_BANK_RECEIPT,
+  LOAN_REPAYMENT_RECEIVED,
   // Schedule B /////////////////////////////////////////////////////
   PAC_CONDUIT_EARMARK_OUT,
   PAC_CONDUIT_EARMARK_OUT_DEPOSITED: PAC_CONDUIT_EARMARK_OUT,
@@ -284,6 +299,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
   INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
   INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
+  IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+  IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
   OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
@@ -345,12 +362,18 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
   LOAN_MADE,
+  LOAN_REPAYMENT_MADE,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
   LOAN_RECEIVED_FROM_BANK,
   LOAN_BY_COMMITTEE,
   // Schedule C1 ////////////////////////////////////////////////////
   C1_LOAN_AGREEMENT,
+  // Schedule C2 ////////////////////////////////////////////////////
+  C2_LOAN_GUARANTOR,
+  // Schedule D ////////////////////////////////////////////////////
+  DEBT_OWED_BY_COMMITTEE,
+  DEBT_OWED_TO_COMMITTEE,
 }
 
 export class TransactionTypeUtils {
@@ -387,6 +410,7 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
     if (transactionType.scheduleId === 'C') return SchCTransaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'C1') return SchC1Transaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'C2') return SchC2Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'D') return SchDTransaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');

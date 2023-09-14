@@ -2,8 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { CommitteeInputComponent } from './committee-input.component';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('CommitteeInputComponent', () => {
   let component: CommitteeInputComponent;
@@ -28,5 +29,17 @@ describe('CommitteeInputComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should sync committee_name to organization_name', () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECEIPT) as SchATransaction;
+
+    component.transaction.transactionType.synchronizeOrgComNameValues = true;
+
+    component.ngOnInit();
+
+    expect(component.form.get('donor_committee_name')?.value).toBe('');
+    component.form.get('contributor_organization_name')?.setValue('ORG');
+    expect(component.form.get('donor_committee_name')?.value).toBe('ORG');
   });
 });

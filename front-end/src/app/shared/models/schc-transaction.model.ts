@@ -25,7 +25,9 @@ export class SchCTransaction extends Transaction {
   loan_balance: number | undefined;
   @Transform(BaseModel.dateTransform) loan_incurred_date: Date | undefined;
   loan_due_date: string | undefined;
+  loan_due_date_field_setting: string | undefined;
   loan_interest_rate: string | undefined;
+  loan_interest_rate_field_setting: string | undefined;
   secured: boolean | undefined;
   personal_funds: boolean | undefined;
   lender_committee_id_number: string | undefined;
@@ -42,6 +44,15 @@ export class SchCTransaction extends Transaction {
   memo_text_description: string | undefined;
 
   aggregation_group: AggregationGroups | undefined;
+
+  // loan_payment_to_date and loan_balance are dynamically calculated on the back-end
+  // and not saved in the database
+  override getFieldsNotToValidate(): string[] {
+    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToValidate()];
+  }
+  override getFieldsNotToSave(): string[] {
+    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToSave()];
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchCTransaction {
@@ -64,10 +75,9 @@ export class SchCTransaction extends Transaction {
 
 export enum ScheduleCTransactionGroups {
   LOANS = 'LOANS',
-  DEBTS = 'DEBTS',
 }
 
-export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.LOANS | ScheduleCTransactionGroups.DEBTS;
+export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.LOANS;
 
 export enum ScheduleCTransactionTypes {
   LOAN_RECEIVED_FROM_INDIVIDUAL = 'LOAN_RECEIVED_FROM_INDIVIDUAL',

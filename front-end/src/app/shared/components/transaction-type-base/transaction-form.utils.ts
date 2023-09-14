@@ -115,7 +115,16 @@ export class TransactionFormUtils {
     form.addControl(
       'contact_2',
       new FormControl(null, () => {
-        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired) {
+        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired(form)) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+    form.addControl(
+      'contact_3',
+      new FormControl(null, () => {
+        if (!transaction?.contact_3 && transaction.transactionType?.contact3IsRequired) {
           return { required: true };
         }
         return null;
@@ -179,6 +188,7 @@ export class TransactionFormUtils {
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
+    formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
     let payload: ScheduleTransaction = getFromJSON({
       ...transaction,
@@ -200,9 +210,9 @@ export class TransactionFormUtils {
 
   /**
    * Some form fields are not part of the FEC spec but internal state variables for the front-end. Add them to the payload.
-   * @param form
    * @param transaction
-   * @param contactTypeOptions
+   * @param form
+   * @param formValues
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static addExtraFormFields(transaction: Transaction, form: FormGroup, formValues: any) {
@@ -211,6 +221,19 @@ export class TransactionFormUtils {
         formValues[field] = form.get(field)?.value ?? null;
       }
     });
+    return formValues;
+  }
+
+  /**
+   * Some form fields are part of the FEC spec but we don't want them in the payload to be
+   * saved in the backend. An example of this are loan_balance in Schedule C which is dynamically
+   * calculated by the backend and not stored in the database.
+   * @param transaction
+   * @param formValues
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static removeUnsavedFormFields(transaction: Transaction, formValues: any) {
+    transaction.getFieldsNotToSave().forEach((field: string) => delete formValues[field]);
     return formValues;
   }
 

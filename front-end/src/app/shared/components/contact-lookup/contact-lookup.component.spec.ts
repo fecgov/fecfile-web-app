@@ -28,6 +28,7 @@ import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from './contact-lookup.component';
+import { LabelPipe } from '../../pipes/label.pipe';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -37,7 +38,7 @@ describe('ContactLookupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContactLookupComponent],
+      declarations: [ContactLookupComponent, LabelPipe],
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -67,7 +68,6 @@ describe('ContactLookupComponent', () => {
     component.ngOnInit();
     component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
     expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);
-    expect(component.requiredErrorMessage).toEqual('Candidate information is required');
   });
 
   it('#onDropdownSearch empty search', fakeAsync(() => {

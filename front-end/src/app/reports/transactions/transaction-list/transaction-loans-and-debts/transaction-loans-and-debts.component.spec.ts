@@ -14,13 +14,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { DropdownModule } from 'primeng/dropdown';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
   let component: TransactionLoansAndDebtsComponent;
   let router: Router;
-  let testItemService: TransactionSchCService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,7 +64,6 @@ describe('TransactionReceiptsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchCService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -89,24 +88,32 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[3].isEnabled({})).toEqual(true);
   });
 
-  it('test forceItemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceItemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(true);
-  });
-
-  it('test forceUnitemize', () => {
-    spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceUnitemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(false);
-  });
-
   it('test editItem', () => {
     const navigateSpy = spyOn(router, 'navigate');
     const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
     component.editItem(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test createLoanRepaymentReceived', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    component.createLoanRepaymentReceived(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test createLoanRepaymentMade', () => {
+    const tableAction = component.rowActions.filter((item) => item.label === 'Make loan repayment')[0];
+    const transaction = { id: 1, transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL };
+    component.reportIsEditable = true;
+    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    transaction.transaction_type_identifier = ScheduleCTransactionTypes.LOAN_BY_COMMITTEE;
+    expect(tableAction.isAvailable(transaction)).toBeFalse();
+    expect(tableAction.isEnabled(transaction)).toBeTrue();
+
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    component.createLoanRepaymentMade(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
 });

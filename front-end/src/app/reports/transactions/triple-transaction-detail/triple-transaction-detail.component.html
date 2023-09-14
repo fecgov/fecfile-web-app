@@ -26,6 +26,7 @@
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
+          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>
@@ -59,6 +60,7 @@
           (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
           (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
+          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>
@@ -92,12 +94,15 @@
           (primaryContactSelect)="childUpdateFormWithPrimaryContact_2($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact_2($event)"
           (secondaryContactSelect)="childUpdateFormWithSecondaryContact_2($event)"
+          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact_2($event)"
         >
         </app-transaction-input>
       </form>
     </div>
   </p-accordionTab>
 </p-accordion>
+
+<app-transaction-children-list-container [transaction]="transaction"></app-transaction-children-list-container>
 
 <app-transaction-navigation
   [isEditable]="isEditable"

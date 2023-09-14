@@ -43,7 +43,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload',
+      // Fixes bug that had window scroll position being preserved between routes.
+      // https://stackoverflow.com/questions/39601026/angular-2-scroll-to-top-on-route-change
+      scrollPositionRestoration: 'top',
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

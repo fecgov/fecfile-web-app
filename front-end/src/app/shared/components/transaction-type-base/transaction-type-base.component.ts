@@ -79,6 +79,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         });
     }
 
+    // If this single-entry transaction has inherited fields from its parent, load values
+    // from parent on create and set field to read-only. For edit, just make
+    // the fields read-only
+    if (this.transaction.transactionType.inheritedFields) {
+      this.initInheritedFieldsFromParent();
+    }
+
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
@@ -144,6 +151,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
+              transaction,
               templateMap,
               contactKey
             );
@@ -204,7 +212,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const reportPath = `/reports/transactions/report/${event.transaction?.report_id}`;
     if (
       event.destination === NavigationDestination.ANOTHER ||
-      event.destination === NavigationDestination.ANOTHER_CHILD
+      event.destination === NavigationDestination.ANOTHER_CHILD ||
+      event.destination === NavigationDestination.ANOTHER_CHILD_BUTTON
     ) {
       this.messageService.add({
         severity: 'success',
@@ -219,7 +228,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
       }
-    } else if (event.destination === NavigationDestination.CHILD) {
+    } else if (
+      event.destination === NavigationDestination.CHILD ||
+      event.destination === NavigationDestination.CHILD_BUTTON
+    ) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -268,6 +280,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     );
   }
 
+  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithTertiaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_3']
+    );
+  }
+
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
     const requiredLabel = 'MEMO ITEM';
     const optionalLabel = requiredLabel + ' (OPTIONAL)';
@@ -284,5 +305,48 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       startWith(optionalLabel),
       takeUntil(this.destroy$)
     );
+  }
+
+  /**
+   * If the transaction being created/edited has inheritedFields, populate the form values
+   * from the parent_transaction on create. On edit, simply make the fields read-only.
+   *
+   * The entity_type is handled as a special case because it does not exist in the templateMap.
+   */
+  initInheritedFieldsFromParent(): void {
+    if (!this.transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
+
+    // If creating a new transaction, set both form and contact_1 values from parent transaction
+    if (!this.transaction.id) {
+      this.transaction.contact_1 = this.transaction.parent_transaction?.contact_1;
+      this.transaction.contact_1_id = this.transaction.parent_transaction?.contact_1_id;
+
+      const entityTypeValue = this.transaction?.parent_transaction?.contact_1?.type;
+      if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);
+      this.form.get('entity_type')?.updateValueAndValidity();
+
+      this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
+        if (this.transaction?.parent_transaction) {
+          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+          const value =
+            this.transaction.parent_transaction[
+              `${this.transaction.parent_transaction?.transactionType.templateMap[inherittedField]}` as keyof Transaction
+            ];
+          if (value !== undefined) {
+            fieldControl?.setValue(value);
+            fieldControl?.updateValueAndValidity();
+          }
+        }
+      });
+    }
+
+    // Set fields to read-only
+    this.form.get('entity_type')?.disable();
+    this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
+      if (this.transaction) {
+        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+        fieldControl?.disable();
+      }
+    });
   }
 }

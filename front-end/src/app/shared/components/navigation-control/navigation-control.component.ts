@@ -15,6 +15,7 @@ import {
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { FormControl } from '@angular/forms';
+import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 
 @Component({
   selector: 'app-navigation-control',
@@ -54,10 +55,28 @@ export class NavigationControlComponent implements OnInit {
   }
 
   click(): void {
+    let destinationTransactionType: TransactionTypes | undefined;
+    // Handle CHILD_BUTTON case by determining child TransactionType
+    if (
+      this.navigationControl?.navigationDestination === NavigationDestination.CHILD_BUTTON &&
+      this.transaction?.transactionType.subTransactionConfig
+    ) {
+      destinationTransactionType = (this.transaction.transactionType.subTransactionConfig as TransactionTypes[])[0];
+    }
+
+    // Handle ANOTHER_CHILD_BUTTON case by determining child TransactionType
+    if (
+      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER_CHILD_BUTTON &&
+      this.transaction?.transaction_type_identifier
+    ) {
+      destinationTransactionType = this.transaction.transaction_type_identifier as TransactionTypes;
+    }
+
     const navigationEvent = new NavigationEvent(
       this.navigationControl?.navigationAction,
       this.navigationControl?.navigationDestination,
-      this.transaction
+      this.transaction,
+      destinationTransactionType
     );
     this.navigate.emit(navigationEvent);
   }
@@ -87,7 +106,8 @@ export class NavigationControlComponent implements OnInit {
       label:
         type.shortName ||
         LabelUtils.get(ScheduleATransactionTypeLabels, typeId) ||
-        LabelUtils.get(ScheduleBTransactionTypeLabels, typeId),
+        LabelUtils.get(ScheduleBTransactionTypeLabels, typeId) ||
+        LabelUtils.get(ScheduleC2TransactionTypeLabels, typeId),
       value: new NavigationEvent(
         NavigationAction.SAVE,
         isParentConfig ? NavigationDestination.ANOTHER_CHILD : NavigationDestination.CHILD,
