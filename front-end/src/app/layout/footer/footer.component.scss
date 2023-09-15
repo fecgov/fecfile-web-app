@@ -1,6 +1,10 @@
 footer {
   background-color: #d8d8d8;
   font-size: 0.8rem;
+  bottom: 0px;
+  left: 0px;
+  position: fixed;
+  width: -webkit-fill-available;
 }
 
 footer label {
