@@ -21,25 +21,25 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     new TableAction(
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
-      (report: F3xSummary) => report.report_status === 'In-Progress',
+      (report: F3xSummary) => report.report_status === 'In progress',
       () => true
     ),
     new TableAction(
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
-      (report: F3xSummary) => report.report_status === 'In-Progress',
+      (report: F3xSummary) => report.report_status === 'In progress',
       () => true
     ),
     new TableAction(
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
-      (report: F3xSummary) => report.report_status === 'In-Progress',
+      (report: F3xSummary) => report.report_status === 'In progress',
       () => true
     ),
     new TableAction(
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
-      (report: F3xSummary) => report.report_status === 'In-Progress',
+      (report: F3xSummary) => report.report_status === 'In progress',
       () => false
     ),
   ];
