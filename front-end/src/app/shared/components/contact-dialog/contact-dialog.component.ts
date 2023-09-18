@@ -172,10 +172,12 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.dialogVisible = true;
   }
 
-  public closeDialog() {
-    this.detailVisibleChange.emit(false);
-    this.detailVisible = false;
-    this.dialogVisible = false;
+  public closeDialog(visibleChangeFlag = false) {
+    if (!visibleChangeFlag) {
+      this.detailVisibleChange.emit(false);
+      this.detailVisible = false;
+      this.dialogVisible = false;
+    }
   }
 
   /**

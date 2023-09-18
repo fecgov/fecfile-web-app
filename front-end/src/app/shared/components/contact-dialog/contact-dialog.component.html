@@ -10,6 +10,7 @@
     styleClass="p-fluid"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
+    (visibleChange)="closeDialog($event)"
   >
     <ng-template pTemplate="content">
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
