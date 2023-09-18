@@ -19,7 +19,6 @@ export class TransactionInputComponent implements OnInit {
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
-  @Input() contactLookupLabel = 'CONTACT TYPE';
   @Input() candidateInfoPosition = 'low';
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();

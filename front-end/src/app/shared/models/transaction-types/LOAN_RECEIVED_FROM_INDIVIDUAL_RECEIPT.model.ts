@@ -38,7 +38,6 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   override formTitle = 'Receipt';
   override footer = undefined;
   override contactTitle = 'Contact';
-  override contactLookupLabel = 'CONTACT LOOKUP';
   override dateLabel = 'DATE';
 
   getNewTransaction() {

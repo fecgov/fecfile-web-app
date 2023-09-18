@@ -12,6 +12,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 
 @Component({
   template: '',
@@ -65,7 +66,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
     new TableAction(
       'Review loan agreement',
-      this.editSecondChild.bind(this),
+      this.editLoanAgreement.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
       () => true
@@ -132,14 +133,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
   }
 
-  public editFirstChild(item: Transaction): void {
-    if (item.children?.length && item.children.length > 0)
-      this.router.navigate([`${item.children[0].id}`], { relativeTo: this.activatedRoute });
-  }
-
-  public editSecondChild(item: Transaction): void {
-    if (item.children?.length && item.children.length > 1)
-      this.router.navigate([`${item.children[1].id}`], { relativeTo: this.activatedRoute });
+  public editLoanAgreement(transaction: Transaction): void {
+    const agreement = (transaction.children ?? []).find(
+      (child) => child.transaction_type_identifier == ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
+    );
+    if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
   }
 
   public forceItemize(transaction: Transaction): void {

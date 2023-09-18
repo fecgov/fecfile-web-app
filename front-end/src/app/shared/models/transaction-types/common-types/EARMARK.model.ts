@@ -19,5 +19,4 @@ export abstract class EARMARK extends SchATransactionType {
   override formTitle = undefined;
   override footer = undefined;
   override contactTitle = 'Contact';
-  override contactLookupLabel = 'CONTACT LOOKUP';
 }
