@@ -82,7 +82,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
-      'Make debt repayment',
+      'Report debt repayment',
       this.createDebtRepaymentMade.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
@@ -90,7 +90,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
-      'Receive debt repayment',
+      'Report debt repayment',
       this.createDebtRepaymentReceived.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
@@ -185,15 +185,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     );
   }
   public createDebtRepaymentReceived(transaction: Transaction): void {
-    this.confirmationService.confirm({
-      header: 'Select a transaction',
-      key: 'debt-repayment',
-      accept: (transactionType: any) => {
-        this.router.navigateByUrl(
-          `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${transactionType}`
-        );
-      },
-    });
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`
+    );
   }
 
   public createLoanRepaymentMade(transaction: Transaction): void {
@@ -202,15 +196,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     );
   }
   public createDebtRepaymentMade(transaction: Transaction): void {
-    this.confirmationService.confirm({
-      header: 'Select a transaction',
-      key: 'debt-repayment',
-      accept: (transactionType: any) => {
-        this.router.navigateByUrl(
-          `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${transactionType}`
-        );
-      },
-    });
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
+    );
   }
 
   public updateItem(item: Transaction) {

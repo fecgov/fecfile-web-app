@@ -41,6 +41,9 @@ export abstract class Transaction extends BaseModel {
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
 
+  repayment_to: Transaction | undefined;
+  repayment_to_id: string | undefined; // Foreign key to debt or loan which this transaction repays
+
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;

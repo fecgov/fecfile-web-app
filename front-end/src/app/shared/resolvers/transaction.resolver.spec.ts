@@ -107,7 +107,7 @@ describe('TransactionResolver', () => {
   });
 
   xit('should attach child for transaction with dependent child transaction type', () => {
-    resolver.resolve_new_child_transaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
+    resolver.resolveNewChildTransaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
       if (transaction?.children) {
         expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');
       }
@@ -117,7 +117,7 @@ describe('TransactionResolver', () => {
   it('should throw an error if trying to resolve an invalid transaction type identifier', () => {
     spyOn(resolver.transactionService, 'get').and.returnValue(of({} as SchATransaction));
     resolver
-      .resolve_existing_transaction('10')
+      .resolveExistingTransaction('10')
       .pipe(
         catchError((err) =>
           of(
@@ -143,7 +143,7 @@ describe('TransactionResolver', () => {
       )
     );
     resolver
-      .resolve_existing_transaction('10')
+      .resolveExistingTransaction('10')
       .pipe(
         catchError((err) =>
           of(
@@ -169,14 +169,14 @@ describe('TransactionResolver', () => {
         })
       )
     );
-    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransaction('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
     });
   });
 
   it('should add new child transaction to new parent if parent has a dependentChildTransactionTypes', () => {
     resolver
-      .resolve_new_transaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
+      .resolveNewTransaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
       .subscribe((transaction: Transaction | undefined) => {
         if (transaction?.children)
           expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
@@ -198,7 +198,7 @@ describe('TransactionResolver', () => {
         })
       );
     });
-    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransaction('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
     });
@@ -247,7 +247,7 @@ describe('TransactionResolver', () => {
         );
       }
     });
-    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransaction('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
       expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
