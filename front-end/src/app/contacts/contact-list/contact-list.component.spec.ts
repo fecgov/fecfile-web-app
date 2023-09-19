@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from 'app/shared/shared.module';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -12,7 +12,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Contact, ContactTypes } from '../../shared/models/contact.model';
-import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
+import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { ContactListComponent } from './contact-list.component';
 import { of } from 'rxjs';
@@ -25,6 +25,13 @@ describe('ContactListComponent', () => {
   contact.first_name = 'Jane';
   contact.last_name = 'Smith';
   contact.name = 'ABC Inc';
+  const tableDataResponse = {
+    count: 2,
+    pageNumber: 1,
+    next: 'https://next',
+    previous: 'https://previous',
+    results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,8 +45,8 @@ describe('ContactListComponent', () => {
         ConfirmDialogModule,
         SharedModule,
       ],
-      declarations: [ContactListComponent, ContactDetailComponent, DeletedContactDialogComponent],
-      providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
+      declarations: [ContactListComponent, ContactDialogComponent, DeletedContactDialogComponent],
+      providers: [ConfirmationService, FormBuilder, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
@@ -95,15 +102,7 @@ describe('ContactListComponent', () => {
   });
 
   it('#onSelectAllChange set properties', () => {
-    spyOn(component.itemService, 'getTableData').and.returnValue(
-      of({
-        count: 2,
-        pageNumber: 1,
-        next: 'https://next',
-        previous: 'https://previous',
-        results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
-      })
-    );
+    spyOn(component.itemService, 'getTableData').and.returnValue(of(tableDataResponse));
     component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeFalse();
     expect(component.selectedItems).toEqual([]);
@@ -116,5 +115,17 @@ describe('ContactListComponent', () => {
   it('#restoreButton should make dialog visible', () => {
     component.onRestoreClick();
     expect(component.restoreDialogIsVisible).toBeTrue();
+  });
+
+  it('#saveContact calls itemService', () => {
+    spyOn(component.itemService, 'update').and.returnValue(of(testContact));
+    spyOn(component.itemService, 'create').and.returnValue(of(testContact));
+    spyOn(component.itemService, 'getTableData').and.returnValue(of(tableDataResponse));
+    const contact = testContact;
+    component.saveContact(contact);
+    expect(component.itemService.update).toHaveBeenCalledTimes(1);
+    contact.id = undefined;
+    component.saveContact(contact);
+    expect(component.itemService.create).toHaveBeenCalledTimes(1);
   });
 });

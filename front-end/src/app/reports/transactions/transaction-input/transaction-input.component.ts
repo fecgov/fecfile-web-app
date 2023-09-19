@@ -1,5 +1,5 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Contact, ContactTypes, ContactTypeLabels } from 'app/shared/models/contact.model';
@@ -17,14 +17,6 @@ export class TransactionInputComponent implements OnInit {
   @Input() isEditable = true;
   @Input() transaction?: Transaction;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  @Input() candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-    ContactTypes.CANDIDATE,
-  ]);
-  @Input() candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
-  @Input() committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-    ContactTypes.COMMITTEE,
-  ]);
-  @Input() committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
@@ -37,6 +29,8 @@ export class TransactionInputComponent implements OnInit {
   ContactTypes = ContactTypes;
   transactionType: TransactionType = {} as TransactionType;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
   ngOnInit(): void {
     if (this.transaction) {
@@ -47,7 +41,12 @@ export class TransactionInputComponent implements OnInit {
     }
   }
 
+  contactTypeSelected(contactType: ContactTypes) {
+    this.form.get('entity_type')?.setValue(contactType);
+  }
+
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+    this.form.get('entity_type')?.setValue(selectItem.value.type);
     this.primaryContactSelect.emit(selectItem);
   }
 
