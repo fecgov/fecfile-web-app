@@ -1539,7 +1539,6 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
 .p-radiobutton {
   width: 20px;
   height: 20px;
-  padding-bottom: 5px !important;
 }
 .p-radiobutton .p-radiobutton-box {
   border: 2px solid #5b616b;
@@ -1570,9 +1569,9 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
   background: #FFFFFF;
 }
 .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
-  border-color: #5b616b;
-  background: #5b616b;
-  color: #ffffff;
+  border-color: #AEB0B5;
+  background: #FFFFFF;
+  color: #AEB0B5;
 }
 p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
   border-color: #cd2026;
