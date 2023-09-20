@@ -92,12 +92,11 @@
   </p-table>
 </div>
 
-<app-contact-detail
+<app-contact-dialog
   [contact]="this.item"
   [(detailVisible)]="detailVisible"
-  [isNewItem]="isNewItem"
-  (loadTableItems)="loadTableItems($event)"
-></app-contact-detail>
+  (savedContact)="saveContact($event)"
+></app-contact-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
 

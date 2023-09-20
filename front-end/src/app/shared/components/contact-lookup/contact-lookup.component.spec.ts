@@ -1,8 +1,18 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
+import { of } from 'rxjs';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
+import { SharedModule } from 'app/shared/shared.module';
+import { ContactService } from 'app/shared/services/contact.service';
+import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { DropdownModule } from 'primeng/dropdown';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DialogModule } from 'primeng/dialog';
+import { ContactLookupComponent } from './contact-lookup.component';
+import { LabelPipe } from '../../pipes/label.pipe';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   CandidateLookupResponse,
   CommitteeLookupResponse,
@@ -17,18 +27,6 @@ import {
   IndividualLookupResponse,
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
-import { SharedModule } from 'app/shared/shared.module';
-import { ContactService } from 'app/shared/services/contact.service';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { DropdownModule } from 'primeng/dropdown';
-import { of } from 'rxjs';
-
-import { LabelUtils } from 'app/shared/utils/label.utils';
-import { SelectItem } from 'primeng/api';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { DialogModule } from 'primeng/dialog';
-import { ContactLookupComponent } from './contact-lookup.component';
-import { LabelPipe } from '../../pipes/label.pipe';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -268,7 +266,7 @@ describe('ContactLookupComponent', () => {
     ).toBeTrue();
   }));
 
-  it('#updateFormWithPrimaryContact Contact happy path', fakeAsync(() => {
+  it('#onContactSelect Contact happy path', fakeAsync(() => {
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
     const testContact = Contact.fromJSON({
       id: 123,
@@ -276,12 +274,9 @@ describe('ContactLookupComponent', () => {
       first_name: 'testFirstName',
       type: ContactTypes.COMMITTEE,
     });
-    const testValue = {
-      value: testContact,
-    } as SelectItem<Contact>;
-    component.updateFormWithPrimaryContact(testValue);
+    component.onContactSelect(testContact);
     tick(500);
-    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
+    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testContact);
   }));
 
   it('#onCreateNewContactSelect Contact happy path', fakeAsync(() => {
@@ -297,4 +292,10 @@ describe('ContactLookupComponent', () => {
 
     expect(retval).toEqual(expectedRetval);
   });
+
+  it('#onContactLookupSelect should call proper lookup', fakeAsync(() => {
+    spyOn(component, 'onContactSelect');
+    component.onContactLookupSelect({ value: testContact });
+    expect(component.onContactSelect).toHaveBeenCalledWith(testContact);
+  }));
 });

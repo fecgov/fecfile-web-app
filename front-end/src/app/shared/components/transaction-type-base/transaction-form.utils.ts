@@ -1,4 +1,4 @@
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
@@ -109,27 +109,6 @@ export class TransactionFormUtils {
           this.updateAggregate(form, templateMap, transaction, previous_transaction, amount);
         });
     }
-
-    // Add form controls to bubble up validate error messages from the Contact Lookup component
-    form.addControl('contact_1', new FormControl());
-    form.addControl(
-      'contact_2',
-      new FormControl(null, () => {
-        if (!transaction?.contact_2 && transaction.transactionType?.contact2IsRequired(form)) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
-    form.addControl(
-      'contact_3',
-      new FormControl(null, () => {
-        if (!transaction?.contact_3 && transaction.transactionType?.contact3IsRequired) {
-          return { required: true };
-        }
-        return null;
-      })
-    );
 
     const schema = transaction.transactionType?.schema;
     if (schema) {

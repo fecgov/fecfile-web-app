@@ -16,7 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TooltipModule } from 'primeng/tooltip';
-import { ContactFormComponent } from './components/contact-form/contact-form.component';
+import { ContactDialogComponent } from './components/contact-dialog/contact-dialog.component';
 import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
@@ -86,7 +86,7 @@ import { DebtInputComponent } from './components/inputs/debt-input/debt-input.co
     NavigationControlBarComponent,
     ContactLookupComponent,
     TransactionContactLookupComponent,
-    ContactFormComponent,
+    ContactDialogComponent,
     AddressInputComponent,
     NameInputComponent,
     CandidateInputComponent,
@@ -122,7 +122,7 @@ import { DebtInputComponent } from './components/inputs/debt-input/debt-input.co
     NavigationControlBarComponent,
     ContactLookupComponent,
     TransactionContactLookupComponent,
-    ContactFormComponent,
+    ContactDialogComponent,
     AddressInputComponent,
     NameInputComponent,
     CandidateInputComponent,

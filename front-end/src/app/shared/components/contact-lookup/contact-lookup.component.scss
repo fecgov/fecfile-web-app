@@ -5,6 +5,14 @@
   border-left: 0px;
 }
 
+.ng-submitted .transaction-contact-invalid :host ::ng-deep .p-autocomplete-input {
+  border-color: #dc3545;
+}
+
+.transaction-contact-invalid .contact-dialog-not-submitted :host ::ng-deep .p-autocomplete-input {
+  border: 2px solid #aeb0b5;
+}
+
 .contact-label {
   float: left;
   width: 50%;

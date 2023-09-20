@@ -47,6 +47,11 @@ p-autocomplete.ng-invalid.ng-touched input.p-inputtext {
   border-color: #dc3545;
 }
 
+.contact-dialog-not-submitted .p-inputtext.ng-invalid,
+.contact-dialog-not-submitted p-dropdown.ng-invalid div.p-dropdown {
+  border: 2px solid #aeb0b5;
+}
+
 label.disabled {
   color: rgba(118, 118, 118, 0.3);
 }

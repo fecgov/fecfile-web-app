@@ -25,12 +25,12 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
-      (report: F3xSummary) => report.report_status === 'In-Progress'
+      (report: F3xSummary) => report.report_status === 'In progress'
     ),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
-      (report: F3xSummary) => report.report_status !== 'In-Progress'
+      (report: F3xSummary) => report.report_status !== 'In progress'
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];

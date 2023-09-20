@@ -1,36 +1,35 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactType } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem } from 'primeng/api';
-import { ContactFormComponent } from '../contact-form/contact-form.component';
+import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
+import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
   templateUrl: './transaction-contact-lookup.component.html',
 })
-export class TransactionContactLookupComponent {
-  @Input() form: FormGroup = new FormGroup([]);
+export class TransactionContactLookupComponent implements OnInit {
+  @Input() contactProperty?: string;
+  @Input() transaction?: Transaction;
+  @Input() form: FormGroup = new FormGroup({});
   @Input() formSubmitted = false;
-
   @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() contactTypeFormControl: FormControl = new FormControl();
-  @Input() selectedContactFormControlName = '';
 
-  @Input() contactTypeReadOnly = false;
-
+  @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
 
-  @ViewChild(ContactFormComponent) contactForm: ContactFormComponent | undefined;
+  @ViewChild(ContactDialogComponent) contactDialog!: ContactDialogComponent;
 
-  createContactDialogVisible = false;
-  createContactFormSubmitted = false;
+  detailVisible = false;
+  dialogContactTypeOptions: PrimeOptions = [];
   createContactForm: FormGroup = this.formBuilder.group(
     ValidateUtils.getFormGroupFields([
       ...new Set([
@@ -41,68 +40,80 @@ export class TransactionContactLookupComponent {
       ]),
     ])
   );
+  errorMessageFormControl?: FormControl;
+  currentContactLabel = 'Individual';
 
   constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateFormWithPrimaryContact(event: any) {
-    this.contactForm?.updateFormWithPrimaryContact(event);
-    if (!(event?.value instanceof Contact)) {
-      this.openCreateContactDialog();
+  ngOnInit(): void {
+    // Set the contact type options in the child dialog component to the first contact type option
+    // listed in the child lookup component. This will automatically select the correct
+    // content type from the transaction contact lookup and make the second in the lookup in the dialog to readonly.
+    this.dialogContactTypeOptions = [this.contactTypeOptions[0]];
+    this.currentContactLabel = this.contactTypeOptions[0].label;
+
+    // Limit contact type options in contact lookup to one when editing a transaction
+    if (this.transaction?.id) {
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+        (this.transaction as ScheduleTransaction).entity_type as ContactTypes,
+      ]);
+    }
+
+    // If needed, create a local form control to manage validation and add the
+    // new form control to the parent form so that a validation check occurs
+    // when the parent form is submitted and blocks submit if validation fails.
+    if (this.contactProperty === 'contact_2') {
+      this.errorMessageFormControl = new FormControl(null, () => {
+        if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired(this.form)) {
+          return { required: true };
+        }
+        return null;
+      });
+      this.form.addControl('contact_2_lookup', this.errorMessageFormControl);
+    }
+    if (this.contactProperty === 'contact_3') {
+      this.errorMessageFormControl = new FormControl(null, () => {
+        if (!this.transaction?.contact_3 && this.transaction?.transactionType?.contact3IsRequired) {
+          return { required: true };
+        }
+        return null;
+      });
+      this.form.addControl('contact_3_lookup', this.errorMessageFormControl);
+    }
+  }
+
+  /**
+   * As the user selects contact types in the lookup, communicate that to the
+   * second contact lookup in the contact dialog so that it can set the selection
+   * value and set its dropdown as readonly.
+   * @param contactType
+   */
+  contactTypeSelected(contactType: ContactTypes) {
+    this.contactDialog.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]);
+    this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
+    this.contactTypeSelect.emit(contactType);
+  }
+
+  contactLookupSelected(contact: Contact) {
+    if (contact.id) {
+      this.contactSelect.emit({
+        value: contact,
+      });
     } else {
-      this.contactSelect.emit(event);
+      this.contactDialog.updateContact(contact);
+      this.detailVisible = true;
     }
   }
 
-  onCreateNewContactSelect() {
-    this.openCreateContactDialog();
+  createNewContactSelected() {
+    this.contactDialog.updateContact(Contact.fromJSON({}));
+    this.detailVisible = true;
   }
 
-  openCreateContactDialog() {
-    this.createContactForm.reset();
-    this.createContactFormSubmitted = false;
-    const typeFormControl = this.createContactForm.get('type');
-    typeFormControl?.setValue(this.contactTypeFormControl.value);
-    typeFormControl?.disable();
-    this.createContactForm.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
-    this.createContactForm.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator());
-    //this.clearErrorsFromContactForm();
-    this.createContactDialogVisible = true;
-  }
-
-  // Ensure invalid form elements are reset to valid when form opened
-  clearErrorsFromContactForm() {
-    this.createContactForm.reset();
-    for (const controlName of Object.keys(this.createContactForm.controls)) {
-      this.createContactForm.get(controlName)?.setErrors(null);
-    }
-  }
-
-  closeCreateContactDialog() {
-    this.createContactDialogVisible = false;
-  }
-
-  createContactSave() {
-    this.createContactFormSubmitted = true;
-    if (this.createContactForm.invalid) {
-      return;
-    }
-
-    const createdContact = Contact.fromJSON({
-      ...ValidateUtils.getFormValues(
-        this.createContactForm,
-        ContactService.getSchemaByType(this.createContactForm.get('type')?.value as ContactType)
-      ),
-    });
+  saveContact(contact: Contact) {
     this.contactSelect.emit({
-      value: createdContact,
+      value: contact,
     });
-    this.closeCreateContactDialog();
-  }
-
-  onCreateContactDialogClose() {
-    this.createContactForm.reset();
-    this.createContactFormSubmitted = false;
-    this.createContactDialogVisible = false;
+    this.detailVisible = false;
   }
 }

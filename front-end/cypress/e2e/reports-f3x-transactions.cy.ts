@@ -48,7 +48,7 @@ describe('Transactions', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Individual Receipt');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(defaultTransactionFormData);
@@ -90,7 +90,7 @@ describe('Transactions', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Other Disbursement');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(formTransactionData);
@@ -124,7 +124,7 @@ describe('Transactions', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Returned/Bounced Receipt');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData({ ...defaultTransactionFormData, ...{ amount: -100.55 } });
@@ -209,7 +209,7 @@ describe('Transactions', () => {
 
     // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData({
@@ -220,7 +220,7 @@ describe('Transactions', () => {
 
     // Check form values of memo form
     cy.get('tbody tr').first().contains('a', 'Partnership Attribution').click();
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData({
@@ -259,7 +259,7 @@ describe('Transactions', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Party Receipt');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(defaultTransactionFormData);
@@ -298,7 +298,7 @@ describe('Transactions', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Refund of Contribution to Other Political Committee');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
@@ -343,7 +343,7 @@ describe('Transactions', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
@@ -404,7 +404,7 @@ describe('Transactions', () => {
 
     // Check form values of receipt edit form
     PageUtils.clickLink('Earmark Receipt');
-    cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true, '@stepOneAccordion');
     TransactionDetailPage.assertFormData(
@@ -417,7 +417,7 @@ describe('Transactions', () => {
 
     // Check form values of memo edit form
     PageUtils.clickLink('STEP TWO');
-    cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
     TransactionDetailPage.assertFormData(
@@ -487,7 +487,7 @@ describe('Transactions', () => {
     // Check form values of receipt edit form
     PageUtils.clickLink('PAC Earmark Receipt');
     PageUtils.clickLink('STEP ONE');
-    cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(stepOneContactFormData, true, '@stepOneAccordion');
     TransactionDetailPage.assertFormData(
@@ -502,7 +502,7 @@ describe('Transactions', () => {
 
     // Check form values of memo edit form
     PageUtils.clickLink('STEP TWO');
-    cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true, '@stepTwoAccordion');
     TransactionDetailPage.assertFormData(
@@ -608,7 +608,7 @@ describe('Transactions', () => {
 
     // Check form values of receipt form
     PageUtils.clickLink('Joint Fundraising Transfer', '@joint_fundraising_transfer_link');
-    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(committeeFormContactData, true);
     TransactionDetailPage.assertFormData({
