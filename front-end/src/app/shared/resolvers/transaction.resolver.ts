@@ -73,8 +73,8 @@ export class TransactionResolver {
       map((debt: Transaction) => {
         const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
         const repayment = repaymentType.getNewTransaction();
-        repayment.repayment_to = debt;
-        repayment.repayment_to_id = debt.id;
+        repayment.debt = debt;
+        repayment.debt_id = debt.id;
         repayment.report_id = debt.report_id;
         return repayment;
       })
@@ -105,10 +105,10 @@ export class TransactionResolver {
                   return transaction;
                 })
               );
-            } else if (transaction?.repayment_to_id) {
-              return this.resolveExistingTransaction(transaction.repayment_to_id).pipe(
-                map((repayment_to) => {
-                  transaction.repayment_to = repayment_to;
+            } else if (transaction?.debt_id) {
+              return this.resolveExistingTransaction(transaction.debt_id).pipe(
+                map((debt) => {
+                  transaction.debt = debt;
                   return transaction;
                 })
               );
