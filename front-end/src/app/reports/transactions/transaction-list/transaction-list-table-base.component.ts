@@ -212,7 +212,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public formatId(id: string | null): string {
     if (id) {
-      return id.split('-')[0].toUpperCase();
+      return id.substring(0, 8).toUpperCase();
     }
     return '';
   }
