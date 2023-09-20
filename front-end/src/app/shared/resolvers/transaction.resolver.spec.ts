@@ -49,6 +49,7 @@ describe('TransactionResolver', () => {
 
   it('should return an existing transaction', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({ transactionId: '999' }),
     };
 
@@ -66,6 +67,7 @@ describe('TransactionResolver', () => {
 
   it('should return undefined', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({ transactionId: undefined }),
     };
 
@@ -76,6 +78,7 @@ describe('TransactionResolver', () => {
 
   it('should return an existing transaction', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({
         reportId: 1,
         transactionType: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -92,6 +95,7 @@ describe('TransactionResolver', () => {
 
   it('should return a child transaction', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({
         parentTransactionId: 1,
         transactionType: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,

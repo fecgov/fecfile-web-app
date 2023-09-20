@@ -8,13 +8,11 @@ import { Report } from 'app/shared/interfaces/report.interface';
 import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
-  ScheduleATransactionGroupsType,
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from 'app/shared/models/scha-transaction.model';
 import {
   ScheduleBTransactionGroups,
-  ScheduleBTransactionGroupsType,
   ScheduleBTransactionTypeLabels,
   ScheduleBTransactionTypes,
 } from 'app/shared/models/schb-transaction.model';
