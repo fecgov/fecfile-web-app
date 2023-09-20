@@ -86,7 +86,7 @@
           {{ formatId(item.id) }}
         </td>
         <td>
-          {{ formatId(item.parent_transaction_id) }}
+          {{ item.debt_id ? formatId(item.debt_id) : formatId(item.parent_transaction_id) }}
         </td>
         <td>
           <app-table-actions-button
