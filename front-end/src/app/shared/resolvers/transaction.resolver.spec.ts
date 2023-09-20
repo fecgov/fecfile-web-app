@@ -11,6 +11,8 @@ import { TransactionService } from '../services/transaction.service';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
+import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -255,6 +257,34 @@ describe('TransactionResolver', () => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
       expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
+    });
+  });
+
+  it('should add debt to repayment', () => {
+    spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      return of(
+        SchDTransaction.fromJSON({
+          id: id,
+          transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
+          transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+        })
+      );
+    });
+    const route = {
+      queryParamMap: convertToParamMap({ debt: '1' }),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+      }),
+    };
+
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
+      expect(transaction).toBeTruthy();
+      if (transaction) {
+        expect(transaction.debt?.id).toEqual('1');
+      }
     });
   });
 });
