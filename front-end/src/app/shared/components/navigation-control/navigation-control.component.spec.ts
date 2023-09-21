@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
+  ControlType,
   NavigationAction,
   NavigationControl,
   NavigationDestination,
@@ -57,7 +58,8 @@ describe('NavigationControlComponent', () => {
         '',
         () => false,
         () => true,
-        'pi pi-plus'
+        'pi pi-plus',
+        ControlType.DROPDOWN
       );
       fixture.detectChanges();
     });

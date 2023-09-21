@@ -16,20 +16,24 @@ export class TransactionResolver {
     const transactionTypeName = route.paramMap.get('transactionType');
     const transactionId = route.paramMap.get('transactionId');
     const parentTransactionId = route.paramMap.get('parentTransactionId');
+    const debtId = route.queryParamMap.get('debt');
 
     if (transactionId) {
-      return this.resolve_existing_transaction(transactionId);
+      return this.resolveExistingTransaction(transactionId);
     }
     if (parentTransactionId && transactionTypeName) {
-      return this.resolve_new_child_transaction(parentTransactionId, transactionTypeName);
+      return this.resolveNewChildTransaction(parentTransactionId, transactionTypeName);
     }
     if (reportId && transactionTypeName) {
-      return this.resolve_new_transaction(reportId, transactionTypeName);
+      if (debtId) {
+        return this.resolveNewDebtRepayment(debtId, transactionTypeName);
+      }
+      return this.resolveNewTransaction(reportId, transactionTypeName);
     }
     return of(undefined);
   }
 
-  resolve_new_transaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
+  resolveNewTransaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_id = String(reportId);
@@ -43,7 +47,7 @@ export class TransactionResolver {
     return of(transaction);
   }
 
-  resolve_new_child_transaction(
+  resolveNewChildTransaction(
     parentTransactionId: string,
     childTransactionTypeName: string
   ): Observable<Transaction | undefined> {
@@ -64,7 +68,20 @@ export class TransactionResolver {
     );
   }
 
-  resolve_existing_transaction(transactionId: string): Observable<Transaction | undefined> {
+  resolveNewDebtRepayment(debtId: string, transactionTypeName: string) {
+    return this.transactionService.get(debtId).pipe(
+      map((debt: Transaction) => {
+        const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
+        const repayment = repaymentType.getNewTransaction();
+        repayment.debt = debt;
+        repayment.debt_id = debt.id;
+        repayment.report_id = debt.report_id;
+        return repayment;
+      })
+    );
+  }
+
+  resolveExistingTransaction(transactionId: string): Observable<Transaction | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
         if (transaction.transaction_type_identifier && transaction.contact_1) {
@@ -82,9 +99,16 @@ export class TransactionResolver {
             }
           } else {
             if (transaction?.parent_transaction_id) {
-              return this.resolve_existing_transaction(transaction.parent_transaction_id).pipe(
+              return this.resolveExistingTransaction(transaction.parent_transaction_id).pipe(
                 map((parent) => {
                   transaction.parent_transaction = parent;
+                  return transaction;
+                })
+              );
+            } else if (transaction?.debt_id) {
+              return this.resolveExistingTransaction(transaction.debt_id).pipe(
+                map((debt) => {
+                  transaction.debt = debt;
                   return transaction;
                 })
               );

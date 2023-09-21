@@ -6,6 +6,7 @@
         <a
           *ngIf="!isTransactionDisabled(transactionType); else elseBlock"
           [routerLink]="getRouterLink(transactionType)"
+          [queryParams]="debtId ? { debt: debtId } : undefined"
           >{{ transactionType | label : transactionTypeLabels }}</a
         >
         <ng-template #elseBlock>

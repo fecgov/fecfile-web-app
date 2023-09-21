@@ -9,6 +9,7 @@ import {
   NavigationControl,
   NavigationAction,
   NavigationDestination,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
@@ -54,12 +55,13 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.CHILD_BUTTON,
+        NavigationDestination.CHILD,
         'Save & add loan guarantor',
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus'
+        'pi pi-plus',
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],

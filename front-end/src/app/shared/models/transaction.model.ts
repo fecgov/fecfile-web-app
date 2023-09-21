@@ -41,6 +41,9 @@ export abstract class Transaction extends BaseModel {
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
 
+  debt: Transaction | undefined;
+  debt_id: string | undefined; // Foreign key to debt or loan which this transaction repays
+
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;
@@ -166,6 +169,9 @@ export function isNewTransaction(transaction?: Transaction): boolean {
 }
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
+}
+export function isExistingTransaction(transaction?: Transaction): boolean {
+  return !!transaction?.id;
 }
 
 export type ScheduleTransaction =
