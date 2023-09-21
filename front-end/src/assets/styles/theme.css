@@ -1541,11 +1541,11 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
   height: 20px;
 }
 .p-radiobutton .p-radiobutton-box {
-  border: 2px solid #d6d7d9;
-  background: #ffffff;
+  border: 2px solid #5b616b;
+  background: #FFFFFF;
   width: 20px;
   height: 20px;
-  color: #212121;
+  color: #FFFFFF; 
   border-radius: 50%;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
@@ -1555,25 +1555,24 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
 .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-  border-color: #112e51;
+  box-shadow: 0 0 0 0.2rem rgba(174, 176, 181, 0.5);
+  border-color: #5b616b;
 }
 .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
   width: 12px;
   height: 12px;
   transition-duration: 0.15s;
-  background-color: #ffffff;
+  background-color: #5b616b;
 }
 .p-radiobutton .p-radiobutton-box.p-highlight {
-  border-color: #112e51;
-  background: #112e51;
+  border-color: #5b616b;
+  background: #FFFFFF;
 }
 .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
-  border-color: #0062cc;
-  background: #0062cc;
-  color: #ffffff;
+  border-color: #AEB0B5;
+  background: #FFFFFF;
+  color: #AEB0B5;
 }
-
 p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
   border-color: #cd2026;
 }
