@@ -177,7 +177,7 @@ export function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
-  return !!transaction?.loan_id;
+  return !!transaction?.loan_id && transaction.transactionType.scheduleId === 'C';
 }
 
 export type ScheduleTransaction =
