@@ -16,7 +16,6 @@ export abstract class SchCTransactionType extends TransactionType {
     return this.navigationControls;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override getFooter(transaction?: Transaction): string | undefined {
     if (isPulledForwardLoan(transaction)) {
       return undefined;
