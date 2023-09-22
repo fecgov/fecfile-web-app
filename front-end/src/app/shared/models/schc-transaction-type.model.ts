@@ -11,7 +11,11 @@ export abstract class SchCTransactionType extends TransactionType {
 
   override getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
     if (isPulledForwardLoan(transaction) && this.navigationControls) {
-      this.navigationControls.continueControls = [SAVE_LIST_CONTROL];
+      return new TransactionNavigationControls(
+        this.navigationControls.inlineControls,
+        this.navigationControls.cancelControls,
+        [SAVE_LIST_CONTROL]
+      );
     }
     return this.navigationControls;
   }

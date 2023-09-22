@@ -26,24 +26,10 @@ export class TransactionContainerComponent extends DestroyerComponent {
     });
   }
 
-  isSingleTransaction(): boolean {
-    return (
-      isPulledForwardLoan(this.transaction) ||
-      !this.transaction?.transactionType?.dependentChildTransactionTypes?.length
-    );
-  }
-
-  isDoubleTransaction(): boolean {
-    return (
-      !isPulledForwardLoan(this.transaction) &&
-      this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 1
-    );
-  }
-
-  isTripleTransaction(): boolean {
-    return (
-      !isPulledForwardLoan(this.transaction) &&
-      this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 2
-    );
+  transctionCardinality(): number {
+    if (isPulledForwardLoan(this.transaction)) {
+      return 1;
+    }
+    return (this.transaction?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;
   }
 }
