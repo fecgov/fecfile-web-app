@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
@@ -27,14 +27,23 @@ export class TransactionContainerComponent extends DestroyerComponent {
   }
 
   isSingleTransaction(): boolean {
-    return !this.transaction?.transactionType?.dependentChildTransactionTypes?.length;
+    return (
+      isPulledForwardLoan(this.transaction) ||
+      !this.transaction?.transactionType?.dependentChildTransactionTypes?.length
+    );
   }
 
   isDoubleTransaction(): boolean {
-    return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 1;
+    return (
+      !isPulledForwardLoan(this.transaction) &&
+      this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 1
+    );
   }
 
   isTripleTransaction(): boolean {
-    return this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 2;
+    return (
+      !isPulledForwardLoan(this.transaction) &&
+      this.transaction?.transactionType?.dependentChildTransactionTypes?.length === 2
+    );
   }
 }

@@ -112,6 +112,13 @@ export class TransactionResolver {
                   return transaction;
                 })
               );
+            } else if (transaction?.loan_id) {
+              return this.resolveExistingTransaction(transaction.loan_id).pipe(
+                map((loan) => {
+                  transaction.loan = loan;
+                  return transaction;
+                })
+              );
             }
             return of(transaction);
           }
