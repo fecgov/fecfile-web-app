@@ -1,5 +1,5 @@
 <h1>{{ this.title }}</h1>
-<p *ngIf="this.debtId">Select the propert transaction type below to report this debt repayment</p>
+<p *ngIf="this.debtId">Select the proper transaction type below to report this debt repayment.</p>
 <p-accordion muiltiple="false">
   <p-accordionTab *ngFor="let transactionGroup of getTransactionGroups()" [header]="transactionGroup">
     <div class="grid">
