@@ -26,7 +26,7 @@ export class TransactionContainerComponent extends DestroyerComponent {
     });
   }
 
-  transctionCardinality(): number {
+  transactionCardinality(): number {
     if (isPulledForwardLoan(this.transaction)) {
       return 1;
     }
