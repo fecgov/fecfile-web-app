@@ -83,6 +83,7 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
+      [transaction]="transaction"
     ></app-loan-terms-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanAgreement">
@@ -129,11 +130,11 @@
       [transaction]="transaction"
     ></app-additional-info-input>
   </ng-container>
-  <ng-container *ngIf="transactionType.footer">
+  <ng-container *ngIf="transactionType.getFooter(transaction)">
     <p-divider></p-divider>
     <div class="grid">
       <span style="font-style: italic">
-        <b>{{ transactionType.footer }}</b>
+        <b>{{ transactionType.getFooter(transaction) }}</b>
       </span>
     </div>
   </ng-container>

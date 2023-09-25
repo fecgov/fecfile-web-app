@@ -1,4 +1,6 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { Transaction, isPulledForwardLoan } from './transaction.model';
+import { TransactionNavigationControls, SAVE_LIST_CONTROL } from './transaction-navigation-controls.model';
 
 export abstract class SchCTransactionType extends TransactionType {
   scheduleId = 'C';
@@ -6,6 +8,24 @@ export abstract class SchCTransactionType extends TransactionType {
 
   // Labels
   override amountInputHeader = 'Loan information';
+
+  override getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
+    if (isPulledForwardLoan(transaction) && this.navigationControls) {
+      return new TransactionNavigationControls(
+        this.navigationControls.inlineControls,
+        this.navigationControls.cancelControls,
+        [SAVE_LIST_CONTROL]
+      );
+    }
+    return this.navigationControls;
+  }
+
+  override getFooter(transaction?: Transaction): string | undefined {
+    if (isPulledForwardLoan(transaction)) {
+      return undefined;
+    }
+    return this.footer;
+  }
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {

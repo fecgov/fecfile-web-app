@@ -1,9 +1,15 @@
 import { INDIVIDUAL_RECEIPT } from './INDIVIDUAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('INDIVIDUAL_RECEIPT', () => {
   let transactionType: INDIVIDUAL_RECEIPT;
+  let transaction: SchATransaction;
+
+  beforeEach(() => {
+    transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
+  });
 
   beforeEach(() => {
     transactionType = new INDIVIDUAL_RECEIPT();
@@ -22,5 +28,16 @@ describe('INDIVIDUAL_RECEIPT', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  });
+
+  it('should not change navigation control', () => {
+    const navControls = transaction.transactionType.getNavigationControls(transaction);
+    const continueControl = navControls?.continueControls?.pop();
+    expect(continueControl?.label).toBe('Save');
+  });
+
+  it('should change footer', () => {
+    const footer = transaction.transactionType.getFooter(transaction);
+    expect(footer).toBeUndefined();
   });
 });

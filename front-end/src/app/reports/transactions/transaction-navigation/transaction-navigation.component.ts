@@ -22,7 +22,10 @@ export class TransactionNavigationComponent {
 
   getNavigationControls(): TransactionNavigationControls {
     if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
-    return this.transaction?.transactionType?.navigationControls ?? new TransactionNavigationControls([], [], []);
+    return (
+      this.transaction?.transactionType?.getNavigationControls(this.transaction) ??
+      new TransactionNavigationControls([], [], [])
+    );
   }
 
   getInlineControls(): NavigationControl[] {
