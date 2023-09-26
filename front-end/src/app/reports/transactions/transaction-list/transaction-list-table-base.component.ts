@@ -45,7 +45,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === false &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        !['C', 'D'].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -55,7 +56,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === true &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        !['C', 'D'].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
