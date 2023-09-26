@@ -35,6 +35,8 @@ export abstract class Transaction extends BaseModel {
   // FECFile Online custom properties
 
   transaction_type_identifier: string | undefined;
+  unaggregated: boolean | undefined;
+  force_unaggregated: boolean | undefined;
   itemized: boolean | undefined;
   force_itemized: boolean | undefined;
 
