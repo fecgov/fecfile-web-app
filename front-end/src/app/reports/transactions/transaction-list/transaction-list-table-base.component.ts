@@ -1,19 +1,19 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ReportService } from 'app/shared/services/report.service';
+import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
+import { ReportService } from 'app/shared/services/report.service';
+import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { take, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
@@ -70,6 +70,15 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       this.editLoanAgreement.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+      () => true
+    ),
+    new TableAction(
+      'New loan agreement',
+      this.createLoanAgreement.bind(this),
+      (transaction: Transaction) =>
+        this.reportIsEditable &&
+        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
+        isPulledForwardLoan(transaction),
       () => true
     ),
     new TableAction(
@@ -155,6 +164,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (child) => child.transaction_type_identifier == ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
     );
     if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
+  }
+
+  public createLoanAgreement(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`
+    );
   }
 
   public forceItemize(transaction: Transaction): void {
