@@ -107,6 +107,22 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[5].isEnabled({})).toEqual(true);
   });
 
+  it('test forceAggregate', fakeAsync(() => {
+    spyOn(testItemService, 'update').and.returnValue(of());
+    const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
+    component.forceAggregate(testTransaction);
+    tick(500);
+    expect(testTransaction.force_unaggregated).toBe(false);
+  }));
+
+  it('test forceUnaggregate', fakeAsync(() => {
+    spyOn(testItemService, 'update').and.returnValue(of());
+    const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
+    component.forceUnaggregate(testTransaction);
+    tick(500);
+    expect(testTransaction.force_unaggregated).toBe(true);
+  }));
+
   it('test forceItemize', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
