@@ -42,7 +42,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'Aggregate',
       this.forceAggregate.bind(this),
       (transaction: Transaction) =>
-        transaction.unaggregated === true &&
+        !!transaction.force_unaggregated &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
@@ -53,7 +53,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'Unaggregate',
       this.forceUnaggregate.bind(this),
       (transaction: Transaction) =>
-        transaction.unaggregated === false &&
+        !transaction.force_unaggregated &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&

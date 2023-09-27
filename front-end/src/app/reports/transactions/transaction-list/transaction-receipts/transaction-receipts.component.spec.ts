@@ -80,23 +80,23 @@ describe('TransactionReceiptsComponent', () => {
   it('should show the correct row actions', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(true);
     expect(component.rowActions[1].isAvailable()).toEqual(false);
-    expect(component.rowActions[2].isAvailable({ unaggregated: true, transactionType: { scheduleId: 'A' } })).toEqual(
-      false
-    );
-    expect(component.rowActions[3].isAvailable({ unaggregated: false, transactionType: { scheduleId: 'A' } })).toEqual(
-      false
-    );
+    expect(
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: 'A' } })
+    ).toEqual(false);
+    expect(
+      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: 'A' } })
+    ).toEqual(false);
     expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(false);
     expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(false);
     component.reportIsEditable = true;
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
-    expect(component.rowActions[2].isAvailable({ unaggregated: true, transactionType: { scheduleId: 'A' } })).toEqual(
-      true
-    );
-    expect(component.rowActions[3].isAvailable({ unaggregated: false, transactionType: { scheduleId: 'A' } })).toEqual(
-      true
-    );
+    expect(
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: 'A' } })
+    ).toEqual(true);
+    expect(
+      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: 'A' } })
+    ).toEqual(true);
     expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(true);
     expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(true);
     expect(component.rowActions[0].isEnabled({})).toEqual(true);
