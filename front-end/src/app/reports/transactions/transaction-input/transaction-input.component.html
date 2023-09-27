@@ -178,6 +178,10 @@
       ></app-committee-input>
     </ng-container>
     <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
+      <label for="contact_2"
+        >LOOKUP
+        <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container></label
+      >
       <app-transaction-contact-lookup
         contactProperty="contact_2"
         [transaction]="transaction"

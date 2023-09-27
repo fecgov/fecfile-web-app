@@ -10,14 +10,14 @@ import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_vali
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
-import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
   templateUrl: './transaction-contact-lookup.component.html',
 })
 export class TransactionContactLookupComponent implements OnInit {
-  @Input() contactProperty?: string;
+  @Input() contactProperty = 'contact_1';
   @Input() transaction?: Transaction;
   @Input() form: FormGroup = new FormGroup({});
   @Input() formSubmitted = false;
@@ -55,7 +55,7 @@ export class TransactionContactLookupComponent implements OnInit {
     // Limit contact type options in contact lookup to one when editing a transaction
     if (this.transaction?.id) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-        (this.transaction as ScheduleTransaction).entity_type as ContactTypes,
+        (this.transaction[this.contactProperty as keyof Transaction] as Contact).type as ContactTypes,
       ]);
     }
 

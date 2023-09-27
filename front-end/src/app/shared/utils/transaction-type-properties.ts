@@ -56,9 +56,6 @@ export const CANDIDATE_FIELDS: string[] = [
   'candidate_middle_name',
   'candidate_prefix',
   'candidate_suffix',
-  'candidate_office',
-  'candidate_state',
-  'candidate_district',
 ];
 export const CANDIDATE_OFFICE_FIELDS: string[] = ['candidate_office', 'candidate_state', 'candidate_district'];
 
