@@ -306,7 +306,7 @@ describe('TransactionResolver', () => {
     });
     resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
-      expect(transaction?.parent_transaction?.id).toBe('2');
+      expect(transaction?.debt?.id).toBe('2');
     });
   });
 
@@ -327,7 +327,7 @@ describe('TransactionResolver', () => {
     });
     resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
-      expect(transaction?.parent_transaction?.id).toBe('2');
+      expect(transaction?.loan?.id).toBe('2');
     });
   });
 
