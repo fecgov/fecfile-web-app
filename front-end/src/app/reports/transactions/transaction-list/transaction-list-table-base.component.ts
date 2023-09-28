@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,6 @@ import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.mo
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleIds } from 'app/shared/models/transaction.model';
 
 @Component({
   template: '',
