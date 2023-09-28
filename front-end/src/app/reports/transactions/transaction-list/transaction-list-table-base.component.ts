@@ -46,7 +46,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
-        transaction.transactionType.scheduleId === 'A',
+        transaction.transactionType.scheduleId === ScheduleIds.A,
       () => true
     ),
     new TableAction(
@@ -57,7 +57,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
-        transaction.transactionType.scheduleId === 'A',
+        transaction.transactionType.scheduleId === ScheduleIds.A,
       () => true
     ),
     new TableAction(
