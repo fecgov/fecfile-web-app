@@ -14,6 +14,7 @@ import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.mo
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleIds } from 'app/shared/models/transaction.model';
 
 @Component({
   template: '',
@@ -46,7 +47,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
-        !['C', 'D'].includes(transaction.transactionType.scheduleId),
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -57,7 +58,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
-        !['C', 'D'].includes(transaction.transactionType.scheduleId),
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(

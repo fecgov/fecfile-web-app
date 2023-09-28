@@ -1,7 +1,8 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { ScheduleIds } from './transaction.model';
 
 export abstract class SchC1TransactionType extends TransactionType {
-  scheduleId = 'C1';
+  scheduleId = ScheduleIds.C1;
   apiEndpoint = '/transactions/schedule-c1';
 
   // Labels

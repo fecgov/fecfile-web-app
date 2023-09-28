@@ -17,6 +17,7 @@ import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { DropdownModule } from 'primeng/dropdown';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { ScheduleIds } from 'app/shared/models/transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -52,7 +53,7 @@ describe('TransactionReceiptsComponent', () => {
                 SchC1Transaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
-                  transactionType: { scheduleId: 'A ' },
+                  transactionType: { scheduleId: ScheduleIds.A },
                 })
               ),
             getTableData: () => of([]),
