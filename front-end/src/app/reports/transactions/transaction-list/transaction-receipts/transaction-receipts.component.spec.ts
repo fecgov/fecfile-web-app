@@ -13,7 +13,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
@@ -81,10 +81,10 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(true);
     expect(component.rowActions[1].isAvailable()).toEqual(false);
     expect(
-      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: 'A' } })
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } })
     ).toEqual(false);
     expect(
-      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: 'A' } })
+      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: ScheduleIds.A } })
     ).toEqual(false);
     expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(false);
     expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(false);
@@ -92,10 +92,10 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
     expect(
-      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: 'A' } })
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } })
     ).toEqual(true);
     expect(
-      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: 'A' } })
+      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: ScheduleIds.A } })
     ).toEqual(true);
     expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(true);
     expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(true);
