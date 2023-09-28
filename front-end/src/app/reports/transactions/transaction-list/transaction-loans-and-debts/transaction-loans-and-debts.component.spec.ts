@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { of } from 'rxjs';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToolbarModule } from 'primeng/toolbar';
-import { TableModule } from 'primeng/table';
-import { SharedModule } from 'app/shared/shared.module';
-import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { provideMockStore } from '@ngrx/store/testing';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { DropdownModule } from 'primeng/dropdown';
+import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
+import { SharedModule } from 'app/shared/shared.module';
+import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { of } from 'rxjs';
+import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -103,18 +103,39 @@ describe('TransactionReceiptsComponent', () => {
     expect(navigateSpy).toHaveBeenCalled();
   });
 
-  it('test createLoanRepaymentMade', () => {
-    const tableAction = component.rowActions.filter((item) => item.label === 'Make loan repayment')[0];
-    const transaction = { id: 1, transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL };
+  it('test editLoanAgreement', () => {
+    const tableAction = component.rowActions.filter((item) => item.label === 'Review loan agreement')[0];
+    const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+    component.reportIsEditable = true;
+    expect(tableAction.isAvailable(transaction)).toBeFalse();
+    transaction.children = [getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)];
+    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    expect(tableAction.isEnabled(transaction)).toBeTrue();
+
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    component.editLoanAgreement(transaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test createLoanAgreement', () => {
+    const tableAction = component.rowActions.filter((item) => item.label === 'New loan agreement')[0];
+    const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+    transaction.loan_id = 'testLoanId';
     component.reportIsEditable = true;
     expect(tableAction.isAvailable(transaction)).toBeTrue();
-    transaction.transaction_type_identifier = ScheduleCTransactionTypes.LOAN_BY_COMMITTEE;
+    transaction.children = [getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)];
     expect(tableAction.isAvailable(transaction)).toBeFalse();
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    component.createLoanAgreement(transaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test createLoanAgreement', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
     const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
-    component.createLoanRepaymentMade(testTransaction);
+    component.createLoanAgreement(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
 

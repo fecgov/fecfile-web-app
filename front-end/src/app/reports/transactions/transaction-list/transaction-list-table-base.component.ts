@@ -69,6 +69,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'Review loan agreement',
       this.editLoanAgreement.bind(this),
       (transaction: Transaction) =>
+        this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         (transaction.children ?? []).some(transaction => transaction.transaction_type_identifier ===
           ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
@@ -80,7 +81,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
-        isPulledForwardLoan(transaction) && 
+        isPulledForwardLoan(transaction) &&
         !(transaction.children ?? []).some(transaction => transaction.transaction_type_identifier ===
           ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
       () => true
