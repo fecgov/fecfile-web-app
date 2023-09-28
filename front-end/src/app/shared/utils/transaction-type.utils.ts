@@ -4,7 +4,7 @@ import { SchCTransaction } from '../models/schc-transaction.model';
 import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { SchDTransaction } from '../models/schd-transaction.model';
-import { ScheduleTransaction } from '../models/transaction.model';
+import { ScheduleIds, ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
 import { TransactionType } from '../models/transaction-type.model';
@@ -405,12 +405,12 @@ export function getTransactionTypeClass(transactionTypeIdentifier: string): any 
 export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
   if (json.transaction_type_identifier) {
     const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
-    if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'C') return SchCTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'C1') return SchC1Transaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'C2') return SchC2Transaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'D') return SchDTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.A) return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.B) return SchBTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C) return SchCTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C1) return SchC1Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C2) return SchC2Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.D) return SchDTransaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');

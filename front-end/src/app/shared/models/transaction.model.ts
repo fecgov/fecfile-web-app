@@ -177,7 +177,7 @@ export function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
-  return !!transaction?.loan_id && transaction.transactionType.scheduleId === 'C';
+  return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
 
 export type ScheduleTransaction =
@@ -217,4 +217,14 @@ export enum AggregationGroups {
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
   RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
   GENERAL_DISBURSEMENT = 'GENERAL_DISBURSEMENT',
+}
+
+export enum ScheduleIds {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  C1 = 'C1',
+  C2 = 'C2',
+  D = 'D',
+  E = 'E',
 }

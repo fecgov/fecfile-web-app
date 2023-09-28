@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
@@ -45,7 +45,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === false &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -55,7 +56,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === true &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
