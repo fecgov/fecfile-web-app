@@ -7,18 +7,27 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      cy.get(alias).find(querySelector).click();
+      if (querySelector.includes("due_date_setting") || querySelector.includes("interest_rate_setting")) {
+        cy.get(alias).find(querySelector).first().click();
+      } else { 
+        cy.get(alias).find(querySelector).click();
+      }
       cy.contains('p-dropdownitem', value).should('be.visible');
       cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
     }
   }
 
-  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
+  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '', loanOverride: boolean = false) {
     alias = PageUtils.getAlias(alias);
-
+    console.log(calendar);
     const currentDate: Date = new Date();
-    cy.get(alias).find(calendar).as('calendarElement').click();
-
+    
+    if(calendar.includes("date_incurred") || calendar.includes("due_date") || calendar.includes("date_signed")) {
+      cy.get(alias).find(calendar).first().as('calendarElement').click();
+    } else {
+      cy.get(alias).find(calendar).as('calendarElement').click();
+    }
+    
     //    Choose the year
     cy.get('@calendarElement').find('.p-datepicker-year').click();
 
@@ -117,6 +126,7 @@ export class PageUtils {
   }
 
   static clickButton(name: string, alias = '') {
+   
     alias = PageUtils.getAlias(alias);
     cy.get(alias).contains('button', name).click();
   }
@@ -129,5 +139,12 @@ export class PageUtils {
       '/' +
       date.getFullYear()
     );
+  }
+
+  static searchBoxInput(input: string) {
+    console.log(input);
+    cy.get('[role="searchbox"]').type(input.slice(0,1));
+    cy.contains(input).should('exist');
+    cy.contains(input).click();
   }
 }

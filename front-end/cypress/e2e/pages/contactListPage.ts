@@ -1,52 +1,5 @@
+import { ContactFormData } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
-
-export type ContactFormData = {
-  contact_type: string;
-  last_name: string;
-  first_name: string;
-  middle_name: string;
-  prefix: string;
-  suffix: string;
-  country: string;
-  street_1: string;
-  street_2: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string;
-  employer: string;
-  occupation: string;
-  candidate_id: string;
-  candidate_office: string;
-  candidate_state: string;
-  candidate_district: string;
-  committee_id: string;
-  name: string;
-};
-
-export const defaultFormData: ContactFormData = {
-  contact_type: 'Individual',
-  last_name: PageUtils.randomString(10),
-  first_name: PageUtils.randomString(10),
-  middle_name: PageUtils.randomString(10),
-  prefix: PageUtils.randomString(5),
-  suffix: PageUtils.randomString(5),
-  country: 'United States of America',
-  street_1: PageUtils.randomString(10),
-  street_2: PageUtils.randomString(10),
-  city: PageUtils.randomString(10),
-  state: 'District of Columbia',
-  zip: PageUtils.randomString(5),
-  phone: PageUtils.randomString(10, 'numeric'),
-  employer: PageUtils.randomString(20),
-  occupation: PageUtils.randomString(20),
-  candidate_id: 'H2AZ12345',
-  candidate_office: 'House',
-  candidate_state: 'Virginia',
-  candidate_district: '01',
-  committee_id: 'C' + PageUtils.randomString(8, 'numeric'),
-  name: PageUtils.randomString(10),
-};
 
 export class ContactListPage {
   static goToPage() {
@@ -55,6 +8,7 @@ export class ContactListPage {
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
+    
     alias = PageUtils.getAlias(alias);
 
     if (!excludeContactType) {
@@ -63,6 +17,7 @@ export class ContactListPage {
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
       //Contact
+      console.log(formData);
       cy.get(alias).find('#last_name').safeType(formData['last_name']);
       cy.get(alias).find('#first_name').safeType(formData['first_name']);
       cy.get(alias).find('#middle_name').safeType(formData['middle_name']);

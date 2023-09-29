@@ -1,6 +1,7 @@
+import { ContactListPage } from './pages/contactListPage';
 import { LoginPage } from './pages/loginPage';
-import { defaultFormData, ContactListPage } from './pages/contactListPage';
 import { PageUtils } from './pages/pageUtils';
+import { defaultFormData as contactFormData } from './models/ContactFormModel';
 
 describe('Manage contacts', () => {
   beforeEach(() => {
@@ -13,7 +14,7 @@ describe('Manage contacts', () => {
     cy.runLighthouse('contacts', 'list');
 
     PageUtils.clickButton('New');
-    const formData = { ...defaultFormData };
+    const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
     cy.contains('a', `${formData['last_name']}, ${formData['first_name']}`).should('exist');
@@ -29,7 +30,7 @@ describe('Manage contacts', () => {
     PageUtils.clickButton('New');
 
     const formData = {
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         contact_type: 'Candidate',
       },
@@ -49,7 +50,7 @@ describe('Manage contacts', () => {
     PageUtils.clickButton('New');
 
     const formData = {
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         contact_type: 'Committee',
       },
@@ -69,7 +70,7 @@ describe('Manage contacts', () => {
     PageUtils.clickButton('New');
 
     const formData = {
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         contact_type: 'Organization',
       },
@@ -88,7 +89,7 @@ describe('Manage contacts', () => {
   it('Empty required fields should display an error message', () => {
     PageUtils.clickButton('New');
     ContactListPage.enterFormData({
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         last_name: '',
         first_name: '',
@@ -111,7 +112,7 @@ describe('Manage contacts', () => {
   it('Fields with too a long string should display an error message', () => {
     PageUtils.clickButton('New');
     ContactListPage.enterFormData({
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         last_name: '012345678901234567890123456789LONG',
         first_name: '01234567890123456789LONG',
