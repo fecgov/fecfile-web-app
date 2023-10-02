@@ -66,6 +66,7 @@
           <a [routerLink]="[item?.id]">{{
             item.transaction_type_identifier | label : scheduleTransactionTypeLabels
           }}</a>
+          <div *ngIf="item?.force_unaggregated === true"><strong>Unaggregated</strong></div>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>

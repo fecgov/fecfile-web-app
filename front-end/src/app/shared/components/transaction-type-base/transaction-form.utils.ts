@@ -5,7 +5,7 @@ import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { combineLatestWith, Observable, of, startWith, BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
@@ -49,8 +49,8 @@ export class TransactionFormUtils {
     }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
-      contactIdMap[contact] = new Subject<string>();
-      contactIdMap[contact].next((transaction[contact as keyof Transaction] as Contact)?.id ?? '');
+      const id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
+      contactIdMap[contact] = new BehaviorSubject<string>(id);
     });
 
     form
@@ -89,7 +89,7 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transactionType.showAggregate) {
+    if (transactionType.showAggregate && !transaction.force_unaggregated) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),

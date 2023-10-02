@@ -39,6 +39,28 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
+      'Aggregate',
+      this.forceAggregate.bind(this),
+      (transaction: Transaction) =>
+        !!transaction.force_unaggregated &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id &&
+        transaction.transactionType.scheduleId === ScheduleIds.A,
+      () => true
+    ),
+    new TableAction(
+      'Unaggregate',
+      this.forceUnaggregate.bind(this),
+      (transaction: Transaction) =>
+        !transaction.force_unaggregated &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id &&
+        transaction.transactionType.scheduleId === ScheduleIds.A,
+      () => true
+    ),
+    new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
       (transaction: Transaction) =>
@@ -157,6 +179,19 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (child) => child.transaction_type_identifier == ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
     );
     if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
+  }
+
+  public forceAggregate(transaction: Transaction): void {
+    this.forceUnaggregation(transaction, false);
+  }
+
+  public forceUnaggregate(transaction: Transaction): void {
+    this.forceUnaggregation(transaction, true);
+  }
+
+  public forceUnaggregation(transaction: Transaction, unaggregated: boolean) {
+    transaction.force_unaggregated = unaggregated;
+    this.updateItem(transaction);
   }
 
   public forceItemize(transaction: Transaction): void {
