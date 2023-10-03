@@ -2,11 +2,19 @@ import { LoanFormData, ScheduleFormData } from '../models/TransactionFormModel';
 import { currentYear, PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
+
+
+  static enterDate(dateFieldName: string, dateFieldValue: any, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    PageUtils.calendarSetValue(dateFieldName, dateFieldValue, alias);
+  }
+
   static enterFormData(formData: ScheduleFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
 
     if (formData['date_received'] != undefined) {
-      PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
+      //PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
+      this.enterDate('p-calendar[inputid="date"]', formData['date_received'], alias);
     }
     if (formData['memo_code']) {
       cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
@@ -34,85 +42,89 @@ export class TransactionDetailPage {
 
   static enterLoanFormData(formData: LoanFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find('#amount').safeType(formData['amount']);
+    cy.get(alias).find('#amount').safeType(formData.amount);
 
-    if (formData['date_received'] != undefined) {
-     PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
+
+    if (formData.date_incurred != undefined) {
+      //PageUtils.calendarSetValue('p-calendar[inputid="date_incurred"]', formData['date_incurred'], alias, true);
+      this.enterDate('p-calendar[inputid="date_incurred"]', formData.date_incurred, alias);
     }
 
-    if (formData['date_incurred'] != undefined) {
-      PageUtils.calendarSetValue('p-calendar[inputid="date_incurred"]', formData['date_incurred'], alias, true);
+    if (formData.date_received != undefined) {
+     //PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
+     this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
     }
 
     // Set due date dropdown & date
-    if (formData["due_date_setting"] != undefined) {
-      PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData['due_date_setting'], alias);
-      if (formData['due_date'] != undefined) {
-        PageUtils.calendarSetValue('p-calendar[inputid="due_date"]', formData['due_date'], alias);
+    if (formData.due_date_setting!= undefined) {
+      PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData.due_date_setting, alias);
+      if (formData.due_date != undefined) {
+        PageUtils.calendarSetValue('p-calendar[inputid="due_date"]', formData.due_date, alias);
       }
     }
 
     // set interest dropdown and rate
-    if (formData["interest_rate_setting"] != undefined) {
-      PageUtils.dropdownSetValue('[inputid="interest_rate_setting"]', formData['interest_rate_setting'], alias);
-      if (formData['interest_rate'] != undefined) {
-        cy.get(alias).find('#interest_rate').safeType(formData['interest_rate']);
+    if (formData.interest_rate_setting != undefined) {
+      PageUtils.dropdownSetValue('[inputid="interest_rate_setting"]', formData.interest_rate_setting, alias);
+      if (formData.interest_rate!= undefined) {
+        cy.get(alias).find('#interest_rate').safeType(formData.interest_rate);
       }
     }
     
-    if (formData["secured"] != undefined) {
+    if (formData.secured != undefined) {
       cy.get(alias).find('input[name="secured"]').first().click({force: true});
     }
 
-    if (formData['memo_text']) {
-      cy.get(alias).find('#text4000').type(formData['memo_text']);
+    if (formData.memo_text) {
+      cy.get(alias).find('#text4000').type(formData.memo_text);
     }
 
-    if (formData['purpose_description'] != undefined) {
-      cy.get(alias).find('#purpose_description').type(formData['purpose_description']);
+    if (formData.purpose_description != undefined) {
+      cy.get(alias).find('#purpose_description').type(formData.purpose_description);
     }
   }
 
   static enterLoanFormDataStepTwo(formData: LoanFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
     PageUtils.clickLink("STEP TWO:");
-    if (formData["loan_restructured"] != undefined) {
+    if (formData.loan_restructured != undefined) {
       cy.get(alias).find('input[name="loan_restructured"]').first().click({force: true});
     }
 
-    if (formData["line_of_credit"] != undefined) {
+    if (formData.line_of_credit!= undefined) {
       cy.get(alias).find('input[name="line_of_credit"]').first().click({force: true});
     }
 
-    if (formData["others_liable"] != undefined) {
+    if (formData.others_liable != undefined) {
       cy.get(alias).find('input[name="others_liable"]').first().click({force: true});
     }
 
-    if (formData["collateral"] != undefined) {
+    if (formData.collateral!= undefined) {
       cy.get(alias).find('input[name="collateral"]').first().click({force: true});
     }
 
-    if (formData["future_income"] != undefined) {
+    if (formData.future_income != undefined) {
       cy.get(alias).find('input[name="future_income"]').first().click({force: true});
     }
 
-    if (formData["last_name"] != undefined) {
+    if (formData.last_name != undefined) {
       cy.get(alias).find('input#last_name').first().type(formData.last_name);
     }
 
-    if (formData["first_name"] != undefined) {
+    if (formData.first_name != undefined) {
       cy.get(alias).find('input#first_name').first().type(formData.first_name);
     }
 
-    if (formData["date_signed"] != undefined) {
-      PageUtils.calendarSetValue('p-calendar[inputid="date_signed"]', formData["date_signed"])
+    if (formData.date_signed != undefined) {
+      PageUtils.calendarSetValue('p-calendar[inputid="date_signed"]', formData.date_signed)
     }
 
-    if (formData["authorized_first_name"] != undefined) {
-      cy.get(alias).find('input[formControlName="authorized_first_name"]').first().type(formData.authorized_first_name);
+    if (formData.authorized_first_name != undefined) {
+      cy.get(alias).find(".signatory_2_input").children().find("app-name-input").children().find("input#last_name").type(formData.authorized_last_name);
+      cy.get(alias).find(".signatory_2_input").children().find("app-name-input").children().find("input#first_name").type(formData.authorized_first_name);
+      cy.get(alias).find(".signatory_2_input").children().find("div.grid").children().find("input#title").type(formData.authorized_title);
+      cy.get(alias).find(".signatory_2_input").children().find("div.grid").children().find("p-calendar[inputid='date_signed']").type("04/27/2023");
     }
-
-    // future_income
   }
 
   static assertFormData(formData: ScheduleFormData, alias = '') {

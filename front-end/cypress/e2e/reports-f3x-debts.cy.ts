@@ -67,36 +67,27 @@ describe('Debts', () => {
     });
     
     it("should test Debt Owed By Committee loan", () => {
-        // Create a committee contact to be used with contact lookup
         ContactListPage.goToPage();
         PageUtils.clickButton('New');
         ContactListPage.enterFormData(committeeFormData);
         PageUtils.clickButton('Save');
 
-        // Create individual 
-        ContactListPage.goToPage();
-        PageUtils.clickButton('New');
-        ContactListPage.enterFormData(individualContactFormData);
-        PageUtils.clickButton('Save');
-
-        // Create report to add loan too
         ReportListPage.goToPage();
         ReportListPage.clickCreateButton();
         F3xCreateReportPage.enterFormData(reportFormData);
         PageUtils.clickButton('Save and continue');
 
-        // Navigate to loans
         PageUtils.clickSidebarItem('Add loans and debts');
         PageUtils.clickLink("DEBTS");
         PageUtils.clickLink("Debt Owed By Committee");
 
         cy.get('#entity_type_dropdown').type(committeeFormData['contact_type']);
 
-        // Search for created committee and enter load data, then add load gaurantor
         PageUtils.searchBoxInput(committeeFormData['committee_id']);
         TransactionDetailPage.enterLoanFormData(debtFormData);
         PageUtils.clickButton("Save");
-
+        cy.url().should("contain", "/list");
+        cy.contains('Debt Owed By Committee').should('exist');
     }); 
 
     it("should test Owed To Committee loan", () => {
@@ -106,68 +97,21 @@ describe('Debts', () => {
       ContactListPage.enterFormData(committeeFormData);
       PageUtils.clickButton('Save');
 
-      // Create individual 
-      ContactListPage.goToPage();
-      PageUtils.clickButton('New');
-      ContactListPage.enterFormData(individualContactFormData);
-      PageUtils.clickButton('Save');
-
-      // Create report to add loan too
       ReportListPage.goToPage();
       ReportListPage.clickCreateButton();
       F3xCreateReportPage.enterFormData(reportFormData);
       PageUtils.clickButton('Save and continue');
 
-      // Navigate to loans
       PageUtils.clickSidebarItem('Add loans and debts');
       PageUtils.clickLink("DEBTS");
       PageUtils.clickLink("Debt Owed To Committee");
 
       cy.get('#entity_type_dropdown').type(committeeFormData['contact_type']);
 
-      // Search for created committee and enter load data, then add load gaurantor
       PageUtils.searchBoxInput(committeeFormData['committee_id']);
       TransactionDetailPage.enterLoanFormData(debtFormData);
       PageUtils.clickButton("Save");
-
+      cy.url().should("contain", "/list");
+      cy.contains('Debt Owed To Committee').should('exist');
   });
-
-    /*
-    it("should test Loan Received from Bank loan", () => {
-      // Create a committee contact to be used with contact lookup
-      ContactListPage.goToPage();
-      PageUtils.clickButton('New');
-      ContactListPage.enterFormData(organizationFormData);
-      PageUtils.clickButton('Save');
-
-      // Create individual 
-      ContactListPage.goToPage();
-      PageUtils.clickButton('New');
-      ContactListPage.enterFormData(individualContactFormData);
-      PageUtils.clickButton('Save');
-
-      // Create report to add loan too
-      ReportListPage.goToPage();
-      ReportListPage.clickCreateButton();
-      F3xCreateReportPage.enterFormData(reportFormData);
-      PageUtils.clickButton('Save and continue');
-
-      // Navigate to loans
-      PageUtils.clickSidebarItem('Add loans and debts');
-      PageUtils.clickLink("LOANS");
-      PageUtils.clickLink("Loan Received from Bank");
-
-      // Search for created committee and enter load data, then add load gaurantor
-      PageUtils.searchBoxInput(organizationFormData['name']);
-      TransactionDetailPage.enterLoanFormData(defaultLoanFormData);
-      
-      TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-      //PageUtils.clickButton("Save transactions");
-
-     // PageUtils.clickLink("Loan By Committee");
-      //PageUtils.clickButton("Save & add loan guarantor");
-      //PageUtils.searchBoxInput(individualContactFormData.last_name);
-      // Add individual loan gaurantor and return back 
-      //PageUtils.clickLink("Create a new contact");
-  }); */
 });

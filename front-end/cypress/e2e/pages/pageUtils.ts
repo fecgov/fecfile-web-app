@@ -3,6 +3,13 @@ import * as _ from 'lodash';
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
+
+  static clickElement(elementSelector: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias).find("[datatest='" + elementSelector + "']").click();
+    //children().contains("p-button").last()
+  }
+
   static dropdownSetValue(querySelector: string, value: string, alias = '') {
     alias = PageUtils.getAlias(alias);
 
@@ -21,16 +28,15 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
     console.log(calendar);
     const currentDate: Date = new Date();
-    
+    //
     if(calendar.includes("date_incurred") || calendar.includes("due_date") || calendar.includes("date_signed")) {
       cy.get(alias).find(calendar).first().as('calendarElement').click();
     } else {
       cy.get(alias).find(calendar).as('calendarElement').click();
     }
-    
-    //    Choose the year
-    cy.get('@calendarElement').find('.p-datepicker-year').click();
 
+    cy.get('@calendarElement').find('.p-datepicker-year').click();
+    //    Choose the year
     const year: number = dateObj.getFullYear();
     const currentYear: number = currentDate.getFullYear();
     const decadeStart: number = currentYear - (currentYear % 10);
@@ -125,10 +131,14 @@ export class PageUtils {
     cy.get(alias).contains('a', name).click();
   }
 
-  static clickButton(name: string, alias = '') {
+  static clickButton(name: string, alias = '', force: boolean = false) {
    
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('button', name).click();
+    if (force) {
+      cy.get(alias).contains('button', name).click({force: true});
+    } else { 
+      cy.get(alias).contains('button', name).click();
+    }
   }
 
   static dateToString(date: Date) {
@@ -141,10 +151,18 @@ export class PageUtils {
     );
   }
 
-  static searchBoxInput(input: string) {
+  static searchBoxInput(input: string, click: boolean = false) {
     console.log(input);
     cy.get('[role="searchbox"]').type(input.slice(0,1));
     cy.contains(input).should('exist');
-    cy.contains(input).click();
+    cy.contains(input).click({force: true});
+  }
+
+  static enterValue(fieldName: string, fieldValue: any) {
+    cy.get(fieldName).type(fieldValue);
+  }
+
+  static urlCheck(input: string) {
+    cy.url().should("contain", input);
   }
 }

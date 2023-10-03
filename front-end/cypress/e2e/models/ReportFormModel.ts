@@ -29,3 +29,29 @@ export class F3xCreateReportFormData {
     date_of_election: new Date(currentYear, 11 - 1, 4),
     state_of_election: 'California',
   };
+
+
+  export const loanEnums = {
+    new: "New",
+    save: "Save",
+    cancel: "Cancel",
+    saveBoth: "Save both transactions",
+    saveMultiple: "Save transactions",
+    saveAndCont: "Save and continue",
+    saveAndAddGaurantor: "Save & add loan guarantor",
+    addGuarantorUrl: "/C2_LOAN_GUARANTOR",
+    createSubTransaction: "create-sub-transaction",
+    addLoansAndDebts: "Add loans and debts",
+    loans: "LOANS",
+    loanByCommittee: "Loan By Committee",
+    loanFromBank: "Loan Received from Bank",
+    loanMade: "Loan Made",
+    loanPaymentRecieved: "Loan Repayment Received",
+    loanPaymentRecievedUrl: "LOAN_REPAYMENT_RECEIVED",
+    makeLoanPayment: "Make loan repayment",
+    makeLoanPaymentUrl: "LOAN_REPAYMENT_MADE",
+    madeLoanPayment: "Loan Repayment Made",
+    recieveLoanPayment: "Receive loan repayment",
+    buttonLoansAndDebts: "loans-and-debts-button",
+    reviewLoan: "Review loan agreement"
+  }

@@ -21,6 +21,7 @@
   </p-overlayPanel>
   <p-button
     pRipple
+    (dataTest)="this.getTestString()"
     [icon]="buttonIcon"
     [label]="buttonLabel"
     [styleClass]="buttonStyleClass"
