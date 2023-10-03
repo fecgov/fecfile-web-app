@@ -13,6 +13,7 @@ import { TransactionResolver } from './transaction.resolver';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
 import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
+import { ScheduleCTransactionTypes } from '../models/schc-transaction.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -284,6 +285,33 @@ describe('TransactionResolver', () => {
       expect(transaction).toBeTruthy();
       if (transaction) {
         expect(transaction.debt?.id).toEqual('1');
+      }
+    });
+  });
+  it('should add loan to repayment', () => {
+    spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      return of(
+        SchDTransaction.fromJSON({
+          id: id,
+          transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+          transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+        })
+      );
+    });
+    const route = {
+      queryParamMap: convertToParamMap({ loan: '1' }),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE,
+      }),
+    };
+
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
+      expect(transaction).toBeTruthy();
+      if (transaction) {
+        expect(transaction.loan?.id).toEqual('1');
       }
     });
   });
