@@ -1,1 +1,10 @@
- <svg  fill='#112e51' width="10" height="3" viewBox="0 0 10 3" xmlns="http://www.w3.org/2000/svg"><path d="M1.175.325h7.15a1 1 0 1 1 0 2h-7.15a1 1 0 1 1 0-2z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10" height="12" viewBox="0 0 10 12">
+  <defs>
+    <clipPath id="clip-Custom_Size_53">
+      <rect width="10" height="12"/>
+    </clipPath>
+  </defs>
+  <g id="Custom_Size_53" data-name="Custom Size – 53" clip-path="url(#clip-Custom_Size_53)">
+    <path id="dash" d="M8.6,7.5H1.4a.945.945,0,0,1-1-1,.945.945,0,0,1,1-1H8.5a.945.945,0,0,1,1,1A.923.923,0,0,1,8.6,7.5Z" transform="translate(0.05 -0.5)" fill="#112e51"/>
+  </g>
+</svg>
