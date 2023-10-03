@@ -22,7 +22,7 @@ export class ReportService implements TableListService<Report> {
       ordering = 'form_type';
     }
     // Pull list from F3X Summaries until we have more report models built
-    return this.apiService.get<ListRestResponse>(`/f3x-summaries/?page=${pageNumber}&ordering=${ordering}`).pipe(
+    return this.apiService.get<ListRestResponse>(`/reports/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => F3xReport.fromJSON(item));
         this.setStoreCashOnHand(response.results);
