@@ -52,9 +52,7 @@
       </div>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
-      <img *ngIf="sortOrder === 0" alt="default sort icon" src="/assets/img/default_sort_icon.svg">
-      <img *ngIf="sortOrder === 1" alt="ascending sort icon" src="/assets/img/sort_asc_icon.svg">
-      <img *ngIf="sortOrder === -1" alt="descending sort icon" src="/assets/img/sort_desc_icon.svg">
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
