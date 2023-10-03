@@ -8,6 +8,8 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
   CATEGORY_CODE,
+  SIGNATORY_1_FIELDS,
+  SIGNATORY_2_FIELDS,
   hasFields,
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
@@ -72,6 +74,7 @@ export abstract class TransactionType {
   dateLabel = 'DATE';
   amountInputHeader = '';
   debtInputHeader = '';
+  committeeCandidateHeader = 'Committee/Candidate information';
   purposeDescripLabel = '';
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
@@ -83,8 +86,8 @@ export abstract class TransactionType {
     return this.footer;
   }
   contactTitle?: string; // Title for primary contact
-  signatoryOneTitle?: string; // Label for the signatory_1 section in the form
-  signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
+  signatoryOneHeader?: string; // Label for the signatory_1 section in the form
+  signatoryTwoHeader?: string; // Label for the signatory_2 section in the form
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -137,7 +140,8 @@ export abstract class TransactionType {
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
-  hasCandidateInformation(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
   hasCommitteeOrCandidateInformation(): boolean {
@@ -170,10 +174,17 @@ export abstract class TransactionType {
   hasMemoText(): boolean {
     return hasFields(this.formFields, ['text4000']);
   }
+  hasSignature1(): boolean {
+    return hasFields(this.formFields, SIGNATORY_1_FIELDS);
+  }
+  hasSignature2(): boolean {
+    return hasFields(this.formFields, SIGNATORY_2_FIELDS);
+  }
+  hasSupportOpposeCode(): boolean {
+    return hasFields(this.formFields, ['support_oppose_code']);
+  }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
-  hasSignature1 = false;
-  hasSignature2 = false;
 }
 
 export enum PurposeDescriptionLabelSuffix {
