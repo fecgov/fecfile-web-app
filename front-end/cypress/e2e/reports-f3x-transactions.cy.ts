@@ -175,7 +175,7 @@ describe('Transactions', () => {
     cy.contains('Transactions in this report').should('exist');
     PageUtils.clickLink('Partnership Receipt');
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
-    cy.contains('Partnership Attribution').wait(500);
+    cy.get('h1').contains('Partnership Attribution').should('exist');
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
