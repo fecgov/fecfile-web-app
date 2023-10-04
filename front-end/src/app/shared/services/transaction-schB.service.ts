@@ -18,7 +18,7 @@ export class TransactionSchBService extends TransactionService {
     ordering = '',
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
   ): Observable<ListRestResponse> {
-    // The table data for the Schedule C loans also includes the Schedule D debts.
+    // The table data for the Schedule B disbursements also includes the Schedule E expenditures.
     params['schedules'] = 'B,E';
     return super.getTableData(pageNumber, ordering, params);
   }
