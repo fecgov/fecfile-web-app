@@ -8,14 +8,14 @@ import {
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
-import { Transaction, TransactionTypes } from './transaction.model';
+import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
  * Populated and used by the transaction resovler for use in the transaction components.
  */
 export abstract class TransactionType {
-  abstract scheduleId: string;
+  abstract scheduleId: ScheduleIds;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];

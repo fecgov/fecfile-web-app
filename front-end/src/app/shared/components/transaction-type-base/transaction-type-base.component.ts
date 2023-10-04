@@ -308,7 +308,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   /**
    * If the transaction being created/edited has inheritedFields, populate the form values
-   * from the parent_transaction on create. On edit, simply make the fields read-only.
+   * from the parent_transaction (or debt or loan) on create. On edit, simply make the fields read-only.
    *
    * The entity_type is handled as a special case because it does not exist in the templateMap.
    */
@@ -317,27 +317,24 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     // If creating a new transaction, set both form and contact_1 values from parent transaction
     if (!this.transaction.id) {
-      this.transaction.contact_1 = this.transaction.parent_transaction?.contact_1;
-      this.transaction.contact_1_id = this.transaction.parent_transaction?.contact_1_id;
+      const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
+      this.transaction.contact_1 = ancestor?.contact_1;
+      this.transaction.contact_1_id = ancestor?.contact_1_id;
 
-      const entityTypeValue = this.transaction?.parent_transaction?.contact_1?.type;
+      const entityTypeValue = ancestor?.contact_1?.type;
       if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);
       this.form.get('entity_type')?.updateValueAndValidity();
 
-      this.transaction.transactionType.getInheritedFields(
-        this.transaction)?.forEach((inherittedField) => {
-          if (this.transaction?.parent_transaction) {
-            const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
-            const value =
-              this.transaction.parent_transaction[
-              `${this.transaction.parent_transaction?.transactionType.templateMap[inherittedField]}` as keyof Transaction
-              ];
-            if (value !== undefined) {
-              fieldControl?.setValue(value);
-              fieldControl?.updateValueAndValidity();
-            }
+      this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
+        if (ancestor && this.transaction) {
+          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+          const value = ancestor[`${ancestor?.transactionType.templateMap[inherittedField]}` as keyof Transaction];
+          if (value !== undefined) {
+            fieldControl?.setValue(value);
+            fieldControl?.updateValueAndValidity();
           }
-        });
+        }
+      });
     }
 
     // Set fields to read-only

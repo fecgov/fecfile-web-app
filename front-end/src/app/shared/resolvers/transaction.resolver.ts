@@ -17,6 +17,7 @@ export class TransactionResolver {
     const transactionId = route.paramMap.get('transactionId');
     const parentTransactionId = route.paramMap.get('parentTransactionId');
     const debtId = route.queryParamMap.get('debt');
+    const loanId = route.queryParamMap.get('loan');
 
     if (transactionId) {
       return this.resolveExistingTransactionForId(transactionId);
@@ -26,7 +27,10 @@ export class TransactionResolver {
     }
     if (reportId && transactionTypeName) {
       if (debtId) {
-        return this.resolveNewDebtRepayment(debtId, transactionTypeName);
+        return this.resolveNewRepayment(debtId, transactionTypeName, 'debt');
+      }
+      if (loanId) {
+        return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
       }
       return this.resolveNewTransaction(reportId, transactionTypeName);
     }
@@ -68,14 +72,20 @@ export class TransactionResolver {
     );
   }
 
-  resolveNewDebtRepayment(debtId: string, transactionTypeName: string) {
-    return this.transactionService.get(debtId).pipe(
-      map((debt: Transaction) => {
+  resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
+    return this.transactionService.get(toId).pipe(
+      map((to: Transaction) => {
         const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
         const repayment = repaymentType.getNewTransaction();
-        repayment.debt = debt;
-        repayment.debt_id = debt.id;
-        repayment.report_id = debt.report_id;
+        if (type === 'loan') {
+          repayment.loan = to;
+          repayment.loan_id = to.id;
+        }
+        if (type === 'debt') {
+          repayment.debt = to;
+          repayment.debt_id = to.id;
+        }
+        repayment.report_id = to.report_id;
         return repayment;
       })
     );

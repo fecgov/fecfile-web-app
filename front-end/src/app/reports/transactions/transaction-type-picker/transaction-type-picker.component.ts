@@ -29,6 +29,11 @@ import {
   ScheduleDTransactionTypeLabels,
   ScheduleDTransactionTypes,
 } from 'app/shared/models/schd-transaction.model';
+import {
+  ScheduleETransactionGroups,
+  ScheduleETransactionTypeLabels,
+  ScheduleETransactionTypes,
+} from 'app/shared/models/sche-transaction.model';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -43,6 +48,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleDTransactionTypeLabels,
+    ...ScheduleETransactionTypeLabels,
   ];
   report?: Report;
   category: Categories = 'receipt';
@@ -86,6 +92,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         ScheduleBTransactionGroups.OTHER_EXPENDITURES,
         ScheduleBTransactionGroups.REFUND,
         ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+        ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES,
       ];
     }
     if (this.category === 'loans-and-debts') {
@@ -259,6 +266,16 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         transactionTypes = [
           ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
           ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
+        ];
+        break;
+      case ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES:
+        transactionTypes = [
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_MULTISTATE,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
         ];
         break;
       default:

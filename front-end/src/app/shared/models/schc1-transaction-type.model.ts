@@ -1,9 +1,9 @@
 import { STANDARD_CONTROLS } from './transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
-import { isPulledForwardLoan, Transaction } from './transaction.model';
+import { isPulledForwardLoan, ScheduleIds, Transaction } from './transaction.model';
 
 export abstract class SchC1TransactionType extends TransactionType {
-  scheduleId = 'C1';
+  scheduleId = ScheduleIds.C1;
   apiEndpoint = '/transactions/schedule-c1';
 
   // Labels

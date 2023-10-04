@@ -31,6 +31,9 @@
           <h2 class="m-0">Restore deleted contact(s)</h2>
         </div>
       </ng-template>
+      <ng-template pTemplate="sorticon" let-sortOrder>
+        <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+      </ng-template>
       <ng-template pTemplate="header">
         <tr role="row">
           <th style="width: 3rem" id="header-checkbox" role="columnheader">

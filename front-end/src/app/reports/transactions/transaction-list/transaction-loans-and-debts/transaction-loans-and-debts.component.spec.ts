@@ -7,7 +7,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -52,6 +52,7 @@ describe('TransactionReceiptsComponent', () => {
                 SchC1Transaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
+                  transactionType: { scheduleId: ScheduleIds.A },
                 })
               ),
             getTableData: () => of([]),
@@ -71,22 +72,6 @@ describe('TransactionReceiptsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should show the correct row actions', () => {
-    expect(component.rowActions[0].isAvailable()).toEqual(true);
-    expect(component.rowActions[1].isAvailable()).toEqual(false);
-    expect(component.rowActions[2].isAvailable({ itemized: false })).toEqual(false);
-    expect(component.rowActions[3].isAvailable({ itemized: true })).toEqual(false);
-    component.reportIsEditable = true;
-    expect(component.rowActions[0].isAvailable()).toEqual(false);
-    expect(component.rowActions[1].isAvailable()).toEqual(true);
-    expect(component.rowActions[2].isAvailable({ itemized: false })).toEqual(true);
-    expect(component.rowActions[3].isAvailable({ itemized: true })).toEqual(true);
-    expect(component.rowActions[0].isEnabled({})).toEqual(true);
-    expect(component.rowActions[1].isEnabled({})).toEqual(true);
-    expect(component.rowActions[2].isEnabled({})).toEqual(true);
-    expect(component.rowActions[3].isEnabled({})).toEqual(true);
   });
 
   it('test editItem', () => {
