@@ -134,5 +134,5 @@ export const ScheduleETransactionTypeLabels: LabelList = [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
     'Payment to Payroll Memo for Independent Expenditure',
   ],
-  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Void of Independent Expenditure'],
+  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Independent Expenditure - Void'],
 ];

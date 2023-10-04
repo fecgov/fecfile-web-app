@@ -3,24 +3,42 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EX
 import { SchETransactionType } from '../sche-transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 import {
   ORGANIZATION_INDIVIDUAL,
-  COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
+  ORG_FIELDS,
+  INDIVIDUAL_FIELDS,
+  ADDRESS_FIELDS,
+  ELECTION_FIELDS,
+  COMMON_FIELDS,
+  CATEGORY_CODE,
+  SIGNATORY_1_FIELDS,
+  AGGREGATE,
+  CANDIDATE_FIELDS,
+  CANDIDATE_OFFICE_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE_VOID extends SchETransactionType {
-  formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
+  formFields = [
+    ...ORG_FIELDS,
+    ...INDIVIDUAL_FIELDS,
+    ...ADDRESS_FIELDS,
+    ...CANDIDATE_FIELDS,
+    ...CANDIDATE_OFFICE_FIELDS,
+    ...ELECTION_FIELDS,
+    ...COMMON_FIELDS,
+    ...CATEGORY_CODE,
+    ...SIGNATORY_1_FIELDS,
+    ...AGGREGATE,
+    'date2',
+    'support_oppose_code',
+  ];
   contactTypeOptions = ORGANIZATION_INDIVIDUAL;
   override contactConfig = STANDARD_AND_CANDIDATE;
+  override negativeAmountValueOnly = true;
   title = LabelUtils.get(ScheduleETransactionTypeLabels, ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID);
   schema = schema;
-  override negativeAmountValueOnly = true;
-  override showAggregate = false;
-  override hasCandidateCommittee = true;
-  override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
 
