@@ -72,6 +72,8 @@ export abstract class TransactionType {
 
   // Labels
   dateLabel = 'DATE';
+  date2Label = '';
+  aggregateLabel = 'AGGREGATE';
   amountInputHeader = '';
   debtInputHeader = '';
   committeeCandidateHeader = 'Committee/Candidate information';
@@ -220,6 +222,7 @@ export type TransactionTemplateMapType = {
   candidate_state: string;
   candidate_district: string;
   date: string;
+  date2: string;
   memo_code: string;
   amount: string;
   balance: string;

@@ -7,6 +7,9 @@ export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
   apiEndpoint = '/transactions/schedule-e';
 
+  override dateLabel = 'DISBURSEMENT DATE';
+  override date2Label = 'DISSEMINATION DATE';
+  override aggregateLabel = 'CALENDAR YEAR-TO-DATE';
   override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
   override signatoryOneHeader = 'Committee treasurer';
   override committeeCandidateHeader = 'Candidate information';
@@ -41,7 +44,8 @@ export abstract class SchETransactionType extends TransactionType {
     candidate_office: 'so_candidate_office',
     candidate_state: 'so_candidate_state',
     candidate_district: 'so_candidate_district',
-    date: 'dissemination_date',
+    date: 'disbursement_date',
+    date2: 'dissemination_date',
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
     balance: '',

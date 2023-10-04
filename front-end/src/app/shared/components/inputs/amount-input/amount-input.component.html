@@ -1,5 +1,16 @@
 <div [formGroup]="form">
-  <div class="grid" *ngIf="showDate">
+  <div class="grid" *ngIf="transaction?.transactionType?.hasDate()">
+    <div class="col-6">
+      <div class="field">
+        <label for="date2">{{ transaction?.transactionType?.date2Label }}</label>
+        <p-calendar inputId="date2" name="date2" [formControlName]="templateMap['date2']"></p-calendar>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['date2']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
     <div class="col-6">
       <div class="field">
         <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
@@ -12,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div class="grid" *ngIf="showMemo">
+  <div class="grid" *ngIf="transaction?.transactionType?.hasMemoCode()">
     <div class="col-12">
       <div class="field">
         <app-memo-code
@@ -52,7 +63,7 @@
     </div>
     <div class="col-6">
       <div class="field" *ngIf="showAggregate">
-        <label for="aggregate">AGGREGATE</label>
+        <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
         <p-inputNumber
           inputId="aggregate"
           [formControlName]="templateMap['aggregate']"
