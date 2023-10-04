@@ -6,7 +6,7 @@ import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { defaultDebtFormData as debtFormData, defaultLoanFormData, LoanFormData } from './models/TransactionFormModel';
 import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
+import { defaultFormData as reportFormData, F3xCreateReportFormData, loanEnums } from './models/ReportFormModel';
 
 export const committeeFormData: ContactFormData = {
   contact_type: 'Committee',
@@ -58,60 +58,64 @@ export const organizationFormData: ContactFormData = {
 
 
 describe('Debts', () => {
-    beforeEach(() => {
-        LoginPage.login();
-        ReportListPage.deleteAllReports();
-        ContactListPage.deleteAllContacts();
-        ContactListPage.goToPage();
-        ReportListPage.goToPage();
-    });
-    
-    it("should test Debt Owed By Committee loan", () => {
-        ContactListPage.goToPage();
-        PageUtils.clickButton('New');
-        ContactListPage.enterFormData(committeeFormData);
-        PageUtils.clickButton('Save');
+  beforeEach(() => {
+    LoginPage.login();
+    ReportListPage.deleteAllReports();
+    ContactListPage.deleteAllContacts();
+    ContactListPage.goToPage();
+    ReportListPage.goToPage();
+  });
 
-        ReportListPage.goToPage();
-        ReportListPage.clickCreateButton();
-        F3xCreateReportPage.enterFormData(reportFormData);
-        PageUtils.clickButton('Save and continue');
+  it("should test Debt Owed By Committee loan", () => {
+    ContactListPage.goToPage();
+    PageUtils.clickButton(loanEnums.new);
+    ContactListPage.enterFormData(committeeFormData);
+    PageUtils.clickButton(loanEnums.save);
 
-        PageUtils.clickSidebarItem('Add loans and debts');
-        PageUtils.clickLink("DEBTS");
-        PageUtils.clickLink("Debt Owed By Committee");
+    // Create report to add loan too
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(reportFormData);
+    PageUtils.clickButton(loanEnums.saveAndCont);
 
-        cy.get('#entity_type_dropdown').type(committeeFormData['contact_type']);
+    // Navigate to loans
+    PageUtils.clickSidebarItem(loanEnums.addLoansAndDebts);
+    PageUtils.clickLink(loanEnums.debts);
+    PageUtils.clickLink(loanEnums.debtOwedByCommittee);
 
-        PageUtils.searchBoxInput(committeeFormData['committee_id']);
-        TransactionDetailPage.enterLoanFormData(debtFormData);
-        PageUtils.clickButton("Save");
-        cy.url().should("contain", "/list");
-        cy.contains('Debt Owed By Committee').should('exist');
-    }); 
+    cy.get('#entity_type_dropdown').type(committeeFormData.contact_type);
 
-    it("should test Owed To Committee loan", () => {
-      // Create a committee contact to be used with contact lookup
-      ContactListPage.goToPage();
-      PageUtils.clickButton('New');
-      ContactListPage.enterFormData(committeeFormData);
-      PageUtils.clickButton('Save');
+    PageUtils.searchBoxInput(committeeFormData.committee_id);
+    TransactionDetailPage.enterLoanFormData(debtFormData);
+    PageUtils.clickButton(loanEnums.save);
+    PageUtils.urlCheck("/list");
+    cy.contains(loanEnums.debtOwedByCommittee).should('exist');
+  });
 
-      ReportListPage.goToPage();
-      ReportListPage.clickCreateButton();
-      F3xCreateReportPage.enterFormData(reportFormData);
-      PageUtils.clickButton('Save and continue');
+  it("should test Owed To Committee loan", () => {
+    ContactListPage.goToPage();
+    PageUtils.clickButton(loanEnums.new);
+    ContactListPage.enterFormData(committeeFormData);
+    PageUtils.clickButton(loanEnums.save);
 
-      PageUtils.clickSidebarItem('Add loans and debts');
-      PageUtils.clickLink("DEBTS");
-      PageUtils.clickLink("Debt Owed To Committee");
+    // Create report to add loan too
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(reportFormData);
+    PageUtils.clickButton(loanEnums.saveAndCont);
 
-      cy.get('#entity_type_dropdown').type(committeeFormData['contact_type']);
+    // Navigate to loans
+    PageUtils.clickSidebarItem(loanEnums.addLoansAndDebts);
+    PageUtils.clickLink(loanEnums.debts);
+    PageUtils.clickLink(loanEnums.debtOwedToCommittee);
 
-      PageUtils.searchBoxInput(committeeFormData['committee_id']);
-      TransactionDetailPage.enterLoanFormData(debtFormData);
-      PageUtils.clickButton("Save");
-      cy.url().should("contain", "/list");
-      cy.contains('Debt Owed To Committee').should('exist');
+
+    cy.get('#entity_type_dropdown').type(committeeFormData['contact_type']);
+
+    PageUtils.searchBoxInput(committeeFormData['committee_id']);
+    TransactionDetailPage.enterLoanFormData(debtFormData);
+    PageUtils.clickButton(loanEnums.save);
+    PageUtils.urlCheck("/list");
+    cy.contains(loanEnums.debtOwedToCommittee).should('exist');
   });
 });

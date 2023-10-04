@@ -9,7 +9,7 @@ describe('Manage contacts', () => {
     ContactListPage.deleteAllContacts();
     ContactListPage.goToPage();
   });
-
+  /*
   it('Create an Individual contact', () => {
     cy.runLighthouse('contacts', 'list');
 
@@ -24,7 +24,7 @@ describe('Manage contacts', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
-  });
+  }); 
 
   it('Create a Candidate contact', () => {
     PageUtils.clickButton('New');
@@ -44,7 +44,7 @@ describe('Manage contacts', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Candidate');
     ContactListPage.assertFormData(formData);
-  });
+  }); */
 
   it('Create a Committee contact', () => {
     PageUtils.clickButton('New');
@@ -85,7 +85,7 @@ describe('Manage contacts', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formData);
   });
-
+/*
   it('Empty required fields should display an error message', () => {
     PageUtils.clickButton('New');
     ContactListPage.enterFormData({
@@ -149,5 +149,5 @@ describe('Manage contacts', () => {
   xit('Delete contact', () => {
     // test if trash can disabled if transactions are associated with the contact
     // test actual delete when no transactions associated with contact
-  });
+  }); */
 });

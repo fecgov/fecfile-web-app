@@ -24,7 +24,7 @@ export class ScheduleFormData {
     }
 };
 
-export const defaultFormData: ScheduleFormData = {
+export const defaultScheduleFormData: ScheduleFormData = {
     amount: 100.55,
     category_code: '',
     date_received: new Date(currentYear, 4 - 1, 27),
@@ -44,10 +44,10 @@ export class LoanFormData extends ScheduleFormData {
     date_incurred: Date | undefined;
     date_signed: Date | undefined;
     due_date: Date | undefined;
-    due_date_setting: string;
+    due_date_setting: string | undefined;
     first_name: string;
     future_income: string;
-    interest_rate_setting: string;
+    interest_rate_setting: string | undefined;
     interest_rate: number | undefined;
     last_name: string;
     line_of_credit: string;
@@ -142,3 +142,16 @@ export const defaultLoanFormData: LoanFormData = {
     purpose_description: PageUtils.randomString(20),
     secured: "YES"
 }
+
+export const formTransactionDataForSchedule: ScheduleFormData = {
+    ...defaultLoanFormData,
+    ...{
+      amount: 200.01,
+      category_code: '005 Polling Expenses',
+      date_incurred: undefined,
+      due_date_setting: undefined,
+      interest_rate_setting: undefined,
+      secured: undefined,
+      
+    },
+  };

@@ -53,5 +53,12 @@ export class F3xCreateReportFormData {
     madeLoanPayment: "Loan Repayment Made",
     recieveLoanPayment: "Receive loan repayment",
     buttonLoansAndDebts: "loans-and-debts-button",
-    reviewLoan: "Review loan agreement"
+    reviewLoan: "Review loan agreement",
+    debts: "DEBTS",
+    debtOwedByCommittee: "Debt Owed By Committee",
+    debtOwedToCommittee: "Debt Owed To Committee",
+    addDisbursement: "Add a disbursement",
+    federalElectionActivityExpenditures: "FEDERAL ELECTION ACTIVITY EXPENDITURES",
+    percentFedElectionActivity: "100% Federal Election Activity Payment",
+    lookup: "LOOKUP"
   }
