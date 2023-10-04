@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { InputNumber } from 'primeng/inputnumber';
@@ -30,6 +31,19 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   ngOnInit(): void {
     if (this.contributionAmountReadOnly) {
       this.contributionAmountInputStyleClass = 'readonly';
+    }
+
+    // If this is a double date transaction. Monitor the other date
+    // and update validation on changes.
+    if (this.templateMap['date2']) {
+      this.form
+        .get(this.templateMap['date'])
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.form.get(this.templateMap['date2'])?.updateValueAndValidity({ emitEvent: false }));
+      this.form
+        .get(this.templateMap['date2'])
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.form.get(this.templateMap['date'])?.updateValueAndValidity({ emitEvent: false }));
     }
   }
 

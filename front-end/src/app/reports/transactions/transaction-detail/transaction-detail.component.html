@@ -4,7 +4,7 @@
   <h1>{{ transaction?.transactionType?.title }}</h1>
   <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
   <h4 class="read-only-tag subtitle" *ngIf="isDebtRepayment">DEBT REPAYMENT</h4>
-  <h2>Contact</h2>
+  <h2>{{ transaction?.transactionType?.subtitle }}</h2>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <app-transaction-input
       [isEditable]="isEditable"

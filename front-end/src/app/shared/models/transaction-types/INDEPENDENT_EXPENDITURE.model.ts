@@ -30,6 +30,7 @@ export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
     ...CATEGORY_CODE,
     ...SIGNATORY_1_FIELDS,
     ...AGGREGATE,
+    'date2',
     'support_oppose_code',
   ];
   contactTypeOptions = ORGANIZATION_INDIVIDUAL;

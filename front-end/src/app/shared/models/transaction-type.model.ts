@@ -26,7 +26,6 @@ export abstract class TransactionType {
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
-  abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
@@ -71,6 +70,8 @@ export abstract class TransactionType {
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   // Labels
+  abstract title: string;
+  subtitle = 'Contact';
   dateLabel = 'DATE';
   date2Label = '';
   aggregateLabel = 'AGGREGATE';

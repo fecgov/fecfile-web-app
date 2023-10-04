@@ -7,6 +7,8 @@ export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
   apiEndpoint = '/transactions/schedule-e';
 
+  override subtitle = 'Payee';
+  override amountInputHeader = 'Expenditure information';
   override dateLabel = 'DISBURSEMENT DATE';
   override date2Label = 'DISSEMINATION DATE';
   override aggregateLabel = 'CALENDAR YEAR-TO-DATE';

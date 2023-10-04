@@ -1,28 +1,36 @@
 <div [formGroup]="form">
-  <div class="grid" *ngIf="transaction?.transactionType?.hasDate()">
-    <div class="col-6">
-      <div class="field">
-        <label for="date2">{{ transaction?.transactionType?.date2Label }}</label>
-        <p-calendar inputId="date2" name="date2" [formControlName]="templateMap['date2']"></p-calendar>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['date2']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+  <ng-container *ngIf="transaction?.transactionType?.hasDate()">
+    <div class="grid" *ngIf="templateMap['date2']">
+      <div class="col-12">
+        <em>Only one date is required, but both dates can be entered.</em>
       </div>
     </div>
-    <div class="col-6">
-      <div class="field">
-        <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
-        <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['date']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+    <div class="grid">
+      <div class="col-4" *ngIf="templateMap['date2']">
+        <div class="field">
+          <label for="date2">{{ transaction?.transactionType?.date2Label }}</label>
+          <p-calendar inputId="date2" name="date2" [formControlName]="templateMap['date2']"></p-calendar>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['date2']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
+          <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['date']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
+
   <div class="grid" *ngIf="transaction?.transactionType?.hasMemoCode()">
     <div class="col-12">
       <div class="field">
