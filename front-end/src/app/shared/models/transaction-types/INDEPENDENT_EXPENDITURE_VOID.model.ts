@@ -9,6 +9,7 @@ import {
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE_VOID extends SchETransactionType {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
@@ -27,6 +28,7 @@ export class INDEPENDENT_EXPENDITURE_VOID extends SchETransactionType {
     return SchETransaction.fromJSON({
       form_type: 'SE',
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
+      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
     });
   }
 }

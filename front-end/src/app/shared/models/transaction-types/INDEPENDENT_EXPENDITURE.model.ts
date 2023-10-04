@@ -17,6 +17,7 @@ import {
   CANDIDATE_OFFICE_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
   formFields = [
@@ -44,6 +45,7 @@ export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
     return SchETransaction.fromJSON({
       form_type: 'SE',
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
     });
   }
 }
