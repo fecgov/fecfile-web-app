@@ -216,7 +216,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public createLoanRepaymentReceived(transaction: Transaction): void {
     this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
     );
   }
   public createDebtRepaymentReceived(transaction: Transaction): void {
@@ -227,7 +227,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public createLoanRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
     );
   }
   public createDebtRepaymentMade(transaction: Transaction): void {
