@@ -13,7 +13,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
@@ -80,18 +80,52 @@ describe('TransactionReceiptsComponent', () => {
   it('should show the correct row actions', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(true);
     expect(component.rowActions[1].isAvailable()).toEqual(false);
-    expect(component.rowActions[2].isAvailable({ itemized: false })).toEqual(false);
-    expect(component.rowActions[3].isAvailable({ itemized: true })).toEqual(false);
+    expect(
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } })
+    ).toEqual(false);
+    expect(
+      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: ScheduleIds.A } })
+    ).toEqual(false);
+    expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(false);
+    expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(false);
     component.reportIsEditable = true;
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
-    expect(component.rowActions[2].isAvailable({ itemized: false })).toEqual(true);
-    expect(component.rowActions[3].isAvailable({ itemized: true })).toEqual(true);
+    expect(
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } })
+    ).toEqual(true);
+    expect(
+      component.rowActions[3].isAvailable({ force_unaggregated: false, transactionType: { scheduleId: ScheduleIds.A } })
+    ).toEqual(true);
+    expect(
+      component.rowActions[4].isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })
+    ).toEqual(true);
+    expect(
+      component.rowActions[5].isAvailable({ itemized: true, transactionType: { scheduleId: ScheduleIds.A } })
+    ).toEqual(true);
     expect(component.rowActions[0].isEnabled({})).toEqual(true);
     expect(component.rowActions[1].isEnabled({})).toEqual(true);
     expect(component.rowActions[2].isEnabled({})).toEqual(true);
     expect(component.rowActions[3].isEnabled({})).toEqual(true);
+    expect(component.rowActions[4].isEnabled({})).toEqual(true);
+    expect(component.rowActions[5].isEnabled({})).toEqual(true);
   });
+
+  it('test forceAggregate', fakeAsync(() => {
+    spyOn(testItemService, 'update').and.returnValue(of());
+    const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
+    component.forceAggregate(testTransaction);
+    tick(500);
+    expect(testTransaction.force_unaggregated).toBe(false);
+  }));
+
+  it('test forceUnaggregate', fakeAsync(() => {
+    spyOn(testItemService, 'update').and.returnValue(of());
+    const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
+    component.forceUnaggregate(testTransaction);
+    tick(500);
+    expect(testTransaction.force_unaggregated).toBe(true);
+  }));
 
   it('test forceItemize', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());

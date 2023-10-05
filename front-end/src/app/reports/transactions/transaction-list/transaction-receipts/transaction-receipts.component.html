@@ -29,13 +29,16 @@
         </div>
       </div>
     </ng-template>
+    <ng-template pTemplate="sorticon" let-sortOrder>
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
           Line <p-sortIcon field="form_type"></p-sortIcon>
         </th>
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
-          Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
+          Type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
         <th pSortableColumn="contributor_name" id="name-column" role="columnheader">
           Name <p-sortIcon field="contributor_name"></p-sortIcon>
@@ -44,7 +47,7 @@
           Date <p-sortIcon field="contribution_date"></p-sortIcon>
         </th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
-          Memo code <p-sortIcon field="memo_code"></p-sortIcon>
+          Memo <p-sortIcon field="memo_code"></p-sortIcon>
         </th>
         <th pSortableColumn="contribution_amount" id="amount-column" role="columnheader">
           Amount <p-sortIcon field="contribution_amount"></p-sortIcon>
@@ -66,6 +69,7 @@
           <a [routerLink]="[item?.id]">{{
             item.transaction_type_identifier | label : scheduleTransactionTypeLabels
           }}</a>
+          <div *ngIf="item?.force_unaggregated === true"><strong>Unaggregated</strong></div>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>

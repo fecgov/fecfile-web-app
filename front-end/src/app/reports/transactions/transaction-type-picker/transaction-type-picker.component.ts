@@ -29,6 +29,11 @@ import {
   ScheduleDTransactionTypeLabels,
   ScheduleDTransactionTypes,
 } from 'app/shared/models/schd-transaction.model';
+import {
+  ScheduleETransactionGroups,
+  ScheduleETransactionTypeLabels,
+  ScheduleETransactionTypes,
+} from 'app/shared/models/sche-transaction.model';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -43,6 +48,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleDTransactionTypeLabels,
+    ...ScheduleETransactionTypeLabels,
   ];
   report?: Report;
   category: Categories = 'receipt';
@@ -86,6 +92,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         ScheduleBTransactionGroups.OTHER_EXPENDITURES,
         ScheduleBTransactionGroups.REFUND,
         ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+        ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES,
       ];
     }
     if (this.category === 'loans-and-debts') {
@@ -261,18 +268,32 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
         ];
         break;
+      case ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES:
+        transactionTypes = [
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_MULTISTATE,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
+          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+        ];
+        break;
       default:
         break;
     }
-    const debtPaymentLines = [
-      ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
-      ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
-    ];
-    return transactionTypes.filter((transactionType) => {
-      return this.debtId
-        ? debtPaymentLines.includes(TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '')
-        : true;
-    });
+
+    if (this.debtId) {
+      const debtPaymentLines = [
+        ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
+        ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
+      ];
+      return transactionTypes.filter((transactionType) => {
+        if (this.isTransactionDisabled(transactionType)) return false;
+        const lineNumber = TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '';
+        return debtPaymentLines.includes(lineNumber);
+      });
+    }
+    return transactionTypes;
   }
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {

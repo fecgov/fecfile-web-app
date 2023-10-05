@@ -56,6 +56,7 @@ const routes: Routes = [
     },
     data: {
       sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
+      noComponentReuse: true,
     },
   },
   {

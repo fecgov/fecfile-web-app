@@ -35,6 +35,7 @@ export abstract class Transaction extends BaseModel {
   // FECFile Online custom properties
 
   transaction_type_identifier: string | undefined;
+  force_unaggregated: boolean | undefined;
   itemized: boolean | undefined;
   force_itemized: boolean | undefined;
 
@@ -42,7 +43,10 @@ export abstract class Transaction extends BaseModel {
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
 
   debt: Transaction | undefined;
-  debt_id: string | undefined; // Foreign key to debt or loan which this transaction repays
+  debt_id: string | undefined; // Foreign key to debt which this transaction repays
+
+  loan: Transaction | undefined;
+  loan_id: string | undefined; // Foreign key to loan which this transaction repays
 
   created: string | undefined;
   updated: string | undefined;
@@ -173,6 +177,9 @@ export function hasNoContact(transaction?: Transaction): boolean {
 export function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
+export function isPulledForwardLoan(transaction?: Transaction): boolean {
+  return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
+}
 
 export type ScheduleTransaction =
   | SchATransaction
@@ -211,4 +218,14 @@ export enum AggregationGroups {
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
   RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
   GENERAL_DISBURSEMENT = 'GENERAL_DISBURSEMENT',
+}
+
+export enum ScheduleIds {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  C1 = 'C1',
+  C2 = 'C2',
+  D = 'D',
+  E = 'E',
 }

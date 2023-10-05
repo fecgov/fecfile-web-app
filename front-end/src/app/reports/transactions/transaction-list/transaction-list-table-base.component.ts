@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
@@ -39,13 +39,36 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
+      'Aggregate',
+      this.forceAggregate.bind(this),
+      (transaction: Transaction) =>
+        !!transaction.force_unaggregated &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id &&
+        transaction.transactionType.scheduleId === ScheduleIds.A,
+      () => true
+    ),
+    new TableAction(
+      'Unaggregate',
+      this.forceUnaggregate.bind(this),
+      (transaction: Transaction) =>
+        !transaction.force_unaggregated &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id &&
+        transaction.transactionType.scheduleId === ScheduleIds.A,
+      () => true
+    ),
+    new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
       (transaction: Transaction) =>
         transaction.itemized === false &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -55,7 +78,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === true &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -157,6 +181,19 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
   }
 
+  public forceAggregate(transaction: Transaction): void {
+    this.forceUnaggregation(transaction, false);
+  }
+
+  public forceUnaggregate(transaction: Transaction): void {
+    this.forceUnaggregation(transaction, true);
+  }
+
+  public forceUnaggregation(transaction: Transaction, unaggregated: boolean) {
+    transaction.force_unaggregated = unaggregated;
+    this.updateItem(transaction);
+  }
+
   public forceItemize(transaction: Transaction): void {
     this.forceItemization(transaction, true);
   }
@@ -179,7 +216,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public createLoanRepaymentReceived(transaction: Transaction): void {
     this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
     );
   }
   public createDebtRepaymentReceived(transaction: Transaction): void {
@@ -190,7 +227,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public createLoanRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
     );
   }
   public createDebtRepaymentMade(transaction: Transaction): void {
