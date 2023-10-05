@@ -1,4 +1,4 @@
-<div class="grid" *ngIf="isEditable && !!!transactionType?.useParentContact">
+<div class="grid" *ngIf="isEditable && !!!transactionType?.getUseParentContact(transaction)">
   <div class="col-12">
     <div class="field">
       <label for="entity_type">LOOKUP</label>

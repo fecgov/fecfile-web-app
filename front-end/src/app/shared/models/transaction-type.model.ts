@@ -2,13 +2,9 @@ import { FormGroup } from '@angular/forms';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
   CANDIDATE_FIELDS,
-  CANDIDATE_OFFICE_FIELDS,
-  ELECTION_FIELDS,
-  EMPLOYEE_INFO_FIELDS,
-  LOAN_FINANCE_FIELDS,
-  LOAN_TERMS_FIELDS,
-  CATEGORY_CODE,
-  hasFields,
+  CANDIDATE_OFFICE_FIELDS, CATEGORY_CODE, ELECTION_FIELDS,
+  EMPLOYEE_INFO_FIELDS, hasFields, LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
@@ -39,12 +35,18 @@ export abstract class TransactionType {
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
+  showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getInheritedFields = (transaction: Transaction) => this.inheritedFields;
+
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getUseParentContact = (transaction?: Transaction) => this.useParentContact;
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
   parentTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the parent, trigger the child to regenerate its description
 

@@ -73,20 +73,21 @@ export class TransactionChildFormUtils {
     });
 
     // Inheritted fields must match parent values
-    childTransaction.transactionType?.inheritedFields?.forEach((inherittedField) => {
-      if (childTransaction.transactionType) {
-        component.form
-          .get(component.templateMap[inherittedField])
-          ?.valueChanges.pipe(takeUntil(component.destroy$))
-          .subscribe((value) => {
-            if (childTransaction.transactionType) {
-              childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.setValue(value);
-            }
-          });
-        childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.disable();
-      } else {
-        throw new Error('Fecfile: Template map not found for transaction component');
-      }
-    });
+    childTransaction.transactionType?.getInheritedFields(
+      childTransaction)?.forEach((inherittedField) => {
+        if (childTransaction.transactionType) {
+          component.form
+            .get(component.templateMap[inherittedField])
+            ?.valueChanges.pipe(takeUntil(component.destroy$))
+            .subscribe((value) => {
+              if (childTransaction.transactionType) {
+                childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.setValue(value);
+              }
+            });
+          childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.disable();
+        } else {
+          throw new Error('Fecfile: Template map not found for transaction component');
+        }
+      });
   }
 }
