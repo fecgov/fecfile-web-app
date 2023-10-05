@@ -46,6 +46,10 @@ export class SchDTransaction extends Transaction {
     }
     return transaction;
   }
+
+  override getFieldsNotToValidate(): string[] {
+    return ['payment_amount', 'balance_at_close', ...super.getFieldsNotToValidate()];
+  }
 }
 
 export enum ScheduleDTransactionGroups {

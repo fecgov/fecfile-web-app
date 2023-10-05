@@ -12,14 +12,14 @@ import {
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
-import { Transaction, TransactionTypes } from './transaction.model';
+import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
  * Populated and used by the transaction resovler for use in the transaction components.
  */
 export abstract class TransactionType {
-  abstract scheduleId: string;
+  abstract scheduleId: ScheduleIds;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
@@ -39,7 +39,6 @@ export abstract class TransactionType {
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
-  
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -53,6 +52,10 @@ export abstract class TransactionType {
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
+    return this.navigationControls;
+  }
 
   // Memo Code settings
   memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
@@ -75,6 +78,10 @@ export abstract class TransactionType {
   accordionSubText?: string; // Text after title in accordion handle
   formTitle?: string; // Title of form within accordion section
   footer?: string; // Text at the end of form
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getFooter(transaction?: Transaction): string | undefined {
+    return this.footer;
+  }
   contactTitle?: string; // Title for primary contact
   signatoryOneTitle?: string; // Label for the signatory_1 section in the form
   signatoryTwoTitle?: string; // Label for the signatory_2 section in the form

@@ -26,7 +26,7 @@ import { hasNoContact } from '../transaction.model';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
-  formFields = [...ADDRESS_FIELDS, ...INDIVIDUAL_FIELDS, 'amount', ...EMPLOYEE_INFO_FIELDS];
+  formFields = [...ADDRESS_FIELDS, ...INDIVIDUAL_FIELDS, 'amount', ...EMPLOYEE_INFO_FIELDS, 'entity_type'];
   override contactConfig = STANDARD_SINGLE_CONTACT;
   override navigationControls = new TransactionNavigationControls(
     [
@@ -44,7 +44,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL]
   );
-  override contactTypeOptions = INDIVIDUAL;
+  contactTypeOptions = INDIVIDUAL;
   schema = schema;
   override hasAmountInput = true;
   override hasAdditionalInfo = false;

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Input, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { take, takeUntil } from 'rxjs';
@@ -7,6 +7,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@ang
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { InputText } from 'primeng/inputtext';
+import { Transaction, isPulledForwardLoan } from 'app/shared/models/transaction.model';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -34,6 +35,7 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
   templateUrl: './loan-terms-dates-input.component.html',
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
+  @Input() transaction?: Transaction;
   @ViewChild('interestRatePercentage') interestInput!: InputText;
   constructor(private store: Store) {
     super();
@@ -55,14 +57,16 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   ngOnInit(): void {
     // Add the date range validation check to the DATE INCURRED input
-    this.store
-      .select(selectActiveReport)
-      .pipe(take(1))
-      .subscribe((report) => {
-        this.form
-          .get(this.templateMap.date)
-          ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
-      });
+    if (!isPulledForwardLoan(this.transaction)) {
+      this.store
+        .select(selectActiveReport)
+        .pipe(take(1))
+        .subscribe((report) => {
+          this.form
+            .get(this.templateMap.date)
+            ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
+        });
+    }
 
     this.percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
