@@ -25,10 +25,6 @@ export class SchDTransaction extends Transaction {
   payment_amount: number | undefined;
   balance_at_close: number | undefined;
 
-  override getFieldsNotToValidate(): string[] {
-    return ["balance_at_close", "payment_amount", ...super.getFieldsNotToValidate()];
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchDTransaction {
     const transaction = plainToClass(SchDTransaction, json);
