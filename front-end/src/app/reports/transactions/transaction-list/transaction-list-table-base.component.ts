@@ -12,6 +12,8 @@ import { ReportService } from 'app/shared/services/report.service';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 
 @Component({
   template: '',
@@ -65,7 +67,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
     new TableAction(
       'Review loan agreement',
-      this.editSecondChild.bind(this),
+      this.editLoanAgreement.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
       () => true
@@ -78,6 +80,22 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
         ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Report debt repayment',
+      this.createDebtRepaymentMade.bind(this),
+      (transaction: Transaction) =>
+        transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
+        this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Report debt repayment',
+      this.createDebtRepaymentReceived.bind(this),
+      (transaction: Transaction) =>
+        transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
+        this.reportIsEditable,
       () => true
     ),
   ];
@@ -132,14 +150,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
   }
 
-  public editFirstChild(item: Transaction): void {
-    if (item.children?.length && item.children.length > 0)
-      this.router.navigate([`${item.children[0].id}`], { relativeTo: this.activatedRoute });
-  }
-
-  public editSecondChild(item: Transaction): void {
-    if (item.children?.length && item.children.length > 1)
-      this.router.navigate([`${item.children[1].id}`], { relativeTo: this.activatedRoute });
+  public editLoanAgreement(transaction: Transaction): void {
+    const agreement = (transaction.children ?? []).find(
+      (child) => child.transaction_type_identifier == ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
+    );
+    if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
   }
 
   public forceItemize(transaction: Transaction): void {
@@ -167,10 +182,20 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
     );
   }
+  public createDebtRepaymentReceived(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`
+    );
+  }
 
   public createLoanRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}`
+    );
+  }
+  public createDebtRepaymentMade(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
     );
   }
 
@@ -187,7 +212,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public formatId(id: string | null): string {
     if (id) {
-      return id.split('-')[0].toUpperCase();
+      return id.substring(0, 8).toUpperCase();
     }
     return '';
   }

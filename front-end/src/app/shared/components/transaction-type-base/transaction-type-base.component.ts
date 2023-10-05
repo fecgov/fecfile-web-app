@@ -38,6 +38,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
+  isDebtRepayment = false;
   memoCodeCheckboxLabel$ = of('');
 
   constructor(
@@ -78,6 +79,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
+
+    this.isDebtRepayment = !!this.transaction.debt_id;
 
     // If this single-entry transaction has inherited fields from its parent, load values
     // from parent on create and set field to read-only. For edit, just make
@@ -212,8 +215,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const reportPath = `/reports/transactions/report/${event.transaction?.report_id}`;
     if (
       event.destination === NavigationDestination.ANOTHER ||
-      event.destination === NavigationDestination.ANOTHER_CHILD ||
-      event.destination === NavigationDestination.ANOTHER_CHILD_BUTTON
+      event.destination === NavigationDestination.ANOTHER_CHILD
     ) {
       this.messageService.add({
         severity: 'success',
@@ -228,10 +230,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
       }
-    } else if (
-      event.destination === NavigationDestination.CHILD ||
-      event.destination === NavigationDestination.CHILD_BUTTON
-    ) {
+    } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',

@@ -20,34 +20,35 @@ import {
   NavigationDestination,
   CANCEL_CONTROL,
   SAVE_LIST_CONTROL,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
-  formFields = [...ADDRESS_FIELDS, ...INDIVIDUAL_FIELDS, 'amount', ...EMPLOYEE_INFO_FIELDS];
+  formFields = [...ADDRESS_FIELDS, ...INDIVIDUAL_FIELDS, 'amount', ...EMPLOYEE_INFO_FIELDS, 'entity_type'];
   override contactConfig = STANDARD_SINGLE_CONTACT;
   override navigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.ANOTHER_CHILD_BUTTON,
+        NavigationDestination.ANOTHER_CHILD,
         'Save & add loan guarantor',
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus'
+        'pi pi-plus',
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL]
   );
-  override contactTypeOptions = INDIVIDUAL;
+  contactTypeOptions = INDIVIDUAL;
   schema = schema;
   override hasAmountInput = true;
   override hasAdditionalInfo = false;
   override showAggregate = false;
-  override contactLookupLabel = 'GUARANTOR LOOKUP';
 
   getNewTransaction() {
     return SchC2Transaction.fromJSON({

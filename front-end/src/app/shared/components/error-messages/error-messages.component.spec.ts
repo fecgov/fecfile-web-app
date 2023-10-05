@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
@@ -71,12 +71,14 @@ describe('ErrorMessagesComponent', () => {
     expect(component.requiredErrorMessage).toBe('This is a required field.');
     expect(component.requiredTrueErrorMessage).toBe('This is a required field.');
     component.fieldName = 'low_high';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ low_high: -100 });
     expect(component.minErrorMessage).toBe('This field must be greater than or equal to $0.00.');
     component.form.patchValue({ low_high: 100 });
     expect(component.maxErrorMessage).toBe('This field must be less than or equal to $10.00.');
     component.fieldName = 'exclusive_low_high';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ exclusive_low_high: 0 });
     expect(component.exclusiveMinErrorMessage).toBe('This field must be greater than $0.00.');
@@ -117,5 +119,14 @@ describe('ErrorMessagesComponent', () => {
     expect(component.exclusiveMaxErrorMessage).toBe('My custom exclusive max error message');
     component.exclusiveMinErrorMessage = 'My custom exclusive min error message';
     expect(component.exclusiveMinErrorMessage).toBe('My custom exclusive min error message');
+  });
+
+  it('should use a form control passed to it before using a named one passed as Input', () => {
+    const fb: FormBuilder = new FormBuilder();
+    const form = fb.group({});
+    component.form = form;
+    component.control = new FormControl('my control');
+    component.ngOnInit();
+    expect(component.control?.value).toBe('my control');
   });
 });

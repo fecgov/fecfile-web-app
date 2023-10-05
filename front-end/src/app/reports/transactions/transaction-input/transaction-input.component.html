@@ -1,14 +1,14 @@
 <div class="grid" *ngIf="isEditable && !!!transactionType?.useParentContact">
   <div class="col-12">
     <div class="field">
-      <label for="entity_type">{{ transactionType.contactLookupLabel ?? contactLookupLabel }}</label>
+      <label for="entity_type">LOOKUP</label>
       <app-transaction-contact-lookup
+        contactProperty="contact_1"
+        [transaction]="transaction"
         [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="contactTypeOptions"
-        [contactTypeFormControl]="$any(form).controls['entity_type']"
-        selectedContactFormControlName="contact_1"
-        [contactTypeReadOnly]="contactTypeOptions.length === 1"
+        (contactTypeSelect)="contactTypeSelected($event)"
         (contactSelect)="updateFormWithPrimaryContact($event)"
       >
       </app-transaction-contact-lookup>
@@ -83,6 +83,7 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
+      [transaction]="transaction"
     ></app-loan-terms-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanAgreement">
@@ -92,6 +93,7 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
+      [transaction]="transaction"
       (contactSelect)="updateFormWithSecondaryContact($event)"
     ></app-loan-agreement-input>
   </ng-container>
@@ -128,11 +130,11 @@
       [transaction]="transaction"
     ></app-additional-info-input>
   </ng-container>
-  <ng-container *ngIf="transactionType.footer">
+  <ng-container *ngIf="transactionType.getFooter(transaction)">
     <p-divider></p-divider>
     <div class="grid">
       <span style="font-style: italic">
-        <b>{{ transactionType.footer }}</b>
+        <b>{{ transactionType.getFooter(transaction) }}</b>
       </span>
     </div>
   </ng-container>
@@ -156,12 +158,11 @@
     </ng-container>
     <ng-container *ngIf="transactionType?.contact3IsRequired">
       <app-transaction-contact-lookup
+        contactProperty="contact_3"
+        [transaction]="transaction"
         [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="committeeContactTypeOptions"
-        [contactTypeFormControl]="committeeContactTypeFormControl"
-        selectedContactFormControlName="contact_3"
-        [contactTypeReadOnly]="true"
         (contactSelect)="updateFormWithTertiaryContact($event)"
       ></app-transaction-contact-lookup>
       <app-committee-input
@@ -177,13 +178,16 @@
       ></app-committee-input>
     </ng-container>
     <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
+      <label for="contact_2"
+        >LOOKUP
+        <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container></label
+      >
       <app-transaction-contact-lookup
+        contactProperty="contact_2"
+        [transaction]="transaction"
         [form]="form"
         [formSubmitted]="formSubmitted"
         [contactTypeOptions]="candidateContactTypeOptions"
-        [contactTypeFormControl]="candidateContactTypeFormControl"
-        selectedContactFormControlName="contact_2"
-        [contactTypeReadOnly]="true"
         (contactSelect)="updateFormWithCandidateContact($event)"
       ></app-transaction-contact-lookup>
       <ng-container *ngIf="transaction?.contact_2">

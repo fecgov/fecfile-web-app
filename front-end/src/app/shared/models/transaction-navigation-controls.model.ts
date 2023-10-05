@@ -11,9 +11,12 @@ export enum NavigationDestination {
   PARENT,
   ANOTHER,
   ANOTHER_CHILD,
-  ANOTHER_CHILD_BUTTON,
   CHILD,
-  CHILD_BUTTON,
+}
+
+export enum ControlType {
+  BUTTON,
+  DROPDOWN,
 }
 
 export class NavigationEvent {
@@ -41,6 +44,7 @@ export class NavigationControl {
   label = 'Cancel';
   icon?: string;
   ngClass?: string;
+  controlType: ControlType;
   visibleCondition: (transaction?: Transaction) => boolean = () => true;
   disabledCondition: (transaction?: Transaction) => boolean = () => false;
 
@@ -51,7 +55,8 @@ export class NavigationControl {
     ngClass?: string,
     disabledCondition?: (transaction?: Transaction) => boolean,
     visibleCondition?: (transaction?: Transaction) => boolean,
-    icon?: string
+    icon?: string,
+    controlType = ControlType.BUTTON
   ) {
     this.navigationAction = navigationAction;
     this.navigationDestination = navigationDestination;
@@ -60,6 +65,7 @@ export class NavigationControl {
     this.visibleCondition = visibleCondition || (() => true);
     this.disabledCondition = disabledCondition || (() => false);
     this.icon = icon;
+    this.controlType = controlType;
   }
 }
 
@@ -117,7 +123,8 @@ export const SAVE_CHILD_CONTROL = new NavigationControl(
   'p-button-warning',
   hasNoContact,
   () => true,
-  'pi pi-plus'
+  'pi pi-plus',
+  ControlType.DROPDOWN
 );
 
 export class TransactionNavigationControls {
@@ -176,20 +183,19 @@ export const STANDARD_PARENT_CONTROLS = new TransactionNavigationControls(
 /**
  * Standard set of form buttons used across all child JF Transfer Memo transaction type screens.
  */
-export function getChildNavigationControls(): TransactionNavigationControls {
-  return new TransactionNavigationControls(
-    [
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER_CHILD,
-        'Save & add memo',
-        '',
-        hasNoContact,
-        () => true,
-        'pi pi-plus'
-      ),
-    ],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL]
-  );
-}
+export const CHILD_CONTROLS = new TransactionNavigationControls(
+  [
+    new NavigationControl(
+      NavigationAction.SAVE,
+      NavigationDestination.ANOTHER_CHILD,
+      'Save & add memo',
+      '',
+      hasNoContact,
+      () => true,
+      'pi pi-plus',
+      ControlType.DROPDOWN
+    ),
+  ],
+  [CANCEL_CONTROL],
+  [SAVE_LIST_CONTROL]
+);

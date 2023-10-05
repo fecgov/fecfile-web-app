@@ -1,25 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/interfaces/report.interface';
 import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
-  ScheduleATransactionGroupsType,
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from 'app/shared/models/scha-transaction.model';
 import {
   ScheduleBTransactionGroups,
-  ScheduleBTransactionGroupsType,
   ScheduleBTransactionTypeLabels,
   ScheduleBTransactionTypes,
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
+import { TransactionTypeUtils, getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import {
   ScheduleCTransactionGroups,
@@ -46,34 +44,33 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleDTransactionTypeLabels,
   ];
-  report: Report | undefined;
+  report?: Report;
   category: Categories = 'receipt';
-  groups: ScheduleATransactionGroupsType[] | ScheduleBTransactionGroupsType[] = [];
   title: string = this.getCategoryTitle();
+  debtId?: string;
 
   constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
+    combineLatest([this.store.select(selectActiveReport), this.route.params, this.route.queryParamMap])
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
-
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.category = params['category'];
-      this.title = this.getCategoryTitle();
-      this.titleService.setTitle(this.title);
-    });
+      .subscribe(([report, params, queryParamMap]) => {
+        this.report = report;
+        this.category = params['category'];
+        this.debtId = queryParamMap.get('debt') ?? undefined;
+        this.title = this.getCategoryTitle();
+        this.titleService.setTitle(this.title);
+      });
   }
 
   getCategoryTitle(): string {
     switch (this.category) {
       case 'receipt':
-        return 'Add a receipt';
+        return this.debtId ? 'Report debt repayment' : 'Add a receipt';
       case 'disbursement':
-        return 'Add a disbursement';
+        return this.debtId ? 'Report debt repayment' : 'Add a disbursement';
       case 'loans-and-debts':
         return 'Add loans and debts';
       default:
@@ -104,9 +101,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   }
 
   getTransactionTypes(group: TransactionGroupTypes): TransactionTypes[] {
+    let transactionTypes: TransactionTypes[] = [];
     switch (group) {
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS:
-        return [
+        transactionTypes = [
           ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECEIPT,
           ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
@@ -117,8 +115,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON,
           ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
         ];
+        break;
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
-        return [
+        transactionTypes = [
           ScheduleATransactionTypes.PARTY_RECEIPT,
           ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
           ScheduleATransactionTypes.PARTY_RETURN,
@@ -128,8 +127,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
           ScheduleATransactionTypes.PAC_RETURN,
         ];
+        break;
       case ScheduleATransactionGroups.TRANSFERS:
-        return [
+        transactionTypes = [
           ScheduleATransactionTypes.TRANSFER,
           ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER,
@@ -138,14 +138,16 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
+        break;
       case ScheduleATransactionGroups.REFUNDS:
-        return [
+        transactionTypes = [
           ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
           ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
           ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];
+        break;
       case ScheduleATransactionGroups.OTHER:
-        return [
+        transactionTypes = [
           ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
           ScheduleATransactionTypes.OTHER_RECEIPTS,
           ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
@@ -175,16 +177,18 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
+        break;
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
-        return [
+        transactionTypes = [
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
         ];
+        break;
       case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS:
-        return [
+        transactionTypes = [
           ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
@@ -193,8 +197,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
         ];
+        break;
       case ScheduleBTransactionGroups.OTHER_EXPENDITURES:
-        return [
+        transactionTypes = [
           ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
@@ -221,8 +226,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
         ];
+        break;
       case ScheduleBTransactionGroups.REFUND:
-        return [
+        transactionTypes = [
           ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
           ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
@@ -232,25 +238,41 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
         ];
+        break;
       case ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES:
-        return [
+        transactionTypes = [
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
         ];
+        break;
       case ScheduleCTransactionGroups.LOANS:
-        return [
+        transactionTypes = [
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
           ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
         ];
+        break;
       case ScheduleDTransactionGroups.DEBTS:
-        return [ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE, ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE];
+        transactionTypes = [
+          ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
+          ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
+        ];
+        break;
       default:
-        return [];
+        break;
     }
+    const debtPaymentLines = [
+      ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
+      ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
+    ];
+    return transactionTypes.filter((transactionType) => {
+      return this.debtId
+        ? debtPaymentLines.includes(TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '')
+        : true;
+    });
   }
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {

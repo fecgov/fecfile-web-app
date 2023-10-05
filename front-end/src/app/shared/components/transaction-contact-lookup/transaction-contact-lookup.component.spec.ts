@@ -1,31 +1,27 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
-import { of } from 'rxjs';
-
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
-import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { LabelUtils } from 'app/shared/utils/label.utils';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
   let fixture: ComponentFixture<TransactionContactLookupComponent>;
 
-  let testFecApiService: FecApiService;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TransactionContactLookupComponent, ContactLookupComponent, LabelPipe],
+      declarations: [TransactionContactLookupComponent, ContactLookupComponent, LabelPipe, ContactDialogComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -36,15 +32,12 @@ describe('TransactionContactLookupComponent', () => {
       ],
       providers: [FormBuilder, FecApiService, EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();
-
-    testFecApiService = TestBed.inject(FecApiService);
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionContactLookupComponent);
     component = fixture.componentInstance;
-    component.form.addControl('contact_1', new FormControl());
-    component.selectedContactFormControlName = 'contact_1';
+    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
     fixture.detectChanges();
   });
@@ -53,58 +46,41 @@ describe('TransactionContactLookupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#updateFormWithPrimaryContact Contact happy path', fakeAsync(() => {
-    const eventEmitterEmitSpy = spyOn(component.contactSelect, 'emit');
-    const testContact = Contact.fromJSON({
-      id: 123,
-      last_name: 'testLastName',
-      first_name: 'testFirstName',
-      type: ContactTypes.COMMITTEE,
-    });
-    const testValue = {
-      value: testContact,
-    } as SelectItem<Contact>;
-    component.updateFormWithPrimaryContact(testValue);
-    tick(500);
-    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
-  }));
+  it('should create a component for "contact_2" or "contact_3', () => {
+    component.contactProperty = 'contact_2';
+    component.transaction = testScheduleATransaction;
+    component.ngOnInit();
+    expect(component.form.get('contact_2_lookup')).toBeTruthy();
 
-  it('#updateFormWithPrimaryContact FecApiLookupData createContactForm null vals', fakeAsync(() => {
-    const testFecApiLookupData = new FecApiCommitteeLookupData({ id: 'C12345678' } as FecApiCommitteeLookupData);
-    const testValue = {
-      value: testFecApiLookupData,
-    } as SelectItem<FecApiLookupData>;
-    spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(new CommitteeAccount()));
-    component.createContactForm.removeControl('committee_id');
-    component.createContactForm.removeControl('name');
-    component.createContactForm.removeControl('street_1');
-    component.createContactForm.removeControl('street_2');
-    component.createContactForm.removeControl('city');
-    component.createContactForm.removeControl('state');
-    component.createContactForm.removeControl('zip');
-    component.updateFormWithPrimaryContact(testValue);
-    tick(500);
-    expect(component.createContactDialogVisible).toEqual(true);
-  }));
+    component.contactProperty = 'contact_3';
+    component.ngOnInit();
+    expect(component.form.get('contact_3_lookup')).toBeTruthy();
+  });
 
-  it('#updateFormWithPrimaryContact FecApiLookupData happy path', fakeAsync(() => {
-    const testFecApiLookupData = new FecApiCommitteeLookupData({ id: 'C12345678' } as FecApiCommitteeLookupData);
-    const testValue = {
-      value: testFecApiLookupData,
-    } as SelectItem<FecApiLookupData>;
-    spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(new CommitteeAccount()));
+  it('selecting a contactType should emit its value', () => {
+    spyOn(component.contactTypeSelect, 'emit');
+    component.contactTypeSelected(ContactTypes.COMMITTEE);
+    expect(component.contactTypeSelect.emit).toHaveBeenCalledWith(ContactTypes.COMMITTEE);
+  });
 
-    component.updateFormWithPrimaryContact(testValue);
-    tick(500);
-    expect(component.createContactDialogVisible).toEqual(true);
-  }));
+  it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
+    component.detailVisible = false;
+    const contact = Contact.fromJSON({ ...testContact });
+    component.contactLookupSelected(contact);
+    contact.id = undefined;
+    component.contactLookupSelected(contact);
+    expect(component.detailVisible).toBeTrue();
+  });
 
-  it('#createNewContact happy path', () => {
-    component.onCreateNewContactSelect();
-    component.closeCreateContactDialog();
-    component.createContactSave();
-    expect(component.createContactForm.get('committee_id')?.value).toBe(null);
-    component.onCreateContactDialogClose();
-    expect(component.createContactFormSubmitted).toBeFalse();
+  it('selecting create new contact should open the contact dialog', () => {
+    component.detailVisible = false;
+    component.createNewContactSelected();
+    expect(component.detailVisible).toBeTrue();
+  });
+
+  it('saving a contact should emit the contact', () => {
+    spyOn(component.contactSelect, 'emit');
+    component.saveContact(testContact);
+    expect(component.contactSelect.emit).toHaveBeenCalledWith({ value: testContact });
   });
 });

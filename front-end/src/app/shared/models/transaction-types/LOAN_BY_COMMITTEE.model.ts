@@ -9,6 +9,7 @@ import {
   NavigationControl,
   NavigationAction,
   NavigationDestination,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
@@ -45,7 +46,6 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override footer =
     'The information in this loan will automatically create a related disbursement. Review the disbursement; enter a purpose of disbursement or note/memo text; or continue without reviewing and “Save transactions.”';
   override contactTitle = 'Lendee';
-  override contactLookupLabel = 'LENDEE LOOKUP';
   override showGuarantorTable = true;
 
   schema = schema;
@@ -56,12 +56,13 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.CHILD_BUTTON,
+        NavigationDestination.CHILD,
         'Save & add loan guarantor',
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus'
+        'pi pi-plus',
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],

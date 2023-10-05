@@ -16,6 +16,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
 import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { DropdownModule } from 'primeng/dropdown';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -114,6 +115,36 @@ describe('TransactionReceiptsComponent', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
     const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
     component.createLoanRepaymentMade(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test createDebtRepaymentMade', () => {
+    const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[0];
+    const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE };
+    component.reportIsEditable = true;
+    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE;
+    expect(tableAction.isAvailable(transaction)).toBeFalse();
+    expect(tableAction.isEnabled(transaction)).toBeTrue();
+
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    component.createDebtRepaymentMade(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test createDebtRepaymentReceived', () => {
+    const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
+    const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE };
+    component.reportIsEditable = true;
+    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE;
+    expect(tableAction.isAvailable(transaction)).toBeFalse();
+    expect(tableAction.isEnabled(transaction)).toBeTrue();
+
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    component.createDebtRepaymentReceived(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
 });

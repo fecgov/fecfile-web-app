@@ -11,6 +11,8 @@ import { TransactionService } from '../services/transaction.service';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
+import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -49,6 +51,7 @@ describe('TransactionResolver', () => {
 
   it('should return an existing transaction', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({ transactionId: '999' }),
     };
 
@@ -66,6 +69,7 @@ describe('TransactionResolver', () => {
 
   it('should return undefined', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({ transactionId: undefined }),
     };
 
@@ -76,6 +80,7 @@ describe('TransactionResolver', () => {
 
   it('should return an existing transaction', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({
         reportId: 1,
         transactionType: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -92,6 +97,7 @@ describe('TransactionResolver', () => {
 
   it('should return a child transaction', () => {
     const route = {
+      queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({
         parentTransactionId: 1,
         transactionType: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
@@ -107,7 +113,7 @@ describe('TransactionResolver', () => {
   });
 
   xit('should attach child for transaction with dependent child transaction type', () => {
-    resolver.resolve_new_child_transaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
+    resolver.resolveNewChildTransaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
       if (transaction?.children) {
         expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');
       }
@@ -117,7 +123,7 @@ describe('TransactionResolver', () => {
   it('should throw an error if trying to resolve an invalid transaction type identifier', () => {
     spyOn(resolver.transactionService, 'get').and.returnValue(of({} as SchATransaction));
     resolver
-      .resolve_existing_transaction('10')
+      .resolveExistingTransaction('10')
       .pipe(
         catchError((err) =>
           of(
@@ -143,7 +149,7 @@ describe('TransactionResolver', () => {
       )
     );
     resolver
-      .resolve_existing_transaction('10')
+      .resolveExistingTransaction('10')
       .pipe(
         catchError((err) =>
           of(
@@ -169,14 +175,14 @@ describe('TransactionResolver', () => {
         })
       )
     );
-    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransaction('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
     });
   });
 
   it('should add new child transaction to new parent if parent has a dependentChildTransactionTypes', () => {
     resolver
-      .resolve_new_transaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
+      .resolveNewTransaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
       .subscribe((transaction: Transaction | undefined) => {
         if (transaction?.children)
           expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
@@ -198,7 +204,7 @@ describe('TransactionResolver', () => {
         })
       );
     });
-    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransaction('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
     });
@@ -247,10 +253,38 @@ describe('TransactionResolver', () => {
         );
       }
     });
-    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransaction('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
       expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
+    });
+  });
+
+  it('should add debt to repayment', () => {
+    spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      return of(
+        SchDTransaction.fromJSON({
+          id: id,
+          transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
+          transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+        })
+      );
+    });
+    const route = {
+      queryParamMap: convertToParamMap({ debt: '1' }),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+      }),
+    };
+
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
+      expect(transaction).toBeTruthy();
+      if (transaction) {
+        expect(transaction.debt?.id).toEqual('1');
+      }
     });
   });
 });

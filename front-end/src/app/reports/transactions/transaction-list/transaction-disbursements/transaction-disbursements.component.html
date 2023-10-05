@@ -50,7 +50,7 @@
           Amount <p-sortIcon field="expenditure_amount"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
-        <th id="transaction_parent" role="columnheader">Associated With</th>
+        <th id="back_reference_tran_id_number" role="columnheader">Associated With</th>
         <th id="buttons" role="columnheader">Actions</th>
       </tr>
     </ng-template>
@@ -83,10 +83,10 @@
           {{ item[item.transactionType.templateMap.amount] | currency }}
         </td>
         <td>
-          {{ formatId(item.id) }}
+          {{ formatId(item.transaction_id) }}
         </td>
         <td>
-          {{ formatId(item.parent_transaction_id) }}
+          {{ formatId(item.back_reference_tran_id_number) }}
         </td>
         <td>
           <app-table-actions-button

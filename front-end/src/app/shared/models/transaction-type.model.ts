@@ -52,6 +52,10 @@ export abstract class TransactionType {
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
+    return this.navigationControls;
+  }
 
   // Memo Code settings
   memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
@@ -74,8 +78,11 @@ export abstract class TransactionType {
   accordionSubText?: string; // Text after title in accordion handle
   formTitle?: string; // Title of form within accordion section
   footer?: string; // Text at the end of form
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getFooter(transaction?: Transaction): string | undefined {
+    return this.footer;
+  }
   contactTitle?: string; // Title for primary contact
-  contactLookupLabel?: string; //Label above contact lookup
   signatoryOneTitle?: string; // Label for the signatory_1 section in the form
   signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
 

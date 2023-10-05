@@ -9,6 +9,7 @@ import {
   NavigationControl,
   NavigationAction,
   NavigationDestination,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
@@ -44,23 +45,23 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override footer =
     'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
   override contactTitle = 'Lender';
-  override contactLookupLabel = 'LENDER LOOKUP';
   override showGuarantorTable = true;
 
   schema = schema;
   override apiEndpoint = '/transactions/save';
   override dependentChildTransactionTypes = [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT];
   override subTransactionConfig = [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR];
-  override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
+  override navigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.CHILD_BUTTON,
+        NavigationDestination.CHILD,
         'Save & add loan guarantor',
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus'
+        'pi pi-plus',
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],

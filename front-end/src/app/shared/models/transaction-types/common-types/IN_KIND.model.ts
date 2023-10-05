@@ -19,7 +19,6 @@ export abstract class IN_KIND extends SchATransactionType {
   override footer =
     'The information in this receipt will automatically populate a related transaction. Review the associated disbursement or click "Save both transactions" to record these transactions.'; // Text at the end of form
   override contactTitle = 'Contact'; // Title for primary contact
-  override contactLookupLabel = 'CONTACT LOOKUP'; //Label above contact lookup
 
   override purposeDescriptionPrefix = 'In-Kind: ';
 }

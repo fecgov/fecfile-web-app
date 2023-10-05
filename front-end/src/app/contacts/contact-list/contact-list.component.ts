@@ -82,4 +82,28 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
       this.selectAll = false;
     }
   }
+
+  saveContact(contact: Contact) {
+    if (contact.id) {
+      this.itemService.update(contact).subscribe(() => {
+        this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      });
+    } else {
+      this.itemService.create(contact).subscribe(() => {
+        this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Created',
+          life: 3000,
+        });
+      });
+    }
+  }
 }

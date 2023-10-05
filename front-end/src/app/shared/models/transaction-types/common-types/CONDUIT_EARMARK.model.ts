@@ -22,5 +22,4 @@ export abstract class CONDUIT_EARMARK extends SchATransactionType {
   override formTitle = undefined;
   override footer = undefined;
   override contactTitle = 'Contact';
-  override contactLookupLabel = 'CONTACT LOOKUP';
 }

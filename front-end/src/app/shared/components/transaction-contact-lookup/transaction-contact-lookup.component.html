@@ -1,48 +1,23 @@
 <div class="p-fluid">
-  <app-contact-lookup
-    [form]="form"
-    [formSubmitted]="formSubmitted"
-    [contactTypeOptions]="contactTypeOptions"
-    [contactTypeFormControl]="contactTypeFormControl"
-    [selectedContactFormControlName]="selectedContactFormControlName"
-    [contactTypeReadOnly]="contactTypeReadOnly"
-    (contactLookupSelect)="updateFormWithPrimaryContact($event)"
-    (createNewContactSelect)="onCreateNewContactSelect()"
-  >
-  </app-contact-lookup>
-  <p-dialog
-    [(visible)]="createContactDialogVisible"
-    [style]="{ width: '90%' }"
-    header="Create a new contact"
-    [modal]="true"
-    (onHide)="onCreateContactDialogClose()"
-  >
-    <app-contact-form [formSubmitted]="createContactFormSubmitted" [form]="createContactForm"> </app-contact-form>
-    <ng-template pTemplate="footer">
-      <div class="grid">
-        <div class="col-1">
-          <button
-            pButton
-            pRipple
-            label="Cancel"
-            type="button"
-            icon="pi pi-times"
-            class="p-button-secondary"
-            (click)="closeCreateContactDialog()"
-          ></button>
-        </div>
-        <div class="col-11">
-          <button
-            pButton
-            pRipple
-            type="button"
-            label="Save & continue"
-            icon="pi pi-check"
-            class="p-button-info"
-            (click)="createContactSave()"
-          ></button>
-        </div>
-      </div>
-    </ng-template>
-  </p-dialog>
+  <div [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl?.status === 'INVALID' }">
+    <app-contact-lookup
+      [contactTypeOptions]="contactTypeOptions"
+      (contactTypeSelect)="contactTypeSelected($event)"
+      (contactLookupSelect)="contactLookupSelected($event)"
+      (createNewContactSelect)="createNewContactSelected()"
+    >
+    </app-contact-lookup>
+  </div>
+  <app-contact-dialog
+    headerTitle="Create a new contact"
+    [contactTypeOptions]="dialogContactTypeOptions"
+    [(detailVisible)]="detailVisible"
+    (savedContact)="saveContact($event)"
+  ></app-contact-dialog>
 </div>
+<app-error-messages
+  *ngIf="errorMessageFormControl"
+  [control]="errorMessageFormControl"
+  [formSubmitted]="formSubmitted"
+  [requiredErrorMessage]="currentContactLabel + ' information is required'"
+></app-error-messages>

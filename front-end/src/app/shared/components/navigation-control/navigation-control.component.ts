@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
+  ControlType,
   NavigationAction,
   NavigationControl,
   NavigationDestination,
@@ -32,10 +33,7 @@ export class NavigationControlComponent implements OnInit {
   dropdownControl = new FormControl('');
 
   ngOnInit(): void {
-    if (
-      NavigationDestination.CHILD == this.navigationControl?.navigationDestination ||
-      NavigationDestination.ANOTHER_CHILD == this.navigationControl?.navigationDestination
-    ) {
+    if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
       this.controlType = 'dropdown';
       this.dropdownOptions = this.getOptions(
         this.transaction?.transactionType,
@@ -56,17 +54,17 @@ export class NavigationControlComponent implements OnInit {
 
   click(): void {
     let destinationTransactionType: TransactionTypes | undefined;
-    // Handle CHILD_BUTTON case by determining child TransactionType
+    // Handle CHILD case by determining child TransactionType
     if (
-      this.navigationControl?.navigationDestination === NavigationDestination.CHILD_BUTTON &&
+      this.navigationControl?.navigationDestination === NavigationDestination.CHILD &&
       this.transaction?.transactionType.subTransactionConfig
     ) {
       destinationTransactionType = (this.transaction.transactionType.subTransactionConfig as TransactionTypes[])[0];
     }
 
-    // Handle ANOTHER_CHILD_BUTTON case by determining child TransactionType
+    // Handle ANOTHER_CHILD case by determining child TransactionType
     if (
-      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER_CHILD_BUTTON &&
+      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER_CHILD &&
       this.transaction?.transaction_type_identifier
     ) {
       destinationTransactionType = this.transaction.transaction_type_identifier as TransactionTypes;
