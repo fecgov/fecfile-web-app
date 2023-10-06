@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_PARENTS';
 import { SchETransactionType } from '../sche-transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ADDRESS_FIELDS,
   ELECTION_FIELDS,
@@ -40,7 +40,7 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
   override subTransactionConfig = new SubTransactionGroup('Independent Expenditure Staff Reimbursement Memo', [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
