@@ -38,6 +38,10 @@ export class ReportService implements TableListService<Report> {
     return this.f3xSummaryService.delete(report as F3xSummary);
   }
 
+  public startAmendment(report: Report): Observable<string> {
+    return this.f3xSummaryService.startAmendment(report as F3xSummary);
+  }
+
   /**
    * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
    * @param reports - List of reports on the current page of the Reports table
@@ -52,7 +56,7 @@ export class ReportService implements TableListService<Report> {
       };
     } else if (reports.length > 0) {
       const report: F3xSummary = reports[0] as F3xSummary;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.00;
+      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
       payload = {
         report_id: report.id,
         value: value,

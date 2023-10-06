@@ -49,6 +49,7 @@ import { LoanAgreementInputComponent } from './components/inputs/loan-agreement-
 import { SignatureInputComponent } from './components/inputs/signature-input/signature-input.component';
 import { YesNoRadioInputComponent } from './components/inputs/yes-no-radio-input/yes-no-radio-input.component';
 import { DebtInputComponent } from './components/inputs/debt-input/debt-input.component';
+import { ReportVersionPipe } from './pipes/report-version.pipe';
 
 @NgModule({
   imports: [
@@ -81,6 +82,7 @@ import { DebtInputComponent } from './components/inputs/debt-input/debt-input.co
     DefaultZeroPipe,
     HighlightTermsPipe,
     ReportCodeLabelPipe,
+    ReportVersionPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -117,6 +119,7 @@ import { DebtInputComponent } from './components/inputs/debt-input/debt-input.co
     DefaultZeroPipe,
     HighlightTermsPipe,
     ReportCodeLabelPipe,
+    ReportVersionPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
