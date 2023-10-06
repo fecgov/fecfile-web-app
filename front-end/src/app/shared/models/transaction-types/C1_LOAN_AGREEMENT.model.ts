@@ -1,9 +1,12 @@
 import { FormGroup } from '@angular/forms';
 import {
-  ADDRESS_FIELDS, LOAN_TERMS_FIELDS, ORGANIZATION,
+  ADDRESS_FIELDS,
+  LOAN_TERMS_FIELDS,
+  ORGANIZATION,
   ORG_FIELDS,
-  SECONDARY_ADDRESS_FIELDS, SIGNATORY_1_FIELDS,
-  SIGNATORY_2_FIELDS
+  SECONDARY_ADDRESS_FIELDS,
+  SIGNATORY_1_FIELDS,
+  SIGNATORY_2_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C1_LOAN_AGREEMENT';
 import { STANDARD_AND_SECONDARY } from '../contact.model';
@@ -55,11 +58,9 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override useParentContact = true;
   override hasAmountInput = false;
   override hasLoanAgreement = true;
-  override hasSignature1 = true;
-  override hasSignature2 = true;
   override hasAdditionalInfo = false;
-  override signatoryOneTitle = 'Committee treasurer';
-  override signatoryTwoTitle = 'Authorized representative';
+  override signatoryOneHeader = 'Committee treasurer';
+  override signatoryTwoHeader = 'Authorized representative';
   override showParentTransactionTitle = true;
 
   override inheritedFields = [

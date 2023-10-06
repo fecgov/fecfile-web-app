@@ -2,9 +2,15 @@ import { FormGroup } from '@angular/forms';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
   CANDIDATE_FIELDS,
-  CANDIDATE_OFFICE_FIELDS, CATEGORY_CODE, ELECTION_FIELDS,
-  EMPLOYEE_INFO_FIELDS, hasFields, LOAN_FINANCE_FIELDS,
-  LOAN_TERMS_FIELDS
+  CANDIDATE_OFFICE_FIELDS,
+  ELECTION_FIELDS,
+  EMPLOYEE_INFO_FIELDS,
+  LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS,
+  CATEGORY_CODE,
+  SIGNATORY_1_FIELDS,
+  SIGNATORY_2_FIELDS,
+  hasFields,
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
@@ -20,7 +26,6 @@ export abstract class TransactionType {
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
-  abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
@@ -71,9 +76,13 @@ export abstract class TransactionType {
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   // Labels
+  abstract title: string;
   dateLabel = 'DATE';
+  date2Label = '';
+  aggregateLabel = 'AGGREGATE';
   amountInputHeader = '';
   debtInputHeader = '';
+  committeeCandidateHeader = 'Committee/Candidate information';
   purposeDescripLabel = '';
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
@@ -85,8 +94,8 @@ export abstract class TransactionType {
     return this.footer;
   }
   contactTitle?: string; // Title for primary contact
-  signatoryOneTitle?: string; // Label for the signatory_1 section in the form
-  signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
+  signatoryOneHeader?: string; // Label for the signatory_1 section in the form
+  signatoryTwoHeader?: string; // Label for the signatory_2 section in the form
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -139,7 +148,8 @@ export abstract class TransactionType {
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
-  hasCandidateInformation(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
   hasCommitteeOrCandidateInformation(): boolean {
@@ -172,10 +182,17 @@ export abstract class TransactionType {
   hasMemoText(): boolean {
     return hasFields(this.formFields, ['text4000']);
   }
+  hasSignature1(): boolean {
+    return hasFields(this.formFields, SIGNATORY_1_FIELDS);
+  }
+  hasSignature2(): boolean {
+    return hasFields(this.formFields, SIGNATORY_2_FIELDS);
+  }
+  hasSupportOpposeCode(): boolean {
+    return hasFields(this.formFields, ['support_oppose_code']);
+  }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
-  hasSignature1 = false;
-  hasSignature2 = false;
 }
 
 export enum PurposeDescriptionLabelSuffix {
@@ -211,6 +228,7 @@ export type TransactionTemplateMapType = {
   candidate_state: string;
   candidate_district: string;
   date: string;
+  date2: string;
   memo_code: string;
   amount: string;
   balance: string;

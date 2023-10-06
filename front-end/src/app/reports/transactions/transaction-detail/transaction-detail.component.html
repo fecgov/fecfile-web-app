@@ -4,7 +4,7 @@
   <h1 *ngIf="transactionType?.showParentTransactionTitle">
     {{ transaction?.parent_transaction?.transactionType?.title }}
   </h1>
-  <h1 [ngClass]="{'dark-gray-text' : transactionType?.showParentTransactionTitle}">
+  <h1 [ngClass]="{ 'dark-gray-text': transactionType?.showParentTransactionTitle }">
     {{ transactionType?.title }}
   </h1>
   <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>

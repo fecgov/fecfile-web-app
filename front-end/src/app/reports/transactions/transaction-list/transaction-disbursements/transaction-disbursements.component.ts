@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
+import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { Store } from '@ngrx/store';
@@ -14,7 +15,7 @@ import { ReportService } from 'app/shared/services/report.service';
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
-  scheduleTransactionTypeLabels: LabelList = ScheduleBTransactionTypeLabels;
+  scheduleTransactionTypeLabels: LabelList = [...ScheduleBTransactionTypeLabels, ...ScheduleETransactionTypeLabels];
 
   constructor(
     protected override messageService: MessageService,

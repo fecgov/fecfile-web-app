@@ -40,6 +40,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     due_date_setting: '',
     secured: '',
     date: '',
+    date2: '',
     memo_code: '',
     amount: 'guaranteed_amount',
     balance: '',
