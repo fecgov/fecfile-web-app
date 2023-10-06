@@ -2,7 +2,6 @@ import { FormGroup } from '@angular/forms';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
   CANDIDATE_FIELDS,
-<<<<<<< HEAD
   CANDIDATE_OFFICE_FIELDS,
   ELECTION_FIELDS,
   EMPLOYEE_INFO_FIELDS,
@@ -12,11 +11,6 @@ import {
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
   hasFields,
-=======
-  CANDIDATE_OFFICE_FIELDS, CATEGORY_CODE, ELECTION_FIELDS,
-  EMPLOYEE_INFO_FIELDS, hasFields, LOAN_FINANCE_FIELDS,
-  LOAN_TERMS_FIELDS
->>>>>>> develop
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
