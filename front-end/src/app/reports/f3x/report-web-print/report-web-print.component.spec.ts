@@ -2,19 +2,19 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { ReportWebPrintComponent } from './report-web-print.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
+import { ReportF3XService } from '../../../shared/services/report-f3x.service';
 import { of } from 'rxjs';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
-  let reportService: F3xSummaryService;
+  let reportService: ReportF3XService;
   let webPrintService: WebPrintService;
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('ReportWebPrintComponent', () => {
       providers: [ReportWebPrintComponent, provideMockStore(testMockStore)],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
-    reportService = TestBed.inject(F3xSummaryService);
+    reportService = TestBed.inject(ReportF3XService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));

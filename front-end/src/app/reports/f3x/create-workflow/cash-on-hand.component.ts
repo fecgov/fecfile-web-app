@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
@@ -24,7 +24,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private f3xSummaryService: F3xSummaryService,
+    private reportF3XService: ReportF3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
     private store: Store
@@ -62,7 +62,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
+    this.reportF3XService.update(payload, this.formProperties).subscribe(() => {
       // Write cash on hand to store
       this.store.dispatch(
         setCashOnHandAction({

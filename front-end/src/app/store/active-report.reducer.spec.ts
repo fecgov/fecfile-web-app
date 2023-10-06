@@ -1,6 +1,6 @@
 import { activeReportReducer } from './active-report.reducer';
 import { setActiveReportAction } from './active-report.actions';
-import { F3xSummary } from '../shared/models/f3x-summary.model';
+import { F3xSummary } from '../shared/models/report-f3x.model';
 
 describe('ActiveReportReducer', () => {
   it('it should store a report', () => {

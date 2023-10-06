@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';

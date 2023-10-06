@@ -10,9 +10,9 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/report-f3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
@@ -67,7 +67,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     private store: Store,
     private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
-    private f3xSummaryService: F3xSummaryService,
+    private reportF3XService: ReportF3XService,
     private messageService: MessageService,
     protected router: Router,
     private activatedRoute: ActivatedRoute,
@@ -87,7 +87,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         }
       });
 
-    combineLatest([this.store.select(selectCommitteeAccount), this.f3xSummaryService.getF3xCoverageDates()])
+    combineLatest([this.store.select(selectCommitteeAccount), this.reportF3XService.getF3xCoverageDates()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([committeeAccount, existingCoverage]) => {
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
@@ -252,7 +252,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     }
 
     //Observables are *defined* here ahead of their execution
-    const create$ = this.f3xSummaryService.create(summary, this.formProperties);
+    const create$ = this.reportF3XService.create(summary, this.formProperties);
     // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
     const tableData$ = this.reportService.getTableData();
     const cashOnHand$ = this.store.select(selectCashOnHand);

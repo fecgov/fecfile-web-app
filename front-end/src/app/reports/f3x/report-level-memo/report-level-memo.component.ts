@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';

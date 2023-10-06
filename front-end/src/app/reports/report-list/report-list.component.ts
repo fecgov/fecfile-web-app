@@ -7,7 +7,7 @@ import { TableAction, TableListBaseComponent } from '../../shared/components/tab
 import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
-import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/report-f3x.model';
 import { Router } from '@angular/router';
 
 @Component({

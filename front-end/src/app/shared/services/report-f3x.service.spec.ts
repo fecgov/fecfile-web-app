@@ -2,22 +2,22 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { F3xSummaryService } from './f3x-summary.service';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { ReportF3XService } from './report-f3x.service';
+import { F3xSummary } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
 
-describe('F3xSummaryService', () => {
-  let service: F3xSummaryService;
+describe('ReportF3XService', () => {
+  let service: ReportF3XService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [F3xSummaryService, provideMockStore(testMockStore)],
+      providers: [ReportF3XService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(F3xSummaryService);
+    service = TestBed.inject(ReportF3XService);
   });
 
   it('should be created', () => {

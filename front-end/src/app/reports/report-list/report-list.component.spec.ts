@@ -7,7 +7,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
-import { F3xSummary, F3xFormTypes } from '../../shared/models/f3x-summary.model';
+import { F3xSummary, F3xFormTypes } from '../../shared/models/report-f3x.model';
 import { Report } from '../../shared/interfaces/report.interface';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';

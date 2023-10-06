@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LabelList } from '../../../shared/utils/label.utils';
-import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/f3x-summary.model';
+import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/report-f3x.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/interfaces/report.interface';
 import { selectActiveReport } from '../../../store/active-report.selectors';

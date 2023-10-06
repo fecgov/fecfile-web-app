@@ -9,7 +9,7 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { CashOnHand } from '../interfaces/report.interface';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { F3xSummary } from '../models/report-f3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';

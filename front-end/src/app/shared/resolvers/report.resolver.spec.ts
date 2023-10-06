@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { F3xSummaryService } from '../services/f3x-summary.service';
+import { ReportF3XService } from '../services/report-f3x.service';
 import { ReportResolver } from './report.resolver';
 import { Report } from '../interfaces/report.interface';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { F3xSummary } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
 
 describe('ReportResolver', () => {
@@ -16,7 +16,7 @@ describe('ReportResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [F3xSummaryService, provideMockStore(testMockStore)],
+      providers: [ReportF3XService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);

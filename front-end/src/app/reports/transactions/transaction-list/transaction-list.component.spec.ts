@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';

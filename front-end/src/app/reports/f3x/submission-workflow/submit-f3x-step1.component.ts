@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -38,7 +38,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private f3xSummaryService: F3xSummaryService,
+    private reportF3XService: ReportF3XService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService
@@ -153,7 +153,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
+    this.reportF3XService.update(payload, this.formProperties).subscribe(() => {
       if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }

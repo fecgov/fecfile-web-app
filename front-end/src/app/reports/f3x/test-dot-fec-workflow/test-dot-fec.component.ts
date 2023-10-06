@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { environment } from 'environments/environment';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';

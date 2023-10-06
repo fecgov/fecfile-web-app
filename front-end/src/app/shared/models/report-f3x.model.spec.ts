@@ -1,4 +1,4 @@
-import { F3xSummary, F3xFormTypes } from './f3x-summary.model';
+import { F3xSummary, F3xFormTypes } from './report-f3x.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
 

@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
@@ -43,7 +43,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private f3xSummaryService: F3xSummaryService,
+    private reportF3XService: ReportF3XService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
@@ -162,7 +162,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });
 
-    return this.f3xSummaryService.update(payload, this.formProperties);
+    return this.reportF3XService.update(payload, this.formProperties);
   }
 
   private submitReport(): Observable<boolean> {

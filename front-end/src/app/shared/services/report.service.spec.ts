@@ -4,7 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { F3xSummary } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
 import { Report } from '../interfaces/report.interface';
 

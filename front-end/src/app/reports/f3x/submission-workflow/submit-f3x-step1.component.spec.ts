@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/report-f3x.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -12,14 +12,14 @@ import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { of } from 'rxjs';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
-import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
+import { ReportF3XService } from '../../../shared/services/report-f3x.service';
 import { ReportsModule } from '../../reports.module';
 import { SubmitF3xStep1Component } from './submit-f3x-step1.component';
 
 describe('SubmitF3xStep1Component', () => {
   let component: SubmitF3xStep1Component;
   let fixture: ComponentFixture<SubmitF3xStep1Component>;
-  let reportService: F3xSummaryService;
+  let reportService: ReportF3XService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -37,7 +37,7 @@ describe('SubmitF3xStep1Component', () => {
       declarations: [SubmitF3xStep1Component],
       providers: [
         FormBuilder,
-        F3xSummaryService,
+        ReportF3XService,
         MessageService,
         provideMockStore(testMockStore),
         {
@@ -55,7 +55,7 @@ describe('SubmitF3xStep1Component', () => {
   });
 
   beforeEach(() => {
-    reportService = TestBed.inject(F3xSummaryService);
+    reportService = TestBed.inject(ReportF3XService);
     fixture = TestBed.createComponent(SubmitF3xStep1Component);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));

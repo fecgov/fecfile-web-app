@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3xSummary, F3xFormTypeLabels } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary, F3xFormTypeLabels } from 'app/shared/models/report-f3x.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';

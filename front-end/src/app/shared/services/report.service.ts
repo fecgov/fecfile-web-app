@@ -6,15 +6,17 @@ import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { Report, CashOnHand } from '../interfaces/report.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
-import { F3xSummaryService } from './f3x-summary.service';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { ReportF3XService } from './report-f3x.service';
+import { F3xSummary } from '../models/report-f3x.model';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReportService implements TableListService<Report> {
-  constructor(private apiService: ApiService, private f3xSummaryService: F3xSummaryService, private store: Store) {}
+  tableDataEndpoint = '/reports';
+
+  constructor(private apiService: ApiService, private reportF3XService: ReportF3XService, private store: Store) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
@@ -31,11 +33,11 @@ export class ReportService implements TableListService<Report> {
   }
 
   public get(reportId: string): Observable<Report> {
-    return this.f3xSummaryService.get(reportId);
+    return this.reportF3XService.get(reportId);
   }
 
   public delete(report: Report): Observable<null> {
-    return this.f3xSummaryService.delete(report as F3xSummary);
+    return this.reportF3XService.delete(report as F3xSummary);
   }
 
   /**
@@ -52,7 +54,7 @@ export class ReportService implements TableListService<Report> {
       };
     } else if (reports.length > 0) {
       const report: F3xSummary = reports[0] as F3xSummary;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.00;
+      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
       payload = {
         report_id: report.id,
         value: value,
