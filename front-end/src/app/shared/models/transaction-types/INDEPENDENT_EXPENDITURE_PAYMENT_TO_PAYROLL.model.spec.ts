@@ -21,6 +21,8 @@ describe('INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL', () => {
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toEqual('Payroll: See Below');
+    const txn: SchETransaction = transactionType.getNewTransaction();
+
+    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Payroll: See Below');
   });
 });

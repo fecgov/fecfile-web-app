@@ -1,6 +1,7 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT } from './INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { Transaction } from '../transaction.model';
 
 describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
   let transactionType: INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT;
@@ -21,6 +22,8 @@ describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toEqual('Credit Card: See Below');
+    const txn: SchETransaction = transactionType.getNewTransaction();
+
+    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Credit Card: See Below');
   });
 });

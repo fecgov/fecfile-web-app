@@ -21,6 +21,8 @@ describe('INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toEqual('Reimbursement: See Below');
+    const txn: SchETransaction = transactionType.getNewTransaction();
+
+    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Reimbursement: See Below');
   });
 });
