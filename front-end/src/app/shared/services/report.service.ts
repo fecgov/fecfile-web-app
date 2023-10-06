@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
-import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
-import { Report, CashOnHand } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ReportF3XService } from './report-f3x.service';
 import { ReportF3X } from '../models/report-f3x.model';
 import { ApiService } from './api.service';
 
@@ -14,55 +12,45 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class ReportService implements TableListService<Report> {
-  tableDataEndpoint = '/reports';
+  apiEndpoint = '/reports';
 
-  constructor(private apiService: ApiService, private reportF3XService: ReportF3XService, private store: Store) {}
+  constructor(protected apiService: ApiService, protected store: Store) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'form_type';
     }
     // Pull list from F3X Summaries until we have more report models built
-    return this.apiService.get<ListRestResponse>(`/f3x-summaries/?page=${pageNumber}&ordering=${ordering}`).pipe(
+    return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => ReportF3X.fromJSON(item));
-        this.setStoreCashOnHand(response.results);
         return response;
       })
     );
   }
 
   public get(reportId: string): Observable<Report> {
-    return this.reportF3XService.get(reportId);
+    return this.apiService
+      .get<Report>(`${this.apiEndpoint}/${reportId}`)
+      .pipe(map((response) => ReportF3X.fromJSON(response)));
+  }
+
+  public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+    const payload = report.toJson();
+    return this.apiService
+      .post<ReportF3X>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .pipe(map((response) => ReportF3X.fromJSON(response)));
+  }
+
+  public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+    const payload = report.toJson();
+    return this.apiService
+      .put<ReportF3X>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .pipe(map((response) => ReportF3X.fromJSON(response)));
   }
 
   public delete(report: Report): Observable<null> {
-    return this.reportF3XService.delete(report as ReportF3X);
-  }
-
-  /**
-   * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
-   * @param reports - List of reports on the current page of the Reports table
-   */
-  public setStoreCashOnHand(reports: Report[]) {
-    let payload: CashOnHand | undefined;
-
-    if (reports.length === 0) {
-      payload = {
-        report_id: undefined,
-        value: undefined,
-      };
-    } else if (reports.length > 0) {
-      const report: ReportF3X = reports[0] as ReportF3X;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
-      payload = {
-        report_id: report.id,
-        value: value,
-      };
-    }
-    if (payload) {
-      this.store.dispatch(setCashOnHandAction({ payload: payload }));
-    }
+    return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}`);
   }
 
   /**

@@ -1,43 +1,67 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
+import { Report } from '../models/report.model';
+import { CashOnHand } from '../models/report-f3x.model';
 import { ReportService } from './report.service';
 import { F3xCoverageDates, ReportF3X } from '../models/report-f3x.model';
 import { ApiService } from './api.service';
+import { ListRestResponse } from '../models/rest-api.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReportF3XService {
-  tableDataEndpoint = '/reports/report-f3x';
+export class ReportF3XService extends ReportService {
+  override apiEndpoint = '/reports/report-f3x';
 
-  constructor(private apiService: ApiService) {}
+  constructor(override apiService: ApiService, override store: Store) {
+    super(apiService, store);
+  }
+
+  override getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
+    if (!ordering) {
+      ordering = 'form_type';
+    }
+    // Pull list from F3X Summaries until we have more report models built
+    return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
+      map((response: ListRestResponse) => {
+        response.results = response.results.map((item) => ReportF3X.fromJSON(item));
+        this.setStoreCashOnHand(response.results);
+        return response;
+      })
+    );
+  }
 
   public getF3xCoverageDates(): Observable<F3xCoverageDates[]> {
     return this.apiService
-      .get<F3xCoverageDates[]>(`/f3x-summaries/coverage_dates`)
+      .get<F3xCoverageDates[]>(`${this.apiEndpoint}/coverage_dates`)
       .pipe(map((response) => response.map((fx3CoverageDate) => F3xCoverageDates.fromJSON(fx3CoverageDate))));
   }
 
-  public get(id: string): Observable<ReportF3X> {
-    return this.apiService.get<ReportF3X>(`/f3x-summaries/${id}`).pipe(map((response) => ReportF3X.fromJSON(response)));
-  }
+  /**
+   * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
+   * @param reports - List of reports on the current page of the Reports table
+   */
+  public setStoreCashOnHand(reports: Report[]) {
+    let payload: CashOnHand | undefined;
 
-  public create(f3xSummary: ReportF3X, fieldsToValidate: string[] = []): Observable<ReportF3X> {
-    const payload = f3xSummary.toJson();
-    return this.apiService
-      .post<ReportF3X>(`/f3x-summaries/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
-      .pipe(map((response) => ReportF3X.fromJSON(response)));
-  }
-
-  public update(f3xSummary: ReportF3X, fieldsToValidate: string[] = []): Observable<ReportF3X> {
-    const payload = f3xSummary.toJson();
-    return this.apiService
-      .put<ReportF3X>(`/f3x-summaries/${f3xSummary.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
-      .pipe(map((response) => ReportF3X.fromJSON(response)));
-  }
-
-  public delete(f3xSummary: ReportF3X): Observable<null> {
-    return this.apiService.delete<null>(`/f3x-summaries/${f3xSummary.id}`);
+    if (reports.length === 0) {
+      payload = {
+        report_id: undefined,
+        value: undefined,
+      };
+    } else if (reports.length > 0) {
+      const report: ReportF3X = reports[0] as ReportF3X;
+      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
+      payload = {
+        report_id: report.id,
+        value: value,
+      };
+    }
+    if (payload) {
+      this.store.dispatch(setCashOnHandAction({ payload: payload }));
+    }
   }
 }

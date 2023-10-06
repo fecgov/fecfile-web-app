@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, takeUntil, from, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CashOnHand } from 'app/shared/interfaces/report.interface';
+import { CashOnHand } from 'app/shared/models/report-f3x.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportF3X } from 'app/shared/models/report-f3x.model';

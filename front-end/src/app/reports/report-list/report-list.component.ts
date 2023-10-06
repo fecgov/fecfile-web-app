@@ -4,10 +4,11 @@ import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
+import { Report } from '../../shared/models/report.model';
+import { CashOnHand, ReportF3X } from '../../shared/models/report-f3x.model';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
-import { ReportF3X, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/report-f3x.model';
+import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/report-f3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,12 +26,12 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
-      (report: ReportF3X) => report.report_status === 'In progress'
+      (report: Report) => report.report_status === 'In progress'
     ),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
-      (report: ReportF3X) => report.report_status !== 'In progress'
+      (report: Report) => report.report_status !== 'In progress'
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
@@ -58,7 +59,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       });
   }
 
-  protected getEmptyItem(): ReportF3X {
+  protected getEmptyItem(): Report {
     return new ReportF3X();
   }
 
@@ -86,6 +87,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    * @returns {string} Returns the appropriate name of the contact for display in the table.
    */
   public displayName(item: Report): string {
-    return item.form_type;
+    return item.form_type ?? '';
   }
 }

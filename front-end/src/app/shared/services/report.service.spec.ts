@@ -6,7 +6,7 @@ import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ReportF3X } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
-import { Report } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -58,9 +58,9 @@ describe('ReportService', () => {
 
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
-    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: 1 });
+    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: 1 });
 
-    service.delete(f3xSummary).subscribe((response: null) => {
+    service.delete(reportF3X).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);
     });
 

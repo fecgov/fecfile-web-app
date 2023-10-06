@@ -25,50 +25,50 @@ describe('ReportF3XService', () => {
   });
 
   it('#get should return a specific f3x summary record', () => {
-    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
     service.get('999').subscribe((response: ReportF3X) => {
-      expect(response).toEqual(f3xSummary);
+      expect(response).toEqual(reportF3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${f3xSummary.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${reportF3X.id}`);
     expect(req.request.method).toEqual('GET');
-    req.flush(f3xSummary);
+    req.flush(reportF3X);
     httpTestingController.verify();
   });
 
   it('#create() should POST a payload', () => {
-    const f3xSummary: ReportF3X = new ReportF3X();
+    const reportF3X: ReportF3X = new ReportF3X();
 
-    service.create(f3xSummary).subscribe((response: ReportF3X) => {
-      expect(response).toEqual(f3xSummary);
+    service.create(reportF3X).subscribe((response: ReportF3X) => {
+      expect(response).toEqual(reportF3X);
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
-    req.flush(f3xSummary);
+    req.flush(reportF3X);
     httpTestingController.verify();
   });
 
   it('#update() should PUT a payload', () => {
-    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
-    service.update(f3xSummary).subscribe((response: ReportF3X) => {
-      expect(response).toEqual(f3xSummary);
+    service.update(reportF3X).subscribe((response: ReportF3X) => {
+      expect(response).toEqual(reportF3X);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${f3xSummary.id}/?fields_to_validate=`
+      `${environment.apiUrl}/f3x-summaries/${reportF3X.id}/?fields_to_validate=`
     );
     expect(req.request.method).toEqual('PUT');
-    req.flush(f3xSummary);
+    req.flush(reportF3X);
     httpTestingController.verify();
   });
 
   it('#delete() should DELETE a record', () => {
-    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
-    service.delete(f3xSummary).subscribe((response: null) => {
+    service.delete(reportF3X).subscribe((response: null) => {
       expect(response).toBeNull();
     });
 

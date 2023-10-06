@@ -6,7 +6,7 @@ import { initialState as initCommitteeAccount } from 'app/store/committee-accoun
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { CashOnHand } from '../interfaces/report.interface';
+import { CashOnHand } from '../models/report-f3x.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { ReportF3X } from '../models/report-f3x.model';

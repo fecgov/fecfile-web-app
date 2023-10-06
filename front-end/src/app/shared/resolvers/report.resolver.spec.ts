@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportF3XService } from '../services/report-f3x.service';
 import { ReportResolver } from './report.resolver';
-import { Report } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
 import { ReportF3X } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
 
@@ -27,18 +27,18 @@ describe('ReportResolver', () => {
   });
 
   it('should return an F3X report', () => {
-    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
     const route = {
       paramMap: convertToParamMap({ reportId: '999' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
-      expect(response).toEqual(f3xSummary);
+      expect(response).toEqual(reportF3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${f3xSummary.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${reportF3X.id}`);
     expect(req.request.method).toEqual('GET');
-    req.flush(f3xSummary);
+    req.flush(reportF3X);
     httpTestingController.verify();
   });
 
