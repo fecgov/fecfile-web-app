@@ -1,10 +1,15 @@
 <p-toast></p-toast>
 
 <div class="p-fluid">
-  <h1>{{ transaction?.transactionType?.title }}</h1>
+  <h1 *ngIf="transactionType?.showParentTransactionTitle">
+    {{ transaction?.parent_transaction?.transactionType?.title }}
+  </h1>
+  <h1 [ngClass]="{ 'dark-gray-text': transactionType?.showParentTransactionTitle }">
+    {{ transactionType?.title }}
+  </h1>
   <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
   <h4 class="read-only-tag subtitle" *ngIf="isDebtRepayment">DEBT REPAYMENT</h4>
-  <h2>{{ transaction?.transactionType?.subtitle }}</h2>
+  <h2>{{ transactionType?.contactTitle || 'Contact' }}</h2>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <app-transaction-input
       [isEditable]="isEditable"

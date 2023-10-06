@@ -1,18 +1,18 @@
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C1_LOAN_AGREEMENT';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchC1TransactionType } from '../schc1-transaction-type.model';
+import { FormGroup } from '@angular/forms';
 import {
+  ADDRESS_FIELDS,
+  LOAN_TERMS_FIELDS,
   ORGANIZATION,
   ORG_FIELDS,
   SECONDARY_ADDRESS_FIELDS,
-  LOAN_TERMS_FIELDS,
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
-  ADDRESS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C1_LOAN_AGREEMENT';
 import { STANDARD_AND_SECONDARY } from '../contact.model';
-import { FormGroup } from '@angular/forms';
+import { SchC1TransactionType } from '../schc1-transaction-type.model';
+import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [
@@ -61,6 +61,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override hasAdditionalInfo = false;
   override signatoryOneHeader = 'Committee treasurer';
   override signatoryTwoHeader = 'Authorized representative';
+  override showParentTransactionTitle = true;
 
   override inheritedFields = [
     ...ORG_FIELDS,
@@ -85,7 +86,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override formTitle = 'Receipt';
   override footer =
     'The information in this loan  will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and "Save transactions."';
-  title = 'Loan Agreement';
+  title = 'Loan agreement';
   override contactTitle = 'Lender';
 
   getNewTransaction() {
