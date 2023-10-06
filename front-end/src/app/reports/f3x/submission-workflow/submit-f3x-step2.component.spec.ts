@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -52,7 +52,7 @@ describe('SubmitF3xStep2Component', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({
+                report: ReportF3X.fromJSON({
                   report_code: 'Q1',
                   id: '999',
                 }),
@@ -70,7 +70,7 @@ describe('SubmitF3xStep2Component', () => {
     fixture = TestBed.createComponent(SubmitF3xStep2Component);
     apiService = TestBed.inject(ApiService);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({ id: '999' })));
+    spyOn(reportService, 'get').and.returnValue(of(ReportF3X.fromJSON({ id: '999' })));
     fixture.detectChanges();
   });
 
@@ -79,7 +79,7 @@ describe('SubmitF3xStep2Component', () => {
   });
 
   it("should set the default form values with the committee's values", () => {
-    component.report = F3xSummary.fromJSON({ id: '999' });
+    component.report = ReportF3X.fromJSON({ id: '999' });
     const testCommitteeAccount = CommitteeAccount.fromJSON({
       treasurer_name_1: 'Test',
       treasurer_name_2: 'McTest',
@@ -95,7 +95,7 @@ describe('SubmitF3xStep2Component', () => {
     expect(component.form.value['treasurer_prefix']).toBe('Mr.');
     expect(component.form.value['treasurer_suffix']).toBe('IV');
 
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       treasurer_first_name: 'Samantha',
       treasurer_last_name: 'Testfield',
       treasurer_middle_name: 'Antoinette',
@@ -110,7 +110,7 @@ describe('SubmitF3xStep2Component', () => {
     expect(component.form.value['treasurer_prefix']).toBe('Mrs.');
     expect(component.form.value['treasurer_suffix']).toBe('III');
 
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       treasurer_first_name: 'Required',
       treasurer_last_name: 'Fields',
     });
@@ -135,7 +135,7 @@ describe('SubmitF3xStep2Component', () => {
   });
 
   it("should catch when there's no change in Treasurer Name", () => {
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       id: '999',
       treasurer_last_name: 'McTest',
       treasurer_first_name: 'Test',
@@ -155,7 +155,7 @@ describe('SubmitF3xStep2Component', () => {
   });
 
   it('#submit should not submit when form data invalid', () => {
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       id: '999',
     });
     component.setDefaultFormValues({

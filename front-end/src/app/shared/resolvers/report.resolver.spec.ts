@@ -6,7 +6,7 @@ import { testMockStore } from '../utils/unit-test.utils';
 import { ReportF3XService } from '../services/report-f3x.service';
 import { ReportResolver } from './report.resolver';
 import { Report } from '../interfaces/report.interface';
-import { F3xSummary } from '../models/report-f3x.model';
+import { ReportF3X } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
 
 describe('ReportResolver', () => {
@@ -27,7 +27,7 @@ describe('ReportResolver', () => {
   });
 
   it('should return an F3X report', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
+    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
     const route = {
       paramMap: convertToParamMap({ reportId: '999' }),
     };

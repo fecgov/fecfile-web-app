@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -31,7 +31,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     'filing_password',
     'truth_statement',
   ];
-  report?: F3xSummary;
+  report?: ReportF3X;
   formSubmitted = false;
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
@@ -59,7 +59,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report as ReportF3X;
       });
     this.store
       .select(selectCommitteeAccount)
@@ -157,7 +157,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   private saveTreasurerName() {
     this.loading = 1;
-    const payload: F3xSummary = F3xSummary.fromJSON({
+    const payload: ReportF3X = ReportF3X.fromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });

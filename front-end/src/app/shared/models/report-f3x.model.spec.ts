@@ -1,20 +1,20 @@
-import { F3xSummary, F3xFormTypes } from './report-f3x.model';
+import { ReportF3X, F3xFormTypes } from './report-f3x.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
 
-describe('F3XSummary', () => {
+describe('ReportF3X', () => {
   it('should create an instance', () => {
-    expect(new F3xSummary()).toBeTruthy();
+    expect(new ReportF3X()).toBeTruthy();
   });
 
-  it('#fromJSON() should return a populated F3xSummary instance', () => {
+  it('#fromJSON() should return a populated ReportF3X instance', () => {
     const data = {
       id: '999',
       form_type: F3xFormTypes.F3XT,
       committee_name: 'foo',
     };
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON(data);
-    expect(f3xSummary).toBeInstanceOf(F3xSummary);
+    const f3xSummary: ReportF3X = ReportF3X.fromJSON(data);
+    expect(f3xSummary).toBeInstanceOf(ReportF3X);
     expect(f3xSummary.id).toBe('999');
     expect(f3xSummary.form_type).toBe(F3xFormTypes.F3XT);
     expect(f3xSummary.committee_name).toBe('foo');
@@ -22,7 +22,7 @@ describe('F3XSummary', () => {
     expect(f3xSummary.upload_submission).toBe(undefined);
   });
 
-  it('#fromJSON() should return an F3xSummary instance with a valid UploadSubmission instance', () => {
+  it('#fromJSON() should return an ReportF3X instance with a valid UploadSubmission instance', () => {
     const data = {
       upload_submission: {
         fec_report_id: 'FEC-1234567',
@@ -35,7 +35,7 @@ describe('F3XSummary', () => {
       },
     };
 
-    const f3xSummary = F3xSummary.fromJSON(data);
+    const f3xSummary = ReportF3X.fromJSON(data);
     expect(f3xSummary.upload_submission).toBeInstanceOf(UploadSubmission);
     expect(f3xSummary.upload_submission?.fec_report_id).toBe('FEC-1234567');
     expect(f3xSummary.upload_submission?.created).toBeInstanceOf(Date);

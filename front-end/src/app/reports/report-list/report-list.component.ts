@@ -7,7 +7,7 @@ import { TableAction, TableListBaseComponent } from '../../shared/components/tab
 import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
-import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/report-f3x.model';
+import { ReportF3X, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/report-f3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,12 +25,12 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
-      (report: F3xSummary) => report.report_status === 'In progress'
+      (report: ReportF3X) => report.report_status === 'In progress'
     ),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
-      (report: F3xSummary) => report.report_status !== 'In progress'
+      (report: ReportF3X) => report.report_status !== 'In progress'
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
@@ -58,8 +58,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       });
   }
 
-  protected getEmptyItem(): F3xSummary {
-    return new F3xSummary();
+  protected getEmptyItem(): ReportF3X {
+    return new ReportF3X();
   }
 
   public override editItem(item: Report): void {

@@ -8,7 +8,7 @@ export class MemoText extends BaseModel {
   transaction_uuid: string | undefined;
   text4000: string | undefined;
 
-  report_id: string | undefined; // Foreign key to the F3XSummary model
+  report_id: string | undefined; // Foreign key to the ReportF3X model
 
   fields_to_validate: string[] = ['rec_type', 'report_id', 'text4000'];
 

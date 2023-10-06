@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../../../shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { SharedModule } from 'app/shared/shared.module';
@@ -28,7 +28,7 @@ describe('CreateF3XStep1Component', () => {
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let reportF3XService: ReportF3XService;
   let reportService: ReportService;
-  const f3x: F3xSummary = F3xSummary.fromJSON({
+  const f3x: ReportF3X = ReportF3X.fromJSON({
     id: '999',
     coverage_from_date: '2022-05-25',
     coverage_through_date: '2022-06-25',

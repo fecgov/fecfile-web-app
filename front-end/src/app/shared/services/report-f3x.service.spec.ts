@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportF3XService } from './report-f3x.service';
-import { F3xSummary } from '../models/report-f3x.model';
+import { ReportF3X } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
 
 describe('ReportF3XService', () => {
@@ -25,9 +25,9 @@ describe('ReportF3XService', () => {
   });
 
   it('#get should return a specific f3x summary record', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
+    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
-    service.get('999').subscribe((response: F3xSummary) => {
+    service.get('999').subscribe((response: ReportF3X) => {
       expect(response).toEqual(f3xSummary);
     });
 
@@ -38,9 +38,9 @@ describe('ReportF3XService', () => {
   });
 
   it('#create() should POST a payload', () => {
-    const f3xSummary: F3xSummary = new F3xSummary();
+    const f3xSummary: ReportF3X = new ReportF3X();
 
-    service.create(f3xSummary).subscribe((response: F3xSummary) => {
+    service.create(f3xSummary).subscribe((response: ReportF3X) => {
       expect(response).toEqual(f3xSummary);
     });
 
@@ -51,9 +51,9 @@ describe('ReportF3XService', () => {
   });
 
   it('#update() should PUT a payload', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
+    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
-    service.update(f3xSummary).subscribe((response: F3xSummary) => {
+    service.update(f3xSummary).subscribe((response: ReportF3X) => {
       expect(response).toEqual(f3xSummary);
     });
 
@@ -66,7 +66,7 @@ describe('ReportF3XService', () => {
   });
 
   it('#delete() should DELETE a record', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
+    const f3xSummary: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
     service.delete(f3xSummary).subscribe((response: null) => {
       expect(response).toBeNull();

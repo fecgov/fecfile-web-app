@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -162,7 +162,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       });
   }
 
-  public onTableActionClick(action: TableAction, report?: F3xSummary) {
+  public onTableActionClick(action: TableAction, report?: ReportF3X) {
     action.action(report);
   }
 

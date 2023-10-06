@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3xSummary, F3xFormTypeLabels } from 'app/shared/models/report-f3x.model';
+import { ReportF3X, F3xFormTypeLabels } from 'app/shared/models/report-f3x.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -14,32 +14,32 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
   styleUrls: ['../transaction.scss'],
 })
 export class TransactionListComponent extends DestroyerComponent implements OnInit {
-  report: F3xSummary | undefined;
+  report: ReportF3X | undefined;
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 
   public tableActions: TableAction[] = [
     new TableAction(
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
-      (report: F3xSummary) => report.report_status === 'In progress',
+      (report: ReportF3X) => report.report_status === 'In progress',
       () => true
     ),
     new TableAction(
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
-      (report: F3xSummary) => report.report_status === 'In progress',
+      (report: ReportF3X) => report.report_status === 'In progress',
       () => true
     ),
     new TableAction(
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
-      (report: F3xSummary) => report.report_status === 'In progress',
+      (report: ReportF3X) => report.report_status === 'In progress',
       () => true
     ),
     new TableAction(
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
-      (report: F3xSummary) => report.report_status === 'In progress',
+      (report: ReportF3X) => report.report_status === 'In progress',
       () => false
     ),
   ];
@@ -52,14 +52,14 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as F3xSummary));
+      .subscribe((report) => (this.report = report as ReportF3X));
   }
 
-  createTransactions(transactionCategory: string, report?: F3xSummary): void {
+  createTransactions(transactionCategory: string, report?: ReportF3X): void {
     this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
-  public onTableActionClick(action: TableAction, report?: F3xSummary) {
+  public onTableActionClick(action: TableAction, report?: ReportF3X) {
     action.action(report);
   }
 }

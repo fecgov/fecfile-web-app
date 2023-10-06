@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -45,7 +45,7 @@ describe('SubmitF3xStep1Component', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({ report_code: 'Q1' }),
+                report: ReportF3X.fromJSON({ report_code: 'Q1' }),
               },
             },
           },
@@ -58,7 +58,7 @@ describe('SubmitF3xStep1Component', () => {
     reportService = TestBed.inject(ReportF3XService);
     fixture = TestBed.createComponent(SubmitF3xStep1Component);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
+    spyOn(reportService, 'get').and.returnValue(of(ReportF3X.fromJSON({})));
     fixture.detectChanges();
   });
 
@@ -67,7 +67,7 @@ describe('SubmitF3xStep1Component', () => {
   });
 
   it('should set the default form values as expected', () => {
-    component.report = F3xSummary.fromJSON({});
+    component.report = ReportF3X.fromJSON({});
     const testCommitteeAccount = CommitteeAccount.fromJSON({
       street_1: 'Test St',
       street_2: 'Unit 11b',
@@ -85,7 +85,7 @@ describe('SubmitF3xStep1Component', () => {
     expect(component.form.value['zip']).toBe('12345');
     expect(component.form.value['confirmation_email_1']).toBe('test@committee.net');
 
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       street_1: 'Test Ln',
       street_2: 'Apt. 22',
       state: 'CA',
@@ -103,7 +103,7 @@ describe('SubmitF3xStep1Component', () => {
     expect(component.form.value['confirmation_email_1']).toBe('test@report.com');
     expect(component.form.value['confirmation_email_2']).toBe('test2@report.com');
 
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       street_1: 'Test Ln',
       state: 'CA',
       city: 'Testopolis',
@@ -159,7 +159,7 @@ describe('SubmitF3xStep1Component', () => {
   });
 
   it('#save should not save when form data invalid', () => {
-    component.report = F3xSummary.fromJSON({
+    component.report = ReportF3X.fromJSON({
       id: '999',
       confirmation_email_1: 'test@test.com',
       change_of_address: 'A',

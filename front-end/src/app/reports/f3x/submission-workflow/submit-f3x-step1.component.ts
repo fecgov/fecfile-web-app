@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -29,7 +29,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
     'state',
     'zip',
   ];
-  report?: F3xSummary;
+  report?: ReportF3X;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
@@ -53,7 +53,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report as ReportF3X;
       });
     this.store
       .select(selectCommitteeAccount)
@@ -146,7 +146,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       };
     }
 
-    const payload: F3xSummary = F3xSummary.fromJSON({
+    const payload: ReportF3X = ReportF3X.fromJSON({
       ...this.report,
       ...addressFields,
       confirmation_email_1: this.form.value.confirmation_email_1,

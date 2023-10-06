@@ -14,7 +14,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CashOnHandComponent } from './cash-on-hand.component';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { F3xSummary } from '../../../shared/models/report-f3x.model';
+import { ReportF3X } from '../../../shared/models/report-f3x.model';
 import { ReportF3XService } from '../../../shared/services/report-f3x.service';
 
 describe('CashOnHandComponent', () => {
@@ -55,7 +55,7 @@ describe('CashOnHandComponent', () => {
   });
 
   it('should save', () => {
-    const f3x = F3xSummary.fromJSON({ id: '999' });
+    const f3x = ReportF3X.fromJSON({ id: '999' });
     spyOn(reportF3XService, 'update').and.returnValue(of(f3x));
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.report = f3x;

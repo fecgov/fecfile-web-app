@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -18,7 +18,7 @@ import { takeUntil } from 'rxjs';
 })
 export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
-  report: F3xSummary | undefined;
+  report: ReportF3X | undefined;
   formSubmitted = false;
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
@@ -36,7 +36,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as F3xSummary));
+      .subscribe((report) => (this.report = report as ReportF3X));
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['L6a_cash_on_hand_jan_1_ytd'].addValidators([Validators.required]);
@@ -53,7 +53,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       return;
     }
 
-    const payload: F3xSummary = F3xSummary.fromJSON({
+    const payload: ReportF3X = ReportF3X.fromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       ...{

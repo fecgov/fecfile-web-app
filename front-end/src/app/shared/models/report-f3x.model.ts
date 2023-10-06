@@ -36,7 +36,7 @@ export class F3xCoverageDates {
   }
 }
 
-export class F3xSummary extends BaseModel implements Report {
+export class ReportF3X extends BaseModel implements Report {
   id: string | undefined;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;
@@ -185,7 +185,7 @@ export class F3xSummary extends BaseModel implements Report {
   deleted: string | undefined;
 
   // prettier-ignore
-  static fromJSON(json: any): F3xSummary { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(F3xSummary, json);
+  static fromJSON(json: any): ReportF3X { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(ReportF3X, json);
   }
 }

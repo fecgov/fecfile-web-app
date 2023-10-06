@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F3xSummary } from 'app/shared/models/report-f3x.model';
+import { ReportF3X } from 'app/shared/models/report-f3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -24,7 +24,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
-  report: F3xSummary = new F3xSummary();
+  report: ReportF3X = new ReportF3X();
   committeeAccountId: string | undefined;
 
   assignedMemoText: MemoText = new MemoText();
@@ -56,7 +56,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report as ReportF3X;
         if (this.report && this.report.id) {
           this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
             if (memoTextList && memoTextList.length > 0) {

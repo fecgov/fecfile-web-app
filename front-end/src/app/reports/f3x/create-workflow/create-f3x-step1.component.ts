@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/report-f3x.model';
+import { F3xCoverageDates, F3xFormTypes, ReportF3X } from 'app/shared/models/report-f3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportF3XService } from 'app/shared/services/report-f3x.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
@@ -242,7 +242,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       return;
     }
 
-    const summary: F3xSummary = F3xSummary.fromJSON(
+    const summary: ReportF3X = ReportF3X.fromJSON(
       ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties)
     );
 
