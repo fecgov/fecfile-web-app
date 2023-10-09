@@ -35,6 +35,11 @@ export class F3xCoverageDates {
   report_code: F3xReportCodes | undefined;
   // prettier-ignore
   static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
+    json = {
+      coverage_from_date: json.report_f3x__coverage_from_date,
+      coverage_through_date: json.report_f3x__coverage_through_date,
+      report_code: json.report_f3x__report_code,
+    }
     return plainToClass(F3xCoverageDates, json);
   }
 }
