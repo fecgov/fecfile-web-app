@@ -1,4 +1,4 @@
 import { createFeatureSelector } from '@ngrx/store';
-import { Report } from '../shared/models/report.model';
+import { ReportTypes } from '../shared/models/report.model';
 
-export const selectActiveReport = createFeatureSelector<Report>('activeReport');
+export const selectActiveReport = createFeatureSelector<ReportTypes>('activeReport');

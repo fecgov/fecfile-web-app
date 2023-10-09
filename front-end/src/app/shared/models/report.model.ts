@@ -2,12 +2,11 @@ import { Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
-import { FormTypes } from '../utils/form-type.utils';
-import { ReportF3X } from './report-f3x.model';
+import { ReportF3X, F3xFormTypes } from './report-f3x.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
-  form_type: FormTypes | undefined;
+  form_type: F3xFormTypes = F3xFormTypes.F3XN;
 
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
