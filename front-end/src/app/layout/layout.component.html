@@ -1,5 +1,5 @@
 <app-banner></app-banner>
-<div class="grid flex-nowrap">
+<!-- <div class="grid flex-wrap flex-column">
   <ng-container *ngIf="sidebarState$ | async">
     <div class="col-fixed fec-background-gradient">
       <app-sidebar></app-sidebar>
@@ -29,11 +29,49 @@
           </div>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-12 no-padding">
-          <app-footer></app-footer>
-        </div>
+
+    </div>
+  </div>
+  <div class="col-12 no-padding">
+    <app-footer></app-footer>
+  </div>
+</div> -->
+<div class="grid">
+  <ng-container *ngIf="sidebarState$ | async">
+    <div class="col-fixed fec-background-gradient">
+      <app-sidebar></app-sidebar>
+    </div>
+  </ng-container>
+  <div class="col no-padding flex-wrapper">
+    <div class="col no-padding">
+      <div class="col-12 header-container">
+        <app-header [showLogo]="(sidebarState$ | async) === undefined"></app-header>
       </div>
+      <div class="col no-padding">
+        <div class="main-content">
+          <div class="grid">
+            <div class="col-12">
+              <app-committee-banner></app-committee-banner>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12">
+              <div *ngIf="progressBarVisible$ | async">
+                <p-progressBar mode="indeterminate"></p-progressBar>
+              </div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12 router-outlet">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-12 no-padding">
+      <app-footer></app-footer>
     </div>
   </div>
 </div>
