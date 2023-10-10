@@ -34,6 +34,9 @@
         <h5 class="m-0">Recent reports</h5>
       </div>
     </ng-template>
+    <ng-template pTemplate="sorticon" let-sortOrder>
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="TBD" id="form-type-column" role="columnheader">

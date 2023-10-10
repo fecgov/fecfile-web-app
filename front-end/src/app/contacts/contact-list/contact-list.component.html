@@ -51,6 +51,9 @@
         <p-button label="Restore deleted contact(s)" styleClass="p-button-link" (click)="onRestoreClick()"></p-button>
       </div>
     </ng-template>
+    <ng-template pTemplate="sorticon" let-sortOrder>
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="sort_name" id="name-column" role="columnheader">

@@ -55,6 +55,7 @@ export abstract class SchCTransactionType extends TransactionType {
     candidate_state: 'lender_candidate_state',
     candidate_district: 'lender_candidate_district',
     date: 'loan_incurred_date',
+    date2: '',
     memo_code: 'memo_code',
     amount: 'loan_amount',
     balance: 'loan_balance',
