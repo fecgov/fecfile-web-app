@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
-import { Report } from '../models/report.model';
+import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ReportF3X } from '../models/report-f3x.model';
@@ -29,7 +29,7 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
-  public get(reportId: string): Observable<Report> {
+  public get(reportId: string): Observable<ReportTypes> {
     return this.apiService
       .get<Report>(`${this.apiEndpoint}/${reportId}`)
       .pipe(map((response) => ReportF3X.fromJSON(response)));

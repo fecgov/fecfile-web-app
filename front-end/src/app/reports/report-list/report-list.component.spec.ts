@@ -41,7 +41,7 @@ describe('ReportListComponent', () => {
   });
 
   it('#getEmptyItem should return a new ReportF3X instance', () => {
-    const item: ReportF3X = component['getEmptyItem']();
+    const item = component['getEmptyItem']();
     expect(item.id).toBe(undefined);
   });
 

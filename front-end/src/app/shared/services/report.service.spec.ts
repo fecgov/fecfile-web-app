@@ -6,7 +6,6 @@ import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ReportF3X } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
-import { Report } from '../models/report.model';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -44,7 +43,7 @@ describe('ReportService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/?page=1&ordering=form_type`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/?page=1&ordering=form_type`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -64,15 +63,9 @@ describe('ReportService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
     httpTestingController.verify();
-  });
-
-  it('should set the COH store values', () => {
-    const reports: Report[] = [{ id: '999' } as Report];
-    const result = service.setStoreCashOnHand(reports);
-    expect(result).not.toBeTruthy();
   });
 });

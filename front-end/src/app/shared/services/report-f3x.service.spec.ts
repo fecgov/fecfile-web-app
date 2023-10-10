@@ -31,7 +31,7 @@ describe('ReportF3XService', () => {
       expect(response).toEqual(reportF3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${reportF3X.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/report-f3x/${reportF3X.id}`);
     expect(req.request.method).toEqual('GET');
     req.flush(reportF3X);
     httpTestingController.verify();
@@ -40,11 +40,11 @@ describe('ReportF3XService', () => {
   it('#create() should POST a payload', () => {
     const reportF3X: ReportF3X = new ReportF3X();
 
-    service.create(reportF3X).subscribe((response: ReportF3X) => {
+    service.create(reportF3X).subscribe((response) => {
       expect(response).toEqual(reportF3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/?fields_to_validate=`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/report-f3x/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
     req.flush(reportF3X);
     httpTestingController.verify();
@@ -53,12 +53,12 @@ describe('ReportF3XService', () => {
   it('#update() should PUT a payload', () => {
     const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
 
-    service.update(reportF3X).subscribe((response: ReportF3X) => {
+    service.update(reportF3X).subscribe((response) => {
       expect(response).toEqual(reportF3X);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${reportF3X.id}/?fields_to_validate=`
+      `${environment.apiUrl}/reports/report-f3x/${reportF3X.id}/?fields_to_validate=`
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(reportF3X);
@@ -72,9 +72,15 @@ describe('ReportF3XService', () => {
       expect(response).toBeNull();
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/999`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/report-f3x/999`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  it('should set the COH store values', () => {
+    const reports: ReportF3X[] = [{ id: '999' } as ReportF3X];
+    const result = service.setStoreCashOnHand(reports);
+    expect(result).not.toBeTruthy();
   });
 });

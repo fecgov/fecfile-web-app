@@ -47,14 +47,14 @@ describe('CreateF3XStep1Component', () => {
   const eigth = new Date('01/08/2023');
   const tenth = new Date('01/10/2023');
   const thirdThroughFifth = F3xCoverageDates.fromJSON({
-    report_code: 'Q1',
-    coverage_from_date: third,
-    coverage_through_date: fifth,
+    report_f3x__report_code: 'Q1',
+    report_f3x__coverage_from_date: third,
+    report_f3x__coverage_through_date: fifth,
   });
   const seventhThroughNinth = F3xCoverageDates.fromJSON({
-    report_code: 'Q2',
-    coverage_from_date: seventh,
-    coverage_through_date: ninth,
+    report_f3x__report_code: 'Q2',
+    report_f3x__coverage_from_date: seventh,
+    report_f3x__coverage_through_date: ninth,
   });
 
   beforeEach(async () => {

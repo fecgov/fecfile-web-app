@@ -36,7 +36,7 @@ describe('ReportResolver', () => {
       expect(response).toEqual(reportF3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${reportF3X.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportF3X.id}`);
     expect(req.request.method).toEqual('GET');
     req.flush(reportF3X);
     httpTestingController.verify();
