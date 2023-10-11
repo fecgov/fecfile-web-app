@@ -13,7 +13,7 @@ describe('ReportVersionPipe', () => {
   });
 
   it('transforms should return Original for non-amendment', () => {
-    expect(pipe.transform({ form_type: 'F3XN' } as Report)).toBe('Orignial');
+    expect(pipe.transform({ form_type: 'F3XN' } as Report)).toBe('Original');
   });
 
   it('transforms should return Amendment with version', () => {
