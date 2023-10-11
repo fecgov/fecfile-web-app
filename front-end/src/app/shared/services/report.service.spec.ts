@@ -70,6 +70,19 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
+  it('#startAmendment() should call amend', () => {
+    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 1 });
+
+    service.startAmendment(f3xSummary).subscribe((response: string) => {
+      expect(response).toEqual('amended 1');
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/1/amend/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush('amended 1');
+    httpTestingController.verify();
+  });
+
   it('should set the COH store values', () => {
     const reports: Report[] = [{ id: '999' } as Report];
     const result = service.setStoreCashOnHand(reports);
