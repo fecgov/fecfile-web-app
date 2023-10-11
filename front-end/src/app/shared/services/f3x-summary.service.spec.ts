@@ -57,7 +57,7 @@ describe('F3xSummaryService', () => {
       expect(response).toEqual('amended report');
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/999/amend`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/999/amend/`);
     expect(req.request.method).toEqual('POST');
     req.flush('amended report');
     httpTestingController.verify();
