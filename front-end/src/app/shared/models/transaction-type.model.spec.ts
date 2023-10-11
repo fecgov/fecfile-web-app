@@ -1,6 +1,7 @@
 import { ScheduleATransactionTypes } from './scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { TransactionType } from './transaction-type.model';
+import { ScheduleETransactionTypes } from './sche-transaction.model';
 
 describe('Transaction Type Model', () => {
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
@@ -31,5 +32,15 @@ describe('Transaction Type Model', () => {
     const modifiedDescrip = transaction.transactionType?.generatePurposeDescriptionWrapper(transaction);
     expect(originalDescrip).not.toEqual(modifiedDescrip);
     expect(modifiedDescrip?.length).toEqual(100);
+  });
+
+  it('form toggle functions to work', () => {
+    let transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
+    expect(transaction.transactionType.hasSignature1()).toBeFalse();
+    expect(transaction.transactionType.hasSignature2()).toBeFalse();
+    expect(transaction.transactionType.hasSupportOpposeCode()).toBeFalse();
+    transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE);
+    expect(transaction.transactionType.hasSignature1()).toBeTrue();
+    expect(transaction.transactionType.hasSupportOpposeCode()).toBeTrue();
   });
 });

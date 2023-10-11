@@ -2,13 +2,16 @@ import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { Contact } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent,
+  NavigationEvent
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
@@ -17,11 +20,8 @@ import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { Contact } from 'app/shared/models/contact.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { of } from 'rxjs';
-import { Router } from '@angular/router';
+import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [
@@ -171,7 +171,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
 
-    expect(component.childTransaction.transactionType?.inheritedFields).toContain('amount');
+    expect(component.childTransaction.transactionType?.getInheritedFields(
+      component.childTransaction)).toContain('amount');
     component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
     component.form.get(component.templateMap.amount)?.setValue(250);
     expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);

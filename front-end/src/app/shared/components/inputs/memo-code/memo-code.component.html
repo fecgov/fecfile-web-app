@@ -72,12 +72,12 @@
     </ng-template>
     <p id="out-of-date-dialog-text">
       <b>
-        {{ form.get(templateMap.date)?.value | fecDate }}
+        {{ coverageDate | fecDate }}
       </b>
       falls outside the report coverages dates of
       <b> {{ report?.coverage_from_date | fecDate }}-{{ report?.coverage_through_date | fecDate }}</b
-      >. Did you mean to date this transaction outside of the report coverage period? <br /><br />
-      If the data entered is correct, this transaction must be a <b>Memo Item</b>.
+      >. {{ coverageDateQuestion }} <br /><br />
+      If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>
     <div class="grid">
       <div class="mx-auto">

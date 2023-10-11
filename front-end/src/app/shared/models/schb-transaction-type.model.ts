@@ -37,6 +37,7 @@ export abstract class SchBTransactionType extends TransactionType {
     candidate_state: 'beneficiary_candidate_state',
     candidate_district: 'beneficiary_candidate_district',
     date: 'expenditure_date',
+    date2: '',
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
     balance: '',

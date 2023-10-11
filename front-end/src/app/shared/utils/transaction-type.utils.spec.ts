@@ -22,5 +22,9 @@ describe('LabelUtils', () => {
     testJSON.transaction_type_identifier = 'DEBT_OWED_TO_COMMITTEE';
     scheduleObject = getFromJSON(testJSON);
     expect(scheduleObject.constructor.name).toBe('SchDTransaction');
+
+    testJSON.transaction_type_identifier = 'INDEPENDENT_EXPENDITURE';
+    scheduleObject = getFromJSON(testJSON);
+    expect(scheduleObject.constructor.name).toBe('SchETransaction');
   });
 });

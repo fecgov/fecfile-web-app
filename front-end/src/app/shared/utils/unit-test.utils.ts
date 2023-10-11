@@ -262,6 +262,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   candidate_state: 'donor_candidate_state',
   candidate_district: 'donor_candidate_district',
   date: 'contribution_date',
+  date2: '',
   memo_code: 'memo_code',
   amount: 'contribution_amount',
   balance: 'loan_balance',

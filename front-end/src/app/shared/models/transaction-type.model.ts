@@ -8,6 +8,8 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
   CATEGORY_CODE,
+  SIGNATORY_1_FIELDS,
+  SIGNATORY_2_FIELDS,
   hasFields,
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
@@ -24,7 +26,6 @@ export abstract class TransactionType {
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
-  abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
@@ -39,12 +40,18 @@ export abstract class TransactionType {
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
+  showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getInheritedFields = (transaction: Transaction) => this.inheritedFields;
+
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getUseParentContact = (transaction?: Transaction) => this.useParentContact;
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
   parentTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the parent, trigger the child to regenerate its description
 
@@ -69,9 +76,13 @@ export abstract class TransactionType {
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   // Labels
+  abstract title: string;
   dateLabel = 'DATE';
+  date2Label = '';
+  aggregateLabel = 'AGGREGATE';
   amountInputHeader = '';
   debtInputHeader = '';
+  committeeCandidateHeader = 'Committee/Candidate information';
   purposeDescripLabel = '';
   description?: string; // Prose describing transaction and filling out the form
   accordionTitle?: string; // Title for accordion handle (does not include subtext)
@@ -83,8 +94,8 @@ export abstract class TransactionType {
     return this.footer;
   }
   contactTitle?: string; // Title for primary contact
-  signatoryOneTitle?: string; // Label for the signatory_1 section in the form
-  signatoryTwoTitle?: string; // Label for the signatory_2 section in the form
+  signatoryOneHeader?: string; // Label for the signatory_1 section in the form
+  signatoryTwoHeader?: string; // Label for the signatory_2 section in the form
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -137,7 +148,8 @@ export abstract class TransactionType {
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
-  hasCandidateInformation(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
   hasCommitteeOrCandidateInformation(): boolean {
@@ -170,10 +182,17 @@ export abstract class TransactionType {
   hasMemoText(): boolean {
     return hasFields(this.formFields, ['text4000']);
   }
+  hasSignature1(): boolean {
+    return hasFields(this.formFields, SIGNATORY_1_FIELDS);
+  }
+  hasSignature2(): boolean {
+    return hasFields(this.formFields, SIGNATORY_2_FIELDS);
+  }
+  hasSupportOpposeCode(): boolean {
+    return hasFields(this.formFields, ['support_oppose_code']);
+  }
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
-  hasSignature1 = false;
-  hasSignature2 = false;
 }
 
 export enum PurposeDescriptionLabelSuffix {
@@ -209,6 +228,7 @@ export type TransactionTemplateMapType = {
   candidate_state: string;
   candidate_district: string;
   date: string;
+  date2: string;
   memo_code: string;
   amount: string;
   balance: string;

@@ -4,7 +4,7 @@ import { NavigationAction, NavigationEvent } from 'app/shared/models/transaction
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType,
+  TransactionType
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -13,10 +13,10 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
 import { concat, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
-import { TransactionFormUtils } from './transaction-form.utils';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -32,8 +32,7 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 })
 export abstract class TripleTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   childFormProperties_2: string[] = [];
   childTransactionType_2?: TransactionType;
   childTransaction_2?: Transaction;
@@ -66,7 +65,8 @@ export abstract class TripleTransactionTypeBaseComponent
     this.childForm_2 = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties_2));
 
     if (
-      this.childTransactionType_2?.inheritedFields?.includes('memo_code' as TemplateMapKeyType) &&
+      this.childTransactionType_2?.getInheritedFields(
+        this.childTransaction_2)?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
       this.childMemoCodeCheckboxLabel_2$ = this.memoCodeCheckboxLabel$;
@@ -169,7 +169,8 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
     super.updateFormWithPrimaryContact(selectItem);
-    if (this.childTransaction_2?.transactionType?.useParentContact && this.transaction?.contact_1) {
+    if (this.childTransaction_2?.transactionType?.getUseParentContact(
+      this.childTransaction_2) && this.transaction?.contact_1) {
       this.childTransaction_2.contact_1 = this.transaction.contact_1;
       this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
     }
