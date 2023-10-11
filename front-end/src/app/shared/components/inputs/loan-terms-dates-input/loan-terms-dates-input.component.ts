@@ -1,13 +1,13 @@
-import { Input, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { take, takeUntil } from 'rxjs';
-import { BaseInputComponent } from '../base-input.component';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
-import { Transaction, isPulledForwardLoan } from 'app/shared/models/transaction.model';
+import { take, takeUntil } from 'rxjs';
+import { BaseInputComponent } from '../base-input.component';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -57,7 +57,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   ngOnInit(): void {
     // Add the date range validation check to the DATE INCURRED input
-    if (!isPulledForwardLoan(this.transaction)) {
+    if (!isPulledForwardLoan(this.transaction) &&
+      !isPulledForwardLoan(this.transaction?.parent_transaction)) {
       this.store
         .select(selectActiveReport)
         .pipe(take(1))

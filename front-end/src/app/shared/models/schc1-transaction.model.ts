@@ -1,8 +1,8 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
-import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { BaseModel } from './base.model';
+import { AggregationGroups, Transaction } from './transaction.model';
 
 export class SchC1Transaction extends Transaction {
   lender_organization_name: string | undefined;
@@ -79,7 +79,7 @@ export class SchC1Transaction extends Transaction {
 }
 
 export enum ScheduleC1TransactionGroups {
-  LOAN_AGREEMENTS = 'LOAN AGGREEMENTS',
+  LOAN_AGREEMENTS = 'LOAN AGREEMENTS',
 }
 
 export type ScheduleC1TransactionGroupsType = ScheduleC1TransactionGroups.LOAN_AGREEMENTS;

@@ -1,14 +1,13 @@
 import { DatePipe } from '@angular/common';
+import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { Transaction, AggregationGroups, ScheduleTransaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService } from './api.service';
+import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
-import { HttpResponse } from '@angular/common/http';
-import { HttpStatusCode } from '@angular/common/http';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +15,7 @@ import { HttpStatusCode } from '@angular/common/http';
 export class TransactionService implements TableListService<Transaction> {
   tableDataEndpoint = '/transactions';
 
-  constructor(protected apiService: ApiService, protected datePipe: DatePipe) {}
+  constructor(protected apiService: ApiService, protected datePipe: DatePipe) { }
 
   public getTableData(
     pageNumber = 1,
@@ -123,8 +122,9 @@ export class TransactionService implements TableListService<Transaction> {
     if (transaction.transactionType?.scheduleId) {
       payload['schedule_id'] = transaction.transactionType.scheduleId;
     }
-    if (transaction.transactionType?.useParentContact) {
-      payload['use_parent_contact'] = transaction.transactionType.useParentContact;
+    if (transaction.transactionType?.getUseParentContact(transaction)) {
+      payload['use_parent_contact'] =
+        transaction.transactionType.getUseParentContact(transaction);
     }
 
     delete payload['transactionType'];

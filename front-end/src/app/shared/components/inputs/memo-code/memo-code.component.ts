@@ -20,6 +20,8 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   memoCodeReadOnly = false;
+  coverageDate: Date = new Date();
+  coverageDateQuestion = 'Did you mean to date this transaction outside of the report coverage period?';
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   report?: F3xSummary;
@@ -44,6 +46,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       .get(this.templateMap.date)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((date: Date) => {
+        this.coverageDate = date;
         this.updateMemoItemWithDate(date);
       });
 

@@ -37,6 +37,7 @@ export abstract class SchDTransactionType extends TransactionType {
     candidate_state: '',
     candidate_district: '',
     date: '',
+    date2: '',
     memo_code: '',
     amount: 'incurred_amount',
     balance: 'beginning_balance',

@@ -16,21 +16,11 @@ describe('SchETransaction', () => {
     expect(transaction.id).toBe('999');
     expect(transaction.form_type).toBe('SE');
     expect(transaction.payee_organization_name).toBe('foo');
-  });
 
-  xit('Creates a transaction object from JSON', () => {
-    const json = {
-      transaction_type_identifier: 'INDEPENDENT_EXPENDITURE',
-      parent_transaction: {
-        transaction_type_identifier: 'INDEPENDENT_EXPENDITURE',
-      },
-      children: [
-        {
-          transaction_type_identifier: 'INDEPENDENT_EXPENDITURE',
-        },
-      ],
-    };
-    const transaction: SchETransaction = SchETransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchETransaction');
+    const fieldsNotToValidate = transaction.getFieldsNotToValidate();
+    expect(fieldsNotToValidate[0]).toBe('calendar_ytd_per_election_office');
+
+    const fieldsNotToSave = transaction.getFieldsNotToSave();
+    expect(fieldsNotToSave[0]).toBe('calendar_ytd_per_election_office');
   });
 });

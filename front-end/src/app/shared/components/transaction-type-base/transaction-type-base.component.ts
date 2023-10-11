@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent,
+  NavigationEvent
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -18,7 +18,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { map, of, Subject, takeUntil, startWith, Observable, delay, from, concatAll, reduce } from 'rxjs';
+import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -51,7 +51,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -85,7 +85,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     // If this single-entry transaction has inherited fields from its parent, load values
     // from parent on create and set field to read-only. For edit, just make
     // the fields read-only
-    if (this.transaction.transactionType.inheritedFields) {
+    if (this.transaction.transactionType.getInheritedFields(this.transaction)) {
       this.initInheritedFieldsFromParent();
     }
 
@@ -146,7 +146,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const confirmations$ = Object.entries(transaction.transactionType?.contactConfig ?? {})
       .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
-          if (transaction.transactionType?.useParentContact && contactKey === 'contact_1') {
+          if (transaction.transactionType?.getUseParentContact(transaction) && contactKey === 'contact_1') {
             return '';
           }
           const contact = transaction[contactKey as keyof Transaction] as Contact;
@@ -325,7 +325,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);
       this.form.get('entity_type')?.updateValueAndValidity();
 
-      this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
+      this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
         if (ancestor && this.transaction) {
           const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
           const value = ancestor[`${ancestor?.transactionType.templateMap[inherittedField]}` as keyof Transaction];
@@ -339,11 +339,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     // Set fields to read-only
     this.form.get('entity_type')?.disable();
-    this.transaction.transactionType.inheritedFields?.forEach((inherittedField) => {
-      if (this.transaction) {
-        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
-        fieldControl?.disable();
-      }
-    });
+    this.transaction.transactionType.getInheritedFields(
+      this.transaction)?.forEach((inherittedField) => {
+        if (this.transaction) {
+          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+          fieldControl?.disable();
+        }
+      });
   }
 }

@@ -50,6 +50,7 @@ import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
+import { SupportOpposeInputComponent } from './components/inputs/support-oppose-input/support-oppose-input.component';
 
 @NgModule({
   imports: [
@@ -110,6 +111,7 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
     SignatureInputComponent,
     YesNoRadioInputComponent,
     DebtInputComponent,
+    SupportOpposeInputComponent,
   ],
   exports: [
     FecDatePipe,
@@ -145,7 +147,8 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
     SignatureInputComponent,
     YesNoRadioInputComponent,
     DebtInputComponent,
+    SupportOpposeInputComponent,
   ],
   providers: [DatePipe],
 })
-export class SharedModule { }
+export class SharedModule {}

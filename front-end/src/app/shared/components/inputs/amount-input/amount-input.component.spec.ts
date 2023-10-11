@@ -11,6 +11,8 @@ import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
+import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
+import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -30,6 +32,8 @@ describe('AmountInputComponent', () => {
       memo_code: new FormControl(''),
       contribution_amount: new FormControl(''),
       contribution_aggregate: new FormControl(''),
+      disbursement_date: new FormControl(''),
+      dissemination_date: new FormControl(''),
     });
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
@@ -51,5 +55,22 @@ describe('AmountInputComponent', () => {
     const updateInputMethodTrue = spyOn(component.amountInput, 'updateInput');
     component.onInputAmount();
     expect(updateInputMethodTrue).toHaveBeenCalled();
+  });
+
+  it('should set up the component properly', () => {
+    const transaction = getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
+    const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
+    component.transaction = transaction;
+    component.templateMap = transaction.transactionType.templateMap;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    component.memoCode = { updateMemoItemWithDate: (date) => undefined } as MemoCodeInputComponent;
+    component.ngOnInit();
+    component.form.patchValue({
+      [transaction.transactionType.templateMap.date]: undefined,
+    });
+    component.form.patchValue({
+      [transaction.transactionType.templateMap.date2]: date,
+    });
+    expect(component.memoCode.coverageDate.getTime()).toBe(-14182940000);
   });
 });
