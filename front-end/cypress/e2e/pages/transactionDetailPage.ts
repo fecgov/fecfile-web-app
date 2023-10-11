@@ -1,5 +1,5 @@
 import { LoanFormData, ScheduleFormData } from '../models/TransactionFormModel';
-import { currentYear, PageUtils } from './pageUtils';
+import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
 
@@ -13,7 +13,6 @@ export class TransactionDetailPage {
     alias = PageUtils.getAlias(alias);
 
     if (formData.date_received != undefined) {
-      //PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
       this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
     }
     if (formData.memo_code) {
@@ -48,12 +47,10 @@ export class TransactionDetailPage {
 
 
     if (formData.date_incurred != undefined) {
-      //PageUtils.calendarSetValue('p-calendar[inputid="date_incurred"]', formData['date_incurred'], alias, true);
       this.enterDate('p-calendar[inputid="date_incurred"]', formData.date_incurred, alias);
     }
 
     if (formData.date_received != undefined) {
-     //PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
     }
 

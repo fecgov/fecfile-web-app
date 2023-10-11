@@ -1,12 +1,12 @@
 import { LoginPage } from './pages/loginPage';
-import { currentYear, PageUtils } from './pages/pageUtils';
+import { PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
 import { TransactionDetailPage } from './pages/transactionDetailPage';
 import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultDebtFormData as debtFormData, defaultLoanFormData, LoanFormData } from './models/TransactionFormModel';
-import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, F3xCreateReportFormData, loanEnums } from './models/ReportFormModel';
+import { defaultDebtFormData as debtFormData} from './models/TransactionFormModel';
+import { ContactFormData } from './models/ContactFormModel';
+import { defaultFormData as reportFormData, loanEnums } from './models/ReportFormModel';
 
 export const committeeFormData: ContactFormData = {
   contact_type: 'Committee',

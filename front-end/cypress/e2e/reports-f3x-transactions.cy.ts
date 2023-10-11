@@ -6,8 +6,8 @@ import { PageUtils, currentYear } from "./pages/pageUtils";
 import { ReportListPage } from "./pages/reportListPage";
 import { TransactionDetailPage } from "./pages/transactionDetailPage";
 import { defaultFormData as defaultContactFormData } from "./models/ContactFormModel";
-import { defaultFormData as defaultReportFormData, loanEnums } from "./models/ReportFormModel";
-import { defaultScheduleFormData, defaultLoanFormData, formTransactionDataForSchedule } from "./models/TransactionFormModel";
+import { defaultFormData as defaultReportFormData } from "./models/ReportFormModel";
+import { defaultScheduleFormData, formTransactionDataForSchedule } from "./models/TransactionFormModel";
 
 let sheduleData = {
   ...defaultScheduleFormData,

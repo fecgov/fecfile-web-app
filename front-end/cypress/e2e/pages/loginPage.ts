@@ -54,11 +54,8 @@ function getLoginIntervalString(sessionDur: number): string {
 function legacyLogin() {
   //Dummy login information
   const email = Cypress.env('EMAIL');
-  //const email = "test@test.com";
   const committeeID = Cypress.env('COMMITTEE_ID');
-  //const committeeID = "C00601211";
   const testPassword = Cypress.env('PASSWORD');
-  //const testPassword = "test";
 
   //login page form-fields' id's (or classes where elements have no id's)
   const fieldEmail = '#login-email-id';
@@ -66,7 +63,7 @@ function legacyLogin() {
   const fieldPassword = '#login-password';
 
   cy.fixture('FEC_Get_Committee_Account').then((response_body) => {
-    response_body.results[0].committee_id = committeeID; //Cypress.env('COMMITTEE_ID');
+    response_body.results[0].committee_id = committeeID; 
     const response = {
       body: response_body,
       statusCode: 200,

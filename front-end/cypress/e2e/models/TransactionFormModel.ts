@@ -79,9 +79,7 @@ export class LoanFormData extends ScheduleFormData {
 }
 
 export class DebtFormData extends LoanFormData {
-    constructor(formData: LoanFormData) {
-        super(formData);
-    }
+
 }
 
 export const defaultDebtFormData: DebtFormData = {

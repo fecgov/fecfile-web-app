@@ -1,5 +1,5 @@
 import { F3xCreateReportFormData } from '../models/ReportFormModel';
-import { currentYear, PageUtils } from './pageUtils';
+import { PageUtils } from './pageUtils';
 
 export class F3xCreateReportPage {
   static enterFormData(formData: F3xCreateReportFormData) {

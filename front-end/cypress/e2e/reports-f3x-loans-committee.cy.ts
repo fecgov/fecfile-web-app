@@ -4,9 +4,9 @@ import { ReportListPage } from './pages/reportListPage';
 import { TransactionDetailPage } from './pages/transactionDetailPage';
 import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultLoanFormData, LoanFormData } from './models/TransactionFormModel';
+import { defaultLoanFormData } from './models/TransactionFormModel';
 import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, loanEnums, F3xCreateReportFormData } from './models/ReportFormModel';
+import { defaultFormData as reportFormData, loanEnums } from './models/ReportFormModel';
 
 
 
