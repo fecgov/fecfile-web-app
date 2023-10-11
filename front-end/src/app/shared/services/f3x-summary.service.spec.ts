@@ -50,6 +50,19 @@ describe('F3xSummaryService', () => {
     httpTestingController.verify();
   });
 
+  it('#startAmendment() should POST', () => {
+    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
+
+    service.startAmendment(f3xSummary).subscribe((response: string) => {
+      expect(response).toEqual('amended report');
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/999/amend`);
+    expect(req.request.method).toEqual('POST');
+    req.flush('amended report');
+    httpTestingController.verify();
+  });
+
   it('#update() should PUT a payload', () => {
     const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
 
