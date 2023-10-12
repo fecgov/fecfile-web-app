@@ -42,7 +42,7 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
-  override subTransactionConfig = new SubTransactionGroup('Independent Expenditure Payment to Payroll Memo', [
+  override subTransactionConfig = new SubTransactionGroup('Payroll Memo for Independent Expenditure', [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
   ]);
 

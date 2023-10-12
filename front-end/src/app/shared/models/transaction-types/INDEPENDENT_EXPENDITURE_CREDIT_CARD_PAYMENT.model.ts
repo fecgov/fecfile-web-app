@@ -42,7 +42,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransaction
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
-  override subTransactionConfig = new SubTransactionGroup('Independent Expenditure Credit Card Memo', [
+  override subTransactionConfig = new SubTransactionGroup('Credit Card Memo for Independent Expenditure', [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
   ]);
 
