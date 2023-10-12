@@ -19,11 +19,7 @@ export class ReportF3XService extends ReportService {
     super(apiService, store);
   }
 
-  override getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'form_type';
-    }
-    // Pull list from F3X Summaries until we have more report models built
+  override getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => ReportF3X.fromJSON(item));

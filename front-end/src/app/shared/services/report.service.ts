@@ -6,7 +6,17 @@ import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ReportF3X } from '../models/report-f3x.model';
+import { ReportF24 } from '../models/report-f24.model';
 import { ApiService } from './api.service';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getReportFromJSON(json: any): Report {
+  if (json.report_type) {
+    if (json.report_type === ReportTypes.F3X) return ReportF3X.fromJSON(json);
+    if (json.report_type === ReportTypes.F24) return ReportF24.fromJSON(json);
+  }
+  throw new Error('Fecfile: Cannot get report from JSON');
+}
 
 @Injectable({
   providedIn: 'root',
@@ -16,36 +26,33 @@ export class ReportService implements TableListService<Report> {
 
   constructor(protected apiService: ApiService, protected store: Store) {}
 
-  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'form_type';
-    }
+  public getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => ReportF3X.fromJSON(item));
+        response.results = response.results.map((item) => getReportFromJSON(item));
         return response;
       })
     );
   }
 
-  public get(reportId: string): Observable<ReportTypes> {
+  public get(reportId: string): Observable<Report> {
     return this.apiService
       .get<Report>(`${this.apiEndpoint}/${reportId}`)
-      .pipe(map((response) => ReportF3X.fromJSON(response)));
+      .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .post<ReportF3X>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
-      .pipe(map((response) => ReportF3X.fromJSON(response)));
+      .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .put<ReportF3X>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
-      .pipe(map((response) => ReportF3X.fromJSON(response)));
+      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public delete(report: Report): Observable<null> {

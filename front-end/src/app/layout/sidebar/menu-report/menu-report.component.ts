@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
-import { Report, ReportTypes } from '../../../shared/models/report.model';
-import { CashOnHand, F3xFormTypeLabels } from '../../../shared/models/report-f3x.model';
+import { Report, Reports } from '../../../shared/models/report.model';
+import { CashOnHand, F3xFormTypeLabels, ReportF3X } from '../../../shared/models/report-f3x.model';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from '../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../sidebar.component';
@@ -19,7 +19,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 })
 export class MenuReportComponent extends DestroyerComponent implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  activeReport$?: Observable<ReportTypes | undefined>;
+  activeReport$?: Observable<ReportF3X | undefined>;
   items$: Observable<MenuItem[]> = of([]);
 
   constructor(private store: Store, private reportService: ReportService) {

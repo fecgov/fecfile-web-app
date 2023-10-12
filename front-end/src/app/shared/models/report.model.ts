@@ -3,10 +3,12 @@ import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
 import { ReportF3X, F3xFormTypes } from './report-f3x.model';
+import { ReportF24, F24FormTypes } from './report-f24.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
-  form_type: F3xFormTypes = F3xFormTypes.F3XN;
+  report_type: ReportTypes = ReportTypes.F3X;
+  form_type: F3xFormTypes | F24FormTypes = F3xFormTypes.F3XN;
   report_version: string | undefined; // Tracks amendment versions
   report_id: string | undefined; // FEC assigned report ID
 
@@ -27,4 +29,9 @@ export abstract class Report extends BaseModel {
   deleted: string | undefined;
 }
 
-export type ReportTypes = ReportF3X;
+export type Reports = ReportF3X | ReportF24;
+
+export enum ReportTypes {
+  F3X = 'F3X',
+  F24 = 'F24',
+}
