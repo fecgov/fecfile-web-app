@@ -58,7 +58,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as ReportF3X;
+        this.report = report;
       });
     this.store
       .select(selectCommitteeAccount)
