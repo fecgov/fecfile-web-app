@@ -7,6 +7,7 @@ import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ReportF3X } from '../models/report-f3x.model';
 import { ApiService } from './api.service';
+import { CashOnHand } from '../interfaces/report.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,6 @@ export class ReportService implements TableListService<Report> {
     if (!ordering) {
       ordering = 'form_type';
     }
-    // Pull list from F3X Summaries until we have more report models built
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => ReportF3X.fromJSON(item));

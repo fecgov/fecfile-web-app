@@ -64,4 +64,8 @@ export class ReportF3XService extends ReportService {
       this.store.dispatch(setCashOnHandAction({ payload: payload }));
     }
   }
+
+  public startAmendment(report: Report): Observable<string> {
+    return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
+  }
 }

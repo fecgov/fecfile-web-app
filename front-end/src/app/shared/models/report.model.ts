@@ -7,6 +7,8 @@ import { ReportF3X, F3xFormTypes } from './report-f3x.model';
 export abstract class Report extends BaseModel {
   id: string | undefined;
   form_type: F3xFormTypes = F3xFormTypes.F3XN;
+  report_version: string | undefined; // Tracks ammendment versions
+  report_id: string | undefined; // FEC assigned report ID
 
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
