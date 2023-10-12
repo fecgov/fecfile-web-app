@@ -52,7 +52,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as ReportF3X));
+      .subscribe((report) => (this.report = report));
   }
 
   createTransactions(transactionCategory: string, report?: ReportF3X): void {

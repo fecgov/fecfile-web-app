@@ -39,7 +39,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as ReportF3X;
+        this.report = report;
       });
 
     this.form

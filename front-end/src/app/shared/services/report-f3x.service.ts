@@ -4,9 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { Report } from '../models/report.model';
-import { CashOnHand } from '../models/report-f3x.model';
 import { ReportService } from './report.service';
-import { F3xCoverageDates, ReportF3X } from '../models/report-f3x.model';
+import { F3xCoverageDates, ReportF3X, CashOnHand } from '../models/report-f3x.model';
 import { ApiService } from './api.service';
 import { ListRestResponse } from '../models/rest-api.model';
 
@@ -54,7 +53,7 @@ export class ReportF3XService extends ReportService {
       };
     } else if (reports.length > 0) {
       const report: ReportF3X = reports[0] as ReportF3X;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
+      const value = report.L6a_cash_on_hand_jan_1_ytd ?? 1.0;
       payload = {
         report_id: report.id,
         value: value,
