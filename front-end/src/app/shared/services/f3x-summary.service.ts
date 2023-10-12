@@ -36,6 +36,10 @@ export class F3xSummaryService {
       .pipe(map((response) => F3xSummary.fromJSON(response)));
   }
 
+  public startAmendment(f3xSummary: F3xSummary): Observable<string> {
+    return this.apiService.post(`/f3x-summaries/${f3xSummary.id}/amend/`, {});
+  }
+
   public delete(f3xSummary: F3xSummary): Observable<null> {
     return this.apiService.delete<null>(`/f3x-summaries/${f3xSummary.id}`);
   }
