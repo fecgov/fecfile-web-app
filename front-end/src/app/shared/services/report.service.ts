@@ -7,7 +7,6 @@ import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ReportF3X } from '../models/report-f3x.model';
 import { ApiService } from './api.service';
-import { CashOnHand } from '../interfaces/report.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -77,5 +76,9 @@ export class ReportService implements TableListService<Report> {
     const fecStatus = report?.upload_submission?.fec_status;
     const fecfileTaskState = report?.upload_submission?.fecfile_task_state;
     return !uploadSubmission || fecStatus == 'REJECTED' || fecfileTaskState == 'FAILED';
+  }
+
+  public startAmendment(report: Report): Observable<string> {
+    return this.apiService.post(`/reports/${report.id}/amend/`, {});
   }
 }

@@ -31,7 +31,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction(
       'Amend',
       this.amendReport.bind(this),
-      (report: F3xSummary) => report.report_status === 'Submission success'
+      (report: Report) => report.report_status === 'Submission success'
     ),
     new TableAction(
       'Review report',

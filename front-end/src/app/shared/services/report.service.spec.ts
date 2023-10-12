@@ -68,4 +68,17 @@ describe('ReportService', () => {
     req.flush(mockResponse);
     httpTestingController.verify();
   });
+
+  it('#startAmendment() should call amend', () => {
+    const report: ReportF3X = ReportF3X.fromJSON({ id: 1 });
+
+    service.startAmendment(report).subscribe((response: string) => {
+      expect(response).toEqual('amended 1');
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/amend/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush('amended 1');
+    httpTestingController.verify();
+  });
 });

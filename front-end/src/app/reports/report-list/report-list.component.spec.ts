@@ -64,7 +64,7 @@ describe('ReportListComponent', () => {
 
   it('#amend should hit service', () => {
     const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(of(''));
-    component.amendReport({ id: '999' } as F3xSummary);
+    component.amendReport({ id: '999' } as Report);
     expect(amendSpy).toHaveBeenCalled();
   });
 

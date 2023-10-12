@@ -84,19 +84,6 @@ describe('ReportF3XService', () => {
     expect(result).not.toBeTruthy();
   });
 
-  it('#startAmendment() should call amend', () => {
-    const report: ReportF3X = ReportF3X.fromJSON({ id: 1 });
-
-    service.startAmendment(report).subscribe((response: string) => {
-      expect(response).toEqual('amended 1');
-    });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/1/amend/`);
-    expect(req.request.method).toEqual('POST');
-    req.flush('amended 1');
-    httpTestingController.verify();
-  });
-
   it('should set the COH store values', () => {
     const reports = [ReportF3X.fromJSON({ id: '999' })];
     const result = service.setStoreCashOnHand(reports);
