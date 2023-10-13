@@ -5,10 +5,10 @@ import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/models/report.model';
-import { CashOnHand, ReportF3X } from '../../shared/models/report-f3x.model';
+import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
-import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/report-f3x.model';
+import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -60,7 +60,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   protected getEmptyItem(): Report {
-    return new ReportF3X();
+    return new Form3X();
   }
 
   public override editItem(item: Report): void {

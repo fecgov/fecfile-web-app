@@ -4,7 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ReportF3X } from '../models/report-f3x.model';
+import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
 
 describe('ReportService', () => {
@@ -30,10 +30,10 @@ describe('ReportService', () => {
       next: 'https://next-page',
       previous: 'https://previous-page',
       results: [
-        ReportF3X.fromJSON({
+        Form3X.fromJSON({
           id: 1,
         }),
-        ReportF3X.fromJSON({
+        Form3X.fromJSON({
           id: 2,
         }),
       ],
@@ -57,9 +57,9 @@ describe('ReportService', () => {
 
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
-    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: 1 });
+    const form3X: Form3X = Form3X.fromJSON({ id: 1 });
 
-    service.delete(reportF3X).subscribe((response: null) => {
+    service.delete(form3X).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);
     });
 

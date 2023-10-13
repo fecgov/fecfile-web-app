@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { ReportF3X } from 'app/shared/models/report-f3x.model';
-import { ReportF3XService } from 'app/shared/services/report-f3x.service';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -29,7 +29,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
     'state',
     'zip',
   ];
-  report?: ReportF3X;
+  report?: Form3X;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
@@ -38,7 +38,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private reportF3XService: ReportF3XService,
+    private form3XService: Form3XService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService
@@ -53,7 +53,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as ReportF3X;
+        this.report = report as Form3X;
       });
     this.store
       .select(selectCommitteeAccount)
@@ -146,14 +146,14 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       };
     }
 
-    const payload: ReportF3X = ReportF3X.fromJSON({
+    const payload: Form3X = Form3X.fromJSON({
       ...this.report,
       ...addressFields,
       confirmation_email_1: this.form.value.confirmation_email_1,
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.reportF3XService.update(payload, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, this.formProperties).subscribe(() => {
       if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }

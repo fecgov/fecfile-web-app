@@ -39,7 +39,7 @@ export class F3xCoverageDates {
   }
 }
 
-export class ReportF3X extends Report {
+export class Form3X extends Report {
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;
@@ -168,8 +168,8 @@ export class ReportF3X extends Report {
   calculation_status: string | undefined;
 
   // prettier-ignore
-  static fromJSON(json: any): ReportF3X { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any): Form3X { // eslint-disable-line @typescript-eslint/no-explicit-any
     // json['form_type'] = F3xFormTypes.F3XT;
-    return plainToClass(ReportF3X, json);
+    return plainToClass(Form3X, json);
   }
 }

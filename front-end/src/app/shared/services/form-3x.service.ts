@@ -4,17 +4,17 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { Report } from '../models/report.model';
-import { CashOnHand } from '../models/report-f3x.model';
+import { CashOnHand } from '../models/form-3x.model';
 import { ReportService } from './report.service';
-import { F3xCoverageDates, ReportF3X } from '../models/report-f3x.model';
+import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 import { ListRestResponse } from '../models/rest-api.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReportF3XService extends ReportService {
-  override apiEndpoint = '/reports/report-f3x';
+export class Form3XService extends ReportService {
+  override apiEndpoint = '/reports/form-3x';
 
   constructor(override apiService: ApiService, override store: Store) {
     super(apiService, store);
@@ -27,7 +27,7 @@ export class ReportF3XService extends ReportService {
     // Pull list from F3X Summaries until we have more report models built
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => ReportF3X.fromJSON(item));
+        response.results = response.results.map((item) => Form3X.fromJSON(item));
         this.setStoreCashOnHand(response.results);
         return response;
       })
@@ -53,7 +53,7 @@ export class ReportF3XService extends ReportService {
         value: undefined,
       };
     } else if (reports.length > 0) {
-      const report: ReportF3X = reports[0] as ReportF3X;
+      const report: Form3X = reports[0] as Form3X;
       const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
       payload = {
         report_id: report.id,

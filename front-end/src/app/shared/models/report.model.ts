@@ -2,7 +2,7 @@ import { Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
-import { ReportF3X, F3xFormTypes } from './report-f3x.model';
+import { Form3X, F3xFormTypes } from './form-3x.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -25,4 +25,4 @@ export abstract class Report extends BaseModel {
   deleted: string | undefined;
 }
 
-export type ReportTypes = ReportF3X;
+export type ReportTypes = Form3X;

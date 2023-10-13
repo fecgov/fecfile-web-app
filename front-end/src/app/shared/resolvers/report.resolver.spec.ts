@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { ReportF3XService } from '../services/report-f3x.service';
+import { Form3XService } from '../services/form-3x.service';
 import { ReportResolver } from './report.resolver';
 import { Report } from '../models/report.model';
-import { ReportF3X } from '../models/report-f3x.model';
+import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
 
 describe('ReportResolver', () => {
@@ -16,7 +16,7 @@ describe('ReportResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ReportF3XService, provideMockStore(testMockStore)],
+      providers: [Form3XService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);
@@ -27,18 +27,18 @@ describe('ReportResolver', () => {
   });
 
   it('should return an F3X report', () => {
-    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
     const route = {
       paramMap: convertToParamMap({ reportId: '999' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
-      expect(response).toEqual(reportF3X);
+      expect(response).toEqual(form3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportF3X.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${form3X.id}`);
     expect(req.request.method).toEqual('GET');
-    req.flush(reportF3X);
+    req.flush(form3X);
     httpTestingController.verify();
   });
 
