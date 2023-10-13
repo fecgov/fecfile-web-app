@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
-import { Report, Reports } from '../../../shared/models/report.model';
+import { Report } from '../../../shared/models/report.model';
 import { CashOnHand, F3xFormTypeLabels, ReportF3X } from '../../../shared/models/report-f3x.model';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from '../../../shared/services/report.service';

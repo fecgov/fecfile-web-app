@@ -5,7 +5,6 @@ import { testMockStore } from '../utils/unit-test.utils';
 import { ReportF3XService } from './report-f3x.service';
 import { ReportF3X } from '../models/report-f3x.model';
 import { environment } from '../../../environments/environment';
-import { ReportTypes } from '../models/report.model';
 
 describe('ReportF3XService', () => {
   let service: ReportF3XService;
@@ -24,19 +23,6 @@ describe('ReportF3XService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  // it('#get should return a specific f3x summary record', () => {
-  //   const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999', report_type: ReportTypes.F3X });
-
-  //   service.get('999').subscribe((response: ReportF3X) => {
-  //     expect(response).toEqual(reportF3X);
-  //   });
-
-  //   const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/report-f3x/${reportF3X.id}`);
-  //   expect(req.request.method).toEqual('GET');
-  //   req.flush(reportF3X);
-  //   httpTestingController.verify();
-  // });
 
   it('#create() should POST a payload', () => {
     const reportF3X: ReportF3X = new ReportF3X();
