@@ -13,7 +13,7 @@ import { ListRestResponse } from '../models/rest-api.model';
   providedIn: 'root',
 })
 export class ReportF3XService extends ReportService {
-  override apiEndpoint = '/reports/report-f3x';
+  override apiEndpoint = '/reports/form-3x';
 
   constructor(override apiService: ApiService, override store: Store) {
     super(apiService, store);

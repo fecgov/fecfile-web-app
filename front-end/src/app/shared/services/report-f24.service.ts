@@ -7,7 +7,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class ReportF24Service extends ReportService {
-  override apiEndpoint = '/reports/report-f24';
+  override apiEndpoint = '/reports/form-24';
 
   constructor(override apiService: ApiService, override store: Store) {
     super(apiService, store);

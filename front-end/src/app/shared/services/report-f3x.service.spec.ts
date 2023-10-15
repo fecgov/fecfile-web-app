@@ -31,7 +31,7 @@ describe('ReportF3XService', () => {
       expect(response).toEqual(reportF3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/report-f3x/?fields_to_validate=`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
     req.flush(reportF3X);
     httpTestingController.verify();
@@ -45,7 +45,7 @@ describe('ReportF3XService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/reports/report-f3x/${reportF3X.id}/?fields_to_validate=`
+      `${environment.apiUrl}/reports/form-3x/${reportF3X.id}/?fields_to_validate=`
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(reportF3X);
@@ -59,7 +59,7 @@ describe('ReportF3XService', () => {
       expect(response).toBeNull();
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/report-f3x/999`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/999`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
