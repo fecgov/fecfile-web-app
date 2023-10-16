@@ -77,7 +77,7 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('#getPreviousTransaction() should GET previous transaction', () => {
+  it('#getPreviousTransactionForAggregate() should GET previous transaction', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({
       id: 1,
       transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -99,7 +99,7 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('#getPreviousTransaction() should return undefined', () => {
+  it('#getPreviousTransactionForAggregate() should return undefined', () => {
     const mockTransaction: Transaction = TransactionTypeUtils.factory(
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ).getNewTransaction();
