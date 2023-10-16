@@ -45,6 +45,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransaction
   override subTransactionConfig = new SubTransactionGroup('Independent Expenditure Credit Card Memo', [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
   ]);
+  override showCalendarYTD = true;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(transaction: Transaction): string {

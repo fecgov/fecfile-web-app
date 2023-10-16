@@ -87,7 +87,7 @@ describe('TransactionService', () => {
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ).getNewTransaction();
     mockTransaction.id = 'abc';
-    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+    service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).subscribe((response) => {
       expect(response?.id).toEqual(mockResponse.id);
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -104,7 +104,7 @@ describe('TransactionService', () => {
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ).getNewTransaction();
     mockTransaction.id = 'abc';
-    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+    service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).subscribe((response) => {
       expect(response).toEqual(undefined);
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');

@@ -1,11 +1,22 @@
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { combineLatestWith, Observable, of, startWith, BehaviorSubject, switchMap, takeUntil } from 'rxjs';
+import {
+  combineLatestWith,
+  Observable,
+  of,
+  startWith,
+  BehaviorSubject,
+  switchMap,
+  takeUntil,
+  combineLatest,
+  withLatestFrom,
+  merge,
+} from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
@@ -89,13 +100,56 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transactionType.showAggregate && !transaction.force_unaggregated) {
+    if (transactionType.showAggregate && !transaction.force_unaggregated && !transactionType.showCalendarYTD) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),
           combineLatestWith(contactIdMap['contact_1']),
           switchMap(([contribution_date, contactId]) => {
-            return component.transactionService.getPreviousTransaction(transaction, contactId, contribution_date);
+            return component.transactionService.getPreviousTransactionForAggregate(
+              transaction,
+              contactId,
+              contribution_date
+            );
+          })
+        ) || of(undefined);
+      form
+        .get(templateMap.amount)
+        ?.valueChanges.pipe(
+          startWith(form.get(templateMap.amount)?.value),
+          combineLatestWith(previous_transaction$, of(transaction)),
+          takeUntil(component.destroy$)
+        )
+        .subscribe(([amount, previous_transaction, transaction]) => {
+          this.updateAggregate(form, templateMap, transaction, previous_transaction, amount);
+        });
+    }
+
+    if (transactionType.showCalendarYTD) {
+      const previous_transaction$: Observable<Transaction | undefined> =
+        merge(
+          (form.get(templateMap.date) as AbstractControl).valueChanges,
+          (form.get(templateMap.date2) as AbstractControl).valueChanges
+        ).pipe(
+          switchMap(() => {
+            const disbursement_date = form.get(templateMap.date)?.value as Date | undefined;
+            const dissemination_date = form.get(templateMap.date2)?.value as Date | undefined;
+            let candidate_id = transaction.contact_2?.id;
+            if (transaction.contact_3?.type === ContactTypes.CANDIDATE) {
+              candidate_id = transaction.contact_3.id;
+            }
+
+            const election_type = (form.get('electionType')?.value as string) || '';
+            const election_year = (form.get('electionYear')?.value as string) || '';
+            const election_code = election_type + election_year;
+
+            return component.transactionService.getPreviousTransactionForCalendarYTD(
+              transaction,
+              candidate_id,
+              disbursement_date,
+              dissemination_date,
+              election_code
+            );
           })
         ) || of(undefined);
       form
@@ -144,6 +198,12 @@ export class TransactionFormUtils {
     } else {
       form.get(templateMap.aggregate)?.setValue(previousAggregate + +amount);
     }
+  }
+
+  static getCandidateContact(transaction: Transaction) {
+    if (transaction.contact_2?.type === ContactTypes.CANDIDATE) return transaction.contact_2;
+    if (transaction.contact_3?.type === ContactTypes.CANDIDATE) return transaction.contact_3;
+    return undefined;
   }
 
   static getPayloadTransaction(

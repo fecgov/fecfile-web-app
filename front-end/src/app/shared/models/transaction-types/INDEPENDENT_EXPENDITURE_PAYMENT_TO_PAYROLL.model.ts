@@ -45,6 +45,7 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   override subTransactionConfig = new SubTransactionGroup('Independent Expenditure Payment to Payroll Memo', [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
   ]);
+  override showCalendarYTD = true;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(transaction: Transaction): string {
