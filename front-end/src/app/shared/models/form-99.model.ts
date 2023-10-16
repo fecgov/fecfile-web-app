@@ -13,7 +13,7 @@ export const F99FormTypeLabels: LabelList = [[F99FormTypes.F99, 'FORM 99']];
 
 export const F3xFormVersionLabels: LabelList = [[F99FormTypes.F99, 'Original']];
 
-export class ReportF99 extends Report {
+export class Form99 extends Report {
   override form_type = F99FormTypes.F99;
 
   committee_name: string | undefined;
@@ -31,7 +31,7 @@ export class ReportF99 extends Report {
   text_code: string | undefined;
 
   // prettier-ignore
-  static fromJSON(json: any): ReportF99 { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(ReportF99, json);
+  static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(Form99, json);
   }
 }

@@ -1,4 +1,4 @@
-import { ReportF99, F99FormTypes } from './report-f99.model';
+import { ReportF99, F99FormTypes } from './form-99.model';
 
 describe('ReportF99', () => {
   it('should create an instance', () => {

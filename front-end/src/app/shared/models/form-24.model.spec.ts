@@ -1,4 +1,4 @@
-import { ReportF24, F24FormTypes } from './report-f24.model';
+import { ReportF24, F24FormTypes } from './form-24.model';
 
 describe('ReportF24', () => {
   it('should create an instance', () => {
