@@ -1632,17 +1632,22 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 
 .p-buttonset .p-button:first-of-type { 
   border-radius: 4px 0px 0px 4px;
+  
 }
 
 .p-buttonset .p-button:last-of-type {
   border-radius: 0 4px 4px 0;
 }
 
-.p-buttonset .p-button:not(:last-child) {
-  border-right: 3px solid;
+.p-buttonset .p-button:first-child:not(.p-highlight) {
+  border-right: 3px solid #aeb0b5;
 }
 
-.p-buttonset .p-button:not(:last-child):not(.p-disabled):not(.p-highlight) {
+.p-buttonset .p-button:first-child.p-highlight:not(:hover) {
+  border-right: 3px solid #5b616b;
+}
+
+.p-buttonset .p-button:first-child.p-highlight:hover {
   border-right: 3px solid #aeb0b5;
 }
 
@@ -1663,9 +1668,11 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 }
 
 .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover {
-  background: #5a6268;
   border-color: #E8E8E8;
-  color: #ffffff;
+}
+
+.p-selectbutton .p-button:not(.p-disabled).p-highlight:hover {
+  border-color: #aeb0b5;
 }
 
 .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover .p-button-icon-left,
