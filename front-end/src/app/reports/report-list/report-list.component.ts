@@ -4,10 +4,11 @@ import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
+import { Report } from '../../shared/models/report.model';
+import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
-import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/f3x-summary.model';
+import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,17 +26,17 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
-      (report: F3xSummary) => report.report_status === 'In progress'
+      (report: Report) => report.report_status === 'In progress'
     ),
     new TableAction(
       'Amend',
       this.amendReport.bind(this),
-      (report: F3xSummary) => report.report_status === 'Submission success'
+      (report: Report) => report.report_status === 'Submission success'
     ),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
-      (report: F3xSummary) => report.report_status !== 'In progress'
+      (report: Report) => report.report_status !== 'In progress'
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
@@ -63,8 +64,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       });
   }
 
-  protected getEmptyItem(): F3xSummary {
-    return new F3xSummary();
+  protected getEmptyItem(): Report {
+    return new Form3X();
   }
 
   public override editItem(item: Report): void {
@@ -100,6 +101,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    * @returns {string} Returns the appropriate name of the contact for display in the table.
    */
   public displayName(item: Report): string {
-    return item.form_type;
+    return item.form_type ?? '';
   }
 }

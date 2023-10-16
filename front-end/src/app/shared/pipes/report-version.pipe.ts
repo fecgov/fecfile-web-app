@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { LabelUtils } from '../utils/label.utils';
-import { F3xFormVersionLabels } from '../models/f3x-summary.model';
-import { Report } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
+import { F3xFormVersionLabels } from '../models/form-3x.model';
 
 @Pipe({
   name: 'reportVersion',

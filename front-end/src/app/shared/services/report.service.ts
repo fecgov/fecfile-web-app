@@ -2,69 +2,63 @@ import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
-import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
-import { Report, CashOnHand } from '../interfaces/report.interface';
+import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
-import { F3xSummaryService } from './f3x-summary.service';
-import { F3xSummary } from '../models/f3x-summary.model';
 import { ApiService } from './api.service';
+import { Form3X } from '../models/form-3x.model';
+import { Form24 } from '../models/form-24.model';
+import { Form99 } from '../models/form-99.model';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getReportFromJSON(json: any): Report {
+  if (json.report_type) {
+    if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json);
+    if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);
+    if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json);
+  }
+  throw new Error('Fecfile: Cannot get report from JSON');
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReportService implements TableListService<Report> {
-  constructor(private apiService: ApiService, private f3xSummaryService: F3xSummaryService, private store: Store) {}
+  apiEndpoint = '/reports';
 
-  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'form_type';
-    }
-    // Pull list from F3X Summaries until we have more report models built
-    return this.apiService.get<ListRestResponse>(`/f3x-summaries/?page=${pageNumber}&ordering=${ordering}`).pipe(
+  constructor(protected apiService: ApiService, protected store: Store) {}
+
+  public getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
+    return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => F3xSummary.fromJSON(item));
-        this.setStoreCashOnHand(response.results);
+        response.results = response.results.map((item) => getReportFromJSON(item));
         return response;
       })
     );
   }
 
   public get(reportId: string): Observable<Report> {
-    return this.f3xSummaryService.get(reportId);
+    return this.apiService
+      .get<Report>(`${this.apiEndpoint}/${reportId}`)
+      .pipe(map((response) => getReportFromJSON(response)));
+  }
+
+  public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+    const payload = report.toJson();
+    return this.apiService
+      .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .pipe(map((response) => getReportFromJSON(response)));
+  }
+
+  public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+    const payload = report.toJson();
+    return this.apiService
+      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public delete(report: Report): Observable<null> {
-    return this.f3xSummaryService.delete(report as F3xSummary);
-  }
-
-  public startAmendment(report: Report): Observable<string> {
-    return this.f3xSummaryService.startAmendment(report as F3xSummary);
-  }
-
-  /**
-   * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
-   * @param reports - List of reports on the current page of the Reports table
-   */
-  public setStoreCashOnHand(reports: Report[]) {
-    let payload: CashOnHand | undefined;
-
-    if (reports.length === 0) {
-      payload = {
-        report_id: undefined,
-        value: undefined,
-      };
-    } else if (reports.length > 0) {
-      const report: F3xSummary = reports[0] as F3xSummary;
-      const value = report.L6a_cash_on_hand_jan_1_ytd ?? 1.0;
-      payload = {
-        report_id: report.id,
-        value: value,
-      };
-    }
-    if (payload) {
-      this.store.dispatch(setCashOnHandAction({ payload: payload }));
-    }
+    return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}`);
   }
 
   /**
@@ -76,7 +70,7 @@ export class ReportService implements TableListService<Report> {
     if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {
-        return this.store.dispatch(setActiveReportAction({ payload: report || new F3xSummary() }));
+        return this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
       })
     );
   }
@@ -91,5 +85,9 @@ export class ReportService implements TableListService<Report> {
     const fecStatus = report?.upload_submission?.fec_status;
     const fecfileTaskState = report?.upload_submission?.fecfile_task_state;
     return !uploadSubmission || fecStatus == 'REJECTED' || fecfileTaskState == 'FAILED';
+  }
+
+  public startAmendment(report: Report): Observable<string> {
+    return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
   }
 }

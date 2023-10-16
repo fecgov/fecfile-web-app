@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
@@ -18,13 +18,13 @@ import { takeUntil } from 'rxjs';
 })
 export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
-  report: F3xSummary | undefined;
+  report: Form3X | undefined;
   formSubmitted = false;
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   constructor(
     public router: Router,
-    private f3xSummaryService: F3xSummaryService,
+    private form3XService: Form3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
     private store: Store
@@ -36,7 +36,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as F3xSummary));
+      .subscribe((report) => (this.report = report));
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['L6a_cash_on_hand_jan_1_ytd'].addValidators([Validators.required]);
@@ -53,7 +53,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       return;
     }
 
-    const payload: F3xSummary = F3xSummary.fromJSON({
+    const payload: Form3X = Form3X.fromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       ...{
@@ -62,7 +62,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, this.formProperties).subscribe(() => {
       // Write cash on hand to store
       this.store.dispatch(
         setCashOnHandAction({

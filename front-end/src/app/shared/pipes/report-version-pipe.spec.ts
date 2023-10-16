@@ -1,5 +1,5 @@
 import { ReportVersionPipe } from './report-version.pipe';
-import { Report } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
 
 describe('ReportVersionPipe', () => {
   let pipe: ReportVersionPipe;

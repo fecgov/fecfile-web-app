@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -95,8 +95,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
-        (transaction.children ?? []).some(transaction => transaction.transaction_type_identifier ===
-          ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
+        (transaction.children ?? []).some(
+          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
+        ),
       () => true
     ),
     new TableAction(
@@ -106,8 +107,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         isPulledForwardLoan(transaction) &&
-        !(transaction.children ?? []).some(transaction => transaction.transaction_type_identifier ===
-          ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
+        !(transaction.children ?? []).some(
+          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
+        ),
       () => true
     ),
     new TableAction(
@@ -160,7 +162,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       });
   }
 
-  public onTableActionClick(action: TableAction, report?: F3xSummary) {
+  public onTableActionClick(action: TableAction, report?: Form3X) {
     action.action(report);
   }
 
