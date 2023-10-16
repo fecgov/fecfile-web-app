@@ -6,7 +6,7 @@ import { ApiService } from './api.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ReportF24Service extends ReportService {
+export class Form24Service extends ReportService {
   override apiEndpoint = '/reports/form-24';
 
   constructor(override apiService: ApiService, override store: Store) {

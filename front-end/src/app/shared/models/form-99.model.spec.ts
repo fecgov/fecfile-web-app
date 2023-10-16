@@ -1,20 +1,20 @@
-import { ReportF99, F99FormTypes } from './form-99.model';
+import { Form99, F99FormTypes } from './form-99.model';
 
-describe('ReportF99', () => {
+describe('Form99', () => {
   it('should create an instance', () => {
-    expect(new ReportF99()).toBeTruthy();
+    expect(new Form99()).toBeTruthy();
   });
 
-  it('#fromJSON() should return a populated ReportF99 instance', () => {
+  it('#fromJSON() should return a populated Form99 instance', () => {
     const data = {
       id: '999',
       form_type: F99FormTypes.F99,
       committee_name: 'foo',
     };
-    const reportF99: ReportF99 = ReportF99.fromJSON(data);
-    expect(reportF99).toBeInstanceOf(ReportF99);
-    expect(reportF99.id).toBe('999');
-    expect(reportF99.form_type).toBe(F99FormTypes.F99);
-    expect(reportF99.committee_name).toBe('foo');
+    const form99: Form99 = Form99.fromJSON(data);
+    expect(form99).toBeInstanceOf(Form99);
+    expect(form99.id).toBe('999');
+    expect(form99.form_type).toBe(F99FormTypes.F99);
+    expect(form99.committee_name).toBe('foo');
   });
 });

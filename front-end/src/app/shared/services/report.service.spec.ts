@@ -70,7 +70,7 @@ describe('ReportService', () => {
   });
 
   it('#startAmendment() should call amend', () => {
-    const report: ReportF3X = ReportF3X.fromJSON({ id: 1 });
+    const report: Form3X = Form3X.fromJSON({ id: 1 });
 
     service.startAmendment(report).subscribe((response: string) => {
       expect(response).toEqual('amended 1');
