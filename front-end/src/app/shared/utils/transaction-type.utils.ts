@@ -190,6 +190,9 @@ import { DEBT_OWED_TO_COMMITTEE } from '../models/transaction-types/DEBT_OWED_TO
 // Schedule E ////////////////////////////////////////////////////
 import { INDEPENDENT_EXPENDITURE } from '../models/transaction-types/INDEPENDENT_EXPENDITURE.model';
 import { INDEPENDENT_EXPENDITURE_VOID } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_VOID.model';
+import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL.model';
+import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -377,6 +380,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   // Schedule E ////////////////////////////////////////////////////
   INDEPENDENT_EXPENDITURE,
   INDEPENDENT_EXPENDITURE_VOID,
+  INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+  INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
 }
 
 export class TransactionTypeUtils {

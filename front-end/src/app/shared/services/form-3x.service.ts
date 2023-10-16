@@ -4,9 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { Report } from '../models/report.model';
-import { CashOnHand } from '../models/form-3x.model';
 import { ReportService } from './report.service';
-import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
+import { F3xCoverageDates, Form3X, CashOnHand } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 import { ListRestResponse } from '../models/rest-api.model';
 
@@ -20,11 +19,7 @@ export class Form3XService extends ReportService {
     super(apiService, store);
   }
 
-  override getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'form_type';
-    }
-    // Pull list from F3X Summaries until we have more report models built
+  override getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => Form3X.fromJSON(item));
@@ -54,7 +49,7 @@ export class Form3XService extends ReportService {
       };
     } else if (reports.length > 0) {
       const report: Form3X = reports[0] as Form3X;
-      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.0;
+      const value = report.L6a_cash_on_hand_jan_1_ytd ?? 1.0;
       payload = {
         report_id: report.id,
         value: value,

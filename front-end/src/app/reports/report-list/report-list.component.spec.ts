@@ -15,11 +15,14 @@ import { UploadSubmission } from 'app/shared/models/upload-submission.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
+import { ReportService } from 'app/shared/services/report.service';
+import { of } from 'rxjs';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
   let fixture: ComponentFixture<ReportListComponent>;
   let router: Router;
+  let reportService: ReportService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,6 +34,7 @@ describe('ReportListComponent', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
+    reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(ReportListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -56,6 +60,12 @@ describe('ReportListComponent', () => {
       upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
     } as Form3X);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+  });
+
+  it('#amend should hit service', () => {
+    const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(of(''));
+    component.amendReport({ id: '999' } as Report);
+    expect(amendSpy).toHaveBeenCalled();
   });
 
   it('#onActionClick should route properly', () => {

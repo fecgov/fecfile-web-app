@@ -22,6 +22,6 @@ export class ReportSummaryComponent extends DestroyerComponent implements OnInit
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as Form3X));
+      .subscribe((report) => (this.report = report));
   }
 }

@@ -3,10 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, takeUntil, from, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CashOnHand } from 'app/shared/models/form-3x.model';
+import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -59,7 +58,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as Form3X;
+        this.report = report;
       });
     this.store
       .select(selectCommitteeAccount)

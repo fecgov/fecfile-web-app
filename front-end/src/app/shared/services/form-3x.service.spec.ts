@@ -24,19 +24,6 @@ describe('Form3XService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#get should return a specific f3x summary record', () => {
-    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
-
-    service.get('999').subscribe((response: Form3X) => {
-      expect(response).toEqual(form3X);
-    });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/${form3X.id}`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(form3X);
-    httpTestingController.verify();
-  });
-
   it('#create() should POST a payload', () => {
     const form3X: Form3X = new Form3X();
 
@@ -80,6 +67,12 @@ describe('Form3XService', () => {
 
   it('should set the COH store values', () => {
     const reports: Form3X[] = [{ id: '999' } as Form3X];
+    const result = service.setStoreCashOnHand(reports);
+    expect(result).not.toBeTruthy();
+  });
+
+  it('should set the COH store values', () => {
+    const reports = [Form3X.fromJSON({ id: '999' })];
     const result = service.setStoreCashOnHand(reports);
     expect(result).not.toBeTruthy();
   });

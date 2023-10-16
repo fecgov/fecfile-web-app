@@ -6,10 +6,9 @@ import { initialState as initCommitteeAccount } from 'app/store/committee-accoun
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { CashOnHand } from '../models/form-3x.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { Form3X } from '../models/form-3x.model';
+import { Form3X, CashOnHand } from '../models/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';

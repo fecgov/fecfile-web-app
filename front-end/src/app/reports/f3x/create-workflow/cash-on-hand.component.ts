@@ -36,7 +36,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as Form3X));
+      .subscribe((report) => (this.report = report));
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['L6a_cash_on_hand_jan_1_ytd'].addValidators([Validators.required]);

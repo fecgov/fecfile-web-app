@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -27,6 +27,11 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       'Edit report',
       this.editItem.bind(this),
       (report: Report) => report.report_status === 'In progress'
+    ),
+    new TableAction(
+      'Amend',
+      this.amendReport.bind(this),
+      (report: Report) => report.report_status === 'Submission success'
     ),
     new TableAction(
       'Review report',
@@ -71,6 +76,15 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     } else {
       this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
     }
+  }
+
+  public amendReport(report: Report): void {
+    this.itemService
+      .startAmendment(report)
+      .pipe(take(1), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadTableItems({});
+      });
   }
 
   public goToTest(item: Report): void {
