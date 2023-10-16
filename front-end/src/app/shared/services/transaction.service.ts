@@ -49,9 +49,9 @@ export class TransactionService implements TableListService<Transaction> {
     action_date: Date
   ): Observable<Transaction | undefined> {
     const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
-    const transaction_id: string = transaction?.id || '';
+    const transaction_id: string = transaction?.id ?? '';
     const aggregation_group: AggregationGroups | undefined =
-      (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
+      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
     if (transaction && action_date && contact_1_id && aggregation_group) {
       return this.apiService
@@ -84,14 +84,14 @@ export class TransactionService implements TableListService<Transaction> {
     dissemination_date: Date | undefined,
     election_code: string | undefined
   ): Observable<Transaction | undefined> {
-    let actionDateString: string = this.datePipe.transform(disbursement_date, 'yyyy-MM-dd') || '';
+    let actionDateString: string = this.datePipe.transform(disbursement_date, 'yyyy-MM-dd') ?? '';
     if (actionDateString.length === 0) {
-      actionDateString = this.datePipe.transform(dissemination_date, 'yyyy-MM-dd') || '';
+      actionDateString = this.datePipe.transform(dissemination_date, 'yyyy-MM-dd') ?? '';
     }
 
-    const transaction_id: string = transaction?.id || '';
+    const transaction_id: string = transaction?.id ?? '';
     const aggregation_group: AggregationGroups | undefined =
-      (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
+      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
     if (transaction && disbursement_date && candidate_id && aggregation_group && election_code) {
       return this.apiService
