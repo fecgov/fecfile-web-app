@@ -1,6 +1,6 @@
 import { cashOnHandReducer } from './cash-on-hand.reducer';
 import { setCashOnHandAction } from './cash-on-hand.actions';
-import { CashOnHand } from 'app/shared/models/report-f3x.model';
+import { CashOnHand } from 'app/shared/models/form-3x.model';
 
 describe('Cash On Hand Reducer', () => {
   it('it should store the boolean status', () => {

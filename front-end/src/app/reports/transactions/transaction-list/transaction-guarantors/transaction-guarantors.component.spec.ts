@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ReportF3X } from 'app/shared/models/report-f3x.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
@@ -35,7 +35,7 @@ describe('TransactionGuarantorsComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: ReportF3X.fromJSON({}),
+                report: Form3X.fromJSON({}),
               },
               params: {
                 reportId: '999',

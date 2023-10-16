@@ -8,7 +8,7 @@ import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { ReportF3X, CashOnHand } from '../models/report-f3x.model';
+import { Form3X, CashOnHand } from '../models/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
@@ -87,7 +87,7 @@ export const testUserLoginData: UserLoginData = {
   login_dot_gov: false,
 };
 
-export const testActiveReport: ReportF3X = ReportF3X.fromJSON({
+export const testActiveReport: Form3X = Form3X.fromJSON({
   id: '999',
   coverage_from_date: '2022-05-25',
   coverage_through_date: '2022-06-30',

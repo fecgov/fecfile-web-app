@@ -20,7 +20,7 @@ export const F3xFormVersionLabels: LabelList = [
   [F24FormTypes.F24A, 'Amendment'],
 ];
 
-export class ReportF24 extends Report {
+export class Form24 extends Report {
   override form_type = F24FormTypes.F24A;
 
   report_type_24_48: string | undefined;
@@ -39,7 +39,7 @@ export class ReportF24 extends Report {
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
 
   // prettier-ignore
-  static fromJSON(json: any): ReportF24 { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(ReportF24, json);
+  static fromJSON(json: any): Form24 { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(Form24, json);
   }
 }

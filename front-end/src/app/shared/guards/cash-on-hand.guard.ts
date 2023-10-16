@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
-import { CashOnHand } from '../models/report-f3x.model';
+import { CashOnHand } from '../models/form-3x.model';
 
 @Injectable({
   providedIn: 'root',

@@ -2,19 +2,19 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ReportF3X } from 'app/shared/models/report-f3x.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { ReportWebPrintComponent } from './report-web-print.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReportF3XService } from '../../../shared/services/report-f3x.service';
+import { Form3XService } from '../../../shared/services/form-3x.service';
 import { of } from 'rxjs';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
-  let reportService: ReportF3XService;
+  let reportService: Form3XService;
   let webPrintService: WebPrintService;
 
   beforeEach(() => {
@@ -24,10 +24,10 @@ describe('ReportWebPrintComponent', () => {
       providers: [ReportWebPrintComponent, provideMockStore(testMockStore)],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
-    reportService = TestBed.inject(ReportF3XService);
+    reportService = TestBed.inject(Form3XService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(ReportF3X.fromJSON({})));
+    spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
     fixture.detectChanges();
   });
 
@@ -53,7 +53,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Updates with a failed report', () => {
-    const testF3x: ReportF3X = ReportF3X.fromJSON({
+    const testF3x: Form3X = Form3X.fromJSON({
       webprint_submission: {
         fec_status: 'FAILED',
         fecfile_error: "Things didn't work out...",
@@ -66,7 +66,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Updates with an unsubmitted report', () => {
-    const testF3x: ReportF3X = ReportF3X.fromJSON({
+    const testF3x: Form3X = Form3X.fromJSON({
       webprint_submission: null,
     });
 
@@ -75,7 +75,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Updates with a processing report', () => {
-    const testF3x: ReportF3X = ReportF3X.fromJSON({
+    const testF3x: Form3X = Form3X.fromJSON({
       webprint_submission: {
         fec_status: 'PROCESSING',
       },

@@ -2,22 +2,22 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { ReportF3XService } from './report-f3x.service';
-import { ReportF3X } from '../models/report-f3x.model';
+import { Form3XService } from './form-3x.service';
+import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
 
-describe('ReportF3XService', () => {
-  let service: ReportF3XService;
+describe('Form3XService', () => {
+  let service: Form3XService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ReportF3XService, provideMockStore(testMockStore)],
+      providers: [Form3XService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(ReportF3XService);
+    service = TestBed.inject(Form3XService);
   });
 
   it('should be created', () => {
@@ -25,37 +25,37 @@ describe('ReportF3XService', () => {
   });
 
   it('#create() should POST a payload', () => {
-    const reportF3X: ReportF3X = new ReportF3X();
+    const form3X: Form3X = new Form3X();
 
-    service.create(reportF3X).subscribe((response) => {
-      expect(response).toEqual(reportF3X);
+    service.create(form3X).subscribe((response) => {
+      expect(response).toEqual(form3X);
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
-    req.flush(reportF3X);
+    req.flush(form3X);
     httpTestingController.verify();
   });
 
   it('#update() should PUT a payload', () => {
-    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
 
-    service.update(reportF3X).subscribe((response) => {
-      expect(response).toEqual(reportF3X);
+    service.update(form3X).subscribe((response) => {
+      expect(response).toEqual(form3X);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/reports/form-3x/${reportF3X.id}/?fields_to_validate=`
+      `${environment.apiUrl}/reports/form-3x/${form3X.id}/?fields_to_validate=`
     );
     expect(req.request.method).toEqual('PUT');
-    req.flush(reportF3X);
+    req.flush(form3X);
     httpTestingController.verify();
   });
 
   it('#delete() should DELETE a record', () => {
-    const reportF3X: ReportF3X = ReportF3X.fromJSON({ id: '999' });
+    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
 
-    service.delete(reportF3X).subscribe((response: null) => {
+    service.delete(form3X).subscribe((response: null) => {
       expect(response).toBeNull();
     });
 
@@ -66,13 +66,13 @@ describe('ReportF3XService', () => {
   });
 
   it('should set the COH store values', () => {
-    const reports: ReportF3X[] = [{ id: '999' } as ReportF3X];
+    const reports: Form3X[] = [{ id: '999' } as Form3X];
     const result = service.setStoreCashOnHand(reports);
     expect(result).not.toBeTruthy();
   });
 
   it('should set the COH store values', () => {
-    const reports = [ReportF3X.fromJSON({ id: '999' })];
+    const reports = [Form3X.fromJSON({ id: '999' })];
     const result = service.setStoreCashOnHand(reports);
     expect(result).not.toBeTruthy();
   });

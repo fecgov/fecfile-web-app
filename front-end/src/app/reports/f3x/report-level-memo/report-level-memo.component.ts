@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { ReportF3X } from 'app/shared/models/report-f3x.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -24,7 +24,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
-  report: ReportF3X = new ReportF3X();
+  report: Form3X = new Form3X();
   committeeAccountId: string | undefined;
 
   assignedMemoText: MemoText = new MemoText();

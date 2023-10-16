@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, takeUntil, from, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CashOnHand, ReportF3X } from 'app/shared/models/report-f3x.model';
+import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportF3XService } from 'app/shared/services/report-f3x.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
@@ -30,7 +30,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     'filing_password',
     'truth_statement',
   ];
-  report?: ReportF3X;
+  report?: Form3X;
   formSubmitted = false;
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
@@ -42,7 +42,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private reportF3XService: ReportF3XService,
+    private form3XService: Form3XService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
@@ -156,12 +156,12 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   private saveTreasurerName() {
     this.loading = 1;
-    const payload: ReportF3X = ReportF3X.fromJSON({
+    const payload: Form3X = Form3X.fromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });
 
-    return this.reportF3XService.update(payload, this.formProperties);
+    return this.form3XService.update(payload, this.formProperties);
   }
 
   private submitReport(): Observable<boolean> {

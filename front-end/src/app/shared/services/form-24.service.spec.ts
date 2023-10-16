@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { ReportF24Service } from './report-f24.service';
+import { Form24Service } from './form-24.service';
 
-describe('ReportF24Service', () => {
-  let service: ReportF24Service;
+describe('Form24Service', () => {
+  let service: Form24Service;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ReportF24Service, provideMockStore(testMockStore)],
+      providers: [Form24Service, provideMockStore(testMockStore)],
     });
 
-    service = TestBed.inject(ReportF24Service);
+    service = TestBed.inject(Form24Service);
   });
 
   it('should be created', () => {
