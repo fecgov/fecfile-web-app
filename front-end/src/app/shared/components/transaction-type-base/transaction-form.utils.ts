@@ -5,18 +5,7 @@ import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import {
-  combineLatestWith,
-  Observable,
-  of,
-  startWith,
-  BehaviorSubject,
-  switchMap,
-  takeUntil,
-  combineLatest,
-  withLatestFrom,
-  merge,
-} from 'rxjs';
+import { combineLatestWith, Observable, of, startWith, BehaviorSubject, switchMap, takeUntil, merge } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
@@ -129,7 +118,8 @@ export class TransactionFormUtils {
       const previous_transaction$: Observable<Transaction | undefined> =
         merge(
           (form.get(templateMap.date) as AbstractControl).valueChanges,
-          (form.get(templateMap.date2) as AbstractControl).valueChanges
+          (form.get(templateMap.date2) as AbstractControl).valueChanges,
+          (form.get(templateMap.election_code) as AbstractControl).valueChanges
         ).pipe(
           switchMap(() => {
             const disbursement_date = form.get(templateMap.date)?.value as Date | undefined;
@@ -139,9 +129,7 @@ export class TransactionFormUtils {
               candidate_id = transaction.contact_3.id;
             }
 
-            const election_type = (form.get('electionType')?.value as string) || '';
-            const election_year = (form.get('electionYear')?.value as string) || '';
-            const election_code = election_type + election_year;
+            const election_code = form.get(templateMap.election_code)?.value;
 
             return component.transactionService.getPreviousTransactionForCalendarYTD(
               transaction,
