@@ -43,7 +43,7 @@ describe('ReportService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/?page=1&ordering=form_type`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/?page=1&ordering=line_label`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
