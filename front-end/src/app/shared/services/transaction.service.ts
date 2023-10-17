@@ -90,12 +90,13 @@ export class TransactionService implements TableListService<Transaction> {
     if (actionDateString.length === 0) {
       actionDateString = this.datePipe.transform(dissemination_date, 'yyyy-MM-dd') ?? '';
     }
+    console.log(actionDateString);
 
     const transaction_id: string = transaction?.id ?? '';
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
-    if (transaction && disbursement_date && candidate_office && aggregation_group && election_code) {
+    if (transaction && actionDateString && candidate_office && aggregation_group && election_code) {
       const params: { [key: string]: string } = {
         transaction_id,
         date: actionDateString,
