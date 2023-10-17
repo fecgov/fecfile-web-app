@@ -92,7 +92,7 @@ describe('TransactionService', () => {
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+      `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
@@ -109,7 +109,7 @@ describe('TransactionService', () => {
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+      `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });

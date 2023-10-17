@@ -267,6 +267,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   amount: 'contribution_amount',
   balance: 'loan_balance',
   aggregate: 'contribution_aggregate',
+  calendar_ytd: '',
   purpose_description: 'contribution_purpose_descrip',
   text4000: 'text4000',
   category_code: '',

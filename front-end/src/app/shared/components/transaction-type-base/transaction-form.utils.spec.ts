@@ -33,6 +33,7 @@ describe('FormUtils', () => {
 
     TransactionFormUtils.updateAggregate(
       form,
+      'aggregate',
       transaction.transactionType.templateMap,
       transaction,
       previous_transaction,
@@ -65,6 +66,7 @@ describe('FormUtils', () => {
 
     TransactionFormUtils.updateAggregate(
       form,
+      'aggregate',
       transaction.transactionType.templateMap,
       transaction,
       previous_transaction,
