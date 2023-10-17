@@ -10,7 +10,7 @@ import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ReportService } from 'app/shared/services/report.service';
-import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
+import { LabelList } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
@@ -23,7 +23,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
   reportIsEditable = false;
-  lineLabels = LineIdentifierLabels;
 
   public rowActions: TableAction[] = [
     new TableAction(
