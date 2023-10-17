@@ -8,37 +8,15 @@ import { defaultLoanFormData } from './models/TransactionFormModel';
 import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
 import { defaultFormData as reportFormData, loanEnums } from './models/ReportFormModel';
 
-
-
-
-export const organizationFormData: ContactFormData = {
-  contact_type: 'Organization',
-  last_name: PageUtils.randomString(10),
-  first_name: PageUtils.randomString(10),
-  middle_name: PageUtils.randomString(10),
-  prefix: PageUtils.randomString(5),
-  suffix: PageUtils.randomString(5),
-  country: 'United States of America',
-  street_1: PageUtils.randomString(10),
-  street_2: PageUtils.randomString(10),
-  city: PageUtils.randomString(10),
-  state: 'District of Columbia',
-  zip: PageUtils.randomString(5),
-  phone: PageUtils.randomString(10, 'numeric'),
-  employer: PageUtils.randomString(20),
-  occupation: PageUtils.randomString(20),
-  candidate_id: 'H2AZ12345',
-  candidate_office: 'House',
-  candidate_state: 'Virginia',
-  candidate_district: '01',
-  committee_id: 'C' + PageUtils.randomString(8, 'numeric'),
-  name: PageUtils.randomString(10),
+const organizationFormData: ContactFormData = {
+  ...individualContactFormData,
+  ...{ contact_type: 'Organization' },
 };
 
-let formData = {
+const formData = {
   ...defaultLoanFormData,
   ...{
-    purpose_description: undefined
+    purpose_description: undefined,
   },
 };
 
@@ -51,14 +29,14 @@ describe('Loans', () => {
     ReportListPage.goToPage();
   });
 
-  it("should test: Loan Received from Bank", () => {
+  it('should test: Loan Received from Bank', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
     ContactListPage.enterFormData(organizationFormData);
     PageUtils.clickButton(loanEnums.save);
 
-    // Create individual 
+    // Create individual
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
     ContactListPage.enterFormData(individualContactFormData);
@@ -82,11 +60,11 @@ describe('Loans', () => {
 
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(loanEnums.saveMultiple);
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     cy.contains(loanEnums.loanFromBank).should('exist');
   });
 
-  it("should test: Loan Received from Bank - Make loan repayment", () => {
+  it('should test: Loan Received from Bank - Make loan repayment', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
@@ -111,7 +89,7 @@ describe('Loans', () => {
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(loanEnums.saveMultiple);
 
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     cy.contains(loanEnums.loanFromBank).last().should('exist');
     PageUtils.clickElement(loanEnums.buttonLoansAndDebts);
     cy.contains(loanEnums.makeLoanPayment).click();
@@ -119,13 +97,13 @@ describe('Loans', () => {
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
     PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
-    PageUtils.enterValue("#amount", formData.amount);
+    PageUtils.enterValue('#amount', formData.amount);
     PageUtils.clickButton(loanEnums.save);
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     cy.contains(loanEnums.madeLoanPayment).should('exist');
   });
 
-  it("should test: Loan Received from Bank - Review loan agreement", () => {
+  it('should test: Loan Received from Bank - Review loan agreement', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
@@ -150,25 +128,29 @@ describe('Loans', () => {
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(loanEnums.saveMultiple);
 
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     cy.contains(loanEnums.loanFromBank).last().should('exist');
-    let alias = PageUtils.getAlias('');
-    cy.get(alias).find("[datatest='" + loanEnums.buttonLoansAndDebts + "']").children().last().click();
+    const alias = PageUtils.getAlias('');
+    cy.get(alias)
+      .find("[datatest='" + loanEnums.buttonLoansAndDebts + "']")
+      .children()
+      .last()
+      .click();
     cy.contains(loanEnums.reviewLoan).click();
-    PageUtils.urlCheck("/list/");
+    PageUtils.urlCheck('/list/');
     PageUtils.clickButton(loanEnums.saveMultiple);
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     cy.contains(loanEnums.loanFromBank).should('exist');
   });
 
-  it("should test: Loan Received from Bank - add Gaurantor", () => {
+  it('should test: Loan Received from Bank - add Gaurantor', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
     ContactListPage.enterFormData(organizationFormData);
     PageUtils.clickButton(loanEnums.save);
 
-    // Create individual 
+    // Create individual
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
     ContactListPage.enterFormData(individualContactFormData);
@@ -199,9 +181,9 @@ describe('Loans', () => {
     PageUtils.clickButton(loanEnums.saveAndAddGaurantor);
 
     PageUtils.clickButton(loanEnums.cancel);
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     cy.contains(loanEnums.loanFromBank).click();
-    PageUtils.urlCheck("/list/");
-    cy.contains(individualContactFormData.last_name).should("exist");
+    PageUtils.urlCheck('/list/');
+    cy.contains(individualContactFormData.last_name).should('exist');
   });
 });

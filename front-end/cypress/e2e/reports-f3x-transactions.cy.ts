@@ -1,22 +1,22 @@
-import { ContactListPage } from "./pages/contactListPage";
-import { F3xCreateReportPage } from "./pages/f3xCreateReportPage";
-import { TransactionTableColumns } from "./pages/f3xTransactionListPage";
-import { LoginPage } from "./pages/loginPage";
-import { PageUtils, currentYear } from "./pages/pageUtils";
-import { ReportListPage } from "./pages/reportListPage";
-import { TransactionDetailPage } from "./pages/transactionDetailPage";
-import { defaultFormData as defaultContactFormData } from "./models/ContactFormModel";
-import { defaultFormData as defaultReportFormData } from "./models/ReportFormModel";
-import { defaultScheduleFormData, formTransactionDataForSchedule } from "./models/TransactionFormModel";
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
+import { TransactionTableColumns } from './pages/f3xTransactionListPage';
+import { LoginPage } from './pages/loginPage';
+import { PageUtils, currentYear } from './pages/pageUtils';
+import { ReportListPage } from './pages/reportListPage';
+import { TransactionDetailPage } from './pages/transactionDetailPage';
+import { defaultFormData as defaultContactFormData } from './models/ContactFormModel';
+import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
+import { defaultScheduleFormData, formTransactionDataForSchedule } from './models/TransactionFormModel';
 
-let sheduleData = {
+const scheduleData = {
   ...defaultScheduleFormData,
   ...{
     electionYear: undefined,
     electionType: undefined,
-    date_received: new Date(currentYear, 4 - 1, 27)
+    date_received: new Date(currentYear, 4 - 1, 27),
   },
-}
+};
 
 describe('Transactions', () => {
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('Transactions', () => {
     ReportListPage.deleteAllReports();
     ReportListPage.goToPage();
   });
-  
+
   it('Create a Group A transaction using a contact lookup', () => {
     cy.runLighthouse('reports', 'transactions-list');
 
@@ -49,24 +49,24 @@ describe('Transactions', () => {
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
 
-    TransactionDetailPage.enterScheduleFormData(sheduleData);
+    TransactionDetailPage.enterScheduleFormData(scheduleData);
     PageUtils.clickButton('Save');
-    sheduleData.date_received = new Date(currentYear, 4 - 1, 27);
+    scheduleData.date_received = new Date(currentYear, 4 - 1, 27);
     cy.get('tr').should('contain', 'Individual Receipt');
     cy.get('tr').should('contain', 'Unitemized');
     cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
-    cy.get('tr').should('contain', PageUtils.dateToString(sheduleData.date_received));
-    cy.get('tr').should('contain', '$' + sheduleData.amount);
+    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
+    cy.get('tr').should('contain', '$' + scheduleData.amount);
 
     // Check values of edit form
     PageUtils.clickLink('Individual Receipt');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
-    TransactionDetailPage.assertFormData(sheduleData);
+    TransactionDetailPage.assertFormData(scheduleData);
 
     cy.runLighthouse('reports', 'single-transaction');
-  }); 
+  });
 
   it('Create a Group B transaction', () => {
     ReportListPage.clickCreateButton();
@@ -93,7 +93,7 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', 'Other Disbursement');
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData.name);
-    cy.get('tr').should('contain', PageUtils.dateToString(sheduleData.date_received));
+    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
     cy.get('tr').should('contain', '$' + formTransactionDataForSchedule.amount);
 
     // Check values of edit form
@@ -102,8 +102,8 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(formTransactionDataForSchedule);
-  }); 
-  
+  });
+
   it('Create a Group C transaction with negative only amount', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
@@ -116,14 +116,14 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     ContactListPage.enterFormData(defaultContactFormData, true);
     PageUtils.clickButton('Save & continue');
-    const negativeAmountFormData = { 
+    const negativeAmountFormData = {
       ...formTransactionDataForSchedule,
       ...{
         amount: -100.55,
         date_received: new Date(currentYear, 4 - 1, 27),
-        category_code: ""
-      }
-    }
+        category_code: '',
+      },
+    };
     TransactionDetailPage.enterScheduleFormData(negativeAmountFormData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
@@ -143,8 +143,8 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(negativeAmountFormData);
-  }); 
-  
+  });
+
   it('Create a Group D transaction and memos with correct aggregate values', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
@@ -165,7 +165,7 @@ describe('Transactions', () => {
 
     const formTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{ purpose_description: '', category_code: "" },
+      ...{ purpose_description: '', category_code: '' },
     };
     TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
@@ -179,9 +179,8 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
     const memoFormTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{ memo_code: true, purpose_description: "", category_code: "" },
+      ...{ memo_code: true, purpose_description: '', category_code: '' },
     };
-
 
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
     PageUtils.clickButton('Save');
@@ -204,14 +203,20 @@ describe('Transactions', () => {
     cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Receipt');
     cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
     cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
-   
+
     cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Attribution');
+    cy.get('@row-2')
+      .find('td')
+      .eq(TransactionTableColumns.transaction_type)
+      .should('contain', 'Partnership Attribution');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(2).as('row-3');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Attribution');
+    cy.get('@row-3')
+      .find('td')
+      .eq(TransactionTableColumns.transaction_type)
+      .should('contain', 'Partnership Attribution');
     cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
     cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$400.02');
 
@@ -225,7 +230,7 @@ describe('Transactions', () => {
       ...{ purpose_description: 'See Partnership Attribution(s) below' },
     });
     PageUtils.clickButton('Cancel');
-    PageUtils.urlCheck("/list");
+    PageUtils.urlCheck('/list');
     // Check form values of memo form
     PageUtils.clickLink('Partnership Attribution');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
@@ -235,7 +240,7 @@ describe('Transactions', () => {
       ...memoFormTransactionData,
       ...{ purpose_description: 'Partnership Attribution' },
     });
-  }); 
+  });
 
   it('Create a Group E transaction', () => {
     ReportListPage.clickCreateButton();
@@ -254,13 +259,13 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
-    const localFormTransactionData = { 
+    const localFormTransactionData = {
       ...formTransactionDataForSchedule,
       ...{
-        category_code: "",
-        date_received: new Date(currentYear, 4 - 1, 27)
-      }
-    }
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
+    };
 
     TransactionDetailPage.enterScheduleFormData(localFormTransactionData);
     PageUtils.clickButton('Save');
@@ -279,7 +284,7 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(localFormTransactionData);
-  }); 
+  });
 
   it('Create a Group I transaction', () => {
     ReportListPage.clickCreateButton();
@@ -301,9 +306,9 @@ describe('Transactions', () => {
     const transactionFormData = {
       ...formTransactionDataForSchedule,
       ...{
-        category_code: "",
-        date_received: new Date(currentYear, 4 - 1, 27)
-      }
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
     };
     TransactionDetailPage.enterScheduleFormData(transactionFormData);
     PageUtils.clickButton('Save');
@@ -322,8 +327,8 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
-  }); 
-  
+  });
+
   it('Create a Group M transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
@@ -348,9 +353,8 @@ describe('Transactions', () => {
         electionYear: 2024,
         election_other_description: PageUtils.randomString(10),
         purpose_description: '',
-        category_code: "",
+        category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
-
       },
     };
     TransactionDetailPage.enterScheduleFormData(transactionFormData);
@@ -369,8 +373,8 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
-  }); 
-  
+  });
+
   it('Create a Group AG transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
@@ -389,7 +393,7 @@ describe('Transactions', () => {
       ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
-        category_code: "",
+        category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
@@ -451,7 +455,7 @@ describe('Transactions', () => {
       },
       '@stepTwoAccordion'
     );
-  }); 
+  });
 
   it('Create a Group FG transaction', () => {
     ReportListPage.clickCreateButton();
@@ -473,7 +477,7 @@ describe('Transactions', () => {
       ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
-        category_code: "",
+        category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
@@ -538,7 +542,7 @@ describe('Transactions', () => {
       },
       '@stepTwoAccordion'
     );
-  }); 
+  });
 
   it('Create a Group E,D,A Tier 3 transactions', () => {
     ReportListPage.clickCreateButton();
@@ -562,7 +566,7 @@ describe('Transactions', () => {
       ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
-        category_code: "",
+        category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
@@ -584,7 +588,7 @@ describe('Transactions', () => {
       ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
-        category_code: "",
+        category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
@@ -606,7 +610,7 @@ describe('Transactions', () => {
       ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
-        category_code: "",
+        category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
