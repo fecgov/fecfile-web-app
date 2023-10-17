@@ -119,24 +119,27 @@ export class TransactionFormUtils {
         merge(
           (form.get(templateMap.date) as AbstractControl).valueChanges,
           (form.get(templateMap.date2) as AbstractControl).valueChanges,
-          (form.get(templateMap.election_code) as AbstractControl).valueChanges
+          (form.get(templateMap.election_code) as AbstractControl).valueChanges,
+          (form.get(templateMap.candidate_office) as AbstractControl).valueChanges,
+          (form.get(templateMap.candidate_state) as AbstractControl).valueChanges,
+          (form.get(templateMap.candidate_district) as AbstractControl).valueChanges
         ).pipe(
           switchMap(() => {
             const disbursement_date = form.get(templateMap.date)?.value as Date | undefined;
             const dissemination_date = form.get(templateMap.date2)?.value as Date | undefined;
-            let candidate_id = transaction.contact_2?.id;
-            if (transaction.contact_3?.type === ContactTypes.CANDIDATE) {
-              candidate_id = transaction.contact_3.id;
-            }
-
             const election_code = form.get(templateMap.election_code)?.value;
+            const candidate_office = form.get(templateMap.candidate_office)?.value;
+            const candidate_state = form.get(templateMap.candidate_state)?.value;
+            const candidate_district = form.get(templateMap.candidate_district)?.value;
 
             return component.transactionService.getPreviousTransactionForCalendarYTD(
               transaction,
-              candidate_id,
               disbursement_date,
               dissemination_date,
-              election_code
+              election_code,
+              candidate_office,
+              candidate_state,
+              candidate_district
             );
           })
         ) || of(undefined);

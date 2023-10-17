@@ -56,7 +56,7 @@ export class TransactionService implements TableListService<Transaction> {
     if (transaction && action_date && contact_1_id && aggregation_group) {
       return this.apiService
         .get<HttpResponse<Transaction>>(
-          '/transactions/previous/',
+          '/transactions/previous/entity/',
           {
             transaction_id,
             contact_1_id,
@@ -79,10 +79,12 @@ export class TransactionService implements TableListService<Transaction> {
 
   public getPreviousTransactionForCalendarYTD(
     transaction: Transaction | undefined,
-    candidate_id: string | undefined,
     disbursement_date: Date | undefined,
     dissemination_date: Date | undefined,
-    election_code: string | undefined
+    election_code: string | undefined,
+    candidate_office: string | undefined,
+    candidate_state: string | undefined,
+    candidate_district: string | undefined
   ): Observable<Transaction | undefined> {
     let actionDateString: string = this.datePipe.transform(disbursement_date, 'yyyy-MM-dd') ?? '';
     if (actionDateString.length === 0) {
@@ -93,19 +95,23 @@ export class TransactionService implements TableListService<Transaction> {
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
-    if (transaction && disbursement_date && candidate_id && aggregation_group && election_code) {
+    if (transaction && disbursement_date && candidate_office && aggregation_group && election_code) {
+      const params: { [key: string]: string } = {
+        transaction_id,
+        date: actionDateString,
+        aggregation_group,
+        election_code,
+        candidate_office,
+      };
+      if (candidate_state) {
+        params['candidate_state'] = candidate_state;
+      }
+      if (candidate_district) {
+        params['candidate_district'] = candidate_district;
+      }
+
       return this.apiService
-        .get<HttpResponse<Transaction>>(
-          '/transactions/previous/',
-          {
-            transaction_id,
-            candidate_id: candidate_id,
-            date: actionDateString,
-            aggregation_group,
-            election_code,
-          },
-          [HttpStatusCode.NotFound]
-        )
+        .get<HttpResponse<Transaction>>('/transactions/previous/election/', params, [HttpStatusCode.NotFound])
         .pipe(
           map((response) => {
             if (response.status === HttpStatusCode.NotFound) {

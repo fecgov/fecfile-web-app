@@ -207,10 +207,6 @@ export class TransactionContactUtils {
       transaction.contact_2 = contact;
     }
     contactId$.next(contact.id ?? '');
-
-    // Refresh the dates to trigger getPreviousTransaction on independent expenditures
-    form.get(templateMap.date)?.updateValueAndValidity();
-    form.get(templateMap.date2)?.updateValueAndValidity();
   }
 
   /**
