@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { environment } from 'environments/environment';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -13,7 +13,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
   templateUrl: './test-dot-fec.component.html',
 })
 export class TestDotFecComponent extends DestroyerComponent implements OnInit {
-  report: F3xSummary | undefined;
+  report: Report | undefined;
   fileIsGenerated = false;
   constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {
     super();
@@ -23,7 +23,7 @@ export class TestDotFecComponent extends DestroyerComponent implements OnInit {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as F3xSummary));
+      .subscribe((report) => (this.report = report));
     this.fileIsGenerated = false;
   }
 

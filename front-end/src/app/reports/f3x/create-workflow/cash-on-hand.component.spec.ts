@@ -14,14 +14,14 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CashOnHandComponent } from './cash-on-hand.component';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { F3xSummary } from '../../../shared/models/f3x-summary.model';
-import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
+import { Form3X } from '../../../shared/models/form-3x.model';
+import { Form3XService } from '../../../shared/services/form-3x.service';
 
 describe('CashOnHandComponent', () => {
   let component: CashOnHandComponent;
   let router: Router;
   let fixture: ComponentFixture<CashOnHandComponent>;
-  let f3xSummaryService: F3xSummaryService;
+  let form3XService: Form3XService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,13 +38,13 @@ describe('CashOnHandComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
       ],
-      providers: [F3xSummaryService, FormBuilder, MessageService, provideMockStore(testMockStore)],
+      providers: [Form3XService, FormBuilder, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
   beforeEach(() => {
     router = TestBed.inject(Router);
-    f3xSummaryService = TestBed.inject(F3xSummaryService);
+    form3XService = TestBed.inject(Form3XService);
     fixture = TestBed.createComponent(CashOnHandComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -55,8 +55,8 @@ describe('CashOnHandComponent', () => {
   });
 
   it('should save', () => {
-    const f3x = F3xSummary.fromJSON({ id: '999' });
-    spyOn(f3xSummaryService, 'update').and.returnValue(of(f3x));
+    const f3x = Form3X.fromJSON({ id: '999' });
+    spyOn(form3XService, 'update').and.returnValue(of(f3x));
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.report = f3x;
     component.form.patchValue({

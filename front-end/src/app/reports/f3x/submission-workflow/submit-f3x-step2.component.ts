@@ -3,11 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, takeUntil, from, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CashOnHand } from 'app/shared/interfaces/report.interface';
+import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
@@ -31,7 +30,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     'filing_password',
     'truth_statement',
   ];
-  report?: F3xSummary;
+  report?: Form3X;
   formSubmitted = false;
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
@@ -43,7 +42,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   constructor(
     public router: Router,
-    private f3xSummaryService: F3xSummaryService,
+    private form3XService: Form3XService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
@@ -59,7 +58,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report;
       });
     this.store
       .select(selectCommitteeAccount)
@@ -157,12 +156,12 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   private saveTreasurerName() {
     this.loading = 1;
-    const payload: F3xSummary = F3xSummary.fromJSON({
+    const payload: Form3X = Form3X.fromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });
 
-    return this.f3xSummaryService.update(payload, this.formProperties);
+    return this.form3XService.update(payload, this.formProperties);
   }
 
   private submitReport(): Observable<boolean> {

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SharedModule } from 'app/shared/shared.module';
@@ -23,7 +23,7 @@ describe('ReportLevelMemoComponent', () => {
   let testMemoTextService: MemoTextService;
   let testMessageService: MessageService;
   let testRouter: Router;
-  const f3x: F3xSummary = F3xSummary.fromJSON({
+  const f3x: Form3X = Form3X.fromJSON({
     id: '999',
     coverage_from_date: '2022-05-25',
     form_type: 'F3XN',

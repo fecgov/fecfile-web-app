@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Report } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
 import { ReportService } from '../services/report.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReportResolver  {
+export class ReportResolver {
   constructor(private store: Store, private reportService: ReportService) {}
 
   /**

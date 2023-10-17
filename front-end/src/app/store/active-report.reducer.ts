@@ -1,6 +1,6 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { setActiveReportAction } from './active-report.actions';
-import { Report } from '../shared/interfaces/report.interface';
+import { Report } from '../shared/models/report.model';
 
 export const initialState: Report | undefined = undefined;
 

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map, of } from 'rxjs';
-import { Report } from '../interfaces/report.interface';
+import { Report } from '../models/report.model';
 import { ReportService } from '../services/report.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReportIsEditableGuard  {
+export class ReportIsEditableGuard {
   constructor(private reportService: ReportService) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
