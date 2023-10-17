@@ -48,6 +48,7 @@ export abstract class SchBTransactionType extends TransactionType {
     due_date_setting: '',
     secured: '',
     aggregate: 'aggregate_amount',
+    calendar_ytd: '',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',
     category_code: 'category_code',

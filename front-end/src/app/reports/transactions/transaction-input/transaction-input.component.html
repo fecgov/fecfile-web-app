@@ -51,6 +51,7 @@
       [contributionAmountReadOnly]="contributionAmountReadOnly"
       [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
       [showAggregate]="!!transaction?.transactionType?.showAggregate"
+      [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
       [transaction]="transaction"
       [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
     ></app-amount-input>

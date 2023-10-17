@@ -1,6 +1,10 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import {
+  TemplateMapKeyType,
+  TransactionTemplateMapType,
+  TransactionType,
+} from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
@@ -89,7 +93,7 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transactionType.showAggregate && !transaction.force_unaggregated && !transactionType.showCalendarYTD) {
+    if (transactionType.showAggregate && !transaction.force_unaggregated) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),
@@ -110,12 +114,12 @@ export class TransactionFormUtils {
           takeUntil(component.destroy$)
         )
         .subscribe(([amount, previous_transaction, transaction]) => {
-          this.updateAggregate(form, templateMap, transaction, previous_transaction, amount);
+          this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
         });
     }
 
     if (transactionType.showCalendarYTD) {
-      const previous_transaction$: Observable<Transaction | undefined> =
+      const previous_election$: Observable<Transaction | undefined> =
         merge(
           (form.get(templateMap.date) as AbstractControl).valueChanges,
           (form.get(templateMap.date2) as AbstractControl).valueChanges,
@@ -147,11 +151,11 @@ export class TransactionFormUtils {
         .get(templateMap.amount)
         ?.valueChanges.pipe(
           startWith(form.get(templateMap.amount)?.value),
-          combineLatestWith(previous_transaction$, of(transaction)),
+          combineLatestWith(previous_election$, of(transaction)),
           takeUntil(component.destroy$)
         )
-        .subscribe(([amount, previous_transaction, transaction]) => {
-          this.updateAggregate(form, templateMap, transaction, previous_transaction, amount);
+        .subscribe(([amount, previous_election, transaction]) => {
+          this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previous_election, amount);
         });
     }
 
@@ -177,24 +181,19 @@ export class TransactionFormUtils {
 
   static updateAggregate(
     form: FormGroup,
+    field: TemplateMapKeyType,
     templateMap: TransactionTemplateMapType,
     transaction: Transaction,
     previousTransaction: Transaction | undefined,
     amount: number
   ) {
-    const key = previousTransaction?.transactionType?.templateMap.aggregate as keyof ScheduleTransaction;
+    const key = previousTransaction?.transactionType?.templateMap[field] as keyof ScheduleTransaction;
     const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
     if (transaction.transactionType?.isRefund) {
-      form.get(templateMap.aggregate)?.setValue(previousAggregate - +amount);
+      form.get(templateMap[field])?.setValue(previousAggregate - +amount);
     } else {
-      form.get(templateMap.aggregate)?.setValue(previousAggregate + +amount);
+      form.get(templateMap[field])?.setValue(previousAggregate + +amount);
     }
-  }
-
-  static getCandidateContact(transaction: Transaction) {
-    if (transaction.contact_2?.type === ContactTypes.CANDIDATE) return transaction.contact_2;
-    if (transaction.contact_3?.type === ContactTypes.CANDIDATE) return transaction.contact_3;
-    return undefined;
   }
 
   static getPayloadTransaction(

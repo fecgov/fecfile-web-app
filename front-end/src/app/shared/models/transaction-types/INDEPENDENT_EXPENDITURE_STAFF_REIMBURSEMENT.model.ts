@@ -32,6 +32,7 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
     ...AGGREGATE,
     'date2',
     'support_oppose_code',
+    'calendar_ytd',
   ];
   contactTypeOptions = INDIVIDUAL;
   override contactConfig = STANDARD_AND_CANDIDATE;
@@ -46,6 +47,7 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
   ]);
   override showCalendarYTD = true;
+  override showAggregate = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(transaction: Transaction): string {

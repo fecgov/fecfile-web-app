@@ -81,6 +81,7 @@ export abstract class TransactionType {
   dateLabel = 'DATE';
   date2Label = '';
   aggregateLabel = 'AGGREGATE';
+  calendarYTDLabel = 'CALENDAR YEAR-TO-DATE';
   amountInputHeader = '';
   debtInputHeader = '';
   committeeCandidateHeader = 'Committee/Candidate information';
@@ -240,6 +241,7 @@ export type TransactionTemplateMapType = {
   interest_rate_setting: string;
   secured: string;
   aggregate: string;
+  calendar_ytd: string;
   purpose_description: string;
   text4000: string;
   category_code: string;

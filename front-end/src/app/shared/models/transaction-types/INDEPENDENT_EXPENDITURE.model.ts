@@ -33,6 +33,7 @@ export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
     ...AGGREGATE,
     'date2',
     'support_oppose_code',
+    'calendar_ytd',
   ];
   contactTypeOptions = ORGANIZATION_INDIVIDUAL;
   override contactConfig = STANDARD_AND_CANDIDATE;
@@ -41,6 +42,7 @@ export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
+  override showAggregate = false;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({

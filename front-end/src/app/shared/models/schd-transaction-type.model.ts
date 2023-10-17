@@ -48,6 +48,7 @@ export abstract class SchDTransactionType extends TransactionType {
     due_date_setting: '',
     secured: '',
     aggregate: '',
+    calendar_ytd: '',
     purpose_description: 'purpose_of_debt_or_obligation',
     text4000: '',
     category_code: '',
