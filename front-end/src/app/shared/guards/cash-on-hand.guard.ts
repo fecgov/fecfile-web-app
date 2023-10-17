@@ -3,12 +3,12 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
-import { CashOnHand } from '../interfaces/report.interface';
+import { CashOnHand } from '../models/form-3x.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CashOnHandGuard  {
+export class CashOnHandGuard {
   constructor(private store: Store) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {

@@ -3,7 +3,7 @@ import { BehaviorSubject, delay, of, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -15,7 +15,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 })
 export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
   protected calculationFinished$ = new BehaviorSubject<boolean>(false);
-  report: F3xSummary = new F3xSummary();
+  report: Form3X = new Form3X();
 
   constructor(
     private store: Store,
@@ -33,7 +33,7 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report;
         if (!report.calculation_status) {
           this.apiService
             .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })

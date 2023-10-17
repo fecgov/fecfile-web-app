@@ -50,6 +50,7 @@ import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
+import { ReportVersionPipe } from './pipes/report-version.pipe';
 import { SupportOpposeInputComponent } from './components/inputs/support-oppose-input/support-oppose-input.component';
 
 @NgModule({
@@ -83,6 +84,7 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
     DefaultZeroPipe,
     HighlightTermsPipe,
     ReportCodeLabelPipe,
+    ReportVersionPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -121,6 +123,7 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
     DefaultZeroPipe,
     HighlightTermsPipe,
     ReportCodeLabelPipe,
+    ReportVersionPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,

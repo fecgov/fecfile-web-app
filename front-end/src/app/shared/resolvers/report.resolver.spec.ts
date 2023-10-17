@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { F3xSummaryService } from '../services/f3x-summary.service';
+import { Form3XService } from '../services/form-3x.service';
 import { ReportResolver } from './report.resolver';
-import { Report } from '../interfaces/report.interface';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { Report } from '../models/report.model';
+import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
 
 describe('ReportResolver', () => {
@@ -16,7 +16,7 @@ describe('ReportResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [F3xSummaryService, provideMockStore(testMockStore)],
+      providers: [Form3XService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);
@@ -27,18 +27,18 @@ describe('ReportResolver', () => {
   });
 
   it('should return an F3X report', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
+    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
     const route = {
       paramMap: convertToParamMap({ reportId: '999' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
-      expect(response).toEqual(f3xSummary);
+      expect(response).toEqual(form3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${f3xSummary.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${form3X.id}`);
     expect(req.request.method).toEqual('GET');
-    req.flush(f3xSummary);
+    req.flush(form3X);
     httpTestingController.verify();
   });
 
