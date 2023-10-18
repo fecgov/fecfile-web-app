@@ -55,7 +55,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=line_label`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=line_label_order_key`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { LabelList } from 'app/shared/utils/label.utils';
+import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
@@ -15,6 +15,7 @@ import { ReportService } from 'app/shared/services/report.service';
 })
 export class TransactionReceiptsComponent extends TransactionListTableBaseComponent implements OnInit {
   scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
+  lineLabels = LineIdentifierLabels;
 
   constructor(
     protected override messageService: MessageService,
