@@ -14,7 +14,7 @@ export class ReportListPage {
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
         method: 'GET',
-        url: 'http://localhost:8080/api/v1/f3x-summaries/',
+        url: 'http://localhost:8080/api/v1/reports/',
         headers: {
           'x-csrftoken': cookie?.value,
         },
@@ -32,7 +32,7 @@ export class ReportListPage {
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
         method: 'DELETE',
-        url: `http://localhost:8080/api/v1/f3x-summaries/${reportID}/`,
+        url: `http://localhost:8080/api/v1/reports/${reportID}/`,
         headers: {
           'x-csrftoken': cookie?.value,
         },

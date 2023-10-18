@@ -3,25 +3,39 @@ import * as _ from 'lodash';
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
+  static clickElement(elementSelector: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias)
+      .find("[datatest='" + elementSelector + "']")
+      .click();
+  }
+
   static dropdownSetValue(querySelector: string, value: string, alias = '') {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      cy.get(alias).find(querySelector).click();
+      if (querySelector.includes('due_date_setting') || querySelector.includes('interest_rate_setting')) {
+        cy.get(alias).find(querySelector).first().click();
+      } else {
+        cy.get(alias).find(querySelector).click();
+      }
       cy.contains('p-dropdownitem', value).should('be.visible');
       cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
     }
   }
 
-  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
+  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '', loanOverride: boolean = false) {
     alias = PageUtils.getAlias(alias);
-
     const currentDate: Date = new Date();
-    cy.get(alias).find(calendar).as('calendarElement').click();
+    //
+    if (calendar.includes('date_incurred') || calendar.includes('due_date') || calendar.includes('date_signed')) {
+      cy.get(alias).find(calendar).first().as('calendarElement').click();
+    } else {
+      cy.get(alias).find(calendar).as('calendarElement').click();
+    }
 
-    //    Choose the year
     cy.get('@calendarElement').find('.p-datepicker-year').click();
-
+    //    Choose the year
     const year: number = dateObj.getFullYear();
     const currentYear: number = currentDate.getFullYear();
     const decadeStart: number = currentYear - (currentYear % 10);
@@ -76,7 +90,6 @@ export class PageUtils {
     } else if (charType == 'symbols') {
       characters = symbols;
     } else {
-      console.log('RandomString: Invalid charType');
       return '';
     }
 
@@ -116,9 +129,13 @@ export class PageUtils {
     cy.get(alias).contains('a', name).click();
   }
 
-  static clickButton(name: string, alias = '') {
+  static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('button', name).click();
+    if (force) {
+      cy.get(alias).contains('button', name).click({ force: true });
+    } else {
+      cy.get(alias).contains('button', name).click();
+    }
   }
 
   static dateToString(date: Date) {
@@ -129,5 +146,19 @@ export class PageUtils {
       '/' +
       date.getFullYear()
     );
+  }
+
+  static searchBoxInput(input: string) {
+    cy.get('[role="searchbox"]').type(input.slice(0, 1));
+    cy.contains(input).should('exist');
+    cy.contains(input).click({ force: true });
+  }
+
+  static enterValue(fieldName: string, fieldValue: any) {
+    cy.get(fieldName).type(fieldValue);
+  }
+
+  static urlCheck(input: string) {
+    cy.url().should('contain', input);
   }
 }
