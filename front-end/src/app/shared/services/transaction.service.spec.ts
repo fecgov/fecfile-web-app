@@ -11,6 +11,7 @@ import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HttpStatusCode, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
+import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -110,6 +111,25 @@ describe('TransactionService', () => {
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
       `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
+    httpTestingController.verify();
+  });
+
+  it('#getPreviousTransactionForCalendarYTD() should return undefined', () => {
+    const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE
+    ).getNewTransaction();
+    mockTransaction.id = 'abc';
+    service
+      .getPreviousTransactionForCalendarYTD(mockTransaction, new Date(), new Date(), '1', 'A', 'A', 'A')
+      .subscribe((response) => {
+        expect(response).toEqual(undefined);
+      });
+    const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/transactions/previous/election/?transaction_id=abc&date=${formattedDate}&aggregation_group=${AggregationGroups.INDEPENDENT_EXPENDITURE}&election_code=1&candidate_office=A&candidate_state=A&candidate_district=A`
     );
     expect(req.request.method).toEqual('GET');
     req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
