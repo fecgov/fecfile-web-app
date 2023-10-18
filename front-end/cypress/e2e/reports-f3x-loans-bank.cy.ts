@@ -143,7 +143,7 @@ describe('Loans', () => {
     cy.contains(loanEnums.loanFromBank).should('exist');
   });
 
-  it('should test: Loan Received from Bank - add Gaurantor', () => {
+  it('should test: Loan Received from Bank - add Guarantor', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);

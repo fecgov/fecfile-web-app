@@ -3,20 +3,20 @@ import * as _ from 'lodash';
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
-
   static clickElement(elementSelector: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find("[datatest='" + elementSelector + "']").click();
-    //children().contains("p-button").last()
+    cy.get(alias)
+      .find("[datatest='" + elementSelector + "']")
+      .click();
   }
 
   static dropdownSetValue(querySelector: string, value: string, alias = '') {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      if (querySelector.includes("due_date_setting") || querySelector.includes("interest_rate_setting")) {
+      if (querySelector.includes('due_date_setting') || querySelector.includes('interest_rate_setting')) {
         cy.get(alias).find(querySelector).first().click();
-      } else { 
+      } else {
         cy.get(alias).find(querySelector).click();
       }
       cy.contains('p-dropdownitem', value).should('be.visible');
@@ -26,10 +26,9 @@ export class PageUtils {
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '', loanOverride: boolean = false) {
     alias = PageUtils.getAlias(alias);
-    console.log(calendar);
     const currentDate: Date = new Date();
     //
-    if(calendar.includes("date_incurred") || calendar.includes("due_date") || calendar.includes("date_signed")) {
+    if (calendar.includes('date_incurred') || calendar.includes('due_date') || calendar.includes('date_signed')) {
       cy.get(alias).find(calendar).first().as('calendarElement').click();
     } else {
       cy.get(alias).find(calendar).as('calendarElement').click();
@@ -91,7 +90,6 @@ export class PageUtils {
     } else if (charType == 'symbols') {
       characters = symbols;
     } else {
-      console.log('RandomString: Invalid charType');
       return '';
     }
 
@@ -131,12 +129,11 @@ export class PageUtils {
     cy.get(alias).contains('a', name).click();
   }
 
-  static clickButton(name: string, alias = '', force: boolean = false) {
-   
+  static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
     if (force) {
-      cy.get(alias).contains('button', name).click({force: true});
-    } else { 
+      cy.get(alias).contains('button', name).click({ force: true });
+    } else {
       cy.get(alias).contains('button', name).click();
     }
   }
@@ -151,11 +148,10 @@ export class PageUtils {
     );
   }
 
-  static searchBoxInput(input: string, click: boolean = false) {
-    console.log(input);
-    cy.get('[role="searchbox"]').type(input.slice(0,1));
+  static searchBoxInput(input: string) {
+    cy.get('[role="searchbox"]').type(input.slice(0, 1));
     cy.contains(input).should('exist');
-    cy.contains(input).click({force: true});
+    cy.contains(input).click({ force: true });
   }
 
   static enterValue(fieldName: string, fieldValue: any) {
@@ -163,6 +159,6 @@ export class PageUtils {
   }
 
   static urlCheck(input: string) {
-    cy.url().should("contain", input);
+    cy.url().should('contain', input);
   }
 }
