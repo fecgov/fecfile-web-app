@@ -137,12 +137,12 @@ describe('Loans', () => {
     PageUtils.searchBoxInput(committeeFormData.committee_id);
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickButton(loanEnums.saveAndAddGaurantor);
+    PageUtils.clickButton(loanEnums.saveAndAddGuarantor);
 
     PageUtils.urlCheck(loanEnums.addGuarantorUrl);
     PageUtils.searchBoxInput(individualContactFormData.last_name);
     cy.get('#amount').safeType(formData['amount']);
-    PageUtils.clickButton(loanEnums.saveAndAddGaurantor);
+    PageUtils.clickButton(loanEnums.saveAndAddGuarantor);
     PageUtils.urlCheck(loanEnums.createSubTransaction + loanEnums.addGuarantorUrl);
     PageUtils.clickButton(loanEnums.cancel, '', true);
     PageUtils.urlCheck(loanEnums.createSubTransaction + loanEnums.addGuarantorUrl);
