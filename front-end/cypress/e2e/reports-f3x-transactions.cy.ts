@@ -26,7 +26,7 @@ describe('Transactions', () => {
     ReportListPage.goToPage();
   });
 
-  it('Create a Group A transaction using a contact lookup', () => {
+  it('Create an Individual Receipt transaction using the contact lookup', () => {
     cy.runLighthouse('reports', 'transactions-list');
 
     // Create an individual contact to be used with contact lookup
@@ -68,7 +68,7 @@ describe('Transactions', () => {
     cy.runLighthouse('reports', 'single-transaction');
   });
 
-  it('Create a Group B transaction', () => {
+  it('Create an Other Disbursement transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -104,7 +104,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(formTransactionDataForSchedule);
   });
 
-  it('Create a Group C transaction with negative only amount', () => {
+  it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -145,7 +145,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(negativeAmountFormData);
   });
 
-  it('Create a Group D transaction and memos with correct aggregate values', () => {
+  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -242,7 +242,7 @@ describe('Transactions', () => {
     });
   });
 
-  it('Create a Group E transaction', () => {
+  it('Create a Party Receipt transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -329,7 +329,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
-  it('Create a Group M transaction', () => {
+  it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -375,7 +375,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
-  it('Create a Group AG transaction', () => {
+  it('Create a dual-entry Earmark Receipt transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -457,7 +457,7 @@ describe('Transactions', () => {
     );
   });
 
-  it('Create a Group FG transaction', () => {
+  it('Create a dual-entry PAC Earmark Receipt transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -544,7 +544,7 @@ describe('Transactions', () => {
     );
   });
 
-  it('Create a Group E,D,A Tier 3 transactions', () => {
+  it('Create a Joint Fundraising Transfer transactin with Tier 3 child transactions', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
