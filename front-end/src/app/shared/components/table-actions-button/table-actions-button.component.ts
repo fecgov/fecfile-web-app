@@ -14,4 +14,9 @@ export class TableActionsButtonComponent {
   @Input() buttonLabel = '';
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
+  @Input() dataTest = '';
+
+  getTestString() { 
+    return this.dataTest;
+  }
 }
