@@ -149,7 +149,7 @@ export class PageUtils {
   }
 
   static searchBoxInput(input: string) {
-    cy.get('[role="searchbox"]').type(input.slice(0, 1));
+    cy.get('[role="searchbox"]').type(input.slice(0, 3));
     cy.contains(input).should('exist');
     cy.contains(input).click({ force: true });
   }
