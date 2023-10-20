@@ -37,35 +37,42 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
       takeUntil(this.destroy$),
       switchMap(([cashOnHand, sidebarState, activeReport]: [CashOnHand, SidebarState, Report | undefined]) => {
         const isEditable = this.reportService.isEditable(activeReport);
+
+        let transactionItems = [
+          {
+            label: 'Manage your transactions',
+            routerLink: [`/reports/transactions/report/${activeReport?.id}/list`],
+          },
+          {
+            label: 'Add a receipt',
+            routerLink: [`/reports/transactions/report/${activeReport?.id}/select/receipt`],
+          },
+          {
+            label: 'Add a disbursement',
+            routerLink: [`/reports/transactions/report/${activeReport?.id}/select/disbursement`],
+          },
+          {
+            label: 'Add loans and debts',
+            routerLink: [`/reports/transactions/report/${activeReport?.id}/select/loans-and-debts`],
+          },
+          { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
+        ];
+        if (activeReport?.id === cashOnHand.report_id) {
+          transactionItems = [
+            {
+              label: 'Cash on hand',
+              routerLink: [`/reports/f3x/create/cash-on-hand/${activeReport?.id}`],
+            },
+            ...transactionItems,
+          ];
+        }
+
         return of([
           {
             label: 'ENTER A TRANSACTION',
             expanded: sidebarState?.section == ReportSidebarState.TRANSACTIONS,
             visible: isEditable,
-            items: [
-              {
-                label: 'Cash on hand',
-                routerLink: [`/reports/f3x/create/cash-on-hand/${activeReport?.id}`],
-                visible: activeReport?.id === cashOnHand.report_id,
-              },
-              {
-                label: 'Manage your transactions',
-                routerLink: [`/reports/transactions/report/${activeReport?.id}/list`],
-              },
-              {
-                label: 'Add a receipt',
-                routerLink: [`/reports/transactions/report/${activeReport?.id}/select/receipt`],
-              },
-              {
-                label: 'Add a disbursement',
-                routerLink: [`/reports/transactions/report/${activeReport?.id}/select/disbursement`],
-              },
-              {
-                label: 'Add loans and debts',
-                routerLink: [`/reports/transactions/report/${activeReport?.id}/select/loans-and-debts`],
-              },
-              { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
-            ],
+            items: transactionItems,
           },
           {
             label: 'REVIEW TRANSACTIONS',
