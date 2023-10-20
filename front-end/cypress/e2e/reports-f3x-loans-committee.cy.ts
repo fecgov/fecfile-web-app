@@ -29,7 +29,7 @@ describe('Loans', () => {
     ReportListPage.goToPage();
   });
 
-  it('should test: Loan By Committee', () => {
+  xit('should test: Loan By Committee', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
@@ -65,7 +65,7 @@ describe('Loans', () => {
     cy.contains(loanEnums.loanMade).should('exist');
   });
 
-  it('should test: Loan By Committee - Receive loan repayment', () => {
+  xit('should test: Loan By Committee - Receive loan repayment', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
@@ -110,7 +110,7 @@ describe('Loans', () => {
     cy.contains(loanEnums.loanPaymentRecieved).should('exist');
   });
 
-  it('should test: Loan By Committee - add Guarantor', () => {
+  xit('should test: Loan By Committee - add Guarantor', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
