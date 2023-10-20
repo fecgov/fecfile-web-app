@@ -44,7 +44,7 @@ describe('TransactionTypeBaseComponent', () => {
           useValue: jasmine.createSpyObj('TransactionService', {
             update: of(undefined),
             create: of(undefined),
-            getPreviousTransaction: of(undefined),
+            getPreviousTransactionForAggregate: of(undefined),
           }),
         },
         ConfirmationService,

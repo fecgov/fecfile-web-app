@@ -60,6 +60,7 @@ export abstract class SchC1TransactionType extends TransactionType {
     due_date_setting: 'loan_due_date_field_setting',
     secured: 'collateral',
     aggregate: '',
+    calendar_ytd: '',
     purpose_description: '',
     text4000: '',
     category_code: '',
