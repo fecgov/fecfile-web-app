@@ -23,7 +23,7 @@ export class TransactionService implements TableListService<Transaction> {
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
   ): Observable<ListRestResponse> {
     if (!ordering) {
-      ordering = 'form_type';
+      ordering = 'line_label_order_key';
     }
     return this.apiService
       .get<ListRestResponse>(`${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
