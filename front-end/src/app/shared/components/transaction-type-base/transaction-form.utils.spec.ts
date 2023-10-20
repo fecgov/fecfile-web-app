@@ -3,6 +3,7 @@ import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/sc
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -33,6 +34,7 @@ describe('FormUtils', () => {
 
     TransactionFormUtils.updateAggregate(
       form,
+      'aggregate',
       transaction.transactionType.templateMap,
       transaction,
       previous_transaction,
@@ -65,6 +67,7 @@ describe('FormUtils', () => {
 
     TransactionFormUtils.updateAggregate(
       form,
+      'aggregate',
       transaction.transactionType.templateMap,
       transaction,
       previous_transaction,
@@ -74,4 +77,36 @@ describe('FormUtils', () => {
     const aggregateFormControl = form.get('aggregate_amount') as FormControl;
     expect(aggregateFormControl.value).toEqual(50);
   });
+});
+
+it('should add the amount for calendar YTD', () => {
+  const form = new FormGroup({
+    expenditure_amount: new FormControl(),
+    calendar_ytd: new FormControl(),
+  });
+
+  const transaction = SchETransaction.fromJSON({
+    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+    expenditure_amount: 50,
+  });
+
+  const previous_transaction = SchETransaction.fromJSON({
+    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+    expenditure_amount: 100,
+    calendar_ytd: 100,
+  });
+
+  TransactionFormUtils.updateAggregate(
+    form,
+    'calendar_ytd',
+    transaction.transactionType.templateMap,
+    transaction,
+    previous_transaction,
+    transaction.expenditure_amount as number
+  );
+
+  const calendarYTDFormControl = form.get('calendar_ytd') as FormControl;
+  expect(calendarYTDFormControl.value).toEqual(150);
 });
