@@ -79,8 +79,12 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
       });
 
     // Run office and state valueChange logic when initializing form elements
-    if (this.transaction?.transactionType.templateMap.election_code)
+    if (
+      this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
+      this.transaction?.transactionType.templateMap.election_code
+    ) {
       this.form.get(this.transaction.transactionType.templateMap.election_code)?.updateValueAndValidity();
+    }
     this.form.get(this.officeFormControlName)?.updateValueAndValidity();
     this.form.get(this.stateFormControlName)?.updateValueAndValidity();
   }
