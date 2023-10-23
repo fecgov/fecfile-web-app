@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { takeUntil } from 'rxjs';
+import { takeUntil, of, combineLatest } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
+import { ScheduleIds } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-candidate-office-input',
@@ -21,28 +22,50 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
 
-    this.form
-      ?.get(this.officeFormControlName)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
-          this.form.patchValue({
-            [this.stateFormControlName]: null,
-            [this.districtFormControlName]: null,
-          });
-          this.form.get(this.stateFormControlName)?.disable();
-          this.form.get(this.districtFormControlName)?.disable();
-        } else if (value === CandidateOfficeTypes.SENATE) {
+    // For Schedule E transactions, we need to track the election code so that we
+    // can make the candidate state required for presidential primaries.
+    let electionCodeValue$ = of('');
+    if (
+      this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
+      this.transaction?.transactionType.templateMap.election_code
+    ) {
+      electionCodeValue$ =
+        this.form
+          ?.get(this.transaction.transactionType.templateMap.election_code)
+          ?.valueChanges.pipe(takeUntil(this.destroy$)) || of('');
+    }
+
+    const officeValue$ =
+      this.form?.get(this.officeFormControlName)?.valueChanges.pipe(takeUntil(this.destroy$)) || of('');
+
+    combineLatest([electionCodeValue$, officeValue$]).subscribe(([electionCode, officeValue]) => {
+      if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
+        // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
+        if (this.transaction?.transactionType.scheduleId === ScheduleIds.E && electionCode.startsWith('P')) {
           this.form.patchValue({
             [this.districtFormControlName]: null,
           });
           this.form.get(this.stateFormControlName)?.enable();
           this.form.get(this.districtFormControlName)?.disable();
         } else {
-          this.form.get(this.stateFormControlName)?.enable();
-          this.form.get(this.districtFormControlName)?.enable();
+          this.form.patchValue({
+            [this.stateFormControlName]: null,
+            [this.districtFormControlName]: null,
+          });
+          this.form.get(this.stateFormControlName)?.disable();
+          this.form.get(this.districtFormControlName)?.disable();
         }
-      });
+      } else if (officeValue === CandidateOfficeTypes.SENATE) {
+        this.form.patchValue({
+          [this.districtFormControlName]: null,
+        });
+        this.form.get(this.stateFormControlName)?.enable();
+        this.form.get(this.districtFormControlName)?.disable();
+      } else {
+        this.form.get(this.stateFormControlName)?.enable();
+        this.form.get(this.districtFormControlName)?.enable();
+      }
+    });
 
     this.form
       ?.get(this.stateFormControlName)
@@ -56,6 +79,8 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
       });
 
     // Run office and state valueChange logic when initializing form elements
+    if (this.transaction?.transactionType.templateMap.election_code)
+      this.form.get(this.transaction.transactionType.templateMap.election_code)?.updateValueAndValidity();
     this.form.get(this.officeFormControlName)?.updateValueAndValidity();
     this.form.get(this.stateFormControlName)?.updateValueAndValidity();
   }
