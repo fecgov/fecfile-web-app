@@ -13,7 +13,7 @@ describe('CandidateOfficeInputComponent', () => {
 
   const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
   const testCandidateStateFormControlName = 'testCandidateStateFormControlName';
-  const candidateDistrictFormControlName = 'candidateDistrictFormControlName';
+  const districtFormControlName = 'districtFormControlName';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -32,13 +32,13 @@ describe('CandidateOfficeInputComponent', () => {
     });
 
     component.form.addControl(testCandidateOfficeFormControlName, new FormControl());
-    component.candidateOfficeFormControlName = testCandidateOfficeFormControlName;
+    component.officeFormControlName = testCandidateOfficeFormControlName;
 
     component.form.addControl(testCandidateStateFormControlName, new FormControl());
-    component.candidateStateFormControlName = testCandidateStateFormControlName;
+    component.stateFormControlName = testCandidateStateFormControlName;
 
-    component.form.addControl(candidateDistrictFormControlName, new FormControl());
-    component.candidateDistrictFormControlName = candidateDistrictFormControlName;
+    component.form.addControl(districtFormControlName, new FormControl());
+    component.districtFormControlName = districtFormControlName;
 
     fixture.detectChanges();
   });
@@ -51,8 +51,8 @@ describe('CandidateOfficeInputComponent', () => {
     component.form.patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL,
     });
-    const stateFormControl = component.form.get(component.candidateStateFormControlName);
-    const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
+    const stateFormControl = component.form.get(component.stateFormControlName);
+    const districtFormControl = component.form.get(component.districtFormControlName);
 
     expect(stateFormControl?.value).toBeNull();
     expect(stateFormControl?.disabled).toBe(true);
@@ -65,8 +65,8 @@ describe('CandidateOfficeInputComponent', () => {
     component.form.patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.SENATE,
     });
-    const stateFormControl = component.form.get(component.candidateStateFormControlName);
-    const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
+    const stateFormControl = component.form.get(component.stateFormControlName);
+    const districtFormControl = component.form.get(component.districtFormControlName);
 
     expect(stateFormControl?.disabled).toBe(false);
 
@@ -81,8 +81,8 @@ describe('CandidateOfficeInputComponent', () => {
     component.form.patchValue({
       [testCandidateStateFormControlName]: 'FL',
     });
-    const stateFormControl = component.form.get(component.candidateStateFormControlName);
-    const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
+    const stateFormControl = component.form.get(component.stateFormControlName);
+    const districtFormControl = component.form.get(component.districtFormControlName);
 
     expect(stateFormControl?.disabled).toBe(false);
     expect(districtFormControl?.disabled).toBe(false);

@@ -5,14 +5,14 @@
         <label for="candidate_office">CANDIDATE OFFICE</label>
         <p-dropdown
           inputId="candidate_office"
-          [formControlName]="this.candidateOfficeFormControlName"
+          [formControlName]="this.officeFormControlName"
           [options]="candidateOfficeTypeOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          [fieldName]="this.candidateOfficeFormControlName"
+          [fieldName]="this.officeFormControlName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -22,20 +22,20 @@
         <label
           for="candidate_state"
           [ngClass]="{
-            disabled: this.form.get(this.candidateStateFormControlName)?.disabled
+            disabled: this.form.get(this.stateFormControlName)?.disabled
           }"
           >CANDIDATE STATE</label
         >
         <p-dropdown
           inputId="candidate_state"
-          [formControlName]="this.candidateStateFormControlName"
+          [formControlName]="this.stateFormControlName"
           [options]="candidateStateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          [fieldName]="this.candidateStateFormControlName"
+          [fieldName]="this.stateFormControlName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -45,20 +45,20 @@
         <label
           for="candidate_district"
           [ngClass]="{
-            disabled: this.form.get(this.candidateDistrictFormControlName)?.disabled
+            disabled: this.form.get(this.districtFormControlName)?.disabled
           }"
           >CANDIDATE DISTRICT</label
         >
         <p-dropdown
           inputId="candidate_district"
-          [formControlName]="this.candidateDistrictFormControlName"
+          [formControlName]="this.districtFormControlName"
           [options]="candidateDistrictOptions"
           appendTo="body"
           [autoDisplayFirst]="false"
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          [fieldName]="this.candidateDistrictFormControlName"
+          [fieldName]="this.districtFormControlName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
