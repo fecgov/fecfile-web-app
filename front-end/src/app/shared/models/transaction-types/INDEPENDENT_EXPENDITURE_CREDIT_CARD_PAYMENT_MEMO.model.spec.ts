@@ -1,4 +1,3 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from './INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
 
