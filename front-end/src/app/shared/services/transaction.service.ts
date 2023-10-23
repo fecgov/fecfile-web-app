@@ -8,6 +8,7 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
+import { CandidateOfficeTypes } from '../models/contact.model';
 
 @Injectable({
   providedIn: 'root',
@@ -95,7 +96,15 @@ export class TransactionService implements TableListService<Transaction> {
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
-    if (transaction && actionDateString && candidate_office && aggregation_group && election_code) {
+    if (
+      transaction &&
+      actionDateString &&
+      candidate_office &&
+      aggregation_group &&
+      election_code &&
+      (candidate_state || candidate_office === CandidateOfficeTypes.PRESIDENTIAL) &&
+      (candidate_district || candidate_office !== CandidateOfficeTypes.HOUSE)
+    ) {
       const params: { [key: string]: string } = {
         transaction_id,
         date: actionDateString,
