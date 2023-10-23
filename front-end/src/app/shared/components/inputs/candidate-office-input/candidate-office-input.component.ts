@@ -1,17 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { takeUntil } from 'rxjs';
-import { DestroyerComponent } from '../../app-destroyer.component';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-candidate-office-input',
   templateUrl: './candidate-office-input.component.html',
 })
-export class CandidateOfficeInputComponent extends DestroyerComponent implements OnInit {
-  @Input() form: FormGroup = new FormGroup([]);
-  @Input() formSubmitted = false;
+export class CandidateOfficeInputComponent extends BaseInputComponent implements OnInit {
   @Input() candidateOfficeFormControlName = '';
   @Input() candidateStateFormControlName = '';
   @Input() candidateDistrictFormControlName = '';
@@ -28,6 +25,7 @@ export class CandidateOfficeInputComponent extends DestroyerComponent implements
       ?.get(this.candidateOfficeFormControlName)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
+        // MJT - here enable
         if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
           this.form.patchValue({
             [this.candidateStateFormControlName]: null,

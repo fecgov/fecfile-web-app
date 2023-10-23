@@ -198,6 +198,7 @@
       ></app-transaction-contact-lookup>
       <ng-container *ngIf="transaction?.contact_2">
         <app-candidate-input
+          [transaction]="transaction"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"

@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
@@ -19,7 +18,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   @Input() memoCodeCheckboxLabel = '';
   @Input() memoItemHelpText: string | undefined;
-  @Input() transaction: Transaction | undefined;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
   @ViewChild('memoCode') memoCode!: MemoCodeInputComponent;

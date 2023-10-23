@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-committee-input',
@@ -12,7 +11,6 @@ export class CommitteeInputComponent extends BaseInputComponent implements OnIni
   @Input() entityRole = 'CONTACT';
   @Input() includeFecId = false;
   @Input() readonly = false;
-  @Input() transaction?: Transaction;
   @Input() tertiaryContact = false;
 
   ngOnInit(): void {
