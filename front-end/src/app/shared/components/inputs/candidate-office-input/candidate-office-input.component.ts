@@ -78,7 +78,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
         }
       });
 
-    // Run office and state valueChange logic when initializing form elements
+    // Run election_code, office, and state valueChange logic when initializing form elements
     if (
       this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
       this.transaction?.transactionType.templateMap.election_code

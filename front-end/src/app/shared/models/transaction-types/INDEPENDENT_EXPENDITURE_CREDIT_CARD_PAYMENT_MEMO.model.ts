@@ -32,6 +32,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
     ...AGGREGATE,
     'date2',
     'support_oppose_code',
+    'calendar_ytd',
   ];
   contactTypeOptions = ORGANIZATION_INDIVIDUAL;
   override contactConfig = STANDARD_AND_CANDIDATE;
@@ -42,7 +43,9 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
   schema = schema;
   override navigationControls: TransactionNavigationControls = CHILD_CONTROLS;
   override contact2IsRequired = () => true;
-  override inheritedFields = ['aggregate'] as TemplateMapKeyType[];
+  override inheritedFields = ['calendar_ytd'] as TemplateMapKeyType[];
+  override showCalendarYTD = true;
+  override showAggregate = false;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({

@@ -31,7 +31,7 @@ export class SchETransaction extends Transaction {
   @Transform(BaseModel.dateTransform) dissemination_date: Date | undefined;
   expenditure_amount: number | undefined;
   @Transform(BaseModel.dateTransform) disbursement_date: Date | undefined;
-  calendar_ytd_per_election_office: number | undefined;
+  calendar_ytd_per_election_office: number | undefined; // This is a calculated field whose value is returned from the api in the 'calendar_ytd' property.
 
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
