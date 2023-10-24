@@ -42,7 +42,7 @@ export class SchETransaction extends Transaction {
   so_candidate_id_number: string | undefined;
   so_candidate_last_name: string | undefined;
   so_candidate_first_name: string | undefined;
-  so_candinate_middle_name: string | undefined;
+  so_candidate_middle_name: string | undefined;
   so_candidate_prefix: string | undefined;
   so_candidate_suffix: string | undefined;
   so_candidate_office: string | undefined;

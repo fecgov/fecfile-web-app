@@ -4,6 +4,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { takeUntil, of, combineLatest } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
+import { STANDARD_AND_CANDIDATE, STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY } from 'app/shared/models/contact.model';
 
 @Component({
   selector: 'app-candidate-office-input',
@@ -39,6 +40,9 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
       this.form?.get(this.officeFormControlName)?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
 
     combineLatest([electionCodeValue$, officeValue$]).subscribe(([electionCode, officeValue]) => {
+      if (this.transaction) {
+        this.transaction.transactionType.contactConfig = STANDARD_AND_CANDIDATE;
+      }
       if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
         // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
         if (this.transaction?.transactionType.scheduleId === ScheduleIds.E && electionCode.startsWith('P')) {
@@ -47,6 +51,8 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
           });
           this.form.get(this.stateFormControlName)?.enable();
           this.form.get(this.districtFormControlName)?.disable();
+          // Do not save the candidate_state to the candidate contact record.
+          this.transaction.transactionType.contactConfig = STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY;
         } else {
           this.form.patchValue({
             [this.stateFormControlName]: null,
