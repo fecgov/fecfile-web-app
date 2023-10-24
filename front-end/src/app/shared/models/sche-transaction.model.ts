@@ -11,8 +11,6 @@ export class SchETransaction extends Transaction {
   entity_type: string | undefined;
   filer_committee_id_number: string | undefined;
   transaction_id_number: string | undefined;
-  back_reference_tran_id_number: string | undefined;
-  back_reference_sched_name: string | undefined;
   payee_organization_name: string | undefined;
   payee_last_name: string | undefined;
   payee_first_name: string | undefined;
@@ -62,7 +60,12 @@ export class SchETransaction extends Transaction {
   // calendar_ytd_per_election_office is dynamically calculated on the back-end
   // and not saved in the database
   override getFieldsNotToValidate(): string[] {
-    return ['calendar_ytd_per_election_office', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      'calendar_ytd_per_election_office',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
   override getFieldsNotToSave(): string[] {
     return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
