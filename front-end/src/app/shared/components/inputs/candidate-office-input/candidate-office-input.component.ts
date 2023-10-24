@@ -32,11 +32,11 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
       electionCodeValue$ =
         this.form
           ?.get(this.transaction.transactionType.templateMap.election_code)
-          ?.valueChanges.pipe(takeUntil(this.destroy$)) || of('');
+          ?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
     }
 
     const officeValue$ =
-      this.form?.get(this.officeFormControlName)?.valueChanges.pipe(takeUntil(this.destroy$)) || of('');
+      this.form?.get(this.officeFormControlName)?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
 
     combineLatest([electionCodeValue$, officeValue$]).subscribe(([electionCode, officeValue]) => {
       if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {

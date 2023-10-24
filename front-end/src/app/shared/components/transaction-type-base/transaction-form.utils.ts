@@ -5,7 +5,7 @@ import {
   TransactionTemplateMapType,
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
-import { ScheduleIds, ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -17,7 +17,6 @@ import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
-import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 
 export class TransactionFormUtils {
   /**
