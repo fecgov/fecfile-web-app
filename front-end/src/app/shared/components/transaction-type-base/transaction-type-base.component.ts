@@ -316,7 +316,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (!this.transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
 
     // If creating a new transaction, set both form and contact_1 values from parent transaction
-    if (!this.transaction.id || this.transaction.transactionType.inheritOnEdit) {
+    if (!this.transaction.id) {
       const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
       this.transaction.contact_1 = ancestor?.contact_1;
       this.transaction.contact_1_id = ancestor?.contact_1_id;

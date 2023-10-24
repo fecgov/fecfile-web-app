@@ -122,9 +122,7 @@ export class TransactionFormUtils {
       // Only dynamically update non-inherited calendar_ytd values on the form input.
       // Inherited calendar_ytd display the value of the parent transaction and do not
       // include or change with the amount value of the child transaction.
-      if (
-        !transaction.transactionType?.getInheritedFields(transaction)?.includes('calendar_ytd' as TemplateMapKeyType)
-      ) {
+      if (!transaction.transactionType.inheritCalendarYTD) {
         const previous_election$: Observable<Transaction | undefined> =
           merge(
             (form.get(templateMap.date) as AbstractControl).valueChanges,

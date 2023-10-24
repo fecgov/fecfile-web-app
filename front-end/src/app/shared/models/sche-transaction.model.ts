@@ -29,7 +29,7 @@ export class SchETransaction extends Transaction {
   @Transform(BaseModel.dateTransform) dissemination_date: Date | undefined;
   expenditure_amount: number | undefined;
   @Transform(BaseModel.dateTransform) disbursement_date: Date | undefined;
-  calendar_ytd_per_election_office: number | undefined; // This is a calculated field whose value is returned from the api in the 'calendar_ytd' property.
+  calendar_ytd: number | undefined; // This is a calculated field whose value is 'calendar_ytd_per_election_office' in the schedule schema.
 
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
@@ -135,7 +135,7 @@ export const ScheduleETransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
-    'Payment to Payroll Memo for Independent Expenditure',
+    'Payroll Memo for Independent Expenditure',
   ],
   [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Independent Expenditure - Void'],
 ];

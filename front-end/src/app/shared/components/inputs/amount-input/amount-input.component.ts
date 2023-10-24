@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -58,6 +59,13 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
             this.memoCode.updateMemoItemWithDate(date);
           }
         });
+    }
+
+    // For Schedule E memos, insert the calendar_ytd from the parent into the form control
+    if (this.transaction?.transactionType.inheritCalendarYTD) {
+      this.form
+        .get(this.transaction.transactionType.templateMap.calendar_ytd)
+        ?.setValue((this.transaction.parent_transaction as SchETransaction)?.calendar_ytd);
     }
   }
 

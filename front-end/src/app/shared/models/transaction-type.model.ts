@@ -37,6 +37,7 @@ export abstract class TransactionType {
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   showCalendarYTD = false;
+  inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
@@ -47,7 +48,6 @@ export abstract class TransactionType {
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
-  inheritOnEdit = false; // If set to true, the inherited fields will be initialized when editing a transaction as well as when creating one.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getInheritedFields = (transaction: Transaction) => this.inheritedFields;
 

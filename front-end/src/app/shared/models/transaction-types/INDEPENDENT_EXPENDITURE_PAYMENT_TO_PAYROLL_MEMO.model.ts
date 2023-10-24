@@ -19,7 +19,7 @@ import {
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
 
-export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransactionType {
+export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransactionType {
   formFields = [
     ...ORG_FIELDS,
     ...INDIVIDUAL_FIELDS,
@@ -39,7 +39,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(
     ScheduleETransactionTypeLabels,
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO
+    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = CHILD_CONTROLS;
@@ -51,7 +51,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
   getNewTransaction() {
     return SchETransaction.fromJSON({
       form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
       aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
     });
   }
