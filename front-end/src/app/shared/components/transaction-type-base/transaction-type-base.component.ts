@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -51,7 +51,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -316,7 +316,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (!this.transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
 
     // If creating a new transaction, set both form and contact_1 values from parent transaction
-    if (!this.transaction.id) {
+    if (!this.transaction.id || this.transaction.transactionType.inheritOnEdit) {
       const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
       this.transaction.contact_1 = ancestor?.contact_1;
       this.transaction.contact_1_id = ancestor?.contact_1_id;
@@ -339,12 +339,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     // Set fields to read-only
     this.form.get('entity_type')?.disable();
-    this.transaction.transactionType.getInheritedFields(
-      this.transaction)?.forEach((inherittedField) => {
-        if (this.transaction) {
-          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
-          fieldControl?.disable();
-        }
-      });
+    this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
+      if (this.transaction) {
+        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+        fieldControl?.disable();
+      }
+    });
   }
 }

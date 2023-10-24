@@ -44,6 +44,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
   override navigationControls: TransactionNavigationControls = CHILD_CONTROLS;
   override contact2IsRequired = () => true;
   override inheritedFields = ['calendar_ytd'] as TemplateMapKeyType[];
+  override inheritOnEdit = true;
   override showCalendarYTD = true;
   override showAggregate = false;
 
