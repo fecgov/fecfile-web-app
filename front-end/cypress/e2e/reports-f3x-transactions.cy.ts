@@ -1,10 +1,22 @@
-import { ContactListPage, defaultFormData as defaultContactFormData } from './pages/contactListPage';
-import { defaultFormData as defaultReportFormData, F3xCreateReportPage } from './pages/f3xCreateReportPage';
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { TransactionTableColumns } from './pages/f3xTransactionListPage';
 import { LoginPage } from './pages/loginPage';
-import { PageUtils } from './pages/pageUtils';
+import { PageUtils, currentYear } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
-import { defaultFormData as defaultTransactionFormData, TransactionDetailPage } from './pages/transactionDetailPage';
+import { TransactionDetailPage } from './pages/transactionDetailPage';
+import { defaultFormData as defaultContactFormData } from './models/ContactFormModel';
+import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
+import { defaultScheduleFormData, formTransactionDataForSchedule } from './models/TransactionFormModel';
+
+const scheduleData = {
+  ...defaultScheduleFormData,
+  ...{
+    electionYear: undefined,
+    electionType: undefined,
+    date_received: new Date(currentYear, 4 - 1, 27),
+  },
+};
 
 describe('Transactions', () => {
   beforeEach(() => {
@@ -14,7 +26,7 @@ describe('Transactions', () => {
     ReportListPage.goToPage();
   });
 
-  it('Create a Group A transaction using a contact lookup', () => {
+  it('Create an Individual Receipt transaction using the contact lookup', () => {
     cy.runLighthouse('reports', 'transactions-list');
 
     // Create an individual contact to be used with contact lookup
@@ -37,26 +49,26 @@ describe('Transactions', () => {
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
 
-    TransactionDetailPage.enterFormData(defaultTransactionFormData);
+    TransactionDetailPage.enterScheduleFormData(scheduleData);
     PageUtils.clickButton('Save');
-
+    scheduleData.date_received = new Date(currentYear, 4 - 1, 27);
     cy.get('tr').should('contain', 'Individual Receipt');
     cy.get('tr').should('contain', 'Unitemized');
     cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
-    cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
-    cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
+    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
+    cy.get('tr').should('contain', '$' + scheduleData.amount);
 
     // Check values of edit form
     PageUtils.clickLink('Individual Receipt');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
-    TransactionDetailPage.assertFormData(defaultTransactionFormData);
+    TransactionDetailPage.assertFormData(scheduleData);
 
     cy.runLighthouse('reports', 'single-transaction');
   });
 
-  it('Create a Group B transaction', () => {
+  it('Create an Other Disbursement transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -73,30 +85,26 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
-    const formTransactionData = {
-      ...defaultTransactionFormData,
-      ...{ amount: 200.01, category_code: '005 Polling Expenses' },
-    };
-    TransactionDetailPage.enterFormData(formTransactionData);
+    TransactionDetailPage.enterLoanFormData(formTransactionDataForSchedule);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
     cy.get('tr').should('contain', 'Other Disbursement');
     cy.get('tr').should('not.contain', 'Unitemized');
-    cy.get('tr').should('contain', formContactData['name']);
-    cy.get('tr').should('contain', PageUtils.dateToString(formTransactionData['date_received']));
-    cy.get('tr').should('contain', '$' + formTransactionData['amount']);
+    cy.get('tr').should('contain', formContactData.name);
+    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
+    cy.get('tr').should('contain', '$' + formTransactionDataForSchedule.amount);
 
     // Check values of edit form
     PageUtils.clickLink('Other Disbursement');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData(formTransactionData);
+    TransactionDetailPage.assertFormData(formTransactionDataForSchedule);
   });
 
-  it('Create a Group C transaction with negative only amount', () => {
+  it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -108,8 +116,15 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     ContactListPage.enterFormData(defaultContactFormData, true);
     PageUtils.clickButton('Save & continue');
-
-    TransactionDetailPage.enterFormData(defaultTransactionFormData);
+    const negativeAmountFormData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        amount: -100.55,
+        date_received: new Date(currentYear, 4 - 1, 27),
+        category_code: '',
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(negativeAmountFormData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -117,20 +132,20 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', 'Returned/Bounced Receipt');
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
-    cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
-
+    cy.get('tr').should('contain', PageUtils.dateToString(negativeAmountFormData.date_received));
+    let amount = negativeAmountFormData.amount < 0 ? -1 * negativeAmountFormData.amount : negativeAmountFormData.amount;
     // Assert that the positive amount was converted to a negative amount
-    cy.get('tr').should('contain', '-$' + defaultTransactionFormData['amount']);
+    cy.get('tr').should('contain', '-$' + amount);
 
     // Check values of edit form
     PageUtils.clickLink('Returned/Bounced Receipt');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
-    TransactionDetailPage.assertFormData({ ...defaultTransactionFormData, ...{ amount: -100.55 } });
+    TransactionDetailPage.assertFormData(negativeAmountFormData);
   });
 
-  it('Create a Group D transaction and memos with correct aggregate values', () => {
+  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -149,10 +164,10 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
 
     const formTransactionData = {
-      ...defaultTransactionFormData,
-      ...{ purpose_description: '' },
+      ...formTransactionDataForSchedule,
+      ...{ purpose_description: '', category_code: '' },
     };
-    TransactionDetailPage.enterFormData(formTransactionData);
+    TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -163,10 +178,11 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(defaultContactFormData, true);
     PageUtils.clickButton('Save & continue');
     const memoFormTransactionData = {
-      ...defaultTransactionFormData,
-      ...{ memo_code: true, purpose_description: '' },
+      ...formTransactionDataForSchedule,
+      ...{ memo_code: true, purpose_description: '', category_code: '' },
     };
-    TransactionDetailPage.enterFormData(memoFormTransactionData);
+
+    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -175,37 +191,34 @@ describe('Transactions', () => {
     cy.contains('Transactions in this report').should('exist');
     PageUtils.clickLink('Partnership Receipt');
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
-    cy.contains('Partnership Attribution').wait(500);
+    PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
-    TransactionDetailPage.enterFormData(memoFormTransactionData);
+    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
     PageUtils.clickButton('Save');
 
     // Assert transaction list table is correct
     cy.get('tbody tr').eq(0).as('row-1');
-    cy.get('@row-1')
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Receipt');
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+
+    cy.get('tbody tr').eq(1).as('row-2');
+    cy.get('@row-2')
       .find('td')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Attribution');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Unitemized');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$201.10');
-
-    cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Receipt');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Unitemized');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(2).as('row-3');
     cy.get('@row-3')
       .find('td')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Attribution');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Unitemized');
     cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$400.02');
 
     // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');
@@ -217,9 +230,9 @@ describe('Transactions', () => {
       ...{ purpose_description: 'See Partnership Attribution(s) below' },
     });
     PageUtils.clickButton('Cancel');
-
+    PageUtils.urlCheck('/list');
     // Check form values of memo form
-    cy.get('tbody tr').first().contains('a', 'Partnership Attribution').click();
+    PageUtils.clickLink('Partnership Attribution');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
@@ -229,7 +242,7 @@ describe('Transactions', () => {
     });
   });
 
-  it('Create a Group E transaction', () => {
+  it('Create a Party Receipt transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -246,7 +259,15 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
-    TransactionDetailPage.enterFormData(defaultTransactionFormData);
+    const localFormTransactionData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
+    };
+
+    TransactionDetailPage.enterScheduleFormData(localFormTransactionData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -254,15 +275,15 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', 'Party Receipt');
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData['name']);
-    cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
-    cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
+    cy.get('tr').should('contain', PageUtils.dateToString(localFormTransactionData.date_received));
+    cy.get('tr').should('contain', '$' + localFormTransactionData.amount);
 
     // Check values of edit form
     PageUtils.clickLink('Party Receipt');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData(defaultTransactionFormData);
+    TransactionDetailPage.assertFormData(localFormTransactionData);
   });
 
   it('Create a Group I transaction', () => {
@@ -283,9 +304,13 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
 
     const transactionFormData = {
-      ...defaultTransactionFormData,
+      ...formTransactionDataForSchedule,
+      ...{
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
     };
-    TransactionDetailPage.enterFormData(transactionFormData);
+    TransactionDetailPage.enterScheduleFormData(transactionFormData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -293,7 +318,7 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', 'Refund of Contribution to Other Political Committee');
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData['name']);
-    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData['date_received']));
+    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
     cy.get('tr').should('contain', '$' + transactionFormData['amount']);
 
     // Check values of edit form
@@ -304,7 +329,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
-  it('Create a Group M transaction', () => {
+  it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -322,24 +347,25 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
 
     const transactionFormData = {
-      ...defaultTransactionFormData,
+      ...formTransactionDataForSchedule,
       ...{
         electionType: 'General',
         electionYear: 2024,
         election_other_description: PageUtils.randomString(10),
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       },
-      ...{ purpose_description: '' },
     };
-    TransactionDetailPage.enterFormData(transactionFormData);
+    TransactionDetailPage.enterScheduleFormData(transactionFormData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData['name']);
-    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData['date_received']));
-    cy.get('tr').should('contain', '$' + transactionFormData['amount']);
+    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
+    cy.get('tr').should('contain', '$' + transactionFormData.amount);
 
     // Check values of edit form
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
@@ -349,7 +375,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
-  it('Create a Group AG transaction', () => {
+  it('Create a dual-entry Earmark Receipt transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -364,12 +390,14 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(defaultContactFormData, true, '@stepOneAccordion');
     PageUtils.clickButton('Save & continue', '@stepOneAccordion');
     const transactionFormData = {
-      ...defaultTransactionFormData,
+      ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');
+    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '@stepOneAccordion');
 
     // Enter STEP TWO transaction
     PageUtils.clickLink('STEP TWO');
@@ -378,7 +406,7 @@ describe('Transactions', () => {
     const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
     ContactListPage.enterFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
-    TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
+    TransactionDetailPage.enterScheduleFormData(transactionFormData, true, '@stepTwoAccordion');
 
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
@@ -394,13 +422,13 @@ describe('Transactions', () => {
       .eq(TransactionTableColumns.name)
       .should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
     cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(1).as('row-2');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Earmark Memo');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.name).should('contain', defaultContactFormData['name']);
     cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     // Check form values of receipt edit form
     PageUtils.clickLink('Earmark Receipt');
@@ -429,7 +457,7 @@ describe('Transactions', () => {
     );
   });
 
-  it('Create a Group FG transaction', () => {
+  it('Create a dual-entry PAC Earmark Receipt transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -446,12 +474,14 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue', '@stepOneAccordion');
 
     const transactionFormData = {
-      ...defaultTransactionFormData,
+      ...formTransactionDataForSchedule,
       ...{
         purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');
+    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '@stepOneAccordion');
 
     // Enter STEP TWO transaction
     PageUtils.clickLink('STEP TWO');
@@ -460,7 +490,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact', '@stepTwoAccordion');
     ContactListPage.enterFormData(defaultContactFormData, true, '@stepTwoAccordion');
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
-    TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
+    TransactionDetailPage.enterScheduleFormData(transactionFormData, true, '@stepTwoAccordion');
 
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
@@ -473,7 +503,7 @@ describe('Transactions', () => {
     cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'PAC Earmark Receipt');
     cy.get('@row-1').find('td').eq(TransactionTableColumns.name).should('contain', defaultContactFormData['name']);
     cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(1).as('row-2');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'PAC Earmark Memo');
@@ -482,7 +512,7 @@ describe('Transactions', () => {
       .eq(TransactionTableColumns.name)
       .should('contain', `${stepOneContactFormData['last_name']}, ${stepOneContactFormData['first_name']}`);
     cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     // Check form values of receipt edit form
     PageUtils.clickLink('PAC Earmark Receipt');
@@ -514,7 +544,7 @@ describe('Transactions', () => {
     );
   });
 
-  it('Create a Group E,D,A Tier 3 transactions', () => {
+  it('Create a Joint Fundraising Transfer transactin with Tier 3 child transactions', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -533,10 +563,14 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
 
     const tier1TransactionData = {
-      ...defaultTransactionFormData,
-      ...{ purpose_description: '' },
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
     };
-    TransactionDetailPage.enterFormData(tier1TransactionData);
+    TransactionDetailPage.enterScheduleFormData(tier1TransactionData);
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Receipt');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -551,10 +585,14 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(organizationFormContactData, true);
     PageUtils.clickButton('Save & continue');
     const tier2TransactionData = {
-      ...defaultTransactionFormData,
-      ...{ purpose_description: '' },
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
     };
-    TransactionDetailPage.enterFormData(tier2TransactionData);
+    TransactionDetailPage.enterScheduleFormData(tier2TransactionData);
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Individual');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -569,10 +607,14 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(individualFormContactData, true);
     PageUtils.clickButton('Save & continue');
     const tier3TransactionData = {
-      ...defaultTransactionFormData,
-      ...{ purpose_description: '' },
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
     };
-    TransactionDetailPage.enterFormData(tier3TransactionData);
+    TransactionDetailPage.enterScheduleFormData(tier3TransactionData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -584,27 +626,24 @@ describe('Transactions', () => {
       .as('joint_fundraising_transfer_link')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Joint Fundraising Transfer');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('not.contain', 'Unitemized');
     cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(1).as('row-2');
     cy.get('@row-2')
       .find('td')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Receipt Joint Fundraising Transfer Memo');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('not.contain', 'Unitemized');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(2).as('row-3');
     cy.get('@row-3')
       .find('td')
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Individual Joint Fundraising Transfer Memo');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.transaction_type).should('not.contain', 'Unitemized');
     cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$100.55');
+    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     // Check form values of receipt form
     PageUtils.clickLink('Joint Fundraising Transfer', '@joint_fundraising_transfer_link');

@@ -1,7 +1,8 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { ScheduleIds } from './transaction.model';
 
 export abstract class SchDTransactionType extends TransactionType {
-  scheduleId = 'D';
+  scheduleId = ScheduleIds.D;
   apiEndpoint = '/transactions/schedule-d';
 
   // Labels
@@ -36,6 +37,7 @@ export abstract class SchDTransactionType extends TransactionType {
     candidate_state: '',
     candidate_district: '',
     date: '',
+    date2: '',
     memo_code: '',
     amount: 'incurred_amount',
     balance: 'beginning_balance',

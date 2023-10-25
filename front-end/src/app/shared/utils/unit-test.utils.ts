@@ -6,10 +6,9 @@ import { initialState as initCommitteeAccount } from 'app/store/committee-accoun
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { CashOnHand } from '../interfaces/report.interface';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { F3xSummary } from '../models/f3x-summary.model';
+import { Form3X, CashOnHand } from '../models/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
@@ -88,7 +87,7 @@ export const testUserLoginData: UserLoginData = {
   login_dot_gov: false,
 };
 
-export const testActiveReport: F3xSummary = F3xSummary.fromJSON({
+export const testActiveReport: Form3X = Form3X.fromJSON({
   id: '999',
   coverage_from_date: '2022-05-25',
   coverage_through_date: '2022-06-30',
@@ -262,6 +261,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   candidate_state: 'donor_candidate_state',
   candidate_district: 'donor_candidate_district',
   date: 'contribution_date',
+  date2: '',
   memo_code: 'memo_code',
   amount: 'contribution_amount',
   balance: 'loan_balance',

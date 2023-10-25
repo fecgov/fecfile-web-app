@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
@@ -20,9 +20,11 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   memoCodeReadOnly = false;
+  coverageDate: Date = new Date();
+  coverageDateQuestion = 'Did you mean to date this transaction outside of the report coverage period?';
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  report?: F3xSummary;
+  report?: Form3X;
 
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
@@ -37,13 +39,14 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as F3xSummary;
+        this.report = report;
       });
 
     this.form
       .get(this.templateMap.date)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((date: Date) => {
+        this.coverageDate = date;
         this.updateMemoItemWithDate(date);
       });
 

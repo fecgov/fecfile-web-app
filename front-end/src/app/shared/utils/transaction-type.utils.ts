@@ -4,7 +4,8 @@ import { SchCTransaction } from '../models/schc-transaction.model';
 import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { SchDTransaction } from '../models/schd-transaction.model';
-import { ScheduleTransaction } from '../models/transaction.model';
+import { SchETransaction } from '../models/sche-transaction.model';
+import { ScheduleIds, ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
 import { TransactionType } from '../models/transaction-type.model';
@@ -95,7 +96,6 @@ import { LOAN_RECEIVED_FROM_BANK_RECEIPT } from '../models/transaction-types/LOA
 import { LOAN_REPAYMENT_RECEIVED } from '../models/transaction-types/LOAN_REPAYMENT_RECEIVED.model';
 
 // Schedule B /////////////////////////////////////////////////////
-
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 import { CONDUIT_EARMARK_OUT } from '../models/transaction-types/CONDUIT_EARMARK_OUT.model';
 import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE.model';
@@ -173,23 +173,26 @@ import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-t
 import { LOAN_REPAYMENT_MADE } from '../models/transaction-types/LOAN_REPAYMENT_MADE.model';
 
 // Schedule C /////////////////////////////////////////////////////
-
 import { LOAN_RECEIVED_FROM_INDIVIDUAL } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL.model';
 import { LOAN_RECEIVED_FROM_BANK } from '../models/transaction-types/LOAN_RECEIVED_FROM_BANK.model';
 import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE.model';
 
 // Schedule C1 ////////////////////////////////////////////////////
-
 import { C1_LOAN_AGREEMENT } from '../models/transaction-types/C1_LOAN_AGREEMENT.model';
 
 // Schedule C2 ////////////////////////////////////////////////////
-
 import { C2_LOAN_GUARANTOR } from '../models/transaction-types/C2_LOAN_GUARANTOR.model';
 
 // Schedule D ////////////////////////////////////////////////////
-
 import { DEBT_OWED_BY_COMMITTEE } from '../models/transaction-types/DEBT_OWED_BY_COMMITTEE.model';
 import { DEBT_OWED_TO_COMMITTEE } from '../models/transaction-types/DEBT_OWED_TO_COMMITTEE.model';
+
+// Schedule E ////////////////////////////////////////////////////
+import { INDEPENDENT_EXPENDITURE } from '../models/transaction-types/INDEPENDENT_EXPENDITURE.model';
+import { INDEPENDENT_EXPENDITURE_VOID } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_VOID.model';
+import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL.model';
+import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -374,6 +377,12 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   // Schedule D ////////////////////////////////////////////////////
   DEBT_OWED_BY_COMMITTEE,
   DEBT_OWED_TO_COMMITTEE,
+  // Schedule E ////////////////////////////////////////////////////
+  INDEPENDENT_EXPENDITURE,
+  INDEPENDENT_EXPENDITURE_VOID,
+  INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+  INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
 }
 
 export class TransactionTypeUtils {
@@ -405,12 +414,13 @@ export function getTransactionTypeClass(transactionTypeIdentifier: string): any 
 export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
   if (json.transaction_type_identifier) {
     const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
-    if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'C') return SchCTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'C1') return SchC1Transaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'C2') return SchC2Transaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === 'D') return SchDTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.A) return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.B) return SchBTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C) return SchCTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C1) return SchC1Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C2) return SchC2Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.D) return SchDTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.E) return SchETransaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');

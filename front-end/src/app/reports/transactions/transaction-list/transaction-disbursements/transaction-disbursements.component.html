@@ -29,25 +29,24 @@
         </div>
       </div>
     </ng-template>
+    <ng-template pTemplate="sorticon" let-sortOrder>
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
           Line <p-sortIcon field="form_type"></p-sortIcon>
         </th>
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
-          Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
+          Type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
-        <th pSortableColumn="payee_name" id="name-column" role="columnheader">
-          Name <p-sortIcon field="payee_name"></p-sortIcon>
-        </th>
-        <th pSortableColumn="expenditure_date" id="date-column" role="columnheader">
-          Date <p-sortIcon field="expenditure_date"></p-sortIcon>
-        </th>
+        <th pSortableColumn="name" id="name-column" role="columnheader">Name <p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="date" id="date-column" role="columnheader">Date <p-sortIcon field="date"></p-sortIcon></th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
-          Memo code <p-sortIcon field="memo_code"></p-sortIcon>
+          Memo <p-sortIcon field="memo_code"></p-sortIcon>
         </th>
-        <th pSortableColumn="expenditure_amount" id="amount-column" role="columnheader">
-          Amount <p-sortIcon field="expenditure_amount"></p-sortIcon>
+        <th pSortableColumn="amount" id="amount-column" role="columnheader">
+          Amount <p-sortIcon field="amount"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
         <th id="back_reference_tran_id_number" role="columnheader">Associated With</th>

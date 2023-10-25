@@ -59,6 +59,15 @@ export class SchETransaction extends Transaction {
   memo_code: boolean | undefined;
   memo_text_description: string | undefined;
 
+  // calendar_ytd_per_election_office is dynamically calculated on the back-end
+  // and not saved in the database
+  override getFieldsNotToValidate(): string[] {
+    return ['calendar_ytd_per_election_office', ...super.getFieldsNotToValidate()];
+  }
+  override getFieldsNotToSave(): string[] {
+    return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchETransaction {
     const transaction = plainToClass(SchETransaction, json);
@@ -86,20 +95,20 @@ export type ScheduleETransactionGroupsType = ScheduleETransactionGroups.INDEPEND
 
 export enum ScheduleETransactionTypes {
   INDEPENDENT_EXPENDITURE = 'INDEPENDENT_EXPENDITURE',
-  MULTISTATE_INDEPENDENT_EXPENDITURE = 'MULTISTATE_INDEPENDENT_EXPENDITURE',
+  INDEPENDENT_EXPENDITURE_VOID = 'INDEPENDENT_EXPENDITURE_VOID',
+  INDEPENDENT_EXPENDITURE_MULTISTATE = 'INDEPENDENT_EXPENDITURE_MULTISTATE',
   INDEPENDENT_EXPENDITURE_DEBT = 'INDEPENDENT_EXPENDITURE_DEBT',
   INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT = 'INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT',
   INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO = 'INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO',
   INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT = 'INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT',
   INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO = 'INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO',
-  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL = 'INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT',
-  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO = 'INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO',
-  INDEPENDENT_EXPENDITURE_VOID = 'INDEPENDENT_EXPENDITURE_VOID',
+  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL = 'INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL',
+  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO = 'INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO',
 }
 
 export const ScheduleETransactionTypeLabels: LabelList = [
   [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE, 'Independent Expenditure'],
-  [ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE, 'Multistate Independent Expenditure'],
+  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_MULTISTATE, 'Multistate Independent Expenditure'],
   [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_DEBT, 'Debt for Independent Expenditure'],
   [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
@@ -125,5 +134,5 @@ export const ScheduleETransactionTypeLabels: LabelList = [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
     'Payment to Payroll Memo for Independent Expenditure',
   ],
-  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Independent Expenditure Void'],
+  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Independent Expenditure - Void'],
 ];

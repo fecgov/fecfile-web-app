@@ -1,6 +1,6 @@
 import { UploadSubmission } from './upload-submission.model';
 
-describe('F3XSummary', () => {
+describe('Form3X', () => {
   it('should create an instance', () => {
     expect(new UploadSubmission()).toBeTruthy();
   });

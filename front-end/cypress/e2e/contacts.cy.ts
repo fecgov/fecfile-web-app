@@ -1,6 +1,7 @@
+import { ContactListPage } from './pages/contactListPage';
 import { LoginPage } from './pages/loginPage';
-import { defaultFormData, ContactListPage } from './pages/contactListPage';
 import { PageUtils } from './pages/pageUtils';
+import { defaultFormData as contactFormData } from './models/ContactFormModel';
 
 describe('Manage contacts', () => {
   beforeEach(() => {
@@ -8,12 +9,12 @@ describe('Manage contacts', () => {
     ContactListPage.deleteAllContacts();
     ContactListPage.goToPage();
   });
-
+  
   it('Create an Individual contact', () => {
     cy.runLighthouse('contacts', 'list');
 
     PageUtils.clickButton('New');
-    const formData = { ...defaultFormData };
+    const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
     cy.contains('a', `${formData['last_name']}, ${formData['first_name']}`).should('exist');
@@ -23,13 +24,13 @@ describe('Manage contacts', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
-  });
+  }); 
 
   it('Create a Candidate contact', () => {
     PageUtils.clickButton('New');
 
     const formData = {
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         contact_type: 'Candidate',
       },
@@ -43,13 +44,13 @@ describe('Manage contacts', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Candidate');
     ContactListPage.assertFormData(formData);
-  });
+  }); 
 
   it('Create a Committee contact', () => {
     PageUtils.clickButton('New');
 
     const formData = {
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         contact_type: 'Committee',
       },
@@ -69,7 +70,7 @@ describe('Manage contacts', () => {
     PageUtils.clickButton('New');
 
     const formData = {
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         contact_type: 'Organization',
       },
@@ -88,7 +89,7 @@ describe('Manage contacts', () => {
   it('Empty required fields should display an error message', () => {
     PageUtils.clickButton('New');
     ContactListPage.enterFormData({
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         last_name: '',
         first_name: '',
@@ -111,7 +112,7 @@ describe('Manage contacts', () => {
   it('Fields with too a long string should display an error message', () => {
     PageUtils.clickButton('New');
     ContactListPage.enterFormData({
-      ...defaultFormData,
+      ...contactFormData,
       ...{
         last_name: '012345678901234567890123456789LONG',
         first_name: '01234567890123456789LONG',
@@ -148,5 +149,5 @@ describe('Manage contacts', () => {
   xit('Delete contact', () => {
     // test if trash can disabled if transactions are associated with the contact
     // test actual delete when no transactions associated with contact
-  });
+  }); 
 });

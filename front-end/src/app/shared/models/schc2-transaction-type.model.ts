@@ -1,7 +1,8 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { ScheduleIds } from './transaction.model';
 
 export abstract class SchC2TransactionType extends TransactionType {
-  scheduleId = 'C2';
+  scheduleId = ScheduleIds.C2;
   apiEndpoint = '/transactions/schedule-c2';
   override amountInputHeader = 'Guaranteed financial information';
 
@@ -39,6 +40,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     due_date_setting: '',
     secured: '',
     date: '',
+    date2: '',
     memo_code: '',
     amount: 'guaranteed_amount',
     balance: '',

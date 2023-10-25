@@ -3,9 +3,9 @@ import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LabelList } from '../../../shared/utils/label.utils';
-import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/f3x-summary.model';
+import { F3xFormTypeLabels, Form3X } from '../../../shared/models/form-3x.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
-import { Report } from '../../../shared/interfaces/report.interface';
+import { Report } from '../../../shared/models/report.model';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
@@ -15,7 +15,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
   styleUrls: ['../../styles.scss'],
 })
 export class ReportWebPrintComponent extends DestroyerComponent implements OnInit {
-  report: F3xSummary = new F3xSummary();
+  report: Form3X = new Form3X();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 
   submitDate: Date | undefined;
@@ -37,7 +37,7 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (report) {
-          this.report = report as F3xSummary;
+          this.report = report as Form3X;
           this.updatePrintStatus(report);
         }
       });

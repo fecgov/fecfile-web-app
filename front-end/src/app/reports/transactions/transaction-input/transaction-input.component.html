@@ -1,4 +1,4 @@
-<div class="grid" *ngIf="isEditable && !!!transactionType?.useParentContact">
+<div class="grid" *ngIf="isEditable && !!!transactionType?.getUseParentContact(transaction)">
   <div class="col-12">
     <div class="field">
       <label for="entity_type">LOOKUP</label>
@@ -97,26 +97,6 @@
       (contactSelect)="updateFormWithSecondaryContact($event)"
     ></app-loan-agreement-input>
   </ng-container>
-  <ng-container *ngIf="transactionType?.hasSignature1">
-    <p-divider></p-divider>
-    <h3>{{ transactionType.signatoryOneTitle }}</h3>
-    <app-signature-input
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      templateMapKeyPrefix="signatory_1"
-    ></app-signature-input>
-  </ng-container>
-  <ng-container *ngIf="transactionType?.hasSignature2">
-    <p-divider></p-divider>
-    <h3>{{ transactionType.signatoryTwoTitle }}</h3>
-    <app-signature-input
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      templateMapKeyPrefix="signatory_2"
-    ></app-signature-input>
-  </ng-container>
   <ng-container *ngIf="candidateInfoPosition === 'low'">
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   </ng-container>
@@ -129,6 +109,28 @@
       [templateMap]="templateMap"
       [transaction]="transaction"
     ></app-additional-info-input>
+  </ng-container>
+  <ng-container *ngIf="transactionType?.hasSignature1()">
+    <p-divider></p-divider>
+    <h3>{{ transactionType.signatoryOneHeader }}</h3>
+    <app-signature-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [templateMap]="templateMap"
+      class="signatory_1_input"
+      templateMapKeyPrefix="signatory_1"
+    ></app-signature-input>
+  </ng-container>
+  <ng-container *ngIf="transactionType?.hasSignature2()">
+    <p-divider></p-divider>
+    <h3>{{ transactionType.signatoryTwoHeader }}</h3>
+    <app-signature-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [templateMap]="templateMap"
+      class="signatory_2_input"
+      templateMapKeyPrefix="signatory_2"
+    ></app-signature-input>
   </ng-container>
   <ng-container *ngIf="transactionType.getFooter(transaction)">
     <p-divider></p-divider>
@@ -143,7 +145,7 @@
 <ng-template #candidateInfo>
   <ng-container *ngIf="transactionType?.hasCommitteeOrCandidateInformation()">
     <p-divider></p-divider>
-    <h3>Committee/Candidate information</h3>
+    <h3>{{ transactionType.committeeCandidateHeader }}</h3>
     <ng-container *ngIf="!transactionType?.contact3IsRequired">
       <app-committee-input
         *ngIf="transaction?.transactionType?.hasCandidateCommittee"
@@ -177,7 +179,10 @@
         [tertiaryContact]="true"
       ></app-committee-input>
     </ng-container>
-    <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation()">
+    <ng-container *ngIf="transaction?.transactionType?.hasSupportOpposeCode()">
+      <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted"></app-support-oppose-input>
+    </ng-container>
+    <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation(form)">
       <label for="contact_2"
         >LOOKUP
         <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container></label

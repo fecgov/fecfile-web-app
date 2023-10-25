@@ -1,9 +1,9 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
-import { Transaction, isPulledForwardLoan } from './transaction.model';
+import { ScheduleIds, Transaction, isPulledForwardLoan } from './transaction.model';
 import { TransactionNavigationControls, SAVE_LIST_CONTROL } from './transaction-navigation-controls.model';
 
 export abstract class SchCTransactionType extends TransactionType {
-  scheduleId = 'C';
+  scheduleId = ScheduleIds.C;
   apiEndpoint = '/transactions/schedule-c';
 
   // Labels
@@ -55,6 +55,7 @@ export abstract class SchCTransactionType extends TransactionType {
     candidate_state: 'lender_candidate_state',
     candidate_district: 'lender_candidate_district',
     date: 'loan_incurred_date',
+    date2: '',
     memo_code: 'memo_code',
     amount: 'loan_amount',
     balance: 'loan_balance',

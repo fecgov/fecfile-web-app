@@ -1,7 +1,8 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { ScheduleIds } from './transaction.model';
 
 export abstract class SchATransactionType extends TransactionType {
-  scheduleId = 'A';
+  scheduleId = ScheduleIds.A;
   apiEndpoint = '/transactions/schedule-a';
 
   //Labels
@@ -37,6 +38,7 @@ export abstract class SchATransactionType extends TransactionType {
     candidate_state: 'donor_candidate_state',
     candidate_district: 'donor_candidate_district',
     date: 'contribution_date',
+    date2: '',
     memo_code: 'memo_code',
     amount: 'contribution_amount',
     balance: '',

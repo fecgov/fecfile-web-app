@@ -1,9 +1,10 @@
 import { LoginPage } from './pages/loginPage';
 import { ReportListPage } from './pages/reportListPage';
-import { defaultFormData, F3xCreateReportPage } from './pages/f3xCreateReportPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from './pages/f3xCashOnHandPage';
 import { F3xReportLevelMemoPage } from './pages/f3xReportLevelMemoPage';
 import { currentYear, PageUtils } from './pages/pageUtils';
+import { defaultFormData } from './models/ReportFormModel';
 
 describe('Manage reports', () => {
   beforeEach(() => {

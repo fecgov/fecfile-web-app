@@ -1,19 +1,19 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ReportService } from 'app/shared/services/report.service';
+import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import { ReportService } from 'app/shared/services/report.service';
+import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { take, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
@@ -39,13 +39,36 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true
     ),
     new TableAction(
+      'Aggregate',
+      this.forceAggregate.bind(this),
+      (transaction: Transaction) =>
+        !!transaction.force_unaggregated &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id &&
+        transaction.transactionType.scheduleId === ScheduleIds.A,
+      () => true
+    ),
+    new TableAction(
+      'Unaggregate',
+      this.forceUnaggregate.bind(this),
+      (transaction: Transaction) =>
+        !transaction.force_unaggregated &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction &&
+        !transaction.parent_transaction_id &&
+        transaction.transactionType.scheduleId === ScheduleIds.A,
+      () => true
+    ),
+    new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
       (transaction: Transaction) =>
         transaction.itemized === false &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -55,7 +78,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === true &&
         this.reportIsEditable &&
         !transaction.parent_transaction &&
-        !transaction.parent_transaction_id,
+        !transaction.parent_transaction_id &&
+        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true
     ),
     new TableAction(
@@ -69,7 +93,23 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'Review loan agreement',
       this.editLoanAgreement.bind(this),
       (transaction: Transaction) =>
-        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+        this.reportIsEditable &&
+        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
+        (transaction.children ?? []).some(
+          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
+        ),
+      () => true
+    ),
+    new TableAction(
+      'New loan agreement',
+      this.createLoanAgreement.bind(this),
+      (transaction: Transaction) =>
+        this.reportIsEditable &&
+        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
+        isPulledForwardLoan(transaction) &&
+        !(transaction.children ?? []).some(
+          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
+        ),
       () => true
     ),
     new TableAction(
@@ -122,7 +162,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       });
   }
 
-  public onTableActionClick(action: TableAction, report?: F3xSummary) {
+  public onTableActionClick(action: TableAction, report?: Form3X) {
     action.action(report);
   }
 
@@ -157,6 +197,25 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
   }
 
+  public createLoanAgreement(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`
+    );
+  }
+
+  public forceAggregate(transaction: Transaction): void {
+    this.forceUnaggregation(transaction, false);
+  }
+
+  public forceUnaggregate(transaction: Transaction): void {
+    this.forceUnaggregation(transaction, true);
+  }
+
+  public forceUnaggregation(transaction: Transaction, unaggregated: boolean) {
+    transaction.force_unaggregated = unaggregated;
+    this.updateItem(transaction);
+  }
+
   public forceItemize(transaction: Transaction): void {
     this.forceItemization(transaction, true);
   }
@@ -179,7 +238,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public createLoanRepaymentReceived(transaction: Transaction): void {
     this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
     );
   }
   public createDebtRepaymentReceived(transaction: Transaction): void {
@@ -190,7 +249,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public createLoanRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
     );
   }
   public createDebtRepaymentMade(transaction: Transaction): void {

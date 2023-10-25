@@ -1,10 +1,13 @@
-import { plainToClass, Transform, Type } from 'class-transformer';
-import { Report } from '../interfaces/report.interface';
+import { plainToClass, Transform } from 'class-transformer';
+import { Report } from './report.model';
 import { LabelList } from '../utils/label.utils';
 import { F3xReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
-import { UploadSubmission } from './upload-submission.model';
-import { WebPrintSubmission } from './webprint-submission.model';
+
+export interface CashOnHand {
+  report_id: string | undefined;
+  value: number | undefined;
+}
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -36,10 +39,7 @@ export class F3xCoverageDates {
   }
 }
 
-export class F3xSummary extends BaseModel implements Report {
-  id: string | undefined;
-
-  form_type: F3xFormType = F3xFormTypes.F3XT;
+export class Form3X extends Report {
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;
@@ -62,17 +62,6 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_1: string | undefined;
   confirmation_email_2: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-
-  @Type(() => UploadSubmission)
-  @Transform(UploadSubmission.transform)
-  upload_submission: UploadSubmission | undefined;
-  report_status: string | undefined;
-  @Type(() => WebPrintSubmission)
-  @Transform(WebPrintSubmission.transform)
-  webprint_submission: WebPrintSubmission | undefined;
-
-  calculation_status: string | undefined;
-
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | undefined;
   L6b_cash_on_hand_beginning_period: number | undefined;
   L6c_total_receipts_period: number | undefined;
@@ -176,16 +165,11 @@ export class F3xSummary extends BaseModel implements Report {
   L37_offsets_to_operating_expenditures_ytd: number | undefined;
   L38_net_operating_expenditures_ytd: number | undefined;
 
-  @Type(() => Date)
-  @Transform(BaseModel.dateTransform)
-  created: Date | undefined;
-  @Type(() => Date)
-  @Transform(BaseModel.dateTransform)
-  updated: Date | undefined;
-  deleted: string | undefined;
+  calculation_status: string | undefined;
 
   // prettier-ignore
-  static fromJSON(json: any): F3xSummary { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(F3xSummary, json);
+  static fromJSON(json: any): Form3X { // eslint-disable-line @typescript-eslint/no-explicit-any
+    // json['form_type'] = F3xFormTypes.F3XT;
+    return plainToClass(Form3X, json);
   }
 }

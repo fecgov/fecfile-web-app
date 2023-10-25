@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
@@ -32,7 +32,7 @@ describe('TransactionChildrenListContainerComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({}),
+                report: Form3X.fromJSON({}),
               },
               params: {
                 reportId: '999',

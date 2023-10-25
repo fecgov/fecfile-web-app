@@ -35,6 +35,7 @@ export abstract class Transaction extends BaseModel {
   // FECFile Online custom properties
 
   transaction_type_identifier: string | undefined;
+  force_unaggregated: boolean | undefined;
   itemized: boolean | undefined;
   force_itemized: boolean | undefined;
 
@@ -177,7 +178,7 @@ export function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
-  return !!transaction?.loan_id && transaction.transactionType.scheduleId === 'C';
+  return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
 
 export type ScheduleTransaction =
@@ -217,4 +218,15 @@ export enum AggregationGroups {
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
   RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
   GENERAL_DISBURSEMENT = 'GENERAL_DISBURSEMENT',
+  INDEPENDENT_EXPENDITURE = 'INDEPENDENT_EXPENDITURE',
+}
+
+export enum ScheduleIds {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  C1 = 'C1',
+  C2 = 'C2',
+  D = 'D',
+  E = 'E',
 }

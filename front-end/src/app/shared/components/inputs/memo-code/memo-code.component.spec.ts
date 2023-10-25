@@ -14,7 +14,7 @@ import { MemoCodeInputComponent } from './memo-code.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
@@ -52,7 +52,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
-    component.report = new F3xSummary();
+    component.report = new Form3X();
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
@@ -69,7 +69,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
-    component.report = new F3xSummary();
+    component.report = new Form3X();
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
@@ -81,7 +81,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
-    component.report = new F3xSummary();
+    component.report = new Form3X();
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
@@ -99,7 +99,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should add and remove the requiredTrue validator when a date is set', () => {
-    component.report = new F3xSummary();
+    component.report = new Form3X();
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;
@@ -115,7 +115,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should preserve old validators when clearing an added requiredTrue validator', () => {
-    component.report = new F3xSummary();
+    component.report = new Form3X();
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;
@@ -132,7 +132,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not crash if it tries to update the contribution date without a memo_code formControl', () => {
-    component.report = new F3xSummary();
+    component.report = new Form3X();
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { AccordionModule } from 'primeng/accordion';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -28,7 +28,7 @@ describe('TransactionTypePickerComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({}),
+                report: Form3X.fromJSON({}),
               },
             },
             params: of({

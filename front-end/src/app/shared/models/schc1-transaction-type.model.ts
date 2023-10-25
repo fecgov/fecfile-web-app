@@ -1,11 +1,25 @@
-import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { STANDARD_CONTROLS } from './transaction-navigation-controls.model';
+import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
+import { isPulledForwardLoan, ScheduleIds, Transaction } from './transaction.model';
 
 export abstract class SchC1TransactionType extends TransactionType {
-  scheduleId = 'C1';
+  scheduleId = ScheduleIds.C1;
   apiEndpoint = '/transactions/schedule-c1';
 
   // Labels
   override amountInputHeader = 'Loan information';
+
+  override getInheritedFields = (transaction: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.inheritedFields;
+
+  override getNavigationControls = (transaction: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? STANDARD_CONTROLS : this.navigationControls;
+
+  override getFooter = (transaction?: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.footer;
+
+  override getUseParentContact = (transaction?: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? false : this.useParentContact;
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
@@ -35,6 +49,7 @@ export abstract class SchC1TransactionType extends TransactionType {
     candidate_state: '',
     candidate_district: '',
     date: 'loan_incurred_date',
+    date2: '',
     memo_code: '',
     amount: 'loan_amount',
     balance: 'total_balance',
