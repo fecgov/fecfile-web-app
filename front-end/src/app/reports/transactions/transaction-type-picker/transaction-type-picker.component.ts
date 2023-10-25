@@ -119,8 +119,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
           ScheduleATransactionTypes.EARMARK_RECEIPT,
           ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
-          ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON,
-          ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
+          ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
+          ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
         ];
         break;
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
