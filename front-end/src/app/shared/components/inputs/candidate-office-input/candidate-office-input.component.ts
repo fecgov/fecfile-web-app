@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
+import {
+  CandidateOfficeTypeLabels,
+  CandidateOfficeTypes,
+  STANDARD_AND_CANDIDATE,
+  STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY,
+} from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { takeUntil, of, combineLatest } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
-import { STANDARD_AND_CANDIDATE, STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY } from 'app/shared/models/contact.model';
 
 @Component({
   selector: 'app-candidate-office-input',
