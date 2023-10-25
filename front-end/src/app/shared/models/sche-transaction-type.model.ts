@@ -40,7 +40,7 @@ export abstract class SchETransactionType extends TransactionType {
     candidate_fec_id: 'so_candidate_id_number',
     candidate_last_name: 'so_candidate_last_name',
     candidate_first_name: 'so_candidate_first_name',
-    candidate_middle_name: 'so_candinate_middle_name',
+    candidate_middle_name: 'so_candidate_middle_name',
     candidate_prefix: 'so_candidate_prefix',
     candidate_suffix: 'so_candidate_suffix',
     candidate_office: 'so_candidate_office',

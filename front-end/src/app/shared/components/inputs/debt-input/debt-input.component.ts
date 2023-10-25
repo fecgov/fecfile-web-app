@@ -1,15 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-debt-input',
   templateUrl: './debt-input.component.html',
 })
 export class DebtInputComponent extends BaseInputComponent implements OnInit {
-  @Input() transaction: Transaction | undefined;
-
   ngOnInit(): void {
     // For new create transactions, the debt calculated amounts are initialized to 0
     // They a calculated fields and not saved to the database

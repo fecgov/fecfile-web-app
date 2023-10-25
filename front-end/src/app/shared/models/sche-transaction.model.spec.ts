@@ -18,7 +18,7 @@ describe('SchETransaction', () => {
     expect(transaction.payee_organization_name).toBe('foo');
 
     const fieldsNotToValidate = transaction.getFieldsNotToValidate();
-    expect(fieldsNotToValidate[0]).toBe('calendar_ytd_per_election_office');
+    expect(fieldsNotToValidate[2]).toBe('calendar_ytd_per_election_office');
 
     const fieldsNotToSave = transaction.getFieldsNotToSave();
     expect(fieldsNotToSave[0]).toBe('calendar_ytd_per_election_office');
