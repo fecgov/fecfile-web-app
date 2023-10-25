@@ -75,11 +75,12 @@
   </div>
   <ng-container *ngIf="hasCandidateOfficeInput">
     <app-candidate-office-input
+      [transaction]="transaction"
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [candidateOfficeFormControlName]="templateMap['candidate_office']"
-      [candidateStateFormControlName]="templateMap['candidate_state']"
-      [candidateDistrictFormControlName]="templateMap['candidate_district']"
+      [officeFormControlName]="templateMap['candidate_office']"
+      [stateFormControlName]="templateMap['candidate_state']"
+      [districtFormControlName]="templateMap['candidate_district']"
     >
     </app-candidate-office-input>
   </ng-container>

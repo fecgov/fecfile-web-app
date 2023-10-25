@@ -11,8 +11,6 @@ export class SchETransaction extends Transaction {
   entity_type: string | undefined;
   filer_committee_id_number: string | undefined;
   transaction_id_number: string | undefined;
-  back_reference_tran_id_number: string | undefined;
-  back_reference_sched_name: string | undefined;
   payee_organization_name: string | undefined;
   payee_last_name: string | undefined;
   payee_first_name: string | undefined;
@@ -31,7 +29,7 @@ export class SchETransaction extends Transaction {
   @Transform(BaseModel.dateTransform) dissemination_date: Date | undefined;
   expenditure_amount: number | undefined;
   @Transform(BaseModel.dateTransform) disbursement_date: Date | undefined;
-  calendar_ytd_per_election_office: number | undefined;
+  calendar_ytd: number | undefined; // This is a calculated field whose value is 'calendar_ytd_per_election_office' in the schedule schema.
 
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
@@ -42,7 +40,7 @@ export class SchETransaction extends Transaction {
   so_candidate_id_number: string | undefined;
   so_candidate_last_name: string | undefined;
   so_candidate_first_name: string | undefined;
-  so_candinate_middle_name: string | undefined;
+  so_candidate_middle_name: string | undefined;
   so_candidate_prefix: string | undefined;
   so_candidate_suffix: string | undefined;
   so_candidate_office: string | undefined;
@@ -62,7 +60,12 @@ export class SchETransaction extends Transaction {
   // calendar_ytd_per_election_office is dynamically calculated on the back-end
   // and not saved in the database
   override getFieldsNotToValidate(): string[] {
-    return ['calendar_ytd_per_election_office', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      'calendar_ytd_per_election_office',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
   override getFieldsNotToSave(): string[] {
     return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
@@ -132,7 +135,7 @@ export const ScheduleETransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
-    'Payment to Payroll Memo for Independent Expenditure',
+    'Payroll Memo for Independent Expenditure',
   ],
   [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Independent Expenditure - Void'],
 ];

@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
@@ -15,7 +14,6 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   @Input() overrideMemoItemHelpText: string | undefined;
-  @Input() transaction: Transaction | undefined;
   @Input() checkboxLabel = '';
 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
