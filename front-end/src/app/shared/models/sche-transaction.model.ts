@@ -29,7 +29,7 @@ export class SchETransaction extends Transaction {
   @Transform(BaseModel.dateTransform) dissemination_date: Date | undefined;
   expenditure_amount: number | undefined;
   @Transform(BaseModel.dateTransform) disbursement_date: Date | undefined;
-  calendar_ytd: number | undefined; // This is a calculated field whose value is 'calendar_ytd_per_election_office' in the schedule schema.
+  calendar_ytd_per_election_office: number | undefined; // calculated field
 
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
@@ -99,7 +99,7 @@ export type ScheduleETransactionGroupsType = ScheduleETransactionGroups.INDEPEND
 export enum ScheduleETransactionTypes {
   INDEPENDENT_EXPENDITURE = 'INDEPENDENT_EXPENDITURE',
   INDEPENDENT_EXPENDITURE_VOID = 'INDEPENDENT_EXPENDITURE_VOID',
-  INDEPENDENT_EXPENDITURE_MULTISTATE = 'INDEPENDENT_EXPENDITURE_MULTISTATE',
+  MULTISTATE_INDEPENDENT_EXPENDITURE = 'MULTISTATE_INDEPENDENT_EXPENDITURE',
   INDEPENDENT_EXPENDITURE_DEBT = 'INDEPENDENT_EXPENDITURE_DEBT',
   INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT = 'INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT',
   INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO = 'INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO',
@@ -111,7 +111,7 @@ export enum ScheduleETransactionTypes {
 
 export const ScheduleETransactionTypeLabels: LabelList = [
   [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE, 'Independent Expenditure'],
-  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_MULTISTATE, 'Multistate Independent Expenditure'],
+  [ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE, 'Multistate Independent Expenditure'],
   [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_DEBT, 'Debt for Independent Expenditure'],
   [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
