@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -12,7 +11,6 @@ import { Transaction } from 'app/shared/models/transaction.model';
   styleUrls: ['./additional-info-input.component.scss'],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
-  @Input() transaction?: Transaction;
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {

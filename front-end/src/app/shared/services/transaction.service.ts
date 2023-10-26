@@ -8,6 +8,7 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
+import { CandidateOfficeTypes } from '../models/contact.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ import { ApiService } from './api.service';
 export class TransactionService implements TableListService<Transaction> {
   tableDataEndpoint = '/transactions';
 
-  constructor(protected apiService: ApiService, protected datePipe: DatePipe) { }
+  constructor(protected apiService: ApiService, protected datePipe: DatePipe) {}
 
   public getTableData(
     pageNumber = 1,
@@ -23,7 +24,7 @@ export class TransactionService implements TableListService<Transaction> {
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
   ): Observable<ListRestResponse> {
     if (!ordering) {
-      ordering = 'form_type';
+      ordering = 'line_label_order_key';
     }
     return this.apiService
       .get<ListRestResponse>(`${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
@@ -43,20 +44,20 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
-  public getPreviousTransaction(
+  public getPreviousTransactionForAggregate(
     transaction: Transaction | undefined,
     contact_1_id: string,
     action_date: Date
   ): Observable<Transaction | undefined> {
     const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
-    const transaction_id: string = transaction?.id || '';
+    const transaction_id: string = transaction?.id ?? '';
     const aggregation_group: AggregationGroups | undefined =
-      (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
+      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
     if (transaction && action_date && contact_1_id && aggregation_group) {
       return this.apiService
         .get<HttpResponse<Transaction>>(
-          '/transactions/previous/',
+          '/transactions/previous/entity/',
           {
             transaction_id,
             contact_1_id,
@@ -65,6 +66,61 @@ export class TransactionService implements TableListService<Transaction> {
           },
           [HttpStatusCode.NotFound]
         )
+        .pipe(
+          map((response) => {
+            if (response.status === HttpStatusCode.NotFound) {
+              return undefined;
+            }
+            return getFromJSON(response.body);
+          })
+        );
+    }
+    return of(undefined);
+  }
+
+  public getPreviousTransactionForCalendarYTD(
+    transaction: Transaction | undefined,
+    disbursement_date: Date | undefined,
+    dissemination_date: Date | undefined,
+    election_code: string | undefined,
+    candidate_office: string | undefined,
+    candidate_state: string | undefined,
+    candidate_district: string | undefined
+  ): Observable<Transaction | undefined> {
+    let actionDateString: string = this.datePipe.transform(disbursement_date, 'yyyy-MM-dd') ?? '';
+    if (actionDateString.length === 0) {
+      actionDateString = this.datePipe.transform(dissemination_date, 'yyyy-MM-dd') ?? '';
+    }
+
+    const transaction_id: string = transaction?.id ?? '';
+    const aggregation_group: AggregationGroups | undefined =
+      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
+
+    if (
+      transaction &&
+      actionDateString &&
+      candidate_office &&
+      aggregation_group &&
+      election_code &&
+      (candidate_state || candidate_office === CandidateOfficeTypes.PRESIDENTIAL) &&
+      (candidate_district || candidate_office !== CandidateOfficeTypes.HOUSE)
+    ) {
+      const params: { [key: string]: string } = {
+        transaction_id,
+        date: actionDateString,
+        aggregation_group,
+        election_code,
+        candidate_office,
+      };
+      if (candidate_state) {
+        params['candidate_state'] = candidate_state;
+      }
+      if (candidate_district) {
+        params['candidate_district'] = candidate_district;
+      }
+
+      return this.apiService
+        .get<HttpResponse<Transaction>>('/transactions/previous/election/', params, [HttpStatusCode.NotFound])
         .pipe(
           map((response) => {
             if (response.status === HttpStatusCode.NotFound) {
@@ -123,8 +179,7 @@ export class TransactionService implements TableListService<Transaction> {
       payload['schedule_id'] = transaction.transactionType.scheduleId;
     }
     if (transaction.transactionType?.getUseParentContact(transaction)) {
-      payload['use_parent_contact'] =
-        transaction.transactionType.getUseParentContact(transaction);
+      payload['use_parent_contact'] = transaction.transactionType.getUseParentContact(transaction);
     }
 
     delete payload['transactionType'];

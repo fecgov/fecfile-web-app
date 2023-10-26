@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -51,7 +51,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -339,12 +339,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     // Set fields to read-only
     this.form.get('entity_type')?.disable();
-    this.transaction.transactionType.getInheritedFields(
-      this.transaction)?.forEach((inherittedField) => {
-        if (this.transaction) {
-          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
-          fieldControl?.disable();
-        }
-      });
+    this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
+      if (this.transaction) {
+        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+        fieldControl?.disable();
+      }
+    });
   }
 }

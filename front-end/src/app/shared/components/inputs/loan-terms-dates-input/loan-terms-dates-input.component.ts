@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
+import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -35,7 +35,6 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
   templateUrl: './loan-terms-dates-input.component.html',
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
-  @Input() transaction?: Transaction;
   @ViewChild('interestRatePercentage') interestInput!: InputText;
   constructor(private store: Store) {
     super();
@@ -57,8 +56,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   ngOnInit(): void {
     // Add the date range validation check to the DATE INCURRED input
-    if (!isPulledForwardLoan(this.transaction) &&
-      !isPulledForwardLoan(this.transaction?.parent_transaction)) {
+    if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
       this.store
         .select(selectActiveReport)
         .pipe(take(1))

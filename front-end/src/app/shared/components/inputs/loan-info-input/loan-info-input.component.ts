@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-loan-info-input',
@@ -11,7 +10,6 @@ export class LoanInfoInputComponent extends BaseInputComponent implements OnInit
   @Input() readonly = false;
 
   @Input() memoItemHelpText: string | undefined;
-  @Input() transaction: Transaction | undefined;
 
   ngOnInit(): void {
     // For new create transactions, the PAYMENT TO DATE is initialized to 0

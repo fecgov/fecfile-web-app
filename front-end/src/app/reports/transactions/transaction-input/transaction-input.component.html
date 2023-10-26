@@ -51,6 +51,7 @@
       [contributionAmountReadOnly]="contributionAmountReadOnly"
       [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
       [showAggregate]="!!transaction?.transactionType?.showAggregate"
+      [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
       [transaction]="transaction"
       [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
     ></app-amount-input>
@@ -197,6 +198,7 @@
       ></app-transaction-contact-lookup>
       <ng-container *ngIf="transaction?.contact_2">
         <app-candidate-input
+          [transaction]="transaction"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"

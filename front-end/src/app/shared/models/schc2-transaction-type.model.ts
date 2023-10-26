@@ -45,6 +45,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     amount: 'guaranteed_amount',
     balance: '',
     aggregate: '',
+    calendar_ytd: '',
     purpose_description: '',
     text4000: 'text4000',
     category_code: '',

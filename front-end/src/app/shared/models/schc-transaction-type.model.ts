@@ -66,6 +66,7 @@ export abstract class SchCTransactionType extends TransactionType {
     interest_rate_setting: 'loan_interest_rate_field_setting',
     secured: 'secured',
     aggregate: '',
+    calendar_ytd: '',
     purpose_description: '',
     text4000: 'text4000',
     category_code: '',

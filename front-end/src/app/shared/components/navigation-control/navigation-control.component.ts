@@ -17,6 +17,7 @@ import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transacti
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { FormControl } from '@angular/forms';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
+import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 
 @Component({
   selector: 'app-navigation-control',
@@ -105,7 +106,8 @@ export class NavigationControlComponent implements OnInit {
         type.shortName ||
         LabelUtils.get(ScheduleATransactionTypeLabels, typeId) ||
         LabelUtils.get(ScheduleBTransactionTypeLabels, typeId) ||
-        LabelUtils.get(ScheduleC2TransactionTypeLabels, typeId),
+        LabelUtils.get(ScheduleC2TransactionTypeLabels, typeId) ||
+        LabelUtils.get(ScheduleETransactionTypeLabels, typeId),
       value: new NavigationEvent(
         NavigationAction.SAVE,
         isParentConfig ? NavigationDestination.ANOTHER_CHILD : NavigationDestination.CHILD,

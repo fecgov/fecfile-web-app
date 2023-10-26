@@ -8,7 +8,6 @@ export class ContactListPage {
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
-    
     alias = PageUtils.getAlias(alias);
 
     if (!excludeContactType) {
@@ -17,7 +16,6 @@ export class ContactListPage {
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
       //Contact
-      console.log(formData);
       cy.get(alias).find('#last_name').safeType(formData['last_name']);
       cy.get(alias).find('#first_name').safeType(formData['first_name']);
       cy.get(alias).find('#middle_name').safeType(formData['middle_name']);
