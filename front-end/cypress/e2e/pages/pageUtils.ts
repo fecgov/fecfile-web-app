@@ -165,4 +165,8 @@ export class PageUtils {
   static urlCheck(input: string) {
     cy.url().should("contain", input);
   }
+
+  static valueCheck(selector: string, input: any) {
+    cy.get(selector).should('have.value', input);
+  }
 }

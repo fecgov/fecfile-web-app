@@ -31,7 +31,7 @@ export class F3xCreateReportFormData {
   };
 
 
-  export const loanEnums = {
+  export const e2eReportStrings = {
     new: "New",
     save: "Save",
     cancel: "Cancel",
@@ -39,9 +39,11 @@ export class F3xCreateReportFormData {
     saveMultiple: "Save transactions",
     saveAndCont: "Save and continue",
     saveAndAddGaurantor: "Save & add loan guarantor",
+    loanAgreementUrl: "/C1_LOAN_AGREEMENT",
     addGuarantorUrl: "/C2_LOAN_GUARANTOR",
     createSubTransaction: "create-sub-transaction",
     addLoansAndDebts: "Add loans and debts",
+    editReport: "Edit report",
     loans: "LOANS",
     loanByCommittee: "Loan By Committee",
     loanFromBank: "Loan Received from Bank",
@@ -54,11 +56,14 @@ export class F3xCreateReportFormData {
     recieveLoanPayment: "Receive loan repayment",
     buttonLoansAndDebts: "loans-and-debts-button",
     reviewLoan: "Review loan agreement",
+    newLoanAgreement: "New loan agreement",
     debts: "DEBTS",
     debtOwedByCommittee: "Debt Owed By Committee",
     debtOwedToCommittee: "Debt Owed To Committee",
     addDisbursement: "Add a disbursement",
     federalElectionActivityExpenditures: "FEDERAL ELECTION ACTIVITY EXPENDITURES",
     percentFedElectionActivity: "100% Federal Election Activity Payment",
-    lookup: "LOOKUP"
+    lookup: "LOOKUP",
+    independantExpenditures: "INDEPENDENT EXPENDITURES",
+    independantExpenditureVoid: "Independent Expenditure - Void"
   }
