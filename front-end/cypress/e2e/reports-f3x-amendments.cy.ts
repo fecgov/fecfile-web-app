@@ -63,12 +63,21 @@ describe('Amendments', () => {
     F3xCreateReportPage.enterFormData(reportFormData);
     PageUtils.clickButton(e2eReportStrings.saveAndCont);
 
-    /*
-    // Navigate to loans
-    PageUtils.clickSidebarItem(e2eReportStrings.addLoansAndDebts);
-    PageUtils.clickLink(e2eReportStrings.loans);
-    PageUtils.clickLink(e2eReportStrings.loanFromBank);
+    
+    // Cash on hand
+    PageUtils.clickSidebarItem(e2eReportStrings.cashOnHandLink);
+    let alias = PageUtils.getAlias('');
+    PageUtils.enterValue("#L6a_cash_on_hand_jan_1_ytd", 60000);
+    PageUtils.calendarSetValue('p-calendar', new Date("05/27/2023"), alias);
+    PageUtils.clickButton(e2eReportStrings.saveAndCont2);
 
+    PageUtils.urlCheck("/list");
+    PageUtils.clickSidebarItem(e2eReportStrings.submitReportLink);
+    PageUtils.clickLink(e2eReportStrings.submitReport);
+    PageUtils.urlCheck("/submit/step2");
+    PageUtils.enterValue("filing_password", "T3stUpl@ad");
+
+    /*
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
     formData.date_received = undefined;

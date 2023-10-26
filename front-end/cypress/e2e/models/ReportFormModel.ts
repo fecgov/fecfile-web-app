@@ -37,6 +37,7 @@ export const defaultFormData: F3xCreateReportFormData = {
     saveBoth: "Save both transactions",
     saveMultiple: "Save transactions",
     saveAndCont: "Save and continue",
+    saveAndCont2: "Save & continue",
     saveAndAddGaurantor: "Save & add loan guarantor",
     loanAgreementUrl: "/C1_LOAN_AGREEMENT",
     addGuarantorUrl: "/C2_LOAN_GUARANTOR",
@@ -64,5 +65,8 @@ export const defaultFormData: F3xCreateReportFormData = {
     percentFedElectionActivity: "100% Federal Election Activity Payment",
     lookup: "LOOKUP",
     independantExpenditures: "INDEPENDENT EXPENDITURES",
-    independantExpenditureVoid: "Independent Expenditure - Void"
+    independantExpenditureVoid: "Independent Expenditure - Void",
+    cashOnHandLink: "Cash on hand",
+    submitReportLink: "SUBMIT YOUR REPORT",
+    submitReport: "Submit report"
   }
