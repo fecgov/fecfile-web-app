@@ -39,6 +39,13 @@ export class TransactionInputComponent implements OnInit {
     } else {
       throw new Error('FECfile: No transaction passed to TransactionInputComponent');
     }
+
+    // If there are mandatory values for any form fields, populate the form field
+    // and make it read-only
+    for (const field in this.transaction.transactionType.mandatoryFormValues) {
+      this.form.get(field)?.setValue(this.transaction.transactionType.mandatoryFormValues[field]);
+      this.form.get(field)?.disable();
+    }
   }
 
   contactTypeSelected(contactType: ContactTypes) {

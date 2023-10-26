@@ -77,6 +77,14 @@ export abstract class TransactionType {
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
+  // Memo Text settings
+  memoTextRequired = false;
+  memoTextPrefix?: string;
+
+  // On some transaction forms, a form field will have a mandatory value. Define them here in a field:value hash.
+  // The form input will have the value and be read-only. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
+  mandatoryFormValues: { [field: string]: string } = {};
+
   // Labels
   abstract title: string;
   dateLabel = 'DATE';

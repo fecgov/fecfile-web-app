@@ -43,6 +43,13 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
   override showAggregate = false;
+  override memoTextRequired = true;
+  override memoTextPrefix =
+    'Multistate independent expenditure, publicly distributed or disseminated in the following states: ';
+  override mandatoryFormValues = {
+    [this.templateMap.candidate_office]: 'P',
+    electionType: 'P',
+  };
 
   getNewTransaction() {
     return SchETransaction.fromJSON({
