@@ -1,12 +1,12 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { INDEPENDENT_EXPENDITURE } from './INDEPENDENT_EXPENDITURE.model';
+import { MULTISTATE_INDEPENDENT_EXPENDITURE } from './MULTISTATE_INDEPENDENT_EXPENDITURE.model';
 
-describe('INDEPENDENT_EXPENDITURE', () => {
-  let transactionType: INDEPENDENT_EXPENDITURE;
+describe('MULTISTATE_INDEPENDENT_EXPENDITURE', () => {
+  let transactionType: MULTISTATE_INDEPENDENT_EXPENDITURE;
 
   beforeEach(() => {
-    transactionType = new INDEPENDENT_EXPENDITURE();
+    transactionType = new MULTISTATE_INDEPENDENT_EXPENDITURE();
   });
 
   it('should create an instance', () => {
@@ -17,7 +17,7 @@ describe('INDEPENDENT_EXPENDITURE', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SE');
-    expect(txn.transaction_type_identifier).toBe(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE);
+    expect(txn.transaction_type_identifier).toBe(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
