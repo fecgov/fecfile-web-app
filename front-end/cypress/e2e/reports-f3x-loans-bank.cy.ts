@@ -107,7 +107,10 @@ describe('Loans', () => {
     .click()
 
     cy.get(alias).contains(e2eReportStrings.editReport).first().click();
-    PageUtils.urlCheck('/list');
+    PageUtils.urlCheck('cash-on-hand');
+    PageUtils.enterValue("#L6a_cash_on_hand_jan_1_ytd", 60000);
+    PageUtils.calendarSetValue('p-calendar', new Date("05/27/2023"), alias);
+    PageUtils.clickButton(e2eReportStrings.saveAndCont2);
     cy.get(alias).find("[datatest='" + e2eReportStrings.buttonLoansAndDebts + "']").children().last().click();
     cy.get(alias).contains(e2eReportStrings.newLoanAgreement).click();
 
@@ -134,7 +137,6 @@ describe('Loans', () => {
     PageUtils.valueCheck("#amount", "$65,000.00");
     PageUtils.valueCheck("#date_incurred", "05/27/2023");
   }) 
-/*
   
   it('should test: Loan Received from Bank', () => {
     // Create a committee contact to be used with contact lookup
@@ -295,9 +297,9 @@ describe('Loans', () => {
     PageUtils.clickButton(e2eReportStrings.saveAndAddGaurantor);
 
     PageUtils.clickButton(e2eReportStrings.cancel);
-    PageUtils.urlCheck('/list');
+    PageUtils.urlCheck(e2eReportStrings.addGuarantorUrl);
     cy.contains(e2eReportStrings.loanFromBank).click();
     PageUtils.urlCheck('/list/');
     cy.contains(individualContactFormData.last_name).should('exist');
-  }); */
+  }); 
 });

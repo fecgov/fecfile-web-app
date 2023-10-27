@@ -8,6 +8,7 @@ import { TransactionDetailPage } from './pages/transactionDetailPage';
 import { defaultFormData as defaultContactFormData } from './models/ContactFormModel';
 import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from './models/TransactionFormModel';
+import { defaultLoanFormData } from './models/TransactionFormModel';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -85,7 +86,7 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
-    TransactionDetailPage.enterLoanFormData(formTransactionDataForSchedule);
+    TransactionDetailPage.enterLoanFormData(defaultLoanFormData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
