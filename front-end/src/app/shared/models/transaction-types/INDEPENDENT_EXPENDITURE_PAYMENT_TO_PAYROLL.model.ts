@@ -17,7 +17,6 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups, Transaction } from '../transaction.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 
 export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionType {
   formFields = [
