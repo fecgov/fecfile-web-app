@@ -46,6 +46,7 @@ export const defaultFormData: F3xCreateReportFormData = {
     editReport: "Edit report",
     loans: "LOANS",
     loanByCommittee: "Loan By Committee",
+    loanByCommitteeUrl: "LOAN_BY_COMMITTEE",
     loanFromBank: "Loan Received from Bank",
     loanMade: "Loan Made",
     loanPaymentRecieved: "Loan Repayment Received",
@@ -59,7 +60,9 @@ export const defaultFormData: F3xCreateReportFormData = {
     newLoanAgreement: "New loan agreement",
     debts: "DEBTS",
     debtOwedByCommittee: "Debt Owed By Committee",
+    debtOwedByCommitteeUrl: "DEBT_OWED_BY_COMMITTEE",
     debtOwedToCommittee: "Debt Owed To Committee",
+    debtOwedToCommitteeUrl: "DEBT_OWED_TO_COMMITTEE",
     addDisbursement: "Add a disbursement",
     federalElectionActivityExpenditures: "FEDERAL ELECTION ACTIVITY EXPENDITURES",
     percentFedElectionActivity: "100% Federal Election Activity Payment",
@@ -68,5 +71,7 @@ export const defaultFormData: F3xCreateReportFormData = {
     independantExpenditureVoid: "Independent Expenditure - Void",
     cashOnHandLink: "Cash on hand",
     submitReportLink: "SUBMIT YOUR REPORT",
-    submitReport: "Submit report"
+    submitReport: "Submit report",
+    submit: "Submit",
+    yes: "Yes"
   }

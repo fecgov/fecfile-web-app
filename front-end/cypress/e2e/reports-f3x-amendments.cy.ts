@@ -1,47 +1,17 @@
 import { LoginPage } from './pages/loginPage';
-import { PageUtils, currentYear } from './pages/pageUtils';
+import { PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
 import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultDebtFormData as debtFormData, defaultLoanFormData } from './models/TransactionFormModel';
 import { ContactFormData, defaultFormData as contactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, e2eReportStrings, F3xCreateReportFormData } from './models/ReportFormModel';
+import { defaultFormData as reportFormData, e2eReportStrings } from './models/ReportFormModel';
 
-const committeeFormData: ContactFormData = {
-  ...contactFormData,
-  ...{ contact_type: 'Committee' },
-};
 
 const organizationFormData: ContactFormData = {
   ...contactFormData,
   ...{ contact_type: 'Organization' 
        },
 };
-
-const reportFormDataApril: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q1',
-    coverage_from_date: new Date(currentYear, 0, 1),
-    coverage_through_date: new Date(currentYear, 3, 30),
-    
-  }
-}
-
-const formData = {
-  ...defaultLoanFormData,
-  ...{
-    purpose_description: undefined,
-    loan_restructured: "NO",
-    line_of_credit: "NO",
-    others_liable: "NO",
-    collateral: "NO",
-    future_income: "NO",
-    date_incurred: new Date("04/27/2023")
-  },
-};
-
 describe('Amendments', () => {
   beforeEach(() => {
     LoginPage.login();
@@ -75,19 +45,17 @@ describe('Amendments', () => {
     PageUtils.clickSidebarItem(e2eReportStrings.submitReportLink);
     PageUtils.clickLink(e2eReportStrings.submitReport);
     PageUtils.urlCheck("/submit/step2");
-    PageUtils.enterValue("filing_password", "T3stUpl@ad");
+    PageUtils.enterValue("#filing_password", "T3stUpl@ad");
+    cy.get(alias).find('p-checkbox[inputid="truth_statement"]').click();
+    PageUtils.clickButton(e2eReportStrings.submit);
+    PageUtils.findOnPage("div", "Are you sure?")
+    
+    PageUtils.clickButton(e2eReportStrings.yes);
+    ReportListPage.goToPage();
 
-    /*
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickLink("STEP TWO:");
-    TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-    PageUtils.clickButton(e2eReportStrings.saveMultiple);
-    PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).should('exist'); */
+    cy.get(alias).find("app-table-actions-button").click();
+    cy.get(alias).contains("Amend").click();
 
-    // filing password : T3stUpl@ad
+    PageUtils.containedOnPage("Amendment 1");
   });
 });

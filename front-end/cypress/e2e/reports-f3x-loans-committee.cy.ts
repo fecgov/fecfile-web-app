@@ -29,7 +29,7 @@ describe('Loans', () => {
     ReportListPage.goToPage();
   });
 
-  xit('should test: Loan By Committee', () => {
+  it('should test: Loan By Committee', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(e2eReportStrings.new);
@@ -54,6 +54,7 @@ describe('Loans', () => {
     PageUtils.clickLink(e2eReportStrings.loanByCommittee);
 
     // Search for created committee and enter load data, then add load gaurantor
+    PageUtils.urlCheck(e2eReportStrings.loanByCommitteeUrl);
     PageUtils.searchBoxInput(committeeFormData.committee_id);
 
     formData.date_received = undefined;
@@ -62,10 +63,10 @@ describe('Loans', () => {
     PageUtils.clickButton(e2eReportStrings.saveBoth);
     PageUtils.urlCheck('/list');
     cy.contains(e2eReportStrings.loanByCommittee).should('exist');
-    cy.contains(e2eReportStrings.loanMade).should('exist');
+    cy.contains(e2eReportStrings.loanMade).should('exist'); 
   });
 
-  xit('should test: Loan By Committee - Receive loan repayment', () => {
+  it('should test: Loan By Committee - Receive loan repayment', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(e2eReportStrings.new);
@@ -90,7 +91,9 @@ describe('Loans', () => {
     PageUtils.clickLink(e2eReportStrings.loanByCommittee);
 
     // Search for created committee and enter load data, then add load gaurantor
+    PageUtils.urlCheck(e2eReportStrings.loanByCommitteeUrl);
     PageUtils.searchBoxInput(committeeFormData.committee_id);
+
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
     PageUtils.clickButton(e2eReportStrings.saveBoth);
@@ -110,7 +113,7 @@ describe('Loans', () => {
     cy.contains(e2eReportStrings.loanPaymentRecieved).should('exist');
   });
 
-  xit('should test: Loan By Committee - add Guarantor', () => {
+  it('should test: Loan By Committee - add Guarantor', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton(e2eReportStrings.new);
@@ -134,6 +137,7 @@ describe('Loans', () => {
     PageUtils.clickLink(e2eReportStrings.loans);
     PageUtils.clickLink(e2eReportStrings.loanByCommittee);
 
+    PageUtils.urlCheck(e2eReportStrings.loanByCommitteeUrl);
     PageUtils.searchBoxInput(committeeFormData.committee_id);
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);

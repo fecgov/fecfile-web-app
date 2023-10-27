@@ -22,7 +22,7 @@ describe('Debts', () => {
     ReportListPage.goToPage();
   });
 
-  xit('should test Debt Owed By Committee loan', () => {
+  it('should test Debt Owed By Committee loan', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton(e2eReportStrings.new);
     ContactListPage.enterFormData(committeeFormData);
@@ -39,6 +39,8 @@ describe('Debts', () => {
     PageUtils.clickLink(e2eReportStrings.debts);
     PageUtils.clickLink(e2eReportStrings.debtOwedByCommittee);
 
+    PageUtils.urlCheck(e2eReportStrings.debtOwedByCommitteeUrl)
+    PageUtils.containedOnPage(e2eReportStrings.debtOwedByCommittee);
     cy.get('#entity_type_dropdown').type(committeeFormData.contact_type);
 
     PageUtils.searchBoxInput(committeeFormData.committee_id);
@@ -48,7 +50,8 @@ describe('Debts', () => {
     cy.contains(e2eReportStrings.debtOwedByCommittee).should('exist');
   });
 
-  xit('should test Owed To Committee loan', () => {
+  
+  it('should test Owed To Committee loan', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton(e2eReportStrings.new);
     ContactListPage.enterFormData(committeeFormData);
@@ -65,6 +68,8 @@ describe('Debts', () => {
     PageUtils.clickLink(e2eReportStrings.debts);
     PageUtils.clickLink(e2eReportStrings.debtOwedToCommittee);
 
+    PageUtils.urlCheck(e2eReportStrings.debtOwedToCommitteeUrl)
+    PageUtils.containedOnPage(e2eReportStrings.debtOwedToCommittee);
     cy.get('#entity_type_dropdown').type(committeeFormData['contact_type']);
 
     PageUtils.searchBoxInput(committeeFormData['committee_id']);
