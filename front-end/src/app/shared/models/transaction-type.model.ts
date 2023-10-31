@@ -45,7 +45,7 @@ export abstract class TransactionType {
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
 
   // Double-entry settings
-  isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
+  isDependentChild = (transaction: Transaction) => false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

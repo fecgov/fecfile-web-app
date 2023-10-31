@@ -14,7 +14,7 @@ import { CandidateOfficeTypes } from '../models/contact.model';
   providedIn: 'root',
 })
 export class TransactionService implements TableListService<Transaction> {
-  tableDataEndpoint = '/transactions';
+  tableDataEndpoint = '/transactions/transactions2';
 
   constructor(protected apiService: ApiService, protected datePipe: DatePipe) {}
 
@@ -31,13 +31,14 @@ export class TransactionService implements TableListService<Transaction> {
       .pipe(
         map((response: ListRestResponse) => {
           response.results = response.results.map((item) => getFromJSON(item));
+          response.pageNumber = pageNumber;
           return response;
         })
       );
   }
 
   public get(id: string): Observable<ScheduleTransaction> {
-    return this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`).pipe(
+    return this.apiService.get<ScheduleTransaction>(`/transactions/transactions2/${id}/`).pipe(
       map((response) => {
         return getFromJSON(response);
       })
@@ -57,7 +58,7 @@ export class TransactionService implements TableListService<Transaction> {
     if (transaction && action_date && contact_1_id && aggregation_group) {
       return this.apiService
         .get<HttpResponse<Transaction>>(
-          '/transactions/previous/entity/',
+          '/transactions/transactions2/previous/entity/',
           {
             transaction_id,
             contact_1_id,
@@ -120,7 +121,9 @@ export class TransactionService implements TableListService<Transaction> {
       }
 
       return this.apiService
-        .get<HttpResponse<Transaction>>('/transactions/previous/election/', params, [HttpStatusCode.NotFound])
+        .get<HttpResponse<Transaction>>('/transactions/transactions2/previous/election/', params, [
+          HttpStatusCode.NotFound,
+        ])
         .pipe(
           map((response) => {
             if (response.status === HttpStatusCode.NotFound) {

@@ -213,11 +213,11 @@ export class TransactionFormUtils {
     // Remove parent transaction links within the parent-child hierarchy in the
     // transaction objects to avoid a recursion overflow from the class-transformer
     // plainToClass() converter
-    if (transaction?.children) {
-      transaction.children.forEach((child) => {
-        child.parent_transaction = undefined;
-      });
-    }
+    // if (transaction?.children) {
+    //   transaction.children.forEach((child) => {
+    //     child.parent_transaction = undefined;
+    //   });
+    // }
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);

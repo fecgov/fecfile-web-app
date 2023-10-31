@@ -8,7 +8,7 @@ import { COMMITTEE, COMMON_FIELDS, ADDRESS_FIELDS } from 'app/shared/utils/trans
 export class LOAN_MADE extends SchBTransactionType {
   override formFields = [...COMMON_FIELDS, ...ADDRESS_FIELDS, 'organization_name', 'committee_fec_id'];
   contactTypeOptions = COMMITTEE;
-  override isDependentChild = true;
+  override isDependentChild = () => true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_MADE);
   schema = schema;
   override useParentContact = true;
