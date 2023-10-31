@@ -27,6 +27,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
   @Input() headerTitle?: string;
+  @Input() defaultCandidateOffice?: CandidateOfficeTypes;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
 
@@ -193,6 +194,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.isNewItem = true;
     this.contactLookup.contactTypeReadOnly = false;
     this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+    if (this.defaultCandidateOffice) {
+      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
+    }
     this.formSubmitted = false;
   }
 

@@ -210,6 +210,11 @@
   <ng-container *ngIf="transactionType?.hasElectionInformation()">
     <p-divider></p-divider>
     <h3>Election information</h3>
-    <app-election-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-election-input>
+    <app-election-input
+      [transaction]="transaction"
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [templateMap]="templateMap"
+    ></app-election-input>
   </ng-container>
 </ng-template>

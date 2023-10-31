@@ -1,6 +1,6 @@
-import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -16,7 +16,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
   selector: 'app-transaction-contact-lookup',
   templateUrl: './transaction-contact-lookup.component.html',
 })
-export class TransactionContactLookupComponent implements OnInit {
+export class TransactionContactLookupComponent implements OnInit, AfterViewInit {
   @Input() contactProperty = 'contact_1';
   @Input() transaction?: Transaction;
   @Input() form: FormGroup = new FormGroup({});
@@ -42,6 +42,7 @@ export class TransactionContactLookupComponent implements OnInit {
   );
   errorMessageFormControl?: FormControl;
   currentContactLabel = 'Individual';
+  mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
   constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
@@ -57,6 +58,18 @@ export class TransactionContactLookupComponent implements OnInit {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
         (this.transaction[this.contactProperty as keyof Transaction] as Contact).type as ContactTypes,
       ]);
+    }
+
+    // Determine from manitoryFields if candidate results are limited to a particular office
+    if (
+      this.transaction?.transactionType.templateMap.candidate_office &&
+      this.transaction.transactionType.mandatoryFormValues &&
+      this.transaction.transactionType.templateMap.candidate_office in
+        this.transaction.transactionType.mandatoryFormValues
+    ) {
+      this.mandatoryCandidateOffice = this.transaction.transactionType.mandatoryFormValues[
+        this.transaction.transactionType.templateMap.candidate_office
+      ] as CandidateOfficeType;
     }
 
     // If needed, create a local form control to manage validation and add the
@@ -79,6 +92,12 @@ export class TransactionContactLookupComponent implements OnInit {
         return null;
       });
       this.form.addControl('contact_3_lookup', this.errorMessageFormControl);
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.mandatoryCandidateOffice) {
+      this.contactDialog.form.get('candidate_office')?.disable();
     }
   }
 

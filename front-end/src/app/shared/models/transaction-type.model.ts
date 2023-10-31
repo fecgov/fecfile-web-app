@@ -78,12 +78,13 @@ export abstract class TransactionType {
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   // Memo Text settings
-  memoTextRequired = false;
-  memoTextPrefix?: string;
+  memoTextRequired = false; // Set to true to make Memo Text required
+  memoTextPrefix?: string; // The string will be a read-only prefix in the Memo Text input textarea
 
-  // On some transaction forms, a form field will have a mandatory value. Define them here in a field:value hash.
-  // The form input will have the value and be read-only. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
-  mandatoryFormValues: { [field: string]: string } = {};
+  // For some predefined form fields, a mandatory default value can be declared. In which case, the value populates
+  // the form field and the field made read-only. Fields defined this way are created as needed for a particular
+  // transaction type model and implemented in a particular input component. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
+  mandatoryFormValues: { [field: string]: string | undefined } = {};
 
   // Labels
   abstract title: string;

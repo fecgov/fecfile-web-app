@@ -8,6 +8,7 @@ import {
   FecApiLookupData,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
+  CandidateOfficeType,
 } from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -30,6 +31,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
   @Input() includeFecfileResults = true;
+  @Input() candidateOffice?: CandidateOfficeType;
 
   @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactLookupSelect = new EventEmitter<Contact>();
@@ -68,7 +70,12 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.CANDIDATE:
           this.contactService
-            .candidateLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
+            .candidateLookup(
+              searchTerm,
+              this.maxFecCommitteeResults,
+              this.maxFecfileCommitteeResults,
+              this.candidateOffice
+            )
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
             });
@@ -127,8 +134,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   }
 
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
-    if (data.id) {
-      this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
+    if (data.candidate_id) {
+      this.fecApiService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
         // TODO: fix once we get info from api and set all names below properly
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
