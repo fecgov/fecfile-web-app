@@ -3,7 +3,7 @@ import { ScheduleIds } from './transaction.model';
 
 export abstract class SchATransactionType extends TransactionType {
   scheduleId = ScheduleIds.A;
-  apiEndpoint = '/transactions/schedule-a';
+  apiEndpoint = '/transactions/transactions2';
 
   //Labels
   override dateLabel = 'DATE RECEIVED';
