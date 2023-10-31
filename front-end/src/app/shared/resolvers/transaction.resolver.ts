@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { expand, map, mergeMap, Observable, of } from 'rxjs';
+import { EMPTY, expand, map, mergeMap, Observable, of, reduce } from 'rxjs';
 import { isPulledForwardLoan, Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { ListRestResponse } from '../models/rest-api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,18 +47,24 @@ export class TransactionResolver {
         if (transaction.transactionType?.isDependentChild(transaction)) {
           return this.resolveExistingTransaction2(transaction.parent_transaction_id ?? '');
         }
-        return resolveExistingTransaction3(transaction);
+        return this.resolveExistingTransaction3(transaction);
       })
     );
   }
 
   resolveExistingTransaction3(transaction: Transaction): Observable<Transaction | undefined> {
     if (transaction.children) {
+      transaction.children = [];
       // tune page size
-      return this.transactionService.getTableData(1, '', { parent_transaction_id: transaction.id ?? '' }).pipe(
-        expand((page) => {
-          return page.next ? this.transactionService.getTableData(page.pageNumber+1, )
-        })
+      const params = { parent: transaction.id ?? '', page_size: 100 };
+      return this.transactionService.getTableData(1, '', params).pipe(
+        expand((page: ListRestResponse) => {
+          return page.next ? this.transactionService.getTableData(page.pageNumber + 1, '', params) : EMPTY;
+        }),
+        reduce((transactionWithChildren: Transaction, page: ListRestResponse) => {
+          transactionWithChildren.children?.push(...(page.results as Transaction[]));
+          return transactionWithChildren;
+        }, transaction)
       );
     }
     return of(transaction);
