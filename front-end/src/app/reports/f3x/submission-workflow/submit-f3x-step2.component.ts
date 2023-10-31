@@ -39,6 +39,8 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     report_id: undefined,
     value: undefined,
   };
+  backdoorCodeHelpText = 'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
+  showBackdoorCode = false;
 
   constructor(
     public router: Router,
@@ -72,6 +74,18 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['filing_password'].addValidators(ValidateUtils.passwordValidator());
     this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
+    this.form
+      .get('backdoor_code_yes_no')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.showBackdoorCode = value;
+        if (!value) {
+          this.form.patchValue({
+            backdoor_code: null,
+          });
+        }
+      });
+    this.form.get('backdoor_code_yes_no')?.updateValueAndValidity();
 
     ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }

@@ -1,7 +1,15 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label [for]="controlName">{{ label }}</label>
+      <div class="field">
+        <label [for]="controlName">{{ label }}</label>
+        <span *ngIf="tooltipText" 
+          class="pi pi-info-circle"
+          style="font-size: 1.5rem; margin-left: 0.5rem"
+          pTooltip="{{ tooltipText }}"
+          [escape]="tooltipEscape"
+        ></span>
+      </div>
     </div>
   </div>
   <div class="grid">

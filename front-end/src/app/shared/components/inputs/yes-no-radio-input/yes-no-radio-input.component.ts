@@ -13,6 +13,8 @@ export class YesNoRadioInputComponent extends BaseInputComponent implements OnIn
   @Input() ariaLabelYes = '';
   @Input() ariaLabelNo = '';
   @Input() errorMessage = 'An answer is required';
+  @Input() tooltipText = '';
+  @Input() tooltipEscape = true;
 
   ngOnInit(): void {
     this.control = this.form.get(this.controlName);

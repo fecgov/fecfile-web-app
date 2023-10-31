@@ -106,6 +106,37 @@
       <div class="grid">
         <div class="col-12">
           <div class="field">
+            <app-yes-no-radio-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              controlName="backdoor_code_yes_no"
+              label="Do you need to use a backdoor code? (OPTIONAL)"
+              ariaLabelYes="You need to use a backdoor code"
+              ariaLabelNo="You do not need to use a backdoor code"
+              [tooltipText]="backdoorCodeHelpText"
+              [tooltipEscape]="false"
+            ></app-yes-no-radio-input>
+            <ng-container *ngIf="showBackdoorCode">
+              <div class="grid">
+                <div class="col-4">
+                  <div class="field">
+                    <label for="backdoor_code">BACKDOOR CODE</label>
+                    <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
+                    <app-error-messages
+                      [form]="form"
+                      fieldName="backdoorCodeFieldName"
+                      [formSubmitted]="formSubmitted"
+                    ></app-error-messages>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <div class="field">
             <strong>
               <p-checkbox
                 [binary]="true"
