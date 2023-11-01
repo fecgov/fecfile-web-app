@@ -42,12 +42,13 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should create', () => {
-    component.defaultCandidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
     expect(component).toBeTruthy();
   });
 
   it('should return CandidateOfficeTypes when called', () => {
     expect(component.CandidateOfficeTypes.HOUSE).toBe(CandidateOfficeTypes.HOUSE);
+    component.defaultCandidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
+    component.ngOnInit();
   });
 
   it('should open dialog with new or edit contact', () => {

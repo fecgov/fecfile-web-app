@@ -59,12 +59,12 @@ describe('ContactLookupComponent', () => {
   });
 
   it('should create', () => {
-    component.candidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
     expect(component).toBeTruthy();
   });
 
   it('#ngOnInit', () => {
     component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
+    component.candidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
     component.ngOnInit();
     component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
     expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);
