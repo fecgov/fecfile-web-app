@@ -9,10 +9,11 @@ import {
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
   CandidateOfficeType,
+  CandidateOfficeTypeLabels,
 } from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
-import { LabelList, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelList, PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
 
@@ -41,6 +42,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
+  candidateOfficeLabel?: string;
 
   contactTypeFormControl = new FormControl();
   searchBoxFormControl = new FormControl();
@@ -55,6 +57,9 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
     this.contactTypeFormControl.setValue(this.contactType);
     this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
+    if (this.candidateOffice) {
+      this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
+    }
 
     this.contactTypeFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((contactType: ContactTypes) => {
       this.contactType = contactType;
