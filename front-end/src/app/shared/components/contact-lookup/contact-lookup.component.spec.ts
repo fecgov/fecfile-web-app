@@ -15,6 +15,7 @@ import { LabelPipe } from '../../pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   CandidateLookupResponse,
+  CandidateOfficeTypes,
   CommitteeLookupResponse,
   Contact,
   ContactTypeLabels,
@@ -58,6 +59,7 @@ describe('ContactLookupComponent', () => {
   });
 
   it('should create', () => {
+    component.candidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
     expect(component).toBeTruthy();
   });
 

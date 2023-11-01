@@ -19,6 +19,9 @@ describe('TransactionInputComponent', () => {
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;
     component.transaction = testScheduleATransaction;
+    component.transaction.transactionType.mandatoryFormValues = {
+      candidate_office: 'P',
+    };
     fixture.detectChanges();
   });
 

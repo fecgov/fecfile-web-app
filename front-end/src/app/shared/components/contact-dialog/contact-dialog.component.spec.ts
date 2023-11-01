@@ -42,6 +42,7 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should create', () => {
+    component.defaultCandidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
     expect(component).toBeTruthy();
   });
 
