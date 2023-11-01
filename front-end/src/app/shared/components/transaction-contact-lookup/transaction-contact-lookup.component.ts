@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -16,7 +16,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
   selector: 'app-transaction-contact-lookup',
   templateUrl: './transaction-contact-lookup.component.html',
 })
-export class TransactionContactLookupComponent implements OnInit, AfterViewInit {
+export class TransactionContactLookupComponent implements OnInit {
   @Input() contactProperty = 'contact_1';
   @Input() transaction?: Transaction;
   @Input() form: FormGroup = new FormGroup({});
@@ -92,12 +92,6 @@ export class TransactionContactLookupComponent implements OnInit, AfterViewInit 
         return null;
       });
       this.form.addControl('contact_3_lookup', this.errorMessageFormControl);
-    }
-  }
-
-  ngAfterViewInit() {
-    if (this.mandatoryCandidateOffice) {
-      this.contactDialog.form.get('candidate_office')?.disable();
     }
   }
 

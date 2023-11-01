@@ -160,8 +160,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             employer: '',
             occupation: '',
             candidate_office: candidate.office,
-            candidate_state: candidate.state,
-            candidate_district: candidate.district,
+            candidate_state: candidate.state === 'US' ? '' : candidate.state,
+            candidate_district: candidate.district === '00' ? '' : candidate.district,
           })
         );
       });

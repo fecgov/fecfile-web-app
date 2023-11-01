@@ -97,6 +97,12 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         }
       });
 
+    // If there is a defualt candidate office (e.g. 'P') set, then make the
+    // candidate office select read-only disabled.
+    if (this.defaultCandidateOffice) {
+      this.form.get('candidate_office')?.disable();
+    }
+
     this.contactTypeChanged(this.contactType);
   }
 
