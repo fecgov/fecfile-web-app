@@ -26,7 +26,7 @@ export class TransactionResolver {
     }
     // New
     if (reportId && transactionTypeName) {
-      return this.resolveNewTransaction(reportId, transactionTypeName);
+      return this.resolveNewTransaction(reportId, transactionTypeName, parentTransactionId);
     }
     // if (transactionId) {
     //   return this.resolveExistingTransactionForId(transactionId);
@@ -75,7 +75,18 @@ export class TransactionResolver {
     return of(transaction);
   }
 
-  resolveNewTransaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
+  resolveNewTransaction(
+    reportId: string,
+    transactionTypeName: string,
+    parentTransactionId: string | null
+  ): Observable<Transaction | undefined> {
+    if (parentTransactionId) {
+      return this.transactionService.get(String(parentTransactionId)).pipe(
+        mergeMap((parentTransaction: Transaction) => {
+          return of(this.getNewChildTransaction(parentTransaction, transactionTypeName));
+        })
+      );
+    }
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_id = String(reportId);
@@ -85,7 +96,6 @@ export class TransactionResolver {
         this.getNewChildTransaction(transaction, type)
       );
     }
-
     return of(transaction);
   }
 
