@@ -12,9 +12,9 @@ import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { of } from 'rxjs';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
+import { ApiService } from '../../../shared/services/api.service';
 import { Form3XService } from '../../../shared/services/form-3x.service';
 import { ReportService } from '../../../shared/services/report.service';
-import { ApiService } from '../../../shared/services/api.service';
 import { ReportsModule } from '../../reports.module';
 import { SubmitF3xStep2Component } from './submit-f3x-step2.component';
 
@@ -167,5 +167,22 @@ describe('SubmitF3xStep2Component', () => {
 
     component.submit();
     expect(component.form.invalid).toBe(true);
+  });
+
+  it('should require valid backdoor code if option is set', () => {
+    component.form.patchValue({
+      backdoor_code_yes_no: true,
+    });
+    expect(component.form.get('backdoor_code')?.invalid).toBeTrue();
+
+    component.form.patchValue({
+      backdoor_code: "this_is_longer_than_max_chars",
+    });
+    expect(component.form.get('backdoor_code')?.invalid).toBeTrue();
+
+    component.form.patchValue({
+      backdoor_code: "shorter_than_max",
+    });
+    expect(component.form.get('backdoor_code')?.invalid).toBeFalse();
   });
 });

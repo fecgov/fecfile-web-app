@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, takeUntil, from, switchMap } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -13,8 +13,8 @@ import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { from, Observable, switchMap, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-submit-f3x-step2',
@@ -71,6 +71,8 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .pipe(takeUntil(this.destroy$))
       .subscribe((cashOnHand: CashOnHand) => (this.cashOnHand = cashOnHand));
 
+    this.form.addControl('backdoor_code_yes_no', new FormControl());
+
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['filing_password'].addValidators(ValidateUtils.passwordValidator());
     this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
@@ -79,13 +81,13 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
         this.showBackdoorCode = value;
-        if (!value) {
-          this.form.patchValue({
-            backdoor_code: null,
-          });
+        if (value) {
+          this.form.addControl('backdoor_code', new FormControl('',
+            [Validators.required, Validators.maxLength(16)]));
+        } else {
+          this.form.removeControl('backdoor_code');
         }
       });
-    this.form.get('backdoor_code_yes_no')?.updateValueAndValidity();
 
     ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
@@ -184,6 +186,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     const payload = {
       report_id: this.report?.id,
       password: this.form?.value['filing_password'],
+      backdoor_code: this.form?.value['backdoor_code'],
     };
     return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
       switchMap(() => {
