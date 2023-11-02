@@ -184,5 +184,10 @@ describe('SubmitF3xStep2Component', () => {
       backdoor_code: "shorter_than_max",
     });
     expect(component.form.get('backdoor_code')?.invalid).toBeFalse();
+
+    component.form.patchValue({
+      backdoor_code_yes_no: false,
+    });
+    expect(component.form.get('backdoor_code')).toBeFalsy();
   });
 });
