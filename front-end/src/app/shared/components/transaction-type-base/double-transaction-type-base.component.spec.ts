@@ -212,6 +212,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: '',
       text4000: '',
     });
+    Object.keys(component.form.controls).forEach(key => {
+      component.form.get(key)?.updateValueAndValidity();
+    });
     component.childForm.patchValue({
       entity_type: 'IND',
       contributor_organization_name: 'zzzz',
@@ -234,6 +237,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: true,
       text4000: '',
     });
+    Object.keys(component.childForm.controls).forEach(key => {
+      component.childForm.get(key)?.updateValueAndValidity();
+    });
+
     component.handleNavigate(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });

@@ -178,6 +178,9 @@ export class TransactionFormUtils {
             form
               .get(templateMap[field as keyof TransactionTemplateMapType])
               ?.addAsyncValidators(contactService.getFecIdValidator(id));
+              form
+              .get(templateMap[field as keyof TransactionTemplateMapType])
+              ?.updateValueAndValidity();
           }
         }
       });
