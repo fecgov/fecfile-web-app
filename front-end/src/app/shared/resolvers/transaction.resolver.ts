@@ -20,8 +20,13 @@ export class TransactionResolver {
     const debtId = route.queryParamMap.get('debt');
     const loanId = route.queryParamMap.get('loan');
 
+    // Existing
     if (transactionId) {
-      return this.resolveExistingTransaction2(transactionId);
+      return this.resolveExistingTransactionFromId(transactionId);
+    }
+    // New
+    if (reportId && transactionTypeName) {
+      return this.resolveNewTransaction(reportId, transactionTypeName);
     }
     // if (transactionId) {
     //   return this.resolveExistingTransactionForId(transactionId);
@@ -41,18 +46,18 @@ export class TransactionResolver {
     return of(undefined);
   }
 
-  resolveExistingTransaction2(transactionId: string): Observable<Transaction | undefined> {
+  resolveExistingTransactionFromId(transactionId: string): Observable<Transaction | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
         if (transaction.transactionType?.isDependentChild(transaction)) {
-          return this.resolveExistingTransaction2(transaction.parent_transaction_id ?? '');
+          return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
         }
-        return this.resolveExistingTransaction3(transaction);
+        return this.resolveExistingTransaction(transaction);
       })
     );
   }
 
-  resolveExistingTransaction3(transaction: Transaction): Observable<Transaction | undefined> {
+  resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
     if (transaction.children) {
       transaction.children = [];
       // tune page size
@@ -157,31 +162,31 @@ export class TransactionResolver {
     );
   }
 
-  resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
-    if (transaction?.parent_transaction_id) {
-      return this.resolveExistingTransactionForId(transaction.parent_transaction_id).pipe(
-        map((parent) => {
-          transaction.parent_transaction = parent;
-          return transaction;
-        })
-      );
-    } else if (transaction?.debt_id) {
-      return this.resolveExistingTransactionForId(transaction.debt_id).pipe(
-        map((debt) => {
-          transaction.debt = debt;
-          return transaction;
-        })
-      );
-    } else if (transaction?.loan_id) {
-      return this.resolveExistingTransactionForId(transaction.loan_id).pipe(
-        map((loan) => {
-          transaction.loan = loan;
-          return transaction;
-        })
-      );
-    }
-    return of(transaction);
-  }
+  // resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
+  //   if (transaction?.parent_transaction_id) {
+  //     return this.resolveExistingTransactionForId(transaction.parent_transaction_id).pipe(
+  //       map((parent) => {
+  //         transaction.parent_transaction = parent;
+  //         return transaction;
+  //       })
+  //     );
+  //   } else if (transaction?.debt_id) {
+  //     return this.resolveExistingTransactionForId(transaction.debt_id).pipe(
+  //       map((debt) => {
+  //         transaction.debt = debt;
+  //         return transaction;
+  //       })
+  //     );
+  //   } else if (transaction?.loan_id) {
+  //     return this.resolveExistingTransactionForId(transaction.loan_id).pipe(
+  //       map((loan) => {
+  //         transaction.loan = loan;
+  //         return transaction;
+  //       })
+  //     );
+  //   }
+  //   return of(transaction);
+  // }
 
   /**
    * Build out a child transaction given the parent and the transaction type wanted
