@@ -46,6 +46,7 @@ export class SchATransaction extends Transaction {
   memo_code: boolean | undefined;
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
+  reattribution_redesignation_tag: string | undefined;
 
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];

@@ -46,6 +46,7 @@ export class SchBTransaction extends Transaction {
   memo_code: boolean | undefined;
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
+  reattribution_redesignation_tag: string | undefined;
 
   override getFieldsNotToValidate(): string[] {
     return [

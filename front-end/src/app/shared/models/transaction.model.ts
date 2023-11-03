@@ -19,6 +19,7 @@ import {
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
+import { Report } from './report.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -53,6 +54,7 @@ export abstract class Transaction extends BaseModel {
   deleted: string | undefined;
 
   report_id: string | undefined; // Foreign key to the parent report db record
+  report: Report | undefined; // Report object from backend
 
   @Type(() => Contact)
   contact_1: Contact | undefined;

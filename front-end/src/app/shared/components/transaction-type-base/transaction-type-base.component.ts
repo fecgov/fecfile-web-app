@@ -22,6 +22,9 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
 @Component({
   template: '',
@@ -95,6 +98,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
+        if (
+          this.transaction &&
+          'reattribution_redesignation_tag' in this.transaction &&
+          this.transaction.reattribution_redesignation_tag
+        ) {
+          ReattRedesUtils.initValidators(this.form, this.transaction as SchATransaction & SchBTransaction, report);
+        }
       });
   }
 
