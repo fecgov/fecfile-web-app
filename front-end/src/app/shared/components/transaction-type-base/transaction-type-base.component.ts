@@ -98,6 +98,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
+        // If this is a reattribution/redesignation transaction, initialize
+        // its specialized validation rules and text written to the purpose description.
         if (
           this.transaction &&
           'reattribution_redesignation_tag' in this.transaction &&

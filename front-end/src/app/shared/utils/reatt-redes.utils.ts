@@ -13,6 +13,11 @@ export enum ReattRedesTypes {
   REDESIGNATION_TO = 'REDESIGNATION_TO',
 }
 
+/**
+ * This class manages the special validation and text written to the purpose description
+ * fields of Schedule A and Schedule B transactions that are part of a reattribution
+ * or redesignation.
+ */
 export class ReattRedesUtils {
   public static initValidators(
     form: FormGroup,
@@ -52,7 +57,7 @@ export class ReattRedesUtils {
     }
     form.get(pdKey)?.disable();
 
-    // Watch transaction date for changes and update validation as appropriate.
+    // Watch transaction date for changes and update validation and purpose description text as appropriate.
     form.get(transaction.transactionType.templateMap.date)?.valueChanges.subscribe((transactionDate) => {
       ReattRedesUtils.updateValidators(transactionDate, form, transaction, activeReport);
     });
@@ -65,6 +70,14 @@ export class ReattRedesUtils {
     );
   }
 
+  /**
+   * This is the callback that fires whenever the user updates the amount field on the
+   * transaction input form.
+   * @param transactionDate
+   * @param form
+   * @param transaction
+   * @param activeReport
+   */
   public static updateValidators(
     transactionDate: Date,
     form: FormGroup,
@@ -109,6 +122,12 @@ export class ReattRedesUtils {
   }
 }
 
+/**
+ * New validation rules for the transaction amount of reattribution and redesignation transactions.
+ * These rules supplant the original rules for a given transaction.
+ * @param transaction
+ * @returns
+ */
 function amountValidator(transaction: SchATransaction & SchBTransaction): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const amount = control.value;

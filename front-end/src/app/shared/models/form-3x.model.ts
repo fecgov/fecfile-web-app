@@ -48,7 +48,6 @@ export class Form3X extends Report {
   state: string | undefined;
   zip: string | undefined;
   report_code: F3xReportCodes | undefined;
-  report_code_label: string | undefined;
   election_code: string | undefined;
   @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
   state_of_election: string | undefined;

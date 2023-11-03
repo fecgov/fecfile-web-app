@@ -103,9 +103,11 @@ export abstract class Transaction extends BaseModel {
     this.contact_3_id = this.contact_3?.id;
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
-    const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
-    const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
-    this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
+    if (!this.fields_to_validate) {
+      const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
+      const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
+      this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
+    }
   }
 
   /**

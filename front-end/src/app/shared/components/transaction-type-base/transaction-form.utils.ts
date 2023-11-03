@@ -229,7 +229,6 @@ export class TransactionFormUtils {
       ...transaction,
       ...formValues,
     });
-    payload.fields_to_validate = transaction.fields_to_validate; // Restore this as it gets overwritten
     if (payload.children) {
       payload.children = payload.updateChildren();
     }
