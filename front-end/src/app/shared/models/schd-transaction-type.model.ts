@@ -3,7 +3,7 @@ import { ScheduleIds } from './transaction.model';
 
 export abstract class SchDTransactionType extends TransactionType {
   scheduleId = ScheduleIds.D;
-  apiEndpoint = '/transactions/schedule-d';
+  apiEndpoint = '/transactions/transactions2';
 
   // Labels
   override debtInputHeader = 'Debt or obligation information';

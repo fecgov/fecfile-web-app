@@ -4,7 +4,7 @@ import { TransactionNavigationControls, SAVE_LIST_CONTROL } from './transaction-
 
 export abstract class SchCTransactionType extends TransactionType {
   scheduleId = ScheduleIds.C;
-  apiEndpoint = '/transactions/schedule-c';
+  apiEndpoint = '/transactions/transactions2';
 
   // Labels
   override amountInputHeader = 'Loan information';

@@ -3,7 +3,7 @@ import { ScheduleIds } from './transaction.model';
 
 export abstract class SchC2TransactionType extends TransactionType {
   scheduleId = ScheduleIds.C2;
-  apiEndpoint = '/transactions/schedule-c2';
+  apiEndpoint = '/transactions/transactions2';
   override amountInputHeader = 'Guaranteed financial information';
 
   // Mapping of schedule fields to the group input component form templates
