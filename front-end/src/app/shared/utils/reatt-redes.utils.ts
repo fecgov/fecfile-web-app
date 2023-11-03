@@ -141,7 +141,7 @@ function amountValidator(transaction: SchATransaction & SchBTransaction): Valida
       const parent = transaction.parent_transaction as SchATransaction & SchBTransaction;
       if (parent) {
         const parentValue = (parent[key as keyof (SchATransaction & SchBTransaction)] as number) ?? 0;
-        if (parent && Math.abs(amount) > Math.abs(parentValue)) {
+        if (Math.abs(amount) > Math.abs(parentValue)) {
           return {
             max: {
               max: parentValue,
