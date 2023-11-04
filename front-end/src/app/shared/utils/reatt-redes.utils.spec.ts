@@ -2,6 +2,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ReattRedesUtils } from './reatt-redes.utils';
 import { testActiveReport, testIndividualReceipt, testScheduleATransaction } from './unit-test.utils';
 import { Form3X } from '../models/form-3x.model';
+import { SchATransaction } from '../models/scha-transaction.model';
 
 describe('ReattRedesUtils', () => {
   it('should create an instance', () => {
@@ -53,6 +54,7 @@ describe('ReattRedesUtils', () => {
     expect(form.get('contribution_purpose_descrip')?.value).toBe('Reattribution to org name');
 
     transaction.reattribution_redesignation_tag = 'REATTRIBUTION_TO';
+    (transaction.parent_transaction as SchATransaction).entity_type = 'IND';
     ReattRedesUtils.initValidators(form, transaction, report);
     expect(form.get('contribution_purpose_descrip')?.value).toBe('Reattribution from org name');
 
@@ -61,6 +63,7 @@ describe('ReattRedesUtils', () => {
     expect(form.get('contribution_purpose_descrip')?.value).toBe('Redesignation - Contribution to 2022-07-27');
 
     transaction.reattribution_redesignation_tag = 'REDESIGNATION_TO';
+    transaction.id = undefined;
     ReattRedesUtils.initValidators(form, transaction, report);
     expect(form.get('contribution_purpose_descrip')?.value).toBe('Redesignation - Contribution from 2022-07-27');
   });
