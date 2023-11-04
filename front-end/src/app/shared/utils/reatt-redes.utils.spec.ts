@@ -55,8 +55,10 @@ describe('ReattRedesUtils', () => {
 
     transaction.reattribution_redesignation_tag = 'REATTRIBUTION_TO';
     (transaction.parent_transaction as SchATransaction).entity_type = 'IND';
+    (transaction.parent_transaction as SchATransaction).contributor_first_name = 'fname';
+    (transaction.parent_transaction as SchATransaction).contributor_last_name = 'lname';
     ReattRedesUtils.initValidators(form, transaction, report);
-    expect(form.get('contribution_purpose_descrip')?.value).toBe('Reattribution from org name');
+    expect(form.get('contribution_purpose_descrip')?.value).toBe('Reattribution from lname, fname');
 
     transaction.reattribution_redesignation_tag = 'REDESIGNATION_FROM';
     ReattRedesUtils.initValidators(form, transaction, report);

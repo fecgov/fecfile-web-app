@@ -3,6 +3,7 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { DateUtils } from './date.utils';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
+import { ContactTypes } from '../models/contact.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -161,17 +162,18 @@ function amountValidator(transaction: SchATransaction | SchBTransaction): Valida
 }
 
 function getName(transaction: SchATransaction | SchBTransaction): string {
+  if (transaction.entity_type === ContactTypes.INDIVIDUAL) {
+    const firstName = transaction[
+      transaction.transactionType.templateMap.first_name as keyof (SchATransaction | SchBTransaction)
+    ] as string;
+    const lastName = transaction[
+      transaction.transactionType.templateMap.last_name as keyof (SchATransaction | SchBTransaction)
+    ] as string;
+    return `${lastName}, ${firstName}`;
+  }
+
   const orgName = transaction[
     transaction.transactionType.templateMap.organization_name as keyof (SchATransaction | SchBTransaction)
   ] as string;
-  if (orgName) {
-    return orgName;
-  }
-  const firstName = transaction[
-    transaction.transactionType.templateMap.first_name as keyof (SchATransaction | SchBTransaction)
-  ] as string;
-  const lastName = transaction[
-    transaction.transactionType.templateMap.last_name as keyof (SchATransaction | SchBTransaction)
-  ] as string;
-  return `${lastName}, ${firstName}`;
+  return orgName;
 }
