@@ -13,6 +13,7 @@ describe('ReattRedesUtils', () => {
     const form = new FormGroup({
       contribution_date: new FormControl(''),
       contribution_purpose_descrip: new FormControl(''),
+      contribution_amount: new FormControl(''),
     });
 
     const transaction = { ...testIndividualReceipt } as SchATransaction;
@@ -52,6 +53,17 @@ describe('ReattRedesUtils', () => {
     transaction.reattribution_redesignation_tag = 'REATTRIBUTION_FROM';
     ReattRedesUtils.initValidators(form, transaction, report);
     expect(form.get('contribution_purpose_descrip')?.value).toBe('Reattribution to org name');
+
+    (transaction.parent_transaction as SchATransaction).contribution_amount = 100;
+    const control = form.get('contribution_amount');
+    control?.setValue('10');
+    expect(control?.status).toBe('INVALID');
+    control?.setValue('-10');
+    expect(control?.status).toBe('VALID');
+    control?.setValue('-200');
+    expect(control?.status).toBe('INVALID');
+    control?.setValue('-10');
+    expect(control?.status).toBe('VALID');
 
     transaction.reattribution_redesignation_tag = 'REATTRIBUTION_TO';
     (transaction.parent_transaction as SchATransaction).entity_type = 'IND';
