@@ -15,8 +15,8 @@ describe('ReattRedesUtils', () => {
       contribution_purpose_descrip: new FormControl(''),
     });
 
-    const transaction = testIndividualReceipt;
-    const parentTransaction = testScheduleATransaction;
+    const transaction = { ...testIndividualReceipt } as SchATransaction;
+    const parentTransaction = { ...testScheduleATransaction } as SchATransaction;
     parentTransaction.contribution_date = new Date(2022, 6, 27);
     parentTransaction.report = {
       report_code: 'M1',
