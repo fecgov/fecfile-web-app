@@ -21,7 +21,7 @@ export enum ReattRedesTypes {
 export class ReattRedesUtils {
   public static initValidators(
     form: FormGroup,
-    transaction: SchATransaction & SchBTransaction,
+    transaction: SchATransaction | SchBTransaction,
     activeReport: Form3X
   ): void {
     // Add additional amount validation
@@ -34,13 +34,13 @@ export class ReattRedesUtils {
     if (transaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_FROM) {
       form
         .get(pdKey)
-        ?.setValue(`Reattribution to ${getName(transaction.parent_transaction as SchATransaction & SchBTransaction)}`);
+        ?.setValue(`Reattribution to ${getName(transaction.parent_transaction as SchATransaction | SchBTransaction)}`);
     }
     if (transaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
       form
         .get(pdKey)
         ?.setValue(
-          `Reattribution from ${getName(transaction.parent_transaction as SchATransaction & SchBTransaction)}`
+          `Reattribution from ${getName(transaction.parent_transaction as SchATransaction | SchBTransaction)}`
         );
     }
     if (
@@ -81,7 +81,7 @@ export class ReattRedesUtils {
   public static updateValidators(
     transactionDate: Date,
     form: FormGroup,
-    transaction: SchATransaction & SchBTransaction,
+    transaction: SchATransaction | SchBTransaction,
     activeReport: Form3X
   ): void {
     // Is this transaction in the current report's period?
@@ -128,20 +128,24 @@ export class ReattRedesUtils {
  * @param transaction
  * @returns
  */
-function amountValidator(transaction: SchATransaction & SchBTransaction): ValidatorFn {
+function amountValidator(transaction: SchATransaction | SchBTransaction): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const amount = control.value;
 
-    if (transaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_FROM && amount !== null) {
+    if (
+      (transaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_FROM ||
+        transaction.reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_FROM) &&
+      amount !== null
+    ) {
       if (amount >= 0) {
         return { exclusiveMax: { exclusiveMax: 0 } };
       }
 
       const key = transaction.transactionType.templateMap.amount;
-      const parent = transaction.parent_transaction as SchATransaction & SchBTransaction;
+      const parent = transaction.parent_transaction as SchATransaction | SchBTransaction;
       if (parent) {
-        const parentValue = (parent[key as keyof (SchATransaction & SchBTransaction)] as number) ?? 0;
-        if (Math.abs(amount) > Math.abs(parentValue)) {
+        const parentValue = parent[key as keyof (SchATransaction | SchBTransaction)] ?? 0;
+        if (Math.abs(amount) > Math.abs(parentValue as number)) {
           return {
             max: {
               max: parentValue,
@@ -156,18 +160,18 @@ function amountValidator(transaction: SchATransaction & SchBTransaction): Valida
   };
 }
 
-function getName(transaction: SchATransaction & SchBTransaction): string {
+function getName(transaction: SchATransaction | SchBTransaction): string {
   const orgName = transaction[
-    transaction.transactionType.templateMap.organization_name as keyof (SchATransaction & SchBTransaction)
+    transaction.transactionType.templateMap.organization_name as keyof (SchATransaction | SchBTransaction)
   ] as string;
   if (orgName) {
     return orgName;
   }
   const firstName = transaction[
-    transaction.transactionType.templateMap.first_name as keyof (SchATransaction & SchBTransaction)
+    transaction.transactionType.templateMap.first_name as keyof (SchATransaction | SchBTransaction)
   ] as string;
   const lastName = transaction[
-    transaction.transactionType.templateMap.last_name as keyof (SchATransaction & SchBTransaction)
+    transaction.transactionType.templateMap.last_name as keyof (SchATransaction | SchBTransaction)
   ] as string;
   return `${lastName}, ${firstName}`;
 }
