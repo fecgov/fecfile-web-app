@@ -16,7 +16,7 @@ describe('ReattRedesUtils', () => {
 
     const transaction = testIndividualReceipt;
     const parentTransaction = testScheduleATransaction;
-    parentTransaction.contribution_date = new Date('2022-07-29');
+    parentTransaction.contribution_date = new Date(2022, 6, 27);
     parentTransaction.report = {
       report_code: 'M1',
     } as unknown as Form3X;
@@ -58,10 +58,10 @@ describe('ReattRedesUtils', () => {
 
     transaction.reattribution_redesignation_tag = 'REDESIGNATION_FROM';
     ReattRedesUtils.initValidators(form, transaction, report);
-    expect(form.get('contribution_purpose_descrip')?.value).toBe('Redesignation - Contribution to 2022-07-28');
+    expect(form.get('contribution_purpose_descrip')?.value).toBe('Redesignation - Contribution to 2022-07-27');
 
     transaction.reattribution_redesignation_tag = 'REDESIGNATION_TO';
     ReattRedesUtils.initValidators(form, transaction, report);
-    expect(form.get('contribution_purpose_descrip')?.value).toBe('Redesignation - Contribution from 2022-07-28');
+    expect(form.get('contribution_purpose_descrip')?.value).toBe('Redesignation - Contribution from 2022-07-27');
   });
 });
