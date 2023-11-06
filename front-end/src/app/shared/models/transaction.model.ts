@@ -19,6 +19,7 @@ import {
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
+import { Report } from './report.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -53,6 +54,7 @@ export abstract class Transaction extends BaseModel {
   deleted: string | undefined;
 
   report_id: string | undefined; // Foreign key to the parent report db record
+  report: Report | undefined; // Report object from backend
 
   @Type(() => Contact)
   contact_1: Contact | undefined;
@@ -101,9 +103,11 @@ export abstract class Transaction extends BaseModel {
     this.contact_3_id = this.contact_3?.id;
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
-    const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
-    const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
-    this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
+    if (!this.fields_to_validate) {
+      const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
+      const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
+      this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
+    }
   }
 
   /**

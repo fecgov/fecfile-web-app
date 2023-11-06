@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
-import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -16,39 +16,44 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   ngOnInit(): void {
     ValidateUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
 
-    const purposeDescriptionPrefix = this.transaction?.transactionType?.purposeDescriptionPrefix;
+    if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
+      this.initPrefix(
+        this.templateMap.purpose_description,
+        this.transaction?.transactionType?.purposeDescriptionPrefix
+      );
+    }
 
-    if (purposeDescriptionPrefix) {
-      // Add custom prefix required validation function to purpose description
-      this.form.controls[this.templateMap.purpose_description].addValidators([
-        ValidateUtils.prefixRequiredValidator(purposeDescriptionPrefix),
-      ]);
-
-      // Watch changes to purpose description to make sure prefix is maintained
-      this.form
-        .get(this.templateMap.purpose_description)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value: string) => {
-          if (value.length < purposeDescriptionPrefix.length) {
-            // Ensure prefix is the first part of the string in the textarea if no user text added
-            this.form.get(this.templateMap.purpose_description)?.setValue(purposeDescriptionPrefix);
-          } else if (!value.startsWith(purposeDescriptionPrefix)) {
-            // Retain user text in textarea if possible if user changes prefix
-            this.form
-              .get(this.templateMap.purpose_description)
-              ?.setValue(purposeDescriptionPrefix + value.slice(value.indexOf(': ') + 2));
-          }
-        });
-
-      // Initialize value of purpose description to prefix if empty
-      if (!this.form.get(this.templateMap.purpose_description)?.value) {
-        this.form.get(this.templateMap.purpose_description)?.setValue(purposeDescriptionPrefix);
-      }
+    if (this.transaction?.transactionType?.memoTextPrefix) {
+      this.initPrefix(this.templateMap.text4000, this.transaction?.transactionType?.memoTextPrefix);
     }
   }
 
   isDescriptionSystemGenerated(): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
     return this.transaction?.transactionType?.generatePurposeDescription !== undefined;
+  }
+
+  initPrefix(field: string, prefix: string) {
+    // Add custom prefix required validation function to form text field
+    this.form.controls[field].addValidators([ValidateUtils.prefixRequiredValidator(prefix)]);
+
+    // Watch changes to form text field to make sure prefix is maintained
+    this.form
+      .get(field)
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        if (value.length < prefix.length || value.indexOf(': ') < 0) {
+          // Ensure prefix is the first part of the string in the textarea if no user text added
+          this.form.get(field)?.setValue(prefix);
+        } else if (!value.startsWith(prefix)) {
+          // Retain user text in textarea if possible if user changes prefix
+          this.form.get(field)?.setValue(prefix + value.slice(value.indexOf(': ') + 2));
+        }
+      });
+
+    // Initialize value of form text field to prefix if empty
+    if (!this.form.get(field)?.value) {
+      this.form.get(field)?.setValue(prefix);
+    }
   }
 }

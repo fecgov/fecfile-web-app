@@ -65,7 +65,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.transaction?.transactionType.inheritCalendarYTD) {
       this.form
         .get(this.transaction.transactionType.templateMap.calendar_ytd)
-        ?.setValue((this.transaction.parent_transaction as SchETransaction)?.calendar_ytd);
+        ?.setValue((this.transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
     }
   }
 

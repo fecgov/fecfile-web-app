@@ -17,7 +17,6 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups, Transaction } from '../transaction.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 
 export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransactionType {
   formFields = [
@@ -43,9 +42,7 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
-  override subTransactionConfig = new SubTransactionGroup('Staff Reimbursement Memo for Independent Expenditure', [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
-  ]);
+  override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
   override showCalendarYTD = true;
   override showAggregate = false;
 

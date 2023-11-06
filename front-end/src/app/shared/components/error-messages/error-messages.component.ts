@@ -99,11 +99,8 @@ export class ErrorMessagesComponent implements OnInit {
     if (this._maxErrorMessage) {
       return this._maxErrorMessage;
     }
-    return `This field must be less than or equal to ${formatCurrency(
-      this.control?.errors?.['max']?.max,
-      this.localeId,
-      '$'
-    )}.`;
+    const msgPrefix = this.control?.errors?.['max']?.msgPrefix ?? 'This field must be less than or equal to';
+    return `${msgPrefix} ${formatCurrency(this.control?.errors?.['max']?.max, this.localeId, '$')}.`;
   }
 
   private _exclusiveMaxErrorMessage = '';
