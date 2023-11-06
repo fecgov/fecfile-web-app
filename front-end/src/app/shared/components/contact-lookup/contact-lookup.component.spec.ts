@@ -15,6 +15,7 @@ import { LabelPipe } from '../../pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   CandidateLookupResponse,
+  CandidateOfficeTypes,
   CommitteeLookupResponse,
   Contact,
   ContactTypeLabels,
@@ -63,6 +64,7 @@ describe('ContactLookupComponent', () => {
 
   it('#ngOnInit', () => {
     component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
+    component.candidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
     component.ngOnInit();
     component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
     expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);

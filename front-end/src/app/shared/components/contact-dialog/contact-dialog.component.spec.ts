@@ -46,6 +46,9 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should return CandidateOfficeTypes when called', () => {
+    component.defaultCandidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
+    component.ngOnInit();
+    component.openDialog();
     expect(component.CandidateOfficeTypes.HOUSE).toBe(CandidateOfficeTypes.HOUSE);
   });
 

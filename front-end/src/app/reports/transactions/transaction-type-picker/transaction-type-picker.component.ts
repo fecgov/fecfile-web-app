@@ -272,7 +272,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         transactionTypes = [
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
-          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_MULTISTATE,
+          ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,

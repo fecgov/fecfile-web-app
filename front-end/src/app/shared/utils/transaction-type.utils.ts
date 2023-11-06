@@ -196,6 +196,7 @@ import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transacti
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
 import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
 import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
+import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/MULTISTATE_INDEPENDENT_EXPENDITURE.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -389,6 +390,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
   INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
   INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
+  MULTISTATE_INDEPENDENT_EXPENDITURE,
 }
 
 export class TransactionTypeUtils {

@@ -82,7 +82,7 @@ describe('FormUtils', () => {
 it('should add the amount for calendar YTD', () => {
   const form = new FormGroup({
     expenditure_amount: new FormControl(),
-    calendar_ytd: new FormControl(),
+    calendar_ytd_per_election_office: new FormControl(),
   });
 
   const transaction = SchETransaction.fromJSON({
@@ -95,7 +95,7 @@ it('should add the amount for calendar YTD', () => {
     transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
     aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
     expenditure_amount: 100,
-    calendar_ytd: 100,
+    calendar_ytd_per_election_office: 100,
   });
 
   TransactionFormUtils.updateAggregate(
@@ -107,6 +107,6 @@ it('should add the amount for calendar YTD', () => {
     transaction.expenditure_amount as number
   );
 
-  const calendarYTDFormControl = form.get('calendar_ytd') as FormControl;
+  const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as FormControl;
   expect(calendarYTDFormControl.value).toEqual(150);
 });
