@@ -26,23 +26,21 @@ export class TransactionResolver {
     }
     // New
     if (reportId && transactionTypeName) {
-      return this.resolveNewTransaction(reportId, transactionTypeName, parentTransactionId);
+      if (parentTransactionId) {
+        return this.transactionService.get(String(parentTransactionId)).pipe(
+          mergeMap((parentTransaction: Transaction) => {
+            return of(this.getNewChildTransaction(parentTransaction, transactionTypeName));
+          })
+        );
+      }
+      if (debtId) {
+        return this.resolveNewRepayment(debtId, transactionTypeName, 'debt');
+      }
+      if (loanId) {
+        return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
+      }
+      return this.resolveNewTransaction(reportId, transactionTypeName);
     }
-    // if (transactionId) {
-    //   return this.resolveExistingTransactionForId(transactionId);
-    // }
-    // if (parentTransactionId && transactionTypeName) {
-    //   return this.resolveNewChildTransaction(parentTransactionId, transactionTypeName);
-    // }
-    // if (reportId && transactionTypeName) {
-    //   if (debtId) {
-    //     return this.resolveNewRepayment(debtId, transactionTypeName, 'debt');
-    //   }
-    //   if (loanId) {
-    //     return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
-    //   }
-    //   return this.resolveNewTransaction(reportId, transactionTypeName);
-    // }
     return of(undefined);
   }
 
@@ -75,22 +73,12 @@ export class TransactionResolver {
     return of(transaction);
   }
 
-  resolveNewTransaction(
-    reportId: string,
-    transactionTypeName: string,
-    parentTransactionId: string | null
-  ): Observable<Transaction | undefined> {
-    if (parentTransactionId) {
-      return this.transactionService.get(String(parentTransactionId)).pipe(
-        mergeMap((parentTransaction: Transaction) => {
-          return of(this.getNewChildTransaction(parentTransaction, transactionTypeName));
-        })
-      );
-    }
+  resolveNewTransaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_id = String(reportId);
 
+    // If this transaction must be completed alongside other on-screen transactions, add them
     if (transactionType.dependentChildTransactionTypes) {
       transaction.children = transactionType.dependentChildTransactionTypes.map((type) =>
         this.getNewChildTransaction(transaction, type)
@@ -138,65 +126,6 @@ export class TransactionResolver {
       })
     );
   }
-
-  resolveExistingTransactionForId(transactionId: string): Observable<Transaction | undefined> {
-    return this.transactionService.get(String(transactionId)).pipe(
-      mergeMap((transaction: Transaction) => {
-        if (transaction.transaction_type_identifier && transaction.contact_1) {
-          // Determine if we need to get the parent transaction as the
-          // transaction type requested is a dependent transaction and cannot
-          // be modified directly in a UI form. (e.g. EARMARK_MEMO)
-          if (transaction.transactionType && transaction.transactionType.isDependentChild(transaction)) {
-            // Get parent transaction to ensure we have a full list of children if not a pulled forward parent
-            if (transaction?.parent_transaction_id) {
-              return this.transactionService.get(transaction.parent_transaction_id).pipe(
-                mergeMap((parentTransaction: Transaction) => {
-                  return isPulledForwardLoan(parentTransaction)
-                    ? this.resolveExistingTransaction(transaction)
-                    : of(parentTransaction);
-                })
-              );
-            } else {
-              throw new Error(
-                `Fecfile: Transaction ${transaction.id} (${transaction.transaction_type_identifier}) is a dependent transaction type but does not have a parent transaction.`
-              );
-            }
-          } else {
-            return this.resolveExistingTransaction(transaction);
-          }
-        }
-        throw new Error(
-          `Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID ${transactionId}`
-        );
-      })
-    );
-  }
-
-  // resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
-  //   if (transaction?.parent_transaction_id) {
-  //     return this.resolveExistingTransactionForId(transaction.parent_transaction_id).pipe(
-  //       map((parent) => {
-  //         transaction.parent_transaction = parent;
-  //         return transaction;
-  //       })
-  //     );
-  //   } else if (transaction?.debt_id) {
-  //     return this.resolveExistingTransactionForId(transaction.debt_id).pipe(
-  //       map((debt) => {
-  //         transaction.debt = debt;
-  //         return transaction;
-  //       })
-  //     );
-  //   } else if (transaction?.loan_id) {
-  //     return this.resolveExistingTransactionForId(transaction.loan_id).pipe(
-  //       map((loan) => {
-  //         transaction.loan = loan;
-  //         return transaction;
-  //       })
-  //     );
-  //   }
-  //   return of(transaction);
-  // }
 
   /**
    * Build out a child transaction given the parent and the transaction type wanted

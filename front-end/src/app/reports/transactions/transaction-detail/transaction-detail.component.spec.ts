@@ -88,9 +88,7 @@ describe('TransactionDetailComponent', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(
-      `${environment.apiUrl}/transactions/transactions2/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`
-    );
+    httpTestingController.expectNone(`${environment.apiUrl}/transactions/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`);
     httpTestingController.verify();
   });
 });

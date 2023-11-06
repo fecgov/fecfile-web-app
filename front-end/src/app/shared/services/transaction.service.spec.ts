@@ -148,7 +148,7 @@ describe('TransactionService', () => {
       expect(response?.id).toEqual(schATransaction.id);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/transactions2/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/`);
     expect(req.request.method).toEqual('POST');
     req.flush(schATransaction);
     httpTestingController.verify();
@@ -164,7 +164,7 @@ describe('TransactionService', () => {
       expect(response?.id).toEqual(schATransaction.id);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/transactions2/1/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(schATransaction);
     httpTestingController.verify();
@@ -181,7 +181,7 @@ describe('TransactionService', () => {
       expect(true).toBeTrue();
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/transactions2/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
     httpTestingController.verify();

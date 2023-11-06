@@ -9,7 +9,7 @@ import { ListRestResponse } from '../models/rest-api.model';
   providedIn: 'root',
 })
 export class TransactionSchBService extends TransactionService {
-  override tableDataEndpoint = '/transactions/transactions2';
+  override tableDataEndpoint = '/transactions';
   constructor(override apiService: ApiService, override datePipe: DatePipe) {
     super(apiService, datePipe);
   }
