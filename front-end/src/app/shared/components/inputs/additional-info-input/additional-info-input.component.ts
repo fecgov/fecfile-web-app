@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
-import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -42,7 +42,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
       .get(field)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        if (value.length < prefix.length) {
+        if (value.length < prefix.length || value.indexOf(': ') < 0) {
           // Ensure prefix is the first part of the string in the textarea if no user text added
           this.form.get(field)?.setValue(prefix);
         } else if (!value.startsWith(prefix)) {
