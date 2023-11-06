@@ -124,7 +124,7 @@ describe('TransactionResolver', () => {
   it('should throw an error if trying to resolve an invalid transaction type identifier', () => {
     spyOn(resolver.transactionService, 'get').and.returnValue(of({} as SchATransaction));
     resolver
-      .resolveExistingTransactionForId('10')
+      .resolveExistingTransactionFromId('10')
       .pipe(
         catchError((err) =>
           of(
@@ -150,7 +150,7 @@ describe('TransactionResolver', () => {
       )
     );
     resolver
-      .resolveExistingTransactionForId('10')
+      .resolveExistingTransactionFromId('10')
       .pipe(
         catchError((err) =>
           of(
@@ -176,7 +176,7 @@ describe('TransactionResolver', () => {
         })
       )
     );
-    resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
     });
   });
@@ -205,7 +205,7 @@ describe('TransactionResolver', () => {
         })
       );
     });
-    resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
     });
@@ -254,7 +254,7 @@ describe('TransactionResolver', () => {
         );
       }
     });
-    resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.parent_transaction?.id).toBe('2');
       expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
@@ -295,16 +295,14 @@ describe('TransactionResolver', () => {
         SchATransaction.fromJSON({
           id: id,
           transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
-          transactionType: TransactionTypeUtils.factory(
-            ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE
-          ),
+          transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
           debt_id: '2',
         })
       );
     });
-    resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.debt?.id).toBe('2');
     });
@@ -316,16 +314,14 @@ describe('TransactionResolver', () => {
         SchATransaction.fromJSON({
           id: id,
           transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
-          transactionType: TransactionTypeUtils.factory(
-            ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK
-          ),
+          transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
           loan_id: '2',
         })
       );
     });
-    resolver.resolveExistingTransactionForId('10').subscribe((transaction: Transaction | undefined) => {
+    resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
       expect(transaction?.loan?.id).toBe('2');
     });
