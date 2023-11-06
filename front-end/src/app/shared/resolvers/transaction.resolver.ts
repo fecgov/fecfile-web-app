@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { EMPTY, expand, map, mergeMap, Observable, of, reduce } from 'rxjs';
-import { isPulledForwardLoan, Transaction } from '../models/transaction.model';
+import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
