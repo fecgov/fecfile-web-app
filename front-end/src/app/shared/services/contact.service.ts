@@ -10,6 +10,7 @@ import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import {
   CandidateLookupResponse,
+  CandidateOfficeType,
   CommitteeLookupResponse,
   Contact,
   ContactTypes,
@@ -60,13 +61,15 @@ export class ContactService implements TableListService<Contact> {
   public candidateLookup(
     search: string,
     maxFecResults: number,
-    maxFecfileResults: number
+    maxFecfileResults: number,
+    office?: CandidateOfficeType
   ): Observable<CandidateLookupResponse> {
     return this.apiService
       .get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
         q: search,
         max_fec_results: maxFecResults,
         max_fecfile_results: maxFecfileResults,
+        office: office ?? '',
       })
       .pipe(map((response) => CandidateLookupResponse.fromJSON(response)));
   }

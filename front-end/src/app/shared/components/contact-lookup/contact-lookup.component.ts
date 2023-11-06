@@ -8,10 +8,12 @@ import {
   FecApiLookupData,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
+  CandidateOfficeType,
+  CandidateOfficeTypeLabels,
 } from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
-import { LabelList, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelList, PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
 
@@ -30,6 +32,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
   @Input() includeFecfileResults = true;
+  @Input() candidateOffice?: CandidateOfficeType;
 
   @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactLookupSelect = new EventEmitter<Contact>();
@@ -39,6 +42,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
+  candidateOfficeLabel?: string;
 
   contactTypeFormControl = new FormControl();
   searchBoxFormControl = new FormControl();
@@ -53,6 +57,9 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
     this.contactTypeFormControl.setValue(this.contactType);
     this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
+    if (this.candidateOffice) {
+      this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
+    }
 
     this.contactTypeFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((contactType: ContactTypes) => {
       this.contactType = contactType;
@@ -68,7 +75,12 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.CANDIDATE:
           this.contactService
-            .candidateLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
+            .candidateLookup(
+              searchTerm,
+              this.maxFecCommitteeResults,
+              this.maxFecfileCommitteeResults,
+              this.candidateOffice
+            )
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
             });
@@ -127,8 +139,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   }
 
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
-    if (data.id) {
-      this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
+    if (data.candidate_id) {
+      this.fecApiService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
         // TODO: fix once we get info from api and set all names below properly
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
@@ -148,8 +160,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             employer: '',
             occupation: '',
             candidate_office: candidate.office,
-            candidate_state: candidate.state,
-            candidate_district: candidate.district,
+            candidate_state: candidate.state === 'US' ? '' : candidate.state,
+            candidate_district: candidate.district === '00' ? '' : candidate.district,
           })
         );
       });

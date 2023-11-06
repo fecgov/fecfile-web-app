@@ -4,8 +4,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ElectionInputComponent } from './election-input.component';
+import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 
 describe('ElectionInputComponent', () => {
   let component: ElectionInputComponent;
@@ -23,6 +24,7 @@ describe('ElectionInputComponent', () => {
       election_code: new FormControl(''),
       election_other_description: new FormControl(''),
     });
+    component.transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

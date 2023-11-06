@@ -276,8 +276,8 @@ export const STANDARD_AND_SECONDARY_AND_TERTIARY = {
 export class FecApiLookupData {}
 
 export class FecApiCandidateLookupData extends FecApiLookupData {
-  id: string | undefined;
-  office_sought: string | undefined;
+  candidate_id: string | undefined;
+  office: string | undefined;
   name: string | undefined;
 
   constructor(data: FecApiCandidateLookupData) {
@@ -289,7 +289,7 @@ export class FecApiCandidateLookupData extends FecApiLookupData {
     return {
       // TODO: Will need to update this to last/first name fields
       // when FEC updates their candidate API to add those fields
-      label: `${this.name} (${this.id})`,
+      label: `${this.name} (${this.candidate_id})`,
       value: this,
     };
   }

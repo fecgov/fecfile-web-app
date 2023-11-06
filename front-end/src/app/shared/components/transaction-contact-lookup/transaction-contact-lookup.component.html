@@ -2,6 +2,7 @@
   <div [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl?.status === 'INVALID' }">
     <app-contact-lookup
       [contactTypeOptions]="contactTypeOptions"
+      [candidateOffice]="mandatoryCandidateOffice"
       (contactTypeSelect)="contactTypeSelected($event)"
       (contactLookupSelect)="contactLookupSelected($event)"
       (createNewContactSelect)="createNewContactSelected()"
@@ -11,6 +12,7 @@
   <app-contact-dialog
     headerTitle="Create a new contact"
     [contactTypeOptions]="dialogContactTypeOptions"
+    [defaultCandidateOffice]="mandatoryCandidateOffice"
     [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"
   ></app-contact-dialog>

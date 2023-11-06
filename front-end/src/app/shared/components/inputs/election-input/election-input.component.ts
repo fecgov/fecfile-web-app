@@ -35,19 +35,30 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
       this.form.disable();
     }
 
-    // Listen to election type and year form inputs and update election_code upon value changes
-    this.form
-      .get('electionType')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.updateElectionCode();
-      });
-    this.form
-      .get('electionYear')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.updateElectionCode();
-      });
+    // Check for maditoryField designation and disable if necessary
+    if (this.transaction && 'electionType' in this.transaction.transactionType.mandatoryFormValues) {
+      this.form.get('electionType')?.setValue(this.transaction.transactionType.mandatoryFormValues['electionType']);
+      this.form.get('electionType')?.disable();
+    } else {
+      this.form
+        .get('electionType')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.updateElectionCode();
+        });
+    }
+    if (this.transaction && 'electionYear' in this.transaction.transactionType.mandatoryFormValues) {
+      this.form.get('electionYear')?.setValue(this.transaction.transactionType.mandatoryFormValues['electionYear']);
+      this.form.get('electionYear')?.disable();
+    } else {
+      this.form
+        .get('electionYear')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.updateElectionCode();
+        });
+    }
+    this.updateElectionCode();
   }
 
   updateElectionCode() {
