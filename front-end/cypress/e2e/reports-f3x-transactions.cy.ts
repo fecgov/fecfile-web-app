@@ -137,7 +137,8 @@ describe('Transactions', () => {
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
     cy.get('tr').should('contain', PageUtils.dateToString(negativeAmountFormData.date_received));
-    let amount = negativeAmountFormData.amount < 0 ? -1 * negativeAmountFormData.amount : negativeAmountFormData.amount;
+    const amount =
+      negativeAmountFormData.amount < 0 ? -1 * negativeAmountFormData.amount : negativeAmountFormData.amount;
     // Assert that the positive amount was converted to a negative amount
     cy.get('tr').should('contain', '-$' + amount);
 

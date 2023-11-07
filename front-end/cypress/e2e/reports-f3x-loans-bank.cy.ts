@@ -6,7 +6,7 @@ import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { defaultLoanFormData } from './models/TransactionFormModel';
 import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, e2eReportStrings, F3xCreateReportFormData } from './models/ReportFormModel';
+import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
 
 const reportFormDataApril: F3xCreateReportFormData = {
   ...reportFormData,
@@ -56,26 +56,26 @@ describe('Loans', () => {
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create individual
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormDataApril);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(e2eReportStrings.addLoansAndDebts);
-    PageUtils.clickLink(e2eReportStrings.loans);
-    PageUtils.clickLink(e2eReportStrings.loanFromBank);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan Received from Bank');
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -83,9 +83,9 @@ describe('Loans', () => {
     TransactionDetailPage.enterLoanFormData(formData);
     PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-    PageUtils.clickButton(e2eReportStrings.saveMultiple);
+    PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).should('exist');
+    cy.contains('Loan Received from Bank').should('exist');
 
     // go back to reports, make new report
 
@@ -93,26 +93,26 @@ describe('Loans', () => {
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton(true);
     F3xCreateReportPage.enterFormData(reportFormDataJuly);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     const alias = PageUtils.getAlias('');
     cy.get(alias).contains('JULY 15').siblings().last().find('app-table-actions-button').children().last().click();
 
-    cy.get(alias).contains(e2eReportStrings.editReport).first().click();
+    cy.get(alias).contains('Edit report').first().click();
     PageUtils.urlCheck('cash-on-hand');
     PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
     PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont2);
+    PageUtils.clickButton('Save & continue');
     cy.get(alias)
-      .find("[datatest='" + e2eReportStrings.buttonLoansAndDebts + "']")
+      .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()
       .last()
       .click();
-    cy.get(alias).contains(e2eReportStrings.newLoanAgreement).click();
+    cy.get(alias).contains('New loan agreement').click();
 
-    PageUtils.urlCheck(e2eReportStrings.loanAgreementUrl);
+    PageUtils.urlCheck('/C1_LOAN_AGREEMENT');
     PageUtils.searchBoxInput(organizationFormData.name);
     const fd = {
       ...formData,
@@ -125,17 +125,17 @@ describe('Loans', () => {
       },
     };
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
-    PageUtils.clickButton(e2eReportStrings.save, '', true);
-    cy.contains(e2eReportStrings.loanFromBank).should('exist');
+    PageUtils.clickButton('Save', '', true);
+    cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).last().should('exist');
+    cy.contains('Loan Received from Bank').last().should('exist');
 
     cy.get(alias)
-      .find("[datatest='" + e2eReportStrings.buttonLoansAndDebts + "']")
+      .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()
       .last()
       .click();
-    cy.contains(e2eReportStrings.reviewLoan).click();
+    cy.contains('Review loan agreement').click();
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
     PageUtils.valueCheck('#date_incurred', '05/27/2023');
@@ -144,26 +144,26 @@ describe('Loans', () => {
   it('should test: Loan Received from Bank', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create individual
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(e2eReportStrings.addLoansAndDebts);
-    PageUtils.clickLink(e2eReportStrings.loans);
-    PageUtils.clickLink(e2eReportStrings.loanFromBank);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan Received from Bank');
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -172,28 +172,28 @@ describe('Loans', () => {
 
     PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-    PageUtils.clickButton(e2eReportStrings.saveMultiple);
+    PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).should('exist');
+    cy.contains('Loan Received from Bank').should('exist');
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(e2eReportStrings.addLoansAndDebts);
-    PageUtils.clickLink(e2eReportStrings.loans);
-    PageUtils.clickLink(e2eReportStrings.loanFromBank);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan Received from Bank');
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -202,39 +202,39 @@ describe('Loans', () => {
 
     PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-    PageUtils.clickButton(e2eReportStrings.saveMultiple);
+    PageUtils.clickButton('Save transactions');
 
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).last().should('exist');
-    PageUtils.clickElement(e2eReportStrings.buttonLoansAndDebts);
-    cy.contains(e2eReportStrings.makeLoanPayment).click();
-    PageUtils.urlCheck(e2eReportStrings.makeLoanPaymentUrl);
+    cy.contains('Loan Received from Bank').last().should('exist');
+    PageUtils.clickElement('loans-and-debts-button');
+    cy.contains('Make loan repayment').click();
+    PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
     PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
     PageUtils.enterValue('#amount', formData.amount);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.madeLoanPayment).should('exist');
+    cy.contains('Loan Repayment Made').should('exist');
   });
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(e2eReportStrings.addLoansAndDebts);
-    PageUtils.clickLink(e2eReportStrings.loans);
-    PageUtils.clickLink(e2eReportStrings.loanFromBank);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan Received from Bank');
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -243,46 +243,46 @@ describe('Loans', () => {
 
     PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-    PageUtils.clickButton(e2eReportStrings.saveMultiple);
+    PageUtils.clickButton('Save transactions');
 
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).last().should('exist');
+    cy.contains('Loan Received from Bank').last().should('exist');
     const alias = PageUtils.getAlias('');
     cy.get(alias)
-      .find("[datatest='" + e2eReportStrings.buttonLoansAndDebts + "']")
+      .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()
       .last()
       .click();
-    cy.contains(e2eReportStrings.reviewLoan).click();
+    cy.contains('Review loan agreement').click();
     PageUtils.urlCheck('/list/');
-    PageUtils.clickButton(e2eReportStrings.saveMultiple);
+    PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
-    cy.contains(e2eReportStrings.loanFromBank).should('exist');
+    cy.contains('Loan Received from Bank').should('exist');
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create individual
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(e2eReportStrings.addLoansAndDebts);
-    PageUtils.clickLink(e2eReportStrings.loans);
-    PageUtils.clickLink(e2eReportStrings.loanFromBank);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan Received from Bank');
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);

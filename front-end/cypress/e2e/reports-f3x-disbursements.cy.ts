@@ -1,108 +1,108 @@
-import { ContactListPage } from "./pages/contactListPage";
-import { F3xCreateReportPage } from "./pages/f3xCreateReportPage";
-import { LoginPage } from "./pages/loginPage";
-import { PageUtils, currentYear } from "./pages/pageUtils";
-import { ReportListPage } from "./pages/reportListPage";
-import { TransactionDetailPage } from "./pages/transactionDetailPage";
-import { defaultFormData as individualContactFormData, ContactFormData } from "./models/ContactFormModel";
-import { defaultFormData as defaultReportFormData, e2eReportStrings } from "./models/ReportFormModel";
-import { defaultScheduleFormData as defaultTransactionFormData, DisbursementFormData } from "./models/TransactionFormModel";
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
+import { LoginPage } from './pages/loginPage';
+import { PageUtils, currentYear } from './pages/pageUtils';
+import { ReportListPage } from './pages/reportListPage';
+import { TransactionDetailPage } from './pages/transactionDetailPage';
+import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
+import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
+import {
+  defaultScheduleFormData as defaultTransactionFormData,
+  DisbursementFormData,
+} from './models/TransactionFormModel';
 
 const organizationFormData: ContactFormData = {
-    ...individualContactFormData,
-    ...{ contact_type: 'Organization' },
+  ...individualContactFormData,
+  ...{ contact_type: 'Organization' },
 };
 
 const candidateFormData: ContactFormData = {
-    ...individualContactFormData,
-    ...{ contact_type: 'Candidate' },
+  ...individualContactFormData,
+  ...{ contact_type: 'Candidate' },
 };
 
-
 const independantExpVoidData: DisbursementFormData = {
-    ...defaultTransactionFormData,
-    ...{
-        date2: new Date(currentYear, 4 - 1, 27),
-        supportOpposeCode: "SUPPORT",
-        signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-        signatoryFirstName: PageUtils.randomString(10),
-        signatoryLastName: PageUtils.randomString(10)
-    },
+  ...defaultTransactionFormData,
+  ...{
+    date2: new Date(currentYear, 4 - 1, 27),
+    supportOpposeCode: 'SUPPORT',
+    signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
+    signatoryFirstName: PageUtils.randomString(10),
+    signatoryLastName: PageUtils.randomString(10),
+  },
 };
 
 describe('Disbursements', () => {
-    beforeEach(() => {
-        LoginPage.login();
-        ReportListPage.deleteAllReports();
-        ContactListPage.deleteAllContacts();
-        ContactListPage.goToPage();
-        ReportListPage.goToPage();
-    });
-    
-    it("should test F3xFederalElectionActivityExpendituresPage disbursement", () => {
-        // Create an individual contact to be used with contact lookup
-        ContactListPage.goToPage();
-        PageUtils.clickButton(e2eReportStrings.new);
-        ContactListPage.enterFormData(individualContactFormData);
-        PageUtils.clickButton(e2eReportStrings.save);
+  beforeEach(() => {
+    LoginPage.login();
+    ReportListPage.deleteAllReports();
+    ContactListPage.deleteAllContacts();
+    ContactListPage.goToPage();
+    ReportListPage.goToPage();
+  });
 
-        ReportListPage.goToPage();
-        ReportListPage.clickCreateButton();
-        F3xCreateReportPage.enterFormData(defaultReportFormData);
-        PageUtils.clickButton(e2eReportStrings.saveAndCont);
+  it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
+    // Create an individual contact to be used with contact lookup
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(individualContactFormData);
+    PageUtils.clickButton('Save');
 
-        PageUtils.clickSidebarItem(e2eReportStrings.addDisbursement);
-        PageUtils.clickLink(e2eReportStrings.federalElectionActivityExpenditures);
-        PageUtils.clickLink(e2eReportStrings.percentFedElectionActivity);
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
 
-        cy.get('#entity_type_dropdown').type(individualContactFormData.contact_type);
-        cy.contains(e2eReportStrings.lookup).should('exist');
-        cy.get('[role="searchbox"]').type(individualContactFormData.last_name.slice(0,1));
-        cy.contains(individualContactFormData.last_name).should('exist');
-        cy.contains(individualContactFormData.last_name).click();
+    PageUtils.clickSidebarItem('Add a disbursement');
+    PageUtils.clickLink('FEDERAL ELECTION ACTIVITY EXPENDITURES');
+    PageUtils.clickLink('100% Federal Election Activity Payment');
 
-        TransactionDetailPage.enterScheduleFormData(defaultTransactionFormData);
-        
-        PageUtils.clickButton(e2eReportStrings.save);
-        PageUtils.clickLink(e2eReportStrings.percentFedElectionActivity);
-        cy.contains(individualContactFormData.first_name).should('exist');
-        cy.contains(individualContactFormData.last_name).should('exist');
+    cy.get('#entity_type_dropdown').type(individualContactFormData.contact_type);
+    cy.contains('LOOKUP').should('exist');
+    cy.get('[role="searchbox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.contains(individualContactFormData.last_name).click();
 
-    }); 
+    TransactionDetailPage.enterScheduleFormData(defaultTransactionFormData);
 
-    it("should test Independent Expenditure - Void Schedule E disbursement", () => {
-        // Create an individual contact to be used with contact lookup
-        ContactListPage.goToPage();
-        PageUtils.clickButton(e2eReportStrings.new);
-        ContactListPage.enterFormData(organizationFormData);
-        PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
+    PageUtils.clickLink('100% Federal Election Activity Payment');
+    cy.contains(individualContactFormData.first_name).should('exist');
+    cy.contains(individualContactFormData.last_name).should('exist');
+  });
 
-        ContactListPage.goToPage();
-        PageUtils.clickButton(e2eReportStrings.new);
-        ContactListPage.enterFormData(candidateFormData);
-        PageUtils.clickButton(e2eReportStrings.save);
+  it('should test Independent Expenditure - Void Schedule E disbursement', () => {
+    // Create an individual contact to be used with contact lookup
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(organizationFormData);
+    PageUtils.clickButton('Save');
 
-        ReportListPage.goToPage();
-        ReportListPage.clickCreateButton();
-        F3xCreateReportPage.enterFormData(defaultReportFormData);
-        PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(candidateFormData);
+    PageUtils.clickButton('Save');
 
-        PageUtils.clickSidebarItem(e2eReportStrings.addDisbursement);
-        cy.contains(e2eReportStrings.addDisbursement).should('exist');
-        PageUtils.clickLink(e2eReportStrings.independantExpenditures);
-        PageUtils.clickLink(e2eReportStrings.independantExpenditureVoid);
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
 
-        cy.get('#entity_type_dropdown').type(organizationFormData.contact_type);
-        cy.contains(e2eReportStrings.lookup).should('exist');
-        cy.get('[role="searchbox"]').type(organizationFormData.name.slice(0, 1));
-        cy.contains(organizationFormData.name).should('exist');
-        cy.contains(organizationFormData.name).click();
+    PageUtils.clickSidebarItem('Add a disbursement');
+    cy.contains('Add a disbursement').should('exist');
+    PageUtils.clickLink('INDEPENDENT EXPENDITURES');
+    PageUtils.clickLink('Independent Expenditure - Void');
 
-        TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independantExpVoidData, candidateFormData);
+    cy.get('#entity_type_dropdown').type(organizationFormData.contact_type);
+    cy.contains('LOOKUP').should('exist');
+    cy.get('[role="searchbox"]').type(organizationFormData.name.slice(0, 1));
+    cy.contains(organizationFormData.name).should('exist');
+    cy.contains(organizationFormData.name).click();
 
-        PageUtils.clickButton(e2eReportStrings.save);
-        PageUtils.clickLink(e2eReportStrings.independantExpenditureVoid);
-        cy.contains(organizationFormData.name).should('exist');
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independantExpVoidData, candidateFormData);
 
-    }); 
+    PageUtils.clickButton('Save');
+    PageUtils.clickLink('Independent Expenditure - Void');
+    cy.contains(organizationFormData.name).should('exist');
+  });
 });

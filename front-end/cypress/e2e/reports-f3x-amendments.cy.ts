@@ -4,7 +4,7 @@ import { ReportListPage } from './pages/reportListPage';
 import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { ContactFormData, defaultFormData as contactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, e2eReportStrings } from './models/ReportFormModel';
+import { defaultFormData as reportFormData } from './models/ReportFormModel';
 
 const organizationFormData: ContactFormData = {
   ...contactFormData,
@@ -21,33 +21,33 @@ describe('Amendments', () => {
 
   it('should test Create an amendment', () => {
     ContactListPage.goToPage();
-    PageUtils.clickButton(e2eReportStrings.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton(e2eReportStrings.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Cash on hand
-    PageUtils.clickSidebarItem(e2eReportStrings.cashOnHandLink);
+    PageUtils.clickSidebarItem('Cash on hand');
     const alias = PageUtils.getAlias('');
     PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
     PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
-    PageUtils.clickButton(e2eReportStrings.saveAndCont2);
+    PageUtils.clickButton('Save & continue');
 
     PageUtils.urlCheck('/list');
-    PageUtils.clickSidebarItem(e2eReportStrings.submitReportLink);
-    PageUtils.clickLink(e2eReportStrings.submitReport);
+    PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
+    PageUtils.clickLink('Submit report');
     PageUtils.urlCheck('/submit/step2');
     PageUtils.enterValue('#filing_password', 'T3stUpl@ad');
     cy.get(alias).find('p-checkbox[inputid="truth_statement"]').click();
-    PageUtils.clickButton(e2eReportStrings.submit);
+    PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
 
-    PageUtils.clickButton(e2eReportStrings.yes);
+    PageUtils.clickButton('Yes');
     ReportListPage.goToPage();
 
     cy.get(alias).find('app-table-actions-button').click();

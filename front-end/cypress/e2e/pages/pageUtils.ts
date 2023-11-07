@@ -24,7 +24,7 @@ export class PageUtils {
     }
   }
 
-  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '', loanOverride: boolean = false) {
+  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
     const currentDate: Date = new Date();
     //
@@ -172,5 +172,5 @@ export class PageUtils {
 
   static containedOnPage(selector: string) {
     cy.contains(selector).should('exist');
-  } 
+  }
 }
