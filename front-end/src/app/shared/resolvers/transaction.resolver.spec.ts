@@ -190,7 +190,7 @@ describe('TransactionResolver', () => {
       });
   });
 
-  it('should populate parent transaction if child is existing', () => {
+  it('should have parent transaction', () => {
     spyOn(resolver.transactionService, 'get').and.callFake((id) => {
       return of(
         SchATransaction.fromJSON({
@@ -201,7 +201,13 @@ describe('TransactionResolver', () => {
           ),
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
-          parent_transaction_id: '2',
+          parent_transaction: SchATransaction.fromJSON({
+            id: '2',
+            transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
+            contact_id: '123',
+            contact_1: Contact.fromJSON({ id: 123 }),
+          }),
         })
       );
     });
@@ -211,11 +217,18 @@ describe('TransactionResolver', () => {
     });
   });
 
-  it('should populate grandparent transaction if child is existing', () => {
+  it('should have grandparent transaction ', () => {
     spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-      if (id === '10') {
-        return of(
-          SchATransaction.fromJSON({
+      return of(
+        SchATransaction.fromJSON({
+          id: id,
+          transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+          transactionType: TransactionTypeUtils.factory(
+            ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
+          ),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+          parent_transaction: SchATransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
@@ -223,36 +236,16 @@ describe('TransactionResolver', () => {
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-            parent_transaction_id: '2',
-          })
-        );
-      }
-      if (id === '2') {
-        return of(
-          SchATransaction.fromJSON({
-            id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
-            transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
-            ),
-            contact_id: '123',
-            contact_1: Contact.fromJSON({ id: 123 }),
-            parent_transaction_id: '1',
-          })
-        );
-      } else {
-        return of(
-          SchATransaction.fromJSON({
-            id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
-            transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
-            ),
-            contact_id: '123',
-            contact_1: Contact.fromJSON({ id: 123 }),
-          })
-        );
-      }
+            parent_transaction: SchATransaction.fromJSON({
+              id: '1',
+              transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+              transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
+              contact_id: '123',
+              contact_1: Contact.fromJSON({ id: 123 }),
+            }),
+          }),
+        })
+      );
     });
     resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
       if (transaction) expect(transaction.id).toBe('10');
@@ -289,7 +282,7 @@ describe('TransactionResolver', () => {
     });
   });
 
-  it('should populate debt transaction', () => {
+  it('should have debt transaction', () => {
     spyOn(resolver.transactionService, 'get').and.callFake((id) => {
       return of(
         SchATransaction.fromJSON({
@@ -298,7 +291,13 @@ describe('TransactionResolver', () => {
           transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
-          debt_id: '2',
+          debt: SchDTransaction.fromJSON({
+            id: '2',
+            transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
+            transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
+            contact_id: '123',
+            contact_1: Contact.fromJSON({ id: 123 }),
+          }),
         })
       );
     });
