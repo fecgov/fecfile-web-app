@@ -4,8 +4,8 @@ export class ReportListPage {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
   }
 
-  static clickCreateButton() {
-    cy.get("button[label='Create a new report']").click();
+  static clickCreateButton(force: boolean = false) {
+    cy.get("button[label='Create a new report']").click({force: force});
     cy.get('button').contains('Start building report').click();
   }
 

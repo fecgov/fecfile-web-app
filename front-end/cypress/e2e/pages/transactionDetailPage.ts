@@ -1,4 +1,5 @@
-import { LoanFormData, ScheduleFormData } from '../models/TransactionFormModel';
+import { ContactFormData } from '../models/ContactFormModel';
+import { DisbursementFormData, LoanFormData, ScheduleFormData } from '../models/TransactionFormModel';
 import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
@@ -7,12 +8,91 @@ export class TransactionDetailPage {
     PageUtils.calendarSetValue(dateFieldName, dateFieldValue, alias);
   }
 
+  static enterSheduleFormDataForVoidExpenditure(
+    formData: DisbursementFormData,
+    contactData: ContactFormData,
+    readOnlyAmount = false,
+    alias = ''
+  ) {
+    alias = PageUtils.getAlias(alias);
+
+    if (formData.date_received !== undefined) {
+      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
+    }
+    if (formData.date2 !== undefined) {
+      this.enterDate('p-calendar[inputid="date2"]', formData.date2, alias);
+    }
+
+    if (formData.supportOpposeCode !== undefined) {
+      cy.get("p-radiobutton[FormControlName='support_oppose_code']").contains(formData.supportOpposeCode).click();
+      cy.get('#entity_type_dropdown').last().type(contactData.contact_type);
+      cy.get('[role="searchbox"]').last().type(contactData.last_name.slice(0, 1));
+      cy.contains(contactData.last_name).should('exist');
+      cy.contains(contactData.last_name).click();
+    }
+
+    if (formData.memo_code) {
+      cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
+    }
+    if (!readOnlyAmount) {
+      cy.get(alias).find('#amount').safeType(formData['amount']);
+    }
+    if (formData.electionType !== undefined) {
+      PageUtils.dropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
+    }
+    if (formData.electionYear !== undefined) {
+      cy.get(alias).find('#electionYear').safeType(formData.electionYear);
+    }
+    if (formData.election_other_description) {
+      cy.get(alias).find('#election_other_description').safeType(formData.election_other_description);
+    }
+    if (formData.purpose_description) {
+      cy.get(alias).find('textarea#purpose_description').safeType(formData.purpose_description);
+    }
+    cy.get(alias).find('textarea#text4000').safeType(formData.memo_text);
+
+    if (formData.category_code != '') {
+      console.log('HELLO');
+      PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
+    }
+
+    if (formData.signatoryLastName !== undefined) {
+      cy.get(alias)
+        .find('.signatory_1_input')
+        .children()
+        .find('app-name-input')
+        .children()
+        .find('input#last_name')
+        .type(formData.signatoryLastName);
+      cy.get(alias)
+        .find('.signatory_1_input')
+        .children()
+        .find('app-name-input')
+        .children()
+        .find('input#first_name')
+        .type(formData.signatoryFirstName);
+      cy.get(alias)
+        .find('.signatory_1_input')
+        .children()
+        .find('div.grid')
+        .children()
+        .find("p-calendar[inputid='date_signed']")
+        .type('04/27/2023');
+    }
+  }
+
+  static enterNewLoanAgreementFormData(formData: LoanFormData, alias = '') {
+    this.enterLoanFormData(formData);
+    this.enterLoanFormDataStepTwo(formData);
+  }
+
   static enterScheduleFormData(formData: ScheduleFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
 
     if (formData.date_received !== undefined) {
       this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
     }
+
     if (formData.memo_code) {
       cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
     }
@@ -38,7 +118,11 @@ export class TransactionDetailPage {
     }
   }
 
-  static enterLoanFormData(formData: LoanFormData, alias = '') {
+  /*
+  
+  */
+
+  static enterLoanFormData(formData: LoanFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find('#amount').safeType(formData.amount);
 
@@ -70,7 +154,7 @@ export class TransactionDetailPage {
       cy.get(alias).find('input[name="secured"]').first().click({ force: true });
     }
 
-    if (formData.memo_text) {
+    if (formData.memo_text !== '') {
       cy.get(alias).find('#text4000').type(formData.memo_text);
     }
 
@@ -85,7 +169,7 @@ export class TransactionDetailPage {
 
   static enterLoanFormDataStepTwo(formData: LoanFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
-    PageUtils.clickLink('STEP TWO:');
+
     if (formData.loan_restructured !== undefined) {
       cy.get(alias).find('input[name="loan_restructured"]').first().click({ force: true });
     }
