@@ -8,7 +8,6 @@ import { TransactionDetailPage } from './pages/transactionDetailPage';
 import { defaultFormData as defaultContactFormData } from './models/ContactFormModel';
 import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from './models/TransactionFormModel';
-import { defaultLoanFormData } from './models/TransactionFormModel';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -86,7 +85,11 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
-    TransactionDetailPage.enterLoanFormData(defaultLoanFormData);
+    const formTransactionData = {
+      ...scheduleData,
+      ...{ amount: 200.01, category_code: '005 Polling Expenses' },
+    };
+    TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -94,7 +97,7 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', 'Other Disbursement');
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData.name);
-    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
+    cy.get('tr').should('contain', PageUtils.dateToString(formTransactionData.date_received));
     cy.get('tr').should('contain', '$' + formTransactionDataForSchedule.amount);
 
     // Check values of edit form

@@ -8,16 +8,14 @@ import { defaultLoanFormData } from './models/TransactionFormModel';
 import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
 import { defaultFormData as reportFormData, e2eReportStrings, F3xCreateReportFormData } from './models/ReportFormModel';
 
-
 const reportFormDataApril: F3xCreateReportFormData = {
   ...reportFormData,
   ...{
     report_code: 'Q1',
     coverage_from_date: new Date(currentYear, 0, 1),
     coverage_through_date: new Date(currentYear, 3, 30),
-    
-  }
-}
+  },
+};
 
 const reportFormDataJuly: F3xCreateReportFormData = {
   ...reportFormData,
@@ -25,9 +23,8 @@ const reportFormDataJuly: F3xCreateReportFormData = {
     report_code: 'Q2',
     coverage_from_date: new Date(currentYear, 4, 1),
     coverage_through_date: new Date(currentYear, 7, 30),
-    
-  }
-}
+  },
+};
 
 const organizationFormData: ContactFormData = {
   ...individualContactFormData,
@@ -38,12 +35,12 @@ const formData = {
   ...defaultLoanFormData,
   ...{
     purpose_description: undefined,
-    loan_restructured: "NO",
-    line_of_credit: "NO",
-    others_liable: "NO",
-    collateral: "NO",
-    future_income: "NO",
-    date_incurred: new Date("04/27/2023")
+    loan_restructured: 'NO',
+    line_of_credit: 'NO',
+    others_liable: 'NO',
+    collateral: 'NO',
+    future_income: 'NO',
+    date_incurred: new Date('04/27/2023'),
   },
 };
 
@@ -56,7 +53,6 @@ describe('Loans', () => {
     ReportListPage.goToPage();
   });
 
-  
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
@@ -85,7 +81,7 @@ describe('Loans', () => {
     PageUtils.searchBoxInput(organizationFormData.name);
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickLink("STEP TWO:");
+    PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(e2eReportStrings.saveMultiple);
     PageUtils.urlCheck('/list');
@@ -102,27 +98,34 @@ describe('Loans', () => {
     // Create report to add loan too
     ReportListPage.goToPage();
     const alias = PageUtils.getAlias('');
-    cy.get(alias).contains("JULY 15").siblings().last().find("app-table-actions-button").children()
-    .last()
-    .click()
+    cy.get(alias).contains('JULY 15').siblings().last().find('app-table-actions-button').children().last().click();
 
     cy.get(alias).contains(e2eReportStrings.editReport).first().click();
     PageUtils.urlCheck('cash-on-hand');
-    PageUtils.enterValue("#L6a_cash_on_hand_jan_1_ytd", 60000);
-    PageUtils.calendarSetValue('p-calendar', new Date("05/27/2023"), alias);
+    PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
+    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
     PageUtils.clickButton(e2eReportStrings.saveAndCont2);
-    cy.get(alias).find("[datatest='" + e2eReportStrings.buttonLoansAndDebts + "']").children().last().click();
+    cy.get(alias)
+      .find("[datatest='" + e2eReportStrings.buttonLoansAndDebts + "']")
+      .children()
+      .last()
+      .click();
     cy.get(alias).contains(e2eReportStrings.newLoanAgreement).click();
 
-    PageUtils.urlCheck(e2eReportStrings.loanAgreementUrl)
+    PageUtils.urlCheck(e2eReportStrings.loanAgreementUrl);
     PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    formData.secured = undefined;
-    formData.memo_text = ""
-    formData.date_incurred = new Date("05/27/2023")
-    formData.amount = 65000;
-    TransactionDetailPage.enterNewLoanAgreementFormData(formData);
-    PageUtils.clickButton(e2eReportStrings.save, "", true);
+    const fd = {
+      ...formData,
+      ...{
+        date_received: undefined,
+        secured: undefined,
+        memo_text: '',
+        date_incurred: new Date('05/27/2023'),
+        amount: 65000,
+      },
+    };
+    TransactionDetailPage.enterNewLoanAgreementFormData(fd);
+    PageUtils.clickButton(e2eReportStrings.save, '', true);
     cy.contains(e2eReportStrings.loanFromBank).should('exist');
     PageUtils.urlCheck('/list');
     cy.contains(e2eReportStrings.loanFromBank).last().should('exist');
@@ -134,10 +137,10 @@ describe('Loans', () => {
       .click();
     cy.contains(e2eReportStrings.reviewLoan).click();
     PageUtils.urlCheck('/list/');
-    PageUtils.valueCheck("#amount", "$65,000.00");
-    PageUtils.valueCheck("#date_incurred", "05/27/2023");
-  }) 
-  
+    PageUtils.valueCheck('#amount', '$65,000.00');
+    PageUtils.valueCheck('#date_incurred', '05/27/2023');
+  });
+
   it('should test: Loan Received from Bank', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
@@ -167,7 +170,7 @@ describe('Loans', () => {
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
 
-    PageUtils.clickLink("STEP TWO:");
+    PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(e2eReportStrings.saveMultiple);
     PageUtils.urlCheck('/list');
@@ -197,7 +200,7 @@ describe('Loans', () => {
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
 
-    PageUtils.clickLink("STEP TWO:");
+    PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(e2eReportStrings.saveMultiple);
 
@@ -238,7 +241,7 @@ describe('Loans', () => {
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
 
-    PageUtils.clickLink("STEP TWO:");
+    PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton(e2eReportStrings.saveMultiple);
 
@@ -286,20 +289,18 @@ describe('Loans', () => {
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
 
-    PageUtils.clickLink("STEP TWO:");
+    PageUtils.clickLink('STEP TWO:');
     TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-  
-    PageUtils.clickButton(e2eReportStrings.saveAndAddGaurantor);
 
-    PageUtils.urlCheck(e2eReportStrings.addGuarantorUrl);
+    PageUtils.clickButton('Save & add loan guarantor');
+
+    PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
     PageUtils.searchBoxInput(individualContactFormData.last_name);
     cy.get('#amount').safeType(formData['amount']);
-    PageUtils.clickButton(e2eReportStrings.saveAndAddGaurantor);
-
-    PageUtils.clickButton(e2eReportStrings.cancel);
-    PageUtils.urlCheck(e2eReportStrings.addGuarantorUrl);
-    cy.contains(e2eReportStrings.loanFromBank).click();
+    cy.contains(/^Save$/).click();
+    cy.contains('Loan Received from Bank').click();
     PageUtils.urlCheck('/list/');
-    cy.contains(individualContactFormData.last_name).should('exist');
-  }); 
+    cy.contains('ORGANIZATION NAME').should('exist');
+    cy.get('#organization_name').should('have.value', individualContactFormData.name);
+  });
 });
