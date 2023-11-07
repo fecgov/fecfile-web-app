@@ -42,6 +42,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   form: FormGroup = this.fb.group({});
   isEditable = true;
   isDebtRepayment = false;
+  isLoanRepayment = false;
   memoCodeCheckboxLabel$ = of('');
 
   constructor(
@@ -84,6 +85,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     this.isDebtRepayment = !!this.transaction.debt_id;
+    this.isLoanRepayment = !!this.transaction.loan_id;
 
     // If this single-entry transaction has inherited fields from its parent, load values
     // from parent on create and set field to read-only. For edit, just make
