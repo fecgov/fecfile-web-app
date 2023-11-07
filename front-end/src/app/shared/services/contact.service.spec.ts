@@ -44,6 +44,7 @@ describe('ContactService', () => {
       count: 2,
       next: 'https://next-page',
       previous: 'https://previous-page',
+      pageNumber: 1,
       results: [
         Contact.fromJSON({
           id: 'C00000001',
@@ -206,6 +207,7 @@ describe('ContactService', () => {
       count: 2,
       next: 'https://next-page',
       previous: 'https://previous-page',
+      pageNumber: 1,
       results: [
         Contact.fromJSON({
           id: 'C00000001',
