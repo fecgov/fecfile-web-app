@@ -39,6 +39,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Output() createNewContactSelect = new EventEmitter<void>();
 
   contactType = ContactTypes.INDIVIDUAL;
+  contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
