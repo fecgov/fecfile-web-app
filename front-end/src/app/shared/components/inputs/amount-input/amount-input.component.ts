@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } fro
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
@@ -19,8 +20,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
   @Input() showCalendarYTD = false;
-  @Input() isDebtRepayment = false;
-  @Input() isLoanRepayment = false;
 
   @Input() memoCodeCheckboxLabel = '';
   @Input() memoItemHelpText: string | undefined;
@@ -30,6 +29,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
+  isLoanRepayment = false;
+  isDebtRepayment = false;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
@@ -39,6 +40,9 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.contributionAmountReadOnly) {
       this.contributionAmountInputStyleClass = 'readonly';
     }
+
+    this.isLoanRepayment = isLoanRepayment(this.transaction);
+    this.isDebtRepayment = isDebtRepayment(this.transaction);
 
     // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
     // and set up the "Just checking..." pop-up as needed.

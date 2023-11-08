@@ -20,8 +20,6 @@ export class TransactionInputComponent implements OnInit {
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
-  @Input() isDebtRepayment = false;
-  @Input() isLoanRepayment = false;
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();

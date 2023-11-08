@@ -53,8 +53,6 @@
       [showAggregate]="!!transaction?.transactionType?.showAggregate"
       [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
       [transaction]="transaction"
-      [isDebtRepayment]="isDebtRepayment"
-      [isLoanRepayment]="isLoanRepayment"
       [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
     ></app-amount-input>
   </ng-container>
