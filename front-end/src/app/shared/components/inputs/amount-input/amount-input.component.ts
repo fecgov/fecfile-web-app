@@ -6,7 +6,7 @@ import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
-import { take, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 
@@ -80,7 +80,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.isDebtRepayment || this.isLoanRepayment) {
       this.store
         .select(selectActiveReport)
-        .pipe(take(1))
+        .pipe(takeUntil(this.destroy$))
         .subscribe((report) => {
           this.form
             .get(this.templateMap.date)
@@ -90,7 +90,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
                 const message = 'Date must fall within the report date range.';
                 return { invaliddate: { msg: message } };
               }
-
               return null;
             });
         });
