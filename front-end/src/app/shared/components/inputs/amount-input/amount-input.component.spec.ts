@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { CalendarModule } from 'primeng/calendar';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { AmountInputComponent } from './amount-input.component';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { Dialog } from 'primeng/dialog';
-import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
+import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Dialog } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { Tooltip, TooltipModule } from 'primeng/tooltip';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
+import { AmountInputComponent } from './amount-input.component';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -34,6 +34,7 @@ describe('AmountInputComponent', () => {
       contribution_aggregate: new FormControl(''),
       disbursement_date: new FormControl(''),
       dissemination_date: new FormControl(''),
+      expenditure_date: new FormControl(''),
     });
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
@@ -72,5 +73,29 @@ describe('AmountInputComponent', () => {
       [transaction.transactionType.templateMap.date2]: date,
     });
     expect(component.memoCode.coverageDate.getTime()).toBe(-14182940000);
+  });
+
+  it('should not allow memo item selection for loan repayment', () => {
+    const transaction = getFromJSON({ transaction_type_identifier: 'LOAN_REPAYMENT_MADE' });
+    transaction.loan_id = 'test';
+    component.transaction = transaction;
+    component.templateMap = transaction.transactionType.templateMap;
+    component.ngOnInit();
+    const dateFormControl = component.form.get(component.templateMap.date);
+
+    const validDate: Date = new Date('May 26, 22 20:17:40 GMT+00:00');
+    component.form.patchValue({
+      [transaction.transactionType.templateMap.date]: validDate,
+    });
+    expect(dateFormControl?.invalid).toBeFalse();
+
+    const invalidDate: Date = new Date('May 26, 20 20:17:40 GMT+00:00');
+    component.form.patchValue({
+      [transaction.transactionType.templateMap.date]: invalidDate,
+    });
+    expect(dateFormControl?.invalid).toBeTrue();
+    
+    const msg = dateFormControl?.errors?.['invaliddate'].msg;
+    expect(msg).toEqual('Date must fall within the report date range.');
   });
 });
