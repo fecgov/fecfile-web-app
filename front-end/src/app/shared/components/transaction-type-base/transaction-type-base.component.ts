@@ -82,7 +82,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
-
+    
     this.isDebtRepayment = isDebtRepayment(this.transaction);
 
     // If this single-entry transaction has inherited fields from its parent, load values
