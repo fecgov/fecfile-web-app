@@ -72,6 +72,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     return SchCTransaction.fromJSON({
       form_type: 'SC/9',
       transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+      // until the FEC filing api can accept '27', we cannot send it: receipt_line_number: '27',
     });
   }
 }
