@@ -13,6 +13,7 @@ import { STANDARD_AND_SECONDARY } from '../contact.model';
 import { SchC1TransactionType } from '../schc1-transaction-type.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
+import { Transaction, isPulledForwardLoan } from '../transaction.model';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [
@@ -52,7 +53,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override contactConfig = STANDARD_AND_SECONDARY;
   override contactTypeOptions = ORGANIZATION;
   override contact2IsRequired = (form: FormGroup) => form.get('future_income')?.value;
-  override isDependentChild = true;
+  override isDependentChild = (transaction: Transaction) => isPulledForwardLoan(transaction.parent_transaction);
   override doMemoCodeDateCheck = false;
   schema = schema;
   override useParentContact = true;

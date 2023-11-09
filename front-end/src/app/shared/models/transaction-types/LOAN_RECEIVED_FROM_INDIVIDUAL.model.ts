@@ -48,7 +48,6 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override showGuarantorTable = true;
 
   schema = schema;
-  override apiEndpoint = '/transactions/save';
   override dependentChildTransactionTypes = [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT];
   override subTransactionConfig = [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR];
   override navigationControls = new TransactionNavigationControls(

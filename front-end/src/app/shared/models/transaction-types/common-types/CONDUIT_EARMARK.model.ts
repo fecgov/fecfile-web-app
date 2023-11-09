@@ -9,7 +9,6 @@ export abstract class CONDUIT_EARMARK extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
   override showAggregate = false;
-  override apiEndpoint = '/transactions/save';
   override memoCodeMap = {
     true: 'Undeposited',
     false: 'Deposited',

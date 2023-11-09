@@ -40,6 +40,7 @@ describe('TransactionService', () => {
       count: 2,
       next: 'https://next-page',
       previous: 'https://previous-page',
+      pageNumber: 1,
       results: [
         SchATransaction.fromJSON({
           id: 1,
@@ -56,7 +57,9 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=line_label_order_key`);
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/transactions/?page=1&ordering=line_label_order_key`
+    );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -146,7 +149,7 @@ describe('TransactionService', () => {
       expect(response?.id).toEqual(schATransaction.id);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/`);
     expect(req.request.method).toEqual('POST');
     req.flush(schATransaction);
     httpTestingController.verify();
@@ -162,7 +165,7 @@ describe('TransactionService', () => {
       expect(response?.id).toEqual(schATransaction.id);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/1/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(schATransaction);
     httpTestingController.verify();
@@ -179,7 +182,7 @@ describe('TransactionService', () => {
       expect(true).toBeTrue();
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
     httpTestingController.verify();

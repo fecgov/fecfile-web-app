@@ -22,7 +22,7 @@ import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model'
  */
 export abstract class TransactionType {
   abstract scheduleId: ScheduleIds;
-  abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
+  apiEndpoint = '/transactions'; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
@@ -45,7 +45,8 @@ export abstract class TransactionType {
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
 
   // Double-entry settings
-  isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isDependentChild = (transaction: Transaction) => false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

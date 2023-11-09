@@ -13,7 +13,7 @@ import {
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   override formFields = INDIVIDUAL_ORGANIZATION_FORM_FIELDS;
   override contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
-  override isDependentChild = true;
+  override isDependentChild = () => true;
   override doMemoCodeDateCheck = false;
   title = 'Receipt';
   schema = schema;
@@ -28,7 +28,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
     'zip',
     'date',
     'amount',
-    'memo_code'
+    'memo_code',
   ] as TemplateMapKeyType[];
 
   override description =
