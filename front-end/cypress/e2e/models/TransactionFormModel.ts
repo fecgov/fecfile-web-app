@@ -36,6 +36,23 @@ export const defaultScheduleFormData: ScheduleFormData = {
     memo_text: PageUtils.randomString(20),
 };
 
+export class DisbursementFormData extends ScheduleFormData { 
+    date2: Date | undefined;
+    supportOpposeCode: string;
+    signatoryLastName: string;
+    signatoryFirstName: string;
+    signatoryDateSigned: Date | undefined;
+
+    constructor(formData: DisbursementFormData) {
+        super(formData);
+        this.date2 = formData.date2;
+        this.supportOpposeCode = formData.supportOpposeCode;
+        this.signatoryFirstName = formData.signatoryFirstName;
+        this.signatoryLastName = formData.signatoryLastName;
+        this.signatoryDateSigned = formData.signatoryDateSigned;
+    }
+}
+
 export class LoanFormData extends ScheduleFormData {
     authorized_first_name: string;
     authorized_last_name: string;
