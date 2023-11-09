@@ -73,7 +73,7 @@
           }}
         </td>
         <td>
-          {{ item[item.transactionType.templateMap.date] | fecDate }}
+          {{ convertToDate(item.date) | fecDate }}
         </td>
         <td>
           {{ item.memo_code | memoCode }}
