@@ -6,7 +6,7 @@ import { catchError, of } from 'rxjs';
 import { Contact } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from '../models/schc-transaction.model';
+import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
 import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
 import { Transaction } from '../models/transaction.model';
 import { ContactService } from '../services/contact.service';
@@ -100,10 +100,23 @@ describe('TransactionResolver', () => {
     const route = {
       queryParamMap: convertToParamMap({}),
       paramMap: convertToParamMap({
+        reportId: 1,
         parentTransactionId: 1,
         transactionType: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
       }),
     };
+    spyOn(resolver.transactionService, 'get').and.returnValue(
+      of(
+        SchATransaction.fromJSON({
+          id: 1,
+          report_id: 1,
+          transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+          transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+        })
+      )
+    );
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
       expect(response).toBeTruthy();
@@ -229,7 +242,7 @@ describe('TransactionResolver', () => {
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
           parent_transaction: SchATransaction.fromJSON({
-            id: id,
+            id: '2',
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
               ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
@@ -307,7 +320,7 @@ describe('TransactionResolver', () => {
     });
   });
 
-  it('should populate loan transaction', () => {
+  it('should have loan transaction', () => {
     spyOn(resolver.transactionService, 'get').and.callFake((id) => {
       return of(
         SchATransaction.fromJSON({
@@ -316,7 +329,13 @@ describe('TransactionResolver', () => {
           transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
-          loan_id: '2',
+          loan: SchCTransaction.fromJSON({
+            id: '2',
+            transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+            transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_BY_COMMITTEE),
+            contact_id: '123',
+            contact_1: Contact.fromJSON({ id: 123 }),
+          }),
         })
       );
     });
