@@ -101,9 +101,8 @@ export class TransactionContactUtils {
     });
     const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
     return (
-      `By saving this transaction, you are also updating the contact for ` +
-      `<b>${contact.getNameString()}</b>. This change will only affect transactions with ` +
-      `receipt date on or after ${dateString}.<br><br>${changesMessage}`
+      `Your suggested changes for <b>${contact.getNameString()}</b> will affect all transactions involving this contact.` +
+      `<br><br>${changesMessage}`
     );
   }
 
