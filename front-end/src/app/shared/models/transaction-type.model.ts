@@ -22,7 +22,7 @@ import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model'
  */
 export abstract class TransactionType {
   abstract scheduleId: ScheduleIds;
-  abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
+  apiEndpoint = '/transactions'; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;

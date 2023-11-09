@@ -4,7 +4,6 @@ import { isPulledForwardLoan, ScheduleIds, Transaction } from './transaction.mod
 
 export abstract class SchC1TransactionType extends TransactionType {
   scheduleId = ScheduleIds.C1;
-  apiEndpoint = '/transactions';
 
   // Labels
   override amountInputHeader = 'Loan information';
