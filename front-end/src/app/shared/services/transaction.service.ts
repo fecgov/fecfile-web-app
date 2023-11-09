@@ -31,6 +31,7 @@ export class TransactionService implements TableListService<Transaction> {
       .pipe(
         map((response: ListRestResponse) => {
           response.results = response.results.map((item) => getFromJSON(item));
+          response.pageNumber = pageNumber;
           return response;
         })
       );
@@ -134,9 +135,11 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public create(transaction: Transaction): Observable<Transaction> {
+    console.log(transaction.transactionType.apiEndpoint);
     const payload = this.preparePayload(transaction);
+    console.log(transaction.transactionType.apiEndpoint);
     return this.apiService
-      .post<Transaction>(`${transaction.transactionType?.apiEndpoint}/`, payload)
+      .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 

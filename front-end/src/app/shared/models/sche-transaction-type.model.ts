@@ -5,7 +5,6 @@ import { FormGroup } from '@angular/forms';
 
 export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
-  apiEndpoint = '/transactions/schedule-e';
 
   override contactTitle = 'Payee';
   override amountInputHeader = 'Expenditure information';
