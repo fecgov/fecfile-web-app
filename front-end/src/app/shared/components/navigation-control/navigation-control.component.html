@@ -6,8 +6,8 @@
     [label]="navigationControl?.label || ''"
     [icon]="navigationControl?.icon || ''"
     [class]="navigationControl?.ngClass || ''"
-    (click)="click()"
-    [disabled]="isDisabled()"
+    (click)="click(); buttonClicked=true"
+    [disabled]="isDisabled() || buttonClicked"
   ></button>
   <p-dropdown
     *ngIf="controlType === 'dropdown'"

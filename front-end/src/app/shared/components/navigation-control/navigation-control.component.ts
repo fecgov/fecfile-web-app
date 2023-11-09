@@ -32,6 +32,7 @@ export class NavigationControlComponent implements OnInit {
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
+  buttonClicked = false;
 
   ngOnInit(): void {
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
