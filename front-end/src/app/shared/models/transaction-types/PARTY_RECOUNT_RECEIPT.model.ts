@@ -17,11 +17,14 @@ export class PARTY_RECOUNT_RECEIPT extends SchATransactionType {
     return `Recount Account`;
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
-      aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
+      ...{
+        form_type: 'SA17',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
+        aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
+      },
+      ...properties,
     });
   }
 }

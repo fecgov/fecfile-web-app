@@ -22,11 +22,14 @@ export class PARTNERSHIP_RECEIPT extends SchATransactionType {
     return 'Partnership attributions do not meet itemization threshold';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11AI',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

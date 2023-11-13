@@ -27,11 +27,14 @@ export class IN_KIND_OUT extends CommonInKindOut {
     'memo_code',
   ] as TemplateMapKeyType[];
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
-      transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_OUT,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      ...{
+        form_type: 'SB21B',
+        transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_OUT,
+        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      },
+      ...properties,
     });
   }
 }

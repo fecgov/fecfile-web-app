@@ -19,11 +19,14 @@ export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO extends SchBTransaction
   schema = schema;
   override navigationControls = CHILD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
-      transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      ...{
+        form_type: 'SB29',
+        transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO,
+        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      },
+      ...properties,
     });
   }
 }

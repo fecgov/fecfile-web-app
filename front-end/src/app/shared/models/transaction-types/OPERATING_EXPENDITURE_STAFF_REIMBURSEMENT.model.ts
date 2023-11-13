@@ -21,11 +21,14 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionTy
     return 'Reimbursement: See Below';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
-      transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      ...{
+        form_type: 'SB21B',
+        transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
+        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      },
+      ...properties,
     });
   }
 }

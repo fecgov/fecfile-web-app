@@ -20,11 +20,14 @@ export class NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT extends SchBTransa
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Headquarters Buildings Account: ';
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
-      transaction_type_identifier: ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      ...{
+        form_type: 'SB21B',
+        transaction_type_identifier: ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
+        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      },
+      ...properties,
     });
   }
 }

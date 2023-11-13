@@ -25,11 +25,14 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
     return 'Transfer of Joint Fundraising Proceeds';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA12',
+        transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

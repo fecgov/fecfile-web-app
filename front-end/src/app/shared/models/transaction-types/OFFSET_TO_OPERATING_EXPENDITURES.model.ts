@@ -16,11 +16,14 @@ export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA15',
-      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      aggregation_group: AggregationGroups.LINE_15,
+      ...{
+        form_type: 'SA15',
+        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+        aggregation_group: AggregationGroups.LINE_15,
+      },
+      ...properties,
     });
   }
 }

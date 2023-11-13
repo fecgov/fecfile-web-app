@@ -14,11 +14,14 @@ export class PAC_RETURN extends SchATransactionType {
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11C',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_RETURN,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11C',
+        transaction_type_identifier: ScheduleATransactionTypes.PAC_RETURN,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

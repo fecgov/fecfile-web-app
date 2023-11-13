@@ -72,7 +72,7 @@ export abstract class Transaction extends BaseModel {
   memo_text: MemoText | undefined;
   memo_text_id: string | undefined;
 
-  children: Transaction[] | undefined;
+  children: Transaction[] = [];
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
   getFieldsNotToValidate(): string[] {

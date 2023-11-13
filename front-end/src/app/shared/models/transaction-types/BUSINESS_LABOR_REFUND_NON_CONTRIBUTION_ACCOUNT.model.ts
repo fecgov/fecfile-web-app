@@ -17,11 +17,14 @@ export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransact
   override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
-      transaction_type_identifier: ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
+      ...{
+        form_type: 'SB29',
+        transaction_type_identifier: ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+        aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
+      },
+      ...properties,
     });
   }
 

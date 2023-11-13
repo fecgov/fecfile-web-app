@@ -10,11 +10,14 @@ export class IN_KIND_TRANSFER extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT];
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_TRANSFER,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA12',
+        transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_TRANSFER,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

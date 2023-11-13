@@ -21,11 +21,14 @@ export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType 
     return 'Reimbursement: See Below';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
-      transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      ...{
+        form_type: 'SB29',
+        transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
+        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      },
+      ...properties,
     });
   }
 }

@@ -128,6 +128,10 @@ export class ReattRedesUtils {
     if (types.length === 0) return !!transaction.reattribution_redesignation_tag;
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
   }
+
+  public static overlayTransactionProperties(transaction: Transaction): void {
+    transaction.transactionType.title = 'Reattribution';
+  }
 }
 
 /**

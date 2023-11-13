@@ -14,11 +14,14 @@ export class PARTY_RETURN extends SchATransactionType {
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11B',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTY_RETURN,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11B',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTY_RETURN,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

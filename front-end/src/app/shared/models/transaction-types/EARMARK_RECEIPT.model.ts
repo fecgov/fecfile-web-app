@@ -27,11 +27,14 @@ export class EARMARK_RECEIPT extends EARMARK {
     return '';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11AI',
+        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

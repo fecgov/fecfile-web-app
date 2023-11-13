@@ -8,12 +8,15 @@ export class PAC_EARMARK_MEMO extends EARMARK_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   schema = schema;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11C',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_MEMO,
-      aggregation_group: AggregationGroups.GENERAL,
-      memo_code: true,
+      ...{
+        form_type: 'SA11C',
+        transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_MEMO,
+        aggregation_group: AggregationGroups.GENERAL,
+        memo_code: true,
+      },
+      ...properties,
     });
   }
 }

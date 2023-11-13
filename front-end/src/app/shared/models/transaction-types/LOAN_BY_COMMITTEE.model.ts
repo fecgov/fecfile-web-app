@@ -68,11 +68,14 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
   );
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchCTransaction.fromJSON({
-      form_type: 'SC/9',
-      transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-      // until the FEC filing api can accept '27', we cannot send it: receipt_line_number: '27',
+      ...{
+        form_type: 'SC/9',
+        transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+        // until the FEC filing api can accept '27', we cannot send it: receipt_line_number: '27',
+      },
+      ...properties,
     });
   }
 }

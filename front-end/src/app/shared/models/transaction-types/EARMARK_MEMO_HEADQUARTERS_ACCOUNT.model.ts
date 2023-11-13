@@ -8,12 +8,15 @@ export class EARMARK_MEMO_HEADQUARTERS_ACCOUNT extends EARMARK_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT);
   schema = schema;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-      memo_code: true,
+      ...{
+        form_type: 'SA17',
+        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
+        aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+        memo_code: true,
+      },
+      ...properties,
     });
   }
 }

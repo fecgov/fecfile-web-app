@@ -137,25 +137,20 @@ export class TransactionResolver {
     return this.transactionService.get(reattriubtionId).pipe(
       map((transaction: Transaction) => {
         (transaction as SchATransaction).reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
-        const to = {
-          ...TransactionTypeUtils.factory(transactionTypeName).getNewTransaction(),
-          ...{
-            parent_transaction_id: transaction.id,
-            parent_transaction: transaction,
-            reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_TO,
-            report_id: transaction.report_id,
-          },
-        } as SchATransaction;
-        const from = {
-          ...TransactionTypeUtils.factory(transactionTypeName).getNewTransaction(),
-          ...{
-            parent_transaction_id: transaction.id,
-            parent_transaction: transaction,
-            reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_FROM,
-            report_id: transaction.report_id,
-          },
-        } as SchATransaction;
-        transaction.children = [to, from];
+        const to = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction({
+          parent_transaction_id: transaction.id,
+          reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_TO,
+          report_id: transaction.report_id,
+        });
+        const from = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction({
+          parent_transaction_id: transaction.id,
+          reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_FROM,
+          report_id: transaction.report_id,
+        });
+        to.parent_transaction = transaction;
+        transaction.children.push(to);
+        from.parent_transaction = transaction;
+        transaction.children.push(from);
         return transaction;
       })
     );

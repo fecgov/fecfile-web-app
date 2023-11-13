@@ -28,11 +28,14 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionT
     return 'Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      ...{
+        form_type: 'SA17',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+        aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      },
+      ...properties,
     });
   }
 }

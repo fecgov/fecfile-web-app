@@ -18,11 +18,14 @@ export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
     return 'Partnership Attribution';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11AI',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

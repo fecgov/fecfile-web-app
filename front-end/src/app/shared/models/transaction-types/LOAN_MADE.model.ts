@@ -43,10 +43,13 @@ export class LOAN_MADE extends SchBTransactionType {
     'Review information and enter purpose of disbursement or note/memo text for the loan made';
   override contactTitle = 'Lendee';
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB27',
-      transaction_type_identifier: ScheduleBTransactionTypes.LOAN_MADE,
+      ...{
+        form_type: 'SB27',
+        transaction_type_identifier: ScheduleBTransactionTypes.LOAN_MADE,
+      },
+      ...properties,
     });
   }
 }

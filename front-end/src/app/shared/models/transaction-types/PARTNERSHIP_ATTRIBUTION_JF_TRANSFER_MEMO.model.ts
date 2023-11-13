@@ -29,11 +29,14 @@ export class PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO extends SchATransactionTyp
     return committeeClause + parenthetical;
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA12',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

@@ -48,11 +48,14 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransac
   override inheritCalendarYTD = true;
   override showAggregate = false;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchETransaction.fromJSON({
-      form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
-      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      ...{
+        form_type: 'SE',
+        transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
+        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      },
+      ...properties,
     });
   }
 }

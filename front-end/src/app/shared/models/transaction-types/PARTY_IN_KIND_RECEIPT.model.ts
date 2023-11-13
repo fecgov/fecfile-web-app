@@ -10,11 +10,14 @@ export class PARTY_IN_KIND_RECEIPT extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.PARTY_IN_KIND_OUT];
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11B',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11B',
+        transaction_type_identifier: ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

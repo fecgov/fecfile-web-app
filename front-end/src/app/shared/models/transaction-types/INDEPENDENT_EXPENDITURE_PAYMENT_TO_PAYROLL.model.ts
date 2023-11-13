@@ -51,11 +51,14 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
     return 'Payroll: See Below';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchETransaction.fromJSON({
-      form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
-      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      ...{
+        form_type: 'SE',
+        transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      },
+      ...properties,
     });
   }
 }

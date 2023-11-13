@@ -17,11 +17,14 @@ export class RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN extends SchATransactionType
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11AI',
+        transaction_type_identifier: ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

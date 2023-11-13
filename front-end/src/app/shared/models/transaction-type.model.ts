@@ -28,7 +28,8 @@ export abstract class TransactionType {
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
-  abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  abstract getNewTransaction(properties?: any): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
   synchronizeOrgComNameValues = true; // When the COM name value is saved in the ORG model property per the FEC specification, "true" indicates that it is also copied into the COM model property as well
 

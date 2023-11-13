@@ -4,6 +4,7 @@ import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { TransactionType } from './transaction-type.model';
+import { ReattRedesUtils } from '../utils/reatt-redes.utils';
 
 export class SchATransaction extends Transaction {
   entity_type: string | undefined;
@@ -53,11 +54,6 @@ export class SchATransaction extends Transaction {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
 
-  override setMetaProperties(transactionType: TransactionType): void {
-    super.setMetaProperties(transactionType);
-    debugger;
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchATransaction {
     const transaction = plainToClass(SchATransaction, json);
@@ -72,6 +68,9 @@ export class SchATransaction extends Transaction {
       transaction.children = transaction.children.map(function (child) {
         return getFromJSON(child, depth - 1);
       });
+    }
+    if (ReattRedesUtils.isReattRedes(transaction)) {
+      ReattRedesUtils.overlayTransactionProperties(transaction);
     }
     return transaction;
   }

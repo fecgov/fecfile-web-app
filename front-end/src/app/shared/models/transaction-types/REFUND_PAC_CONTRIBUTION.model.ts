@@ -15,11 +15,14 @@ export class REFUND_PAC_CONTRIBUTION extends SchBTransactionType {
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchBTransaction.fromJSON({
-      form_type: 'SB28C',
-      transaction_type_identifier: ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SB28C',
+        transaction_type_identifier: ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

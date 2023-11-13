@@ -21,12 +21,15 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends
     return 'Recount/Legal Proceedings Account Partnership Attribution';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier:
-        ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      ...{
+        form_type: 'SA17',
+        transaction_type_identifier:
+          ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+        aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      },
+      ...properties,
     });
   }
 }

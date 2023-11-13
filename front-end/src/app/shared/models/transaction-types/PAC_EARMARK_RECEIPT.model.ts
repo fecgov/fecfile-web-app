@@ -30,11 +30,14 @@ export class PAC_EARMARK_RECEIPT extends EARMARK {
     return '';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11C',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11C',
+        transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

@@ -30,11 +30,14 @@ export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
     return 'Pres. Nominating Convention Account Transfer of JF Proceeds';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      ...{
+        form_type: 'SA17',
+        transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+        aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      },
+      ...properties,
     });
   }
 }

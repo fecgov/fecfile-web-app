@@ -20,11 +20,14 @@ export class PAC_JF_TRANSFER_MEMO extends SchATransactionType {
     }`;
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA12',
+        transaction_type_identifier: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

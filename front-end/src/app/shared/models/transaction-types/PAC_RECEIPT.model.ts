@@ -13,11 +13,14 @@ export class PAC_RECEIPT extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA11C',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
+      ...{
+        form_type: 'SA11C',
+        transaction_type_identifier: ScheduleATransactionTypes.PAC_RECEIPT,
+        aggregation_group: AggregationGroups.GENERAL,
+      },
+      ...properties,
     });
   }
 }

@@ -51,11 +51,14 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransaction
     return 'Credit Card: See Below';
   }
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchETransaction.fromJSON({
-      form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
-      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      ...{
+        form_type: 'SE',
+        transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      },
+      ...properties,
     });
   }
 }

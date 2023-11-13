@@ -67,11 +67,14 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
     [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
   );
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchCTransaction.fromJSON({
-      form_type: 'SC/10',
-      transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
-      receipt_line_number: '13',
+      ...{
+        form_type: 'SC/10',
+        transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
+        receipt_line_number: '13',
+      },
+      ...properties,
     });
   }
 }

@@ -16,11 +16,14 @@ export class OTHER_RECEIPT extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
+  getNewTransaction(properties = {}) {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.OTHER_RECEIPTS,
-      aggregation_group: AggregationGroups.OTHER_RECEIPTS,
+      ...{
+        form_type: 'SA17',
+        transaction_type_identifier: ScheduleATransactionTypes.OTHER_RECEIPTS,
+        aggregation_group: AggregationGroups.OTHER_RECEIPTS,
+      },
+      ...properties,
     });
   }
 }
