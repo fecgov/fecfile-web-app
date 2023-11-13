@@ -1,6 +1,7 @@
 import { FormGroup, AbstractControl, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { DateUtils } from './date.utils';
+import { Transaction } from '../models/transaction.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { ContactTypes } from '../models/contact.model';
@@ -120,6 +121,12 @@ export class ReattRedesUtils {
     ) {
       form.get(transaction.transactionType.templateMap.memo_code)?.setValidators([Validators.required]);
     }
+  }
+
+  public static isReattRedes(transaction: Transaction | undefined, types: ReattRedesTypes[] = []): boolean {
+    if (!transaction || !('reattribution_redesignation_tag' in transaction)) return false;
+    if (types.length === 0) return !!transaction.reattribution_redesignation_tag;
+    return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
   }
 }
 

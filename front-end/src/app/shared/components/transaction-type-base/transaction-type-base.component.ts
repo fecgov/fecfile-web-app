@@ -7,7 +7,7 @@ import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { isDebtRepayment, Transaction } from 'app/shared/models/transaction.model';
@@ -16,7 +16,7 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -54,9 +54,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    if (this.transaction) {
+      this.transaction = this.getTransaction(this.transaction);
+    } else {
+      throw new Error('Fecfile: Transaction not provided for transaction component');
+    }
     if (!this.transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
@@ -116,6 +121,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     Object.values(this.contactIdMap).forEach((id$) => id$.complete());
   }
 
+  getTransaction(transaction: Transaction): Transaction | undefined {
+    if (ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED])) {
+      return transaction.children?.filter((child) =>
+        [ReattRedesTypes.REATTRIBUTION_TO, ReattRedesTypes.REDESIGNATION_TO].includes(
+          (child as SchATransaction | SchBTransaction).reattribution_redesignation_tag as ReattRedesTypes
+        )
+      )[0];
+    }
+    return transaction;
+  }
+
   writeToApi(payload: Transaction): Observable<Transaction> {
     if (payload.id) {
       return this.transactionService.update(payload);
@@ -129,7 +145,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
-      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+      throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(

@@ -4,7 +4,7 @@ import { NavigationAction, NavigationEvent } from 'app/shared/models/transaction
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType
+  TransactionType,
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -17,6 +17,9 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -31,7 +34,8 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -64,8 +68,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
 
     if (
-      this.childTransactionType?.getInheritedFields(
-        this.childTransaction)?.includes('memo_code' as TemplateMapKeyType) &&
+      this.childTransactionType
+        ?.getInheritedFields(this.childTransaction)
+        ?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
       this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
@@ -98,6 +103,15 @@ export abstract class DoubleTransactionTypeBaseComponent
    * @returns
    */
   getChildTransaction(transaction: Transaction, index: number): Transaction | undefined {
+    if (
+      ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTION_TO, ReattRedesTypes.REDESIGNATION_TO])
+    ) {
+      return transaction.parent_transaction?.children?.filter((child) =>
+        [ReattRedesTypes.REATTRIBUTION_FROM, ReattRedesTypes.REDESIGNATION_FROM].includes(
+          (child as SchATransaction | SchBTransaction).reattribution_redesignation_tag as ReattRedesTypes
+        )
+      )[0];
+    }
     return transaction?.children?.filter((child) => {
       const transactionTypeId = transaction?.transactionType?.dependentChildTransactionTypes?.[index];
       const transactionTypeIdVariations = [
@@ -167,8 +181,10 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
     super.updateFormWithPrimaryContact(selectItem);
-    if (this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
-      this.transaction?.contact_1) {
+    if (
+      this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
+      this.transaction?.contact_1
+    ) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
       this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }
@@ -194,21 +210,20 @@ export abstract class DoubleTransactionTypeBaseComponent
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.
 
-    childTransaction.transactionType?.getInheritedFields(
-      childTransaction)?.forEach((inherittedField) => {
-        if (childTransaction.transactionType) {
-          const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
-          childFieldControl?.enable();
-          const value = this.form.get(this.templateMap[inherittedField])?.value;
-          if (value !== undefined) {
-            childFieldControl?.setValue(value);
-            childFieldControl?.updateValueAndValidity();
-          }
-          childFieldControl?.disable();
-        } else {
-          throw new Error('Fecfile: Transaction missing transactionType.');
+    childTransaction.transactionType?.getInheritedFields(childTransaction)?.forEach((inherittedField) => {
+      if (childTransaction.transactionType) {
+        const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
+        childFieldControl?.enable();
+        const value = this.form.get(this.templateMap[inherittedField])?.value;
+        if (value !== undefined) {
+          childFieldControl?.setValue(value);
+          childFieldControl?.updateValueAndValidity();
         }
-      });
+        childFieldControl?.disable();
+      } else {
+        throw new Error('Fecfile: Transaction missing transactionType.');
+      }
+    });
   }
 
   childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {

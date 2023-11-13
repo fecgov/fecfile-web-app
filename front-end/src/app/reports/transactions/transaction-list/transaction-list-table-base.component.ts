@@ -11,6 +11,7 @@ import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.mo
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
@@ -137,6 +138,15 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable,
       () => true
     ),
+    new TableAction(
+      'Reattribute',
+      this.createReattribution.bind(this),
+      (transaction: Transaction) =>
+        transaction.transactionType.scheduleId === ScheduleIds.A &&
+        !ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED]) &&
+        this.reportIsEditable,
+      () => true
+    ),
   ];
 
   constructor(
@@ -254,6 +264,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public createDebtRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
+    );
+  }
+  public createReattribution(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
     );
   }
 

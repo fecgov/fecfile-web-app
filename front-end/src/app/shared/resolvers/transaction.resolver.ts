@@ -5,6 +5,8 @@ import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { ReattRedesTypes } from '../utils/reatt-redes.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,7 @@ export class TransactionResolver {
     const parentTransactionId = route.paramMap.get('parentTransactionId');
     const debtId = route.queryParamMap.get('debt');
     const loanId = route.queryParamMap.get('loan');
+    const reattributionId = route.queryParamMap.get('reattribution');
 
     // Existing
     if (transactionId) {
@@ -38,6 +41,9 @@ export class TransactionResolver {
       }
       if (loanId) {
         return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
+      }
+      if (reattributionId) {
+        return this.resolveNewReattribution(reattributionId, transactionTypeName);
       }
       return this.resolveNewTransaction(reportId, transactionTypeName);
     }
@@ -123,6 +129,34 @@ export class TransactionResolver {
         }
         repayment.report_id = to.report_id;
         return repayment;
+      })
+    );
+  }
+
+  resolveNewReattribution(reattriubtionId: string, transactionTypeName: string) {
+    return this.transactionService.get(reattriubtionId).pipe(
+      map((transaction: Transaction) => {
+        (transaction as SchATransaction).reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+        const to = {
+          ...TransactionTypeUtils.factory(transactionTypeName).getNewTransaction(),
+          ...{
+            parent_transaction_id: transaction.id,
+            parent_transaction: transaction,
+            reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_TO,
+            report_id: transaction.report_id,
+          },
+        } as SchATransaction;
+        const from = {
+          ...TransactionTypeUtils.factory(transactionTypeName).getNewTransaction(),
+          ...{
+            parent_transaction_id: transaction.id,
+            parent_transaction: transaction,
+            reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_FROM,
+            report_id: transaction.report_id,
+          },
+        } as SchATransaction;
+        transaction.children = [to, from];
+        return transaction;
       })
     );
   }
