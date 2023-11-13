@@ -6,7 +6,7 @@
     <h1 *ngIf="report?.upload_submission?.fec_status === 'REJECTED'" class="super-header">
       Your report has been rejected.
     </h1>
-    <h1 *ngIf="report?.upload_submission?.fec_status === 'PROCESSING'" class="super-header">
+    <h1 *ngIf="!report?.upload_submission?.fec_status || report?.upload_submission?.fec_status === 'PROCESSING'" class="super-header">
       Thank you for submitting your report. It is currently being processed.
     </h1>
   </div>

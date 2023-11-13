@@ -13,7 +13,7 @@ import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { from, Observable, switchMap, takeUntil, delay } from 'rxjs';
+import { from, Observable, switchMap, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
@@ -189,7 +189,6 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       backdoor_code: this.form?.value['backdoor_code'],
     };
     return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
-      delay(5000),
       switchMap(() => {
         if (this.report?.id) {
           this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
