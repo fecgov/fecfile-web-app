@@ -10,7 +10,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { isDebtRepayment, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -41,7 +41,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
-  isDebtRepayment = false;
   memoCodeCheckboxLabel$ = of('');
 
   constructor(
@@ -87,8 +86,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
-
-    this.isDebtRepayment = isDebtRepayment(this.transaction);
 
     // If this single-entry transaction has inherited fields from its parent, load values
     // from parent on create and set field to read-only. For edit, just make

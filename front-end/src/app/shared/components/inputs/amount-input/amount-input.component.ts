@@ -29,8 +29,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
-  isLoanRepayment = false;
-  isDebtRepayment = false;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
@@ -40,9 +38,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.contributionAmountReadOnly) {
       this.contributionAmountInputStyleClass = 'readonly';
     }
-
-    this.isLoanRepayment = isLoanRepayment(this.transaction);
-    this.isDebtRepayment = isDebtRepayment(this.transaction);
 
     // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
     // and set up the "Just checking..." pop-up as needed.
@@ -77,7 +72,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         ?.setValue((this.transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
     }
 
-    if (this.isDebtRepayment || this.isLoanRepayment) {
+    if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
       this.store
         .select(selectActiveReport)
         .pipe(takeUntil(this.destroy$))
@@ -110,4 +105,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       }
     }
   }
+
+  protected readonly isLoanRepayment = isLoanRepayment;
+  protected readonly isDebtRepayment = isDebtRepayment;
 }
