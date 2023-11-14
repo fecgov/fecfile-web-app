@@ -1,16 +1,14 @@
-import { Report } from "./report.model";
-import { Transform } from "class-transformer";
-import { BaseModel } from "./base.model";
-import { CandidateOfficeType } from "./contact.model";
+import { Report } from './report.model';
+import { Transform } from 'class-transformer';
+import { BaseModel } from './base.model';
+import { CandidateOfficeType } from './contact.model';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
   OTHER = 'N',
 }
 
-export type CommitteeType =
-  | CommitteeTypes.STATE_PTY
-  | CommitteeTypes.OTHER;
+export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
   street_1?: string;
@@ -66,7 +64,7 @@ export class Form1M extends Report {
   IV_candidate_office?: CandidateOfficeType;
   IV_candidate_state?: string;
   IV_candidate_district?: string;
-  IV_date_of_contribution?: Date;
+  @Transform(BaseModel.dateTransform) IV_date_of_contribution?: Date;
 
   V_candidate_id_number?: string;
   V_candidate_last_name?: string;
@@ -77,5 +75,5 @@ export class Form1M extends Report {
   V_candidate_office?: CandidateOfficeType;
   V_candidate_state?: string;
   V_candidate_district?: string;
-  V_date_of_contribution?: Date;
+  @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
 }
