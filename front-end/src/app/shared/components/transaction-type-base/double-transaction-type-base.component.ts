@@ -46,6 +46,14 @@ export abstract class DoubleTransactionTypeBaseComponent
   childMemoCodeCheckboxLabel$ = of('');
 
   override ngOnInit(): void {
+    // If this is a create and the transaction is reattributed/redesignated, then repackage
+    // the transaction for display in the double-entry form.
+    if (this.activatedRoute.snapshot.queryParamMap.get('reattribution')) {
+      this.transaction = ReattRedesUtils.getDoubleFormTransaction(
+        this.transaction as SchATransaction | SchBTransaction
+      ) as Transaction;
+    }
+
     // Initialize primary form.
     super.ngOnInit();
 
@@ -103,15 +111,6 @@ export abstract class DoubleTransactionTypeBaseComponent
    * @returns
    */
   getChildTransaction(transaction: Transaction, index: number): Transaction | undefined {
-    if (
-      ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTION_TO, ReattRedesTypes.REDESIGNATION_TO])
-    ) {
-      return transaction.parent_transaction?.children?.filter((child) =>
-        [ReattRedesTypes.REATTRIBUTION_FROM, ReattRedesTypes.REDESIGNATION_FROM].includes(
-          (child as SchATransaction | SchBTransaction).reattribution_redesignation_tag as ReattRedesTypes
-        )
-      )[0];
-    }
     return transaction?.children?.filter((child) => {
       const transactionTypeId = transaction?.transactionType?.dependentChildTransactionTypes?.[index];
       const transactionTypeIdVariations = [

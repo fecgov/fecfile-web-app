@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
@@ -16,7 +16,7 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -52,15 +52,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected router: Router,
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
-    protected reportService: ReportService
+    protected reportService: ReportService,
+    protected activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    if (this.transaction) {
-      this.transaction = this.getTransaction(this.transaction);
-    } else {
-      throw new Error('Fecfile: Transaction not provided for transaction component');
-    }
     if (!this.transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
@@ -116,17 +112,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.destroy$.next(true);
     this.destroy$.complete();
     Object.values(this.contactIdMap).forEach((id$) => id$.complete());
-  }
-
-  getTransaction(transaction: Transaction): Transaction | undefined {
-    if (ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED])) {
-      return transaction.children?.filter((child) =>
-        [ReattRedesTypes.REATTRIBUTION_TO, ReattRedesTypes.REDESIGNATION_TO].includes(
-          (child as SchATransaction | SchBTransaction).reattribution_redesignation_tag as ReattRedesTypes
-        )
-      )[0];
-    }
-    return transaction;
   }
 
   writeToApi(payload: Transaction): Observable<Transaction> {

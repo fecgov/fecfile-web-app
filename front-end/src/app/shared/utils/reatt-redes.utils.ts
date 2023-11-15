@@ -1,10 +1,11 @@
 import { FormGroup, AbstractControl, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { DateUtils } from './date.utils';
-import { Transaction } from '../models/transaction.model';
+import { Transaction, TransactionTypes } from '../models/transaction.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { ContactTypes } from '../models/contact.model';
+import { TemplateMapKeyType } from '../models/transaction-type.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -129,8 +130,113 @@ export class ReattRedesUtils {
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
   }
 
-  public static overlayTransactionProperties(transaction: Transaction): void {
-    transaction.transactionType.title = 'Reattribution';
+  public static getDoubleFormTransaction(transaction: SchATransaction | SchBTransaction) {
+    const formTransaction = transaction?.children?.filter((child) =>
+      [ReattRedesTypes.REATTRIBUTION_TO, ReattRedesTypes.REDESIGNATION_TO].includes(
+        (child as SchATransaction | SchBTransaction).reattribution_redesignation_tag as ReattRedesTypes
+      )
+    )[0];
+    formTransaction.children.push(
+      transaction?.children?.filter((child) =>
+        [ReattRedesTypes.REATTRIBUTION_FROM, ReattRedesTypes.REDESIGNATION_FROM].includes(
+          (child as SchATransaction | SchBTransaction).reattribution_redesignation_tag as ReattRedesTypes
+        )
+      )[0]
+    );
+    return formTransaction;
+  }
+
+  public static overlayTransactionProperties(transaction: SchATransaction | SchBTransaction): Transaction {
+    switch (transaction.reattribution_redesignation_tag) {
+      case ReattRedesTypes.REATTRIBUTED:
+        (transaction as SchATransaction).contribution_purpose_descrip = 'See attribution below.';
+        break;
+
+      case ReattRedesTypes.REATTRIBUTION_TO:
+        transaction.transactionType.dependentChildTransactionTypes = [
+          transaction.transaction_type_identifier as TransactionTypes,
+        ];
+        transaction.transactionType.title = 'Reattribution';
+        transaction.transactionType.subTitle =
+          'The portion of an excessive contribution that has been attributed, in writing, to another contributor and signed by both contributors.';
+        transaction.transactionType.accordionTitle = 'ENTER DATA';
+        transaction.transactionType.accordionSubText =
+          'Reattribute a contribution or a portion of it to a different contributor.';
+        transaction.transactionType.formTitle = 'Reattribution to';
+        transaction.transactionType.contactTitle = 'Contact';
+        transaction.transactionType.dateLabel = 'REATTRIBUTION DATE';
+        transaction.transactionType.amountLabel = 'REATTRIBUTED AMOUNT';
+        transaction.transactionType.footer =
+          'The information in this rattribution will automatically create a related receipt. Review the receipt, or continue without reviewing and "Save transactions."';
+        transaction.transactionType.schema.properties['memo_code'].const = true;
+        transaction.transactionType.generatePurposeDescription = (transaction: SchATransaction): string => {
+          if (!transaction.parent_transaction) return '';
+          const parentTransaction = transaction.parent_transaction as SchATransaction;
+          let name = '';
+          if (parentTransaction.contributor_organization_name) {
+            name = parentTransaction.contributor_organization_name;
+          }
+          if (
+            parentTransaction.entity_type === ContactTypes.INDIVIDUAL &&
+            parentTransaction.contributor_first_name &&
+            parentTransaction.contributor_last_name
+          ) {
+            name = `${parentTransaction.contributor_first_name || ''} ${parentTransaction.contributor_last_name || ''}`;
+          }
+          return `Reattributed from ${name}`;
+        };
+        break;
+
+      case ReattRedesTypes.REATTRIBUTION_FROM:
+        transaction.transactionType.accordionTitle = 'AUTO-POPULATED';
+        transaction.transactionType.accordionSubText =
+          'Review contact, receipt, and additional information in the reattribution from section.';
+        transaction.transactionType.title = 'Reattribution from';
+        transaction.transactionType.contactTitle = 'Contact';
+        transaction.transactionType.dateLabel = 'REATTRIBUTION DATE';
+        transaction.transactionType.amountLabel = 'REATTRIBUTED AMOUNT';
+        transaction.transactionType.schema.properties['memo_code'].const = true;
+        transaction.transactionType.inheritedFields = [
+          'organization_name',
+          'last_name',
+          'first_name',
+          'middle_name',
+          'prefix',
+          'suffix',
+          'employer',
+          'occupation',
+          'street_1',
+          'street_2',
+          'city',
+          'state',
+          'zip',
+          'date',
+          'amount',
+          'purpose_description',
+          'committee_fec_id',
+          'committee_name',
+        ] as TemplateMapKeyType[];
+        transaction.transactionType.useParentContact = true;
+        transaction.transactionType.generatePurposeDescription = (transaction: SchATransaction): string => {
+          if (!transaction.parent_transaction) return '';
+          const parentTransaction = transaction.parent_transaction as SchATransaction;
+          let name = '';
+          if (parentTransaction.contributor_organization_name) {
+            name = parentTransaction.contributor_organization_name;
+          }
+          if (
+            parentTransaction.entity_type === ContactTypes.INDIVIDUAL &&
+            parentTransaction.contributor_first_name &&
+            parentTransaction.contributor_last_name
+          ) {
+            name = `${parentTransaction.contributor_first_name || ''} ${parentTransaction.contributor_last_name || ''}`;
+          }
+          return `Reattributed to ${name}`;
+        };
+        break;
+    }
+
+    return transaction;
   }
 }
 

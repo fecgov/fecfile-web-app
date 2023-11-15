@@ -27,7 +27,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
     protected override fecDatePipe: FecDatePipe,
     protected override store: Store,
     protected override reportService: ReportService,
-    private route: ActivatedRoute
+    protected override activatedRoute: ActivatedRoute
   ) {
     super(
       messageService,
@@ -38,7 +38,8 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
       router,
       fecDatePipe,
       store,
-      reportService
+      reportService,
+      activatedRoute
     );
   }
 
@@ -46,7 +47,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
     super.ngOnInit();
 
     // Determine which accordion pane to open initially based on transaction id in page URL
-    const transactionId = this.route.snapshot.params['transactionId'];
+    const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
       this.accordionActiveIndex = 1;
     }

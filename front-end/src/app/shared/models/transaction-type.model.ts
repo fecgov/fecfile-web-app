@@ -90,11 +90,13 @@ export abstract class TransactionType {
 
   // Labels
   abstract title: string;
+  subTitle?: string;
   dateLabel = 'DATE';
   date2Label = '';
   aggregateLabel = 'AGGREGATE';
   calendarYTDLabel = 'CALENDAR YEAR-TO-DATE';
   amountInputHeader = '';
+  amountLabel = 'AMOUNT';
   debtInputHeader = '';
   committeeCandidateHeader = 'Committee/Candidate information';
   purposeDescripLabel = '';
