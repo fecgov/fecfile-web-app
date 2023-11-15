@@ -172,9 +172,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             );
           }
           const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
-          const dateString = this.fecDatePipe.transform(form.get(templateMap.date)?.value);
           if (changes.length > 0) {
-            return TransactionContactUtils.getContactChangesMessage(contact, dateString, changes);
+            return TransactionContactUtils.getContactChangesMessage(contact, changes);
           }
         }
         return '';
