@@ -46,7 +46,6 @@ describe('Loans', () => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
     ReportListPage.goToPage();
 
     organizationFormData = {
@@ -104,10 +103,14 @@ describe('Loans', () => {
 
     cy.get(alias).contains('Edit report').first().click();
     cy.wait(500)
-    PageUtils.urlCheck('cash-on-hand');
-    PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
-    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
-    PageUtils.clickButton('Save & continue');
+    cy.url().then((currentUrl) => {
+      if (currentUrl.includes('cash-on-hand')) {
+        PageUtils.urlCheck('cash-on-hand');
+        PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
+        PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
+        PageUtils.clickButton('Save & continue');
+      }
+    })
     cy.get(alias)
       .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()

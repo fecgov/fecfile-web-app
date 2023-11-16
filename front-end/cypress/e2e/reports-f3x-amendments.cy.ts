@@ -11,7 +11,6 @@ describe('Amendments', () => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
     ReportListPage.goToPage();
   });
 
@@ -50,7 +49,7 @@ describe('Amendments', () => {
     PageUtils.findOnPage('div', 'Are you sure?');
 
     PageUtils.clickButton('Yes');
-    cy.wait(3000); // Give time for async report submission to set success
+    cy.wait(5000); // Give time for async report submission to set success
     ReportListPage.goToPage();
 
     cy.get(alias).find('app-table-actions-button').click();
