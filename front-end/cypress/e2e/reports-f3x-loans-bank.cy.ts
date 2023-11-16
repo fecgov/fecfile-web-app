@@ -1,12 +1,12 @@
+import { ContactFormData, defaultFormData as individualContactFormData } from './models/ContactFormModel';
+import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
+import { defaultLoanFormData } from './models/TransactionFormModel';
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { LoginPage } from './pages/loginPage';
 import { currentYear, PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
 import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultLoanFormData } from './models/TransactionFormModel';
-import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
 
 const reportFormDataApril: F3xCreateReportFormData = {
   ...reportFormData,
@@ -26,10 +26,7 @@ const reportFormDataJuly: F3xCreateReportFormData = {
   },
 };
 
-const organizationFormData: ContactFormData = {
-  ...individualContactFormData,
-  ...{ contact_type: 'Organization' },
-};
+let organizationFormData: ContactFormData;
 
 const formData = {
   ...defaultLoanFormData,
@@ -51,6 +48,11 @@ describe('Loans', () => {
     ContactListPage.deleteAllContacts();
     ContactListPage.goToPage();
     ReportListPage.goToPage();
+
+    organizationFormData = {
+      ...individualContactFormData,
+      ...{ contact_type: 'Organization' },
+    };
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
@@ -101,6 +103,7 @@ describe('Loans', () => {
     cy.get(alias).contains('JULY 15').siblings().last().find('app-table-actions-button').children().last().click();
 
     cy.get(alias).contains('Edit report').first().click();
+    cy.wait(500)
     PageUtils.urlCheck('cash-on-hand');
     PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
     PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
