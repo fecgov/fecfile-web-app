@@ -36,6 +36,8 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
+  showCalendarYTD = false;
+  inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
@@ -75,11 +77,21 @@ export abstract class TransactionType {
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
+  // Memo Text settings
+  memoTextRequired = false; // Set to true to make Memo Text required
+  memoTextPrefix?: string; // The string will be a read-only prefix in the Memo Text input textarea
+
+  // For some predefined form fields, a mandatory default value can be declared. In which case, the value populates
+  // the form field and the field made read-only. Fields defined this way are created as needed for a particular
+  // transaction type model and implemented in a particular input component. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
+  mandatoryFormValues: { [field: string]: string | undefined } = {};
+
   // Labels
   abstract title: string;
   dateLabel = 'DATE';
   date2Label = '';
   aggregateLabel = 'AGGREGATE';
+  calendarYTDLabel = 'CALENDAR YEAR-TO-DATE';
   amountInputHeader = '';
   debtInputHeader = '';
   committeeCandidateHeader = 'Committee/Candidate information';
@@ -239,6 +251,7 @@ export type TransactionTemplateMapType = {
   interest_rate_setting: string;
   secured: string;
   aggregate: string;
+  calendar_ytd: string;
   purpose_description: string;
   text4000: string;
   category_code: string;

@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -22,6 +22,9 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
 @Component({
   template: '',
@@ -51,7 +54,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -95,6 +98,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
+        // If this is a reattribution/redesignation transaction, initialize
+        // its specialized validation rules and text written to the purpose description.
+        if (
+          this.transaction &&
+          'reattribution_redesignation_tag' in this.transaction &&
+          this.transaction.reattribution_redesignation_tag
+        ) {
+          ReattRedesUtils.initValidators(this.form, this.transaction as SchATransaction & SchBTransaction, report);
+        }
       });
   }
 
@@ -339,12 +351,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     // Set fields to read-only
     this.form.get('entity_type')?.disable();
-    this.transaction.transactionType.getInheritedFields(
-      this.transaction)?.forEach((inherittedField) => {
-        if (this.transaction) {
-          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
-          fieldControl?.disable();
-        }
-      });
+    this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
+      if (this.transaction) {
+        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+        fieldControl?.disable();
+      }
+    });
   }
 }

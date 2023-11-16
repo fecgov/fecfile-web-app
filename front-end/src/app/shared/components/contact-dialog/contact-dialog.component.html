@@ -28,6 +28,7 @@
                 [showSearchBoxCallback]="showSearchBox"
                 [showCreateNewContactButton]="false"
                 [includeFecfileResults]="false"
+                [candidateOffice]="defaultCandidateOffice"
                 (contactTypeSelect)="contactTypeChanged($event)"
                 (contactLookupSelect)="updateContact($event)"
               >
@@ -279,9 +280,9 @@
           <app-candidate-office-input
             [form]="form"
             [formSubmitted]="formSubmitted"
-            candidateOfficeFormControlName="candidate_office"
-            candidateStateFormControlName="candidate_state"
-            candidateDistrictFormControlName="candidate_district"
+            officeFormControlName="candidate_office"
+            stateFormControlName="candidate_state"
+            districtFormControlName="candidate_district"
           >
           </app-candidate-office-input>
         </ng-container>

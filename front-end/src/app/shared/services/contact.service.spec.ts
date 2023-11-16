@@ -120,6 +120,7 @@ describe('ContactService', () => {
       q: testSearch,
       max_fec_results: testMaxFecResults,
       max_fecfile_results: testMaxFecfileResults,
+      office: '',
     };
 
     service

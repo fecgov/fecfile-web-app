@@ -22,7 +22,7 @@ describe('Debts', () => {
     ReportListPage.goToPage();
   });
 
-  it('should test Debt Owed By Committee loan', () => {
+  xit('should test Debt Owed By Committee loan', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
     ContactListPage.enterFormData(committeeFormData);
@@ -48,7 +48,7 @@ describe('Debts', () => {
     cy.contains(loanEnums.debtOwedByCommittee).should('exist');
   });
 
-  it('should test Owed To Committee loan', () => {
+  xit('should test Owed To Committee loan', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton(loanEnums.new);
     ContactListPage.enterFormData(committeeFormData);

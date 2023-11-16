@@ -225,35 +225,7 @@ export const CategoryCodeLabels: LabelList = [
 ];
 
 export const LineIdentifierLabels: LabelList = [
-  // Schedule A
-  ['SA11A', '11(a)'],
+  // Schedule A itemization-specific labels
   ['SA11AI', '11(a)(i)'],
   ['SA11AII', '11(a)(ii)'],
-  ['SA11B', '11(b)'],
-  ['SA11C', '11(c)'],
-  ['SA12', '12'],
-  ['SA13', '13'],
-  ['SA14', '14'],
-  ['SA15', '15'],
-  ['SA16', '16'],
-  ['SA17', '17'],
-  // Schedule B
-  ['SB21B', '21(b)'],
-  ['SB22', '22'],
-  ['SB23', '23'],
-  ['SB26', '26'],
-  ['SB27', '27'],
-  ['SB28A', '28(a)'],
-  ['SB28B', '28(b)'],
-  ['SB28C', '28(c)'],
-  ['SB29', '29'],
-  ['SB30B', '30(b)'],
-  // Schedule C
-  ['SC/10', '10'],
-  ['SC/9', '9'],
-  // Schedule D
-  ['SD9', '9'],
-  ['SD10', '10'],
-  // Schedule E
-  ['SE', '24'],
 ];

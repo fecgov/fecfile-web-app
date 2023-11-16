@@ -9,8 +9,10 @@ This project will provide a web application for filling out FEC campaign
 finance information. The project code is distributed across these repositories:
 
 - [fecfile-web-app](https://github.com/fecgov/fecfile-web-app): this is the browser-based front-end developed in Angular
-- [fecfile-web-api](https://github.com/fecgov/fecfile-web-api): RESTful endpoint supporting the front-end
+- [fecfile-web-api](https://github.com/fecgov/fecfile-web-api): RESTful API supporting the front-end developed in Django
 - [fecfile-validate](https://github.com/fecgov/fecfile-validate): data validation rules and engine
+
+The project is hosted on the [cloud.gov](https://cloud.gov/docs/) platform and uses [login.gov](https://www.login.gov/what-is-login/) for authentication.
 
 ---
 

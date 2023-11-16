@@ -46,6 +46,7 @@ export class SchATransaction extends Transaction {
   memo_code: boolean | undefined;
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
+  reattribution_redesignation_tag: string | undefined;
 
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
@@ -96,8 +97,8 @@ export enum ScheduleATransactionTypes {
   CONDUIT_EARMARK_RECEIPT = 'CONDUIT_EARMARK_RECEIPT',
   CONDUIT_EARMARK_RECEIPT_DEPOSITED = 'CONDUIT_EARMARK_RECEIPT_DEPOSITED',
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED = 'CONDUIT_EARMARK_RECEIPT_UNDEPOSITED',
-  UNREGISTERED_RECEIPT_FROM_PERSON = 'UNREGISTERED_RECEIPT_FROM_PERSON',
-  UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
+  RECEIPT_FROM_UNREGISTERED_ENTITY = 'RECEIPT_FROM_UNREGISTERED_ENTITY',
+  RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN = 'RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
   PARTY_IN_KIND_RECEIPT = 'PARTY_IN_KIND_RECEIPT',
@@ -199,10 +200,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT, 'Conduit Earmark Receipt'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON, 'Unregistered Receipt from Person'],
+  [ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY, 'Receipt from Unregistered Entity'],
   [
-    ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
-    'Unregistered Receipt from Person - Returned/Bounced Receipt',
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+    'Receipt from Unregistered Entity - Returned/Bounced Receipt',
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],

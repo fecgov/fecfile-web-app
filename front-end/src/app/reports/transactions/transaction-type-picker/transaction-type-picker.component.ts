@@ -119,8 +119,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
           ScheduleATransactionTypes.EARMARK_RECEIPT,
           ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
-          ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON,
-          ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
+          ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
+          ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
         ];
         break;
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
@@ -272,7 +272,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         transactionTypes = [
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
-          ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_MULTISTATE,
+          ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,

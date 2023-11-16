@@ -11,6 +11,7 @@ import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HttpStatusCode, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
+import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -55,7 +56,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=form_type`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=line_label_order_key`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -77,7 +78,7 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('#getPreviousTransaction() should GET previous transaction', () => {
+  it('#getPreviousTransactionForAggregate() should GET previous transaction', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({
       id: 1,
       transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -87,29 +88,48 @@ describe('TransactionService', () => {
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ).getNewTransaction();
     mockTransaction.id = 'abc';
-    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+    service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).subscribe((response) => {
       expect(response?.id).toEqual(mockResponse.id);
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+      `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
   });
 
-  it('#getPreviousTransaction() should return undefined', () => {
+  it('#getPreviousTransactionForAggregate() should return undefined', () => {
     const mockTransaction: Transaction = TransactionTypeUtils.factory(
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ).getNewTransaction();
     mockTransaction.id = 'abc';
-    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+    service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).subscribe((response) => {
       expect(response).toEqual(undefined);
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+      `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
+    httpTestingController.verify();
+  });
+
+  it('#getPreviousTransactionForCalendarYTD() should return undefined', () => {
+    const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE
+    ).getNewTransaction();
+    mockTransaction.id = 'abc';
+    service
+      .getPreviousTransactionForCalendarYTD(mockTransaction, new Date(), new Date(), '1', 'A', 'A', 'A')
+      .subscribe((response) => {
+        expect(response).toEqual(undefined);
+      });
+    const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/transactions/previous/election/?transaction_id=abc&date=${formattedDate}&aggregation_group=${AggregationGroups.INDEPENDENT_EXPENDITURE}&election_code=1&candidate_office=A&candidate_state=A&candidate_district=A`
     );
     expect(req.request.method).toEqual('GET');
     req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });

@@ -49,6 +49,7 @@ export abstract class SchATransactionType extends TransactionType {
     due_date_setting: '',
     secured: '',
     aggregate: 'contribution_aggregate',
+    calendar_ytd: '',
     purpose_description: 'contribution_purpose_descrip',
     text4000: 'text4000',
     category_code: '',

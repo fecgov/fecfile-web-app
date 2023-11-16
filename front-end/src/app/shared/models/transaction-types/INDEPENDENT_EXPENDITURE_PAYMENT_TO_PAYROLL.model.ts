@@ -17,7 +17,6 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups, Transaction } from '../transaction.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 
 export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionType {
   formFields = [
@@ -32,6 +31,7 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
     ...AGGREGATE,
     'date2',
     'support_oppose_code',
+    'calendar_ytd',
   ];
   contactTypeOptions = ORGANIZATION;
   override contactConfig = STANDARD_AND_CANDIDATE;
@@ -42,9 +42,9 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
-  override subTransactionConfig = new SubTransactionGroup('Payroll Memo for Independent Expenditure', [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
-  ]);
+  override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
+  override showCalendarYTD = true;
+  override showAggregate = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(transaction: Transaction): string {

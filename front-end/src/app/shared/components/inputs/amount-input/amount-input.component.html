@@ -72,8 +72,8 @@
         ></app-error-messages>
       </div>
     </div>
-    <div class="col-6">
-      <div class="field" *ngIf="showAggregate">
+    <div class="col-6" *ngIf="showAggregate">
+      <div class="field">
         <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
         <p-inputNumber
           inputId="aggregate"
@@ -90,6 +90,27 @@
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The aggregate can be 12 digits max"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="showCalendarYTD">
+      <div class="field">
+        <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
+        <p-inputNumber
+          inputId="calendar_ytd"
+          [formControlName]="templateMap['calendar_ytd']"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="true"
+          inputStyleClass="readonly"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['calendar_ytd']"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
         ></app-error-messages>
       </div>
     </div>

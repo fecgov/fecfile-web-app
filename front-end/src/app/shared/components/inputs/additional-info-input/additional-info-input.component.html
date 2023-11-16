@@ -29,7 +29,9 @@
   </div>
   <div class="grid" *ngIf="transaction?.transactionType?.hasMemoText()">
     <div class="col-12">
-      <label for="text4000">NOTE OR MEMO TEXT (OPTIONAL)</label>
+      <label for="text4000"
+        >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
+      >
       <div>
         <textarea
           id="text4000"
