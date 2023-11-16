@@ -16,19 +16,7 @@ a {
 }
 
 :host ::ng-deep .header-navbar-icon {
-  height: 16px !important;
-}
-
-
-:host ::ng-deep p-menubarsub {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-:host ::ng-deep .p-menuitem-text {
-  font-size: 12px;
-  font-family: "karla-bold", sans-serif;
+  min-height: 16px !important;
 }
 
 nav {
@@ -40,30 +28,10 @@ nav {
   align-items: end;
 }
 
-
-.nav-item {
-  display: flex;
-  height: 100%;
-  align-items: center;
-}
-
-.nav-item:hover {
-  background: #e8e8e8;
-}
-
 a > img {
   min-width: 16px;
 }
 
-.nav-link {
-  font-size: 12px;
-  font-family: "karla-bold", sans-serif;
-  text-transform: uppercase;
-}
-
-.nav-link.disabled:hover {
-  cursor: default;
-}
 
 :host ::ng-deep .dead-link {
   color: #D6D7D9 !important;
