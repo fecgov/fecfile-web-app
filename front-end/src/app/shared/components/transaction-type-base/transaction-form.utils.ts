@@ -17,6 +17,7 @@ import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 
 export class TransactionFormUtils {
   /**
@@ -161,6 +162,13 @@ export class TransactionFormUtils {
           .subscribe(([amount, previous_election, transaction]) => {
             this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previous_election, amount);
           });
+      } else {
+        component.transactionService.get(transaction.parent_transaction?.id ?? '').subscribe((parent: Transaction) => {
+          const inheritedElectionAggregate = (parent as SchETransaction).calendar_ytd_per_election_office;
+          if (inheritedElectionAggregate) {
+            this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, undefined, inheritedElectionAggregate);
+          }
+        });
       }
     }
 
