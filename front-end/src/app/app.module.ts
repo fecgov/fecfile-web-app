@@ -1,5 +1,5 @@
 // Anguluar
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -48,6 +48,7 @@ import { HttpErrorInterceptor } from './shared/interceptors/http-error.intercept
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
+import { NgOptimizedImage } from "@angular/common";
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -57,6 +58,7 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
     rehydrate: true,
   })(reducer);
 }
+
 const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncReducer];
 
 @NgModule({
@@ -79,7 +81,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
+    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
@@ -89,7 +91,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
       },
-      { metaReducers }
+      {metaReducers}
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
@@ -98,15 +100,17 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ButtonModule,
     ProgressBarModule,
     SharedModule,
+    NgOptimizedImage,
   ],
   providers: [
     CookieService,
     ConfirmationService,
     MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
     FecDatePipe,
-    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}
