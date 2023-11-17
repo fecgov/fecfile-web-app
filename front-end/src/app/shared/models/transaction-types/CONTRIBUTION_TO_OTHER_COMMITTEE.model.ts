@@ -10,7 +10,6 @@ export class CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType {
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE);
   schema = schema;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

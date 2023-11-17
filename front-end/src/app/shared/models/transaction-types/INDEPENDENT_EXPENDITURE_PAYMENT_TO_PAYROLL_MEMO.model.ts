@@ -46,7 +46,6 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransac
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
   override inheritCalendarYTD = true;
-  override showAggregate = false;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({

@@ -42,7 +42,6 @@ export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
-  override showAggregate = false;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({
