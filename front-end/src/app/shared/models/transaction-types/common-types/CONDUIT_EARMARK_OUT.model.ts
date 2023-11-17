@@ -4,7 +4,6 @@ import { SchBTransactionType } from '../../schb-transaction-type.model';
 export abstract class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   override isDependentChild = () => true;
   override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
-  override showAggregate = false;
   override hasCandidateCommittee = true;
   override contact2IsRequired = () => true;
 

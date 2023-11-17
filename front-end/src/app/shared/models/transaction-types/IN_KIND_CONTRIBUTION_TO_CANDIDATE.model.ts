@@ -15,7 +15,6 @@ export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   override contactConfig = STANDARD_AND_SECONDARY_AND_TERTIARY;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE);
   schema = schema;
-  override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override hasCandidateCommittee = true;
   override contact2IsRequired = () => true;

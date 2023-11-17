@@ -14,7 +14,6 @@ export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
     ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID
   );
   schema = schema;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override negativeAmountValueOnly = true;
