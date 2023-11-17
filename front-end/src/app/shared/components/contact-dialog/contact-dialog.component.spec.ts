@@ -11,6 +11,7 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
+import { ConfirmationService } from 'primeng/api';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -26,7 +27,7 @@ describe('ContactDialogComponent', () => {
         ContactLookupComponent,
         LabelPipe,
       ],
-      providers: [FormBuilder, provideMockStore(testMockStore)],
+      providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
