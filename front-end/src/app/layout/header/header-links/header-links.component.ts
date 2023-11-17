@@ -8,7 +8,6 @@ import { LoginService } from "../../../shared/services/login.service";
 })
 export class HeaderLinksComponent {
   loginService: LoginService;
-  @Input() showLogo = false;
   @Input() ratio = 1;
   @Input() full = false;
 

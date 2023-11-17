@@ -17,7 +17,7 @@ import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
-import { sidebarStateReducer } from './store/sidebar-state.reducer';
+import { sidebarStateReducer, sidebarVisibleReducer } from './store/sidebar-state.reducer';
 import { spinnerReducer } from './store/spinner.reducer';
 
 // PrimeNG
@@ -49,6 +49,7 @@ import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { NgOptimizedImage } from "@angular/common";
+import { HeaderLinksComponent } from "./layout/header/header-links/header-links.component";
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -67,6 +68,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     LayoutComponent,
     CommitteeBannerComponent,
     HeaderComponent,
+    HeaderLinksComponent,
     BannerComponent,
     SidebarComponent,
     FooterComponent,
@@ -90,6 +92,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         activeReport: activeReportReducer,
         cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
+        sidebarVisible: sidebarVisibleReducer
       },
       {metaReducers}
     ),

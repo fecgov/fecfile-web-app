@@ -37,6 +37,7 @@ import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.co
 import { FormTypeDialogComponent } from './form-type-dialog/form-type-dialog.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
+import { RippleModule } from "primeng/ripple";
 
 @NgModule({
   declarations: [
@@ -79,6 +80,8 @@ import { ReportsRoutingModule } from './reports-routing.module';
     ConfirmDialogModule,
     ProgressSpinnerModule,
     InputNumberModule,
+    RippleModule,
   ],
 })
-export class ReportsModule { }
+export class ReportsModule {
+}

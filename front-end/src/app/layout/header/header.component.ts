@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoginService } from 'app/shared/services/login.service';
+import { Store } from "@ngrx/store";
+import { toggleSidebarVisibleAction } from "../../store/sidebar-state.actions";
 
 @Component({
   selector: 'app-header',
@@ -8,10 +10,13 @@ import { LoginService } from 'app/shared/services/login.service';
 })
 export class HeaderComponent {
   loginService: LoginService;
-  @Input() showLogo = false;
 
-  constructor(loginService: LoginService) {
+  constructor(loginService: LoginService, private store: Store) {
     this.loginService = loginService;
   }
 
+  toggleSideBar() {
+    if (window.location.href.includes('reports'))
+      this.store.dispatch(toggleSidebarVisibleAction());
+  }
 }
