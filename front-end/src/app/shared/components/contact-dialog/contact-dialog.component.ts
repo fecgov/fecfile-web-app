@@ -226,7 +226,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         }
         return undefined;
       })
-      .filter((change) => !!change) as [string, any][];
+      .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
     const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact, changes);
     this.confirmationService.confirm({
       key: 'contactDialogDialog',
