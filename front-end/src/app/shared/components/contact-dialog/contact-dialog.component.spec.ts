@@ -11,11 +11,12 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
-import { ConfirmationService } from 'primeng/api';
+import { Confirmation, ConfirmationService } from 'primeng/api';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
   let fixture: ComponentFixture<ContactDialogComponent>;
+  let testConfirmationService: ConfirmationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,9 +30,8 @@ describe('ContactDialogComponent', () => {
       ],
       providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
+    testConfirmationService = TestBed.inject(ConfirmationService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
     component.contact = { ...testContact } as Contact;
@@ -93,5 +93,14 @@ describe('ContactDialogComponent', () => {
     component.form.get('test')?.setValue('abc');
     component.saveContact(false);
     expect(component.isNewItem).toBeTrue();
+  });
+
+  it('should raise confirmation dialog', () => {
+    component.contact = new Contact();
+    const spy = spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) return confirmation?.accept();
+    });
+    component.confirmPropagation();
+    expect(spy).toHaveBeenCalled();
   });
 });
