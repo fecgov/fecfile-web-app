@@ -15,7 +15,6 @@ export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

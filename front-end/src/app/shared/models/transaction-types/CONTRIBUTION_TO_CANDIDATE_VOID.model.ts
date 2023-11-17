@@ -17,7 +17,6 @@ export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;
-  override showAggregate = false;
   override hasCandidateCommittee = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

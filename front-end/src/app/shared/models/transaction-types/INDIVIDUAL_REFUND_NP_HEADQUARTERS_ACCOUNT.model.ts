@@ -15,7 +15,6 @@ export class INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionTy
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override showAggregate = false;
   override isRefund = true;
 
   getNewTransaction(properties = {}) {

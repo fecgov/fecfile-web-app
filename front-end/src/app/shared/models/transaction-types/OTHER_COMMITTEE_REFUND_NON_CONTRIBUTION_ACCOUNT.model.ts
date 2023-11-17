@@ -14,7 +14,6 @@ export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransac
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT
   );
   schema = schema;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

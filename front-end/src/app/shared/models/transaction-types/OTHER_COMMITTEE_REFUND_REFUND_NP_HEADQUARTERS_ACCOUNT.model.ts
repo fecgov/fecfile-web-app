@@ -14,7 +14,6 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBT
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT
   );
   schema = schema;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

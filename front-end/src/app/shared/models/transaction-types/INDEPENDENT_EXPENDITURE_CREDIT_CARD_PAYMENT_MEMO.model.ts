@@ -46,7 +46,6 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
   override inheritCalendarYTD = true;
-  override showAggregate = false;
 
   getNewTransaction(properties = {}) {
     return SchETransaction.fromJSON({

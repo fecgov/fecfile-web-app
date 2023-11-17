@@ -14,7 +14,6 @@ export class TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionType {
     ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT
   );
   schema = schema;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
