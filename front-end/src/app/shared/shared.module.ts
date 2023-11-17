@@ -52,6 +52,7 @@ import { LongDatePipe } from './pipes/long-date.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { ReportVersionPipe } from './pipes/report-version.pipe';
 import { SupportOpposeInputComponent } from './components/inputs/support-oppose-input/support-oppose-input.component';
+import { SingleClickDirective } from './directives/single-click.directive';
 
 @NgModule({
   imports: [
@@ -114,6 +115,7 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
     YesNoRadioInputComponent,
     DebtInputComponent,
     SupportOpposeInputComponent,
+    SingleClickDirective,
   ],
   exports: [
     FecDatePipe,
@@ -151,6 +153,7 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
     YesNoRadioInputComponent,
     DebtInputComponent,
     SupportOpposeInputComponent,
+    SingleClickDirective,
   ],
   providers: [DatePipe],
 })

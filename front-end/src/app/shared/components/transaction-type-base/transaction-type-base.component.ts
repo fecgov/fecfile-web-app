@@ -2,10 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent,
+  NavigationEvent
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -14,6 +16,7 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -22,9 +25,6 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
 @Component({
   template: '',
@@ -41,7 +41,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
-  isDebtRepayment = false;
   memoCodeCheckboxLabel$ = of('');
 
   constructor(
@@ -54,7 +53,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -82,8 +81,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
-
-    this.isDebtRepayment = !!this.transaction.debt_id;
 
     // If this single-entry transaction has inherited fields from its parent, load values
     // from parent on create and set field to read-only. For edit, just make
