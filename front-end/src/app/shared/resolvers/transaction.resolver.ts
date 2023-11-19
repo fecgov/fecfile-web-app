@@ -6,7 +6,7 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
-import { ReattRedesTypes } from '../utils/reatt-redes.utils';
+import { ReattRedesTypes } from 'app/shared/models/reattribution-redesignation/reattribution-redesignation-base.model';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +43,7 @@ export class TransactionResolver {
         return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
       }
       if (reattributionId) {
-        return this.resolveNewReattribution(reattributionId, transactionTypeName);
+        return this.resolveNewReattribution(reportId, reattributionId, transactionTypeName);
       }
       return this.resolveNewTransaction(reportId, transactionTypeName);
     }
@@ -133,25 +133,23 @@ export class TransactionResolver {
     );
   }
 
-  resolveNewReattribution(reattriubtionId: string, transactionTypeName: string) {
-    return this.transactionService.get(reattriubtionId).pipe(
-      map((transaction: Transaction) => {
-        (transaction as SchATransaction).reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+  resolveNewReattribution(reportId: string, originatingId: string, transactionTypeName: string) {
+    return this.transactionService.get(originatingId).pipe(
+      map((originatingTransaction: Transaction) => {
         const to = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction({
-          parent_transaction_id: transaction.id,
+          reatt_redes_id: originatingTransaction.id,
           reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_TO,
-          report_id: transaction.report_id,
+          report_id: reportId,
         });
         const from = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction({
-          parent_transaction_id: transaction.id,
+          reatt_redes_id: originatingTransaction.id,
           reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_FROM,
-          report_id: transaction.report_id,
+          report_id: reportId,
         });
-        to.parent_transaction = transaction;
-        transaction.children.push(to);
-        from.parent_transaction = transaction;
-        transaction.children.push(from);
-        return transaction;
+        to.reatt_redes = originatingTransaction;
+        from.reatt_redes = originatingTransaction;
+        to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
+        return to;
       })
     );
   }

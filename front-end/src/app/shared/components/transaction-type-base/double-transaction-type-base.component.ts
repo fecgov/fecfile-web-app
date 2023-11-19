@@ -11,13 +11,14 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { concat, of, reduce } from 'rxjs';
+import { concat, of, reduce, takeUntil } from 'rxjs';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
@@ -46,14 +47,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   childMemoCodeCheckboxLabel$ = of('');
 
   override ngOnInit(): void {
-    // If this is a create and the transaction is reattributed/redesignated, then repackage
-    // the transaction for display in the double-entry form.
-    if (this.activatedRoute.snapshot.queryParamMap.get('reattribution')) {
-      this.transaction = ReattRedesUtils.getDoubleFormTransaction(
-        this.transaction as SchATransaction | SchBTransaction
-      ) as Transaction;
-    }
-
     // Initialize primary form.
     super.ngOnInit();
 
@@ -94,6 +87,20 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.contactService
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
+
+    // If the parent is a reattribution/redesignation transaction, initialize
+    // its specialized validation rules and form element behavior.
+    if (ReattRedesUtils.isReattRedes(this.transaction)) {
+      ReattRedesUtils.overlayForms(
+        this.form,
+        this.transaction as SchATransaction | SchBTransaction,
+        this.childForm,
+        this.childTransaction as SchATransaction | SchBTransaction
+      );
+      this.childUpdateFormWithPrimaryContact({
+        value: this.transaction?.reatt_redes?.contact_1,
+      } as SelectItem);
+    }
   }
 
   override ngOnDestroy(): void {
@@ -141,6 +148,10 @@ export abstract class DoubleTransactionTypeBaseComponent
       TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
     ];
     payload.children[0].report_id = payload.report_id;
+
+    if (ReattRedesUtils.isReattRedes(payload)) {
+      const payloads: Transaction[] = ReattRedesUtils.getPayloads(payload);
+    }
 
     if (payload.transaction_type_identifier) {
       const responseFromApi = this.writeToApi(payload);

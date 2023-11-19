@@ -3,7 +3,6 @@ import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionType } from './transaction-type.model';
 import { ReattRedesUtils } from '../utils/reatt-redes.utils';
 
 export class SchATransaction extends Transaction {
@@ -56,7 +55,7 @@ export class SchATransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchATransaction {
-    const transaction = plainToClass(SchATransaction, json);
+    let transaction = plainToClass(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
@@ -70,7 +69,7 @@ export class SchATransaction extends Transaction {
       });
     }
     if (ReattRedesUtils.isReattRedes(transaction)) {
-      ReattRedesUtils.overlayTransactionProperties(transaction);
+      transaction = ReattRedesUtils.overlayTransactionProperties(transaction) as SchATransaction;
     }
     return transaction;
   }

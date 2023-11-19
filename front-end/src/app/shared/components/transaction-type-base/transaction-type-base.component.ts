@@ -2,8 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -16,7 +14,6 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -96,15 +93,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
-        // If this is a reattribution/redesignation transaction, initialize
-        // its specialized validation rules and text written to the purpose description.
-        if (
-          this.transaction &&
-          'reattribution_redesignation_tag' in this.transaction &&
-          this.transaction.reattribution_redesignation_tag
-        ) {
-          ReattRedesUtils.initValidators(this.form, this.transaction as SchATransaction & SchBTransaction, report);
-        }
       });
   }
 

@@ -20,6 +20,7 @@ import {
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
 import { Report } from './report.model';
+import { ContactTypes } from './contact.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -48,6 +49,9 @@ export abstract class Transaction extends BaseModel {
 
   loan: Transaction | undefined;
   loan_id: string | undefined; // Foreign key to loan which this transaction repays
+
+  reatt_redes: Transaction | undefined;
+  reatt_redes_id: string | undefined; // Foreign key to original reattribution/redesignation transaction
 
   created: string | undefined;
   updated: string | undefined;
@@ -172,6 +176,22 @@ export abstract class Transaction extends BaseModel {
   }
 }
 
+export function getTransactionName(transaction: ScheduleTransaction): string {
+  if (transaction.entity_type === ContactTypes.INDIVIDUAL) {
+    const firstName = transaction[
+      transaction.transactionType.templateMap.first_name as keyof ScheduleTransaction
+    ] as string;
+    const lastName = transaction[
+      transaction.transactionType.templateMap.last_name as keyof ScheduleTransaction
+    ] as string;
+    return `${lastName}, ${firstName}`;
+  }
+
+  const orgName = transaction[
+    transaction.transactionType.templateMap.organization_name as keyof ScheduleTransaction
+  ] as string;
+  return orgName;
+}
 export function isNewTransaction(transaction?: Transaction): boolean {
   return !transaction?.id;
 }
