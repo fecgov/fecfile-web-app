@@ -310,7 +310,7 @@
               label="Save"
               icon="pi pi-check"
               class="p-button-primary"
-              (click)="confirmPropagation()"
+              (click)="isNewItem ? saveContact() : confirmPropagation()"
             ></button>
             <button
               type="button"
