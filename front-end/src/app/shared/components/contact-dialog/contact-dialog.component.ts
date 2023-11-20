@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -17,6 +17,8 @@ import {
 } from '../../models/contact.model';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -55,7 +57,11 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   candidateDistrictOptions: PrimeOptions = [];
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
 
-  constructor(private fb: FormBuilder, private contactService: ContactService) {
+  constructor(
+    private fb: FormBuilder,
+    private contactService: ContactService,
+    protected confirmationService: ConfirmationService
+  ) {
     super();
   }
 
@@ -209,6 +215,30 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   updateContact(contact: Contact) {
     this.contact = contact;
     this.form.patchValue(contact);
+  }
+
+  public confirmPropagation() {
+    const changes = Object.entries(this.form.controls)
+      .map(([field, control]: [string, AbstractControl]) => {
+        const contactValue = this.contact[field as keyof Contact];
+        if (control?.value !== contactValue) {
+          return [field, control.value];
+        }
+        return undefined;
+      })
+      .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact, changes);
+    this.confirmationService.confirm({
+      key: 'contactDialogDialog',
+      header: 'Confirm',
+      icon: 'pi pi-info-circle',
+      message: changesMessage,
+      acceptLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        this.saveContact();
+      },
+    });
   }
 
   public saveContact(closeDialog = true) {

@@ -42,7 +42,6 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
-  override showAggregate = false;
   override memoTextRequired = true;
   override memoTextPrefix =
     'Multistate independent expenditure, publicly distributed or disseminated in the following states: ';

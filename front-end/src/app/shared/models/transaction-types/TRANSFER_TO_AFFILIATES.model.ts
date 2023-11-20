@@ -10,7 +10,6 @@ export class TRANSFER_TO_AFFILIATES extends SchBTransactionType {
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES);
   schema = schema;
-  override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
