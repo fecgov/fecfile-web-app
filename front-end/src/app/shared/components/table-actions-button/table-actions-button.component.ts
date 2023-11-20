@@ -8,15 +8,9 @@ import { TableAction } from '../table-list-base/table-list-base.component';
 export class TableActionsButtonComponent {
   @Input() tableActions: TableAction[] = [];
   @Input() actionItem: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  @Input() tableActionClick: (action: TableAction, actionItem: any) => // eslint-disable-line @typescript-eslint/no-explicit-any
-    void = (() => { return });
+  @Input() tableActionClick: TableAction[] = [];
   @Input() buttonIcon = '';
   @Input() buttonLabel = '';
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
-  @Input() dataTest = '';
-
-  getTestString() { 
-    return this.dataTest;
-  }
 }
