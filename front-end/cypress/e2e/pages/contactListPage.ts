@@ -12,6 +12,7 @@ export class ContactListPage {
 
     if (!excludeContactType) {
       PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
+      cy.wait(500)
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
