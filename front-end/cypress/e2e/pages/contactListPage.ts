@@ -12,7 +12,6 @@ export class ContactListPage {
 
     if (!excludeContactType) {
       PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
-      cy.wait(500)
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
@@ -57,7 +56,7 @@ export class ContactListPage {
     }
 
     if (formData['contact_type'] == 'Organization') {
-      cy.get(alias).find('#name').safeType(formData['name']);
+      cy.get(alias).find('#name', { timeout: 5000}).safeType(formData['name']);
     }
   }
 
