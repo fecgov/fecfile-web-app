@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ListRestResponse } from '../../../shared/models/rest-api.model';
+import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
-import { Observable, forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 
@@ -76,9 +76,9 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       event = this.pagerState
         ? this.pagerState
         : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+          first: 0,
+          rows: this.rowsPerPage,
+        };
     }
 
     // Calculate the record page number to retrieve from the API.
@@ -150,7 +150,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
           this.refreshTable();
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000});
         });
       },
     });
@@ -174,7 +174,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
       this.selectedItems = [];
       this.refreshTable();
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
+      this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000});
     });
   }
 

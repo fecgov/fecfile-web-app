@@ -1,57 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Component } from '@angular/core';
 import { LoginService } from 'app/shared/services/login.service';
+import { Store } from "@ngrx/store";
+import { toggleSidebarVisibleAction } from "../../store/sidebar-state.actions";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
-  items: MenuItem[] = [];
-  @Input() showLogo = false;
+export class HeaderComponent {
+  loginService: LoginService;
 
-  constructor(private loginService: LoginService) {}
+  constructor(loginService: LoginService, private store: Store) {
+    this.loginService = loginService;
+  }
 
-  ngOnInit(): void {
-    this.items = [
-      {
-        label: 'Dashboard',
-        routerLink: ['/dashboard'],
-      },
-      {
-        label: 'Reports',
-        routerLink: ['/reports'],
-      },
-      {
-        label: 'Transactions',
-        routerLink: ['/transactions'],
-        disabled: true,
-      },
-      {
-        label: 'Contacts',
-        routerLink: ['/contacts'],
-      },
-      {
-        label: 'Tools',
-        escape: false,
-        items: [{ label: 'Import' }, { label: 'Export' }, { label: 'Update cash on hand' }, { label: 'FECFile Help' }],
-      },
-      {
-        label: '<img class="header-navbar-icon" src="assets/img/notification_bell_icon.svg" alt="Notifications" />',
-        escape: false,
-      },
-      {
-        label: '<img class="header-navbar-icon" src="assets/img/profile_icon.svg" alt="Profile" />',
-        escape: false,
-        items: [
-          { label: 'Account', routerLink: ['/profile/account'] },
-          { label: 'Users', routerLink: ['/committee/users'] },
-          { label: '<span class="dead-link">Switch Committees</span>', escape: false },
-          { label: '<span class="dead-link">User Profile</span>', escape: false },
-          { label: 'Logout', command: () => this.loginService.logOut() },
-        ],
-      },
-    ];
+  toggleSideBar() {
+    if (window.location.href.includes('reports'))
+      this.store.dispatch(toggleSidebarVisibleAction());
   }
 }

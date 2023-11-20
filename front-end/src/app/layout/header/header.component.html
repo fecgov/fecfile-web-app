@@ -1,10 +1,29 @@
-<div class="grid">
-  <div class="col-4" *ngIf="showLogo">
-    <a class="seal-link" routerLink="/">
-      <img src="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" />
-    </a>
-  </div>
-  <div class="float-right header-nav-menu" [ngClass]="{ 'col-8': showLogo, 'col-12': !showLogo }">
-    <p-menubar [model]="items"> </p-menubar>
-  </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-2 py-0 ">
+    <button class="seal-link navbar-brand" (click)="toggleSideBar()">
+        <img ngSrc="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" height="48" width="181"/>
+    </button>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"
+            aria-controls="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo01">
+        <app-header-links></app-header-links>
+    </div>
+</nav>
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasLabel">
+            <a class="seal-link navbar-brand" routerLink="/">
+                <img ngSrc="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" height="48"
+                     width="181"/>
+            </a>
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <app-header-links [ratio]="1.5" [full]="true"></app-header-links>
+    </div>
 </div>
