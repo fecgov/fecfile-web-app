@@ -90,11 +90,16 @@ describe('Loans', () => {
 
     // go back to reports, make new report
 
-    // Create report to add loan too
+    // Create report
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton(true);
     F3xCreateReportPage.enterFormData(reportFormDataJuly);
+    cy.intercept({
+      method: 'Post',
+      url: 'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency,report_type_category,report_code,coverage_from_date,coverage_through_date,date_of_election,state_of_election,form_type',
+    }).as('saveReport');
     PageUtils.clickButton('Save and continue');
+    cy.wait('@saveReport');
 
     // Create report to add loan too
     ReportListPage.goToPage();
@@ -131,7 +136,12 @@ describe('Loans', () => {
       },
     };
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
+
+    cy.intercept({
+      method: 'Post',
+    }).as('saveNewAgreement');
     PageUtils.clickButton('Save', '', true);
+    cy.wait('@saveNewAgreement');
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').last().should('exist');
