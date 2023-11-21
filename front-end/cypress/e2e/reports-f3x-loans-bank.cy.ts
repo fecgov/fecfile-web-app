@@ -102,12 +102,15 @@ describe('Loans', () => {
     cy.get(alias).contains('JULY 15').siblings().last().find('app-table-actions-button').children().last().click();
 
     cy.get(alias).contains('Edit report').first().click();
-    cy.wait(500)
-    cy.get(alias).contains('Edit report').first().click();
-    PageUtils.urlCheck('cash-on-hand');	    cy.wait(500)
-    PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);	    cy.url().then((currentUrl) => {
-    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);	      if (currentUrl.includes('cash-on-hand')) {
-    PageUtils.clickButton('Save & continue');
+    cy.wait(500);
+    cy.url().then((currentUrl) => {
+      if (currentUrl.includes('cash-on-hand')) {
+        PageUtils.urlCheck('cash-on-hand');
+        PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
+        PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
+        PageUtils.clickButton('Save & continue');
+      }
+    });
     cy.get(alias)
       .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()
