@@ -1,28 +1,28 @@
-<div class="dropdown position-absolute" style="margin-top: -19px">
-    <p-button
-            data-bs-toggle="dropdown"
-            data-bs-display="static"
-            pRipple
-            [icon]="buttonIcon"
-            [label]="buttonLabel"
-            [styleClass]="buttonStyleClass"
-            [ariaLabel]="buttonAriaLabel"
-    ></p-button>
-    <ul class="dropdown-menu ">
-        <li *ngFor="let action of tableActions; let index = index">
-            <button
-                    *ngIf="!action.isAvailable || action.isAvailable(actionItem)"
-                    [disabled]="!action.isEnabled(actionItem)"
-                    pButton
-                    pRipple
-                    type="button"
-                    class="p-button-secondary p-button-text"
-                    [id]="'button-' + index"
-                    (click)="tableActionClick(action, actionItem)"
-            >
-                {{ action.label }}
-            </button>
-        </li>
-    </ul>
+<div class="dropdown" [ngClass]="isAbsolute ? 'position-absolute' : ''" style="margin-top: -19px">
+  <p-button
+    data-bs-toggle="dropdown"
+    data-bs-display="static"
+    pRipple
+    [icon]="buttonIcon"
+    [label]="buttonLabel"
+    [styleClass]="buttonStyleClass"
+    [ariaLabel]="buttonAriaLabel"
+  ></p-button>
+  <ul class="dropdown-menu ">
+    <li *ngFor="let action of tableActions; let index = index">
+      <button
+        *ngIf="!action.isAvailable || action.isAvailable(actionItem)"
+        [disabled]="!action.isEnabled(actionItem)"
+        pButton
+        pRipple
+        type="button"
+        class="p-button-secondary p-button-text w-full text-left"
+        [id]="'button-' + index"
+        (click)="tableActionClick.emit({action, actionItem})"
+      >
+        {{ action.label }}
+      </button>
+    </li>
+  </ul>
 </div>
 

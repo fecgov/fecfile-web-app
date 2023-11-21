@@ -26,15 +26,21 @@ describe('TableActionsButtonComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should accept an array of TableActions as input', () => {
-    component.tableActionClick = [new TableAction(
+  it('should output an action on click', () => {
+    const spy = spyOn(component.tableActionClick, 'emit');
+    component.tableActions = [new TableAction(
       'Edit report',
       () => {
         return
       },
       (report: Report) => report.report_status === 'In progress'
     )];
-
-    expect(component.tableActionClick.length).toBeGreaterThan(0);
+    component.actionItem = {};
+    component.tableActionClick.emit({
+      action: component.tableActions[0], actionItem: {}
+    })
+    expect(spy).toHaveBeenCalledOnceWith({
+      action: component.tableActions[0], actionItem: {}
+    });
   })
 });

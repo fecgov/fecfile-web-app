@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableAction } from '../table-list-base/table-list-base.component';
 
 @Component({
@@ -8,9 +8,10 @@ import { TableAction } from '../table-list-base/table-list-base.component';
 export class TableActionsButtonComponent {
   @Input() tableActions: TableAction[] = [];
   @Input() actionItem: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  @Input() tableActionClick: TableAction[] = [];
   @Input() buttonIcon = '';
   @Input() buttonLabel = '';
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
+  @Input() isAbsolute = true;
+  @Output() tableActionClick = new EventEmitter<{ action: TableAction, actionItem: any }>();// eslint-disable-line @typescript-eslint/no-explicit-any
 }
