@@ -56,7 +56,7 @@ export class ContactListPage {
     }
 
     if (formData['contact_type'] == 'Organization') {
-      cy.get(alias).find('#name', { timeout: 5000}).safeType(formData['name']);
+      cy.get(alias).find('#name').safeType(formData['name']);
     }
   }
 
