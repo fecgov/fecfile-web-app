@@ -24,7 +24,6 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
     super();
 
-    this.isReports = window.location.href.includes('reports');
     store.select(selectSidebarVisible).subscribe((res => {
       this.showSidebar = res;
     }));
