@@ -22,13 +22,10 @@ export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB23',
-        transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
-      },
-      ...properties,
+      form_type: 'SB23',
+      transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
     });
   }
 }

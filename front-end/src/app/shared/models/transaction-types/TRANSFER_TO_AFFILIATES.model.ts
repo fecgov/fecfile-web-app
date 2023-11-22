@@ -12,13 +12,10 @@ export class TRANSFER_TO_AFFILIATES extends SchBTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB22',
-        transaction_type_identifier: ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
-      },
-      ...properties,
+      form_type: 'SB22',
+      transaction_type_identifier: ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
     });
   }
 }

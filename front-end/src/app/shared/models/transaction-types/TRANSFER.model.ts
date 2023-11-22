@@ -13,14 +13,11 @@ export class TRANSFER extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA12',
-        transaction_type_identifier: ScheduleATransactionTypes.TRANSFER,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA12',
+      transaction_type_identifier: ScheduleATransactionTypes.TRANSFER,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

@@ -20,14 +20,11 @@ export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT extends SchATransactionType
     return 'Non-contribution Account';
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA17',
-        transaction_type_identifier: ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
-        aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
-      },
-      ...properties,
+      form_type: 'SA17',
+      transaction_type_identifier: ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+      aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });
   }
 }

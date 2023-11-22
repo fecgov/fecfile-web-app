@@ -40,14 +40,11 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   override contactTitle = 'Contact';
   override dateLabel = 'DATE';
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA13',
-        transaction_type_identifier: ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA13',
+      transaction_type_identifier: ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

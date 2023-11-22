@@ -17,14 +17,11 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT extends SchBTransactio
   override subTransactionConfig = [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB29',
-        transaction_type_identifier: ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
-        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-      },
-      ...properties,
+      form_type: 'SB29',
+      transaction_type_identifier: ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
   override generatePurposeDescription(): string {

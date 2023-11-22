@@ -50,14 +50,11 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
     electionType: 'P',
   };
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchETransaction.fromJSON({
-      ...{
-        form_type: 'SE',
-        transaction_type_identifier: ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
-        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-      },
-      ...properties,
+      form_type: 'SE',
+      transaction_type_identifier: ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
+      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
     });
   }
 }

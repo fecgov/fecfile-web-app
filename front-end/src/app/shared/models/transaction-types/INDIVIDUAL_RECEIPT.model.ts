@@ -13,14 +13,11 @@ export class INDIVIDUAL_RECEIPT extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA11AI',
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA11AI',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

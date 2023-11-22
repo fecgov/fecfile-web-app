@@ -19,14 +19,11 @@ export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO extends SchBTrans
   schema = schema;
   override navigationControls = CHILD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB30B',
-        transaction_type_identifier: ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
-        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-      },
-      ...properties,
+      form_type: 'SB30B',
+      transaction_type_identifier: ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
 }

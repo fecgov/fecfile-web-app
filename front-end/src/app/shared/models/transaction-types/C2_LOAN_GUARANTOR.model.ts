@@ -50,13 +50,10 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   override hasAdditionalInfo = false;
   override showAggregate = false;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchC2Transaction.fromJSON({
-      ...{
-        form_type: 'SC2/10',
-        transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
-      },
-      ...properties,
+      form_type: 'SC2/10',
+      transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
     });
   }
 }

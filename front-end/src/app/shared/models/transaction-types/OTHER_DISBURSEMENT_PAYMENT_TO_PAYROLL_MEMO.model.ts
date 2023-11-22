@@ -19,14 +19,11 @@ export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionT
   schema = schema;
   override navigationControls = CHILD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB29',
-        transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
-        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-      },
-      ...properties,
+      form_type: 'SB29',
+      transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
 }

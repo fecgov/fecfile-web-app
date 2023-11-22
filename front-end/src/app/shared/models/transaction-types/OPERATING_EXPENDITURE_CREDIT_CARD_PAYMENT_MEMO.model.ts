@@ -18,14 +18,11 @@ export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchBTransact
   );
   schema = schema;
   override navigationControls = CHILD_CONTROLS;
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB21B',
-        transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
-        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-      },
-      ...properties,
+      form_type: 'SB21B',
+      transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
 }

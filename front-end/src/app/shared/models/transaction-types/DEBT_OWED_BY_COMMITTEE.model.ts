@@ -29,13 +29,10 @@ export class DEBT_OWED_BY_COMMITTEE extends SchDTransactionType {
   override hasAmountInput = false;
   override hasDebtInput = true;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchDTransaction.fromJSON({
-      ...{
-        form_type: 'SD10',
-        transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
-      },
-      ...properties,
+      form_type: 'SD10',
+      transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
     });
   }
 }

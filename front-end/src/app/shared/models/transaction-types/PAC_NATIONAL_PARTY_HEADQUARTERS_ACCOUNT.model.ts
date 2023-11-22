@@ -20,14 +20,11 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType
     return 'Headquarters Buildings Account';
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA17',
-        transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-        aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-      },
-      ...properties,
+      form_type: 'SA17',
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });
   }
 }

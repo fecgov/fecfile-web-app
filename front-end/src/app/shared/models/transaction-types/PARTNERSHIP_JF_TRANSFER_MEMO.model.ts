@@ -19,14 +19,11 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
   ]);
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA12',
-        transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA12',
+      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 

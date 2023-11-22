@@ -10,14 +10,11 @@ export class PAC_IN_KIND_RECEIPT extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.PAC_IN_KIND_OUT];
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA11C',
-        transaction_type_identifier: ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA11C',
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

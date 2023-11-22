@@ -17,14 +17,11 @@ export class OPERATING_EXPENDITURE_VOID extends SchBTransactionType {
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB21B',
-        transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
-        aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-      },
-      ...properties,
+      form_type: 'SB21B',
+      transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
 }

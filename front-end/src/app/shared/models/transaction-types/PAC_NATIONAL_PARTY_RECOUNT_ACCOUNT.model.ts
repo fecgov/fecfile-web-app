@@ -17,14 +17,11 @@ export class PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
     return 'Recount/Legal Proceedings Account';
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA17',
-        transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-        aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
-      },
-      ...properties,
+      form_type: 'SA17',
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
   }
 }

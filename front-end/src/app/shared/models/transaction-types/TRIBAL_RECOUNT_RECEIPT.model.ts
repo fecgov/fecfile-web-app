@@ -17,14 +17,11 @@ export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account';
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA17',
-        transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
-        aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
-      },
-      ...properties,
+      form_type: 'SA17',
+      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
+      aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
     });
   }
 }

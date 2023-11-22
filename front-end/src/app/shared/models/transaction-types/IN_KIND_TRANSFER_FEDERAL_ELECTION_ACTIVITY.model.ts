@@ -13,14 +13,11 @@ export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT];
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA12',
-        transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA12',
+      transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

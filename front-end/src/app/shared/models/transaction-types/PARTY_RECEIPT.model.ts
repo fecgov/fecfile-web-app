@@ -13,14 +13,11 @@ export class PARTY_RECEIPT extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA11B',
-        transaction_type_identifier: ScheduleATransactionTypes.PARTY_RECEIPT,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA11B',
+      transaction_type_identifier: ScheduleATransactionTypes.PARTY_RECEIPT,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

@@ -23,14 +23,11 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     }
     return '';
   }
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA11C',
-        transaction_type_identifier: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
-        memo_code: false,
-      },
-      ...properties,
+      form_type: 'SA11C',
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
+      memo_code: false,
     });
   }
 }

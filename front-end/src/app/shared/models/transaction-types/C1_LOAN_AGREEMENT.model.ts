@@ -90,13 +90,10 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   title = 'Loan agreement';
   override contactTitle = 'Lender';
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchC1Transaction.fromJSON({
-      ...{
-        form_type: 'SC1/10',
-        transaction_type_identifier: ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
-      },
-      ...properties,
+      form_type: 'SC1/10',
+      transaction_type_identifier: ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
     });
   }
 }

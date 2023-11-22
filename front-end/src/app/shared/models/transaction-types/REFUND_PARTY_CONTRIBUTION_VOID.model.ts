@@ -15,14 +15,11 @@ export class REFUND_PARTY_CONTRIBUTION_VOID extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override negativeAmountValueOnly = true;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB28B',
-        transaction_type_identifier: ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SB28B',
+      transaction_type_identifier: ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

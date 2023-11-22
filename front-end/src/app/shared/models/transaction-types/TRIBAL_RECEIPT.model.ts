@@ -17,14 +17,11 @@ export class TRIBAL_RECEIPT extends SchATransactionType {
     return 'Tribal Receipt';
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA11AI',
-        transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECEIPT,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA11AI',
+      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECEIPT,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

@@ -16,14 +16,11 @@ export class INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionT
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB29',
-        transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
-        aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
-      },
-      ...properties,
+      form_type: 'SB29',
+      transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+      aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });
   }
   override generatePurposeDescription(): string {

@@ -17,14 +17,11 @@ export class RETURN_RECEIPT extends SchATransactionType {
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA11AI',
-        transaction_type_identifier: ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA11AI',
+      transaction_type_identifier: ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

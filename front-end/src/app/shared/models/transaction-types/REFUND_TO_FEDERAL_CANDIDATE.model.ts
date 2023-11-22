@@ -17,14 +17,11 @@ export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA16',
-        transaction_type_identifier: ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
-        aggregation_group: AggregationGroups.LINE_16,
-      },
-      ...properties,
+      form_type: 'SA16',
+      transaction_type_identifier: ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
+      aggregation_group: AggregationGroups.LINE_16,
     });
   }
 }

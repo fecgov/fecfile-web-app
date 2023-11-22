@@ -18,14 +18,11 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType {
     return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA12',
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
-        aggregation_group: AggregationGroups.GENERAL,
-      },
-      ...properties,
+      form_type: 'SA12',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

@@ -13,14 +13,11 @@ export class REFUND_TO_OTHER_POLITICAL_COMMITTEE extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA16',
-        transaction_type_identifier: ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
-        aggregation_group: AggregationGroups.LINE_16,
-      },
-      ...properties,
+      form_type: 'SA16',
+      transaction_type_identifier: ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
+      aggregation_group: AggregationGroups.LINE_16,
     });
   }
 }

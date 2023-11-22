@@ -23,13 +23,10 @@ export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType
   override purposeDescriptionPrefix? = 'In-kind: ';
   override synchronizeOrgComNameValues = false;
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchBTransaction.fromJSON({
-      ...{
-        form_type: 'SB23',
-        transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
-      },
-      ...properties,
+      form_type: 'SB23',
+      transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
     });
   }
 }

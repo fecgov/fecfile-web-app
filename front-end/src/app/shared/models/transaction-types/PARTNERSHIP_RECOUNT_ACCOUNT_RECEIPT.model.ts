@@ -22,14 +22,11 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account (Partnership attributions do not meet itemization threshold)';
   }
 
-  getNewTransaction(properties = {}) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      ...{
-        form_type: 'SA17',
-        transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
-        aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
-      },
-      ...properties,
+      form_type: 'SA17',
+      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
+      aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
     });
   }
 }
