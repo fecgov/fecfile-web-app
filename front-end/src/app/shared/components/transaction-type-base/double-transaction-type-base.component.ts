@@ -11,8 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { concat, of, reduce, takeUntil } from 'rxjs';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { concat, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -150,10 +149,11 @@ export abstract class DoubleTransactionTypeBaseComponent
     payload.children[0].report_id = payload.report_id;
 
     if (ReattRedesUtils.isReattRedes(payload)) {
-      const payloads: Transaction[] = ReattRedesUtils.getPayloads(payload);
-    }
-
-    if (payload.transaction_type_identifier) {
+      const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
+      this.transactionService.multisave(payloads).subscribe((response) => {
+        debugger;
+      });
+    } else if (payload.transaction_type_identifier) {
       const responseFromApi = this.writeToApi(payload);
       responseFromApi.subscribe((transaction) => {
         navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;

@@ -5,8 +5,9 @@ import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { Reattributed } from '../models/reattribution-redesignation/reattributed.model';
 import { ReattRedesTypes } from 'app/shared/models/reattribution-redesignation/reattribution-redesignation-base.model';
+import { SchATransaction } from '../models/scha-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -146,8 +147,12 @@ export class TransactionResolver {
           reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_FROM,
           report_id: reportId,
         });
-        to.reatt_redes = originatingTransaction;
-        from.reatt_redes = originatingTransaction;
+        const reattributed = new Reattributed().overlayTransactionProperties(
+          originatingTransaction as SchATransaction,
+          reportId
+        );
+        to.reatt_redes = reattributed;
+        from.reatt_redes = reattributed;
         to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
         return to;
       })

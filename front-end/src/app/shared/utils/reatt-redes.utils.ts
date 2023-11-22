@@ -3,7 +3,6 @@ import { Transaction } from '../models/transaction.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { ReattRedesTypes } from 'app/shared/models/reattribution-redesignation/reattribution-redesignation-base.model';
-import { Reattributed } from '../models/reattribution-redesignation/reattributed.model';
 import { ReattributionTo } from '../models/reattribution-redesignation/reattribution-to.model';
 import { ReattributionFrom } from '../models/reattribution-redesignation/reattribution-from.model';
 
@@ -40,28 +39,11 @@ export class ReattRedesUtils {
     }
   }
 
-  public static getPayloads(payload: Transaction): Transaction[] {
-    let orig;
-    let origCopy; // If needed, a copy of the originating transaction.
-
+  public static getPayloads(payload: Transaction): (SchATransaction | SchBTransaction)[] {
+    const orig = payload.reatt_redes as SchATransaction | SchBTransaction;
     const from = payload.children[0] as SchATransaction | SchBTransaction;
     const to = payload as SchATransaction | SchBTransaction;
     to.children = [];
-
-    // Split up payload into the 3 or 4 separate transaction payloads to save the originating, TO, and FROM transactions
-    // and the copy of the originating transaction if the originating is in a different reporting period.
-    if (to.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
-      [orig, origCopy] = new Reattributed().overlayTransactionProperties(
-        payload.reatt_redes as SchATransaction,
-        to.report_id as string
-      );
-    }
-    // Put REDESIGNATED overlayTransactionProperties here
-    // else {}
-
-    if (origCopy) {
-      return [orig as Transaction, origCopy, to, from];
-    }
-    return [orig as Transaction, to, from];
+    return [orig, to, from];
   }
 }

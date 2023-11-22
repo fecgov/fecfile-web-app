@@ -15,7 +15,7 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
       dateLabel: 'REATTRIBUTION DATE',
       amountLabel: 'REATTRIBUTED AMOUNT',
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
-      useParentContact: true,
+      // useParentContact: true,
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend

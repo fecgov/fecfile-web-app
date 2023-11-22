@@ -165,6 +165,11 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
+  public multisave(transactions: Transaction[]): Observable<Transaction[]> {
+    const payload = transactions.map((t) => this.preparePayload(t));
+    return this.apiService.put<Transaction[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/`, payload);
+  }
+
   /**
    * Update and prepare a transaction payload as a JSON object to be received by the API.
    * This involves removing excess properties such and transactionType while
