@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
@@ -140,7 +140,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Reattribute',
       this.createReattribution.bind(this),
-      (transaction: Transaction) => transaction.transactionType.scheduleId === ScheduleIds.A && this.reportIsEditable,
+      (transaction: Transaction) =>
+        transaction.transactionType.scheduleId === ScheduleIds.A &&
+        this.reportIsEditable &&
+        !(transaction as SchATransaction).reattribution_redesignation_tag,
       () => true
     ),
   ];

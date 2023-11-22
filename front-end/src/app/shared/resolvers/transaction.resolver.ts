@@ -137,16 +137,14 @@ export class TransactionResolver {
   resolveNewReattribution(reportId: string, originatingId: string, transactionTypeName: string) {
     return this.transactionService.get(originatingId).pipe(
       map((originatingTransaction: Transaction) => {
-        const to = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction({
-          reatt_redes_id: originatingTransaction.id,
-          reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_TO,
-          report_id: reportId,
-        });
-        const from = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction({
-          reatt_redes_id: originatingTransaction.id,
-          reattribution_redesignation_tag: ReattRedesTypes.REATTRIBUTION_FROM,
-          report_id: reportId,
-        });
+        const to = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction() as SchATransaction;
+        to.reatt_redes_id = originatingTransaction.id;
+        to.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+        to.report_id = reportId;
+        const from = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction() as SchATransaction;
+        from.reatt_redes_id = originatingTransaction.id;
+        from.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
+        from.report_id = reportId;
         const reattributed = new Reattributed().overlayTransactionProperties(
           originatingTransaction as SchATransaction,
           reportId
