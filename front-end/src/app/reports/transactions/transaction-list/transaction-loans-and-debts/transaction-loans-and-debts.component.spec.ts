@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
