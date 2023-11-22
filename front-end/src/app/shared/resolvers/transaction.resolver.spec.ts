@@ -14,7 +14,6 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
-import { ListRestResponse } from '../models/rest-api.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
