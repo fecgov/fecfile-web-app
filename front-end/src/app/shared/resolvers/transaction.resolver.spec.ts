@@ -14,6 +14,7 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
+import { ListRestResponse } from '../models/rest-api.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -35,6 +36,14 @@ describe('TransactionResolver', () => {
                 contact_1: Contact.fromJSON({ id: 123 }),
               })
             ),
+          getTableData: () =>
+            of({
+              count: 5,
+              next: 'http://url',
+              previous: 'http://url',
+              pageNumber: 1,
+              results: [],
+            }),
         },
       },
     ],
