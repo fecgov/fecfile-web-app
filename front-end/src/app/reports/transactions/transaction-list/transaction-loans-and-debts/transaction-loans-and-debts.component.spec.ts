@@ -93,7 +93,7 @@ describe('TransactionReceiptsComponent', () => {
     const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
     component.reportIsEditable = true;
     expect(tableAction.isAvailable(transaction)).toBeFalse();
-    transaction.children = [getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)];
+    transaction.loan_agreement = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 
@@ -108,7 +108,7 @@ describe('TransactionReceiptsComponent', () => {
     transaction.loan_id = 'testLoanId';
     component.reportIsEditable = true;
     expect(tableAction.isAvailable(transaction)).toBeTrue();
-    transaction.children = [getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)];
+    transaction.loan_agreement = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeFalse();
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 
