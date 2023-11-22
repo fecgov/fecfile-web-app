@@ -4,6 +4,7 @@ import { TableAction } from '../table-list-base/table-list-base.component';
 @Component({
   selector: 'app-table-actions-button',
   templateUrl: './table-actions-button.component.html',
+  styleUrls: ['./table-actions-button.component.scss']
 })
 export class TableActionsButtonComponent {
   @Input() tableActions: TableAction[] = [];
