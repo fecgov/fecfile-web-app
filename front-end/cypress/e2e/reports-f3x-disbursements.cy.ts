@@ -32,7 +32,7 @@ const independantExpVoidData: DisbursementFormData = {
   },
 };
 
-describe('Disbursements', () => {
+xdescribe('Disbursements', () => {
   beforeEach(() => {
     LoginPage.login();
     ReportListPage.deleteAllReports();

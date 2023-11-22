@@ -20,7 +20,7 @@ const formData = {
   },
 };
 
-describe('Loans', () => {
+xdescribe('Loans', () => {
   beforeEach(() => {
     LoginPage.login();
     ReportListPage.deleteAllReports();

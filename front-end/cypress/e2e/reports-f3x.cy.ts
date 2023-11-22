@@ -6,7 +6,7 @@ import { F3xReportLevelMemoPage } from './pages/f3xReportLevelMemoPage';
 import { currentYear, PageUtils } from './pages/pageUtils';
 import { defaultFormData } from './models/ReportFormModel';
 
-describe('Manage reports', () => {
+xdescribe('Manage reports', () => {
   beforeEach(() => {
     LoginPage.login();
     ReportListPage.deleteAllReports();

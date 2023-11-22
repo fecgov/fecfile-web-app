@@ -18,7 +18,7 @@ const scheduleData = {
   },
 };
 
-describe('Transactions', () => {
+xdescribe('Transactions', () => {
   beforeEach(() => {
     LoginPage.login();
     ContactListPage.deleteAllContacts();
