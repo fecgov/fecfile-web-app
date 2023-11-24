@@ -15,7 +15,7 @@ describe('Reattribution To', () => {
   });
 
   it('overlayTransactionProperties should override default properties', () => {
-    const origTransaction = Object.assign({}, testScheduleATransaction);
+    const origTransaction = { ...testScheduleATransaction } as SchATransaction;
     const toTransaction = reattributionTo.overlayTransactionProperties(
       origTransaction,
       '3cd741da-aa57-4cc3-8530-667e8b7bad78'
@@ -26,7 +26,7 @@ describe('Reattribution To', () => {
   });
 
   it('overlayForm() should update validators and watch for value changes', () => {
-    const transaction = Object.assign({}, testScheduleATransaction);
+    const transaction = { ...testScheduleATransaction } as SchATransaction;
     transaction.reatt_redes = {
       id: '999',
       report_id: '999',

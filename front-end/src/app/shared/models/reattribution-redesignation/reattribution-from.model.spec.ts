@@ -25,7 +25,7 @@ describe('Reattribution From', () => {
   });
 
   it('overlayForm() should update validators and watch for value changes', () => {
-    const transaction = testScheduleATransaction;
+    const transaction = { ...testScheduleATransaction } as SchATransaction;
     transaction.parent_transaction = {
       id: '888',
       reatt_redes: {
