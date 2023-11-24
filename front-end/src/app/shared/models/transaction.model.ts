@@ -1,5 +1,5 @@
 import { BaseModel } from './base.model';
-import { Contact } from './contact.model';
+import { Contact, ContactTypes } from './contact.model';
 import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
@@ -20,7 +20,6 @@ import {
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
 import { Report } from './report.model';
-import { ContactTypes } from './contact.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;

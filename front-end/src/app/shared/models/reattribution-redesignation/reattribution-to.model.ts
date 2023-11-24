@@ -1,8 +1,7 @@
 import { ReattributionRedesignationBase } from './reattribution-redesignation-base.model';
 import { FormGroup } from '@angular/forms';
-import { TransactionTypes } from '../transaction.model';
+import { TransactionTypes, getTransactionName } from '../transaction.model';
 import { SchATransaction } from '../scha-transaction.model';
-import { getTransactionName } from '../transaction.model';
 
 export class ReattributionTo extends ReattributionRedesignationBase {
   overlayTransactionProperties(transaction: SchATransaction): SchATransaction {

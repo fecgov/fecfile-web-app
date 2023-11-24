@@ -38,8 +38,8 @@ describe('TransactionResolver', () => {
           getTableData: () =>
             of({
               count: 5,
-              next: 'http://url',
-              previous: 'http://url',
+              next: 'https://url',
+              previous: 'https://url',
               pageNumber: 1,
               results: [],
             }),

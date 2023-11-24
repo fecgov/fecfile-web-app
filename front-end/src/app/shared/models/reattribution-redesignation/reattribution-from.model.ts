@@ -43,9 +43,9 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
 
     // Watch for changes to the "TO" transaction entity name and then update the "FROM" transaction contribution purpose description.
     combineLatest([
-      toForm.get(transaction.transactionType.templateMap.organization_name)?.valueChanges || of(null),
-      toForm.get(transaction.transactionType.templateMap.first_name)?.valueChanges || of(null),
-      toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges || of(null),
+      toForm.get(transaction.transactionType.templateMap.organization_name)?.valueChanges ?? of(null),
+      toForm.get(transaction.transactionType.templateMap.first_name)?.valueChanges ?? of(null),
+      toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges ?? of(null),
     ]).subscribe(([orgName, firstName, lastName]) => {
       if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
         form.get('contribution_purpose_descrip')?.setValue(`Reattribution to ${lastName}, ${firstName}`);
