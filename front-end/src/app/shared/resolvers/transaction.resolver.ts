@@ -142,8 +142,8 @@ export class TransactionResolver {
           originatingTransaction as SchATransaction,
           reportId
         );
-        const to = new ReattributionTo().overlayTransactionProperties(reattributed, reportId) as SchATransaction;
-        const from = new ReattributionFrom().overlayTransactionProperties(reattributed, reportId) as SchATransaction;
+        const to = new ReattributionTo().overlayTransactionProperties(reattributed, reportId);
+        const from = new ReattributionFrom().overlayTransactionProperties(reattributed, reportId);
         to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
         return to;
       })
