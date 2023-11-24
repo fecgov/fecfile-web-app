@@ -6,8 +6,9 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
 import { Reattributed } from '../models/reattribution-redesignation/reattributed.model';
-import { ReattRedesTypes } from 'app/shared/models/reattribution-redesignation/reattribution-redesignation-base.model';
 import { SchATransaction } from '../models/scha-transaction.model';
+import { ReattributionTo } from '../models/reattribution-redesignation/reattribution-to.model';
+import { ReattributionFrom } from '../models/reattribution-redesignation/reattribution-from.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +45,7 @@ export class TransactionResolver {
         return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
       }
       if (reattributionId) {
-        return this.resolveNewReattribution(reportId, reattributionId, transactionTypeName);
+        return this.resolveNewReattribution(reportId, reattributionId);
       }
       return this.resolveNewTransaction(reportId, transactionTypeName);
     }
@@ -134,23 +135,15 @@ export class TransactionResolver {
     );
   }
 
-  resolveNewReattribution(reportId: string, originatingId: string, transactionTypeName: string) {
+  resolveNewReattribution(reportId: string, originatingId: string) {
     return this.transactionService.get(originatingId).pipe(
       map((originatingTransaction: Transaction) => {
-        const to = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction() as SchATransaction;
-        to.reatt_redes_id = originatingTransaction.id;
-        to.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
-        to.report_id = reportId;
-        const from = TransactionTypeUtils.factory(transactionTypeName).getNewTransaction() as SchATransaction;
-        from.reatt_redes_id = originatingTransaction.id;
-        from.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
-        from.report_id = reportId;
         const reattributed = new Reattributed().overlayTransactionProperties(
           originatingTransaction as SchATransaction,
           reportId
         );
-        to.reatt_redes = reattributed;
-        from.reatt_redes = reattributed;
+        const to = new ReattributionTo().overlayTransactionProperties(reattributed, reportId) as SchATransaction;
+        const from = new ReattributionFrom().overlayTransactionProperties(reattributed, reportId) as SchATransaction;
         to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
         return to;
       })

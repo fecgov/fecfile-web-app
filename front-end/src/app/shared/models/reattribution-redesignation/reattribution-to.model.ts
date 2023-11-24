@@ -1,10 +1,23 @@
-import { ReattributionRedesignationBase } from './reattribution-redesignation-base.model';
+import { ReattributionRedesignationBase, ReattRedesTypes } from './reattribution-redesignation-base.model';
 import { FormGroup } from '@angular/forms';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { TransactionTypes, getTransactionName } from '../transaction.model';
 import { SchATransaction } from '../scha-transaction.model';
 
 export class ReattributionTo extends ReattributionRedesignationBase {
-  overlayTransactionProperties(transaction: SchATransaction): SchATransaction {
+  overlayTransactionProperties(reattributedTransaction: SchATransaction, activeReportId: string): SchATransaction {
+    if (!reattributedTransaction.transaction_type_identifier) {
+      throw Error('Fecfile online: originating reattribution transaction type not found.');
+    }
+    const transaction = TransactionTypeUtils.factory(
+      reattributedTransaction.transaction_type_identifier
+    ).getNewTransaction() as SchATransaction;
+
+    transaction.reatt_redes_id = reattributedTransaction.id;
+    transaction.reatt_redes = reattributedTransaction;
+    transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+    transaction.report_id = activeReportId;
+
     Object.assign(transaction.transactionType, {
       title: 'Reattribution',
       subTitle:
@@ -38,11 +51,11 @@ export class ReattributionTo extends ReattributionRedesignationBase {
 
   overlayForm(form: FormGroup, transaction: SchATransaction): FormGroup {
     // Add additional amount validation
-    const originatingTransaction = transaction.reatt_redes as SchATransaction;
-    if (originatingTransaction) {
+    const reattributedTransaction = transaction.reatt_redes as SchATransaction;
+    if (reattributedTransaction) {
       form
         .get(transaction.transactionType.templateMap.amount)
-        ?.addValidators([this.amountValidator(originatingTransaction)]);
+        ?.addValidators([this.amountValidator(reattributedTransaction)]);
     }
 
     // Clear normal schema validation from reattribution TO form

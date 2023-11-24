@@ -53,6 +53,7 @@ export abstract class TransactionType {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getInheritedFields = (transaction: Transaction) => this.inheritedFields;
 
+  hidePrimaryContactLookup = false; // Set to true to hide the contact lookup for the primary contact
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getUseParentContact = (transaction?: Transaction) => this.useParentContact;

@@ -1,12 +1,24 @@
 import { combineLatest, of } from 'rxjs';
-import { ReattributionRedesignationBase } from './reattribution-redesignation-base.model';
+import { ReattributionRedesignationBase, ReattRedesTypes } from './reattribution-redesignation-base.model';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 export class ReattributionFrom extends ReattributionRedesignationBase {
-  overlayTransactionProperties(transaction: SchATransaction): SchATransaction {
+  overlayTransactionProperties(reattributedTransaction: SchATransaction, activeReportId: string): SchATransaction {
+    if (!reattributedTransaction.transaction_type_identifier) {
+      throw Error('Fecfile online: originating reattribution transaction type not found.');
+    }
+    const transaction = TransactionTypeUtils.factory(
+      reattributedTransaction.transaction_type_identifier
+    ).getNewTransaction() as SchATransaction;
+
+    transaction.reatt_redes_id = reattributedTransaction.id;
+    transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
+    transaction.report_id = activeReportId;
+
     Object.assign(transaction.transactionType, {
       accordionTitle: 'AUTO-POPULATED',
       accordionSubText: 'Review contact, receipt, and additional information in the reattribution from section.',
@@ -15,7 +27,8 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
       dateLabel: 'REATTRIBUTION DATE',
       amountLabel: 'REATTRIBUTED AMOUNT',
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
-      // useParentContact: true,
+      hidePrimaryContactLookup: true,
+      contactTypeOptions: [reattributedTransaction.entity_type],
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend
@@ -28,18 +41,19 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
     return transaction;
   }
 
-  overlayForm(form: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
+  overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
     // Add additional amount validation
-    const originatingTransaction = transaction.parent_transaction?.parent_transaction as SchATransaction;
-    if (originatingTransaction) {
-      form
+    const reattributedTransaction = transaction.parent_transaction?.reatt_redes as SchATransaction;
+
+    if (reattributedTransaction) {
+      fromForm
         .get(transaction.transactionType.templateMap.amount)
-        ?.addValidators([this.amountValidator(originatingTransaction, true)]);
+        ?.addValidators([this.amountValidator(reattributedTransaction, true)]);
     }
 
     // Update purpose description for rules that are independent of the transaction date being in the report.
-    form.get('contribution_purpose_descrip')?.clearValidators();
-    form.get('memo_code')?.clearValidators();
+    fromForm.get('contribution_purpose_descrip')?.clearValidators();
+    fromForm.get('memo_code')?.clearValidators();
 
     // Watch for changes to the "TO" transaction entity name and then update the "FROM" transaction contribution purpose description.
     combineLatest([
@@ -48,15 +62,15 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
       toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges ?? of(null),
     ]).subscribe(([orgName, firstName, lastName]) => {
       if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-        form.get('contribution_purpose_descrip')?.setValue(`Reattribution to ${lastName}, ${firstName}`);
+        fromForm.get('contribution_purpose_descrip')?.setValue(`Reattribution to ${lastName}, ${firstName}`);
       } else {
-        form.get('contribution_purpose_descrip')?.setValue(`Reattribution to ${orgName}`);
+        fromForm.get('contribution_purpose_descrip')?.setValue(`Reattribution to ${orgName}`);
       }
     });
 
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
     toForm.get(transaction.transactionType.templateMap.amount)?.valueChanges.subscribe((amount) => {
-      form.get(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
+      fromForm.get(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
     });
 
     const readOnlyFields = [
@@ -79,9 +93,9 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
       'committee_name',
     ];
     readOnlyFields.forEach((field) =>
-      form.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
+      fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
     );
 
-    return form;
+    return fromForm;
   }
 }

@@ -13,20 +13,6 @@ export class ReattRedesUtils {
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
   }
 
-  public static overlayTransactionProperties(
-    transaction: SchATransaction | SchBTransaction
-  ): SchATransaction | SchBTransaction {
-    switch (transaction.reattribution_redesignation_tag) {
-      case ReattRedesTypes.REATTRIBUTION_TO:
-        transaction = new ReattributionTo().overlayTransactionProperties(transaction as SchATransaction);
-        break;
-      case ReattRedesTypes.REATTRIBUTION_FROM:
-        transaction = new ReattributionFrom().overlayTransactionProperties(transaction as SchATransaction);
-        break;
-    }
-    return transaction;
-  }
-
   public static overlayForms(
     toForm: FormGroup,
     toTransaction: SchATransaction | SchBTransaction,
