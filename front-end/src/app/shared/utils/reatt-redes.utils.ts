@@ -26,10 +26,10 @@ export class ReattRedesUtils {
   }
 
   public static getPayloads(payload: Transaction): (SchATransaction | SchBTransaction)[] {
-    const orig = payload.reatt_redes as SchATransaction | SchBTransaction;
+    const reattributed = payload.reatt_redes as SchATransaction | SchBTransaction;
     const from = payload.children[0] as SchATransaction | SchBTransaction;
     const to = payload as SchATransaction | SchBTransaction;
     to.children = [];
-    return [orig, to, from];
+    return [reattributed, to, from];
   }
 }
