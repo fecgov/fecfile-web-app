@@ -1,18 +1,14 @@
 import { ReattributionRedesignationBase, ReattRedesTypes } from './reattribution-redesignation-base.model';
 import { FormGroup } from '@angular/forms';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { TransactionTypes, getTransactionName } from '../transaction.model';
 import { SchATransaction } from '../scha-transaction.model';
 
 export class ReattributionTo extends ReattributionRedesignationBase {
-  overlayTransactionProperties(reattributedTransaction: SchATransaction, activeReportId: string): SchATransaction {
-    if (!reattributedTransaction.transaction_type_identifier) {
-      throw Error('Fecfile online: originating reattribution transaction type not found.');
-    }
-    const transaction = TransactionTypeUtils.factory(
-      reattributedTransaction.transaction_type_identifier
-    ).getNewTransaction() as SchATransaction;
-
+  overlayTransactionProperties(
+    transaction: SchATransaction,
+    reattributedTransaction: SchATransaction,
+    activeReportId: string
+  ): SchATransaction {
     transaction.reatt_redes_id = reattributedTransaction.id;
     transaction.reatt_redes = reattributedTransaction;
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
@@ -64,13 +60,13 @@ export class ReattributionTo extends ReattributionRedesignationBase {
     form.get('memo_code')?.setValue(false);
 
     // Memo Code required to be X unless original "Reattributed" transaction in current report period
-    if (transaction.report_id === transaction.reatt_redes?.report_id) {
-      form.get('memo_code')?.setValue(false);
-      form.get('memo_code')?.enable();
-    } else {
-      form.get('memo_code')?.setValue(true);
-      form.get('memo_code')?.disable();
-    }
+    // if (transaction.report_id === transaction.reatt_redes?.report_id) {
+    //   form.get('memo_code')?.setValue(false);
+    //   form.get('memo_code')?.enable();
+    // } else {
+    form.get('memo_code')?.setValue(true);
+    form.get('memo_code')?.disable();
+    // }
 
     return form;
   }

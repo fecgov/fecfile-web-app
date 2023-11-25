@@ -26,6 +26,9 @@ export abstract class ReattributionRedesignationBase {
         if (mustBeNegative && amount >= 0) {
           return { exclusiveMax: { exclusiveMax: 0 } };
         }
+        if (!mustBeNegative && amount < 0) {
+          return { exclusiveMin: { exclusiveMin: 0 } };
+        }
 
         const key = originatingTransaction.transactionType.templateMap.amount;
         if (originatingTransaction) {

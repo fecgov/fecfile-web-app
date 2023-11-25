@@ -9,6 +9,8 @@ import { Reattributed } from '../models/reattribution-redesignation/reattributed
 import { SchATransaction } from '../models/scha-transaction.model';
 import { ReattributionTo } from '../models/reattribution-redesignation/reattribution-to.model';
 import { ReattributionFrom } from '../models/reattribution-redesignation/reattribution-from.model';
+import { ReattRedesUtils } from '../utils/reatt-redes.utils';
+import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +59,34 @@ export class TransactionResolver {
       mergeMap((transaction: Transaction) => {
         if (transaction.transactionType?.isDependentChild(transaction)) {
           return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
+        } else if (
+          ReattRedesUtils.isReattRedes(transaction, [
+            ReattRedesTypes.REATTRIBUTION_TO,
+            ReattRedesTypes.REATTRIBUTION_FROM,
+            ReattRedesTypes.REDESIGNATION_TO,
+            ReattRedesTypes.REDESIGNATION_FROM,
+          ])
+        ) {
+          if (transaction.reatt_redes_id) {
+            return this.transactionService.getReattRedes(transaction.reatt_redes_id).pipe(
+              map((transactions: any | undefined) => {
+                const reattributed = transactions.reattributed;
+                const to = new ReattributionTo().overlayTransactionProperties(
+                  transactions.to,
+                  reattributed,
+                  transactions.to.report_id
+                );
+                const from = new ReattributionFrom().overlayTransactionProperties(
+                  transactions.from,
+                  reattributed,
+                  transactions.from.report_id
+                );
+                to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
+                return to;
+              })
+            );
+          }
+          throw Error('Fecfile: Could not find reatt_redes_id for reattribution');
         }
         return this.resolveExistingTransaction(transaction);
       })
@@ -142,8 +172,17 @@ export class TransactionResolver {
           originatingTransaction as SchATransaction,
           reportId
         );
-        const to = new ReattributionTo().overlayTransactionProperties(reattributed, reportId);
-        const from = new ReattributionFrom().overlayTransactionProperties(reattributed, reportId);
+        if (!reattributed.transaction_type_identifier) {
+          throw Error('Fecfile online: originating reattribution transaction type not found.');
+        }
+        let to = TransactionTypeUtils.factory(
+          reattributed.transaction_type_identifier
+        ).getNewTransaction() as SchATransaction;
+        to = new ReattributionTo().overlayTransactionProperties(to, reattributed, reportId);
+        let from = TransactionTypeUtils.factory(
+          reattributed.transaction_type_identifier
+        ).getNewTransaction() as SchATransaction;
+        from = new ReattributionFrom().overlayTransactionProperties(from, reattributed, reportId);
         to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
         return to;
       })

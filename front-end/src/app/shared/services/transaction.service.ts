@@ -9,6 +9,9 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
+import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -132,6 +135,45 @@ export class TransactionService implements TableListService<Transaction> {
         );
     }
     return of(undefined);
+  }
+
+  public getReattRedes(id: string): Observable<any | undefined> {
+    return this.apiService
+      .get<HttpResponse<(SchATransaction | SchBTransaction)[] | undefined>>(
+        '/transactions/reattributions-redesignations/',
+        {
+          transaction_id: id,
+        },
+        [HttpStatusCode.NotFound]
+      )
+      .pipe(
+        map((response) => {
+          if (response.status === HttpStatusCode.NotFound || !response.body) {
+            return undefined;
+          }
+          const transactions = response.body as unknown as (SchATransaction | SchBTransaction)[];
+          const to = getFromJSON(
+            transactions.filter((t) =>
+              [ReattRedesTypes.REATTRIBUTION_TO, ReattRedesTypes.REDESIGNATION_TO].includes(
+                t.reattribution_redesignation_tag as ReattRedesTypes
+              )
+            )[0]
+          );
+          const from = getFromJSON(
+            transactions.filter((t) =>
+              [ReattRedesTypes.REATTRIBUTION_FROM, ReattRedesTypes.REDESIGNATION_FROM].includes(
+                t.reattribution_redesignation_tag as ReattRedesTypes
+              )
+            )[0]
+          );
+
+          return {
+            reattributed: getFromJSON(to.reatt_redes),
+            to: to,
+            from: from,
+          };
+        })
+      );
   }
 
   public create(transaction: Transaction): Observable<Transaction> {

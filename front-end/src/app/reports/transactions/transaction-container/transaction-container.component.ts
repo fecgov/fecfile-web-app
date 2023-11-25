@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { Transaction, isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { ReattRedesTypes } from 'app/shared/models/reattribution-redesignation/reattribution-redesignation-base.model';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 
 @Component({
   selector: 'app-transaction-container',
@@ -30,7 +32,13 @@ export class TransactionContainerComponent extends DestroyerComponent {
     if (isPulledForwardLoan(this.transaction)) {
       return 1;
     }
-    if (this.activatedRoute.snapshot.queryParamMap.get('reattribution')) {
+    if (
+      this.activatedRoute.snapshot.queryParamMap.get('reattribution') ||
+      ReattRedesUtils.isReattRedes(this.transaction, [
+        ReattRedesTypes.REATTRIBUTION_TO,
+        ReattRedesTypes.REDESIGNATION_TO,
+      ])
+    ) {
       return 2;
     }
     return (this.transaction?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;

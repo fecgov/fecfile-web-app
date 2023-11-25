@@ -4,17 +4,13 @@ import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 export class ReattributionFrom extends ReattributionRedesignationBase {
-  overlayTransactionProperties(reattributedTransaction: SchATransaction, activeReportId: string): SchATransaction {
-    if (!reattributedTransaction.transaction_type_identifier) {
-      throw Error('Fecfile online: originating reattribution transaction type not found.');
-    }
-    const transaction = TransactionTypeUtils.factory(
-      reattributedTransaction.transaction_type_identifier
-    ).getNewTransaction() as SchATransaction;
-
+  overlayTransactionProperties(
+    transaction: SchATransaction,
+    reattributedTransaction: SchATransaction,
+    activeReportId: string
+  ): SchATransaction {
     transaction.reatt_redes_id = reattributedTransaction.id;
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
     transaction.report_id = activeReportId;
