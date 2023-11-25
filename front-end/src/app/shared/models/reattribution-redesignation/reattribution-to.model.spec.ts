@@ -1,7 +1,8 @@
 import { ReattributionTo } from './reattribution-to.model';
 import { testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SchATransaction } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('Reattribution To', () => {
   let reattributionTo = new ReattributionTo();
@@ -17,6 +18,7 @@ describe('Reattribution To', () => {
   it('overlayTransactionProperties should override default properties', () => {
     const origTransaction = { ...testScheduleATransaction } as SchATransaction;
     const toTransaction = reattributionTo.overlayTransactionProperties(
+      getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
       origTransaction,
       '3cd741da-aa57-4cc3-8530-667e8b7bad78'
     );
@@ -42,6 +44,6 @@ describe('Reattribution To', () => {
 
     transaction.report_id = '999';
     reattributionTo.overlayForm(toForm, transaction);
-    expect(toForm.get('memo_code')?.value).toBeFalse();
+    expect(toForm.get('memo_code')?.value).toBeTrue();
   });
 });

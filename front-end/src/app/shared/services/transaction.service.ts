@@ -137,6 +137,7 @@ export class TransactionService implements TableListService<Transaction> {
     return of(undefined);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public getReattRedes(id: string): Observable<any | undefined> {
     return this.apiService
       .get<HttpResponse<(SchATransaction | SchBTransaction)[] | undefined>>(

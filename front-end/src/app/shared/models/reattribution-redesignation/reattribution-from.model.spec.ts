@@ -1,7 +1,7 @@
 import { ReattributionFrom } from './reattribution-from.model';
-import { testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SchATransaction } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
 describe('Reattribution From', () => {
   let reattributionFrom = new ReattributionFrom();
@@ -16,6 +16,7 @@ describe('Reattribution From', () => {
 
   it('overlayTransactionProperties should override default properties', () => {
     const fromTransaction = reattributionFrom.overlayTransactionProperties(
+      getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
       testScheduleATransaction,
       '3cd741da-aa57-4cc3-8530-667e8b7bad78'
     );

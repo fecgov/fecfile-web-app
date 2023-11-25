@@ -69,6 +69,7 @@ export class TransactionResolver {
         ) {
           if (transaction.reatt_redes_id) {
             return this.transactionService.getReattRedes(transaction.reatt_redes_id).pipe(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               map((transactions: any | undefined) => {
                 const reattributed = transactions.reattributed;
                 const to = new ReattributionTo().overlayTransactionProperties(
