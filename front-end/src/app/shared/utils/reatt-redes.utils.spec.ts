@@ -18,7 +18,7 @@ describe('ReattRedesUtils', () => {
     expect(result).toBeTrue();
   });
 
-  xit('should overlay forms correctly', () => {
+  it('should overlay forms correctly', () => {
     const toTxn = { ...testIndividualReceipt } as SchATransaction;
     toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
     const toForm = new FormGroup({

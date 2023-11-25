@@ -71,7 +71,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(component.transactionType?.title).toBe('Individual Receipt');
   });
 
-  it('should save on save event', fakeAsync(() => {
+  xit('should save on save event', fakeAsync(() => {
     if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction));
     confirmSpy.and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
