@@ -1,8 +1,7 @@
 import { ReattributionTo } from './reattribution-to.model';
-import { testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
+import { testScheduleATransaction, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { FormGroup, FormControl } from '@angular/forms';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('Reattribution To', () => {
   let reattributionTo = new ReattributionTo();
