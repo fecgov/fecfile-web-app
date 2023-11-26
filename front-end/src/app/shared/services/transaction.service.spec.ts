@@ -213,4 +213,37 @@ describe('TransactionService', () => {
     req.flush(transactions);
     httpTestingController.verify();
   });
+
+  it('#getReattRedes() should GET reattribution/redesignation transactions', () => {
+    const mockResponse = [
+      {
+        id: '1',
+        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+        aggregation_group: AggregationGroups.GENERAL,
+        reattribution_redesignation_tag: 'REATTRIBUTION_TO',
+        reatt_redes: {
+          id: '3',
+          transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+          aggregation_group: AggregationGroups.GENERAL,
+        },
+      },
+      {
+        id: '2',
+        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+        aggregation_group: AggregationGroups.GENERAL,
+        reattribution_redesignation_tag: 'REATTRIBUTION_FROM',
+      },
+    ];
+    service.getReattRedes('abc').subscribe((response) => {
+      expect(response.to.id).toEqual('1');
+      expect(response.from.id).toEqual('2');
+      expect(response.reattributed.id).toEqual('3');
+    });
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/transactions/reattributions-redesignations/?transaction_id=abc`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
 });
