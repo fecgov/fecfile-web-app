@@ -23,13 +23,12 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
     super();
-    
-    this.isReports = window.location.href.includes('reports');
+
     store.select(selectSidebarVisible).subscribe((res => {
       this.showSidebar = res;
     }));
     router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(e => {
-      this.isReports = (e as NavigationEnd).url.includes('reports');
+      this.isReports = (e as NavigationEnd).url.includes('reports') && !(e as NavigationEnd).url.endsWith('reports');
 
     })
   }
