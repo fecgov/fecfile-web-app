@@ -26,13 +26,12 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
     super();
 
     this.isReports = this.window.location.href.includes('reports');
-    store.select(selectSidebarVisible).subscribe((res => {
+    store.select(selectSidebarVisible).subscribe((res) => {
       this.showSidebar = res;
-    }));
-    router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(e => {
-      this.isReports = (e as NavigationEnd).url.includes('reports');
-
-    })
+    });
+    router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e) => {
+      this.isReports = (e as NavigationEnd).url.includes('reports') && !(e as NavigationEnd).url.endsWith('reports');
+    });
   }
 
   ngOnInit(): void {
@@ -44,5 +43,4 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
   get isVisible(): boolean {
     return this.showSidebar && this.isReports;
   }
-
 }
