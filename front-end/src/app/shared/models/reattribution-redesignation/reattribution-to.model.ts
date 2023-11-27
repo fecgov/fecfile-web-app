@@ -25,7 +25,7 @@ export class ReattributionTo extends ReattributionRedesignationBase {
       dateLabel: 'REATTRIBUTION DATE',
       amountLabel: 'REATTRIBUTED AMOUNT',
       footer:
-        'The information in this rattribution will automatically create a related receipt. Review the receipt, or continue without reviewing and "Save transactions."',
+        'The information in this reattribution will automatically create a related receipt. Review the receipt, or continue without reviewing and "Save transactions."',
       dependentChildTransactionTypes: [transaction.transaction_type_identifier as TransactionTypes],
 
       generatePurposeDescription: (transaction: SchATransaction): string => {
