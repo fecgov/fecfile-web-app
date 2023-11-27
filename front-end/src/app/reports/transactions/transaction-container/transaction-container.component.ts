@@ -33,7 +33,6 @@ export class TransactionContainerComponent extends DestroyerComponent {
       return 1;
     }
     if (
-      this.activatedRoute.snapshot.queryParamMap.get('reattribution') ||
       ReattRedesUtils.isReattRedes(this.transaction, [
         ReattRedesTypes.REATTRIBUTION_TO,
         ReattRedesTypes.REDESIGNATION_TO,

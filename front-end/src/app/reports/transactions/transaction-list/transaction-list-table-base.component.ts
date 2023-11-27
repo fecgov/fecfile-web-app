@@ -143,6 +143,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.A &&
         this.reportIsEditable &&
+        !transaction.parent_transaction_id &&
         !(transaction as SchATransaction).reattribution_redesignation_tag,
       () => true
     ),

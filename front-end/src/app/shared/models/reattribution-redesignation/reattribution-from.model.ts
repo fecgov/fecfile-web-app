@@ -9,11 +9,11 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
   overlayTransactionProperties(
     transaction: SchATransaction,
     reattributedTransaction: SchATransaction,
-    activeReportId: string
+    activeReportId?: string
   ): SchATransaction {
     transaction.reatt_redes_id = reattributedTransaction.id;
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
-    transaction.report_id = activeReportId;
+    if (activeReportId) transaction.report_id = activeReportId;
 
     Object.assign(transaction.transactionType, {
       accordionTitle: 'AUTO-POPULATED',

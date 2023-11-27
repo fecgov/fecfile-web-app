@@ -7,12 +7,12 @@ export class ReattributionTo extends ReattributionRedesignationBase {
   overlayTransactionProperties(
     transaction: SchATransaction,
     reattributedTransaction: SchATransaction,
-    activeReportId: string
+    activeReportId?: string
   ): SchATransaction {
     transaction.reatt_redes_id = reattributedTransaction.id;
     transaction.reatt_redes = reattributedTransaction;
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
-    transaction.report_id = activeReportId;
+    if (activeReportId) transaction.report_id = activeReportId;
 
     Object.assign(transaction.transactionType, {
       title: 'Reattribution',

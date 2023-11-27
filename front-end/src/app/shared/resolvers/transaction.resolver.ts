@@ -72,16 +72,8 @@ export class TransactionResolver {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               map((transactions: any | undefined) => {
                 const reattributed = transactions.reattributed;
-                const to = new ReattributionTo().overlayTransactionProperties(
-                  transactions.to,
-                  reattributed,
-                  transactions.to.report_id
-                );
-                const from = new ReattributionFrom().overlayTransactionProperties(
-                  transactions.from,
-                  reattributed,
-                  transactions.from.report_id
-                );
+                const to = new ReattributionTo().overlayTransactionProperties(transactions.to, reattributed);
+                const from = new ReattributionFrom().overlayTransactionProperties(transactions.from, reattributed);
                 to.children = [from]; // This parent-child relation will be undone before submitting to the backend. It's needed for the double-entry form.
                 return to;
               })
