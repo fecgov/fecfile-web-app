@@ -71,6 +71,9 @@ export class TransactionResolver {
             return this.transactionService.getReattRedes(transaction.reatt_redes_id).pipe(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               map((transactions: any | undefined) => {
+                if (!transactions) {
+                  throw Error('Fecfile: No reattribute/redesignate object returned from backend');
+                }
                 const reattributed = transactions.reattributed;
                 const to = new ReattributionTo().overlayTransactionProperties(
                   transactions.to,
