@@ -57,8 +57,14 @@ describe('LayoutComponent', () => {
       .subscribe((state) => expect(state?.section).toBe(ReportSidebarState.TRANSACTIONS));
   });
 
-  it('should set isReports to true when location is reports module', () => {
+  it('should set isReports to false when location is base reports module', () => {
     const event = new NavigationEnd(42, '/reports', '/');
+    (TestBed.inject(Router).events as Subject<Event>).next(event);
+    expect(component.isReports).toBeFalsy();
+  });
+
+  it('should set isReports to true when location is reports module', () => {
+    const event = new NavigationEnd(42, '/reports/transactions/report/3fa0fd7e-306e-4cb6-8c8d-9ff9306092a6/list', '/');
     (TestBed.inject(Router).events as Subject<Event>).next(event);
     expect(component.isReports).toBeTruthy();
   });
@@ -66,7 +72,7 @@ describe('LayoutComponent', () => {
   it('should be visible only when showSidebar and isReports are both true', () => {
     expect(component.isVisible).toBeFalsy();
     component.showSidebar = true;
-    const event = new NavigationEnd(42, '/reports', '/');
+    const event = new NavigationEnd(42, '/reports/transactions/report/3fa0fd7e-306e-4cb6-8c8d-9ff9306092a6/list', '/');
     (TestBed.inject(Router).events as Subject<Event>).next(event);
     expect(component.isReports).toBeTruthy();
     expect(component.showSidebar).toBeTruthy();
