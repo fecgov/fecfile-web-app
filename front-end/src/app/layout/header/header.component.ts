@@ -10,13 +10,14 @@ import { toggleSidebarVisibleAction } from "../../store/sidebar-state.actions";
 })
 export class HeaderComponent {
   loginService: LoginService;
+  private window = window;
 
   constructor(loginService: LoginService, private store: Store) {
     this.loginService = loginService;
   }
 
   toggleSideBar() {
-    if (window.location.href.includes('reports'))
+    if (this.window.location.href.includes('reports'))
       this.store.dispatch(toggleSidebarVisibleAction());
   }
 }

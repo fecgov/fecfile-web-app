@@ -7,7 +7,7 @@
         </div>
         <div class="col-12">
           <span class="subtitle"
-            >{{ report?.form_type | label : f3xFormTypeLabels }}: {{ report?.report_code | reportCodeLabel }}</span
+          >{{ report?.form_type | label : f3xFormTypeLabels }}: {{ report?.report_code | reportCodeLabel }}</span
           >
         </div>
       </div>
@@ -18,7 +18,8 @@
         *ngIf="report?.report_status === 'In progress'"
         [tableActions]="tableActions"
         [actionItem]="report"
-        [tableActionClick]="onTableActionClick"
+        [isAbsolute]="false"
+        (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-plus"
         buttonLabel="Add new transaction"
         buttonStyleClass="mr-2 add-button"
