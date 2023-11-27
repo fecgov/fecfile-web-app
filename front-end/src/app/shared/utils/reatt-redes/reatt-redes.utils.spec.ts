@@ -1,14 +1,10 @@
-import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { ReattRedesTypes } from './reatt-redes.utils';
+import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ReattRedesUtils } from './reatt-redes.utils';
-import { testIndividualReceipt } from './unit-test.utils';
+import { testIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
 
 describe('ReattRedesUtils', () => {
-  it('should create an instance', () => {
-    expect(new ReattRedesUtils()).toBeTruthy();
-  });
-
   it('should test if transaction is reatt/redes', () => {
     const txn = { ...testIndividualReceipt } as SchATransaction;
     let result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
@@ -56,6 +52,27 @@ describe('ReattRedesUtils', () => {
 
     expect(result[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
     expect(result[1].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTION_TO);
-    expect(result[2].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTION_FROM);
+    expect((result[1].children[0] as SchATransaction).reattribution_redesignation_tag).toBe(
+      ReattRedesTypes.REATTRIBUTION_FROM
+    );
+  });
+
+  it('amountValidator() should limit max value', () => {
+    const txn = { ...testScheduleATransaction } as SchATransaction;
+    txn.contribution_amount = 100;
+    const validatorFunction = ReattRedesUtils.amountValidator(txn, true);
+
+    const control = new FormControl();
+    control.setValue(50);
+    let validatorResult = validatorFunction(control);
+    expect(validatorResult && validatorResult['exclusiveMax']['exclusiveMax']).toBe(0);
+
+    control.setValue(-50);
+    validatorResult = validatorFunction(control);
+    expect(validatorResult).toBeNull();
+
+    control.setValue(-500);
+    validatorResult = validatorFunction(control);
+    expect(validatorResult && validatorResult['max']['max']).toBe(100);
   });
 });

@@ -1,19 +1,22 @@
 import { combineLatest, of } from 'rxjs';
-import { ReattributionRedesignationBase, ReattRedesTypes } from './reattribution-redesignation-base.model';
+import { ReattRedesUtils, ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchATransaction } from '../scha-transaction.model';
-import { ContactTypes } from '../contact.model';
+import { TemplateMapKeyType } from '../../models/transaction-type.model';
+import { SchATransaction } from '../../models/scha-transaction.model';
+import { ContactTypes } from '../../models/contact.model';
 
-export class ReattributionFrom extends ReattributionRedesignationBase {
-  overlayTransactionProperties(
+export class ReattributionFromUtils {
+  public static overlayTransactionProperties(
     transaction: SchATransaction,
-    reattributedTransaction: SchATransaction,
+    reattributedTransaction?: SchATransaction,
     activeReportId?: string
   ): SchATransaction {
-    transaction.reatt_redes_id = reattributedTransaction.id;
-    transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
+    if (reattributedTransaction) {
+      transaction.reatt_redes_id = reattributedTransaction.id;
+      transaction.reatt_redes = reattributedTransaction;
+    }
     if (activeReportId) transaction.report_id = activeReportId;
+    transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
 
     Object.assign(transaction.transactionType, {
       accordionTitle: 'AUTO-POPULATED',
@@ -24,7 +27,7 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
       amountLabel: 'REATTRIBUTED AMOUNT',
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
       hidePrimaryContactLookup: true,
-      contactTypeOptions: [reattributedTransaction.entity_type],
+      contactTypeOptions: [(transaction.reatt_redes as SchATransaction).entity_type],
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend
@@ -37,14 +40,14 @@ export class ReattributionFrom extends ReattributionRedesignationBase {
     return transaction;
   }
 
-  overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
+  public static overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
     // Add additional amount validation
     const reattributedTransaction = transaction.parent_transaction?.reatt_redes as SchATransaction;
 
     if (reattributedTransaction) {
       fromForm
         .get(transaction.transactionType.templateMap.amount)
-        ?.addValidators([this.amountValidator(reattributedTransaction, true)]);
+        ?.addValidators([ReattRedesUtils.amountValidator(reattributedTransaction, true)]);
     }
 
     // Update purpose description for rules that are independent of the transaction date being in the report.

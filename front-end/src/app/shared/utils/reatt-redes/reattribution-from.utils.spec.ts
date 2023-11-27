@@ -1,21 +1,11 @@
-import { ReattributionFrom } from './reattribution-from.model';
+import { ReattributionFromUtils } from './reattribution-from.utils';
 import { getTestTransactionByType, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 
 describe('Reattribution From', () => {
-  let reattributionFrom = new ReattributionFrom();
-
-  beforeEach(() => {
-    reattributionFrom = new ReattributionFrom();
-  });
-
-  it('should create an instance', () => {
-    expect(reattributionFrom).toBeTruthy();
-  });
-
   it('overlayTransactionProperties should override default properties', () => {
-    const fromTransaction = reattributionFrom.overlayTransactionProperties(
+    const fromTransaction = ReattributionFromUtils.overlayTransactionProperties(
       getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
       testScheduleATransaction,
       '3cd741da-aa57-4cc3-8530-667e8b7bad78'
@@ -47,7 +37,7 @@ describe('Reattribution From', () => {
     });
 
     expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeTrue();
-    reattributionFrom.overlayForm(fromForm, transaction, toForm);
+    ReattributionFromUtils.overlayForm(fromForm, transaction, toForm);
     expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
 
     toForm.get('contribution_amount')?.setValue(5 as never);

@@ -1,18 +1,20 @@
-import { ReattributionRedesignationBase, ReattRedesTypes } from './reattribution-redesignation-base.model';
+import { ReattRedesUtils, ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import { TransactionTypes, getTransactionName } from '../transaction.model';
-import { SchATransaction } from '../scha-transaction.model';
+import { TransactionTypes, getTransactionName } from '../../models/transaction.model';
+import { SchATransaction } from '../../models/scha-transaction.model';
 
-export class ReattributionTo extends ReattributionRedesignationBase {
-  overlayTransactionProperties(
+export class ReattributionToUtils {
+  public static overlayTransactionProperties(
     transaction: SchATransaction,
-    reattributedTransaction: SchATransaction,
+    reattributedTransaction?: SchATransaction,
     activeReportId?: string
   ): SchATransaction {
-    transaction.reatt_redes_id = reattributedTransaction.id;
-    transaction.reatt_redes = reattributedTransaction;
-    transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+    if (reattributedTransaction) {
+      transaction.reatt_redes_id = reattributedTransaction.id;
+      transaction.reatt_redes = reattributedTransaction;
+    }
     if (activeReportId) transaction.report_id = activeReportId;
+    transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
 
     Object.assign(transaction.transactionType, {
       title: 'Reattribution',
@@ -45,13 +47,13 @@ export class ReattributionTo extends ReattributionRedesignationBase {
     return transaction;
   }
 
-  overlayForm(form: FormGroup, transaction: SchATransaction): FormGroup {
+  public static overlayForm(form: FormGroup, transaction: SchATransaction): FormGroup {
     // Add additional amount validation
     const reattributedTransaction = transaction.reatt_redes as SchATransaction;
     if (reattributedTransaction) {
       form
         .get(transaction.transactionType.templateMap.amount)
-        ?.addValidators([this.amountValidator(reattributedTransaction)]);
+        ?.addValidators([ReattRedesUtils.amountValidator(reattributedTransaction)]);
     }
 
     // Clear normal schema validation from reattribution TO form

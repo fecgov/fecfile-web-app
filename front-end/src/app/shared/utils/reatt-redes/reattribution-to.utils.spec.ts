@@ -1,22 +1,12 @@
-import { ReattributionTo } from './reattribution-to.model';
+import { ReattributionToUtils } from './reattribution-to.utils';
 import { testScheduleATransaction, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 
 describe('Reattribution To', () => {
-  let reattributionTo = new ReattributionTo();
-
-  beforeEach(() => {
-    reattributionTo = new ReattributionTo();
-  });
-
-  it('should create an instance', () => {
-    expect(reattributionTo).toBeTruthy();
-  });
-
   it('overlayTransactionProperties should override default properties', () => {
     const origTransaction = { ...testScheduleATransaction } as SchATransaction;
-    const toTransaction = reattributionTo.overlayTransactionProperties(
+    const toTransaction = ReattributionToUtils.overlayTransactionProperties(
       getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
       origTransaction,
       '3cd741da-aa57-4cc3-8530-667e8b7bad78'
@@ -38,11 +28,11 @@ describe('Reattribution To', () => {
       memo_code: new FormControl(''),
     });
 
-    reattributionTo.overlayForm(toForm, transaction);
+    ReattributionToUtils.overlayForm(toForm, transaction);
     expect(toForm.get('memo_code')?.value).toBeTrue();
 
     transaction.report_id = '999';
-    reattributionTo.overlayForm(toForm, transaction);
+    ReattributionToUtils.overlayForm(toForm, transaction);
     expect(toForm.get('memo_code')?.value).toBeTrue();
   });
 });

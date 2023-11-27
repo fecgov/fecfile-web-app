@@ -17,7 +17,7 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
