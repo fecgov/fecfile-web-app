@@ -13,7 +13,7 @@ const committeeFormData: ContactFormData = {
   ...{ contact_type: 'Committee' },
 };
 
-xdescribe('Debts', () => {
+describe('Debts', () => {
   beforeEach(() => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
