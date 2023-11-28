@@ -70,7 +70,7 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td class="no-wrap">
-          {{ (item.form_type | label : lineLabels) || item.line_label }}
+          {{ item.line_label }}
         </td>
         <td>
           <a [routerLink]="[item?.id]">{{
@@ -80,7 +80,12 @@
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
-          {{ item.name }}
+          {{
+            item[item.transactionType.templateMap.organization_name] ||
+              item[item.transactionType.templateMap.last_name] +
+                ', ' +
+                item[item.transactionType.templateMap.first_name]
+          }}
         </td>
         <td>
           {{ item[item.transactionType.templateMap.date] | fecDate }}
