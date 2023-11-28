@@ -1,18 +1,18 @@
 <div class="card">
   <p-table
-    #dt
-    [value]="items"
-    [lazy]="true"
-    (onLazyLoad)="loadTableItems($event)"
-    responsiveLayout="scroll"
-    dataKey="id"
-    [paginator]="true"
-    [rows]="rowsPerPage"
-    [totalRecords]="totalItems"
-    [loading]="loading"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-    [showCurrentPageReport]="true"
-    sortField="line_label_order_key,created"
+      #dt
+      [value]="items"
+      [lazy]="true"
+      (onLazyLoad)="loadTableItems($event)"
+      responsiveLayout="scroll"
+      dataKey="id"
+      [paginator]="true"
+      [rows]="rowsPerPage"
+      [totalRecords]="totalItems"
+      [loading]="loading"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+      [showCurrentPageReport]="true"
+      sortField="line_label_order_key,created"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
@@ -35,18 +35,26 @@
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="line_label_order_key" id="line-label-column" role="columnheader">
-          Line <p-sortIcon field="line_label_order_key"></p-sortIcon>
+          Line
+          <p-sortIcon field="line_label_order_key"></p-sortIcon>
         </th>
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
-          Type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
+          Type
+          <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
-        <th pSortableColumn="name" id="name-column" role="columnheader">Name <p-sortIcon field="name"></p-sortIcon></th>
-        <th pSortableColumn="date" id="date-column" role="columnheader">Date <p-sortIcon field="date"></p-sortIcon></th>
+        <th pSortableColumn="name" id="name-column" role="columnheader">Name
+          <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="date" id="date-column" role="columnheader">Date
+          <p-sortIcon field="date"></p-sortIcon>
+        </th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
-          Memo <p-sortIcon field="memo_code"></p-sortIcon>
+          Memo
+          <p-sortIcon field="memo_code"></p-sortIcon>
         </th>
         <th pSortableColumn="amount" id="amount-column" role="columnheader">
-          Amount <p-sortIcon field="amount"></p-sortIcon>
+          Amount
+          <p-sortIcon field="amount"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
         <th id="back_reference_tran_id_number" role="columnheader">Associated With</th>
@@ -60,16 +68,16 @@
         </td>
         <td>
           <a [routerLink]="[item?.id]">{{
-            item.transaction_type_identifier | label : scheduleTransactionTypeLabels
-          }}</a>
+              item.transaction_type_identifier | label : scheduleTransactionTypeLabels
+            }}</a>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
           {{
             item[item.transactionType.templateMap.organization_name] ||
-              item[item.transactionType.templateMap.last_name] +
-                ', ' +
-                item[item.transactionType.templateMap.first_name]
+            item[item.transactionType.templateMap.last_name] +
+            ', ' +
+            item[item.transactionType.templateMap.first_name]
           }}
         </td>
         <td>
@@ -91,7 +99,7 @@
           <app-table-actions-button
             [tableActions]="rowActions"
             [actionItem]="item"
-            [tableActionClick]="onRowActionClick"
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
             buttonIcon="pi pi-ellipsis-v"
             buttonStyleClass="p-button-text"
             buttonAriaLabel="action"

@@ -24,6 +24,15 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     ...ScheduleDTransactionTypeLabels,
   ];
 
+  sortableHeaders = [
+    {field: "line_label_order_key", label: "Line"},
+    {field: "transaction_type_identifier", label: "Type"},
+    {field: "name", label: "Name"},
+    {field: "date", label: "Date incurred"},
+    {field: "amount", label: "Amount"},
+    {field: "balance", label: "Balance"}
+  ];
+
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,

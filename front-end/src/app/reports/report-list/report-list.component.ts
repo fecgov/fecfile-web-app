@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';

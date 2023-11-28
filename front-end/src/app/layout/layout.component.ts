@@ -20,17 +20,18 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
   sidebarState$?: Observable<SidebarState | undefined>;
   showSidebar = true;
   isReports = false;
+  private window = window;
 
   constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
     super();
 
-    store.select(selectSidebarVisible).subscribe((res => {
+    this.isReports = this.window.location.href.includes('reports');
+    store.select(selectSidebarVisible).subscribe((res) => {
       this.showSidebar = res;
-    }));
-    router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(e => {
+    });
+    router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e) => {
       this.isReports = (e as NavigationEnd).url.includes('reports') && !(e as NavigationEnd).url.endsWith('reports');
-
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -42,5 +43,4 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
   get isVisible(): boolean {
     return this.showSidebar && this.isReports;
   }
-
 }
