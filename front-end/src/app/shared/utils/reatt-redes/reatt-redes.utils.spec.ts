@@ -1,7 +1,6 @@
-import { ReattRedesTypes } from './reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { testIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
 
 describe('ReattRedesUtils', () => {
@@ -12,6 +11,24 @@ describe('ReattRedesUtils', () => {
     txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
     expect(result).toBeTrue();
+  });
+
+  it('should test if transaction isAtAmountLimit', () => {
+    const txn = { ...testIndividualReceipt } as SchATransaction;
+    txn.transaction_id = 'AC9877E1';
+    let result = ReattRedesUtils.isAtAmountLimit(txn);
+    expect(result).toBeFalse();
+
+    txn.reatt_redes_total = 100;
+    txn.contribution_amount = 100;
+    result = ReattRedesUtils.isAtAmountLimit(txn);
+    expect(result).toBeTrue();
+
+    txn.reatt_redes_total = 200;
+    txn.contribution_amount = 100;
+    expect(() => ReattRedesUtils.isAtAmountLimit(txn)).toThrow(
+      new Error('Fecfile: Transaction (AC9877E1) has more reattributions or redesignations that its amount allows.')
+    );
   });
 
   it('should overlay forms correctly', () => {

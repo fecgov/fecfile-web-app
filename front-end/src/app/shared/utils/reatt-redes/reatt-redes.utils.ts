@@ -73,14 +73,14 @@ export class ReattRedesUtils {
           return { exclusiveMin: { exclusiveMin: 0 } };
         }
 
-        const key = transaction.transactionType.templateMap.amount;
+        const amountKey = transaction.transactionType.templateMap.amount;
         const originalAmount =
           ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
-            key as keyof (SchATransaction | SchBTransaction)
+            amountKey as keyof (SchATransaction | SchBTransaction)
           ] as number) ?? 0;
         const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
         let limit = originalAmount - reattRedesTotal;
-        if (transaction.id) limit += +(transaction[key as keyof (SchATransaction | SchBTransaction)] as number) ?? 0; // If editing, add value back into limit restriction.
+        if (transaction.id) limit += +(transaction[amountKey as keyof (SchATransaction | SchBTransaction)] as number); // If editing, add value back into limit restriction.
         if (Math.abs(amount) > Math.abs(limit)) {
           return {
             max: {
