@@ -59,7 +59,9 @@ describe('ReattRedesUtils', () => {
 
   it('amountValidator() should limit max value', () => {
     const txn = { ...testScheduleATransaction } as SchATransaction;
-    txn.contribution_amount = 100;
+    txn.reatt_redes = { ...testScheduleATransaction } as SchATransaction;
+    (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
+    (txn.reatt_redes as SchATransaction).contribution_amount = 100;
     const validatorFunction = ReattRedesUtils.amountValidator(txn, true);
 
     const control = new FormControl();
@@ -67,12 +69,12 @@ describe('ReattRedesUtils', () => {
     let validatorResult = validatorFunction(control);
     expect(validatorResult && validatorResult['exclusiveMax']['exclusiveMax']).toBe(0);
 
-    control.setValue(-50);
+    control.setValue(-10);
     validatorResult = validatorFunction(control);
     expect(validatorResult).toBeNull();
 
     control.setValue(-500);
     validatorResult = validatorFunction(control);
-    expect(validatorResult && validatorResult['max']['max']).toBe(100);
+    expect(validatorResult && validatorResult['max']['max']).toBe(25);
   });
 });
