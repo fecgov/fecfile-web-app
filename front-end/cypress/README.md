@@ -51,7 +51,7 @@ Once the CircleCI E2E job spins up fecfile-web-api in the remote docker, it then
 
 There are a number of environment variables that are required by the CircleCI E2E job. These are currently set within the CircleCI fecfile-web-app project and include:
 
-E2E_BRANCH_NAME (fecfile-web-api and fecfile-web-app branch to checkout for the E2E test execution)
+CIRCLE_BRANCH (fecfile-web-api and fecfile-web-app branch to checkout for the E2E test execution)
 E2E_DJANGO_SECRET_KEY (The Django secret key used to spin up the api)
 E2E_DATABASE_URL (The database url for the api)
 CYPRESS_EMAIL (email of the e2e account for login)
@@ -63,11 +63,11 @@ Finally, a CircleCI Trigger was added to [schedule a nightly job](https://circle
 To run locally (you may need to add e2e-test to all workflow jobs in app circleci config.yml first, or circleci will complain about not being able to find it. Also, you also may need to add 'sudo' in front of the docker commands (otherwise it will complain about not being able to find Docker Daemon listening):
 
 ```
-export E2E_BRANCH_NAME=''
+export CIRCLE_BRANCH=''
 export E2E_DJANGO_SECRET_KEY=''
 export E2E_DATABASE_URL=''
 export CYPRESS_EMAIL=''
 export CYPRESS_COMMITTEE_ID=''
 export CYPRESS_PASSWORD=''
-sudo circleci local execute -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e E2E_DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} -e E2E_DATABASE_URL=${E2E_DATABASE_URL} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --job e2e-test
+sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e E2E_DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} -e E2E_DATABASE_URL=${E2E_DATABASE_URL} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --job e2e-test
 ```
