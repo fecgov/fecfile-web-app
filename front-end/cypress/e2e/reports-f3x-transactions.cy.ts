@@ -215,7 +215,7 @@ describe('Transactions', () => {
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Attribution');
     cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$400.02');
+    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
     cy.get('tbody tr').eq(2).as('row-3');
     cy.get('@row-3')
@@ -223,7 +223,7 @@ describe('Transactions', () => {
       .eq(TransactionTableColumns.transaction_type)
       .should('contain', 'Partnership Attribution');
     cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$400.02');
 
     // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');
