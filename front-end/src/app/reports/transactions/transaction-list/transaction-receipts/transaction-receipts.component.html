@@ -80,12 +80,7 @@
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
-          {{
-            item[item.transactionType.templateMap.organization_name] ||
-              item[item.transactionType.templateMap.last_name] +
-                ', ' +
-                item[item.transactionType.templateMap.first_name]
-          }}
+          {{ item.name }}
         </td>
         <td>
           {{ item[item.transactionType.templateMap.date] | fecDate }}
