@@ -49,12 +49,9 @@ export class ReattributionToUtils {
 
   public static overlayForm(form: FormGroup, transaction: SchATransaction): FormGroup {
     // Add additional amount validation
-    const reattributedTransaction = transaction.reatt_redes as SchATransaction;
-    if (reattributedTransaction) {
-      form
-        .get(transaction.transactionType.templateMap.amount)
-        ?.addValidators([ReattRedesUtils.amountValidator(reattributedTransaction)]);
-    }
+    form
+      .get(transaction.transactionType.templateMap.amount)
+      ?.addValidators([ReattRedesUtils.amountValidator(transaction)]);
 
     // Clear normal schema validation from reattribution TO form
     form.get('contribution_purpose_descrip')?.clearValidators();

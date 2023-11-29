@@ -51,6 +51,7 @@ export class SchATransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   reattribution_redesignation_tag: string | undefined;
+  reatt_redes_total?: number; // Amount of total money that has been reattributed for a transaction.
 
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
@@ -84,6 +85,9 @@ export class SchATransaction extends Transaction {
         transaction = ReattributionFromUtils.overlayTransactionProperties(transaction);
         break;
       }
+    }
+    if (depth > 0 && transaction.reatt_redes) {
+      transaction.reatt_redes = getFromJSON(transaction.reatt_redes, depth - 1);
     }
     return transaction;
   }

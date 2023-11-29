@@ -11,6 +11,7 @@ import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.mo
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
@@ -144,7 +145,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.transactionType.scheduleId === ScheduleIds.A &&
         this.reportIsEditable &&
         !transaction.parent_transaction_id &&
-        !(transaction as SchATransaction).reattribution_redesignation_tag,
+        !ReattRedesUtils.isReattRedes(transaction, [
+          ReattRedesTypes.REATTRIBUTION_FROM,
+          ReattRedesTypes.REATTRIBUTION_TO,
+          ReattRedesTypes.REDESIGNATION_FROM,
+          ReattRedesTypes.REDESIGNATION_TO,
+        ]) &&
+        !ReattRedesUtils.isAtLimit(transaction),
       () => true
     ),
   ];

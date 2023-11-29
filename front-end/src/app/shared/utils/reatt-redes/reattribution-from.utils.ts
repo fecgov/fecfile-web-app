@@ -1,5 +1,5 @@
 import { combineLatest, of } from 'rxjs';
-import { ReattRedesUtils, ReattRedesTypes } from './reatt-redes.utils';
+import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
@@ -41,15 +41,6 @@ export class ReattributionFromUtils {
   }
 
   public static overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
-    // Add additional amount validation
-    const reattributedTransaction = transaction.parent_transaction?.reatt_redes as SchATransaction;
-
-    if (reattributedTransaction) {
-      fromForm
-        .get(transaction.transactionType.templateMap.amount)
-        ?.addValidators([ReattRedesUtils.amountValidator(reattributedTransaction, true)]);
-    }
-
     // Update purpose description for rules that are independent of the transaction date being in the report.
     fromForm.get('contribution_purpose_descrip')?.clearValidators();
     fromForm.get('memo_code')?.clearValidators();

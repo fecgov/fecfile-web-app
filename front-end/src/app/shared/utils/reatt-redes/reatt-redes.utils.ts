@@ -21,6 +21,28 @@ export class ReattRedesUtils {
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
   }
 
+  public static isAtLimit(transaction: Transaction | undefined): boolean {
+    const txn = transaction as SchATransaction | SchBTransaction;
+    if (txn.reatt_redes_total !== undefined) {
+      if (
+        +txn.reatt_redes_total ===
+        +(txn[txn.transactionType.templateMap.amount as keyof (SchATransaction | SchBTransaction)] ?? 0)
+      ) {
+        return true;
+      }
+      if (
+        txn.reatt_redes_total &&
+        +txn.reatt_redes_total >
+          +(txn[txn.transactionType.templateMap.amount as keyof (SchATransaction | SchBTransaction)] ?? 0)
+      ) {
+        throw new Error(
+          `Fecfile: Transaction (${txn.transaction_id}) has more reattributions or redesignations that its amount allows.`
+        );
+      }
+    }
+    return false;
+  }
+
   public static overlayForms(
     toForm: FormGroup,
     toTransaction: SchATransaction | SchBTransaction,
@@ -36,13 +58,10 @@ export class ReattRedesUtils {
   /**
    * New validation rules for the transaction amount of reattribution from and redesignation from transactions.
    * These rules supplant the original rules for a given transaction.
-   * @param originatingTransaction
+   * @param transaction
    * @returns
    */
-  public static amountValidator(
-    originatingTransaction: SchATransaction | SchBTransaction,
-    mustBeNegative = false
-  ): ValidatorFn {
+  public static amountValidator(transaction: SchATransaction | SchBTransaction, mustBeNegative = false): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const amount = control.value;
 
@@ -54,17 +73,21 @@ export class ReattRedesUtils {
           return { exclusiveMin: { exclusiveMin: 0 } };
         }
 
-        const key = originatingTransaction.transactionType.templateMap.amount;
-        if (originatingTransaction) {
-          const originatingAmount = originatingTransaction[key as keyof (SchATransaction | SchBTransaction)] ?? 0;
-          if (Math.abs(amount) > Math.abs(originatingAmount as number)) {
-            return {
-              max: {
-                max: originatingAmount,
-                msgPrefix: 'The absolute value of the amount must be less than or equal to',
-              },
-            };
-          }
+        const key = transaction.transactionType.templateMap.amount;
+        const originalAmount =
+          ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
+            key as keyof (SchATransaction | SchBTransaction)
+          ] as number) ?? 0;
+        const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
+        let limit = originalAmount - reattRedesTotal;
+        if (transaction.id) limit += +(transaction[key as keyof (SchATransaction | SchBTransaction)] as number) ?? 0; // If editing, add value back into limit restriction.
+        if (Math.abs(amount) > Math.abs(limit)) {
+          return {
+            max: {
+              max: limit,
+              msgPrefix: 'The absolute value of the amount must be less than or equal to',
+            },
+          };
         }
       }
 

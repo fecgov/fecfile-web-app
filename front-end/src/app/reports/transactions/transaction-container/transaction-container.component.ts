@@ -31,14 +31,6 @@ export class TransactionContainerComponent extends DestroyerComponent {
     if (isPulledForwardLoan(this.transaction)) {
       return 1;
     }
-    if (
-      ReattRedesUtils.isReattRedes(this.transaction, [
-        ReattRedesTypes.REATTRIBUTION_TO,
-        ReattRedesTypes.REDESIGNATION_TO,
-      ])
-    ) {
-      return 2;
-    }
     return (this.transaction?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;
   }
 }

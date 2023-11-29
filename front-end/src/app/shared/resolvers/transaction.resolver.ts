@@ -64,30 +64,6 @@ export class TransactionResolver {
           ])
         ) {
           return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
-          // } else if (
-          //   ReattRedesUtils.isReattRedes(transaction, [
-          //     ReattRedesTypes.REATTRIBUTION_TO,
-          //     ReattRedesTypes.REATTRIBUTION_FROM,
-          //     ReattRedesTypes.REDESIGNATION_TO,
-          //     ReattRedesTypes.REDESIGNATION_FROM,
-          //   ])
-          // ) {
-          //   if (transaction.reatt_redes_id) {
-          //     return this.transactionService.getReattRedes(transaction.reatt_redes_id).pipe(
-          //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          //       map((transactions: any | undefined) => {
-          //         if (!transactions) {
-          //           throw Error('Fecfile: No reattribute/redesignate object returned from backend');
-          //         }
-          //         const reattributed = transactions.reattributed;
-          //         const to = ReattributionToUtils.overlayTransactionProperties(transactions.to, reattributed);
-          //         const from = ReattributionFromUtils.overlayTransactionProperties(transactions.from, reattributed);
-          //         to.children = [from];
-          //         return to;
-          //       })
-          //     );
-          //   }
-          //   throw Error('Fecfile: Could not find reatt_redes_id for reattribution');
         }
         return this.resolveExistingTransaction(transaction);
       })
