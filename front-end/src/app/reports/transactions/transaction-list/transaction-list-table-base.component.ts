@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
@@ -151,7 +151,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ReattRedesTypes.REDESIGNATION_FROM,
           ReattRedesTypes.REDESIGNATION_TO,
         ]) &&
-        !ReattRedesUtils.isAtLimit(transaction),
+        !ReattRedesUtils.isAtAmountLimit(transaction),
       () => true
     ),
   ];

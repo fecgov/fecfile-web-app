@@ -21,7 +21,7 @@ export class ReattRedesUtils {
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
   }
 
-  public static isAtLimit(transaction: Transaction | undefined): boolean {
+  public static isAtAmountLimit(transaction: Transaction | undefined): boolean {
     const txn = transaction as SchATransaction | SchBTransaction;
     if (txn.reatt_redes_total !== undefined) {
       if (
