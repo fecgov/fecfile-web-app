@@ -22,6 +22,8 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   isNewItem = true;
   protected itemService!: TableListService<T>;
 
+  protected caption?: string;
+
   constructor(
     protected messageService: MessageService,
     protected confirmationService: ConfirmationService,
@@ -45,6 +47,16 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     paginatorNextButton?.setAttribute('title', 'paginator go to next table page');
     const paginatorLastButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-last');
     paginatorLastButton?.setAttribute('title', 'paginator go to last table page');
+
+    if (this.caption) {
+      const table = (<HTMLElement>this.elementRef.nativeElement).querySelector('table');
+      if (table) {
+        const captionElem = table.createCaption();
+        captionElem.innerHTML = this.caption;
+        (<HTMLElement>captionElem).className = 'sr-only';
+
+      }
+    }
   }
 
   /**
