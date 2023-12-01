@@ -1,11 +1,11 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
-import { testIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
+import { getTestIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
 
 describe('ReattRedesUtils', () => {
   it('should test if transaction is reatt/redes', () => {
-    const txn = { ...testIndividualReceipt } as SchATransaction;
+    const txn = getTestIndividualReceipt();
     let result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
     expect(result).toBeFalse();
     txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
@@ -14,7 +14,7 @@ describe('ReattRedesUtils', () => {
   });
 
   it('should test if transaction isAtAmountLimit', () => {
-    const txn = { ...testIndividualReceipt } as SchATransaction;
+    const txn = getTestIndividualReceipt();
     txn.transaction_id = 'AC9877E1';
     let result = ReattRedesUtils.isAtAmountLimit(txn);
     expect(result).toBeFalse();
@@ -32,13 +32,13 @@ describe('ReattRedesUtils', () => {
   });
 
   it('should overlay forms correctly', () => {
-    const toTxn = { ...testIndividualReceipt } as SchATransaction;
+    const toTxn = getTestIndividualReceipt();
     toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
     const toForm = new FormGroup({
       contribution_purpose_descip: new FormControl(''),
       memo_code: new FormControl(''),
     });
-    const fromTxn = { ...testIndividualReceipt } as SchATransaction;
+    const fromTxn = getTestIndividualReceipt();
     fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
     const fromForm = new FormGroup({
       contribution_purpose_descrip: new FormControl(''),
@@ -54,11 +54,11 @@ describe('ReattRedesUtils', () => {
   });
 
   it('should reorder payload correctly', () => {
-    const reattributed = { ...testIndividualReceipt } as SchATransaction;
+    const reattributed = getTestIndividualReceipt();
     reattributed.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
-    const toTxn = { ...testIndividualReceipt } as SchATransaction;
+    const toTxn = getTestIndividualReceipt();
     toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
-    const fromTxn = { ...testIndividualReceipt } as SchATransaction;
+    const fromTxn = getTestIndividualReceipt();
     fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
 
     const payload = toTxn;

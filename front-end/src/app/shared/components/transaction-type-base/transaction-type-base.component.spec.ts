@@ -10,7 +10,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { testIndividualReceipt, testMockStore, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { getTestIndividualReceipt, testMockStore, getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
@@ -56,7 +56,7 @@ describe('TransactionTypeBaseComponent', () => {
     transactionServiceSpy = TestBed.inject(TransactionService) as jasmine.SpyObj<TransactionService>;
     testConfirmationService = TestBed.inject(ConfirmationService);
 
-    testTransaction = testIndividualReceipt;
+    testTransaction = getTestIndividualReceipt();
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -71,7 +71,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(component.transactionType?.title).toBe('Individual Receipt');
   });
 
-  xit('should save on save event', fakeAsync(() => {
+  it('should save on save event', fakeAsync(() => {
     if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction));
     confirmSpy.and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
@@ -94,7 +94,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('inherited fields should use the parent transaction to initialize the form values', () => {
     component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
-    component.transaction.parent_transaction = testIndividualReceipt;
+    component.transaction.parent_transaction = getTestIndividualReceipt();
     if (component.transaction.parent_transaction.contact_1)
       component.transaction.parent_transaction.contact_1.street_1 = 'Parent Street 1';
     component.ngOnInit();
