@@ -9,6 +9,9 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
+// import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
+// import { SchATransaction } from '../models/scha-transaction.model';
+// import { SchBTransaction } from '../models/schb-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -163,6 +166,11 @@ export class TransactionService implements TableListService<Transaction> {
         }
       })
     );
+  }
+
+  public multisave(transactions: Transaction[]): Observable<Transaction[]> {
+    const payload = transactions.map((t) => this.preparePayload(t));
+    return this.apiService.put<Transaction[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/`, payload);
   }
 
   /**

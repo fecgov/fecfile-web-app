@@ -5,6 +5,11 @@ import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
+import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +24,7 @@ export class TransactionResolver {
     const parentTransactionId = route.paramMap.get('parentTransactionId');
     const debtId = route.queryParamMap.get('debt');
     const loanId = route.queryParamMap.get('loan');
+    const reattributionId = route.queryParamMap.get('reattribution');
 
     // Existing
     if (transactionId) {
@@ -39,6 +45,9 @@ export class TransactionResolver {
       if (loanId) {
         return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
       }
+      if (reattributionId) {
+        return this.resolveNewReattribution(reportId, reattributionId);
+      }
       return this.resolveNewTransaction(reportId, transactionTypeName);
     }
     return of(undefined);
@@ -47,7 +56,13 @@ export class TransactionResolver {
   resolveExistingTransactionFromId(transactionId: string): Observable<Transaction | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
-        if (transaction.transactionType?.isDependentChild(transaction)) {
+        if (
+          transaction.transactionType?.isDependentChild(transaction) ||
+          ReattRedesUtils.isReattRedes(transaction, [
+            ReattRedesTypes.REATTRIBUTION_FROM,
+            ReattRedesTypes.REDESIGNATION_FROM,
+          ])
+        ) {
           return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
         }
         return this.resolveExistingTransaction(transaction);
@@ -123,6 +138,30 @@ export class TransactionResolver {
         }
         repayment.report_id = to.report_id;
         return repayment;
+      })
+    );
+  }
+
+  resolveNewReattribution(reportId: string, originatingId: string) {
+    return this.transactionService.get(originatingId).pipe(
+      map((originatingTransaction: Transaction) => {
+        const reattributed = ReattributedUtils.overlayTransactionProperties(
+          originatingTransaction as SchATransaction,
+          reportId
+        );
+        if (!reattributed.transaction_type_identifier) {
+          throw Error('Fecfile online: originating reattribution transaction type not found.');
+        }
+        let to = TransactionTypeUtils.factory(
+          reattributed.transaction_type_identifier
+        ).getNewTransaction() as SchATransaction;
+        to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
+        let from = TransactionTypeUtils.factory(
+          reattributed.transaction_type_identifier
+        ).getNewTransaction() as SchATransaction;
+        from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
+        to.children = [from];
+        return to;
       })
     );
   }

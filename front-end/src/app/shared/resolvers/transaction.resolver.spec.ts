@@ -35,6 +35,14 @@ describe('TransactionResolver', () => {
                 contact_1: Contact.fromJSON({ id: 123 }),
               })
             ),
+          getTableData: () =>
+            of({
+              count: 5,
+              next: 'https://url',
+              previous: 'https://url',
+              pageNumber: 1,
+              results: [],
+            }),
         },
       },
     ],
@@ -369,6 +377,37 @@ describe('TransactionResolver', () => {
       expect(transaction).toBeTruthy();
       if (transaction) {
         expect(transaction.loan?.id).toEqual('1');
+      }
+    });
+  });
+
+  it('should add reattribution', () => {
+    spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      return of(
+        SchATransaction.fromJSON({
+          id: id,
+          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+        })
+      );
+    });
+    const route = {
+      queryParamMap: convertToParamMap({ reattribution: '1' }),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+    };
+
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
+      expect(transaction).toBeTruthy();
+      if (transaction) {
+        expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
+        expect(
+          ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag
+        ).toEqual('REATTRIBUTION_FROM');
       }
     });
   });

@@ -155,42 +155,45 @@ export const testContact = Contact.fromJSON({
   transaction_count: 3,
 });
 
-export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
-  id: '123',
-  transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-  report_id: '999',
-  contribution_amount: '202.2',
-  contribution_date: '2022-02-02',
-  entity_type: ContactTypes.INDIVIDUAL,
-  contributor_organization_name: 'org name',
-  contributor_street_1: '123 Main St',
-  contributor_city: 'city',
-  contributor_state: 'VA',
-  contributor_zip: '20001',
-  contributor_employer: 'employer',
-  contributor_occupation: 'occupation',
-  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  contact_1_id: '456',
-  contact_1: Contact.fromJSON({
-    id: 'testId',
-    type: ContactTypes.INDIVIDUAL,
-    last_name: 'testLn1',
-    first_name: 'testFn1',
-    middle_name: 'testMn1',
-    prefix: 'testPrefix1',
-    suffix: 'testSuffix1',
-    employer: 'testEmployer1',
-    occupation: 'testOccupation1',
-    street_1: 'testStreet1',
-    street_2: 'testStreet2',
-    city: 'testCity1',
-    state: 'VA',
-    zip: '12345',
-  }),
-});
+export function getTestIndividualReceipt(): SchATransaction {
+  return SchATransaction.fromJSON({
+    id: '123',
+    transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    report_id: '999',
+    contribution_amount: '202.2',
+    contribution_date: '2022-02-02',
+    entity_type: ContactTypes.INDIVIDUAL,
+    contributor_organization_name: 'org name',
+    contributor_street_1: '123 Main St',
+    contributor_city: 'city',
+    contributor_state: 'VA',
+    contributor_zip: '20001',
+    contributor_employer: 'employer',
+    contributor_occupation: 'occupation',
+    memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+    contact_1_id: '456',
+    contact_1: Contact.fromJSON({
+      id: 'testId',
+      type: ContactTypes.INDIVIDUAL,
+      last_name: 'testLn1',
+      first_name: 'testFn1',
+      middle_name: 'testMn1',
+      prefix: 'testPrefix1',
+      suffix: 'testSuffix1',
+      employer: 'testEmployer1',
+      occupation: 'testOccupation1',
+      street_1: 'testStreet1',
+      street_2: 'testStreet2',
+      city: 'testCity1',
+      state: 'VA',
+      zip: '12345',
+    }),
+  });
+}
 
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
+  report_id: '3cd741da-aa57-4cc3-8530-667e8b7bad78',
   transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.COMMITTEE,
@@ -206,6 +209,9 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   aggregation_group: AggregationGroups.GENERAL,
   memo_code: true,
   donor_committee_fec_id: 'C00000000',
+  report: {
+    report_type: 'M1',
+  },
 });
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
