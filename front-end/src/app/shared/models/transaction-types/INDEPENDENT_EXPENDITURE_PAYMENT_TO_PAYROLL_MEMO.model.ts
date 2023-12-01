@@ -14,7 +14,7 @@ import {
   AGGREGATE,
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,
-  ORGANIZATION_INDIVIDUAL,
+  INDIVIDUAL_ORGANIZATION,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
@@ -35,7 +35,7 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransac
     'support_oppose_code',
     'calendar_ytd',
   ];
-  contactTypeOptions = ORGANIZATION_INDIVIDUAL;
+  contactTypeOptions = INDIVIDUAL_ORGANIZATION;
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(
     ScheduleETransactionTypeLabels,
@@ -46,7 +46,6 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransac
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
   override inheritCalendarYTD = true;
-  override showAggregate = false;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({

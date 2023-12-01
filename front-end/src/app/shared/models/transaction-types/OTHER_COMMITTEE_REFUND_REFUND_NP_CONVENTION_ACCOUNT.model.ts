@@ -14,7 +14,6 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT extends SchBTra
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT
   );
   schema = schema;
-  override showAggregate = false;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

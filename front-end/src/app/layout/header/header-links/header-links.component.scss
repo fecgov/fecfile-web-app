@@ -1,0 +1,33 @@
+.full-width {
+  width: 100%;
+}
+
+.full-width > a {
+  padding-left: 0.5rem;
+  color: black;
+}
+
+.nav-item {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.nav-item:hover {
+  background: #e8e8e8;
+}
+
+.nav-link {
+  font-size: 12px;
+  font-family: "karla-bold", sans-serif;
+  text-transform: uppercase;
+  color: black !important;
+}
+
+.nav-link.disabled {
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.nav-link.disabled:hover {
+  cursor: default;
+}

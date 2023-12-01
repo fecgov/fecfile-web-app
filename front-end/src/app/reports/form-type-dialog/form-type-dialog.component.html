@@ -1,10 +1,24 @@
-<p-dialog [(visible)]="detailVisible" header="Select form type" [modal]="true" styleClass="p-fluid form-type-dialog" (onHide)="onHide()">
+<p-dialog
+  [(visible)]="detailVisible"
+  header="Select form type"
+  [modal]="true"
+  styleClass="p-fluid form-type-dialog"
+  (onHide)="onHide()"
+>
   <ng-template pTemplate="content">
     <div class="grid">
       <div class="col-6">
         <div class="field">
           <label for="type">CHOOSE FORM</label>
-          <p-dropdown appendTo="body" [(ngModel)]="selectedType" [options]="formTypeOptions" autoWidth="false" [autofocus]="true">
+          <p-dropdown
+            [ngStyle]="{ display: 'inline' }"
+            [autoDisplayFirst]="false"
+            appendTo="body"
+            [(ngModel)]="selectedType"
+            [options]="formTypeOptions"
+            autoWidth="false"
+            [autofocus]="true"
+          >
             <ng-template let-type pTemplate="selectedItem">
               <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
             </ng-template>
@@ -20,6 +34,7 @@
     <button
       pButton
       pRipple
+      [disabled]="!getFormType(selectedType)?.createRoute"
       label="Start building report"
       icon="pi pi-check"
       class="p-button-primary"

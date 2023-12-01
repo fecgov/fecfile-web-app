@@ -53,18 +53,18 @@
           <span class="float-right">
             {{ item[item.transactionType.templateMap.amount] | currency }}
           </span>
-        </td>
-        <td>
-          <app-table-actions-button
-            [tableActions]="rowActions"
-            [actionItem]="item"
-            [tableActionClick]="onRowActionClick"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="p-button-text"
-            buttonAriaLabel="action"
-          ></app-table-actions-button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+                </td>
+                <td>
+                    <app-table-actions-button
+                            [tableActions]="rowActions"
+                            [actionItem]="item"
+                            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+                            buttonIcon="pi pi-ellipsis-v"
+                            buttonStyleClass="p-button-text"
+                            buttonAriaLabel="action"
+                    ></app-table-actions-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
