@@ -46,12 +46,7 @@
       <tr role="row">
         <td>
           <a (click)="this.editItem(item)">
-            {{
-              item[item.transactionType.templateMap.organization_name] ||
-                item[item.transactionType.templateMap.last_name] +
-                  ', ' +
-                  item[item.transactionType.templateMap.first_name]
-            }}
+            {{ item.name }}
           </a>
         </td>
         <td>
