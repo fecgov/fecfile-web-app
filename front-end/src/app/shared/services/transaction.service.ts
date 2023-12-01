@@ -183,6 +183,7 @@ export class TransactionService implements TableListService<Transaction> {
    * @param transaction
    */
   private preparePayload(transaction: Transaction) {
+    if (typeof transaction === 'string') return transaction;
     const payload = transaction.toJson();
 
     // Add flags to the payload used for API processing

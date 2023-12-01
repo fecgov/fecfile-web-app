@@ -5,8 +5,12 @@ export class ReportListPage {
   }
 
   static clickCreateButton(force: boolean = false) {
-    cy.get("button[label='Create a new report']").click({force: force});
+    cy.get("button[label='Create a new report']").click({ force: force });
+    cy.intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' }).as(
+      'coverageDates'
+    );
     cy.get('button').contains('Start building report').click();
+    cy.wait('@coverageDates'); // the page is ready when coverage_dates has returned
   }
 
   //Deletes all reports belonging to the logged-in committee

@@ -1,30 +1,28 @@
-<ng-container>
-    <p-overlayPanel #op [styleClass]="'action-options'">
-        <ng-template pTemplate>
-            <ul>
-                <li *ngFor="let action of tableActions">
-                    <button
-                            *ngIf="!action.isAvailable || action.isAvailable(actionItem)"
-                            [disabled]="!action.isEnabled(actionItem)"
-                            pButton
-                            pRipple
-                            type="button"
-                            class="p-button-secondary p-button-text"
-                            id="one"
-                            (click)="tableActionClick(action, actionItem)"
-                    >
-                        {{ action.label }}
-                    </button>
-                </li>
-            </ul>
-        </ng-template>
-    </p-overlayPanel>
-    <p-button
-            pRipple
-            [icon]="buttonIcon"
-            [label]="buttonLabel"
-            [styleClass]="buttonStyleClass"
-            [ariaLabel]="buttonAriaLabel"
-            (onClick)="op.toggle($event)"
-    ></p-button>
-</ng-container>
+<div class="dropdown" [ngClass]="isAbsolute ? 'absolute-correction' : ''">
+  <p-button
+    data-bs-toggle="dropdown"
+    data-bs-display="static"
+    pRipple
+    [icon]="buttonIcon"
+    [label]="buttonLabel"
+    [styleClass]="buttonStyleClass"
+    [ariaLabel]="buttonAriaLabel"
+  ></p-button>
+  <ul class="dropdown-menu ">
+    <li *ngFor="let action of tableActions; let index = index">
+      <button
+        *ngIf="!action.isAvailable || action.isAvailable(actionItem)"
+        [disabled]="!action.isEnabled(actionItem)"
+        pButton
+        pRipple
+        type="button"
+        class="p-button-secondary p-button-text w-full text-left"
+        [id]="'button-' + index"
+        (click)="tableActionClick.emit({action, actionItem})"
+      >
+        {{ action.label }}
+      </button>
+    </li>
+  </ul>
+</div>
+

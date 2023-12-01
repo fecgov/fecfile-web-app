@@ -39,23 +39,29 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th pSortableColumn="TBD" id="form-type-column" role="columnheader">
-          Form type <p-sortIcon field="TBD"></p-sortIcon>
+        <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
+          Form type
+          <p-sortIcon field="form_type"></p-sortIcon>
         </th>
         <th pSortableColumn="report_code_label" id="report-code-column" role="columnheader">
-          Type of report <p-sortIcon field="report_code_label"></p-sortIcon>
+          Type of report
+          <p-sortIcon field="report_code_label"></p-sortIcon>
         </th>
         <th pSortableColumn="coverage_through_date" id="coverage-dates-column" role="columnheader">
-          Coverage dates <p-sortIcon field="coverage_through_date"></p-sortIcon>
+          Coverage dates
+          <p-sortIcon field="coverage_through_date"></p-sortIcon>
         </th>
         <th pSortableColumn="report_status" id="status-column" role="columnheader">
-          Status <p-sortIcon field="report_status"></p-sortIcon>
+          Status
+          <p-sortIcon field="report_status"></p-sortIcon>
         </th>
         <th pSortableColumn="form_type" id="version" role="columnheader">
-          Version <p-sortIcon field="form_type"></p-sortIcon>
+          Version
+          <p-sortIcon field="form_type"></p-sortIcon>
         </th>
-        <th pSortableColumn="date_filed" id="date-filed-column" role="columnheader">
-          Date filed <p-sortIcon field="date_filed"></p-sortIcon>
+        <th pSortableColumn="upload_submission__created" id="date-filed-column" role="columnheader">
+          Date filed
+          <p-sortIcon field="upload_submission__created"></p-sortIcon>
         </th>
         <th id="actions" role="columnheader">Actions</th>
       </tr>
@@ -76,7 +82,7 @@
           <app-table-actions-button
             [tableActions]="rowActions"
             [actionItem]="item"
-            [tableActionClick]="onRowActionClick"
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
             buttonIcon="pi pi-ellipsis-v"
             buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
             [buttonAriaLabel]="'edit ' + displayName(item)"

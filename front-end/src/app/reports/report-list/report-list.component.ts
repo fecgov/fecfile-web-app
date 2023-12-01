@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
@@ -50,6 +50,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     public router: Router
   ) {
     super(messageService, confirmationService, elementRef);
+    this.caption = "Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filled, and actions.";
   }
 
   override ngOnInit() {

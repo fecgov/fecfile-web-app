@@ -1,28 +1,29 @@
+import { defaultFormData as contactFormData } from './models/ContactFormModel';
+import { defaultFormData as reportFormData } from './models/ReportFormModel';
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { LoginPage } from './pages/loginPage';
 import { PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { ContactFormData, defaultFormData as contactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData } from './models/ReportFormModel';
 
-const organizationFormData: ContactFormData = {
-  ...contactFormData,
-  ...{ contact_type: 'Organization' },
-};
 describe('Amendments', () => {
   beforeEach(() => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
     ReportListPage.goToPage();
   });
 
   it('should test Create an amendment', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
+    const formData = {
+      ...contactFormData,
+      ...{
+        contact_type: 'Organization',
+      },
+    };
+    ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
 
     // Create report to add loan too

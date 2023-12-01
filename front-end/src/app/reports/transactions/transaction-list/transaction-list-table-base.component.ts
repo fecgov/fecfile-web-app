@@ -95,9 +95,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
-        (transaction.children ?? []).some(
-          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
-        ),
+        !!transaction.loan_agreement_id,
       () => true
     ),
     new TableAction(
@@ -107,9 +105,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         isPulledForwardLoan(transaction) &&
-        !(transaction.children ?? []).some(
-          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
-        ),
+        !transaction.loan_agreement_id,
       () => true
     ),
     new TableAction(
@@ -207,10 +203,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public editLoanAgreement(transaction: Transaction): void {
-    const agreement = (transaction.children ?? []).find(
-      (child) => child.transaction_type_identifier == ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
-    );
-    if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
+    if (transaction.loan_agreement_id)
+      this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
   }
 
   public createLoanAgreement(transaction: Transaction): void {

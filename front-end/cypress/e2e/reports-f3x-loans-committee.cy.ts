@@ -146,9 +146,11 @@ describe('Loans', () => {
     PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
     PageUtils.searchBoxInput(individualContactFormData.last_name);
     cy.get('#amount').safeType(formData['amount']);
+    cy.intercept({
+      method: 'Post',
+    }).as('saveGuarantor');
     PageUtils.clickButton('Save & add loan guarantor');
-    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-    PageUtils.clickButton('Cancel', '', true);
+    cy.wait('@saveGuarantor');
     PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
     PageUtils.clickButton('Cancel', '', true);
 
