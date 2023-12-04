@@ -47,6 +47,7 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   reattribution_redesignation_tag: string | undefined;
+  reatt_redes_total?: number; // Amount of total money that has been redesignated for a transaction.
 
   override getFieldsNotToValidate(): string[] {
     return [

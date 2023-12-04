@@ -33,7 +33,12 @@
     </div>
   </ng-container>
 
-  <div class="grid" *ngIf="transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)">
+  <div
+    class="grid"
+    *ngIf="
+      transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)
+    "
+  >
     <div class="col-12">
       <div class="field">
         <app-memo-code
@@ -51,7 +56,7 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="amount">AMOUNT</label>
+        <label for="amount">{{ transaction?.transactionType?.amountLabel }}</label>
         <p-inputNumber
           #amountInput
           inputId="amount"

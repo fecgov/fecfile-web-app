@@ -1,12 +1,12 @@
+import { ContactFormData, defaultFormData as individualContactFormData } from './models/ContactFormModel';
+import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
+import { defaultLoanFormData } from './models/TransactionFormModel';
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { LoginPage } from './pages/loginPage';
 import { currentYear, PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
 import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultLoanFormData } from './models/TransactionFormModel';
-import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
 
 const reportFormDataApril: F3xCreateReportFormData = {
   ...reportFormData,
@@ -26,10 +26,7 @@ const reportFormDataJuly: F3xCreateReportFormData = {
   },
 };
 
-const organizationFormData: ContactFormData = {
-  ...individualContactFormData,
-  ...{ contact_type: 'Organization' },
-};
+let organizationFormData: ContactFormData;
 
 const formData = {
   ...defaultLoanFormData,
@@ -49,8 +46,12 @@ describe('Loans', () => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
     ReportListPage.goToPage();
+
+    organizationFormData = {
+      ...individualContactFormData,
+      ...{ contact_type: 'Organization' },
+    };
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
@@ -89,11 +90,16 @@ describe('Loans', () => {
 
     // go back to reports, make new report
 
-    // Create report to add loan too
+    // Create report
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton(true);
     F3xCreateReportPage.enterFormData(reportFormDataJuly);
+    cy.intercept({
+      method: 'Post',
+      url: 'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency,report_type_category,report_code,coverage_from_date,coverage_through_date,date_of_election,state_of_election,form_type',
+    }).as('saveReport');
     PageUtils.clickButton('Save and continue');
+    cy.wait('@saveReport');
 
     // Create report to add loan too
     ReportListPage.goToPage();
@@ -101,10 +107,15 @@ describe('Loans', () => {
     cy.get(alias).contains('JULY 15').siblings().last().find('app-table-actions-button').children().last().click();
 
     cy.get(alias).contains('Edit report').first().click();
-    PageUtils.urlCheck('cash-on-hand');
-    PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
-    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
-    PageUtils.clickButton('Save & continue');
+    cy.wait(500);
+    cy.url().then((currentUrl) => {
+      if (currentUrl.includes('cash-on-hand')) {
+        PageUtils.urlCheck('cash-on-hand');
+        PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
+        PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
+        PageUtils.clickButton('Save & continue');
+      }
+    });
     cy.get(alias)
       .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()
@@ -125,7 +136,12 @@ describe('Loans', () => {
       },
     };
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
+
+    cy.intercept({
+      method: 'Post',
+    }).as('saveNewAgreement');
     PageUtils.clickButton('Save', '', true);
+    cy.wait('@saveNewAgreement');
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').last().should('exist');

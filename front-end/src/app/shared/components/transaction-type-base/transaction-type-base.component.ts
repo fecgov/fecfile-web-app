@@ -1,13 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -16,7 +14,6 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -52,8 +49,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected router: Router,
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
-    protected reportService: ReportService
-  ) { }
+    protected reportService: ReportService,
+    protected activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -95,15 +93,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
-        // If this is a reattribution/redesignation transaction, initialize
-        // its specialized validation rules and text written to the purpose description.
-        if (
-          this.transaction &&
-          'reattribution_redesignation_tag' in this.transaction &&
-          this.transaction.reattribution_redesignation_tag
-        ) {
-          ReattRedesUtils.initValidators(this.form, this.transaction as SchATransaction & SchBTransaction, report);
-        }
       });
   }
 
@@ -126,7 +115,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
-      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+      throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
