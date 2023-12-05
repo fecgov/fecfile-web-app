@@ -44,5 +44,6 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     protected override reportService: ReportService
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
+    this.caption = "Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.";
   }
 }
