@@ -3,12 +3,11 @@
     *ngIf="controlType === 'button'"
     pButton
     pRipple
-    appSingleClick
     [label]="navigationControl?.label || ''"
     [icon]="navigationControl?.icon || ''"
     [class]="navigationControl?.ngClass || ''"
     (click)="click()"
-    [disabled]="isDisabled()"
+    [disabled]="isDisabled() || processing"
   ></button>
   <p-dropdown
     *ngIf="controlType === 'dropdown'"

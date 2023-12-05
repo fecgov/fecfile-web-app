@@ -55,7 +55,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-
+  processing = false;
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
@@ -239,7 +239,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-
+    this.processing = true;
     if (this.form.invalid) {
       return;
     }
@@ -267,6 +267,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         takeUntil(this.destroy$)
       )
       .subscribe(([report, coh]) => {
+        this.processing = false;
         if (jump === 'continue') {
           if (coh.report_id === report.id) {
             this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);

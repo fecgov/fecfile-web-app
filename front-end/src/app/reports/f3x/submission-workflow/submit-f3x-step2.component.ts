@@ -135,7 +135,6 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   public submit(): void {
     this.formSubmitted = true;
-
     if (this.form.invalid) {
       return;
     }
@@ -190,6 +189,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     };
     return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
       switchMap(() => {
+        this.loading = 0;
         if (this.report?.id) {
           this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
           return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));

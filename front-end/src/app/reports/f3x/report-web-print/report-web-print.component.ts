@@ -17,7 +17,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 export class ReportWebPrintComponent extends DestroyerComponent implements OnInit {
   report: Form3X = new Form3X();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-
+  processing = false;
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
@@ -49,11 +49,13 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
     } else {
       switch (report?.webprint_submission.fec_status) {
         case 'COMPLETED':
+          this.processing = false;
           this.webPrintStage = 'success';
           this.downloadURL = report.webprint_submission.fec_image_url;
           this.submitDate = report.webprint_submission.created;
           break;
         case 'FAILED':
+          this.processing = false;
           this.webPrintStage = 'failure';
           this.printError = report.webprint_submission.fecfile_error;
           break;
@@ -67,7 +69,7 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
   }
 
   public pollPrintStatus() {
-    const pollingTime = 5000;
+    const pollingTime = 1000;
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
@@ -82,6 +84,7 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
 
   public submitPrintJob() {
     if (this.report.id) {
+      this.processing = true;
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }
