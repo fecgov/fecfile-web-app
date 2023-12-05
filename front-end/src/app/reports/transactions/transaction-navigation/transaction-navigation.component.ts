@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Transaction } from 'app/shared/models/transaction.model';
 import {
+  GO_BACK_CONTROL,
   NavigationControl,
   NavigationEvent,
   TransactionNavigationControls,
-  GO_BACK_CONTROL,
 } from 'app/shared/models/transaction-navigation-controls.model';
 
 @Component({
@@ -14,6 +14,7 @@ import {
 export class TransactionNavigationComponent {
   @Input() isEditable = true;
   @Input() transaction?: Transaction;
+  @Input() processing = false;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
 
   handleNavigate($event: NavigationEvent) {

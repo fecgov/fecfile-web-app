@@ -8,7 +8,7 @@
     <h3 class="no-vert-margins">
       {{ report.form_type | label : f3xFormTypeLabels }}: {{ report.report_code | reportCodeLabel }}
     </h3>
-    <br />
+    <br/>
   </div>
   <div class="col-12">
     <img
@@ -28,9 +28,9 @@
           alt="The report's web print status is loading..."
         />
         <h1 class="align-center super-header">
-          <br /><br />
+          <br/><br/>
           <strong>Compiling your preview</strong>
-          <br />
+          <br/>
         </h1>
         <h2 class="align-center">
           {{ pollingStatusMessage }}
@@ -43,7 +43,7 @@
   <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
     <ng-container *ngIf="webPrintStage === 'failure'">
       <div class="col-12">
-        <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
+        <h2 class="align-center">Printing error:<br/>{{ printError }}</h2>
       </div>
     </ng-container>
     <div class="col-5"></div>
@@ -51,7 +51,7 @@
       <button
         pButton
         pRipple
-        appSingleClick
+        [disabled]="processing"
         label="Compile PDF"
         class="p-button-warning button-full-width"
         (click)="submitPrintJob()"
@@ -59,7 +59,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="webPrintStage === 'success'">
-    <h2 class="col-12 align-center">PDF compiled<br />Submitted on: {{ submitDate }}</h2>
+    <h2 class="col-12 align-center">PDF compiled<br/>Submitted on: {{ submitDate }}</h2>
     <div class="col-3"></div>
     <div class="col-2">
       <button pButton pRipple label="Open PDF" class="p-button-info button-full-width" (click)="downloadPDF()"></button>
@@ -71,7 +71,7 @@
       <button
         pButton
         pRipple
-        appSingleClick
+        [disabled]="processing"
         label="Compile New PDF"
         class="p-button-warning button-full-width"
         (click)="submitPrintJob()"

@@ -27,11 +27,13 @@ import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transacti
 export class NavigationControlComponent implements OnInit {
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
+  @Input() processing = false;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
+
 
   ngOnInit(): void {
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
@@ -47,6 +49,7 @@ export class NavigationControlComponent implements OnInit {
       Object.prototype.hasOwnProperty.call(option, 'value')
     );
   }
+
   isVisible = true;
 
   isDisabled(): boolean {
@@ -54,6 +57,7 @@ export class NavigationControlComponent implements OnInit {
   }
 
   click(): void {
+    this.processing = true;
     let destinationTransactionType: TransactionTypes | undefined;
     // Handle CHILD case by determining child TransactionType
     if (
@@ -98,7 +102,7 @@ export class NavigationControlComponent implements OnInit {
     }
     const typeId = config as TransactionTypes;
     if (!getTransactionTypeClass(typeId)) {
-      return { label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId) };
+      return {label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId)};
     }
     const type = TransactionTypeUtils.factory(typeId);
     return {
