@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { LabelList } from '../../../shared/utils/label.utils';
 import { Form3X } from '../../../shared/models/form-3x.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/models/report.model';

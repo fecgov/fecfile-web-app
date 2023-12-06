@@ -6,7 +6,6 @@ import { selectActiveReport } from '../../../../store/active-report.selectors';
 import { selectCashOnHand } from '../../../../store/cash-on-hand.selectors';
 import { Report } from '../../../../shared/models/report.model';
 import { CashOnHand, Form3X } from '../../../../shared/models/form-3x.model';
-import { LabelList } from '../../../../shared/utils/label.utils';
 import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';

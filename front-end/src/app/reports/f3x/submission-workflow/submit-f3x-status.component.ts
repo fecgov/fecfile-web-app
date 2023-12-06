@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { LabelList } from '../../../shared/utils/label.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({

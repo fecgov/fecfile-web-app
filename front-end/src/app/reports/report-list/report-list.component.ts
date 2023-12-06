@@ -6,7 +6,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/models/report.model';
 import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
-import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
 import { Router } from '@angular/router';
 

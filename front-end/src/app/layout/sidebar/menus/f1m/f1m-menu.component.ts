@@ -6,7 +6,6 @@ import { selectActiveReport } from '../../../../store/active-report.selectors';
 import { selectCashOnHand } from '../../../../store/cash-on-hand.selectors';
 import { Report } from '../../../../shared/models/report.model';
 import { ReportService } from '../../../../shared/services/report.service';
-import { ReportSidebarState, SidebarState } from '../../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CashOnHand } from 'app/shared/models/form-3x.model';
