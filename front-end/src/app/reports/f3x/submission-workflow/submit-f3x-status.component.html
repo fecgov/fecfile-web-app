@@ -6,7 +6,15 @@
     <h1 *ngIf="report?.upload_submission?.fec_status === 'REJECTED'" class="super-header">
       Your report has been rejected.
     </h1>
-    <h1 *ngIf="report?.upload_submission?.fec_status === 'PROCESSING' || (!report?.upload_submission?.fec_status && report?.upload_submission?.fecfile_task_state && report?.upload_submission?.fecfile_task_state !== 'FAILED')" class="super-header">
+    <h1
+      *ngIf="
+        report?.upload_submission?.fec_status === 'PROCESSING' ||
+        (!report?.upload_submission?.fec_status &&
+          report?.upload_submission?.fecfile_task_state &&
+          report?.upload_submission?.fecfile_task_state !== 'FAILED')
+      "
+      class="super-header"
+    >
       Thank you for submitting your report. It is currently being processed.
     </h1>
   </div>
@@ -17,7 +25,7 @@
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR FORM TYPE:</h5>
         <h3 class="no-vert-margins">
-          {{ report.form_type | label: f3xFormTypeLabels }}
+          {{ report.formLabel }}
         </h3>
         <br />
       </div>

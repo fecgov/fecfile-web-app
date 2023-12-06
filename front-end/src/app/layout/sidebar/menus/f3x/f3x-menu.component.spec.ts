@@ -5,24 +5,24 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '../../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { MenuReportComponent } from './menu-report.component';
-import { ReportSidebarState, SidebarState } from '../sidebar.component';
+import { F3XMenuComponent } from './f3x-menu.component';
+import { ReportSidebarState, SidebarState } from '../../sidebar.component';
 import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
 describe('MenuReportComponent', () => {
-  let component: MenuReportComponent;
-  let fixture: ComponentFixture<MenuReportComponent>;
+  let component: F3XMenuComponent;
+  let fixture: ComponentFixture<F3XMenuComponent>;
   let router: Router;
   let store: Store;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MenuReportComponent],
+      declarations: [F3XMenuComponent],
       providers: [provideMockStore(testMockStore)],
       imports: [
         SharedModule,
@@ -41,7 +41,7 @@ describe('MenuReportComponent', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
-    fixture = TestBed.createComponent(MenuReportComponent);
+    fixture = TestBed.createComponent(F3XMenuComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(Store);
     fixture.detectChanges();

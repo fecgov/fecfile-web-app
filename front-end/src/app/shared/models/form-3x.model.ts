@@ -1,7 +1,7 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Report } from './report.model';
+import { Report, ReportTypes } from './report.model';
 import { LabelList } from '../utils/label.utils';
-import { F3xReportCodes } from '../utils/report-code.utils';
+import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 
 export interface CashOnHand {
@@ -17,18 +17,11 @@ export enum F3xFormTypes {
 
 export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
-export const F3xFormTypeLabels: LabelList = [
-  [F3xFormTypes.F3XN, 'FORM 3X'],
-  [F3xFormTypes.F3XA, 'FORM 3X'],
-  [F3xFormTypes.F3XT, 'FORM 3X'],
-];
-
-export const F3xFormVersionLabels: LabelList = [
-  [F3xFormTypes.F3XN, 'Original'],
-  [F3xFormTypes.F3XA, 'Amendment'],
-  [F3xFormTypes.F3XT, 'Termination'],
-];
-
+export const F3xFormVersionLabels: { [key in F3xFormTypes]: string } = {
+  [F3xFormTypes.F3XN]: 'Original',
+  [F3xFormTypes.F3XA]: 'Amendment',
+  [F3xFormTypes.F3XT]: 'Termination',
+};
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
@@ -40,6 +33,17 @@ export class F3xCoverageDates {
 }
 
 export class Form3X extends Report {
+  report_type = ReportTypes.F3X;
+  form_type = F3xFormTypes.F3XN;
+  get formLabel() {
+    return 'FORM 3X';
+  }
+  get versionLabel() {
+    return F3xFormVersionLabels[this.form_type] ?? '';
+  }
+  override get transactionTableTitle() {
+    return `${this.formLabel}: ${getReportCodeLabel(this.report_code)}`;
+  }
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;

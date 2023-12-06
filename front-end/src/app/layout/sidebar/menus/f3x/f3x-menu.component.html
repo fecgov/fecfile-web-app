@@ -2,7 +2,7 @@
   <div class="grid report-info">
     <div class="col-12">
       <div class="title-2">REPORT PROGRESS</div>
-      <div class="report-type">{{ (activeReport$ | async)?.form_type | label : f3xFormTypeLabels }}</div>
+      <div class="report-type">{{ (activeReport$ | async)?.formLabel }}</div>
       <div class="sub-heading">{{ (activeReport$ | async)?.report_code | reportCodeLabel }}</div>
       <div class="sub-heading">
         {{ (activeReport$ | async)!.coverage_from_date | fecDate }} — <wbr />
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="grid">
-    <div class="col-12">
+    <div class="col-12" *ngIf="items$ | async">
       <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
     </div>
   </div>

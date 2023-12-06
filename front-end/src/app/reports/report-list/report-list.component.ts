@@ -8,7 +8,6 @@ import { Report } from '../../shared/models/report.model';
 import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
-import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,8 +15,6 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
-  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   cashOnHand: CashOnHand = {
     report_id: undefined,
     value: undefined,
@@ -50,7 +47,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     public router: Router
   ) {
     super(messageService, confirmationService, elementRef);
-    this.caption = "Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filled, and actions.";
+    this.caption =
+      'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filled, and actions.';
   }
 
   override ngOnInit() {

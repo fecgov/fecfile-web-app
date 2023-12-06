@@ -41,15 +41,16 @@ import { CommitteeBannerComponent } from './layout/committee-banner/committee-ba
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { LayoutComponent } from './layout/layout.component';
-import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
+import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
-import { NgOptimizedImage } from "@angular/common";
-import { HeaderLinksComponent } from "./layout/header/header-links/header-links.component";
+import { NgOptimizedImage } from '@angular/common';
+import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
+import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -74,7 +75,8 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     FooterComponent,
     LoginComponent,
     DashboardComponent,
-    MenuReportComponent,
+    F3XMenuComponent,
+    F1MMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,7 +85,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
@@ -92,9 +94,9 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         activeReport: activeReportReducer,
         cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
-        sidebarVisible: sidebarVisibleReducer
+        sidebarVisible: sidebarVisibleReducer,
       },
-      {metaReducers}
+      { metaReducers }
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
@@ -109,11 +111,10 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     CookieService,
     ConfirmationService,
     MessageService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
-    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

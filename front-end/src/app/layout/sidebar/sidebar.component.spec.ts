@@ -7,7 +7,7 @@ import { SidebarComponent } from './sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { MenuReportComponent } from './menu-report/menu-report.component';
+import { F3XMenuComponent } from './menus/f3x/f3x-menu.component';
 import { SharedModule } from 'app/shared/shared.module';
 
 describe('SidebarComponent', () => {
@@ -24,7 +24,7 @@ describe('SidebarComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([]),
       ],
-      declarations: [SidebarComponent, MenuReportComponent],
+      declarations: [SidebarComponent, F3XMenuComponent],
       providers: [provideMockStore(testMockStore)],
     }).compileComponents();
   });

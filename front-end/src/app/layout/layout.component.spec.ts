@@ -7,14 +7,14 @@ import { ReportSidebarState, SidebarComponent, SidebarState } from './sidebar/si
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
+import { MenuReportComponent } from './sidebar/menus/f3x/f3x-menu.component';
 import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
 import { filter, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
-import { Event, NavigationEnd, Router } from "@angular/router";
+import { Event, NavigationEnd, Router } from '@angular/router';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -51,7 +51,7 @@ describe('LayoutComponent', () => {
   }));
 
   it('should set the sidebar to the transaction section', () => {
-    store.dispatch(setSidebarStateAction({payload: new SidebarState(ReportSidebarState.TRANSACTIONS)}));
+    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS) }));
     component.sidebarState$
       ?.pipe(filter((state) => !!state))
       .subscribe((state) => expect(state?.section).toBe(ReportSidebarState.TRANSACTIONS));
