@@ -1,6 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
-import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
 export enum F99FormTypes {

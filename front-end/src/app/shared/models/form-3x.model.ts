@@ -1,6 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
-import { LabelList } from '../utils/label.utils';
 import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 
