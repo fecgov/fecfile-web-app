@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
-describe('MenuReportComponent', () => {
+describe('F3XMenuComponent', () => {
   let component: F3XMenuComponent;
   let fixture: ComponentFixture<F3XMenuComponent>;
   let router: Router;
