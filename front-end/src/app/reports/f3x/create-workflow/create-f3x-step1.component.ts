@@ -117,10 +117,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         this.form.addValidators(this.existingCoverageValidator(existingCoverage));
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.form.controls['coverage_from_date'].addValidators([Validators.required, DateUtils.dateBefore(this.form.controls['coverage_through_date'])]);
-    this.form.controls['coverage_through_date'].addValidators([Validators.required]);
-    this.form.controls['coverage_through_date'].valueChanges.subscribe(() => {
-      this.form.controls['coverage_from_date'].updateValueAndValidity();
+    this.form.controls['coverage_from_date'].addValidators([Validators.required]);
+    this.form.controls['coverage_through_date'].addValidators([Validators.required, DateUtils.dateAfter(this.form.controls['coverage_from_date'])]);
+    this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
+      this.form.controls['coverage_through_date'].updateValueAndValidity();
     });
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([

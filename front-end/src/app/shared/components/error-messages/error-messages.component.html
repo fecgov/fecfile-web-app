@@ -16,7 +16,7 @@
     *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"
   >{{ emailErrorMessage }}</small
   >
-  <small class="p-error" *ngIf="control?.hasError('dateBefore')">{{ dateBeforeMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('dateAfter')">{{ dateAfterMessage }}</small>
   <small
     class="p-error"
     *ngIf="
@@ -28,7 +28,7 @@
       !control?.hasError('exclusiveMax') &&
       !control?.hasError('exclusiveMin') &&
       !control?.hasError('invaliddate') &&
-      !control?.hasError('dateBefore') &&
+      !control?.hasError('dateAfter') &&
       control?.hasError('pattern')
     "
   >{{ patternErrorMessage }}</small

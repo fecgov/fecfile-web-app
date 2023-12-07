@@ -20,7 +20,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() requiredTrueErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
   @Input() uniqueFecIdMessage = 'FEC IDs must be unique';
-  @Input() dateBeforeMessage = "From date must be before To date";
+  @Input() dateAfterMessage = "TO date must fall chronologically after FROM date";
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {

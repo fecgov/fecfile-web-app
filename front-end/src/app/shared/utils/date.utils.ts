@@ -50,15 +50,15 @@ export class DateUtils {
     return !!(date && from && through) && from <= date && date <= through;
   }
 
-  public static dateBefore(afterDateControl: AbstractControl<Date | null>): ValidatorFn {
+  public static dateAfter(afterDateControl: AbstractControl<Date | null>): ValidatorFn {
     return (control: AbstractControl<Date | null>): ValidationErrors | null => {
 
-      const beforeValue = control.value;
-      const afterValue = afterDateControl.value;
+      const afterValue = control.value;
+      const beforeValue = afterDateControl.value;
       if (!beforeValue || !afterValue) {
         return null;
       }
-      return beforeValue.getTime() >= afterValue.getTime() ? {dateBefore: true} : null;
+      return beforeValue.getTime() >= afterValue.getTime() ? {dateAfter: true} : null;
     }
   }
 }

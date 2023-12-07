@@ -78,7 +78,7 @@ describe('DateUtils', () => {
   describe('dateBefore', () => {
     it('should not check if either date is null', () => {
       const otherControl = new FormControl<Date>(new Date());
-      const control = new FormControl<Date>(new Date(), [DateUtils.dateBefore(otherControl)]);
+      const control = new FormControl<Date>(new Date(), [DateUtils.dateAfter(otherControl)]);
       otherControl.setValue(null);
       control.updateValueAndValidity();
       expect(control.valid).toBeTrue();
@@ -89,17 +89,17 @@ describe('DateUtils', () => {
       expect(control.valid).toBeTrue();
     });
 
-    it("should verify that the control's date comes before the date of the other control", () => {
+    it("should verify that the control's date comes after the date of the other control", () => {
       const otherControl = new FormControl<Date>(new Date());
       const control = new FormControl<Date>(new Date(), {
-        validators: [DateUtils.dateBefore(otherControl)],
+        validators: [DateUtils.dateAfter(otherControl)],
         nonNullable: true
       });
       control.updateValueAndValidity();
       expect(control.valid).toBeFalse();
       if (!control.errors) throw new Error("Bad test");
-      expect(control.errors['dateBefore']).toBeTrue();
-      control.setValue(new Date(control.getRawValue().getTime() - 1000));
+      expect(control.errors['dateAfter']).toBeTrue();
+      control.setValue(new Date(control.getRawValue().getTime() + 1000));
       expect(control.valid).toBeTrue();
     });
   });
