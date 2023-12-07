@@ -1,4 +1,5 @@
 import { DateUtils } from './date.utils';
+import { FormControl } from "@angular/forms";
 
 describe('DateUtils', () => {
   it('should create an instance', () => {
@@ -72,5 +73,34 @@ describe('DateUtils', () => {
 
     // undefined
     expect(DateUtils.areOverlapping(undefined, januaryFirst, januaryThird)).toBeFalse();
+  });
+
+  describe('dateBefore', () => {
+    it('should not check if either date is null', () => {
+      const otherControl = new FormControl<Date>(new Date());
+      const control = new FormControl<Date>(new Date(), [DateUtils.dateBefore(otherControl)]);
+      otherControl.setValue(null);
+      control.updateValueAndValidity();
+      expect(control.valid).toBeTrue();
+
+      otherControl.setValue(new Date());
+      control.setValue(null);
+      control.updateValueAndValidity();
+      expect(control.valid).toBeTrue();
+    });
+
+    it("should verify that the control's date comes before the date of the other control", () => {
+      const otherControl = new FormControl<Date>(new Date());
+      const control = new FormControl<Date>(new Date(), {
+        validators: [DateUtils.dateBefore(otherControl)],
+        nonNullable: true
+      });
+      control.updateValueAndValidity();
+      expect(control.valid).toBeFalse();
+      if (!control.errors) throw new Error("Bad test");
+      expect(control.errors['dateBefore']).toBeTrue();
+      control.setValue(new Date(control.getRawValue().getTime() - 1000));
+      expect(control.valid).toBeTrue();
+    });
   });
 });

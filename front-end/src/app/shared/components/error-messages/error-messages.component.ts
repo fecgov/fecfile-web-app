@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, LOCALE_ID, Inject } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { formatCurrency } from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -20,11 +20,13 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() requiredTrueErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
   @Input() uniqueFecIdMessage = 'FEC IDs must be unique';
+  @Input() dateBeforeMessage = "From date must be before To date";
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {
     this._emailErrorMessage = value;
   }
+
   get emailErrorMessage(): string {
     if (this._emailErrorMessage) {
       return this._emailErrorMessage;
@@ -43,6 +45,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set minLengthErrorMessage(value: string) {
     this._minLengthErrorMessage = value;
   }
+
   get minLengthErrorMessage(): string {
     if (this._minLengthErrorMessage) {
       return this._minLengthErrorMessage;
@@ -54,6 +57,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set maxLengthErrorMessage(value: string) {
     this._maxLengthErrorMessage = value;
   }
+
   get maxLengthErrorMessage(): string {
     if (this._maxLengthErrorMessage) {
       return this._maxLengthErrorMessage;
@@ -65,6 +69,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set minErrorMessage(value: string) {
     this._minErrorMessage = value;
   }
+
   get minErrorMessage(): string {
     if (this._minErrorMessage) {
       return this._minErrorMessage;
@@ -80,6 +85,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set exclusiveMinErrorMessage(value: string) {
     this._exclusiveMinErrorMessage = value;
   }
+
   get exclusiveMinErrorMessage(): string {
     if (this._exclusiveMinErrorMessage) {
       return this._exclusiveMinErrorMessage;
@@ -95,6 +101,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set maxErrorMessage(value: string) {
     this._maxErrorMessage = value;
   }
+
   get maxErrorMessage(): string {
     if (this._maxErrorMessage) {
       return this._maxErrorMessage;
@@ -107,6 +114,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set exclusiveMaxErrorMessage(value: string) {
     this._exclusiveMaxErrorMessage = value;
   }
+
   get exclusiveMaxErrorMessage(): string {
     if (this._exclusiveMaxErrorMessage) {
       return this._exclusiveMaxErrorMessage;
@@ -127,6 +135,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() set invalidDateErrorMessage(value: string) {
     this._invalidDateErrorMessage = value;
   }
+
   get invalidDateErrorMessage(): string {
     if (this._invalidDateErrorMessage) {
       return this._invalidDateErrorMessage;
@@ -134,7 +143,8 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
-  constructor(@Inject(LOCALE_ID) private localeId: string) {}
+  constructor(@Inject(LOCALE_ID) private localeId: string) {
+  }
 
   ngOnInit(): void {
     if (!this.control) {
