@@ -20,7 +20,7 @@
     styleClass="navigation-dropdown"
     panelStyleClass="navigation-dropdown-panel"
     (onChange)="onDropdownChange($event)"
-    [disabled]="isDisabled()"
+    [disabled]="isDisabled() || processing"
     [group]="isGroupedDropdown"
   >
     <ng-template let-group pTemplate="group">
