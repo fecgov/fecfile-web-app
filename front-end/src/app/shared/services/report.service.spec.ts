@@ -29,6 +29,7 @@ describe('ReportService', () => {
       count: 2,
       next: 'https://next-page',
       previous: 'https://previous-page',
+      pageNumber: 1,
       results: [
         Form3X.fromJSON({
           id: 1,

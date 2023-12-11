@@ -310,7 +310,7 @@
               label="Save"
               icon="pi pi-check"
               class="p-button-primary"
-              (click)="saveContact()"
+              (click)="isNewItem ? saveContact() : confirmPropagation()"
             ></button>
             <button
               type="button"
@@ -340,3 +340,5 @@
     (click)="saveContact()"
   ></button>
 </ng-template>
+
+<p-confirmDialog key="contactDialogDialog" [style]="{ width: '450px' }"></p-confirmDialog>

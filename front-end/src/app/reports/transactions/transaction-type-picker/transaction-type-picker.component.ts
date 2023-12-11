@@ -88,7 +88,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     if (this.category === 'disbursement') {
       return [
         ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
-        ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS,
+        ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
         ScheduleBTransactionGroups.OTHER_EXPENDITURES,
         ScheduleBTransactionGroups.REFUND,
         ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
@@ -194,7 +194,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
         ];
         break;
-      case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS:
+      case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS:
         transactionTypes = [
           ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,

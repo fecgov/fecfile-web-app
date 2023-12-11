@@ -49,7 +49,6 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override showGuarantorTable = true;
 
   schema = schema;
-  override apiEndpoint = '/transactions/save';
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.LOAN_MADE];
   override subTransactionConfig = [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR];
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
@@ -73,7 +72,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     return SchCTransaction.fromJSON({
       form_type: 'SC/9',
       transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-      receipt_line_number: '27',
+      // until the FEC filing api can accept '27', we cannot send it: receipt_line_number: '27',
     });
   }
 }

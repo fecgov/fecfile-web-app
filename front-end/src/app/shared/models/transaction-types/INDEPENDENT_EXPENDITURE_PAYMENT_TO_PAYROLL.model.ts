@@ -44,7 +44,6 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   override contact2IsRequired = () => true;
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
   override showCalendarYTD = true;
-  override showAggregate = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(transaction: Transaction): string {

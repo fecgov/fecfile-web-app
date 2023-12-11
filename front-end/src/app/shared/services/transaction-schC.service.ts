@@ -9,6 +9,7 @@ import { ListRestResponse } from '../models/rest-api.model';
   providedIn: 'root',
 })
 export class TransactionSchCService extends TransactionService {
+  override tableDataEndpoint = '/transactions';
   constructor(override apiService: ApiService, override datePipe: DatePipe) {
     super(apiService, datePipe);
   }

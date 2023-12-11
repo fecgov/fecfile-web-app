@@ -85,7 +85,11 @@ describe('Transactions', () => {
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
-    TransactionDetailPage.enterLoanFormData(formTransactionDataForSchedule);
+    const formTransactionData = {
+      ...scheduleData,
+      ...{ amount: 200.01, category_code: '005 Polling Expenses' },
+    };
+    TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -93,7 +97,7 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', 'Other Disbursement');
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData.name);
-    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
+    cy.get('tr').should('contain', PageUtils.dateToString(formTransactionData.date_received));
     cy.get('tr').should('contain', '$' + formTransactionDataForSchedule.amount);
 
     // Check values of edit form
@@ -133,7 +137,8 @@ describe('Transactions', () => {
     cy.get('tr').should('not.contain', 'Unitemized');
     cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
     cy.get('tr').should('contain', PageUtils.dateToString(negativeAmountFormData.date_received));
-    let amount = negativeAmountFormData.amount < 0 ? -1 * negativeAmountFormData.amount : negativeAmountFormData.amount;
+    const amount =
+      negativeAmountFormData.amount < 0 ? -1 * negativeAmountFormData.amount : negativeAmountFormData.amount;
     // Assert that the positive amount was converted to a negative amount
     cy.get('tr').should('contain', '-$' + amount);
 

@@ -3,7 +3,7 @@ import { ScheduleIds } from './transaction.model';
 
 export abstract class SchBTransactionType extends TransactionType {
   scheduleId = ScheduleIds.B;
-  apiEndpoint = '/transactions/schedule-b';
+  override showAggregate = false;
 
   // Labels
   override amountInputHeader = 'Expenditure information';

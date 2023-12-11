@@ -13,7 +13,7 @@ import {
 export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override formFields = ORGANIZATION_FORM_FIELDS;
   override contactTypeOptions = ORGANIZATION;
-  override isDependentChild = true;
+  override isDependentChild = () => true;
   override doMemoCodeDateCheck = false;
   schema = schema;
   override useParentContact = true;

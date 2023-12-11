@@ -123,6 +123,7 @@ describe('CreateF3XStep1Component', () => {
       next: '/',
       previous: '/',
       results: [],
+      pageNumber: 0,
     } as ListRestResponse;
     spyOn(form3XService, 'create').and.returnValue(of(f3x));
     spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));

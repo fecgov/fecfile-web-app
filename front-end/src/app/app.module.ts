@@ -1,5 +1,5 @@
 // Anguluar
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,7 +17,7 @@ import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
-import { sidebarStateReducer } from './store/sidebar-state.reducer';
+import { sidebarStateReducer, sidebarVisibleReducer } from './store/sidebar-state.reducer';
 import { spinnerReducer } from './store/spinner.reducer';
 
 // PrimeNG
@@ -48,6 +48,8 @@ import { HttpErrorInterceptor } from './shared/interceptors/http-error.intercept
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
+import { NgOptimizedImage } from "@angular/common";
+import { HeaderLinksComponent } from "./layout/header/header-links/header-links.component";
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -57,6 +59,7 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
     rehydrate: true,
   })(reducer);
 }
+
 const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncReducer];
 
 @NgModule({
@@ -64,6 +67,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     AppComponent,
     LayoutComponent,
     CommitteeBannerComponent,
+    HeaderLinksComponent,
     HeaderComponent,
     BannerComponent,
     SidebarComponent,
@@ -79,7 +83,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
+    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
@@ -88,8 +92,9 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         activeReport: activeReportReducer,
         cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
+        sidebarVisible: sidebarVisibleReducer
       },
-      { metaReducers }
+      {metaReducers}
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
@@ -98,15 +103,17 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ButtonModule,
     ProgressBarModule,
     SharedModule,
+    NgOptimizedImage,
   ],
   providers: [
     CookieService,
     ConfirmationService,
     MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
     FecDatePipe,
-    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

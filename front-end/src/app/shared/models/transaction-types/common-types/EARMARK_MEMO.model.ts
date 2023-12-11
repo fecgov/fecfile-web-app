@@ -7,7 +7,7 @@ export abstract class EARMARK_MEMO extends SchATransactionType {
   contactTypeOptions = COMMITTEE_INDIVIDUAL;
 
   override inheritedFields = ['amount' as TemplateMapKeyType];
-  override isDependentChild = true;
+  override isDependentChild = () => true;
 
   override description = undefined;
   override accordionTitle = 'STEP TWO';

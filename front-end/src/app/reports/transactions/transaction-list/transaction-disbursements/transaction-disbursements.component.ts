@@ -8,6 +8,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -28,5 +29,9 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     protected override reportService: ReportService
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
+  }
+
+  public convertToDate(date: string) {
+    return DateUtils.convertFecFormatToDate(date) ?? undefined;
   }
 }

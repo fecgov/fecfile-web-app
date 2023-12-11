@@ -67,12 +67,12 @@ jobs:
           command: mkdir -p /tmp/cache/scanner
       - restore_cache:
           keys:
-            - v1-sonarcloud-scanner-4.6.2.2472
+            - v1-sonarcloud-scanner-5.0.1.3006
       - run:
           name: SonarCloud
           command: |
             set -e
-            VERSION=4.6.2.2472
+            VERSION=5.0.1.3006
             if [ -z "$SONAR_TOKEN" ]; then
                  echo "You must set SONAR_TOKEN environemnt variable"
                  exit 1
@@ -92,7 +92,7 @@ jobs:
           environment:
             SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
       - save_cache:
-          key: v1-sonarcloud-scanner-4.6.2.2472
+          key: v1-sonarcloud-scanner-5.0.1.3006
           paths:
             - /tmp/cache/scanner
 
@@ -113,7 +113,7 @@ jobs:
           command: |
             git checkout ${E2E_BRANCH_NAME}
             docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} docker-compose up --build -d
             docker container run --network container:fecfile-api \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/api/v1/user/login/authenticate \

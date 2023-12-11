@@ -1,10 +1,14 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
+import { DateUtils } from 'app/shared/utils/date.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
+import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
-import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -67,6 +71,24 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         .get(this.transaction.transactionType.templateMap.calendar_ytd)
         ?.setValue((this.transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
     }
+
+    if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
+      this.store
+        .select(selectActiveReport)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((report) => {
+          this.form
+            .get(this.templateMap.date)
+            ?.addValidators((control: AbstractControl): ValidationErrors | null => {
+              const date = control.value;
+              if (date && !DateUtils.isWithin(date, report.coverage_from_date, report.coverage_through_date)) {
+                const message = 'Date must fall within the report date range.';
+                return { invaliddate: { msg: message } };
+              }
+              return null;
+            });
+        });
+    }
   }
 
   ngOnChanges(): void {
@@ -83,4 +105,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       }
     }
   }
+
+  protected readonly isLoanRepayment = isLoanRepayment;
+  protected readonly isDebtRepayment = isDebtRepayment;
 }

@@ -184,6 +184,12 @@ export function isExistingTransaction(transaction?: Transaction): boolean {
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
+export function isLoanRepayment(transaction?: Transaction): boolean {
+  return !!transaction?.loan_id && transaction.transactionType.scheduleId !== ScheduleIds.C;
+}
+export function isDebtRepayment(transaction?: Transaction): boolean {
+  return !!transaction?.debt_id && transaction.transactionType.scheduleId !== ScheduleIds.D;
+}
 
 export type ScheduleTransaction =
   | SchATransaction

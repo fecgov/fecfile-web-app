@@ -6,7 +6,7 @@ import { ContactListPage } from './pages/contactListPage';
 import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { defaultLoanFormData } from './models/TransactionFormModel';
 import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, loanEnums } from './models/ReportFormModel';
+import { defaultFormData as reportFormData } from './models/ReportFormModel';
 
 const committeeFormData: ContactFormData = {
   ...individualContactFormData,
@@ -29,127 +29,131 @@ describe('Loans', () => {
     ReportListPage.goToPage();
   });
 
-  xit('should test: Loan By Committee', () => {
+  it('should test: Loan By Committee', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(loanEnums.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
 
     // Create individual
     ContactListPage.goToPage();
-    PageUtils.clickButton(loanEnums.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(loanEnums.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(loanEnums.addLoansAndDebts);
-    PageUtils.clickLink(loanEnums.loans);
-    PageUtils.clickLink(loanEnums.loanByCommittee);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan By Committee');
 
     // Search for created committee and enter load data, then add load gaurantor
+    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
     PageUtils.searchBoxInput(committeeFormData.committee_id);
 
     formData.date_received = undefined;
 
     TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickButton(loanEnums.saveBoth);
+    PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
-    cy.contains(loanEnums.loanByCommittee).should('exist');
-    cy.contains(loanEnums.loanMade).should('exist');
+    cy.contains('Loan By Committee').should('exist');
+    cy.contains('Loan Made').should('exist');
   });
 
-  xit('should test: Loan By Committee - Receive loan repayment', () => {
+  it('should test: Loan By Committee - Receive loan repayment', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(loanEnums.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
 
     // Create individual
     ContactListPage.goToPage();
-    PageUtils.clickButton(loanEnums.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(loanEnums.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(loanEnums.addLoansAndDebts);
-    PageUtils.clickLink(loanEnums.loans);
-    PageUtils.clickLink(loanEnums.loanByCommittee);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan By Committee');
 
     // Search for created committee and enter load data, then add load gaurantor
+    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
     PageUtils.searchBoxInput(committeeFormData.committee_id);
+
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickButton(loanEnums.saveBoth);
+    PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
-    cy.contains(loanEnums.loanByCommittee).should('exist');
-    cy.contains(loanEnums.loanMade).should('exist');
-    PageUtils.clickElement(loanEnums.buttonLoansAndDebts);
-    cy.contains(loanEnums.recieveLoanPayment).click();
+    cy.contains('Loan By Committee').should('exist');
+    cy.contains('Loan Made').should('exist');
+    PageUtils.clickElement('loans-and-debts-button');
+    cy.contains('Receive loan repayment').click();
 
-    PageUtils.urlCheck(loanEnums.loanPaymentRecievedUrl);
+    PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
     PageUtils.searchBoxInput(committeeFormData.committee_id);
     formData.date_received = new Date(currentYear, 4 - 1, 27);
     PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
     PageUtils.enterValue('#amount', formData.amount);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
     PageUtils.urlCheck('/list');
-    cy.contains(loanEnums.loanPaymentRecieved).should('exist');
+    cy.contains('Loan Repayment Received').should('exist');
   });
 
-  xit('should test: Loan By Committee - add Guarantor', () => {
+  it('should test: Loan By Committee - add Guarantor', () => {
     // Create a committee contact to be used with contact lookup
     ContactListPage.goToPage();
-    PageUtils.clickButton(loanEnums.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
 
     // Create individual
     ContactListPage.goToPage();
-    PageUtils.clickButton(loanEnums.new);
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton(loanEnums.save);
+    PageUtils.clickButton('Save');
 
     // Create report to add loan too
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton(loanEnums.saveAndCont);
+    PageUtils.clickButton('Save and continue');
 
     // Navigate to loans
-    PageUtils.clickSidebarItem(loanEnums.addLoansAndDebts);
-    PageUtils.clickLink(loanEnums.loans);
-    PageUtils.clickLink(loanEnums.loanByCommittee);
+    PageUtils.clickSidebarItem('Add loans and debts');
+    PageUtils.clickLink('LOANS');
+    PageUtils.clickLink('Loan By Committee');
 
+    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
     PageUtils.searchBoxInput(committeeFormData.committee_id);
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickButton(loanEnums.saveAndAddGuarantor);
+    PageUtils.clickButton('Save & add loan guarantor');
 
-    PageUtils.urlCheck(loanEnums.addGuarantorUrl);
+    PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
     PageUtils.searchBoxInput(individualContactFormData.last_name);
     cy.get('#amount').safeType(formData['amount']);
-    PageUtils.clickButton(loanEnums.saveAndAddGuarantor);
-    PageUtils.urlCheck(loanEnums.createSubTransaction + loanEnums.addGuarantorUrl);
-    PageUtils.clickButton(loanEnums.cancel, '', true);
-    PageUtils.urlCheck(loanEnums.createSubTransaction + loanEnums.addGuarantorUrl);
-    PageUtils.clickButton(loanEnums.cancel, '', true);
+    PageUtils.clickButton('Save & add loan guarantor');
+    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+    PageUtils.clickButton('Cancel', '', true);
+    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+    PageUtils.clickButton('Cancel', '', true);
 
     PageUtils.urlCheck('/list');
-    cy.contains(loanEnums.loanByCommittee).click();
+    cy.contains('Loan By Committee').click();
     PageUtils.urlCheck('/list/');
     cy.contains(individualContactFormData.last_name).should('exist');
   });
