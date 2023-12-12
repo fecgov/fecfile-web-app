@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'f3x',
     loadChildren: () => import('./f3x/f3x.module').then((m) => m.F3XModule),
   },
+  {
+    path: 'f99',
+    loadChildren: () => import('./f99/f99.module').then((m) => m.F99Module),
+  },
   { path: '**', redirectTo: '' },
 ];
 
