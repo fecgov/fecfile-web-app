@@ -10,6 +10,7 @@ import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CashOnHand } from 'app/shared/models/form-3x.model';
 import { FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.utils';
+import { SidebarState } from '../../sidebar.component';
 
 @Component({
   selector: 'app-f1m-menu',
