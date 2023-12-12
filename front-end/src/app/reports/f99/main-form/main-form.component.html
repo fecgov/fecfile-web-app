@@ -13,10 +13,18 @@
       </div>
     </div>
 
+    <h3>Committee</h3>
     <div class="grid">
       <div class="col-9">
         <label>COMMITTEE NAME</label>
-        <input type="text" pInputText id="committee_name" formControlName="committee_name" [readonly]="true" />
+        <input
+          type="text"
+          pInputText
+          id="committee_name"
+          formControlName="committee_name"
+          [readonly]="true"
+          ngClass="readonly"
+        />
         <app-error-messages></app-error-messages>
       </div>
       <div class="col-3">
@@ -27,12 +35,14 @@
           id="filer_committee_id_number"
           formControlName="filer_committee_id_number"
           [readonly]="true"
+          ngClass="readonly"
         />
         <app-error-messages></app-error-messages>
       </div>
     </div>
     <p-divider></p-divider>
 
+    <h3>Address</h3>
     <app-address-input [readonly]="true" [templateMap]="this.templateMap" [form]="this.form"></app-address-input>
     <p-divider></p-divider>
 
