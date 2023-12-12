@@ -1,7 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { Candidate } from '../models/candidate.model';
@@ -14,9 +13,9 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
   providedIn: 'root',
 })
 export class FecApiService {
-  private apiKey: string | null = environment.fecApiKey;
 
-  constructor(private http: HttpClient, private apiService: ApiService) {}
+  constructor(private http: HttpClient, private apiService: ApiService) {
+  }
 
   getHeaders() {
     return {
@@ -24,28 +23,26 @@ export class FecApiService {
     };
   }
 
-  getQueryParams(queryParams: QueryParamsType = {}) {
-    const allParams: QueryParamsType = { ...{ api_key: this.apiKey || '' }, ...queryParams };
-    return new HttpParams({ fromObject: allParams });
-  }
+  // getQueryParams(queryParams: QueryParamsType = {}) {
+  //   const allParams: QueryParamsType = { ...{ api_key: this.apiKey || '' }, ...queryParams };
+  //   return new HttpParams({ fromObject: allParams });
+  // }
 
   /**
    * Gets the candidate details.
    *
    * @return     {Observable}  The candidate details.
    */
-  public getCandidateDetails(candidateId: string | null): Observable<Candidate> {
-    if (!candidateId) {
+  public getCandidateDetails(candidate_id: string | null): Observable<Candidate> {
+    if (!candidate_id) {
       throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
     }
-    const headers = this.getHeaders();
-    const params = this.getQueryParams();
-    return this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}candidate/${candidateId}/`, {
-        headers: headers,
-        params: params,
+    return this.apiService
+      .get<FecApiPaginatedResponse>('/contacts/candidate/', {
+        candidate_id
       })
       .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as Candidate) || undefined));
+
   }
 
   /**
