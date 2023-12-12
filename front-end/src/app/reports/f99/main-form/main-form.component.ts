@@ -26,9 +26,10 @@ import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Form99 } from 'app/shared/models/form-99.model';
+import { F99FormTypes, Form99 } from 'app/shared/models/form-99.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { Form99Service } from 'app/shared/services/form-99.service';
 
 @Component({
   selector: 'app-main-form',
@@ -78,7 +79,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     private store: Store,
     private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
-    private form3XService: Form3XService,
+    private form99Service: Form99Service,
     private messageService: MessageService,
     protected router: Router,
     private activatedRoute: ActivatedRoute,
@@ -88,6 +89,16 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const reportId = this.activatedRoute.snapshot.data['reportId'];
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        if (reportId && report) {
+          this.form.patchValue(report);
+        }
+      });
+
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
@@ -105,15 +116,38 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
       zip: committeeAccount.zip,
       filer_committee_id_number: committeeAccount.committee_id,
       committee_name: committeeAccount.name,
+      form_type: F99FormTypes.F99,
     });
-    console.log(committeeAccount);
   }
 
-  save(doContinue?: string): void {
-    return;
+  public goBack() {
+    this.router.navigateByUrl('/reports');
   }
 
-  goBack(): void {
-    return;
+  public save(jump: 'continue' | undefined = undefined) {
+    this.formSubmitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    const summary: Form99 = Form99.fromJSON(ValidateUtils.getFormValues(this.form, f99Schema, this.formProperties));
+    //Observables are *defined* here ahead of their execution
+    const create$ = this.form99Service.create(summary, this.formProperties);
+
+    //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
+    create$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+      if (jump === 'continue') {
+        this.router.navigateByUrl(`/reports/f99/web-print/${report.id}`);
+      } else {
+        this.router.navigateByUrl('/reports');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      }
+    });
   }
 }

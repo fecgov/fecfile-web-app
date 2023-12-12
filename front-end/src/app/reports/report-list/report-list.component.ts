@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report } from '../../shared/models/report.model';
+import { Report, ReportTypes } from '../../shared/models/report.model';
 import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Router } from '@angular/router';
@@ -68,11 +68,18 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   public override editItem(item: Report): void {
     if (!this.itemService.isEditable(item)) {
-      this.router.navigateByUrl(`/reports/f3x/submit/status/${item.id}`);
-    } else if (item.id === this.cashOnHand.report_id) {
-      this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-    } else {
-      this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+      this.router.navigateByUrl(`/reports/${item.report_type}/submit/status/${item.id}`);
+      return;
+    }
+
+    if (item.report_type === ReportTypes.F3X) {
+      if (item.id === this.cashOnHand.report_id) {
+        this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
+      } else {
+        this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+      }
+    } else if (item.report_type === ReportTypes.F99) {
+      this.router.navigateByUrl(`/reports/f99/create/${item.id}`);
     }
   }
 
