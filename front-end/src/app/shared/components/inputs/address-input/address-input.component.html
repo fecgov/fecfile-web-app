@@ -3,7 +3,7 @@
     <div class="col-6">
       <div class="field">
         <label for="street_1">STREET ADDRESS</label>
-        <input type="text" pInputText id="street_1" [formControlName]="streetOneFieldName" />
+        <input type="text" pInputText id="street_1" [formControlName]="streetOneFieldName" [readonly]="readonly" />
         <app-error-messages
           [form]="form"
           [fieldName]="streetOneFieldName"
@@ -14,7 +14,7 @@
     <div class="col-6">
       <div class="field">
         <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-        <input type="text" pInputText id="street_2" [formControlName]="streetTwoFieldName" />
+        <input type="text" pInputText id="street_2" [formControlName]="streetTwoFieldName" [readonly]="readonly" />
         <app-error-messages
           [form]="form"
           [fieldName]="streetTwoFieldName"
@@ -27,7 +27,7 @@
     <div class="col-6">
       <div class="field">
         <label for="city">CITY</label>
-        <input type="text" pInputText id="city" [formControlName]="cityFieldName" />
+        <input type="text" pInputText id="city" [formControlName]="cityFieldName" [readonly]="readonly" />
         <app-error-messages
           [form]="form"
           [fieldName]="cityFieldName"
@@ -44,6 +44,7 @@
           [options]="stateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
+          [readonly]="readonly"
         ></p-dropdown>
         <app-error-messages
           [form]="form"
@@ -55,7 +56,7 @@
     <div class="col-3">
       <div class="field">
         <label for="zip">ZIP/POSTAL CODE</label>
-        <input type="text" pInputText id="zip" [formControlName]="zipFieldName" />
+        <input type="text" pInputText id="zip" [formControlName]="zipFieldName" [readonly]="readonly" />
         <app-error-messages
           [form]="form"
           [fieldName]="zipFieldName"
