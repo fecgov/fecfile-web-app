@@ -18,7 +18,7 @@ export class TransactionSchC2Service extends TransactionService {
     ordering?: string,
     params?: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] }
   ): Observable<ListRestResponse> {
-    return super.getTableData(pageNumber, ordering, { ...params, schedules: 'A' });
+    return super.getTableData(pageNumber, ordering, { ...params, schedules: 'C2' });
   }
 
   constructor(override apiService: ApiService, override datePipe: DatePipe) {
