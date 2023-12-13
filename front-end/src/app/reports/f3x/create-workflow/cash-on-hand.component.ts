@@ -57,6 +57,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       ...{
+        calculation_status: null,
         cash_on_hand_date: this.form.controls['cash_on_hand_date'].value,
         L6a_year_for_above_ytd: String(this.form.controls['cash_on_hand_date'].value.getYear() + 1900),
       },

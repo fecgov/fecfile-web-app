@@ -223,9 +223,3 @@ export const CategoryCodeLabels: LabelList = [
   ['011', '011 Political Contributions'],
   ['012', '012 Donations'],
 ];
-
-export const LineIdentifierLabels: LabelList = [
-  // Schedule A itemization-specific labels
-  ['SA11AI', '11(a)(i)'],
-  ['SA11AII', '11(a)(ii)'],
-];

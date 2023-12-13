@@ -1,18 +1,18 @@
 <div class="card">
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="rowsPerPage"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-      [showCurrentPageReport]="true"
-      sortField="line_label_order_key,created"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+    [showCurrentPageReport]="true"
+    sortField="line_label_order_key,created"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
@@ -38,17 +38,17 @@
           Line
           <p-sortIcon field="line_label_order_key"></p-sortIcon>
         </th>
-        <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column"
-            role="columnheader">
+        <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
           Type
           <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
-        <th pSortableColumn="name" id="name-column" role="columnheader">Name
+        <th pSortableColumn="name" id="name-column" role="columnheader">
+          Name
           <p-sortIcon field="name"></p-sortIcon>
         </th>
-        <th pSortableColumn="contribution_date" id="date-column" role="columnheader">
+        <th pSortableColumn="date" id="date-column" role="columnheader">
           Date
-          <p-sortIcon field="contribution_date"></p-sortIcon>
+          <p-sortIcon field="date"></p-sortIcon>
         </th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
           Memo
@@ -70,17 +70,22 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td class="no-wrap">
-          {{ (item.form_type | label : lineLabels) || item.line_label }}
+          {{ item.line_label }}
         </td>
         <td>
           <a [routerLink]="[item?.id]">{{
-              item.transaction_type_identifier | label : scheduleTransactionTypeLabels
-            }}</a>
+            item.transaction_type_identifier | label : scheduleTransactionTypeLabels
+          }}</a>
           <div *ngIf="item?.force_unaggregated === true"><strong>Unaggregated</strong></div>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
-          {{ item.name }}
+          {{
+            item[item.transactionType.templateMap.organization_name] ||
+              item[item.transactionType.templateMap.last_name] +
+                ', ' +
+                item[item.transactionType.templateMap.first_name]
+          }}
         </td>
         <td>
           {{ item[item.transactionType.templateMap.date] | fecDate }}

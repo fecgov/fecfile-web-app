@@ -3,6 +3,10 @@ import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
+import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
+import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
 
 export class SchATransaction extends Transaction {
   entity_type: string | undefined;
@@ -47,6 +51,7 @@ export class SchATransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   reattribution_redesignation_tag: string | undefined;
+  reatt_redes_total?: number; // Amount of total money that has been reattributed for a transaction.
 
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
@@ -54,7 +59,7 @@ export class SchATransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchATransaction {
-    const transaction = plainToClass(SchATransaction, json);
+    let transaction = plainToClass(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
@@ -66,6 +71,23 @@ export class SchATransaction extends Transaction {
       transaction.children = transaction.children.map(function (child) {
         return getFromJSON(child, depth - 1);
       });
+    }
+    switch (transaction.reattribution_redesignation_tag) {
+      case ReattRedesTypes.REATTRIBUTED: {
+        transaction = ReattributedUtils.overlayTransactionProperties(transaction);
+        break;
+      }
+      case ReattRedesTypes.REATTRIBUTION_TO: {
+        transaction = ReattributionToUtils.overlayTransactionProperties(transaction);
+        break;
+      }
+      case ReattRedesTypes.REATTRIBUTION_FROM: {
+        transaction = ReattributionFromUtils.overlayTransactionProperties(transaction);
+        break;
+      }
+    }
+    if (depth > 0 && transaction.reatt_redes) {
+      transaction.reatt_redes = getFromJSON(transaction.reatt_redes, depth - 1);
     }
     return transaction;
   }

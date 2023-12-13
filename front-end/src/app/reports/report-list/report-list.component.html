@@ -17,18 +17,18 @@
   </p-toolbar>
 
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="10"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
-      [showCurrentPageReport]="true"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+    [showCurrentPageReport]="true"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -40,9 +40,9 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th pSortableColumn="TBD" id="form-type-column" role="columnheader">
+        <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
           Form type
-          <p-sortIcon field="TBD"></p-sortIcon>
+          <p-sortIcon field="form_type"></p-sortIcon>
         </th>
         <th pSortableColumn="report_code_label" id="report-code-column" role="columnheader">
           Type of report
@@ -60,9 +60,9 @@
           Version
           <p-sortIcon field="form_type"></p-sortIcon>
         </th>
-        <th pSortableColumn="date_filed" id="date-filed-column" role="columnheader">
+        <th pSortableColumn="upload_submission__created" id="date-filed-column" role="columnheader">
           Date filed
-          <p-sortIcon field="date_filed"></p-sortIcon>
+          <p-sortIcon field="upload_submission__created"></p-sortIcon>
         </th>
         <th id="actions" role="columnheader">Actions</th>
       </tr>
@@ -73,7 +73,7 @@
         <td>{{ item.report_code_label }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
-          >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
+            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
           >
         </td>
         <td>{{ item.report_status }}</td>

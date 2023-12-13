@@ -50,6 +50,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     public router: Router
   ) {
     super(messageService, confirmationService, elementRef);
+    this.caption = "Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.";
   }
 
   override ngOnInit() {

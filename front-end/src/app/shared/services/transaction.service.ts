@@ -9,6 +9,9 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
+// import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
+// import { SchATransaction } from '../models/scha-transaction.model';
+// import { SchBTransaction } from '../models/schb-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -165,6 +168,11 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
+  public multisave(transactions: Transaction[]): Observable<Transaction[]> {
+    const payload = transactions.map((t) => this.preparePayload(t));
+    return this.apiService.put<Transaction[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/`, payload);
+  }
+
   /**
    * Update and prepare a transaction payload as a JSON object to be received by the API.
    * This involves removing excess properties such and transactionType while
@@ -175,6 +183,7 @@ export class TransactionService implements TableListService<Transaction> {
    * @param transaction
    */
   private preparePayload(transaction: Transaction) {
+    if (typeof transaction === 'string') return transaction;
     const payload = transaction.toJson();
 
     // Add flags to the payload used for API processing
