@@ -1,0 +1,64 @@
+h1 {
+  color: #212121;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 36px;
+}
+
+.field {
+  display: grid;
+}
+
+.modal-dialog {
+  width: 512px;
+  background-color: #FFFFFF;
+  border-radius: 4px;
+  box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
+}
+
+.modal-header {
+  border-bottom: 2px solid #212121;
+  width: 448px;
+  margin: auto;
+  padding-bottom: 10px;
+}
+
+.modal-body {
+  padding: 64px 16px;
+  margin-left: 25px;
+  margin-right: 25px;
+
+}
+
+label {
+  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-weight: bold;
+  font-size: 14px;
+  color: #212121;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.dropdown, .dropdown-toggle {
+  width: 400px !important;
+}
+
+.dropdown-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  border: 2px solid #aeb0b5;
+  font-size: 14px;
+}
+
+.modal-footer {
+  justify-content: center;
+  border-top: 0;
+  padding-top: 0;
+  padding-bottom: 32px;
+}
+
+.option {
+  font-size: 14px;
+}
