@@ -67,4 +67,14 @@ describe('TransactionGuarantorsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have delete', () => {
+    component.reportIsEditable = true;
+    expect(component.rowActions[0].isAvailable()).toEqual(false);
+    expect(component.rowActions[1].isAvailable()).toEqual(true);
+    expect(component.rowActions[2].isAvailable()).toEqual(true);
+    expect(component.rowActions[0].isEnabled({})).toEqual(true);
+    expect(component.rowActions[1].isEnabled({})).toEqual(true);
+    expect(component.rowActions[2].isEnabled({})).toEqual(true);
+  });
 });
