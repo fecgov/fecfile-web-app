@@ -8,7 +8,3 @@ export const sidebarStateReducer = createReducer<SidebarState | undefined, Actio
   initialState,
   on(setSidebarStateAction, (_state, update) => update.payload)
 );
-export const sidebarVisibleReducer = createReducer<boolean, Action>(
-  true,
-  on(toggleSidebarVisibleAction, (_state) => !_state),
-);

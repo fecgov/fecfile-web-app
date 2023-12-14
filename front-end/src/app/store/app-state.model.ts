@@ -11,5 +11,4 @@ export interface AppState {
   activeReport: Report | undefined;
   cashOnHand: CashOnHand;
   sidebarState?: SidebarState;
-  sidebarVisible: boolean;
 }
