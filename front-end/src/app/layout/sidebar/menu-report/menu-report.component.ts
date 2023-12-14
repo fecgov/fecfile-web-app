@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, map, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
@@ -11,7 +11,8 @@ import { ReportService } from '../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { reduce } from 'lodash';
 
 @Component({
   selector: 'app-menu-report',
@@ -23,13 +24,23 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
   activeReport$?: Observable<Form3X | undefined>;
   items$: Observable<MenuItem[]> = of([]);
 
-  constructor(private store: Store, private reportService: ReportService, private route: ActivatedRoute) {
+  constructor(
+    private store: Store,
+    private reportService: ReportService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     super();
+  }
+
+  getLastChild(route: ActivatedRoute): ActivatedRoute {
+    if (route.firstChild) return this.getLastChild(route.firstChild);
+    return route;
   }
 
   ngOnInit(): void {
     this.activeReport$ =
-      this.route.firstChild?.firstChild?.firstChild?.data.pipe(
+      this.getLastChild(this.route).data.pipe(
         map(({ report }) => {
           return report;
         })
