@@ -12,8 +12,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
+import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -41,13 +41,13 @@ describe('TransactionGuarantorsComponent', () => {
           },
         },
         {
-          provide: TransactionSchAService,
+          provide: TransactionSchC2Service,
           useValue: {
             get: (transactionId: string) =>
               of(
-                SchATransaction.fromJSON({
+                SchC2Transaction.fromJSON({
                   id: transactionId,
-                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
+                  transaction_type_identifier: 'LOAN_GUARANTOR',
                 })
               ),
             getTableData: () => of([]),
