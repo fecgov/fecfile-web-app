@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -10,12 +10,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
 import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
-import { filter, Subject } from 'rxjs';
+import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
-import { Event, NavigationEnd, Router } from '@angular/router';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
