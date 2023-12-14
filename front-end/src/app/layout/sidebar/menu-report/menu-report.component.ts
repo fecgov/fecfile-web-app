@@ -27,11 +27,12 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.route.data.pipe(
-      map(({ report }) => {
-        return report;
-      })
-    );
+    this.activeReport$ =
+      this.route.firstChild?.firstChild?.firstChild?.data.pipe(
+        map(({ report }) => {
+          return report;
+        })
+      ) ?? of(undefined);
 
     this.items$ = combineLatest([
       this.store.select(selectCashOnHand),
