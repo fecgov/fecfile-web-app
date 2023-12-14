@@ -8,6 +8,7 @@ import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/models/report.model';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { spinnerOffAction, spinnerOnAction } from "../../../store/spinner.actions";
 
 @Component({
   selector: 'app-report-web-print',
@@ -17,7 +18,6 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 export class ReportWebPrintComponent extends DestroyerComponent implements OnInit {
   report: Form3X = new Form3X();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  processing = false;
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
@@ -49,13 +49,13 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
     } else {
       switch (report?.webprint_submission.fec_status) {
         case 'COMPLETED':
-          this.processing = false;
+          this.store.dispatch(spinnerOffAction());
           this.webPrintStage = 'success';
           this.downloadURL = report.webprint_submission.fec_image_url;
           this.submitDate = report.webprint_submission.created;
           break;
         case 'FAILED':
-          this.processing = false;
+          this.store.dispatch(spinnerOffAction());
           this.webPrintStage = 'failure';
           this.printError = report.webprint_submission.fecfile_error;
           break;
@@ -84,7 +84,7 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
 
   public submitPrintJob() {
     if (this.report.id) {
-      this.processing = true;
+      this.store.dispatch(spinnerOnAction());
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }

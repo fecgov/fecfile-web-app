@@ -14,7 +14,6 @@ import {
 export class TransactionNavigationComponent {
   @Input() isEditable = true;
   @Input() transaction?: Transaction;
-  @Input() processing = false;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
 
   handleNavigate($event: NavigationEvent) {

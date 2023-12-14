@@ -51,7 +51,7 @@
       <button
         pButton
         pRipple
-        [disabled]="processing"
+        appSingleClick
         label="Compile PDF"
         class="p-button-warning button-full-width"
         (click)="submitPrintJob()"
@@ -71,7 +71,7 @@
       <button
         pButton
         pRipple
-        [disabled]="processing"
+        appSingleClick
         label="Compile New PDF"
         class="p-button-warning button-full-width"
         (click)="submitPrintJob()"
