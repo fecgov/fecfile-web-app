@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, of, switchMap, takeUntil, map } from 'rxjs';
+import { combineLatest, Observable, of, switchMap, takeUntil, map, filter } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
@@ -26,13 +26,19 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
     super();
   }
 
+  getLastChild(route: ActivatedRoute): ActivatedRoute {
+    if (route.firstChild) return this.getLastChild(route.firstChild);
+    return route;
+  }
+
   ngOnInit(): void {
-    this.activeReport$ =
-      this.route.firstChild?.firstChild?.firstChild?.data.pipe(
-        map(({ report }) => {
-          return report;
-        })
-      ) ?? of(undefined);
+    this.activeReport$ = this.getLastChild(this.route).data.pipe(
+      takeUntil(this.destroy$),
+      map(({ report }) => {
+        return report;
+      }),
+      filter((report) => !!report)
+    );
 
     this.items$ = combineLatest([
       this.store.select(selectCashOnHand),
