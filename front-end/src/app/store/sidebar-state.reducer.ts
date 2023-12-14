@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { SidebarState } from 'app/layout/sidebar/sidebar.component';
-import { setSidebarStateAction, toggleSidebarVisibleAction } from './sidebar-state.actions';
+import { setSidebarStateAction } from './sidebar-state.actions';
 
 export const initialState: SidebarState | undefined = undefined;
 
