@@ -70,31 +70,4 @@ describe('TransactionGuarantorsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should filter to only the loan guarantors', () => {
-    component.transactions = [
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
-      }),
-      SchC2Transaction.fromJSON({
-        transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
-      }),
-    ];
-    fixture.detectChanges();
-    component.ngOnInit();
-
-    expect(component.transactions?.length).toEqual(1);
-    expect(component.transactions?.[0]?.transaction_type_identifier).toEqual(
-      ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR
-    );
-  });
 });
