@@ -39,7 +39,8 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     report_id: undefined,
     value: undefined,
   };
-  backdoorCodeHelpText = 'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
+  backdoorCodeHelpText =
+    'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
   showBackdoorCode = false;
 
   constructor(
@@ -60,7 +61,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report;
+        this.report = report as Form3X;
       });
     this.store
       .select(selectCommitteeAccount)
@@ -82,8 +83,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .subscribe((value) => {
         this.showBackdoorCode = value;
         if (value) {
-          this.form.addControl('backdoor_code', new FormControl('',
-            [Validators.required, Validators.maxLength(16)]));
+          this.form.addControl('backdoor_code', new FormControl('', [Validators.required, Validators.maxLength(16)]));
         } else {
           this.form.removeControl('backdoor_code');
         }
