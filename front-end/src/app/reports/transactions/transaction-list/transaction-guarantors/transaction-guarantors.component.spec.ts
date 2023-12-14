@@ -13,10 +13,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC2Transaction, ScheduleC2TransactionTypes } from 'app/shared/models/schc2-transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
