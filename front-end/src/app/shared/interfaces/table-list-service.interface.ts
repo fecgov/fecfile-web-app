@@ -7,6 +7,8 @@ export interface TableListService<T> {
     ordering?: string,
     params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
   ): Observable<ListRestResponse>;
+
   delete(item: T): Observable<null>;
-  update?: { (item: T, fieldsToValidate?: string[]): Observable<T> };
+
+  update?(item: T, spinner: boolean, fieldsToValidate?: string[]): Observable<T>;
 }

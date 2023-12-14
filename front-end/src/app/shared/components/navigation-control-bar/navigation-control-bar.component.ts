@@ -14,7 +14,6 @@ import {
 export class NavigationControlBarComponent {
   @Input() navigationControls: TransactionNavigationControls = new TransactionNavigationControls();
   @Input() transaction?: Transaction;
-  @Input() processing = false;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
 
   getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {

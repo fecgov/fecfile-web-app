@@ -20,7 +20,6 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
   report: Form3X | undefined;
   formSubmitted = false;
-  processing = false;
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   constructor(
@@ -49,7 +48,6 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
   public save(): void {
     this.formSubmitted = true;
-    this.processing = true;
     if (this.form.invalid) {
       return;
     }
@@ -64,9 +62,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.form3XService.update(payload, this.formProperties).subscribe(() => {
-      this.processing = false;
-
+    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
       // Write cash on hand to store
       this.store.dispatch(
         setCashOnHandAction({

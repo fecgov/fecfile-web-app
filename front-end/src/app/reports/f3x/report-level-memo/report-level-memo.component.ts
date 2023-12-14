@@ -21,7 +21,6 @@ import { takeUntil } from 'rxjs';
 export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
   readonly text4kFormProperty = 'text4000';
-  processing = false;
 
   formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
@@ -73,7 +72,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   save() {
     this.formSubmitted = true;
-    this.processing = true;
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
 
     const payload: MemoText = MemoText.fromJSON({
@@ -86,7 +84,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
     if (this.assignedMemoText.id) {
       this.memoTextService.update(payload, this.formProperties).subscribe(() => {
-        this.processing = false;
         this.router.navigateByUrl(nextUrl);
         this.messageService.add({
           severity: 'success',
@@ -97,7 +94,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       });
     } else {
       this.memoTextService.create(payload, this.formProperties).subscribe(() => {
-        this.processing = false;
         this.router.navigateByUrl(nextUrl);
         this.messageService.add({
           severity: 'success',

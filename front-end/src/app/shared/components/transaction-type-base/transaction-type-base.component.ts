@@ -22,6 +22,7 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { spinnerOffAction } from "../../../store/spinner.actions";
 
 @Component({
   template: '',
@@ -35,7 +36,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
-  processing = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
@@ -106,9 +106,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   writeToApi(payload: Transaction): Observable<Transaction> {
     if (payload.id) {
-      return this.transactionService.update(payload);
+      return this.transactionService.update(payload, true);
     } else {
-      return this.transactionService.create(payload);
+      return this.transactionService.create(payload, true);
     }
   }
 
@@ -117,7 +117,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
-      this.processing = false;
       throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
@@ -131,14 +130,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
-      const responseFromApi = this.writeToApi(payload);
-      responseFromApi.subscribe((transaction) => {
-        this.processing = false;
+      this.writeToApi(payload).subscribe((transaction) => {
+        this.store.dispatch(spinnerOffAction());
         navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
         this.navigateTo(navigationEvent);
       });
     } else {
-      this.processing = false;
+      this.store.dispatch(spinnerOffAction());
     }
   }
 
@@ -216,11 +214,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     if (navigationEvent.action === NavigationAction.SAVE) {
       if (this.isInvalid()) return;
-      this.processing = true;
       this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
-        else this.processing = false;
+        else this.store.dispatch(spinnerOffAction());
       });
     } else {
       this.navigateTo(navigationEvent);

@@ -7,7 +7,8 @@
     [icon]="navigationControl?.icon || ''"
     [class]="navigationControl?.ngClass || ''"
     (click)="click()"
-    [disabled]="isDisabled() || processing"
+    [disabled]="isDisabled()"
+    appSingleClick
   ></button>
   <p-dropdown
     *ngIf="controlType === 'dropdown'"
@@ -20,7 +21,8 @@
     styleClass="navigation-dropdown"
     panelStyleClass="navigation-dropdown-panel"
     (onChange)="onDropdownChange($event)"
-    [disabled]="isDisabled() || processing"
+    [disabled]="isDisabled()"
+    appSingleClick
     [group]="isGroupedDropdown"
   >
     <ng-template let-group pTemplate="group">

@@ -20,6 +20,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
+import { spinnerOffAction } from "../../../store/spinner.actions";
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -133,7 +134,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
-      this.processing = false;
+      this.store.dispatch(spinnerOffAction());
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
 
@@ -151,7 +152,6 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (ReattRedesUtils.isReattRedes(payload)) {
       const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
       this.transactionService.multisave(payloads).subscribe((response) => {
-        this.processing = false;
         navigationEvent.transaction = response[0];
         this.navigateTo(navigationEvent);
       });

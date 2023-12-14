@@ -33,7 +33,6 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  processing = false;
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
@@ -128,7 +127,6 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
     if (this.form.invalid) {
       return;
     }
-    this.processing = true;
     let addressFields: object;
     if (this.form.value.change_of_address === false) {
       addressFields = {
@@ -153,8 +151,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.form3XService.update(payload, this.formProperties).subscribe(() => {
-      this.processing = false;
+    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
       if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }

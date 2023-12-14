@@ -135,11 +135,9 @@ describe('TransactionTypeBaseComponent', () => {
     });
     it('should stop processing and throw an error if there is no transaction', () => {
       component.transaction = undefined;
-      component.processing = true;
       expect(function () {
         component.save(navEvent);
       }).toThrow(new Error('Fecfile: No transactions submitted for single-entry transaction form.'));
-      expect(component.processing).toBeFalsy();
     });
   });
 
@@ -148,7 +146,6 @@ describe('TransactionTypeBaseComponent', () => {
       navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
     })
     it('should set processing to false if no transaction type identifier on payload', () => {
-      component.processing = true;
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         component.form,
@@ -156,19 +153,15 @@ describe('TransactionTypeBaseComponent', () => {
       );
       payload.transaction_type_identifier = undefined;
       component.processPayload(payload, navEvent);
-      expect(component.processing).toBeFalsy();
     });
 
     it('should update data and then set processing to false', () => {
-      component.processing = true;
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         component.form,
         component.formProperties
       );
-      expect(component.processing).toBeTruthy();
       component.processPayload(payload, navEvent);
-      expect(component.processing).toBeFalsy();
       expect(transactionServiceSpy.update).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
     })
@@ -248,7 +241,6 @@ describe('TransactionTypeBaseComponent', () => {
       it('should confirm with user before proceeding', () => {
         component.handleNavigate(navEvent);
         expect(confirmSpy).toHaveBeenCalled();
-        expect(component.processing).toBeTruthy();
       });
 
       it('should stop processing if user rejects', fakeAsync(() => {
@@ -257,7 +249,6 @@ describe('TransactionTypeBaseComponent', () => {
         });
         component.handleNavigate(navEvent);
         tick(500);
-        expect(component.processing).toBeFalsy();
       }));
 
       it('should save on confirmation', fakeAsync(() => {

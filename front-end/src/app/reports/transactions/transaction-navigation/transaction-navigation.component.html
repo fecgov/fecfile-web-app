@@ -5,7 +5,6 @@
         <app-navigation-control
           [navigationControl]="navigationControl"
           [transaction]="transaction"
-          [processing]="processing"
           (navigate)="handleNavigate($event)"
         ></app-navigation-control>
       </div>
@@ -17,7 +16,6 @@
   <p-divider></p-divider>
   <app-navigation-control-bar
     [navigationControls]="getNavigationControls()"
-    [processing]="processing"
     [transaction]="transaction"
     (navigate)="handleNavigate($event)"
     [class]="isEditable ? '' : 'flex-center'"

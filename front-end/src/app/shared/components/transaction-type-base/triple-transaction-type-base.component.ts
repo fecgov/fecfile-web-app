@@ -103,7 +103,6 @@ export abstract class TripleTransactionTypeBaseComponent
         this.childForm_2
       );
     } else {
-      this.processing = false;
       throw new Error('Fecfile: No transactions submitted for triple-entry transaction form.');
     }
 

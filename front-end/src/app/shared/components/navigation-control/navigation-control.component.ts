@@ -27,7 +27,6 @@ import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transacti
 export class NavigationControlComponent implements OnInit {
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
-  @Input() processing = false;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -57,7 +56,6 @@ export class NavigationControlComponent implements OnInit {
   }
 
   click(): void {
-    this.processing = true;
     let destinationTransactionType: TransactionTypes | undefined;
     // Handle CHILD case by determining child TransactionType
     if (
