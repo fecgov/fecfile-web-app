@@ -4,12 +4,10 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -35,11 +33,8 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
   loading: 0 | 1 | 2 = 0;
-  cashOnHand: CashOnHand = {
-    report_id: undefined,
-    value: undefined,
-  };
-  backdoorCodeHelpText = 'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
+  backdoorCodeHelpText =
+    'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
   showBackdoorCode = false;
 
   constructor(
@@ -66,10 +61,6 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
-    this.store
-      .select(selectCashOnHand)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cashOnHand: CashOnHand) => (this.cashOnHand = cashOnHand));
 
     this.form.addControl('backdoor_code_yes_no', new FormControl());
 
@@ -82,8 +73,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .subscribe((value) => {
         this.showBackdoorCode = value;
         if (value) {
-          this.form.addControl('backdoor_code', new FormControl('',
-            [Validators.required, Validators.maxLength(16)]));
+          this.form.addControl('backdoor_code', new FormControl('', [Validators.required, Validators.maxLength(16)]));
         } else {
           this.form.removeControl('backdoor_code');
         }

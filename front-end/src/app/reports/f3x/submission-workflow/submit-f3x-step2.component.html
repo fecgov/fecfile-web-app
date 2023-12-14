@@ -150,7 +150,7 @@
           </div>
         </div>
       </div>
-      <div class="grid" *ngIf="cashOnHand.value !== undefined">
+      <div class="grid" *ngIf="report?.L6a_year_for_above_ytd">
         <div class="col-4"></div>
         <div class="col-4">
           <button
@@ -179,7 +179,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="grid" *ngIf="!!!cashOnHand.value">
+      <div class="grid" *ngIf="!!!report?.L6a_year_for_above_ytd">
         <div class="col-12">*** You may not submit a report until you have entered an amount for Cash on Hand ***</div>
       </div>
     </form>

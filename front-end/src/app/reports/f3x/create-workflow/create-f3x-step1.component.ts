@@ -33,7 +33,6 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { MessageService } from 'primeng/api';
 import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
-import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
@@ -93,10 +92,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
-        this.form?.patchValue({filing_frequency: filingFrequency, form_type: 'F3XN'});
-        this.form?.patchValue({report_type_category: this.getReportTypeCategories()[0]});
+        this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
+        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
-        this.form?.patchValue({report_code: this.getFirstEnabledReportCode()});
+        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
         this.form
           ?.get('filing_frequency')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -104,13 +103,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
             this.form.patchValue({
               report_type_category: this.getReportTypeCategories()[0],
             });
-            this.form?.patchValue({report_code: this.getFirstEnabledReportCode()});
+            this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
         this.form
           ?.get('report_type_category')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
-            this.form.patchValue({report_code: this.getFirstEnabledReportCode()});
+            this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
 
         this.existingCoverage = existingCoverage;
@@ -118,7 +117,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
-    this.form.controls['coverage_through_date'].addValidators([Validators.required, DateUtils.dateAfter(this.form.controls['coverage_from_date'])]);
+    this.form.controls['coverage_through_date'].addValidators([
+      Validators.required,
+      DateUtils.dateAfter(this.form.controls['coverage_from_date']),
+    ]);
     this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
     });
@@ -138,7 +140,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           isElectionYear,
           filingFrequency
         );
-        this.form.patchValue({coverage_from_date, coverage_through_date});
+        this.form.patchValue({ coverage_from_date, coverage_through_date });
       }
     });
 
@@ -177,7 +179,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   getErrors(errors: ValidationErrors | null, newError: ValidationErrors | null): ValidationErrors | null {
     const otherErrors = !_.isEmpty(_.omit(errors, 'invaliddate')) ? _.omit(errors, 'invaliddate') : null;
-    return otherErrors || newError ? {...otherErrors, ...newError} : null;
+    return otherErrors || newError ? { ...otherErrors, ...newError } : null;
   }
 
   findSurrounding(from: Date, through: Date, existingCoverage: F3xCoverageDates[]): F3xCoverageDates | undefined {
@@ -194,7 +196,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
       ` ${this.fecDatePipe.transform(collision.coverage_from_date)} -` +
       ` ${this.fecDatePipe.transform(collision.coverage_through_date)}`;
-    return {invaliddate: {msg: message}};
+    return { invaliddate: { msg: message } };
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
@@ -253,36 +255,25 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
     //Observables are *defined* here ahead of their execution
     const create$ = this.form3XService.create(summary, this.formProperties);
-    // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
-    const tableData$ = this.reportService.getTableData();
-    const cashOnHand$ = this.store.select(selectCashOnHand);
 
-    //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
-    create$
-      .pipe(
-        switchMap((report) => tableData$.pipe(map(() => report))),
-        switchMap((report) => {
-          return zip(of(report), cashOnHand$);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(([report, coh]) => {
-        if (jump === 'continue') {
-          if (coh.report_id === report.id) {
-            this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
-          } else {
-            this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-          }
+    //Create the report
+    create$.subscribe((report) => {
+      if (jump === 'continue') {
+        if (report.is_first) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
         } else {
-          this.router.navigateByUrl('/reports');
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Contact Updated',
-            life: 3000,
-          });
+          this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
         }
-      });
+      } else {
+        this.router.navigateByUrl('/reports');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      }
+    });
   }
 }
 
