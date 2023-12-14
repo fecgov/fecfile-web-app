@@ -1,9 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ActivatedRoute } from '@angular/router';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
@@ -32,7 +29,6 @@ describe('ReportDetailedSummaryComponent', () => {
       declarations: [ReportDetailedSummaryComponent],
       providers: [
         ReportService,
-        provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -60,8 +56,6 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('CALCULATING', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'CALCULATING';
-      TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
-      TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
       return component.refreshSummary();
     });
@@ -73,8 +67,6 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('SUCCEEDED', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'SUCCEEDED';
-      TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
-      TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
       return component.refreshSummary();
     });

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, delay, of, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportService } from 'app/shared/services/report.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
@@ -18,10 +16,10 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
   report: Form3X = new Form3X();
 
   constructor(
-    private store: Store,
     public router: Router,
     private apiService: ApiService,
-    private reportService: ReportService
+    private form3XService: Form3XService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
@@ -29,26 +27,23 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
   ngOnInit(): void {
     this.calculationFinished$.pipe(takeUntil(this.destroy$)).subscribe();
 
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report;
-        if (!report.calculation_status) {
-          this.apiService
-            .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })
-            .subscribe(() => this.refreshSummary());
-        } else if (report.calculation_status != 'SUCCEEDED') {
-          of(true)
-            .pipe(delay(1000), takeUntil(this.destroy$))
-            .subscribe(() => this.refreshSummary());
-        } else {
-          this.calculationFinished$.next(true);
-        }
-      });
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+      if (!this.report.calculation_status) {
+        this.apiService
+          .post(`/web-services/summary/calculate-summary/`, { report_id: this.report.id })
+          .subscribe(() => this.refreshSummary());
+      } else if (this.report.calculation_status != 'SUCCEEDED') {
+        of(true)
+          .pipe(delay(1000), takeUntil(this.destroy$))
+          .subscribe(() => this.refreshSummary());
+      } else {
+        this.calculationFinished$.next(true);
+      }
+    });
   }
 
   refreshSummary(): void {
-    this.reportService.setActiveReportById(this.report.id).subscribe();
+    if (this.report.id) this.form3XService.get(this.report.id).subscribe((report) => (this.report = report as Form3X));
   }
 }

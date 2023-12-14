@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
@@ -28,17 +27,14 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   outOfDateDialogVisible = false;
   memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report;
-      });
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+    });
 
     this.form
       .get(this.templateMap.date)

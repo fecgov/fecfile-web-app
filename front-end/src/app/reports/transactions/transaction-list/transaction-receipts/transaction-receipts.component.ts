@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
@@ -23,10 +22,10 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
     protected override itemService: TransactionSchAService,
-    protected override store: Store,
     protected override reportService: ReportService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
-    this.caption = "Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.";
+    super(messageService, confirmationService, elementRef, activatedRoute, router, reportService);
+    this.caption =
+      'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.';
   }
 }

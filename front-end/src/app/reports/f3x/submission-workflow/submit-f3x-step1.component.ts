@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -8,7 +8,6 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -41,7 +40,8 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
     private form3XService: Form3XService,
     private fb: FormBuilder,
     private store: Store,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
@@ -49,12 +49,9 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
   ngOnInit(): void {
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report;
-      });
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+    });
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))

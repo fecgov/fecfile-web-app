@@ -14,7 +14,7 @@ export class CashOnHandGuard {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.store.select(selectCashOnHand).pipe(
       map((cashOnHand: CashOnHand) => {
-        const reportId = String(route.paramMap.get('reportId'));
+        const reportId = route.paramMap.get('reportId');
         if (reportId) {
           return reportId === cashOnHand.report_id;
         }

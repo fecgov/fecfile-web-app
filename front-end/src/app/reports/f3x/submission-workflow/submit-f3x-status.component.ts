@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/form-3x.model';
@@ -16,15 +15,14 @@ export class ReportSubmissionStatusComponent extends DestroyerComponent implemen
   report: Form3X = new Form3X();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 
-  constructor(private store: Store, public router: Router) {
+  constructor(private store: Store, public router: Router, private activatedRoute: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+    });
   }
 
   public backToReports() {

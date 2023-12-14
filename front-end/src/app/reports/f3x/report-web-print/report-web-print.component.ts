@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels, Form3X } from '../../../shared/models/form-3x.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/models/report.model';
-import { selectActiveReport } from '../../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
@@ -27,20 +26,20 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
     | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
 
-  constructor(private store: Store, public router: Router, private webPrintService: WebPrintService) {
+  constructor(
+    private store: Store,
+    public router: Router,
+    private webPrintService: WebPrintService,
+    private activatedRoute: ActivatedRoute
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select<Report | null>(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (report) {
-          this.report = report as Form3X;
-          this.updatePrintStatus(report);
-        }
-      });
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+      this.updatePrintStatus(this.report);
+    });
   }
 
   public updatePrintStatus(report: Report) {
@@ -77,12 +76,15 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
   }
 
   public refreshReportStatus() {
-    if (this.report.id) this.webPrintService.getStatus(this.report.id);
+    if (this.report.id)
+      this.webPrintService.getStatus(this.report.id).subscribe((report) => (this.report = report as Form3X));
   }
 
   public submitPrintJob() {
     if (this.report.id) {
-      this.webPrintService.submitPrintJob(this.report.id);
+      this.webPrintService
+        .submitPrintJob(this.report.id)
+        .subscribe((report) => (this.report = (report as Form3X) ?? new Form3X()));
       this.pollPrintStatus();
     }
   }

@@ -1,10 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
 import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -36,7 +35,7 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
-  constructor(private store: Store) {
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
   }
 
@@ -57,14 +56,12 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   ngOnInit(): void {
     // Add the date range validation check to the DATE INCURRED input
     if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
-      this.store
-        .select(selectActiveReport)
-        .pipe(take(1))
-        .subscribe((report) => {
-          this.form
-            .get(this.templateMap.date)
-            ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
-        });
+      this.activatedRoute.data.pipe(take(1)).subscribe((data) => {
+        const report = data['report'];
+        this.form
+          .get(this.templateMap.date)
+          ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
+      });
     }
 
     this.percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');

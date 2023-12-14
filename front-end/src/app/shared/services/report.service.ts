@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -61,20 +60,6 @@ export class ReportService implements TableListService<Report> {
 
   public delete(report: Report): Observable<null> {
     return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}`);
-  }
-
-  /**
-   * Pulls the report from the back end, stores it in the ngrx store, and returns the report to the caller.
-   * @param reportId
-   * @returns Observable<Report>
-   */
-  setActiveReportById(reportId: string | undefined): Observable<Report> {
-    if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
-    return this.get(reportId).pipe(
-      tap((report) => {
-        return this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
-      })
-    );
   }
 
   /**

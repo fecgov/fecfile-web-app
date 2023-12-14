@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/models/report.model';
 import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
@@ -55,15 +53,15 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   title: string = this.getCategoryTitle();
   debtId?: string;
 
-  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
+  constructor(private activatedRoute: ActivatedRoute, private titleService: Title) {
     super();
   }
 
   ngOnInit(): void {
-    combineLatest([this.store.select(selectActiveReport), this.route.params, this.route.queryParamMap])
+    combineLatest([this.activatedRoute.data, this.activatedRoute.params, this.activatedRoute.queryParamMap])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([report, params, queryParamMap]) => {
-        this.report = report;
+        this.report = report['report'];
         this.category = params['category'];
         this.debtId = queryParamMap.get('debt') ?? undefined;
         this.title = this.getCategoryTitle();

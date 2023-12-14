@@ -1,8 +1,6 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X, F3xFormTypeLabels } from 'app/shared/models/form-3x.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -44,15 +42,14 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     ),
   ];
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+    });
   }
 
   createTransactions(transactionCategory: string, report?: Form3X): void {

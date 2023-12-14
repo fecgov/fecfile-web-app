@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -25,7 +24,6 @@ export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseC
     protected override fb: FormBuilder,
     protected override router: Router,
     protected override fecDatePipe: FecDatePipe,
-    protected override store: Store,
     protected override reportService: ReportService,
     protected override activatedRoute: ActivatedRoute
   ) {
@@ -37,7 +35,6 @@ export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseC
       fb,
       router,
       fecDatePipe,
-      store,
       reportService,
       activatedRoute
     );

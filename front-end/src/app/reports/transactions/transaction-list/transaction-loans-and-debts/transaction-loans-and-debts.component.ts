@@ -4,7 +4,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
@@ -25,12 +24,12 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   ];
 
   sortableHeaders = [
-    {field: "line_label_order_key", label: "Line"},
-    {field: "transaction_type_identifier", label: "Type"},
-    {field: "name", label: "Name"},
-    {field: "date", label: "Date incurred"},
-    {field: "amount", label: "Amount"},
-    {field: "balance", label: "Balance"}
+    { field: 'line_label_order_key', label: 'Line' },
+    { field: 'transaction_type_identifier', label: 'Type' },
+    { field: 'name', label: 'Name' },
+    { field: 'date', label: 'Date incurred' },
+    { field: 'amount', label: 'Amount' },
+    { field: 'balance', label: 'Balance' },
   ];
 
   constructor(
@@ -40,10 +39,10 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
     protected override itemService: TransactionSchCService,
-    protected override store: Store,
     protected override reportService: ReportService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
-    this.caption = "Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.";
+    super(messageService, confirmationService, elementRef, activatedRoute, router, reportService);
+    this.caption =
+      'Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.';
   }
 }

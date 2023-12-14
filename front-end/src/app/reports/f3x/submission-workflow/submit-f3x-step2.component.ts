@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -8,13 +8,11 @@ import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { from, Observable, switchMap, takeUntil } from 'rxjs';
-import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
   selector: 'app-submit-f3x-step2',
@@ -39,7 +37,8 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     report_id: undefined,
     value: undefined,
   };
-  backdoorCodeHelpText = 'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
+  backdoorCodeHelpText =
+    'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
   showBackdoorCode = false;
 
   constructor(
@@ -50,18 +49,15 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     private messageService: MessageService,
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
-    private reportService: ReportService
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report;
-      });
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+    });
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
@@ -82,8 +78,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       .subscribe((value) => {
         this.showBackdoorCode = value;
         if (value) {
-          this.form.addControl('backdoor_code', new FormControl('',
-            [Validators.required, Validators.maxLength(16)]));
+          this.form.addControl('backdoor_code', new FormControl('', [Validators.required, Validators.maxLength(16)]));
         } else {
           this.form.removeControl('backdoor_code');
         }
@@ -191,7 +186,6 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
     return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
       switchMap(() => {
         if (this.report?.id) {
-          this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
           return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));
         } else {
           return from(this.router.navigateByUrl('/reports'));

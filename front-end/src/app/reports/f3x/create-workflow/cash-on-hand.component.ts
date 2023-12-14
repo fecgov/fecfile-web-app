@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -27,16 +26,17 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     private form3XService: Form3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    private store: Store
+    private store: Store,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      debugger;
+      this.report = data['report'];
+    });
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['L6a_cash_on_hand_jan_1_ytd'].addValidators([Validators.required]);

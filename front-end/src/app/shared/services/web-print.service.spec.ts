@@ -38,7 +38,7 @@ describe('WebPrintService', () => {
   });
 
   it('should get new reports', () => {
-    const reportRequest = spyOn(reportService, 'setActiveReportById').and.returnValue(of(new Form3X()));
+    const reportRequest = spyOn(reportService, 'get').and.returnValue(of(new Form3X()));
     service.getStatus('1');
     expect(reportRequest).toHaveBeenCalledWith('1');
   });

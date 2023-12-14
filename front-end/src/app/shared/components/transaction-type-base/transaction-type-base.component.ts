@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import {
   NavigationAction,
   NavigationDestination,
@@ -16,7 +15,6 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
@@ -48,7 +46,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fb: FormBuilder,
     protected router: Router,
     protected fecDatePipe: FecDatePipe,
-    protected store: Store,
     protected reportService: ReportService,
     protected activatedRoute: ActivatedRoute
   ) {}
@@ -87,13 +84,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.initInheritedFieldsFromParent();
     }
 
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.isEditable = this.reportService.isEditable(report);
-        if (!this.isEditable) this.form.disable();
-      });
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      const report = data['report'];
+      this.isEditable = this.reportService.isEditable(report);
+      if (!this.isEditable) this.form.disable();
+    });
   }
 
   ngOnDestroy(): void {

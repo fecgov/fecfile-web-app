@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Report } from '../models/report.model';
@@ -16,11 +16,11 @@ export class ReportResolver {
    * @param {ActivatedRouteSnapshot} route
    * @returns {Observable<Report | undefined>}
    */
-  resolve(route: ActivatedRouteSnapshot): Observable<Report | undefined> {
-    const reportId = String(route.paramMap.get('reportId'));
-    if (!reportId) {
-      return of(undefined);
+  resolve(route: ActivatedRouteSnapshot): Observable<Report> {
+    const reportId = route.paramMap.get('reportId');
+    if (reportId) {
+      return this.reportService.get(reportId);
     }
-    return this.reportService.setActiveReportById(reportId);
+    throw new Error('FECFile: No reportId found in report resolver');
   }
 }

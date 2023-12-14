@@ -10,7 +10,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
 import { cashOnHandReducer } from './store/cash-on-hand.reducer';
 import { CommitteeAccountEffects } from './store/committee-account.effects';
@@ -48,8 +47,8 @@ import { HttpErrorInterceptor } from './shared/interceptors/http-error.intercept
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
-import { NgOptimizedImage } from "@angular/common";
-import { HeaderLinksComponent } from "./layout/header/header-links/header-links.component";
+import { NgOptimizedImage } from '@angular/common';
+import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -83,18 +82,17 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
         spinnerOn: spinnerReducer,
         userLoginData: loginReducer,
-        activeReport: activeReportReducer,
         cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
-        sidebarVisible: sidebarVisibleReducer
+        sidebarVisible: sidebarVisibleReducer,
       },
-      {metaReducers}
+      { metaReducers }
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
@@ -109,11 +107,10 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     CookieService,
     ConfirmationService,
     MessageService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
-    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

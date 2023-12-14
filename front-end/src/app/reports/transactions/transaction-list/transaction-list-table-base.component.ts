@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
@@ -12,7 +11,6 @@ import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
 
@@ -158,7 +156,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     protected override elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected store: Store,
     protected reportService: ReportService
   ) {
     super(messageService, confirmationService, elementRef);
@@ -166,12 +163,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override ngOnInit(): void {
     this.loading = true;
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.reportIsEditable = this.reportService.isEditable(report);
-      });
+
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.reportIsEditable = this.reportService.isEditable(data['report']);
+    });
   }
 
   public onTableActionClick(action: TableAction, report?: Form3X) {

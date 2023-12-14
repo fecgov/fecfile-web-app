@@ -6,7 +6,6 @@ import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transacti
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
 
@@ -25,11 +24,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
     protected override itemService: TransactionSchBService,
-    protected override store: Store,
     protected override reportService: ReportService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
-    this.caption = "Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.";
+    super(messageService, confirmationService, elementRef, activatedRoute, router, reportService);
+    this.caption =
+      'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
   }
 
   public convertToDate(date: string) {

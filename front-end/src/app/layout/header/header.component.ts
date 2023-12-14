@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginService } from 'app/shared/services/login.service';
-import { Store } from "@ngrx/store";
-import { toggleSidebarVisibleAction } from "../../store/sidebar-state.actions";
+import { Store } from '@ngrx/store';
+import { toggleSidebarVisibleAction } from '../../store/sidebar-state.actions';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +17,6 @@ export class HeaderComponent {
   }
 
   toggleSideBar() {
-    if (this.window.location.href.includes('reports'))
-      this.store.dispatch(toggleSidebarVisibleAction());
+    if (this.window.location.href.includes('reports')) this.store.dispatch(toggleSidebarVisibleAction());
   }
 }

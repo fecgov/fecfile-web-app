@@ -1,5 +1,3 @@
-import { initialState as initActiveReport } from 'app/store/active-report.reducer';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCashOnHand } from 'app/store/cash-on-hand.reducer';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
@@ -115,13 +113,11 @@ export const testMockStore = {
   initialState: {
     fecfile_online_committeeAccount: initCommitteeAccount,
     fecfile_online_userLoginData: initUserLoginData,
-    fecfile_online_activeReport: initActiveReport,
     fecfile_online_cashOnHand: initCashOnHand,
   },
   selectors: [
     { selector: selectCommitteeAccount, value: testCommitteeAccount },
     { selector: selectUserLoginData, value: testUserLoginData },
-    { selector: selectActiveReport, value: testActiveReport },
     { selector: selectCashOnHand, value: testCashOnHand },
   ],
 };

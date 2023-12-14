@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, Observable, of, switchMap, takeUntil, map } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
-import { selectActiveReport } from '../../../store/active-report.selectors';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import { Report } from '../../../shared/models/report.model';
 import { CashOnHand, F3xFormTypeLabels, Form3X } from '../../../shared/models/form-3x.model';
@@ -19,15 +19,20 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 })
 export class MenuReportComponent extends DestroyerComponent implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  activeReport$?: Observable<Form3X | undefined>;
+  activeReport$?: Observable<any>;
   items$: Observable<MenuItem[]> = of([]);
 
-  constructor(private store: Store, private reportService: ReportService) {
+  constructor(private store: Store, private reportService: ReportService, private activatedRoute: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.store.select(selectActiveReport);
+    this.activeReport$ = this.activatedRoute.data.pipe(
+      takeUntil(this.destroy$),
+      map((data) => {
+        return data['report'] ?? new Form3X();
+      })
+    );
 
     this.items$ = combineLatest([
       this.store.select(selectCashOnHand),

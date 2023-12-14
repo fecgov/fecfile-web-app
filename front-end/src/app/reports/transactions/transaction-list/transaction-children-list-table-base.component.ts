@@ -4,7 +4,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from './transaction-list-table-base.component';
-import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
@@ -40,10 +39,9 @@ export class TransactionChildrenComponent extends TransactionListTableBaseCompon
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
     protected override itemService: TransactionSchAService,
-    protected override store: Store,
     protected override reportService: ReportService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
+    super(messageService, confirmationService, elementRef, activatedRoute, router, reportService);
   }
 
   // The transactionFilter can be overriden to ensure that

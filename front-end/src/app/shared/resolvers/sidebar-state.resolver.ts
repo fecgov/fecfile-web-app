@@ -8,7 +8,7 @@ import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 @Injectable({
   providedIn: 'root',
 })
-export class SidebarStateResolver  {
+export class SidebarStateResolver {
   constructor(private store: Store) {}
 
   /**

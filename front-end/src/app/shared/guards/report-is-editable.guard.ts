@@ -13,9 +13,7 @@ export class ReportIsEditableGuard {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     const reportId = String(route.paramMap.get('reportId'));
     if (reportId) {
-      return this.reportService
-        .setActiveReportById(reportId)
-        .pipe(map((report: Report) => this.reportService.isEditable(report)));
+      return this.reportService.get(reportId).pipe(map((report: Report) => this.reportService.isEditable(report)));
     }
     return of(false);
   }

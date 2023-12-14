@@ -50,12 +50,6 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
-  it('#setActiveReportById() should throw error if report id is undefined', () => {
-    expect(() => {
-      service.setActiveReportById(undefined);
-    }).toThrowError();
-  });
-
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
     const form3X: Form3X = Form3X.fromJSON({ id: 1 });

@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { environment } from 'environments/environment';
@@ -15,15 +14,14 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 export class TestDotFecComponent extends DestroyerComponent implements OnInit {
   report: Report | undefined;
   fileIsGenerated = false;
-  constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {
+  constructor(private apiService: ApiService, private http: HttpClient, private activatedRoute: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.report = data['report'];
+    });
     this.fileIsGenerated = false;
   }
 
