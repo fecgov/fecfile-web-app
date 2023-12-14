@@ -17,7 +17,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    resolve: { sidebar: SidebarStateResolver, report: ReportResolver },
+    resolve: { sidebar: SidebarStateResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {
