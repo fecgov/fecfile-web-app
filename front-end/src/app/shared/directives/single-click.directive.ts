@@ -1,13 +1,13 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { Store } from "@ngrx/store";
-import { selectSpinnerStatus } from "../../store/spinner.selectors";
-import { firstValueFrom } from "rxjs";
+import { Store } from '@ngrx/store';
+import { selectSpinnerStatus } from '../../store/spinner.selectors';
+import { firstValueFrom } from 'rxjs';
 
 @Directive({
-  selector: '[appSingleClick]'
+  selector: '[appSingleClick]',
 })
 export class SingleClickDirective {
-  disableTimeoutMs = 3000;
+  disableTimeoutMs = 1000;
 
   @Input() set appSingleClick(value: string) {
     const numValue = Number(value);
@@ -17,12 +17,10 @@ export class SingleClickDirective {
   }
 
   constructor(private el: ElementRef, private store: Store) {
-    this.store.select(selectSpinnerStatus).subscribe(spinner => {
-      if (spinner)
-        this.el.nativeElement.setAttribute('disabled', 'true');
-      else
-        this.el.nativeElement.removeAttribute('disabled');
-    })
+    this.store.select(selectSpinnerStatus).subscribe((spinner) => {
+      if (spinner) this.el.nativeElement.setAttribute('disabled', 'true');
+      else this.el.nativeElement.removeAttribute('disabled');
+    });
   }
 
   @HostListener('click') onClick() {
