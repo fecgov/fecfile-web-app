@@ -13,20 +13,13 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
   providedIn: 'root',
 })
 export class FecApiService {
-
-  constructor(private http: HttpClient, private apiService: ApiService) {
-  }
+  constructor(private http: HttpClient, private apiService: ApiService) {}
 
   getHeaders() {
     return {
       'Content-Type': 'application/json',
     };
   }
-
-  // getQueryParams(queryParams: QueryParamsType = {}) {
-  //   const allParams: QueryParamsType = { ...{ api_key: this.apiKey || '' }, ...queryParams };
-  //   return new HttpParams({ fromObject: allParams });
-  // }
 
   /**
    * Gets the candidate details.
@@ -39,10 +32,9 @@ export class FecApiService {
     }
     return this.apiService
       .get<FecApiPaginatedResponse>('/contacts/candidate/', {
-        candidate_id
+        candidate_id,
       })
       .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as Candidate) || undefined));
-
   }
 
   /**
