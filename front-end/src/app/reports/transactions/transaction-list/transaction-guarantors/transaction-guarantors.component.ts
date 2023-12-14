@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-transaction-guarantors',
@@ -33,7 +34,15 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   }
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    return { ...super.getGetParams(), parent: this.loan?.id ?? 'miss' };
+    return this.loan?.id ? { ...super.getGetParams(), parent: this.loan.id } : super.getGetParams();
+  }
+  override loadTableItems(event: TableLazyLoadEvent): void {
+    if (!this.loan?.id) {
+      this.items = [];
+      this.totalItems = 0;
+    } else {
+      super.loadTableItems(event);
+    }
   }
 
   override rowActions: TableAction[] = [
