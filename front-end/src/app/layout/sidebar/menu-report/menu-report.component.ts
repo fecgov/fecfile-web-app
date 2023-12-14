@@ -22,15 +22,14 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
   activeReport$?: Observable<any>;
   items$: Observable<MenuItem[]> = of([]);
 
-  constructor(private store: Store, private reportService: ReportService, private activatedRoute: ActivatedRoute) {
+  constructor(private store: Store, private reportService: ReportService, private route: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.activatedRoute.data.pipe(
-      takeUntil(this.destroy$),
-      map((data) => {
-        return data['report'] ?? new Form3X();
+    this.activeReport$ = this.route.data.pipe(
+      map(({ report }) => {
+        return report;
       })
     );
 

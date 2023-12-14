@@ -16,11 +16,11 @@ export class ReportResolver {
    * @param {ActivatedRouteSnapshot} route
    * @returns {Observable<Report | undefined>}
    */
-  resolve(route: ActivatedRouteSnapshot): Observable<Report> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Report | undefined> {
     const reportId = route.paramMap.get('reportId');
-    if (reportId) {
-      return this.reportService.get(reportId);
+    if (!reportId) {
+      return of(undefined);
     }
-    throw new Error('FECFile: No reportId found in report resolver');
+    return this.reportService.get(reportId);
   }
 }
