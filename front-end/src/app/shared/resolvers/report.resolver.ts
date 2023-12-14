@@ -17,7 +17,7 @@ export class ReportResolver {
    * @returns {Observable<Report | undefined>}
    */
   resolve(route: ActivatedRouteSnapshot): Observable<Report | undefined> {
-    const reportId = String(route.paramMap.get('reportId'));
+    const reportId = route.paramMap.get('reportId');
     if (!reportId) {
       return of(undefined);
     }

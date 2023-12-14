@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
@@ -11,6 +11,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-menu-report',
@@ -22,12 +23,16 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
   activeReport$?: Observable<Form3X | undefined>;
   items$: Observable<MenuItem[]> = of([]);
 
-  constructor(private store: Store, private reportService: ReportService) {
+  constructor(private store: Store, private reportService: ReportService, private route: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.store.select(selectActiveReport);
+    this.activeReport$ = this.route.data.pipe(
+      map(({ report }) => {
+        return report;
+      })
+    );
 
     this.items$ = combineLatest([
       this.store.select(selectCashOnHand),

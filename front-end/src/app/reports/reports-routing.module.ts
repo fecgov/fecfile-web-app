@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'transactions',
-    resolve: { sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS) },
     loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
   },
@@ -42,7 +42,7 @@ const routes: Routes = [
     title: 'Cash on hand',
     component: CashOnHandComponent,
     canActivate: [ReportIsEditableGuard, CashOnHandGuard],
-    resolve: { sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS) },
   },
   {
@@ -53,6 +53,7 @@ const routes: Routes = [
   {
     path: 'f3x/create/step1/:reportId',
     title: 'Create a report',
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     component: CreateF3XStep1Component,
     canActivate: [ReportIsEditableGuard],
   },
