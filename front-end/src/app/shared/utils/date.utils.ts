@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 export class DateUtils {
   /**
@@ -47,5 +48,17 @@ export class DateUtils {
 
   public static isWithin(date?: Date, from?: Date, through?: Date): boolean {
     return !!(date && from && through) && from <= date && date <= through;
+  }
+
+  public static dateAfter(afterDateControl: AbstractControl<Date | null>): ValidatorFn {
+    return (control: AbstractControl<Date | null>): ValidationErrors | null => {
+
+      const afterValue = control.value;
+      const beforeValue = afterDateControl.value;
+      if (!beforeValue || !afterValue) {
+        return null;
+      }
+      return beforeValue.getTime() >= afterValue.getTime() ? {dateAfter: true} : null;
+    }
   }
 }

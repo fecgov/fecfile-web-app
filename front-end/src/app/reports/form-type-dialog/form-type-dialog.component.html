@@ -1,44 +1,38 @@
-<p-dialog
-  [(visible)]="detailVisible"
-  header="Select form type"
-  [modal]="true"
-  styleClass="p-fluid form-type-dialog"
-  (onHide)="onHide()"
->
-  <ng-template pTemplate="content">
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label for="type">CHOOSE FORM</label>
-          <p-dropdown
-            [ngStyle]="{ display: 'inline' }"
-            [autoDisplayFirst]="false"
-            appendTo="body"
-            [(ngModel)]="selectedType"
-            [options]="formTypeOptions"
-            autoWidth="false"
-            [autofocus]="true"
-          >
-            <ng-template let-type pTemplate="selectedItem">
-              <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
-            </ng-template>
-            <ng-template let-type pTemplate="item">
-              <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}
-            </ng-template>
-          </p-dropdown>
+<div class="modal fade" id="modal" data-bs-keyboard="true" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="staticBackdropLabel">Create a new Report</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+      </div>
+      <div class="modal-body">
+        <div class="dropdown">
+          <label id="type-label" for="typeDropdown">FORM TYPE</label>
+          <button class="btn dropdown-toggle " type="button" id="typeDropdown"
+                  data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="dropdownButtonText">
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li *ngFor="let type of formTypeOptions">
+              <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)"
+              >
+                <span class="option"> <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span>
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
+      <div class="modal-footer">
+        <button
+          pButton
+          pRipple
+          [disabled]="!getFormType(selectedType)?.createRoute"
+          label="Start building report"
+          class="p-button-primary"
+          data-bs-dismiss="modal"
+          (click)="goToReportForm()"
+        ></button>
+      </div>
     </div>
-  </ng-template>
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipple
-      [disabled]="!getFormType(selectedType)?.createRoute"
-      label="Start building report"
-      icon="pi pi-check"
-      class="p-button-primary"
-      (click)="goToReportForm()"
-    ></button>
-  </ng-template>
-</p-dialog>
+  </div>
+</div>

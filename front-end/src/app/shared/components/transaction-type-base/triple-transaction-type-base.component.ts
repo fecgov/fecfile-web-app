@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { NavigationAction, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
+import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { concat, of, reduce } from 'rxjs';
+import { concat, Observable, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
@@ -119,47 +119,21 @@ export abstract class TripleTransactionTypeBaseComponent
     payload.children[0].report_id = payload.report_id;
     payload.children[1].report_id = payload.report_id;
 
-    if (payload.transaction_type_identifier) {
-      const responseFromApi = this.writeToApi(payload);
-      responseFromApi.subscribe((transaction) => {
-        navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
-        this.navigateTo(navigationEvent);
-      });
-    }
+    this.processPayload(payload, navigationEvent);
   }
 
-  override handleNavigate(navigationEvent: NavigationEvent): void {
-    this.formSubmitted = true;
+  override isInvalid(): boolean {
+    return super.isInvalid() ||
+      this.childForm_2.invalid ||
+      !this.childTransaction_2;
+  }
 
-    if (navigationEvent.action === NavigationAction.SAVE) {
-      if (
-        this.form.invalid ||
-        this.childForm.invalid ||
-        this.childForm_2.invalid ||
-        !this.transaction ||
-        !this.childTransaction ||
-        !this.childTransaction_2
-      ) {
-        return;
-      }
-
-      let confirmation$ = this.confirmWithUser(this.transaction, this.form);
-      confirmation$ = concat(
-        confirmation$,
-        this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-      confirmation$ = concat(
-        confirmation$,
-        this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2')
-      ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
-
-      confirmation$.subscribe((confirmed: boolean) => {
-        // if every confirmation was accepted
-        if (confirmed) this.save(navigationEvent);
-      });
-    } else {
-      this.navigateTo(navigationEvent);
-    }
+  override get confirmation$(): Observable<boolean> {
+    if (!this.childTransaction_2) return of(false);
+    return concat(
+      super.confirmation$,
+      this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2')
+    ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
   }
 
   override resetForm() {

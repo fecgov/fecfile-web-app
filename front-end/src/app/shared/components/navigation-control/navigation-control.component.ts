@@ -33,6 +33,7 @@ export class NavigationControlComponent implements OnInit {
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
 
+
   ngOnInit(): void {
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
       this.controlType = 'dropdown';
@@ -47,6 +48,7 @@ export class NavigationControlComponent implements OnInit {
       Object.prototype.hasOwnProperty.call(option, 'value')
     );
   }
+
   isVisible = true;
 
   isDisabled(): boolean {
@@ -98,7 +100,7 @@ export class NavigationControlComponent implements OnInit {
     }
     const typeId = config as TransactionTypes;
     if (!getTransactionTypeClass(typeId)) {
-      return { label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId) };
+      return {label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId)};
     }
     const type = TransactionTypeUtils.factory(typeId);
     return {

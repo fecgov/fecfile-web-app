@@ -43,12 +43,11 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     this.form.controls['cash_on_hand_date'].addValidators([Validators.required]);
 
     // Set form default values
-    this.form.patchValue({ ...this.report });
+    this.form.patchValue({...this.report});
   }
 
   public save(): void {
     this.formSubmitted = true;
-
     if (this.form.invalid) {
       return;
     }
@@ -57,12 +56,13 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       ...{
+        calculation_status: null,
         cash_on_hand_date: this.form.controls['cash_on_hand_date'].value,
         L6a_year_for_above_ytd: String(this.form.controls['cash_on_hand_date'].value.getYear() + 1900),
       },
     });
 
-    this.form3XService.update(payload, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
       // Write cash on hand to store
       this.store.dispatch(
         setCashOnHandAction({

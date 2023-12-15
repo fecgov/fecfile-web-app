@@ -4,8 +4,8 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidatorFn,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,8 +17,8 @@ import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
-  F3xReportCodes,
   F3X_REPORT_CODE_MAP,
+  F3xReportCodes,
   getReportCodeLabel,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
@@ -36,6 +36,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { spinnerOffAction, spinnerOnAction } from "../../../store/spinner.actions";
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -55,7 +56,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
@@ -93,10 +93,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
-        this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
-        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
+        this.form?.patchValue({filing_frequency: filingFrequency, form_type: 'F3XN'});
+        this.form?.patchValue({report_type_category: this.getReportTypeCategories()[0]});
         this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
-        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        this.form?.patchValue({report_code: this.getFirstEnabledReportCode()});
         this.form
           ?.get('filing_frequency')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -104,13 +104,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
             this.form.patchValue({
               report_type_category: this.getReportTypeCategories()[0],
             });
-            this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+            this.form?.patchValue({report_code: this.getFirstEnabledReportCode()});
           });
         this.form
           ?.get('report_type_category')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
-            this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+            this.form.patchValue({report_code: this.getFirstEnabledReportCode()});
           });
 
         this.existingCoverage = existingCoverage;
@@ -118,8 +118,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
-    this.form.controls['coverage_through_date'].addValidators([Validators.required]);
-
+    this.form.controls['coverage_through_date'].addValidators([Validators.required, DateUtils.dateAfter(this.form.controls['coverage_from_date'])]);
+    this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
+      this.form.controls['coverage_through_date'].updateValueAndValidity();
+    });
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
@@ -136,7 +138,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           isElectionYear,
           filingFrequency
         );
-        this.form.patchValue({ coverage_from_date, coverage_through_date });
+        this.form.patchValue({coverage_from_date, coverage_through_date});
       }
     });
 
@@ -175,7 +177,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   getErrors(errors: ValidationErrors | null, newError: ValidationErrors | null): ValidationErrors | null {
     const otherErrors = !_.isEmpty(_.omit(errors, 'invaliddate')) ? _.omit(errors, 'invaliddate') : null;
-    return otherErrors || newError ? { ...otherErrors, ...newError } : null;
+    return otherErrors || newError ? {...otherErrors, ...newError} : null;
   }
 
   findSurrounding(from: Date, through: Date, existingCoverage: F3xCoverageDates[]): F3xCoverageDates | undefined {
@@ -192,7 +194,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
       ` ${this.fecDatePipe.transform(collision.coverage_from_date)} -` +
       ` ${this.fecDatePipe.transform(collision.coverage_through_date)}`;
-    return { invaliddate: { msg: message } };
+    return {invaliddate: {msg: message}};
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
@@ -237,7 +239,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-
+    this.store.dispatch(spinnerOnAction());
     if (this.form.invalid) {
       return;
     }
@@ -265,6 +267,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         takeUntil(this.destroy$)
       )
       .subscribe(([report, coh]) => {
+        this.store.dispatch(spinnerOffAction());
         if (jump === 'continue') {
           if (coh.report_id === report.id) {
             this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
