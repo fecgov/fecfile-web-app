@@ -21,7 +21,7 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { MessageService } from 'primeng/api';
-import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
+import { Observable, combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
@@ -30,6 +30,7 @@ import { F99FormTypes, Form99 } from 'app/shared/models/form-99.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
+import { Report } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-main-form',
@@ -74,6 +75,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
   } as TransactionTemplateMapType;
 
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  reportId: string | undefined;
 
   constructor(
     private store: Store,
@@ -89,12 +91,12 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const reportId = this.activatedRoute.snapshot.data['reportId'];
+    this.reportId = this.activatedRoute.snapshot.params['reportId'];
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        if (reportId && report) {
+        if (this.reportId && report) {
           this.form.patchValue(report);
         }
       });
@@ -132,13 +134,21 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     }
 
     const summary: Form99 = Form99.fromJSON(ValidateUtils.getFormValues(this.form, f99Schema, this.formProperties));
+    let save$: Observable<Report>;
+    if (this.reportId) {
+      summary.id = this.reportId;
+      save$ = this.form99Service.update(summary, this.formProperties);
+    } else {
+      save$ = this.form99Service.create(summary, this.formProperties);
+    }
+
     //Observables are *defined* here ahead of their execution
-    const create$ = this.form99Service.create(summary, this.formProperties);
 
     //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
-    create$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+    save$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
       if (jump === 'continue') {
-        this.router.navigateByUrl(`/reports/f99/web-print/${report.id}`);
+        //this.router.navigateByUrl(`/reports/f99/web-print/${report.id}`);
+        this.router.navigateByUrl('/reports');
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({

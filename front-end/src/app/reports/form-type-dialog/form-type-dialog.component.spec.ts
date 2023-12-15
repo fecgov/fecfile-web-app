@@ -27,20 +27,29 @@ describe('FormTypeDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#goToReportForm should route properly', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.selectedType = FormTypes.F3X;
-    component.goToReportForm();
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
+  describe('goToReportForm', () => {
+    it('should route properly', () => {
+      const navigateSpy = spyOn(router, 'navigateByUrl');
+      component.selectedType = FormTypes.F3X;
+      component.goToReportForm();
+      expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
+    });
   });
 
-  it('#onHide should change visible to false', () => {
-    let detailVisibleChangeValue = true;
-    expect(component.detailVisible).toEqual(false);
-    component.detailVisibleChange.subscribe(value => {
-      detailVisibleChangeValue = value;
+  describe('dropdownButtonText', () => {
+    it('should return an empty span if there is no selected type', () => {
+      expect(component.dropdownButtonText).toEqual('<span></span>')
     });
-    component.onHide();
-    expect(detailVisibleChangeValue).toEqual(false);
+    it('should return a correctly formatted string if there is a selected type', () => {
+      component.selectedType = FormTypes.F3X;
+      expect(component.dropdownButtonText).toEqual('<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>')
+    })
+  });
+
+  describe('updateSelected', () => {
+    it('should set the selectedType to the provided type', () => {
+      component.updateSelected(FormTypes.F3X);
+      expect(component.selectedType).toEqual(FormTypes.F3X);
+    });
   });
 });

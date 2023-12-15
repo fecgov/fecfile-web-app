@@ -24,7 +24,9 @@ export enum ReportSidebarState {
 
 export class SidebarState {
   section: ReportSidebarState;
-  constructor(section: ReportSidebarState) {
+  url: string;
+  constructor(section: ReportSidebarState, url: string) {
     this.section = section;
+    this.url = url;
   }
 }

@@ -6,7 +6,7 @@ import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guar
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
-import { ReportSidebarState, SidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarState } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
 // ROUTING NOTE:
@@ -23,7 +23,7 @@ const routes: Routes = [
     component: TransactionListComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
-      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
+      sidebarState: ReportSidebarState.TRANSACTIONS,
     },
   },
   {
@@ -32,7 +32,7 @@ const routes: Routes = [
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
-      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
+      sidebarState: ReportSidebarState.TRANSACTIONS,
     },
   },
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
       sidebar: SidebarStateResolver,
     },
     data: {
-      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
+      sidebarState: ReportSidebarState.TRANSACTIONS,
     },
     canActivate: [ReportIsEditableGuard],
   },
@@ -55,7 +55,7 @@ const routes: Routes = [
       sidebar: SidebarStateResolver,
     },
     data: {
-      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
+      sidebarState: ReportSidebarState.TRANSACTIONS,
       noComponentReuse: true,
     },
   },

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -10,11 +10,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { F3XMenuComponent } from './sidebar/menus/f3x/f3x-menu.component';
 import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
-import { filter, Subject } from 'rxjs';
+import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { Event, NavigationEnd, Router } from '@angular/router';
+import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -46,39 +47,23 @@ describe('LayoutComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not set the sidebar by default', waitForAsync(() => {
-    component.sidebarState$?.subscribe((state) => expect(state).toBe(undefined));
-  }));
-
-  it('should set the sidebar to the transaction section', () => {
-    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS) }));
-    component.sidebarState$
-      ?.pipe(filter((state) => !!state))
-      .subscribe((state) => expect(state?.section).toBe(ReportSidebarState.TRANSACTIONS));
+  it('should set showSidebar to true when location has a sidebar action', () => {
+    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS, '/url') }));
+    store
+      .select(selectSidebarState)
+      .pipe(filter((state) => !!state))
+      .subscribe(() => {
+        expect(component.showSidebar).toBeTruthy();
+      });
   });
 
-  it('should set isReports to false when location is base reports module', () => {
-    const event = new NavigationEnd(42, '/reports', '/');
-    (TestBed.inject(Router).events as Subject<Event>).next(event);
-    expect(component.isReports).toBeFalsy();
-  });
-
-  it('should set isReports to true when location is reports module', () => {
-    const event = new NavigationEnd(42, '/reports/transactions/report/3fa0fd7e-306e-4cb6-8c8d-9ff9306092a6/list', '/');
-    (TestBed.inject(Router).events as Subject<Event>).next(event);
-    expect(component.isReports).toBeTruthy();
-  });
-
-  it('should be visible only when showSidebar and isReports are both true', () => {
-    expect(component.isVisible).toBeFalsy();
-    component.showSidebar = true;
-    const event = new NavigationEnd(42, '/reports/transactions/report/3fa0fd7e-306e-4cb6-8c8d-9ff9306092a6/list', '/');
-    (TestBed.inject(Router).events as Subject<Event>).next(event);
-    expect(component.isReports).toBeTruthy();
-    expect(component.showSidebar).toBeTruthy();
-    expect(component.isVisible).toBeTruthy();
-
-    component.showSidebar = false;
-    expect(component.isVisible).toBeFalsy();
+  it('should set showSidebar to false when location does not have a sidebar action', () => {
+    store.dispatch(setSidebarStateAction({ payload: undefined }));
+    store
+      .select(selectSidebarState)
+      .pipe(filter((state) => !!state))
+      .subscribe(() => {
+        expect(component.showSidebar).toBeFalsy();
+      });
   });
 });
