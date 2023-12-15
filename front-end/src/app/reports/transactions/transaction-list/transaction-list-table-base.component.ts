@@ -199,7 +199,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override editItem(item: Transaction): void {
-    this.router.navigate([`${item.id}`], {relativeTo: this.activatedRoute});
+    this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
   }
 
   public editLoanAgreement(transaction: Transaction): void {
