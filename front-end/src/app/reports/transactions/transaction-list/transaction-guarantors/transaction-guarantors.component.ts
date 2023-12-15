@@ -34,7 +34,10 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   }
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    return this.loan?.id ? { ...super.getGetParams(), parent: this.loan.id } : super.getGetParams();
+    if (this.loan?.id) {
+      return { ...super.getGetParams(), parent: this.loan.id };
+    }
+    return super.getGetParams();
   }
   override loadTableItems(event: TableLazyLoadEvent): void {
     if (!this.loan?.id) {
