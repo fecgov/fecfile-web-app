@@ -71,6 +71,9 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should load items with loan', () => {
     component.loan = { id: '1' } as Transaction;
+    fixture.detectChanges();
+    expect(component).toBeTruthy();
+    expect(component.getGetParams()['parent']).toEqual('1');
   });
 
   it('should have delete', () => {
