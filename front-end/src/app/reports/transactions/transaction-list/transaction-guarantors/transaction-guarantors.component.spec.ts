@@ -67,6 +67,7 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(component.getGetParams()['parent']).toBeUndefined();
   });
 
   it('should load items with loan', () => {
