@@ -28,6 +28,12 @@ export class ReattributionFromUtils {
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
       hidePrimaryContactLookup: true,
       contactTypeOptions: [(transaction.reatt_redes as SchATransaction).entity_type],
+      // noop generatePurposeDescription to inform dynamic input label
+      generatePurposeDescription: (transaction: SchATransaction): string => {
+        return transaction[
+          transaction.transactionType.templateMap.purpose_description as keyof SchATransaction
+        ] as string;
+      },
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend

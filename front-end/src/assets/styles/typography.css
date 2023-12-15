@@ -214,24 +214,7 @@ input[type='search'] {
 [type='radio']:disabled + label::before {
   cursor: not-allowed;
 }
-[type='button'],
-[type='submit'],
-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none;
-  background: 0 0;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  display: inline-block;
-  font-family: karla, sans-serif;
-  line-height: 1;
-  text-decoration: none;
-  user-select: none;
-}
+
 [type='button']:disabled,
 [type='submit']:disabled,
 button:disabled {

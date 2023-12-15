@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { Form3X, CashOnHand } from '../models/form-3x.model';
+import { CashOnHand, Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
@@ -27,7 +27,8 @@ function getReportFromJSON(json: any): Report {
 export class ReportService implements TableListService<Report> {
   apiEndpoint = '/reports';
 
-  constructor(protected apiService: ApiService, protected store: Store) {}
+  constructor(protected apiService: ApiService, protected store: Store) {
+  }
 
   public getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
@@ -48,14 +49,14 @@ export class ReportService implements TableListService<Report> {
   public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .post<Report>(`${this.apiEndpoint}/`, payload, {fields_to_validate: fieldsToValidate.join(',')})
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
-  public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+  public update(report: Report, spinner = false, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, {fields_to_validate: fieldsToValidate.join(',')}, spinner)
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
@@ -72,7 +73,7 @@ export class ReportService implements TableListService<Report> {
     if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {
-        return this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
+        return this.store.dispatch(setActiveReportAction({payload: report || new Form3X()}));
       })
     );
   }
@@ -114,7 +115,7 @@ export class ReportService implements TableListService<Report> {
       };
     }
     if (payload) {
-      this.store.dispatch(setCashOnHandAction({ payload: payload }));
+      this.store.dispatch(setCashOnHandAction({payload: payload}));
     }
   }
 }
