@@ -14,6 +14,7 @@ import { TransactionGuarantorsComponent } from './transaction-guarantors.compone
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -66,6 +67,10 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should load items with loan', () => {
+    component.loan = { id: '1' } as Transaction;
   });
 
   it('should have delete', () => {
