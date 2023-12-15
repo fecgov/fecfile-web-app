@@ -10,7 +10,7 @@ import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.util
 export class FormTypeDialogComponent {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
-  @Input() noReports: boolean = true;
+  @Input() noReports = true;
 
   constructor(public router: Router, private changeDetectorRef: ChangeDetectorRef) {}
 
