@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
+import { SharedModule } from 'app/shared/shared.module';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -23,7 +24,7 @@ describe('LayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule],
+      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, SharedModule],
       declarations: [
         LayoutComponent,
         SidebarComponent,
