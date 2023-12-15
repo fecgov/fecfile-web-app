@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/models/report.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
 import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/form-3x.model';
@@ -91,5 +92,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    */
   public displayName(item: Report): string {
     return item.form_type ?? '';
+  }
+
+  public noCashOnHand(): boolean {
+    return this.items.length === 1 && !!!(this.items[0] as Form3X).L8_cash_on_hand_close_ytd;
   }
 }

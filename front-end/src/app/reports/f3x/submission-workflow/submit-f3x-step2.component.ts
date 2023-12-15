@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';

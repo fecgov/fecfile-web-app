@@ -11,9 +11,8 @@
         class="mr-2 add-button"
         data-bs-toggle="modal"
         data-bs-target="#modal"
-        [disabled]="items.length === 1 && !items[0].L8_cash_on_hand_at_close_ytd"
+        [disabled]="noCashOnHand()"
       ></button>
-      {{ items.length === 1 && !items[0].L8_cash_on_hand_at_close_ytd }}
     </ng-template>
   </p-toolbar>
 
