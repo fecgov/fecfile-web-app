@@ -52,7 +52,7 @@ describe('MenuReportComponent', () => {
   });
 
   it('should set the sidebar state to TRANSACTIONS', waitForAsync(() => {
-    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS) }));
+    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS, '/url') }));
     const waitUntilSidebarState = store.select(selectSidebarState).pipe(filter((state) => !!state));
     combineLatest([component.items$, waitUntilSidebarState]).subscribe(([items, _]) => {
       expect(_.section).toBe(ReportSidebarState.TRANSACTIONS);
@@ -61,7 +61,7 @@ describe('MenuReportComponent', () => {
   }));
 
   it('should set the sidebar state to REVIEW', waitForAsync(() => {
-    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.REVIEW) }));
+    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.REVIEW, '/url') }));
     const waitUntilSidebarState = store.select(selectSidebarState).pipe(filter((state) => !!state));
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     combineLatest([component.items$, waitUntilSidebarState]).subscribe(([items, _]) => {
@@ -70,7 +70,7 @@ describe('MenuReportComponent', () => {
   }));
 
   it('should set the sidebar state to SUBMISSION', waitForAsync(() => {
-    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.REVIEW) }));
+    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.REVIEW, '/url') }));
     const waitUntilSidebarState = store.select(selectSidebarState).pipe(filter((state) => !!state));
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     combineLatest([component.items$, waitUntilSidebarState]).subscribe(([items, _]) => {

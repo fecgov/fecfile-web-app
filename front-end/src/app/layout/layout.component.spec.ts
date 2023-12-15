@@ -47,7 +47,7 @@ describe('LayoutComponent', () => {
   });
 
   it('should set showSidebar to true when location has a sidebar action', () => {
-    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS) }));
+    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS, '/url') }));
     store
       .select(selectSidebarState)
       .pipe(filter((state) => !!state))
