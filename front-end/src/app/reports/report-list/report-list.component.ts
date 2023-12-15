@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/models/report.model';
@@ -37,7 +36,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   ];
 
   constructor(
-    private store: Store,
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,

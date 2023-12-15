@@ -11,7 +11,7 @@ export class CashOnHandGuard {
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.reportService
-      .get(route.paramMap.get('reportId') ?? '')
+      .get(route.paramMap?.get('reportId') ?? '')
       .pipe(map((report) => report?.is_first ?? false));
   }
 }
