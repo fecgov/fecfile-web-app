@@ -16,7 +16,7 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
@@ -93,7 +93,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
     this.store
-      .select(selectActiveReport)
+      .select(selectActiveForm3X)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (this.reportId && report) {

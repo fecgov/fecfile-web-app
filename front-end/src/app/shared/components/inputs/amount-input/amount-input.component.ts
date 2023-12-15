@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -74,19 +74,17 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
     if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
       this.store
-        .select(selectActiveReport)
+        .select(selectActiveForm3X)
         .pipe(takeUntil(this.destroy$))
         .subscribe((report) => {
-          this.form
-            .get(this.templateMap.date)
-            ?.addValidators((control: AbstractControl): ValidationErrors | null => {
-              const date = control.value;
-              if (date && !DateUtils.isWithin(date, report.coverage_from_date, report.coverage_through_date)) {
-                const message = 'Date must fall within the report date range.';
-                return { invaliddate: { msg: message } };
-              }
-              return null;
-            });
+          this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
+            const date = control.value;
+            if (date && !DateUtils.isWithin(date, report.coverage_from_date, report.coverage_through_date)) {
+              const message = 'Date must fall within the report date range.';
+              return { invaliddate: { msg: message } };
+            }
+            return null;
+          });
         });
     }
   }

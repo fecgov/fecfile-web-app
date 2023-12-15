@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, delay, of, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -30,7 +30,7 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
     this.calculationFinished$.pipe(takeUntil(this.destroy$)).subscribe();
 
     this.store
-      .select(selectActiveReport)
+      .select(selectActiveForm3X)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report;

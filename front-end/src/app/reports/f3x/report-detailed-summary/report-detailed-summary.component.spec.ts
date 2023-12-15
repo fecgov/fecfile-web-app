@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { ActivatedRoute } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -60,7 +60,7 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('CALCULATING', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'CALCULATING';
-      TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
+      TestBed.inject(MockStore).overrideSelector(selectActiveForm3X, f3x);
       TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
       return component.refreshSummary();
@@ -73,7 +73,7 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('SUCCEEDED', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'SUCCEEDED';
-      TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
+      TestBed.inject(MockStore).overrideSelector(selectActiveForm3X, f3x);
       TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
       return component.refreshSummary();

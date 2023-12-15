@@ -12,7 +12,7 @@ import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
 
@@ -167,7 +167,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   override ngOnInit(): void {
     this.loading = true;
     this.store
-      .select(selectActiveReport)
+      .select(selectActiveForm3X)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.reportIsEditable = this.reportService.isEditable(report);

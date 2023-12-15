@@ -51,6 +51,7 @@ import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
+import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -77,6 +78,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     DashboardComponent,
     F3XMenuComponent,
     F1MMenuComponent,
+    F99MenuComponent,
   ],
   imports: [
     BrowserModule,

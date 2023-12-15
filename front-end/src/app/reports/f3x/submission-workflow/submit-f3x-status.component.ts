@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
@@ -19,7 +19,7 @@ export class ReportSubmissionStatusComponent extends DestroyerComponent implemen
 
   ngOnInit(): void {
     this.store
-      .select(selectActiveReport)
+      .select(selectActiveForm3X)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
   }

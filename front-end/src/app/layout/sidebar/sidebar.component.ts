@@ -17,6 +17,7 @@ export class SidebarComponent {
 }
 
 export enum ReportSidebarState {
+  'CREATE',
   'TRANSACTIONS',
   'REVIEW',
   'SUBMISSION',
