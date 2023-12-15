@@ -1,14 +1,12 @@
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { initialState as initCashOnHand } from 'app/store/cash-on-hand.reducer';
-import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { Form3X, CashOnHand } from '../models/form-3x.model';
+import { Form3X } from '../models/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
@@ -109,20 +107,16 @@ export const testActiveReport: Form3X = Form3X.fromJSON({
   },
 });
 
-export const testCashOnHand: CashOnHand = { report_id: '999', value: 100.0 };
-
 export const testMockStore = {
   initialState: {
     fecfile_online_committeeAccount: initCommitteeAccount,
     fecfile_online_userLoginData: initUserLoginData,
     fecfile_online_activeReport: initActiveReport,
-    fecfile_online_cashOnHand: initCashOnHand,
   },
   selectors: [
     { selector: selectCommitteeAccount, value: testCommitteeAccount },
     { selector: selectUserLoginData, value: testUserLoginData },
     { selector: selectActiveReport, value: testActiveReport },
-    { selector: selectCashOnHand, value: testCashOnHand },
   ],
 };
 
