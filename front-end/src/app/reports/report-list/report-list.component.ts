@@ -95,6 +95,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public noCashOnHand(): boolean {
-    return this.items.length === 1 && !!!(this.items[0] as Form3X).L8_cash_on_hand_close_ytd;
+    return this.items.length === 1 && !(this.items[0] as Form3X).L8_cash_on_hand_close_ytd;
   }
 }

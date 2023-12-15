@@ -31,7 +31,7 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
+import { combineLatest, startWith, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
