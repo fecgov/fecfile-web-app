@@ -1,7 +1,7 @@
 export class ReportListPage {
   static goToPage() {
     cy.visit('/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+    cy.get('.navbar-nav').find('.nav-link').contains('Reports').click();
   }
 
   static clickCreateButton(force: boolean = false) {
@@ -9,6 +9,8 @@ export class ReportListPage {
     cy.intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' }).as(
       'coverageDates'
     );
+    cy.get('#typeDropdown').click();
+    cy.get('button').contains('Form 3X').click();
     cy.get('button').contains('Start building report').click();
     cy.wait('@coverageDates'); // the page is ready when coverage_dates has returned
   }
