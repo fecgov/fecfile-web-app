@@ -25,7 +25,11 @@
           [readonly]="true"
           ngClass="readonly"
         />
-        <app-error-messages></app-error-messages>
+        <app-error-messages
+          [form]="form"
+          fieldName="committee_name"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
       <div class="col-3">
         <label>COMMITTEE ID</label>
@@ -37,7 +41,7 @@
           [readonly]="true"
           ngClass="readonly"
         />
-        <app-error-messages></app-error-messages>
+        <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
     <p-divider></p-divider>
