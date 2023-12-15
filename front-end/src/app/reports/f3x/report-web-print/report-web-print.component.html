@@ -10,23 +10,22 @@
     </h3>
     <br/>
   </div>
-  <div class="col-12">
+  <div class="col-12 flex justify-content-center">
     <img
-      _ngcontent-kve-c61=""
       class="image-max-width image-centered-horiz"
-      src="assets/img/image-f3x-pages-spread.png"
+      ngSrc="assets/img/image-placeholder.png"
       draggable="false"
-      alt="Form 3X pages spread out aesthetically"
+      alt="Print success image"
       [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' }"
-    />
+      height="271" width="450"/>
     <ng-container *ngIf="webPrintStage === 'checking'">
       <div class="fec-loader-div col-12">
         <img
           class="image-max-width fec-loader-image"
-          src="assets/img/fec-loading-flag.gif"
+          ngSrc="assets/img/fec-loading-flag.gif"
           draggable="false"
           alt="The report's web print status is loading..."
-        />
+          height="103" width="114"/>
         <h1 class="align-center super-header">
           <br/><br/>
           <strong>Compiling your preview</strong>
