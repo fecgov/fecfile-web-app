@@ -34,6 +34,7 @@ describe('CreateF3XStep1Component', () => {
     coverage_through_date: '2022-06-25',
     form_type: 'F3XN',
     report_code: 'Q1',
+    is_first: true,
   });
 
   const first = new Date('01/01/2023');

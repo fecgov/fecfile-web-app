@@ -7,7 +7,6 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
@@ -43,7 +42,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     this.form.controls['cash_on_hand_date'].addValidators([Validators.required]);
 
     // Set form default values
-    this.form.patchValue({...this.report});
+    this.form.patchValue({ ...this.report });
   }
 
   public save(): void {
@@ -63,16 +62,6 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     });
 
     this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
-      // Write cash on hand to store
-      this.store.dispatch(
-        setCashOnHandAction({
-          payload: {
-            report_id: payload.id,
-            value: payload.L6a_cash_on_hand_jan_1_ytd,
-          },
-        })
-      );
-
       if (this.report) {
         this.router.navigateByUrl(`/reports/transactions/report/${this.report.id}/list`);
       }
