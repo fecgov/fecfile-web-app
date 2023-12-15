@@ -9,7 +9,8 @@
         label="Create a new report"
         icon="pi pi-plus"
         class="mr-2 add-button"
-        (click)="addItem()"
+        data-bs-toggle="modal"
+        data-bs-target="#modal"
         [disabled]="items.length === 1 && !items[0].L8_cash_on_hand_at_close_ytd"
       ></button>
       {{ items.length === 1 && !items[0].L8_cash_on_hand_at_close_ytd }}
@@ -94,4 +95,4 @@
   </p-table>
 </div>
 
-<app-form-type-dialog [(detailVisible)]="detailVisible"></app-form-type-dialog>
+<app-form-type-dialog></app-form-type-dialog>

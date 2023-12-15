@@ -35,6 +35,7 @@ import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rx
 import { ReportService } from '../../../shared/services/report.service';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { spinnerOffAction, spinnerOnAction } from '../../../store/spinner.actions';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -54,7 +55,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
@@ -241,7 +241,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-
+    this.store.dispatch(spinnerOnAction());
     if (this.form.invalid) {
       return;
     }
@@ -258,6 +258,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
     //Create the report
     create$.subscribe((report) => {
+      this.store.dispatch(spinnerOffAction());
       if (jump === 'continue') {
         if (report.is_first) {
           this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);

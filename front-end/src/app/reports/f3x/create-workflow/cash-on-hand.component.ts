@@ -47,7 +47,6 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
   public save(): void {
     this.formSubmitted = true;
-
     if (this.form.invalid) {
       return;
     }
@@ -62,7 +61,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.form3XService.update(payload, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
       if (this.report) {
         this.router.navigateByUrl(`/reports/transactions/report/${this.report.id}/list`);
       }

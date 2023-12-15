@@ -97,11 +97,11 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       const email: string = this.form?.get(valueFormControlName)?.value;
 
       if (this.checkInvalidEmail(email)) {
-        return { email: 'invalid' };
+        return {email: 'invalid'};
       }
 
       if (this.checkIdenticalEmails()) {
-        return { email: 'identical' };
+        return {email: 'identical'};
       }
 
       return null;
@@ -124,11 +124,9 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
 
   public save(): void {
     this.formSubmitted = true;
-
     if (this.form.invalid) {
       return;
     }
-
     let addressFields: object;
     if (this.form.value.change_of_address === false) {
       addressFields = {
@@ -153,7 +151,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.form3XService.update(payload, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
       if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }

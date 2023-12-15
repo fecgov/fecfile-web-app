@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
@@ -50,10 +50,15 @@ export class ReportService implements TableListService<Report> {
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
-  public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+  public update(report: Report, spinner = false, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
+      .put<Report>(
+        `${this.apiEndpoint}/${report.id}/`,
+        payload,
+        { fields_to_validate: fieldsToValidate.join(',') },
+        spinner
+      )
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
