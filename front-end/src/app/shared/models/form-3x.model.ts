@@ -4,11 +4,6 @@ import { LabelList } from '../utils/label.utils';
 import { F3xReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 
-export interface CashOnHand {
-  report_id: string | undefined;
-  value: number | undefined;
-}
-
 export enum F3xFormTypes {
   F3XN = 'F3XN',
   F3XA = 'F3XA',

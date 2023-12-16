@@ -150,14 +150,14 @@
           </div>
         </div>
       </div>
-      <div class="grid" *ngIf="cashOnHand.value !== undefined">
+      <div class="grid" *ngIf="report?.L6a_cash_on_hand_jan_1_ytd">
         <div class="col-4"></div>
         <div class="col-4">
           <button
             *ngIf="form.value.truth_statement === true"
             pButton
             pRipple
-            appSingleClick
+            [disabled]="loading > 0"
             label="Submit"
             class="p-button"
             (click)="submit()"
@@ -179,7 +179,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="grid" *ngIf="!!!cashOnHand.value">
+      <div class="grid" *ngIf="!!!report?.L6a_cash_on_hand_jan_1_ytd">
         <div class="col-12">*** You may not submit a report until you have entered an amount for Cash on Hand ***</div>
       </div>
     </form>

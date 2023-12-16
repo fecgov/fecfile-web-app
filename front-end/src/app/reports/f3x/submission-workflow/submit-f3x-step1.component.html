@@ -17,7 +17,7 @@
         <div class="col-6">
           <div class="field">
             <label for="confirmation_email_1"><strong>Email #1</strong></label>
-            <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
+            <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1"/>
             <app-error-messages
               [form]="form"
               fieldName="confirmation_email_1"
@@ -28,7 +28,7 @@
         <div class="col-6">
           <div class="field">
             <label for="confirmation_email_2"><strong>Email #2</strong> (Optional)</label>
-            <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
+            <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2"/>
             <app-error-messages
               [form]="form"
               fieldName="confirmation_email_2"
@@ -42,7 +42,7 @@
         <div class="col-12">
           <div class="field">
             <h3>Verify physical address</h3>
-            <br />
+            <br/>
             <div>Has your address changed in the last 10 days?</div>
           </div>
         </div>
@@ -99,7 +99,7 @@
           <div class="col-6">
             <div class="field">
               <label for="street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="street_1" formControlName="street_1" />
+              <input type="text" pInputText id="street_1" formControlName="street_1"/>
               <app-error-messages
                 [form]="form"
                 fieldName="street_1"
@@ -110,7 +110,7 @@
           <div class="col-6">
             <div class="field">
               <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="street_2" formControlName="street_2" />
+              <input type="text" pInputText id="street_2" formControlName="street_2"/>
               <app-error-messages
                 [form]="form"
                 fieldName="street_2"
@@ -123,7 +123,7 @@
           <div class="col-6">
             <div class="field">
               <label for="city">CITY</label>
-              <input type="text" pInputText id="city" formControlName="city" />
+              <input type="text" pInputText id="city" formControlName="city"/>
               <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
@@ -143,7 +143,7 @@
           <div class="col-3">
             <div class="field">
               <label for="zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="zip" formControlName="zip" />
+              <input type="text" pInputText id="zip" formControlName="zip"/>
               <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
@@ -162,7 +162,8 @@
         </div>
         <div class="col-6"></div>
         <div class="col-4">
-          <button pButton pRipple appSingleClick label="Confirm information" class="p-button-primary" (click)="save()"></button>
+          <button pButton pRipple appSingleClick label="Confirm information" class="p-button-primary"
+                  (click)="save()"></button>
         </div>
       </div>
     </form>
