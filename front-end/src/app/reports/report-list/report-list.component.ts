@@ -6,6 +6,7 @@ import { Report, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
+import { FormTypes } from 'app/shared/utils/form-type.utils';
 
 @Component({
   selector: 'app-report-list',
@@ -96,6 +97,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public noCashOnHand(): boolean {
-    return this.items.length === 1 && !(this.items[0] as Form3X).cash_on_hand_date;
+    const f3x_reports = this.items.filter((item) => {
+      return item.report_type === ReportTypes.F3X;
+    });
+    return f3x_reports.length === 1 && !(f3x_reports[0] as Form3X).cash_on_hand_date;
   }
 }

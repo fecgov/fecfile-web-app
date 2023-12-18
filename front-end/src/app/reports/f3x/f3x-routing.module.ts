@@ -13,7 +13,7 @@ import { ReportWebPrintComponent } from './report-web-print/report-web-print.com
 import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
-import { ReportSidebarState, SidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarState } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
 // ROUTING NOTE:

@@ -29,6 +29,7 @@ export class F1MMenuComponent extends DestroyerComponent implements OnInit {
 
     this.items$ = combineLatest([this.store.select(selectSidebarState), this.activeReport$]).pipe(
       takeUntil(this.destroy$),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       switchMap(([sidebarState, activeReport]: [SidebarState, Report | undefined]) => {
         return of([] as MenuItem[]);
       })
