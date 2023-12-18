@@ -75,8 +75,8 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('test editItem', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: 'testId', report_id: '1' } as unknown as Transaction;
     component.editItem(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });

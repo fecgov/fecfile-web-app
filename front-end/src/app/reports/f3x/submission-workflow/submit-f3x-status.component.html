@@ -7,6 +7,7 @@
       Your report has been rejected.
     </h1>
     <h1
+<<<<<<< HEAD
       *ngIf="
         report?.upload_submission?.fec_status === 'PROCESSING' ||
         (!report?.upload_submission?.fec_status &&
@@ -15,6 +16,10 @@
       "
       class="super-header"
     >
+=======
+      *ngIf="report?.upload_submission?.fec_status === 'PROCESSING' || (!report?.upload_submission?.fec_status && report?.upload_submission?.fecfile_task_state && report?.upload_submission?.fecfile_task_state !== 'FAILED')"
+      class="super-header">
+>>>>>>> develop
       Thank you for submitting your report. It is currently being processed.
     </h1>
   </div>
@@ -27,30 +32,31 @@
         <h3 class="no-vert-margins">
           {{ report.formLabel }}
         </h3>
-        <br />
+        <br/>
       </div>
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR REPORT TYPE:</h5>
         <h3 class="no-vert-margins">
           {{ report.report_code | reportCodeLabel }}
         </h3>
-        <br />
+        <br/>
       </div>
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
         <h3 class="no-vert-margins no-wrap">
-          {{ report.coverage_from_date || null | longDate }} — <wbr />
+          {{ report.coverage_from_date || null | longDate }} —
+          <wbr/>
           {{ report.coverage_through_date || null | longDate }}
         </h3>
-        <br />
+        <br/>
       </div>
       <div class="col-12">
         <h5 class="no-vert-margins word-break">CONFIRMATION EMAILS:</h5>
         <h3 class="no-vert-margins word-break">
-          {{ report.confirmation_email_1 }} <br />
+          {{ report.confirmation_email_1 }} <br/>
           {{ report.confirmation_email_2 }}
         </h3>
-        <br />
+        <br/>
       </div>
       <ng-container *ngIf="report?.upload_submission?.fec_report_id">
         <div class="col-12">
@@ -64,12 +70,11 @@
   </div>
   <div class="col-8">
     <img
-      _ngcontent-kve-c61=""
       class="image-max-width"
-      src="assets/img/image-f3x-pages-spread.png"
+      ngSrc="assets/img/image-placeholder.png"
       draggable="false"
-      alt="Form 3X pages spread out aesthetically"
-    />
+      alt="Form submitted success image"
+      height="271" width="450"/>
   </div>
 </div>
 <div class="grid">

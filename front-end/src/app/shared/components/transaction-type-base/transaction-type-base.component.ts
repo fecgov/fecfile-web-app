@@ -22,6 +22,7 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { spinnerOffAction } from "../../../store/spinner.actions";
 
 @Component({
   template: '',
@@ -51,7 +52,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected store: Store,
     protected reportService: ReportService,
     protected activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -75,7 +77,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
+            this.form.patchValue({[this.templateMap.amount]: -1 * amount});
           }
         });
     }
@@ -104,9 +106,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   writeToApi(payload: Transaction): Observable<Transaction> {
     if (payload.id) {
-      return this.transactionService.update(payload);
+      return this.transactionService.update(payload, true);
     } else {
-      return this.transactionService.create(payload);
+      return this.transactionService.create(payload, true);
     }
   }
 
@@ -123,12 +125,18 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.formProperties
     );
+    this.processPayload(payload, navigationEvent)
+  }
+
+  processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
-      const responseFromApi = this.writeToApi(payload);
-      responseFromApi.subscribe((transaction) => {
+      this.writeToApi(payload).subscribe((transaction) => {
+        this.store.dispatch(spinnerOffAction());
         navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
         this.navigateTo(navigationEvent);
       });
+    } else {
+      this.store.dispatch(spinnerOffAction());
     }
   }
 
@@ -137,7 +145,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form: FormGroup,
     targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
   ) {
-    const templateMap = transaction.transactionType?.templateMap;
+    const templateMap = transaction.transactionType.templateMap;
     if (!templateMap) {
       throw new Error('Fecfile: Cannot find template map when confirming transaction');
     }
@@ -192,16 +200,24 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     );
   }
 
+  isInvalid(): boolean {
+    return this.form.invalid || !this.transaction;
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.transaction) return of(false);
+    return this.confirmWithUser(this.transaction, this.form);
+  }
+
   handleNavigate(navigationEvent: NavigationEvent): void {
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (this.form.invalid || !this.transaction) {
-        return;
-      }
-      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: boolean) => {
+      if (this.isInvalid()) return;
+      this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
+        else this.store.dispatch(spinnerOffAction());
       });
     } else {
       this.navigateTo(navigationEvent);

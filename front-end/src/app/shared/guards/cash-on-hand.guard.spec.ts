@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -10,6 +11,7 @@ describe('CashOnHandGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [provideMockStore(testMockStore)],
     });
     guard = TestBed.inject(CashOnHandGuard);

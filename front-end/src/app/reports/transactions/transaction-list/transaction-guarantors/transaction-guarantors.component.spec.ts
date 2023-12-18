@@ -12,11 +12,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC2Transaction, ScheduleC2TransactionTypes } from 'app/shared/models/schc2-transaction.model';
+import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
+import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -44,13 +42,13 @@ describe('TransactionGuarantorsComponent', () => {
           },
         },
         {
-          provide: TransactionSchAService,
+          provide: TransactionSchC2Service,
           useValue: {
             get: (transactionId: string) =>
               of(
-                SchATransaction.fromJSON({
+                SchC2Transaction.fromJSON({
                   id: transactionId,
-                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
+                  transaction_type_identifier: 'LOAN_GUARANTOR',
                 })
               ),
             getTableData: () => of([]),
@@ -69,32 +67,23 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(component.getGetParams()['parent']).toBeUndefined();
   });
 
-  it('should filter to only the loan guarantors', () => {
-    component.transactions = [
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
-      }),
-      SchATransaction.fromJSON({
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
-      }),
-      SchC2Transaction.fromJSON({
-        transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
-      }),
-    ];
+  it('should load items with loan', () => {
+    component.loan = { id: '1' } as Transaction;
     fixture.detectChanges();
-    component.ngOnInit();
+    expect(component).toBeTruthy();
+    expect(component.getGetParams()['parent']).toEqual('1');
+  });
 
-    expect(component.transactions?.length).toEqual(1);
-    expect(component.transactions?.[0]?.transaction_type_identifier).toEqual(
-      ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR
-    );
+  it('should have delete', () => {
+    component.reportIsEditable = true;
+    expect(component.rowActions[0].isAvailable()).toEqual(false);
+    expect(component.rowActions[1].isAvailable()).toEqual(true);
+    expect(component.rowActions[2].isAvailable()).toEqual(true);
+    expect(component.rowActions[0].isEnabled({})).toEqual(true);
+    expect(component.rowActions[1].isEnabled({})).toEqual(true);
+    expect(component.rowActions[2].isEnabled({})).toEqual(true);
   });
 });

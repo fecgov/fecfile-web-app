@@ -184,7 +184,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return { report_id: reportId, page_size: this.rowsPerPage };
+    return {report_id: reportId, page_size: this.rowsPerPage};
   }
 
   onRowsPerPageChange() {
@@ -199,12 +199,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override editItem(item: Transaction): void {
-    this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
+    this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
   }
 
   public editLoanAgreement(transaction: Transaction): void {
     if (transaction.loan_agreement_id)
-      this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
+      this.router.navigate([`${transaction.loan_agreement_id}`], {relativeTo: this.activatedRoute});
   }
 
   public createLoanAgreement(transaction: Transaction): void {
@@ -251,6 +251,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
     );
   }
+
   public createDebtRepaymentReceived(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`
@@ -262,11 +263,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
     );
   }
+
   public createDebtRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
     );
   }
+
   public createReattribution(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
@@ -276,7 +279,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public updateItem(item: Transaction) {
     if (this.itemService.update) {
       this.itemService
-        .update(item)
+        .update(item, false)
         .pipe(take(1), takeUntil(this.destroy$))
         .subscribe(() => {
           this.loadTableItems({});

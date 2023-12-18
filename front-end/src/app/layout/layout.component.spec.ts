@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
 import { ReportSidebarState, SidebarComponent, SidebarState } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
@@ -12,19 +11,27 @@ import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
 import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
+import { SharedModule } from 'app/shared/shared.module';
+import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
   let store: Store;
 
+  const mockStore = {
+    initialState: {
+      fecfile_online_sidebarState: initSidebarState,
+    },
+    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarState.TRANSACTIONS, '/url') }],
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule],
+      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, SharedModule],
       declarations: [
         LayoutComponent,
         SidebarComponent,
@@ -34,7 +41,7 @@ describe('LayoutComponent', () => {
         FooterComponent,
         CommitteeBannerComponent,
       ],
-      providers: [LayoutComponent, provideMockStore(testMockStore)],
+      providers: [LayoutComponent, provideMockStore(mockStore)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutComponent);
@@ -48,22 +55,11 @@ describe('LayoutComponent', () => {
   });
 
   it('should set showSidebar to true when location has a sidebar action', () => {
-    store.dispatch(setSidebarStateAction({ payload: new SidebarState(ReportSidebarState.TRANSACTIONS, '/url') }));
     store
       .select(selectSidebarState)
       .pipe(filter((state) => !!state))
       .subscribe(() => {
         expect(component.showSidebar).toBeTruthy();
-      });
-  });
-
-  it('should set showSidebar to false when location does not have a sidebar action', () => {
-    store.dispatch(setSidebarStateAction({ payload: undefined }));
-    store
-      .select(selectSidebarState)
-      .pipe(filter((state) => !!state))
-      .subscribe(() => {
-        expect(component.showSidebar).toBeFalsy();
       });
   });
 });

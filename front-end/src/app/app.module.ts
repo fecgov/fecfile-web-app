@@ -12,7 +12,6 @@ import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
-import { cashOnHandReducer } from './store/cash-on-hand.reducer';
 import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
@@ -56,7 +55,7 @@ import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component'
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'cashOnHand', 'sidebarState'],
+    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'sidebarState'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -94,7 +93,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         spinnerOn: spinnerReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
-        cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
       },
       { metaReducers }

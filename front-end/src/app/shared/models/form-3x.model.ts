@@ -3,11 +3,6 @@ import { Report, ReportTypes } from './report.model';
 import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 
-export interface CashOnHand {
-  report_id: string | undefined;
-  value: number | undefined;
-}
-
 export enum F3xFormTypes {
   F3XN = 'F3XN',
   F3XA = 'F3XA',

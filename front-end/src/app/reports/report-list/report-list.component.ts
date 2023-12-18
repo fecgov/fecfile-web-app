@@ -1,12 +1,17 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
+<<<<<<< HEAD
 import { Report, ReportTypes } from '../../shared/models/report.model';
 import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
 import { ReportService } from '../../shared/services/report.service';
+=======
+import { Report } from '../../shared/models/report.model';
+import { LabelList } from '../../shared/utils/label.utils';
+import { ReportService } from '../../shared/services/report.service';
+import { F3xFormTypeLabels, F3xFormVersionLabels, Form3X } from 'app/shared/models/form-3x.model';
+>>>>>>> develop
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,10 +19,15 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
+<<<<<<< HEAD
   cashOnHand: CashOnHand = {
     report_id: undefined,
     value: undefined,
   };
+=======
+  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
+  f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
+>>>>>>> develop
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',
@@ -38,7 +48,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   ];
 
   constructor(
-    private store: Store,
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
@@ -53,13 +62,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-
-    this.store
-      .select(selectCashOnHand)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cashOnHand: CashOnHand) => {
-        this.cashOnHand = cashOnHand;
-      });
   }
 
   protected getEmptyItem(): Report {
@@ -73,7 +75,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     }
 
     if (item.report_type === ReportTypes.F3X) {
-      if (item.id === this.cashOnHand.report_id) {
+      if (item.is_first) {
         this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
       } else {
         this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
@@ -107,5 +109,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    */
   public displayName(item: Report): string {
     return item.form_type ?? '';
+  }
+
+  public noCashOnHand(): boolean {
+    return this.items.length === 1 && !(this.items[0] as Form3X).cash_on_hand_date;
   }
 }

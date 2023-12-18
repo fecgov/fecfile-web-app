@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // PrimeNG
@@ -83,6 +83,7 @@ import { MainFormComponent } from './f1m/main-form/main-form.component';
     ProgressSpinnerModule,
     InputNumberModule,
     RippleModule,
+    NgOptimizedImage,
   ],
 })
 export class ReportsModule {

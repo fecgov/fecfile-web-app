@@ -31,11 +31,11 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
+import { combineLatest, startWith, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
-import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { spinnerOffAction, spinnerOnAction } from '../../../store/spinner.actions';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -55,7 +55,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
@@ -242,7 +241,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-
+    this.store.dispatch(spinnerOnAction());
     if (this.form.invalid) {
       return;
     }
@@ -256,36 +255,26 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
     //Observables are *defined* here ahead of their execution
     const create$ = this.form3XService.create(summary, this.formProperties);
-    // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
-    const tableData$ = this.reportService.getTableData();
-    const cashOnHand$ = this.store.select(selectCashOnHand);
 
-    //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
-    create$
-      .pipe(
-        switchMap((report) => tableData$.pipe(map(() => report))),
-        switchMap((report) => {
-          return zip(of(report), cashOnHand$);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(([report, coh]) => {
-        if (jump === 'continue') {
-          if (coh.report_id === report.id) {
-            this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
-          } else {
-            this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-          }
+    //Create the report
+    create$.subscribe((report) => {
+      this.store.dispatch(spinnerOffAction());
+      if (jump === 'continue') {
+        if (report.is_first) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
         } else {
-          this.router.navigateByUrl('/reports');
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Contact Updated',
-            life: 3000,
-          });
+          this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
         }
-      });
+      } else {
+        this.router.navigateByUrl('/reports');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      }
+    });
   }
 }
 

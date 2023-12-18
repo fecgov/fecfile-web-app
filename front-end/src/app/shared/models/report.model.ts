@@ -18,6 +18,7 @@ export abstract class Report extends BaseModel {
   }
   report_version: string | undefined; // Tracks amendment versions
   report_id: string | undefined; // FEC assigned report ID
+  is_first: boolean | undefined;
 
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)

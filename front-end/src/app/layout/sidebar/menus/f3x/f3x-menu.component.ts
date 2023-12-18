@@ -3,9 +3,7 @@ import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../../store/active-report.selectors';
-import { selectCashOnHand } from '../../../../store/cash-on-hand.selectors';
 import { Report } from '../../../../shared/models/report.model';
-import { CashOnHand } from '../../../../shared/models/form-3x.model';
 import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
@@ -41,13 +39,9 @@ export class F3XMenuComponent extends DestroyerComponent implements OnInit {
       this.coverage_through_date = (report as Form3X).coverage_through_date;
     });
 
-    this.items$ = combineLatest([
-      this.store.select(selectCashOnHand),
-      this.store.select(selectSidebarState),
-      this.activeReport$,
-    ]).pipe(
+    this.items$ = combineLatest([this.store.select(selectSidebarState), this.activeReport$]).pipe(
       takeUntil(this.destroy$),
-      switchMap(([cashOnHand, sidebarState, activeReport]: [CashOnHand, SidebarState, Report | undefined]) => {
+      switchMap(([sidebarState, activeReport]: [SidebarState, Report | undefined]) => {
         const isEditable = this.reportService.isEditable(activeReport);
 
         let transactionItems = [
@@ -69,7 +63,7 @@ export class F3XMenuComponent extends DestroyerComponent implements OnInit {
           },
           { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
         ];
-        if (activeReport?.id === cashOnHand.report_id) {
+        if (activeReport?.is_first) {
           transactionItems = [
             {
               label: 'Cash on hand',

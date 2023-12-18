@@ -72,7 +72,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   save() {
     this.formSubmitted = true;
-
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
 
     const payload: MemoText = MemoText.fromJSON({
