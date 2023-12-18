@@ -12,7 +12,6 @@ import { BannerComponent } from './banner/banner.component';
 import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
-import { Event, NavigationEnd, Router } from '@angular/router';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { SharedModule } from 'app/shared/shared.module';
 import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';

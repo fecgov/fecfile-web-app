@@ -9,7 +9,6 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { MessageService } from 'primeng/api';
 import { Observable, takeUntil } from 'rxjs';
-import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { F99FormTypes, Form99 } from 'app/shared/models/form-99.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -129,7 +128,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     //Observables are *defined* here ahead of their execution
 
     //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
-    save$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+    save$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (jump === 'continue') {
         //this.router.navigateByUrl(`/reports/f99/web-print/${report.id}`);
         this.router.navigateByUrl('/reports');

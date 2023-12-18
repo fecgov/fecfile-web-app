@@ -2,10 +2,6 @@ import { Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
-import { Form3X } from './form-3x.model';
-import { Form99 } from './form-99.model';
-import { Form1M } from './form-1m.model';
-import { Form24 } from './form-24.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
