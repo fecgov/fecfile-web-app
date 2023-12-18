@@ -4,6 +4,8 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
+import { RedesignationToUtils } from './redesignation-to.utils';
+import { RedesignationFromUtils } from './redesignation-from.utils';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -46,6 +48,10 @@ export class ReattRedesUtils {
     if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
       ReattributionToUtils.overlayForm(toForm, toTransaction as SchATransaction);
       ReattributionFromUtils.overlayForm(fromForm, fromTransaction as SchATransaction, toForm);
+    }
+    if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_TO) {
+      RedesignationToUtils.overlayForm(toForm, toTransaction as SchBTransaction);
+      RedesignationFromUtils.overlayForm(fromForm, fromTransaction as SchBTransaction, toForm);
     }
   }
 
