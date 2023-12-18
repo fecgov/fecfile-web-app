@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
 import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -59,7 +59,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     // Add the date range validation check to the DATE INCURRED input
     if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
       this.store
-        .select(selectActiveForm3X)
+        .select(selectActiveReport)
         .pipe(take(1))
         .subscribe((report) => {
           this.form

@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
-import { selectActiveForm99 } from '../../../../store/active-report.selectors';
+import { selectActiveReport } from '../../../../store/active-report.selectors';
 import { Report } from '../../../../shared/models/report.model';
-import { Form99 } from '../../../../shared/models/form-99.model';
 import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
@@ -16,7 +15,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
   styleUrls: ['../menu-report.component.scss'],
 })
 export class F99MenuComponent extends DestroyerComponent implements OnInit {
-  activeReport$?: Observable<Form99 | undefined>;
+  activeReport$?: Observable<Report | undefined>;
   items$: Observable<MenuItem[]> = of([]);
 
   constructor(private store: Store, private reportService: ReportService) {
@@ -24,7 +23,7 @@ export class F99MenuComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.store.select(selectActiveForm99);
+    this.activeReport$ = this.store.select(selectActiveReport);
 
     this.items$ = combineLatest([this.store.select(selectSidebarState), this.activeReport$]).pipe(
       takeUntil(this.destroy$),

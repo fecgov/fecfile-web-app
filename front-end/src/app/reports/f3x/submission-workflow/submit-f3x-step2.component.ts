@@ -8,7 +8,7 @@ import { CashOnHand, Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -58,7 +58,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
 
   ngOnInit(): void {
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as Form3X;

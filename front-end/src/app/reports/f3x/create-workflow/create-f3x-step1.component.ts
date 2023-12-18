@@ -26,7 +26,7 @@ import {
   quarterlyNonElectionYearReportCodes,
 } from 'app/shared/utils/report-code.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -79,7 +79,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (reportId && report) {

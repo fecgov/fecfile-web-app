@@ -1,5 +1,5 @@
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCashOnHand } from 'app/store/cash-on-hand.reducer';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
@@ -121,7 +121,7 @@ export const testMockStore = {
   selectors: [
     { selector: selectCommitteeAccount, value: testCommitteeAccount },
     { selector: selectUserLoginData, value: testUserLoginData },
-    { selector: selectActiveForm3X, value: testActiveReport },
+    { selector: selectActiveReport, value: testActiveReport },
     { selector: selectCashOnHand, value: testCashOnHand },
   ],
 };

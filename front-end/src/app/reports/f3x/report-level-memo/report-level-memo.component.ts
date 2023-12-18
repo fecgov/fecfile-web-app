@@ -7,7 +7,7 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
@@ -53,7 +53,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       .subscribe((committeeAccount) => (this.committeeAccountId = committeeAccount?.committee_id));
 
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as Form3X;

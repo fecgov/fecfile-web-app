@@ -6,7 +6,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -34,7 +34,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report as Form3X));
 

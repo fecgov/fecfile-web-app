@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
@@ -34,7 +34,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   ngOnInit(): void {
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as Form3X;

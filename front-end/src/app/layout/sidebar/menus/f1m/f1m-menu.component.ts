@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
-import { selectActiveForm3X } from '../../../../store/active-report.selectors';
+import { selectActiveReport } from '../../../../store/active-report.selectors';
 import { selectCashOnHand } from '../../../../store/cash-on-hand.selectors';
 import { Report } from '../../../../shared/models/report.model';
 import { ReportService } from '../../../../shared/services/report.service';
@@ -27,7 +27,7 @@ export class F1MMenuComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.store.select(selectActiveForm3X);
+    this.activeReport$ = this.store.select(selectActiveReport);
 
     this.items$ = combineLatest([
       this.store.select(selectCashOnHand),

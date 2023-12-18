@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { environment } from 'environments/environment';
@@ -21,7 +21,7 @@ export class TestDotFecComponent extends DestroyerComponent implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
     this.fileIsGenerated = false;

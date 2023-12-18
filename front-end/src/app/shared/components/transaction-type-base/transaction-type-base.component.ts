@@ -16,7 +16,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
@@ -88,7 +88,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     this.store
-      .select(selectActiveForm3X)
+      .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);

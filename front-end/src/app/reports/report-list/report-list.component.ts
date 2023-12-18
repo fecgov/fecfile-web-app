@@ -68,7 +68,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   public override editItem(item: Report): void {
     if (!this.itemService.isEditable(item)) {
-      this.router.navigateByUrl(`/reports/${item.report_type}/submit/status/${item.id}`);
+      this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
       return;
     }
 

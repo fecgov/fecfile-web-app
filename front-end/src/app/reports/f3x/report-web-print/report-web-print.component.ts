@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Form3X } from '../../../shared/models/form-3x.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/models/report.model';
-import { selectActiveForm3X } from '../../../store/active-report.selectors';
+import { selectActiveReport } from '../../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
@@ -31,7 +31,7 @@ export class ReportWebPrintComponent extends DestroyerComponent implements OnIni
 
   ngOnInit(): void {
     this.store
-      .select<Report | null>(selectActiveForm3X)
+      .select<Report | null>(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (report) {

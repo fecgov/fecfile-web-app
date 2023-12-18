@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { selectActiveForm3X } from 'app/store/active-report.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -75,7 +75,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
     if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
       this.store
-        .select(selectActiveForm3X)
+        .select(selectActiveReport)
         .pipe(takeUntil(this.destroy$))
         .subscribe((report) => {
           this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
