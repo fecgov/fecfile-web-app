@@ -9,5 +9,4 @@ export interface AppState {
   userLoginData: UserLoginData;
   activeReport: Report | undefined;
   sidebarState?: SidebarState;
-  sidebarVisible: boolean;
 }

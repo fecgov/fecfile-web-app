@@ -16,7 +16,7 @@ import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
-import { sidebarStateReducer, sidebarVisibleReducer } from './store/sidebar-state.reducer';
+import { sidebarStateReducer } from './store/sidebar-state.reducer';
 import { spinnerReducer } from './store/spinner.reducer';
 
 // PrimeNG
@@ -90,7 +90,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
         sidebarState: sidebarStateReducer,
-        sidebarVisible: sidebarVisibleReducer,
       },
       { metaReducers }
     ),
