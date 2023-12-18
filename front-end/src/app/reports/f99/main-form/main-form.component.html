@@ -16,7 +16,7 @@
     <h3>Committee</h3>
     <div class="grid">
       <div class="col-9">
-        <label>COMMITTEE NAME</label>
+        <label for="committee_name">COMMITTEE NAME</label>
         <input
           type="text"
           pInputText
@@ -32,7 +32,7 @@
         ></app-error-messages>
       </div>
       <div class="col-3">
-        <label>COMMITTEE ID</label>
+        <label for="filer_committee_id_number">COMMITTEE ID</label>
         <input
           type="text"
           pInputText
@@ -53,7 +53,7 @@
     <h3>Text Information</h3>
     <div class="grid">
       <div class="col-6">
-        <label>TEXT CODE (OPTIONAL)</label>
+        <label for="text_code">TEXT CODE (OPTIONAL)</label>
         <p-dropdown
           inputId="text_code"
           formControlName="text_code"
@@ -65,7 +65,7 @@
       </div>
       <div class="col-6"></div>
       <div class="col-12">
-        <label>TEXT MESSAGE</label>
+        <label for="text_message">TEXT MESSAGE</label>
         <textarea
           id="text_message"
           [rows]="4"

@@ -84,8 +84,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     private form99Service: Form99Service,
     private messageService: MessageService,
     protected router: Router,
-    private activatedRoute: ActivatedRoute,
-    private reportService: ReportService
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
