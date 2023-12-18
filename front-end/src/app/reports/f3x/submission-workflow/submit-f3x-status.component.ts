@@ -21,7 +21,7 @@ export class ReportSubmissionStatusComponent extends DestroyerComponent implemen
     this.store
       .select(selectActiveForm3X)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
+      .subscribe((report) => (this.report = report as Form3X));
   }
 
   public backToReports() {

@@ -2,11 +2,11 @@
   <div class="grid report-info">
     <div class="col-12">
       <div class="title-2">REPORT PROGRESS</div>
-      <div class="report-type">{{ (activeReport$ | async)?.formLabel }}</div>
-      <div class="sub-heading">{{ (activeReport$ | async)?.report_code | reportCodeLabel }}</div>
+      <div class="report-type">{{ formLabel }}</div>
+      <div class="sub-heading">{{ report_code | reportCodeLabel }}</div>
       <div class="sub-heading">
-        {{ (activeReport$ | async)!.coverage_from_date | fecDate }} — <wbr />
-        {{ (activeReport$ | async)!.coverage_through_date | fecDate }}
+        {{ coverage_from_date | fecDate }} — <wbr />
+        {{ coverage_through_date | fecDate }}
       </div>
     </div>
   </div>

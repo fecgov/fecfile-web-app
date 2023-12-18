@@ -8,6 +8,7 @@ import { selectActiveForm3X } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
 import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
+import { Form3X } from 'app/shared/models/form-3x.model';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -63,7 +64,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         .subscribe((report) => {
           this.form
             .get(this.templateMap.date)
-            ?.addValidators(dateWithinReportRange(report.coverage_from_date, report.coverage_through_date));
+            ?.addValidators(
+              dateWithinReportRange((report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date)
+            );
         });
     }
 
