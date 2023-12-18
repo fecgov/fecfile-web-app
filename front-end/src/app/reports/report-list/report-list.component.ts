@@ -6,7 +6,6 @@ import { Report, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
-import { FormTypes } from 'app/shared/utils/form-type.utils';
 
 @Component({
   selector: 'app-report-list',
