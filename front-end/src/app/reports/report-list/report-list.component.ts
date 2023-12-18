@@ -2,16 +2,9 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-<<<<<<< HEAD
 import { Report, ReportTypes } from '../../shared/models/report.model';
-import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
 import { ReportService } from '../../shared/services/report.service';
-=======
-import { Report } from '../../shared/models/report.model';
-import { LabelList } from '../../shared/utils/label.utils';
-import { ReportService } from '../../shared/services/report.service';
-import { F3xFormTypeLabels, F3xFormVersionLabels, Form3X } from 'app/shared/models/form-3x.model';
->>>>>>> develop
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,15 +12,6 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
-<<<<<<< HEAD
-  cashOnHand: CashOnHand = {
-    report_id: undefined,
-    value: undefined,
-  };
-=======
-  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
->>>>>>> develop
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',

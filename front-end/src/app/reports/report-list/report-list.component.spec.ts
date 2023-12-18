@@ -51,11 +51,7 @@ describe('ReportListComponent', () => {
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-<<<<<<< HEAD
-    component.editItem({ id: '999', report_type: ReportTypes.F3X } as Report); // 999 is the cash on hand report
-=======
-    component.editItem({ id: '999', is_first: true } as Form3X); // 999 is the cash on hand report
->>>>>>> develop
+    component.editItem({ id: '999', is_first: true, report_type: ReportTypes.F3X } as Form3X); // 999 is the cash on hand report
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
     component.editItem({ id: '888', report_type: ReportTypes.F3X } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');

@@ -1,29 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-  ValidationErrors,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { DateUtils } from 'app/shared/utils/date.utils';
-import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { environment } from 'environments/environment';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { MessageService } from 'primeng/api';
-import { Observable, combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
-import { ReportService } from '../../../shared/services/report.service';
-import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
+import { Observable, takeUntil } from 'rxjs';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { F99FormTypes, Form99 } from 'app/shared/models/form-99.model';
@@ -136,7 +121,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     let save$: Observable<Report>;
     if (this.reportId) {
       summary.id = this.reportId;
-      save$ = this.form99Service.update(summary, this.formProperties);
+      save$ = this.form99Service.update(summary, false, this.formProperties);
     } else {
       save$ = this.form99Service.create(summary, this.formProperties);
     }
