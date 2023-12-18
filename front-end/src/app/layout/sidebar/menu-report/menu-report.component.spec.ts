@@ -8,7 +8,6 @@ import { SharedModule } from '../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuReportComponent } from './menu-report.component';
 import { ReportSidebarState, SidebarState } from '../sidebar.component';
-import { Store } from '@ngrx/store';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
 
