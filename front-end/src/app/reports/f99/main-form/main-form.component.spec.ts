@@ -17,10 +17,15 @@ import { Form99Service } from 'app/shared/services/form-99.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { Form99 } from 'app/shared/models/form-99.model';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
   let fixture: ComponentFixture<MainFormComponent>;
+  let router: Router;
+  let form99Service: Form99Service;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,6 +43,8 @@ describe('MainFormComponent', () => {
       declarations: [MainFormComponent, LabelPipe, AppSelectButtonComponent],
       providers: [Form99Service, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     });
+    router = TestBed.inject(Router);
+    form99Service = TestBed.inject(Form99Service);
     fixture = TestBed.createComponent(MainFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -45,5 +52,28 @@ describe('MainFormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should go back', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.goBack();
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
+  });
+
+  it('should save', () => {
+    const createSpy = spyOn(form99Service, 'create').and.returnValue(of(Form99.fromJSON({})));
+    const updateSpy = spyOn(form99Service, 'update').and.returnValue(of(Form99.fromJSON({})));
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+
+    component.save();
+
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
+    expect(createSpy).toHaveBeenCalledTimes(1);
+
+    component.reportId = '999';
+    component.save('continue');
+
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
+    expect(updateSpy).toHaveBeenCalledTimes(1);
   });
 });
