@@ -128,8 +128,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     //Observables are *defined* here ahead of their execution
 
     //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    save$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+    save$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (jump === 'continue') {
         //this.router.navigateByUrl(`/reports/f99/web-print/${report.id}`);
         this.router.navigateByUrl('/reports');

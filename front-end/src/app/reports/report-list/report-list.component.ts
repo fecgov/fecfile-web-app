@@ -96,9 +96,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public noCashOnHand(): boolean {
-    const f3x_reports = this.items.filter((item) => {
-      return item.report_type === ReportTypes.F3X;
-    });
-    return f3x_reports.length === 1 && !(f3x_reports[0] as Form3X).cash_on_hand_date;
+    const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
+    return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
   }
 }
