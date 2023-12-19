@@ -16,7 +16,7 @@ export class SidebarStateResolver {
    * @param {ActivatedRouteSnapshot} route
    * @returns {Observable<Report | undefined>}
    */
-  resolve(route: ActivatedRouteSnapshot, routeState: RouterStateSnapshot): Observable<SidebarState | undefined> {
+  resolve(route: ActivatedRouteSnapshot): Observable<SidebarState | undefined> {
     const sidebarSection = route.data['sidebarSection'];
     let sidebarState: SidebarState | undefined;
     if (sidebarSection != undefined) {
