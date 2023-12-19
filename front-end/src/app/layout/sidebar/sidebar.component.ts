@@ -16,18 +16,15 @@ export class SidebarComponent {
   }
 }
 
-export enum ReportSidebarState {
-  'CREATE',
+export enum ReportSidebarSection {
   'TRANSACTIONS',
   'REVIEW',
   'SUBMISSION',
 }
 
 export class SidebarState {
-  section: ReportSidebarState;
-  url: string;
-  constructor(section: ReportSidebarState, url: string) {
+  section: ReportSidebarSection;
+  constructor(section: ReportSidebarSection) {
     this.section = section;
-    this.url = url;
   }
 }

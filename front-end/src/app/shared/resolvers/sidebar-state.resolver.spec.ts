@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SidebarStateResolver } from './sidebar-state.resolver';
 import { Store } from '@ngrx/store';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
-import { ReportSidebarState, SidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarSection, SidebarState } from 'app/layout/sidebar/sidebar.component';
 import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
 
 describe('SidebarStateResolver', () => {
@@ -15,7 +15,7 @@ describe('SidebarStateResolver', () => {
     initialState: {
       fecfile_online_sidebarState: initSidebarState,
     },
-    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarState.TRANSACTIONS, '/url') }],
+    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarSection.TRANSACTIONS) }],
   };
 
   beforeEach(() => {
@@ -36,18 +36,12 @@ describe('SidebarStateResolver', () => {
         sidebarState: 0,
       },
     };
-    const routeState = {
-      url: '/url',
-    };
-    resolver
-      .resolve(route as unknown as ActivatedRouteSnapshot, routeState as RouterStateSnapshot)
-      .subscribe((response) => {
-        expect(response).toBeUndefined();
+    resolver.resolve(route as unknown as ActivatedRouteSnapshot).subscribe((response) => {
+      expect(response).toBeUndefined();
 
-        store.select(selectSidebarState).subscribe((data) => {
-          expect(data.section).toBe(ReportSidebarState.TRANSACTIONS);
-          expect(data.url).toBe('/url');
-        });
+      store.select(selectSidebarState).subscribe((data) => {
+        expect(data.section).toBe(ReportSidebarSection.TRANSACTIONS);
       });
+    });
   });
 });

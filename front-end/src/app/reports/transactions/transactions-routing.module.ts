@@ -6,7 +6,7 @@ import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guar
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
-import { ReportSidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
 // ROUTING NOTE:
@@ -23,8 +23,9 @@ const routes: Routes = [
     component: TransactionListComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
-      sidebarState: ReportSidebarState.TRANSACTIONS,
+      sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'report/:reportId/select/:category',
@@ -32,8 +33,9 @@ const routes: Routes = [
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
-      sidebarState: ReportSidebarState.TRANSACTIONS,
+      sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'report/:reportId/create/:transactionType',
@@ -43,9 +45,10 @@ const routes: Routes = [
       sidebar: SidebarStateResolver,
     },
     data: {
-      sidebarState: ReportSidebarState.TRANSACTIONS,
+      sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },
     canActivate: [ReportIsEditableGuard],
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'report/:reportId/list/:transactionId',
@@ -55,9 +58,10 @@ const routes: Routes = [
       sidebar: SidebarStateResolver,
     },
     data: {
-      sidebarState: ReportSidebarState.TRANSACTIONS,
+      sidebarSection: ReportSidebarSection.TRANSACTIONS,
       noComponentReuse: true,
     },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType',
