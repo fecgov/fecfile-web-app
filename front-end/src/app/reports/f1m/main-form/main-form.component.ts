@@ -47,6 +47,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 })
 export class MainFormComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
+    'status_by',
     'form_type',
     'filer_committee_id_number',
     'committee_name',
@@ -60,7 +61,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     'committee_type',
     'treasurer_last_name',
     'treasurer_first_name',
-    'date_signed',
   ];
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
@@ -96,7 +96,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
       .subscribe((committeeAccount) => {
         Object.entries(COMMITTEE_TO_1M_FIELDS).forEach(([field, committeeField]) => {
           this.form.get(field)?.setValue(committeeAccount[committeeField as keyof CommitteeAccount]);
-          this.form.get(field)?.disable();
         });
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);

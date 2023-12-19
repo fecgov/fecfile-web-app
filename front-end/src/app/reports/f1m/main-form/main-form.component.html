@@ -20,7 +20,14 @@
       <div class="col-9">
         <div class="field">
           <label for="name">COMMITTEE NAME</label>
-          <input class="p-disabled" type="text" pInputText id="committee_name" formControlName="committee_name" />
+          <input
+            class="p-disabled"
+            type="text"
+            pInputText
+            id="committee_name"
+            [readonly]="true"
+            formControlName="committee_name"
+          />
         </div>
       </div>
       <div class="col-3">
@@ -29,6 +36,7 @@
           <input
             class="p-disabled"
             type="text"
+            [readonly]="true"
             pInputText
             id="filer_committee_id_number"
             formControlName="filer_committee_id_number"
@@ -77,13 +85,13 @@
       <div class="col-6">
         <div class="field">
           <label for="street_1">STREET ADDRESS</label>
-          <input class="p-disabled" type="text" pInputText id="street_1" formControlName="street_1" />
+          <input class="p-disabled" type="text" [readonly]="true" pInputText id="street_1" formControlName="street_1" />
         </div>
       </div>
       <div class="col-6">
         <div class="field">
           <label for="street_2">APARTMENT, SUITE, ETC.</label>
-          <input class="p-disabled" type="text" pInputText id="street_2" formControlName="street_2" />
+          <input class="p-disabled" type="text" [readonly]="true" pInputText id="street_2" formControlName="street_2" />
         </div>
       </div>
     </div>
@@ -91,7 +99,7 @@
       <div class="col-6">
         <div class="field">
           <label for="city">CITY</label>
-          <input class="p-disabled" type="text" pInputText id="city" formControlName="city" />
+          <input class="p-disabled" type="text" [readonly]="true" pInputText id="city" formControlName="city" />
         </div>
       </div>
       <div class="col-3">
@@ -101,6 +109,7 @@
             inputId="state"
             formControlName="state"
             [options]="stateOptions"
+            [readonly]="true"
             [autoDisplayFirst]="false"
             appendTo="body"
           ></p-dropdown>
@@ -109,7 +118,7 @@
       <div class="col-3">
         <div class="field">
           <label for="zip">ZIP/POSTAL CODE</label>
-          <input class="p-disabled" type="text" pInputText id="zip" formControlName="zip" />
+          <input class="p-disabled" type="text" [readonly]="true" pInputText id="zip" formControlName="zip" />
         </div>
       </div>
     </div>
@@ -117,13 +126,13 @@
       <div class="col-6 long-word-value">
         <div class="field">
           <label for="email">EMAIL</label>
-          <input class="p-disabled" type="text" pInputText id="email" formControlName="email" />
+          <input class="p-disabled" type="text" [readonly]="true" pInputText id="email" formControlName="email" />
         </div>
       </div>
       <div class="col-6 long-word-value">
         <div class="field">
           <label for="website">WEBSITE</label>
-          <input class="p-disabled" type="text" pInputText id="website" formControlName="website" />
+          <input class="p-disabled" type="text" [readonly]="true" pInputText id="website" formControlName="website" />
         </div>
       </div>
     </div>
@@ -154,6 +163,7 @@
               name="status_by"
               value="qualification"
               label="QUALIFICATION"
+              [disabled]="true"
               formControlName="status_by"
             ></p-radioButton>
           </div>

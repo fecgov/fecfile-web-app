@@ -111,4 +111,7 @@ export const COMMITTEE_TO_1M_FIELDS = {
   zip: 'zip',
   email: 'email',
   website: 'website',
+  committee_type: 'committee_type',
+  treasurer_last_name: 'treasurer_name_2',
+  treasurer_first_name: 'treasurer_name_1',
 };
