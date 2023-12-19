@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SidebarStateResolver } from './sidebar-state.resolver';
 import { Store } from '@ngrx/store';
@@ -35,9 +35,6 @@ describe('SidebarStateResolver', () => {
       data: {
         sidebarState: 0,
       },
-    };
-    const routeState = {
-      url: '/url',
     };
     resolver.resolve(route as unknown as ActivatedRouteSnapshot).subscribe((response) => {
       expect(response).toBeUndefined();
