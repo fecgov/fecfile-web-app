@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { MessageService } from 'primeng/api';
-import { Observable, takeUntil } from 'rxjs';
+import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { F99FormTypes, Form99 } from 'app/shared/models/form-99.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -30,7 +29,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     'city',
     'state',
     'zip',
-    'date_signed',
     'text_code',
     'message_text',
   ];
@@ -62,7 +60,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
     private form99Service: Form99Service,
     private messageService: MessageService,
@@ -74,19 +71,16 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (this.reportId && report) {
-          this.form.patchValue(report);
-        }
-      });
+    const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+    const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
 
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
+      if (this.reportId) {
+        this.form.patchValue(activeReport);
+      } else {
+        this.setDefaultFormValues(committeeAccount);
+      }
+    });
 
     ValidateUtils.addJsonSchemaValidators(this.form, f99Schema, false);
   }

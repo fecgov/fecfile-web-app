@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F99MenuComponent } from './f99-menu.component';
-import { ReportSidebarState, SidebarState } from '../../sidebar.component';
+import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
@@ -20,7 +20,7 @@ describe('F99MenuComponent', () => {
     initialState: {
       fecfile_online_sidebarState: initSidebarState,
     },
-    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarState.REVIEW, '/url') }],
+    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarSection.REVIEW) }],
   };
 
   beforeEach(async () => {

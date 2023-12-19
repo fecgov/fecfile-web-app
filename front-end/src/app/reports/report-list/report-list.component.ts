@@ -65,7 +65,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
       }
     } else if (item.report_type === ReportTypes.F99) {
-      this.router.navigateByUrl(`/reports/f99/create/${item.id}`);
+      this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
     }
   }
 

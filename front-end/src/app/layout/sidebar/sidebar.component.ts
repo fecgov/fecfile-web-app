@@ -20,6 +20,7 @@ export enum ReportSidebarSection {
   'TRANSACTIONS',
   'REVIEW',
   'SUBMISSION',
+  'CREATE',
 }
 
 export class SidebarState {

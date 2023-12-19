@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { MainFormComponent } from './main-form/main-form.component';
-import { ReportSidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
@@ -20,12 +20,13 @@ const routes: Routes = [
     component: MainFormComponent,
   },
   {
-    path: 'create/:reportId',
+    path: 'edit/:reportId',
     title: 'Edit a report',
     component: MainFormComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: ReportSidebarState.CREATE },
+    data: { sidebarSection: ReportSidebarSection.CREATE },
+    runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
 ];

@@ -61,6 +61,9 @@ describe('MainFormComponent', () => {
   });
 
   it('should save', () => {
+    component.form.patchValue({
+      message_text: 'message',
+    });
     const createSpy = spyOn(form99Service, 'create').and.returnValue(of(Form99.fromJSON({})));
     const updateSpy = spyOn(form99Service, 'update').and.returnValue(of(Form99.fromJSON({})));
     const navigateSpy = spyOn(router, 'navigateByUrl');
