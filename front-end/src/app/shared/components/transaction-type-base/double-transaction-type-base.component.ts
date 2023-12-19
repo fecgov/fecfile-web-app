@@ -152,6 +152,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (ReattRedesUtils.isReattRedes(payload)) {
       const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
       this.transactionService.multisave(payloads).subscribe((response) => {
+        this.store.dispatch(spinnerOffAction());
         navigationEvent.transaction = response[0];
         this.navigateTo(navigationEvent);
       });

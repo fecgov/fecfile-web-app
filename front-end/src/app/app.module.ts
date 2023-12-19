@@ -53,7 +53,7 @@ import { HeaderLinksComponent } from './layout/header/header-links/header-links.
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'sidebarState'],
+    keys: ['committeeAccount', 'userLoginData', 'activeReport', 'sidebarState'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -82,7 +82,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
+    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
@@ -91,7 +91,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         activeReport: activeReportReducer,
         sidebarState: sidebarStateReducer,
       },
-      { metaReducers }
+      {metaReducers}
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
@@ -106,10 +106,11 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     CookieService,
     ConfirmationService,
     MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
     FecDatePipe,
-    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

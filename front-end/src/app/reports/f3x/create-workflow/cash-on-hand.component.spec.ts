@@ -16,6 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Form3X } from '../../../shared/models/form-3x.model';
 import { Form3XService } from '../../../shared/services/form-3x.service';
+import { spinnerOffAction } from "../../../store/spinner.actions";
 
 describe('CashOnHandComponent', () => {
   let component: CashOnHandComponent;
@@ -54,18 +55,28 @@ describe('CashOnHandComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should save', () => {
-    const f3x = Form3X.fromJSON({ id: '999' });
-    spyOn(form3XService, 'update').and.returnValue(of(f3x));
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.report = f3x;
-    component.form.patchValue({
-      L6a_cash_on_hand_jan_1_ytd: 200.0,
-      cash_on_hand_date: new Date(),
+  describe('save', () => {
+    it('should save', () => {
+      const f3x = Form3X.fromJSON({id: '999'});
+      spyOn(form3XService, 'update').and.returnValue(of(f3x));
+      const navigateSpy = spyOn(router, 'navigateByUrl');
+      component.report = f3x;
+      component.form.patchValue({
+        L6a_cash_on_hand_jan_1_ytd: 200.0,
+        cash_on_hand_date: new Date(),
+      });
+
+      component.save();
+
+      expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
     });
 
-    component.save();
-
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
+    it('should stop if form is invalid', () => {
+      expect(component.form.invalid).toBeTrue();
+      const spy = spyOn(component.store, 'dispatch');
+      component.save();
+      expect(spy).toHaveBeenCalledWith(spinnerOffAction());
+    });
   });
+
 });

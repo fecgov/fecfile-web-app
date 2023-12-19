@@ -3,9 +3,9 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { SingleClickDirective } from './single-click.directive';
 import { SharedModule } from "../shared.module";
 import { By } from "@angular/platform-browser";
-import {Store, StoreModule} from "@ngrx/store";
-import { spinnerOffAction, spinnerOnAction } from "../../store/spinner.actions";
-import {spinnerReducer} from "../../store/spinner.reducer";
+import { Store, StoreModule } from "@ngrx/store";
+import { spinnerOffAction } from "../../store/spinner.actions";
+import { spinnerReducer } from "../../store/spinner.reducer";
 
 @Component({
   standalone: true,
@@ -34,28 +34,13 @@ describe('SingleClickDirective', () => {
     spyOn(button, 'setAttribute');
     spyOn(button, 'removeAttribute');
     button.click();
-
+    tick(300);
     expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
-    tick(3001);
-
-    expect(button.removeAttribute).toHaveBeenCalled();
-  }));
-
-  it('should wait on spinner if spinner starts', fakeAsync(() => {
-    const button = des[0].nativeElement as HTMLButtonElement;
-    spyOn(button, 'setAttribute');
-    spyOn(button, 'removeAttribute');
-    button.click();
-    fixture.detectChanges();
-    expect(button.removeAttribute).toHaveBeenCalledTimes(0);
-    store.dispatch(spinnerOnAction());
-    fixture.detectChanges();
-    expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
-    // Called twice. Once in the initial click. Once in the subscription
-    expect(button.setAttribute).toHaveBeenCalledTimes(2);
-    expect(button.removeAttribute).toHaveBeenCalledTimes(0);
-    tick(3001);
+    expect(button.setAttribute).toHaveBeenCalledTimes(1);
     store.dispatch(spinnerOffAction());
+    tick(300);
     expect(button.removeAttribute).toHaveBeenCalledTimes(1);
+
   }));
+
 });

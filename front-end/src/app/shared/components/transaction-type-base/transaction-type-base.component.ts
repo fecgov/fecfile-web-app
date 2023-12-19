@@ -106,9 +106,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   writeToApi(payload: Transaction): Observable<Transaction> {
     if (payload.id) {
-      return this.transactionService.update(payload, true);
+      return this.transactionService.update(payload);
     } else {
-      return this.transactionService.create(payload, true);
+      return this.transactionService.create(payload);
     }
   }
 
@@ -117,6 +117,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
+      this.store.dispatch(spinnerOffAction());
       throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 

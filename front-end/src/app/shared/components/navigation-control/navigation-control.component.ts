@@ -18,6 +18,8 @@ import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/
 import { FormControl } from '@angular/forms';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
+import { spinnerOffAction } from "../../../store/spinner.actions";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: 'app-navigation-control',
@@ -32,6 +34,9 @@ export class NavigationControlComponent implements OnInit {
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
+
+  constructor(private store: Store) {
+  }
 
 
   ngOnInit(): void {
@@ -79,6 +84,7 @@ export class NavigationControlComponent implements OnInit {
       this.transaction,
       destinationTransactionType
     );
+    this.store.dispatch(spinnerOffAction());
     this.navigate.emit(navigationEvent);
   }
 

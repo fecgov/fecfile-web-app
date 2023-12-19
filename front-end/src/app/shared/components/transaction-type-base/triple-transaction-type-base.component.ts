@@ -17,6 +17,7 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { spinnerOffAction } from "../../../store/spinner.actions";
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -103,6 +104,7 @@ export abstract class TripleTransactionTypeBaseComponent
         this.childForm_2
       );
     } else {
+      this.store.dispatch(spinnerOffAction());
       throw new Error('Fecfile: No transactions submitted for triple-entry transaction form.');
     }
 
