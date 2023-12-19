@@ -7,17 +7,15 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {}
 
-export enum ReportSidebarState {
+export enum ReportSidebarSection {
   'TRANSACTIONS',
   'REVIEW',
   'SUBMISSION',
 }
 
 export class SidebarState {
-  section: ReportSidebarState;
-  url: string;
-  constructor(section: ReportSidebarState, url: string) {
+  section: ReportSidebarSection;
+  constructor(section: ReportSidebarSection) {
     this.section = section;
-    this.url = url;
   }
 }

@@ -7,7 +7,7 @@ import { Report } from '../../../shared/models/report.model';
 import { F3xFormTypeLabels, Form3X } from '../../../shared/models/form-3x.model';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from '../../../shared/services/report.service';
-import { ReportSidebarState, SidebarState } from '../sidebar.component';
+import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
@@ -36,19 +36,19 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
         let transactionItems = [
           {
             label: 'Manage your transactions',
-            routerLink: [`/reports/transactions/report/${activeReport?.id}/list`],
+            routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
           },
           {
             label: 'Add a receipt',
-            routerLink: [`/reports/transactions/report/${activeReport?.id}/select/receipt`],
+            routerLink: `/reports/transactions/report/${activeReport?.id}/select/receipt`,
           },
           {
             label: 'Add a disbursement',
-            routerLink: [`/reports/transactions/report/${activeReport?.id}/select/disbursement`],
+            routerLink: `/reports/transactions/report/${activeReport?.id}/select/disbursement`,
           },
           {
             label: 'Add loans and debts',
-            routerLink: [`/reports/transactions/report/${activeReport?.id}/select/loans-and-debts`],
+            routerLink: `/reports/transactions/report/${activeReport?.id}/select/loans-and-debts`,
           },
           { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
         ];
@@ -56,7 +56,7 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
           transactionItems = [
             {
               label: 'Cash on hand',
-              routerLink: [`/reports/f3x/create/cash-on-hand/${activeReport?.id}`],
+              routerLink: `/reports/f3x/create/cash-on-hand/${activeReport?.id}`,
             },
             ...transactionItems,
           ];
@@ -65,56 +65,56 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
         return of([
           {
             label: 'ENTER A TRANSACTION',
-            expanded: sidebarState?.section == ReportSidebarState.TRANSACTIONS,
+            expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
             visible: isEditable,
             items: transactionItems,
           },
           {
             label: 'REVIEW TRANSACTIONS',
-            expanded: sidebarState?.section == ReportSidebarState.TRANSACTIONS,
+            expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
             visible: !isEditable,
-            routerLink: [`/reports/transactions/report/${activeReport?.id}/list`],
+            routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
           },
           {
             label: 'REVIEW A REPORT',
-            expanded: sidebarState?.section == ReportSidebarState.REVIEW,
+            expanded: sidebarState?.section == ReportSidebarSection.REVIEW,
             items: [
               {
                 label: 'View summary page',
-                routerLink: [`/reports/f3x/summary/${activeReport?.id}`],
+                routerLink: `/reports/f3x/summary/${activeReport?.id}`,
               },
               {
                 label: 'View detailed summary page',
-                routerLink: [`/reports/f3x/detailed-summary/${activeReport?.id}`],
+                routerLink: `/reports/f3x/detailed-summary/${activeReport?.id}`,
               },
               {
                 label: 'View print preview',
-                routerLink: [`/reports/f3x/web-print/${activeReport?.id}`],
+                routerLink: `/reports/f3x/web-print/${activeReport?.id}`,
               },
               {
                 label: 'Add a report level memo',
-                routerLink: [`/reports/f3x/memo/${activeReport?.id}`],
+                routerLink: `/reports/f3x/memo/${activeReport?.id}`,
                 visible: isEditable,
               },
             ],
           },
           {
             label: 'SUBMIT YOUR REPORT',
-            expanded: sidebarState?.section == ReportSidebarState.SUBMISSION,
+            expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
             items: [
               {
                 label: 'Confirm information',
-                routerLink: [`/reports/f3x/submit/step1/${activeReport?.id}`],
+                routerLink: `/reports/f3x/submit/step1/${activeReport?.id}`,
                 visible: isEditable,
               },
               {
                 label: 'Submit report',
-                routerLink: [`/reports/f3x/submit/step2/${activeReport?.id}`],
+                routerLink: `/reports/f3x/submit/step2/${activeReport?.id}`,
                 visible: isEditable,
               },
               {
                 label: 'Report status',
-                routerLink: [`/reports/f3x/submit/status/${activeReport?.id}`],
+                routerLink: `/reports/f3x/submit/status/${activeReport?.id}`,
               },
             ],
           },
