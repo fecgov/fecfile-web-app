@@ -19,7 +19,6 @@ import { Report } from 'app/shared/models/report.model';
 @Component({
   selector: 'app-main-form',
   templateUrl: './main-form.component.html',
-  styleUrls: ['../../styles.scss'],
 })
 export class MainFormComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
@@ -127,10 +126,8 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
 
     //Observables are *defined* here ahead of their execution
 
-    //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
     save$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (jump === 'continue') {
-        //this.router.navigateByUrl(`/reports/f99/web-print/${report.id}`);
         this.router.navigateByUrl('/reports');
       } else {
         this.router.navigateByUrl('/reports');
