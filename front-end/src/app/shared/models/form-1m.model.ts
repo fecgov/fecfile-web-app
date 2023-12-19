@@ -1,5 +1,5 @@
 import { Report, ReportTypes } from './report.model';
-import { Transform } from 'class-transformer';
+import { Transform, plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType } from './contact.model';
 
@@ -93,4 +93,22 @@ export class Form1M extends Report {
   V_candidate_state?: string;
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
+
+  // prettier-ignore
+  static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
+    // json['form_type'] = F3xFormTypes.F3XT;
+    return plainToClass(Form1M, json);
+  }
 }
+
+export const COMMITTEE_TO_1M_FIELDS = {
+  filer_committee_id_number: 'committee_id',
+  committee_name: 'name',
+  street_1: 'street_1',
+  street_2: 'street_2',
+  city: 'city',
+  state: 'state',
+  zip: 'zip',
+  email: 'email',
+  website: 'website',
+};
