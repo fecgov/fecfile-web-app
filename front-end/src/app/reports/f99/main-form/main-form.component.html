@@ -65,16 +65,16 @@
       </div>
       <div class="col-6"></div>
       <div class="col-12">
-        <label for="text_message">TEXT MESSAGE</label>
+        <label for="message_text">TEXT MESSAGE</label>
         <textarea
-          id="text_message"
+          id="message_text"
           [rows]="4"
           [cols]="30"
           pInputTextarea
           [autoResize]="true"
-          formControlName="text_message"
+          formControlName="message_text"
         ></textarea>
-        <app-error-messages [form]="form" fieldName="text_message" [formSubmitted]="formSubmitted"></app-error-messages>
+        <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
     <p-divider></p-divider>

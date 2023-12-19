@@ -33,7 +33,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     'zip',
     'date_signed',
     'text_code',
-    'text_message',
+    'message_text',
   ];
   formSubmitted = false;
   textCodes = [

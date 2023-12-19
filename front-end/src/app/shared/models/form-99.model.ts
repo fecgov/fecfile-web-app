@@ -33,6 +33,7 @@ export class Form99 extends Report {
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   text_code: string | undefined;
+  message_text: string | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any
