@@ -27,7 +27,7 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
         // Show sidebar if there is an associated "sidebar state" declared in a routing module.
-        this.showSidebar = state.section !== undefined;
+        this.showSidebar = !!state;
       });
   }
 }
