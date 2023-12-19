@@ -39,14 +39,12 @@ describe('SidebarStateResolver', () => {
     const routeState = {
       url: '/url',
     };
-    resolver
-      .resolve(route as unknown as ActivatedRouteSnapshot, routeState as RouterStateSnapshot)
-      .subscribe((response) => {
-        expect(response).toBeUndefined();
+    resolver.resolve(route as unknown as ActivatedRouteSnapshot).subscribe((response) => {
+      expect(response).toBeUndefined();
 
-        store.select(selectSidebarState).subscribe((data) => {
-          expect(data.section).toBe(ReportSidebarSection.TRANSACTIONS);
-        });
+      store.select(selectSidebarState).subscribe((data) => {
+        expect(data.section).toBe(ReportSidebarSection.TRANSACTIONS);
       });
+    });
   });
 });
