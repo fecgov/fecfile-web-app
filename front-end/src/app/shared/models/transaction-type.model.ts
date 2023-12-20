@@ -94,7 +94,7 @@ export abstract class TransactionType {
   dateLabel = 'DATE';
   date2Label = '';
   aggregateLabel = 'AGGREGATE';
-  calendarYTDLabel = 'CALENDAR YEAR-TO-DATE';
+  calendarYTDLabel = 'CALENDAR YEAR-TO-DATE PER ELECTION FOR OFFICE SOUGHT';
   amountInputHeader = '';
   amountLabel = 'AMOUNT';
   debtInputHeader = '';
