@@ -2,24 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
-import { selectActiveReport } from '../../../store/active-report.selectors';
-import { Report } from '../../../shared/models/report.model';
-import { F3xFormTypeLabels, Form3X } from '../../../shared/models/form-3x.model';
-import { LabelList } from '../../../shared/utils/label.utils';
-import { ReportService } from '../../../shared/services/report.service';
-import { ReportSidebarSection, SidebarState } from '../sidebar.component';
+import { selectActiveReport } from '../../../../store/active-report.selectors';
+import { Report } from '../../../../shared/models/report.model';
+import { ReportService } from '../../../../shared/services/report.service';
+import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { Form3X } from '../../../../shared/models/form-3x.model';
+import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 
 @Component({
-  selector: 'app-menu-report',
-  templateUrl: './menu-report.component.html',
-  styleUrls: ['./menu-report.component.scss'],
+  selector: 'app-f3x-menu',
+  templateUrl: './f3x-menu.component.html',
+  styleUrls: ['../menu-report.component.scss'],
 })
-export class MenuReportComponent extends DestroyerComponent implements OnInit {
-  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  activeReport$?: Observable<Form3X | undefined>;
+export class F3XMenuComponent extends DestroyerComponent implements OnInit {
+  activeReport$?: Observable<Report | undefined>;
   items$: Observable<MenuItem[]> = of([]);
+
+  formLabel?: string;
+  report_code?: F3xReportCodes;
+  coverage_from_date?: Date;
+  coverage_through_date?: Date;
 
   constructor(private store: Store, private reportService: ReportService) {
     super();
@@ -27,6 +31,13 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
 
   ngOnInit(): void {
     this.activeReport$ = this.store.select(selectActiveReport);
+
+    this.activeReport$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+      this.formLabel = report?.formLabel;
+      this.report_code = (report as Form3X).report_code;
+      this.coverage_from_date = (report as Form3X).coverage_from_date;
+      this.coverage_through_date = (report as Form3X).coverage_through_date;
+    });
 
     this.items$ = combineLatest([this.store.select(selectSidebarState), this.activeReport$]).pipe(
       takeUntil(this.destroy$),

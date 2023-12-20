@@ -1,6 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Report } from './report.model';
-import { LabelList } from '../utils/label.utils';
+import { Report, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
 
 export enum F24FormTypes {
@@ -10,18 +9,19 @@ export enum F24FormTypes {
 
 export type F24FormType = F24FormTypes.F24N | F24FormTypes.F24A;
 
-export const F24FormTypeLabels: LabelList = [
-  [F24FormTypes.F24N, 'FORM 24'],
-  [F24FormTypes.F24A, 'FORM 24'],
-];
-
-export const F3xFormVersionLabels: LabelList = [
-  [F24FormTypes.F24N, 'Original'],
-  [F24FormTypes.F24A, 'Amendment'],
-];
-
+export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
+  [F24FormTypes.F24N]: 'Original',
+  [F24FormTypes.F24A]: 'Amendment',
+};
 export class Form24 extends Report {
+  override report_type = ReportTypes.F24;
   override form_type = F24FormTypes.F24A;
+  get formLabel() {
+    return 'FORM 24';
+  }
+  get versionLabel() {
+    return F24FormVersionLabels[this.form_type] ?? '';
+  }
 
   report_type_24_48: string | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;

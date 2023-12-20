@@ -9,6 +9,7 @@ import { InputNumber } from 'primeng/inputnumber';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
+import { Form3X } from 'app/shared/models/form-3x.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -77,16 +78,17 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         .select(selectActiveReport)
         .pipe(takeUntil(this.destroy$))
         .subscribe((report) => {
-          this.form
-            .get(this.templateMap.date)
-            ?.addValidators((control: AbstractControl): ValidationErrors | null => {
-              const date = control.value;
-              if (date && !DateUtils.isWithin(date, report.coverage_from_date, report.coverage_through_date)) {
-                const message = 'Date must fall within the report date range.';
-                return { invaliddate: { msg: message } };
-              }
-              return null;
-            });
+          this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
+            const date = control.value;
+            if (
+              date &&
+              !DateUtils.isWithin(date, (report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date)
+            ) {
+              const message = 'Date must fall within the report date range.';
+              return { invaliddate: { msg: message } };
+            }
+            return null;
+          });
         });
     }
   }

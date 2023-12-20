@@ -1,0 +1,18 @@
+<div class="report-menu">
+  <div class="grid report-info">
+    <div class="col-12">
+      <div class="title-2">REPORT PROGRESS</div>
+      <div class="report-type">{{ formLabel }}</div>
+      <div class="sub-heading">{{ report_code | reportCodeLabel }}</div>
+      <div class="sub-heading">
+        {{ coverage_from_date | fecDate }} — <wbr />
+        {{ coverage_through_date | fecDate }}
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12" *ngIf="items$ | async">
+      <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
+    </div>
+  </div>
+</div>

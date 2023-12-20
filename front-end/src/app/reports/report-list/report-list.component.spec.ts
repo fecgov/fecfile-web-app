@@ -8,7 +8,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { Form3X, F3xFormTypes } from '../../shared/models/form-3x.model';
-import { Report } from '../../shared/models/report.model';
+import { Report, ReportTypes } from '../../shared/models/report.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';
@@ -44,21 +44,22 @@ describe('ReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#getEmptyItem should return a new Form3X instance', () => {
+  it('#getEmptyItem should return a new Report instance', () => {
     const item = component['getEmptyItem']();
     expect(item.id).toBe(undefined);
   });
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.editItem({ id: '999', is_first: true } as Form3X); // 999 is the cash on hand report
+    component.editItem({ id: '999', is_first: true, report_type: ReportTypes.F3X } as Form3X); // 999 is the cash on hand report
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
-    component.editItem({ id: '888' } as Form3X);
+    component.editItem({ id: '888', report_type: ReportTypes.F3X } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
     component.editItem({
       id: '777',
+      report_type: ReportTypes.F3X,
       upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
-    } as Form3X);
+    } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
   });
 
@@ -70,9 +71,12 @@ describe('ReportListComponent', () => {
 
   it('#onActionClick should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onRowActionClick(new TableAction('', component.editItem.bind(component)), { id: '888' } as Form3X);
+    component.onRowActionClick(new TableAction('', component.editItem.bind(component)), {
+      id: '888',
+      report_type: ReportTypes.F3X,
+    } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.onRowActionClick(new TableAction('', component.goToTest.bind(component)), { id: '888' } as Form3X);
+    component.onRowActionClick(new TableAction('', component.goToTest.bind(component)), { id: '888' } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/test-dot-fec/888');
   });
 

@@ -40,7 +40,7 @@ import { CommitteeBannerComponent } from './layout/committee-banner/committee-ba
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { LayoutComponent } from './layout/layout.component';
-import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
+import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
@@ -49,6 +49,8 @@ import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
+import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
+import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -73,7 +75,9 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     FooterComponent,
     LoginComponent,
     DashboardComponent,
-    MenuReportComponent,
+    F3XMenuComponent,
+    F1MMenuComponent,
+    F99MenuComponent,
   ],
   imports: [
     BrowserModule,
