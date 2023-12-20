@@ -8,6 +8,7 @@ export abstract class Report extends BaseModel {
   abstract report_type: ReportTypes;
   abstract form_type: string;
   abstract get formLabel(): string;
+  abstract get formSubLabel(): string;
   abstract get versionLabel(): string;
   get transactionTableTitle(): string {
     return this.formLabel;

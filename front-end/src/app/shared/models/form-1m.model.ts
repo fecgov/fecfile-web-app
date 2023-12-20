@@ -25,6 +25,9 @@ export class Form1M extends Report {
   get formLabel() {
     return 'FORM 1M';
   }
+  get formSubLabel() {
+    return '';
+  }
   get versionLabel() {
     return F1MFormVersionLabels[this.form_type] ?? '';
   }

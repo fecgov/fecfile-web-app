@@ -17,6 +17,9 @@ export class Form99 extends Report {
   get formLabel() {
     return 'FORM 99';
   }
+  get formSubLabel() {
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
+  }
   get versionLabel() {
     return F99FormVersionLabels[this.form_type] ?? '';
   }
@@ -40,3 +43,18 @@ export class Form99 extends Report {
     return plainToClass(Form99, json);
   }
 }
+
+export const textCodes = [
+  {
+    label: 'Disavowal Response',
+    value: 'MSI',
+  },
+  {
+    label: 'Filing Frequency Change Notice',
+    value: 'MSM',
+  },
+  {
+    label: 'Miscellaneous Report to the FEC',
+    value: 'MST',
+  },
+];

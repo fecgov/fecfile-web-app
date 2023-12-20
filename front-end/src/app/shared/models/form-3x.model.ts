@@ -32,6 +32,9 @@ export class Form3X extends Report {
   get formLabel() {
     return 'FORM 3X';
   }
+  get formSubLabel() {
+    return getReportCodeLabel(this.report_code) ?? '';
+  }
   get versionLabel() {
     return F3xFormVersionLabels[this.form_type] ?? '';
   }

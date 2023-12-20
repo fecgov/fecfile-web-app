@@ -33,20 +33,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     'message_text',
   ];
   formSubmitted = false;
-  textCodes = [
-    {
-      label: 'Disavowal Response',
-      value: 'MSI',
-    },
-    {
-      label: 'Filing Frequency Change Notice',
-      value: 'MSM',
-    },
-    {
-      label: 'Miscellaneous Report to the FEC',
-      value: 'MST',
-    },
-  ];
   templateMap = {
     street_1: 'street_1',
     street_2: 'street_2',

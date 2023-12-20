@@ -19,6 +19,9 @@ export class Form24 extends Report {
   get formLabel() {
     return 'FORM 24';
   }
+  get formSubLabel() {
+    return '';
+  }
   get versionLabel() {
     return F24FormVersionLabels[this.form_type] ?? '';
   }
