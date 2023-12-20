@@ -9,7 +9,6 @@ export const environment = {
   appTitle: 'FECfile',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
   fecApiUrl: 'https://api.open.fec.gov/v1/',
-  fecApiKey: 'EjSyhVzlpDG06QCcWaMtLdDv8qLu2GAPbffHrXRF',
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: 'https://fecfile-web-api-prod.app.cloud.gov/oidc/authenticate',
   loginDotGovLogoutUrl: 'https://fecfile-web-api-prod.app.cloud.gov/oidc/logout',

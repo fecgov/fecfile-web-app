@@ -6,10 +6,9 @@ import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { CashOnHand, Form3X } from '../models/form-3x.model';
+import { Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
-import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getReportFromJSON(json: any): Report {
@@ -27,14 +26,12 @@ function getReportFromJSON(json: any): Report {
 export class ReportService implements TableListService<Report> {
   apiEndpoint = '/reports';
 
-  constructor(protected apiService: ApiService, protected store: Store) {
-  }
+  constructor(protected apiService: ApiService, protected store: Store) {}
 
   public getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => getReportFromJSON(item));
-        this.setStoreCashOnHand(response.results);
         return response;
       })
     );
@@ -49,14 +46,19 @@ export class ReportService implements TableListService<Report> {
   public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .post<Report>(`${this.apiEndpoint}/`, payload, {fields_to_validate: fieldsToValidate.join(',')})
+      .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public update(report: Report, spinner = false, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, {fields_to_validate: fieldsToValidate.join(',')}, spinner)
+      .put<Report>(
+        `${this.apiEndpoint}/${report.id}/`,
+        payload,
+        { fields_to_validate: fieldsToValidate.join(',') },
+        spinner
+      )
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
@@ -73,7 +75,7 @@ export class ReportService implements TableListService<Report> {
     if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {
-        return this.store.dispatch(setActiveReportAction({payload: report || new Form3X()}));
+        return this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
       })
     );
   }
@@ -92,30 +94,5 @@ export class ReportService implements TableListService<Report> {
 
   public startAmendment(report: Report): Observable<string> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
-  }
-
-  /**
-   * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
-   * @param reports - List of reports on the current page of the Reports table
-   */
-  public setStoreCashOnHand(reports: Report[]) {
-    let payload: CashOnHand | undefined;
-
-    if (reports.length === 0) {
-      payload = {
-        report_id: undefined,
-        value: undefined,
-      };
-    } else if (reports.length > 0) {
-      const report: Form3X = reports[0] as Form3X;
-      const value = report.L6a_cash_on_hand_jan_1_ytd ?? 1.0;
-      payload = {
-        report_id: report.id,
-        value: value,
-      };
-    }
-    if (payload) {
-      this.store.dispatch(setCashOnHandAction({payload: payload}));
-    }
   }
 }

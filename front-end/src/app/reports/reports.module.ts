@@ -38,6 +38,7 @@ import { FormTypeDialogComponent } from './form-type-dialog/form-type-dialog.com
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
 import { RippleModule } from "primeng/ripple";
+import { MainFormComponent } from './f1m/main-form/main-form.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { RippleModule } from "primeng/ripple";
     CashOnHandComponent,
     AppSelectButtonComponent,
     FormTypeDialogComponent,
+    MainFormComponent,
   ],
   imports: [
     CommonModule,

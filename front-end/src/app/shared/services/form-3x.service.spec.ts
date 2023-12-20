@@ -64,16 +64,4 @@ describe('Form3XService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
-
-  it('should set the COH store values', () => {
-    const reports: Form3X[] = [{ id: '999' } as Form3X];
-    const result = service.setStoreCashOnHand(reports);
-    expect(result).not.toBeTruthy();
-  });
-
-  it('should set the COH store values', () => {
-    const reports = [Form3X.fromJSON({ id: '999' })];
-    const result = service.setStoreCashOnHand(reports);
-    expect(result).not.toBeTruthy();
-  });
 });

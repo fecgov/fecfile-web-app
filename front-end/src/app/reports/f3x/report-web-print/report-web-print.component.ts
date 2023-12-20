@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { LabelList } from '../../../shared/utils/label.utils';
-import { F3xFormTypeLabels, Form3X } from '../../../shared/models/form-3x.model';
+import { Form3X } from '../../../shared/models/form-3x.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/models/report.model';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { spinnerOffAction, spinnerOnAction } from "../../../store/spinner.actions";
+import { spinnerOffAction, spinnerOnAction } from '../../../store/spinner.actions';
 
 @Component({
   selector: 'app-report-web-print',
@@ -17,7 +16,6 @@ import { spinnerOffAction, spinnerOnAction } from "../../../store/spinner.action
 })
 export class ReportWebPrintComponent extends DestroyerComponent implements OnInit {
   report: Form3X = new Form3X();
-  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';

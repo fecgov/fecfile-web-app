@@ -12,12 +12,11 @@ import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
-import { cashOnHandReducer } from './store/cash-on-hand.reducer';
 import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
-import { sidebarStateReducer, sidebarVisibleReducer } from './store/sidebar-state.reducer';
+import { sidebarStateReducer } from './store/sidebar-state.reducer';
 import { spinnerReducer } from './store/spinner.reducer';
 
 // PrimeNG
@@ -41,20 +40,22 @@ import { CommitteeBannerComponent } from './layout/committee-banner/committee-ba
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { LayoutComponent } from './layout/layout.component';
-import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
+import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
 import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
-import { NgOptimizedImage } from "@angular/common";
-import { HeaderLinksComponent } from "./layout/header/header-links/header-links.component";
+import { NgOptimizedImage } from '@angular/common';
+import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
+import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
+import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'cashOnHand', 'sidebarState'],
+    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'sidebarState'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -74,7 +75,9 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     FooterComponent,
     LoginComponent,
     DashboardComponent,
-    MenuReportComponent,
+    F3XMenuComponent,
+    F1MMenuComponent,
+    F99MenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,18 +86,16 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
         spinnerOn: spinnerReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
-        cashOnHand: cashOnHandReducer,
         sidebarState: sidebarStateReducer,
-        sidebarVisible: sidebarVisibleReducer
       },
-      {metaReducers}
+      { metaReducers }
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
@@ -109,11 +110,10 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     CookieService,
     ConfirmationService,
     MessageService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
-    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

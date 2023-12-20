@@ -14,7 +14,7 @@ import { ReportWebPrintComponent } from './f3x/report-web-print/report-web-print
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard';
-import { ReportSidebarState, SidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
 // ROUTING NOTE:
@@ -34,8 +34,17 @@ const routes: Routes = [
   {
     path: 'transactions',
     resolve: { sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS) },
+    data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
     loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'f3x',
+    loadChildren: () => import('./f3x/f3x.module').then((m) => m.F3XModule),
+  },
+  {
+    path: 'f99',
+    loadChildren: () => import('./f99/f99.module').then((m) => m.F99Module),
   },
   {
     path: 'f3x/create/cash-on-hand/:reportId',
@@ -43,39 +52,45 @@ const routes: Routes = [
     component: CashOnHandComponent,
     canActivate: [ReportIsEditableGuard, CashOnHandGuard],
     resolve: { sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS) },
+    data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/create/step1',
     title: 'Create a report',
     component: CreateF3XStep1Component,
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/create/step1/:reportId',
     title: 'Create a report',
     component: CreateF3XStep1Component,
     canActivate: [ReportIsEditableGuard],
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/summary/:reportId',
     title: 'View summary page',
     component: ReportSummaryComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.REVIEW) },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/detailed-summary/:reportId',
     title: 'View detailed summary page',
     component: ReportDetailedSummaryComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.REVIEW) },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/web-print/:reportId',
     title: 'Print preview',
     component: ReportWebPrintComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.REVIEW) },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/memo/:reportId',
@@ -83,7 +98,8 @@ const routes: Routes = [
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.REVIEW) },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/submit/step1/:reportId',
@@ -91,7 +107,8 @@ const routes: Routes = [
     component: SubmitF3xStep1Component,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.SUBMISSION) },
+    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/submit/step2/:reportId',
@@ -99,20 +116,23 @@ const routes: Routes = [
     component: SubmitF3xStep2Component,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.SUBMISSION) },
+    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/submit/status/:reportId',
     title: 'Report status',
     component: ReportSubmissionStatusComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.SUBMISSION) },
+    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x/test-dot-fec/:reportId',
     component: TestDotFecComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarState: new SidebarState(ReportSidebarState.REVIEW) },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
 ];
