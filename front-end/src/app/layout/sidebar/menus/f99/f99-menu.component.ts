@@ -54,10 +54,10 @@ export class F99MenuComponent extends DestroyerComponent implements OnInit {
               //   label: 'View detailed summary page',
               //   routerLink: [`/reports/f99/detailed-summary/${activeReport?.id}`],
               // },
-              // {
-              //   label: 'View print preview',
-              //   routerLink: [`/reports/f99/web-print/${activeReport?.id}`],
-              // },
+              {
+                label: 'View print preview',
+                routerLink: [`/reports/f99/web-print/${activeReport?.id}`],
+              },
               // {
               //   label: 'Add a report level memo',
               //   routerLink: [`/reports/f99/memo/${activeReport?.id}`],

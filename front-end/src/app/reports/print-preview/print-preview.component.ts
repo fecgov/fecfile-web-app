@@ -2,19 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Form3X } from '../../../shared/models/form-3x.model';
-import { WebPrintService } from '../../../shared/services/web-print.service';
-import { Report } from '../../../shared/models/report.model';
-import { selectActiveReport } from '../../../store/active-report.selectors';
+import { Form3X } from '../../shared/models/form-3x.model';
+import { WebPrintService } from '../../shared/services/web-print.service';
+import { Report } from '../../shared/models/report.model';
+import { selectActiveReport } from '../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { spinnerOffAction, spinnerOnAction } from '../../../store/spinner.actions';
+import { spinnerOffAction, spinnerOnAction } from '../../store/spinner.actions';
 
 @Component({
-  selector: 'app-report-web-print',
-  templateUrl: './report-web-print.component.html',
-  styleUrls: ['../../styles.scss'],
+  selector: 'app-print-preview',
+  templateUrl: './print-preview.component.html',
+  styleUrls: ['../styles.scss'],
 })
-export class ReportWebPrintComponent extends DestroyerComponent implements OnInit {
+export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   report: Form3X = new Form3X();
   submitDate: Date | undefined;
   downloadURL = '';

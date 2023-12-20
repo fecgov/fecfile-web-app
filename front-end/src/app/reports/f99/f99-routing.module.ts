@@ -5,6 +5,7 @@ import { MainFormComponent } from './main-form/main-form.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
+import { PrintPreviewComponent } from '../print-preview/print-preview.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -26,6 +27,14 @@ const routes: Routes = [
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'web-print/:reportId',
+    title: 'Print preview',
+    component: PrintPreviewComponent,
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
