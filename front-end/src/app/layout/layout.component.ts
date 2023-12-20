@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
+
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({

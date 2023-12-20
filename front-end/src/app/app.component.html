@@ -1,1 +1,71 @@
-<router-outlet></router-outlet>
+<div id="page-container">
+  <app-banner></app-banner>
+
+  <!--  Begin Sidebar section -->
+  <div *ngIf="showSidebar">
+    <div class="inline-flex w-100">
+      <div class=" fec-background-gradient flex-shrink-1" id="sidebar-container">
+        <app-sidebar></app-sidebar>
+      </div>
+      <div class="sidebar-content-container ">
+        <div class="header-container">
+          <app-header></app-header>
+        </div>
+        <div class="main-content">
+          <div class="grid">
+            <div class="col-12">
+              <app-committee-banner></app-committee-banner>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12">
+              <div *ngIf="progressBarVisible$ | async">
+                <p-progressBar mode="indeterminate"></p-progressBar>
+              </div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12 router-outlet">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+        <div class="flex-grow-1 d-flex flex-column">
+          <div class="flex-grow-1"></div>
+          <app-footer [showSidebar]="true"></app-footer>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  End Sidebar section -->
+
+  <!-- Begin No Sidebar section -->
+  <div *ngIf="!showSidebar" class="content-offset">
+    <div class="container">
+      <div class="header-container">
+        <app-header></app-header>
+      </div>
+      <div class="col-12 main-content">
+        <div class="grid">
+          <div class="col-12">
+            <app-committee-banner></app-committee-banner>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <div *ngIf="progressBarVisible$ | async">
+              <p-progressBar mode="indeterminate"></p-progressBar>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12 router-outlet">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer *ngIf="!showSidebar"></app-footer>
+  <!-- End No Sidebar section -->
+</div>
