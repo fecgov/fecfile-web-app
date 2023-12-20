@@ -21,27 +21,19 @@ import { CalculationOverlayComponent } from './components/calculation-overlay/ca
 import { ContactDialogComponent } from './components/contact-dialog/contact-dialog.component';
 import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
-import {
-  FecInternationalPhoneInputComponent
-} from './components/fec-international-phone-input/fec-international-phone-input.component';
-import {
-  AdditionalInfoInputComponent
-} from './components/inputs/additional-info-input/additional-info-input.component';
+import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
+import { AdditionalInfoInputComponent } from './components/inputs/additional-info-input/additional-info-input.component';
 import { AddressInputComponent } from './components/inputs/address-input/address-input.component';
 import { AmountInputComponent } from './components/inputs/amount-input/amount-input.component';
 import { CandidateInputComponent } from './components/inputs/candidate-input/candidate-input.component';
-import {
-  CandidateOfficeInputComponent
-} from './components/inputs/candidate-office-input/candidate-office-input.component';
+import { CandidateOfficeInputComponent } from './components/inputs/candidate-office-input/candidate-office-input.component';
 import { CommitteeInputComponent } from './components/inputs/committee-input/committee-input.component';
 import { DebtInputComponent } from './components/inputs/debt-input/debt-input.component';
 import { ElectionInputComponent } from './components/inputs/election-input/election-input.component';
 import { EmployerInputComponent } from './components/inputs/employer-input/employer-input.component';
 import { LoanAgreementInputComponent } from './components/inputs/loan-agreement-input/loan-agreement-input.component';
 import { LoanInfoInputComponent } from './components/inputs/loan-info-input/loan-info-input.component';
-import {
-  LoanTermsDatesInputComponent
-} from './components/inputs/loan-terms-dates-input/loan-terms-dates-input.component';
+import { LoanTermsDatesInputComponent } from './components/inputs/loan-terms-dates-input/loan-terms-dates-input.component';
 import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/loan-terms-input.component';
 import { MemoCodeInputComponent } from './components/inputs/memo-code/memo-code.component';
 import { NameInputComponent } from './components/inputs/name-input/name-input.component';
@@ -51,19 +43,16 @@ import { NavigationControlBarComponent } from './components/navigation-control-b
 import { NavigationControlComponent } from './components/navigation-control/navigation-control.component';
 import { TableActionsButtonComponent } from './components/table-actions-button/table-actions-button.component';
 import { TableSortIconComponent } from './components/table-sort-icon/table-sort-icon.component';
-import {
-  TransactionContactLookupComponent
-} from './components/transaction-contact-lookup/transaction-contact-lookup.component';
+import { TransactionContactLookupComponent } from './components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
 import { FecDatePipe } from './pipes/fec-date.pipe';
 import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
-import { ReportVersionPipe } from './pipes/report-version.pipe';
 import { SupportOpposeInputComponent } from './components/inputs/support-oppose-input/support-oppose-input.component';
 import { SingleClickDirective } from './directives/single-click.directive';
-import { RippleModule } from "primeng/ripple";
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   imports: [
@@ -97,7 +86,6 @@ import { RippleModule } from "primeng/ripple";
     DefaultZeroPipe,
     HighlightTermsPipe,
     ReportCodeLabelPipe,
-    ReportVersionPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -137,7 +125,6 @@ import { RippleModule } from "primeng/ripple";
     DefaultZeroPipe,
     HighlightTermsPipe,
     ReportCodeLabelPipe,
-    ReportVersionPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -169,5 +156,4 @@ import { RippleModule } from "primeng/ripple";
   ],
   providers: [DatePipe],
 })
-export class SharedModule {
-}
+export class SharedModule {}

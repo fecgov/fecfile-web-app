@@ -7,6 +7,7 @@ import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
   templateUrl: './address-input.component.html',
 })
 export class AddressInputComponent extends BaseInputComponent implements OnInit {
+  @Input() readonly = false;
   @Input() stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   @Input() templateMapKeyPrefix = '';
 

@@ -6,7 +6,7 @@ import { ReportSidebarSection, SidebarComponent, SidebarState } from './sidebar/
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
+import { F3XMenuComponent } from './sidebar/menus/f3x/f3x-menu.component';
 import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
 import { filter } from 'rxjs';
@@ -36,7 +36,7 @@ describe('LayoutComponent', () => {
         SidebarComponent,
         HeaderComponent,
         BannerComponent,
-        MenuReportComponent,
+        F3XMenuComponent,
         FooterComponent,
         CommitteeBannerComponent,
       ],

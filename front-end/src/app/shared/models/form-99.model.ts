@@ -1,6 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Report } from './report.model';
-import { LabelList } from '../utils/label.utils';
+import { Report, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
 
 export enum F99FormTypes {
@@ -9,13 +8,18 @@ export enum F99FormTypes {
 
 export type F99FormType = F99FormTypes.F99;
 
-export const F99FormTypeLabels: LabelList = [[F99FormTypes.F99, 'FORM 99']];
-
-export const F3xFormVersionLabels: LabelList = [[F99FormTypes.F99, 'Original']];
-
+export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
+  [F99FormTypes.F99]: 'Original',
+};
 export class Form99 extends Report {
+  override report_type = ReportTypes.F99;
   override form_type = F99FormTypes.F99;
-
+  get formLabel() {
+    return 'FORM 99';
+  }
+  get versionLabel() {
+    return F99FormVersionLabels[this.form_type] ?? '';
+  }
   committee_name: string | undefined;
   street_1: string | undefined;
   street_2: string | undefined;
@@ -29,6 +33,7 @@ export class Form99 extends Report {
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   text_code: string | undefined;
+  message_text: string | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any

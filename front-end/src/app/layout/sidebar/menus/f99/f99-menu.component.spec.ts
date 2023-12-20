@@ -4,28 +4,28 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '../../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { MenuReportComponent } from './menu-report.component';
-import { ReportSidebarSection, SidebarState } from '../sidebar.component';
-import { selectSidebarState } from 'app/store/sidebar-state.selectors';
+import { F99MenuComponent } from './f99-menu.component';
+import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
+import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
-describe('MenuReportComponent', () => {
-  let component: MenuReportComponent;
-  let fixture: ComponentFixture<MenuReportComponent>;
+describe('F99MenuComponent', () => {
+  let component: F99MenuComponent;
+  let fixture: ComponentFixture<F99MenuComponent>;
   let router: Router;
 
   const mockStore = {
     initialState: {
       fecfile_online_sidebarState: initSidebarState,
     },
-    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarSection.TRANSACTIONS) }],
+    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarSection.REVIEW) }],
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MenuReportComponent],
+      declarations: [F99MenuComponent],
       providers: [provideMockStore(mockStore)],
       imports: [
         SharedModule,
@@ -44,7 +44,7 @@ describe('MenuReportComponent', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
-    fixture = TestBed.createComponent(MenuReportComponent);
+    fixture = TestBed.createComponent(F99MenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -53,9 +53,9 @@ describe('MenuReportComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the sidebar state to TRANSACTIONS', () => {
+  it('should set the sidebar state to REVIEW A REPORT', () => {
     component.items$.subscribe((items) => {
-      expect(items[1].visible).toBeTrue();
+      expect(items[1].expanded).toBeTrue();
     });
   });
 

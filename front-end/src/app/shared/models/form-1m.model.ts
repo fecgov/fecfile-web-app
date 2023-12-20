@@ -1,4 +1,4 @@
-import { Report } from './report.model';
+import { Report, ReportTypes } from './report.model';
 import { Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType } from './contact.model';
@@ -7,10 +7,27 @@ export enum CommitteeTypes {
   STATE_PTY = 'X',
   OTHER = 'N',
 }
+export enum F1MFormTypes {
+  F1MN = 'F1MN',
+  F1MA = 'F1MA',
+}
+
+export const F1MFormVersionLabels: { [key in F1MFormTypes]: string } = {
+  [F1MFormTypes.F1MN]: 'Original',
+  [F1MFormTypes.F1MA]: 'Amendment',
+};
 
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
+  override report_type = ReportTypes.F1M;
+  override form_type = F1MFormTypes.F1MN;
+  get formLabel() {
+    return 'FORM 1M';
+  }
+  get versionLabel() {
+    return F1MFormVersionLabels[this.form_type] ?? '';
+  }
   street_1?: string;
   street_2?: string;
   city?: string;
