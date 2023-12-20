@@ -11,7 +11,6 @@ export abstract class SchETransactionType extends TransactionType {
   override amountInputHeader = 'Expenditure information';
   override dateLabel = 'DISBURSEMENT DATE';
   override date2Label = 'DISSEMINATION DATE';
-  override aggregateLabel = 'CALENDAR YEAR-TO-DATE';
   override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
   override signatoryOneHeader = 'Committee treasurer';
   override committeeCandidateHeader = 'Candidate information';
