@@ -5,25 +5,25 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
-import { ReportWebPrintComponent } from './report-web-print.component';
+import { PrintPreviewComponent } from './print-preview.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Form3XService } from '../../../shared/services/form-3x.service';
+import { Form3XService } from '../../shared/services/form-3x.service';
 import { of } from 'rxjs';
-import { WebPrintService } from '../../../shared/services/web-print.service';
+import { WebPrintService } from '../../shared/services/web-print.service';
 
-describe('ReportWebPrintComponent', () => {
-  let component: ReportWebPrintComponent;
-  let fixture: ComponentFixture<ReportWebPrintComponent>;
+describe('PrintPreviewComponent', () => {
+  let component: PrintPreviewComponent;
+  let fixture: ComponentFixture<PrintPreviewComponent>;
   let reportService: Form3XService;
   let webPrintService: WebPrintService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule, DividerModule, SharedModule],
-      declarations: [ReportWebPrintComponent],
-      providers: [ReportWebPrintComponent, provideMockStore(testMockStore)],
+      declarations: [PrintPreviewComponent],
+      providers: [PrintPreviewComponent, provideMockStore(testMockStore)],
     }).compileComponents();
-    fixture = TestBed.createComponent(ReportWebPrintComponent);
+    fixture = TestBed.createComponent(PrintPreviewComponent);
     reportService = TestBed.inject(Form3XService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;

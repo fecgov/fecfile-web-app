@@ -8,10 +8,16 @@ export abstract class Report extends BaseModel {
   abstract report_type: ReportTypes;
   abstract form_type: string;
   abstract get formLabel(): string;
+  get reportCodeLabel(): string | undefined {
+    return undefined;
+  }
   abstract get versionLabel(): string;
   get transactionTableTitle(): string {
     return this.formLabel;
   }
+  abstract get routePrintPreviewBack(): string;
+  abstract get routePrintPreviewSignAndSubmit(): string;
+
   report_version: string | undefined; // Tracks amendment versions
   report_id: string | undefined; // FEC assigned report ID
   is_first: boolean | undefined;
