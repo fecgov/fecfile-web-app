@@ -76,7 +76,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
 
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.setConstantFormValues(committeeAccount);
-      this.form.patchValue(activeReport);
+      if (this.reportId) this.form.patchValue(activeReport);
     });
 
     ValidateUtils.addJsonSchemaValidators(this.form, f99Schema, false);
