@@ -22,6 +22,12 @@ export class Form24 extends Report {
   get versionLabel() {
     return F24FormVersionLabels[this.form_type] ?? '';
   }
+  override get routePrintPreviewBack() {
+    return '/reports';
+  }
+  override get routePrintPreviewSignAndSubmit() {
+    return '/reports';
+  }
 
   report_type_24_48: string | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;

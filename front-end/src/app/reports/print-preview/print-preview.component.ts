@@ -15,7 +15,7 @@ import { spinnerOffAction, spinnerOnAction } from '../../store/spinner.actions';
   styleUrls: ['../styles.scss'],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
-  report: Form3X = new Form3X();
+  report: Report = new Form3X() as unknown as Report;
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
@@ -35,7 +35,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (report) {
-          this.report = report as Form3X;
+          this.report = report as Report;
           this.updatePrintStatus(report);
         }
       });
