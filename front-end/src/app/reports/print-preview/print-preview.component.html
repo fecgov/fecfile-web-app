@@ -8,8 +8,13 @@
     <h3 class="no-vert-margins">
       {{ report.formLabel }}<ng-container *ngIf="report.reportCodeLabel">:</ng-container> {{ report.reportCodeLabel }}
     </h3>
-    <br />
+    <hr class="black-line" />
   </div>
+  <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
+    <div class="col-12">
+      <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
+    </div>
+  </ng-container>
   <div class="col-12 flex justify-content-center">
     <img
       class="image-max-width image-centered-horiz"
@@ -62,7 +67,9 @@
     </div>
   </ng-container>
   <ng-container *ngIf="webPrintStage === 'success'">
-    <h2 class="col-12 align-center">PDF compiled<br />Submitted on: {{ submitDate }}</h2>
+    <h1 class="col-12 align-center">PDF compiled</h1>
+    <div class="bold col-12 align-center">SUBMITTED ON:</div>
+    <div class="col-12 align-center">{{ submitDate }}</div>
     <div class="col-3"></div>
     <div class="col-2">
       <button pButton pRipple label="Open PDF" class="p-button-info button-full-width" (click)="downloadPDF()"></button>
