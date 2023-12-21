@@ -92,10 +92,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
-        this.form?.patchValue({filing_frequency: filingFrequency, form_type: 'F3XN'});
-        this.form?.patchValue({report_type_category: this.getReportTypeCategories()[0]});
+        this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
+        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
-        this.form?.patchValue({report_code: this.getFirstEnabledReportCode()});
+        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
         this.form
           ?.get('filing_frequency')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -103,13 +103,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
             this.form.patchValue({
               report_type_category: this.getReportTypeCategories()[0],
             });
-            this.form?.patchValue({report_code: this.getFirstEnabledReportCode()});
+            this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
         this.form
           ?.get('report_type_category')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
-            this.form.patchValue({report_code: this.getFirstEnabledReportCode()});
+            this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
 
         this.existingCoverage = existingCoverage;
@@ -140,7 +140,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           isElectionYear,
           filingFrequency
         );
-        this.form.patchValue({coverage_from_date, coverage_through_date});
+        this.form.patchValue({ coverage_from_date, coverage_through_date });
       }
     });
 
@@ -179,7 +179,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   getErrors(errors: ValidationErrors | null, newError: ValidationErrors | null): ValidationErrors | null {
     const otherErrors = !_.isEmpty(_.omit(errors, 'invaliddate')) ? _.omit(errors, 'invaliddate') : null;
-    return otherErrors || newError ? {...otherErrors, ...newError} : null;
+    return otherErrors || newError ? { ...otherErrors, ...newError } : null;
   }
 
   findSurrounding(from: Date, through: Date, existingCoverage: F3xCoverageDates[]): F3xCoverageDates | undefined {
@@ -196,7 +196,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
       ` ${this.fecDatePipe.transform(collision.coverage_from_date)} -` +
       ` ${this.fecDatePipe.transform(collision.coverage_through_date)}`;
-    return {invaliddate: {msg: message}};
+    return { invaliddate: { msg: message } };
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
@@ -258,7 +258,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
     //Create the report
     create$.subscribe((report) => {
-      this.store.dispatch(spinnerOffAction());
       if (jump === 'continue') {
         if (report.is_first) {
           this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);

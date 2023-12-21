@@ -1,13 +1,12 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectSpinnerStatus } from '../../store/spinner.selectors';
-import { spinnerOnAction } from "../../store/spinner.actions";
+import { spinnerOnAction, spinnerOffAction } from '../../store/spinner.actions';
 
 @Directive({
   selector: '[appSingleClick]',
 })
-export class SingleClickDirective {
-
+export class SingleClickDirective implements OnDestroy {
   constructor(private el: ElementRef, private store: Store) {
     this.store.select(selectSpinnerStatus).subscribe((spinner) => {
       if (spinner) this.el.nativeElement.setAttribute('disabled', 'true');
@@ -16,6 +15,10 @@ export class SingleClickDirective {
   }
 
   @HostListener('click') onClick() {
-    this.store.dispatch(spinnerOnAction())
+    this.store.dispatch(spinnerOnAction());
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(spinnerOffAction());
   }
 }

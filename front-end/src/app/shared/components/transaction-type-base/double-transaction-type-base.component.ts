@@ -20,7 +20,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
-import { spinnerOffAction } from "../../../store/spinner.actions";
+import { spinnerOffAction } from '../../../store/spinner.actions';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -35,7 +35,8 @@ import { spinnerOffAction } from "../../../store/spinner.actions";
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -152,7 +153,6 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (ReattRedesUtils.isReattRedes(payload)) {
       const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
       this.transactionService.multisave(payloads).subscribe((response) => {
-        this.store.dispatch(spinnerOffAction());
         navigationEvent.transaction = response[0];
         this.navigateTo(navigationEvent);
       });
@@ -167,10 +167,9 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override get confirmation$(): Observable<boolean> {
     if (!this.childTransaction) return of(false);
-    return concat(
-      super.confirmation$,
-      this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-    ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed))
+    return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
+      reduce((accumulator, confirmed) => accumulator && confirmed)
+    );
   }
 
   override resetForm() {
