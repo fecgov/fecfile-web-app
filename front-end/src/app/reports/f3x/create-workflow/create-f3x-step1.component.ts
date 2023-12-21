@@ -35,7 +35,7 @@ import { combineLatest, startWith, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { spinnerOffAction } from '../../../store/spinner.actions';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -242,7 +242,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
     if (this.form.invalid) {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
 

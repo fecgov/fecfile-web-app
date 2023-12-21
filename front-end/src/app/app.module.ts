@@ -17,7 +17,7 @@ import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
 import { sidebarStateReducer } from './store/sidebar-state.reducer';
-import { spinnerReducer } from './store/spinner.reducer';
+import { singleClickReducer } from './store/single-click.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -25,7 +25,6 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { ProgressBarModule } from 'primeng/progressbar';
 
 // Third party
 import { CookieService } from 'ngx-cookie-service';
@@ -55,7 +54,7 @@ import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component'
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'userLoginData', 'activeReport', 'sidebarState'],
+    keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport', 'sidebarState'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -86,23 +85,22 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
-        spinnerOn: spinnerReducer,
+        singleClickDisabled: singleClickReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
         sidebarState: sidebarStateReducer,
       },
-      {metaReducers}
+      { metaReducers }
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
     PanelMenuModule,
     PanelModule,
     ButtonModule,
-    ProgressBarModule,
     SharedModule,
     NgOptimizedImage,
   ],
@@ -110,11 +108,10 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     CookieService,
     ConfirmationService,
     MessageService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
-    {provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy},
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

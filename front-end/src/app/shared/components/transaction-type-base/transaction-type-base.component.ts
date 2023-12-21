@@ -22,7 +22,7 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { spinnerOffAction } from '../../../store/spinner.actions';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   template: '',
@@ -116,7 +116,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
@@ -135,7 +135,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         this.navigateTo(navigationEvent);
       });
     } else {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
     }
   }
 
@@ -213,13 +213,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     if (navigationEvent.action === NavigationAction.SAVE) {
       if (this.isInvalid()) {
-        this.store.dispatch(spinnerOffAction());
+        this.store.dispatch(singleClickEnableAction());
         return;
       }
       this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
-        else this.store.dispatch(spinnerOffAction());
+        else this.store.dispatch(singleClickEnableAction());
       });
     } else {
       this.navigateTo(navigationEvent);

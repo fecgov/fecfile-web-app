@@ -16,7 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Form3X } from '../../../shared/models/form-3x.model';
 import { Form3XService } from '../../../shared/services/form-3x.service';
-import { spinnerOffAction } from "../../../store/spinner.actions";
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 describe('CashOnHandComponent', () => {
   let component: CashOnHandComponent;
@@ -57,7 +57,7 @@ describe('CashOnHandComponent', () => {
 
   describe('save', () => {
     it('should save', () => {
-      const f3x = Form3X.fromJSON({id: '999'});
+      const f3x = Form3X.fromJSON({ id: '999' });
       spyOn(form3XService, 'update').and.returnValue(of(f3x));
       const navigateSpy = spyOn(router, 'navigateByUrl');
       component.report = f3x;
@@ -75,8 +75,7 @@ describe('CashOnHandComponent', () => {
       expect(component.form.invalid).toBeTrue();
       const spy = spyOn(component.store, 'dispatch');
       component.save();
-      expect(spy).toHaveBeenCalledWith(spinnerOffAction());
+      expect(spy).toHaveBeenCalledWith(singleClickEnableAction());
     });
   });
-
 });

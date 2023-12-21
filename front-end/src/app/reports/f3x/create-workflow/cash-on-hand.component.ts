@@ -10,7 +10,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
-import { spinnerOffAction } from '../../../store/spinner.actions';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   selector: 'app-cash-on-hand',
@@ -49,7 +49,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   public save(): void {
     this.formSubmitted = true;
     if (this.form.invalid) {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
 

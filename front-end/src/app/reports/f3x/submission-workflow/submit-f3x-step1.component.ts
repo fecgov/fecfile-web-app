@@ -13,7 +13,7 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { Observable, takeUntil } from 'rxjs';
-import { spinnerOffAction } from '../../../store/spinner.actions';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -126,7 +126,7 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
   public save(): void {
     this.formSubmitted = true;
     if (this.form.invalid) {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
     let addressFields: object;
