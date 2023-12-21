@@ -1,46 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { from, Observable, switchMap, takeUntil } from 'rxjs';
-import { ReportService } from '../../../shared/services/report.service';
+import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-submit-f3x-step2',
-  templateUrl: './submit-f3x-step2.component.html',
+  selector: 'app-submit-report-step2',
+  templateUrl: './submit-report-step2.component.html',
 })
-export class SubmitF3xStep2Component extends DestroyerComponent implements OnInit {
+export class SubmitReportStep2Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'treasurer_first_name',
     'treasurer_last_name',
     'treasurer_middle_name',
     'treasurer_prefix',
     'treasurer_suffix',
-    'filing_password',
-    'truth_statement',
+    'filingPassword',
+    'userCertified',
   ];
-  report?: Form3X;
+  report?: Report;
   formSubmitted = false;
-  committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
   loading: 0 | 1 | 2 = 0;
   backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
   showBackdoorCode = false;
+  getBackUrl?: (report?: Report) => string;
+  getContinueUrl?: (report?: Report) => string;
 
   constructor(
     public router: Router,
-    private form3XService: Form3XService,
+    public route: ActivatedRoute,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
@@ -52,24 +52,21 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
   }
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report as Form3X;
-      });
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+    const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
+    combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
+      this.report = activeReport;
+      ValidateUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
+      this.initializeFormWithReport(this.report, committeeAccount);
+    });
 
-    this.form.addControl('backdoor_code_yes_no', new FormControl());
+    this.form.addControl('backdoorYesNo', new FormControl());
 
     // Initialize validation tracking of current JSON schema and form data
-    this.form.controls['filing_password'].addValidators(ValidateUtils.passwordValidator());
-    this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
+    this.form.controls['filingPassword'].addValidators(ValidateUtils.passwordValidator());
+    this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form
-      .get('backdoor_code_yes_no')
+      .get('backdoorYesNo')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
         this.showBackdoorCode = value;
@@ -79,52 +76,26 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
           this.form.removeControl('backdoor_code');
         }
       });
-
-    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+    this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
+      this.getBackUrl = getBackUrl;
+      this.getContinueUrl = getContinueUrl;
+    });
   }
 
-  setDefaultFormValues(committeeAccount: CommitteeAccount) {
-    //If the report provided them, take the remaining fields from the report
-    if (this.report?.treasurer_last_name && this.report?.treasurer_first_name) {
-      this.form.patchValue({
-        treasurer_first_name: this.report.treasurer_first_name,
-        treasurer_last_name: this.report.treasurer_last_name,
-        treasurer_middle_name: this.report.treasurer_middle_name,
-        treasurer_prefix: this.report.treasurer_prefix,
-        treasurer_suffix: this.report.treasurer_suffix,
-      });
-    } else {
-      //Else, take them from the Committee Account
-      this.form.patchValue({
-        treasurer_first_name: committeeAccount?.treasurer_name_1,
-        treasurer_last_name: committeeAccount?.treasurer_name_2,
-        treasurer_middle_name: committeeAccount?.treasurer_name_middle,
-        treasurer_prefix: committeeAccount?.treasurer_name_prefix,
-        treasurer_suffix: committeeAccount?.treasurer_name_suffix,
-      });
+  initializeFormWithReport(report: Report, committeeAccount: CommitteeAccount) {
+    this.form.patchValue({
+      treasurer_first_name: committeeAccount?.treasurer_name_1,
+      treasurer_last_name: committeeAccount?.treasurer_name_2,
+      treasurer_middle_name: committeeAccount?.treasurer_name_middle,
+      treasurer_prefix: committeeAccount?.treasurer_name_prefix,
+      treasurer_suffix: committeeAccount?.treasurer_name_suffix,
+    });
+    if (report && (report as any)['treasurer_last_name']) {
+      this.form.patchValue(report);
     }
   }
 
-  /**
-   * Checks whether or not the form's treasurer name is different from the report's.
-   * This is used to determine whether or not the report needs to be updated before
-   * being submitted to the FEC.
-   *
-   * @returns a boolean
-   */
-  public treasurerNameChanged(): boolean {
-    if (!this.report || !this.form) return true;
-
-    return (
-      this.form.value['treasurer_last_name'] != this.report.treasurer_last_name ||
-      this.form.value['treasurer_first_name'] != this.report.treasurer_first_name ||
-      this.form.value['treasurer_middle_name'] != this.report.treasurer_middle_name ||
-      this.form.value['treasurer_prefix'] != this.report.treasurer_prefix ||
-      this.form.value['treasurer_suffix'] != this.report.treasurer_suffix
-    );
-  }
-
-  public submit(): void {
+  public submitClicked(): void {
     this.formSubmitted = true;
     if (this.form.invalid) {
       return;
@@ -136,51 +107,49 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.onConfirm().subscribe();
+        this.saveAndSubmit$.subscribe();
       },
     });
   }
 
-  public onConfirm(): Observable<boolean> {
-    if (this.treasurerNameChanged()) {
-      return this.saveTreasurerName().pipe(
-        switchMap(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Report Updated',
-            life: 3000,
-          });
+  get saveAndSubmit$(): Observable<boolean> {
+    return this.saveTreasurerName$.pipe(
+      switchMap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Report Updated',
+          life: 3000,
+        });
 
-          return this.submitReport();
-        })
-      );
-    } else {
-      return this.submitReport();
-    }
+        return this.submitReport$;
+      })
+    );
   }
 
-  private saveTreasurerName() {
+  get saveTreasurerName$(): Observable<Report | undefined> {
+    if (!this.report) return of(undefined);
     this.loading = 1;
-    const payload: Form3X = Form3X.fromJSON({
+    const payload: Report = this.report.getFromJSON()({
       ...this.report,
-      ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
+      ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });
 
-    return this.form3XService.update(payload, false, this.formProperties);
+    return this.reportService.update(payload, false, this.formProperties);
   }
 
-  private submitReport(): Observable<boolean> {
+  get submitReport$(): Observable<boolean> {
     this.loading = 2;
 
     const payload = {
       report_id: this.report?.id,
-      password: this.form?.value['filing_password'],
+      password: this.form?.value['filingPassword'],
       backdoor_code: this.form?.value['backdoor_code'],
     };
     return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
       switchMap(() => {
         this.loading = 0;
+        from(this.router.navigateByUrl(this.getContinueUrl?.(this.report) || ''));
         if (this.report?.id) {
           this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
           return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));

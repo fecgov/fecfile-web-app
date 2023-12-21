@@ -1,10 +1,12 @@
 <p-toast></p-toast>
 
+<h1>Submit report</h1>
+<h5>
+  <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
+</h5>
+<p-divider></p-divider>
 <div class="p-fluid">
   <p-card>
-    <h1>Submit report</h1>
-    <h5><strong>Form 3X:</strong> {{ report?.report_code | reportCodeLabel }}</h5>
-    <p-divider></p-divider>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">
         <div class="col-12">
@@ -90,13 +92,13 @@
         </div>
         <div class="col-6">
           <div class="field">
-            <label for="filing_password">
+            <label for="filingPassword">
               <strong>ELECTRONIC FILING PASSWORD </strong>
             </label>
-            <input type="text" pInputText id="filing_password" formControlName="filing_password" />
+            <input type="text" pInputText id="filingPassword" formControlName="filingPassword" />
             <app-error-messages
               [form]="form"
-              fieldName="filing_password"
+              fieldName="filingPassword"
               [formSubmitted]="formSubmitted"
               patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
             ></app-error-messages>
@@ -109,7 +111,7 @@
             <app-yes-no-radio-input
               [form]="form"
               [formSubmitted]="formSubmitted"
-              controlName="backdoor_code_yes_no"
+              controlName="backdoorYesNo"
               label="Do you need to use a backdoor code? (OPTIONAL)"
               ariaLabelYes="You need to use a backdoor code"
               ariaLabelNo="You do not need to use a backdoor code"
@@ -140,9 +142,9 @@
             <strong>
               <p-checkbox
                 [binary]="true"
-                inputId="truth_statement"
+                inputId="userCertified"
                 label="I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct, and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing this Statement to the penalties of 52 U.S.C. § 30109."
-                formControlName="truth_statement"
+                formControlName="userCertified"
                 [trueValue]="true"
                 [falseValue]="false"
               ></p-checkbox>
@@ -150,20 +152,20 @@
           </div>
         </div>
       </div>
-      <div class="grid" *ngIf="report?.L6a_cash_on_hand_jan_1_ytd">
+      <div class="grid" *ngIf="!report?.getBlocker()">
         <div class="col-4"></div>
         <div class="col-4">
           <button
-            *ngIf="form.value.truth_statement === true"
+            *ngIf="form.value.userCertified === true"
             pButton
             pRipple
             [disabled]="loading > 0"
             label="Submit"
             class="p-button"
-            (click)="submit()"
+            (click)="submitClicked()"
           ></button>
           <button
-            *ngIf="form.value.truth_statement === false"
+            *ngIf="form.value.userCertified === false"
             pButton
             pRipple
             label="Submit"
@@ -179,20 +181,21 @@
           </div>
         </ng-container>
       </div>
-      <div class="grid" *ngIf="!!!report?.L6a_cash_on_hand_jan_1_ytd">
-        <div class="col-12">*** You may not submit a report until you have entered an amount for Cash on Hand ***</div>
+      <div class="grid" *ngIf="report?.getBlocker()">
+        <div class="col-12">{{ report?.getBlocker() }}</div>
       </div>
     </form>
-  </p-card>
-  <div class="grid">
-    <div class="col-3">
-      <button
-        pButton
-        pRipple
-        label="Back"
-        class="p-button-secondary p-button-outlined"
-        (click)="router.navigateByUrl('/reports/f3x/submit/step1/' + report?.id)"
-      ></button>
+
+    <div class="grid">
+      <div class="col-3">
+        <button
+          pButton
+          pRipple
+          label="Back"
+          class="p-button-secondary p-button-outlined"
+          (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
+        ></button>
+      </div>
     </div>
-  </div>
+  </p-card>
 </div>

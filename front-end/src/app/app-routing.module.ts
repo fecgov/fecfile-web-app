@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
+import { SpinnerResolver } from './shared/resolvers/spinner.resolver';
 
 const routes: Routes = [
   {
@@ -16,7 +17,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    resolve: { sidebar: SidebarStateResolver },
+    resolve: { sidebar: SidebarStateResolver, spinner: SpinnerResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {

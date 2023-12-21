@@ -1,6 +1,7 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
+import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
 
 export enum F24FormTypes {
   F24N = 'F24N',
@@ -14,6 +15,7 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
   [F24FormTypes.F24A]: 'Amendment',
 };
 export class Form24 extends Report {
+  override schema = f24Schema;
   override report_type = ReportTypes.F24;
   override form_type = F24FormTypes.F24A;
   get formLabel() {
@@ -24,12 +26,6 @@ export class Form24 extends Report {
   }
   get versionLabel() {
     return F24FormVersionLabels[this.form_type] ?? '';
-  }
-  override get routePrintPreviewBack() {
-    return '/reports';
-  }
-  override get routePrintPreviewSignAndSubmit() {
-    return '/reports';
   }
 
   report_type_24_48: string | undefined;
@@ -51,4 +47,7 @@ export class Form24 extends Report {
   static fromJSON(json: any): Form24 { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Form24, json);
   }
+  override getFromJSON = () => {
+    return Form24.fromJSON;
+  };
 }

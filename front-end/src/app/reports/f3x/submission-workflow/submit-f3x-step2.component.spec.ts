@@ -171,22 +171,22 @@ describe('SubmitF3xStep2Component', () => {
 
   it('should require valid backdoor code if option is set', () => {
     component.form.patchValue({
-      backdoor_code_yes_no: true,
+      backdoorYesNo: true,
     });
     expect(component.form.get('backdoor_code')?.invalid).toBeTrue();
 
     component.form.patchValue({
-      backdoor_code: "this_is_longer_than_max_chars",
+      backdoor_code: 'this_is_longer_than_max_chars',
     });
     expect(component.form.get('backdoor_code')?.invalid).toBeTrue();
 
     component.form.patchValue({
-      backdoor_code: "shorter_than_max",
+      backdoor_code: 'shorter_than_max',
     });
     expect(component.form.get('backdoor_code')?.invalid).toBeFalse();
 
     component.form.patchValue({
-      backdoor_code_yes_no: false,
+      backdoorYesNo: false,
     });
     expect(component.form.get('backdoor_code')).toBeFalsy();
   });

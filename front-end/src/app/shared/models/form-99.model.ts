@@ -1,6 +1,7 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
+import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -12,6 +13,7 @@ export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
   [F99FormTypes.F99]: 'Original',
 };
 export class Form99 extends Report {
+  override schema = f99Schema;
   override report_type = ReportTypes.F99;
   override form_type = F99FormTypes.F99;
   get formLabel() {
@@ -22,12 +24,6 @@ export class Form99 extends Report {
   }
   get versionLabel() {
     return F99FormVersionLabels[this.form_type] ?? '';
-  }
-  override get routePrintPreviewBack() {
-    return '/reports/f99/edit/' + this.id;
-  }
-  override get routePrintPreviewSignAndSubmit() {
-    return '/reports/f99/edit/' + this.id;
   }
 
   committee_name: string | undefined;
@@ -49,6 +45,9 @@ export class Form99 extends Report {
   static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Form99, json);
   }
+  override getFromJSON = () => {
+    return Form99.fromJSON;
+  };
 }
 
 export const textCodes = [

@@ -18,11 +18,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       this.editItem.bind(this),
       (report: Report) => report.report_status === 'In progress'
     ),
-    new TableAction(
-      'Amend',
-      this.amendReport.bind(this),
-      (report: Report) => report.report_status === 'Submission success'
-    ),
+    new TableAction('Amend', this.amendReport.bind(this), (report: Report) => report.canAmend),
     new TableAction(
       'Review report',
       this.editItem.bind(this),

@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Report } from 'app/shared/models/report.model';
+import { ApiService } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { Observable, takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-submit-f3x-step1',
-  templateUrl: './submit-f3x-step1.component.html',
+  selector: 'app-submit-report-step1',
+  templateUrl: './submit-report-step1.component.html',
 })
-export class SubmitF3xStep1Component extends DestroyerComponent implements OnInit {
+export class SubmitReportStep1Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'confirmation_email_1',
     'confirmation_email_2',
@@ -29,19 +29,22 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
     'state',
     'zip',
   ];
-  report?: Form3X;
+  report?: Report;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  getBackUrl?: (report?: Report) => string;
+  getContinueUrl?: (report?: Report) => string;
 
   constructor(
     public router: Router,
-    private form3XService: Form3XService,
+    public route: ActivatedRoute,
+    private reportService: ReportService,
     private fb: FormBuilder,
     private store: Store,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private apiService: ApiService
   ) {
     super();
   }
@@ -49,16 +52,13 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
   ngOnInit(): void {
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report as Form3X;
-      });
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+    const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
+    combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
+      this.report = activeReport;
+      ValidateUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
+      this.initializeFormWithReport(this.report, committeeAccount);
+    });
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['confirmation_email_1'].addValidators([
@@ -70,26 +70,22 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       Validators.maxLength(44),
       this.buildEmailValidator('confirmation_email_2'),
     ]);
-
-    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+    this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
+      this.getBackUrl = getBackUrl;
+      this.getContinueUrl = getContinueUrl;
+    });
   }
 
-  setDefaultFormValues(committeeAccount: CommitteeAccount) {
-    const reportHasAddress = this.report?.street_1;
-    const addressSource = reportHasAddress ? this.report : committeeAccount;
+  initializeFormWithReport(report: Report, committeeAccount: CommitteeAccount) {
     this.form.patchValue({
-      street_1: addressSource?.street_1,
-      street_2: addressSource?.street_2,
-      city: addressSource?.city,
-      state: addressSource?.state,
-      zip: addressSource?.zip,
+      change_of_address: false,
+      confirmation_email_1: committeeAccount?.email,
+      confirmation_email_2: undefined,
     });
-
-    this.form.patchValue({
-      change_of_address: this.report?.change_of_address ?? false,
-      confirmation_email_1: this.report?.confirmation_email_1 ?? committeeAccount?.email,
-      confirmation_email_2: this.report?.confirmation_email_2 ?? undefined,
-    });
+    this.form.patchValue(committeeAccount);
+    if (report && (report as any)['confirmation_email_1']) {
+      this.form.patchValue(report);
+    }
   }
 
   public buildEmailValidator(valueFormControlName: string): ValidatorFn {
@@ -97,11 +93,11 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
       const email: string = this.form?.get(valueFormControlName)?.value;
 
       if (this.checkInvalidEmail(email)) {
-        return {email: 'invalid'};
+        return { email: 'invalid' };
       }
 
       if (this.checkIdenticalEmails()) {
-        return {email: 'identical'};
+        return { email: 'identical' };
       }
 
       return null;
@@ -122,38 +118,29 @@ export class SubmitF3xStep1Component extends DestroyerComponent implements OnIni
     return !!email_1 && email_1 === email_2;
   }
 
-  public save(): void {
+  public continue(): void {
     this.formSubmitted = true;
-    if (this.form.invalid) {
+    if (this.form.invalid || this.report == undefined) {
       return;
     }
-    let addressFields: object;
-    if (this.form.value.change_of_address === false) {
+    let addressFields = {};
+    if (this.form.value.change_of_address) {
       addressFields = {
-        change_of_address: false,
-        city: null,
-        street_1: null,
-        street_2: null,
-        state: null,
-        zip: null,
-      };
-    } else {
-      addressFields = {
-        change_of_address: true,
-        ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
+        ...ValidateUtils.getFormValues(this.form, this.report?.schema, this.formProperties),
       };
     }
 
-    const payload: Form3X = Form3X.fromJSON({
+    const payload: Report = this.report.getFromJSON()({
       ...this.report,
       ...addressFields,
+      change_of_address: this.form.value.change_of_address,
       confirmation_email_1: this.form.value.confirmation_email_1,
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
+    this.reportService.update(payload, true, this.formProperties).subscribe(() => {
       if (this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
+        this.router.navigateByUrl(this.getContinueUrl?.(this.report) ?? '');
       }
 
       this.messageService.add({

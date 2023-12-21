@@ -3,6 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form99Service } from 'app/shared/services/form-99.service';
+import { ReportService } from 'app/shared/services/report.service';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -27,10 +30,12 @@ const routes: Routes = [
   },
   {
     path: 'f3x',
+    providers: [{ provide: ReportService, useClass: Form3XService }],
     loadChildren: () => import('./f3x/f3x.module').then((m) => m.F3XModule),
   },
   {
     path: 'f99',
+    providers: [{ provide: ReportService, useClass: Form99Service }],
     loadChildren: () => import('./f99/f99.module').then((m) => m.F99Module),
   },
   { path: '**', redirectTo: '' },

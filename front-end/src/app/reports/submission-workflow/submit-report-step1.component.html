@@ -1,22 +1,22 @@
 <p-toast></p-toast>
 
+<h1>Confirm information</h1>
+<h5>
+  <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
+</h5>
+<p-divider></p-divider>
 <div class="p-fluid">
   <p-card>
-    <h1>Confirm information</h1>
-    <h5>
-      <strong>{{ report.formLabel }}:</strong> {{ report?.formSubLabel }}
-    </h5>
-    <p-divider></p-divider>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">
         <div class="col-12">
           <div class="field">
-            <h3>Verify confirmation email addresses</h3>
+            <h2>Verify confirmation email addresses</h2>
           </div>
         </div>
       </div>
       <div class="grid">
-        <div class="col-6">
+        <div class="col-12">
           <div class="field">
             <label for="confirmation_email_1"><strong>Email #1</strong></label>
             <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
@@ -27,7 +27,7 @@
             ></app-error-messages>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-12">
           <div class="field">
             <label for="confirmation_email_2"><strong>Email #2</strong> (Optional)</label>
             <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
@@ -39,7 +39,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="report.hasChangeOfAddress">
+      <div *ngIf="report?.hasChangeOfAddress">
         <p-divider></p-divider>
         <div class="grid">
           <div class="col-12">
@@ -162,7 +162,7 @@
             pRipple
             label="Back"
             class="p-button-secondary"
-            (click)="router.navigateByUrl('/reports/f3x/memo/' + report?.id)"
+            (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
           ></button>
         </div>
         <div class="col-6"></div>
@@ -173,7 +173,7 @@
             appSingleClick
             label="Confirm information"
             class="p-button-primary"
-            (click)="save()"
+            (click)="continue()"
           ></button>
         </div>
       </div>
