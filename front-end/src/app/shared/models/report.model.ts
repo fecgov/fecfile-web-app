@@ -14,6 +14,9 @@ export abstract class Report extends BaseModel {
     return this.formLabel;
   }
   hasChangeOfAddress = false;
+  abstract get routePrintPreviewBack(): string;
+  abstract get routePrintPreviewSignAndSubmit(): string;
+
   report_version: string | undefined; // Tracks amendment versions
   report_id: string | undefined; // FEC assigned report ID
   is_first: boolean | undefined;

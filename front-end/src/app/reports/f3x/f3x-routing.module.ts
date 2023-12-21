@@ -9,7 +9,7 @@ import { SubmitF3xStep1Component } from './submission-workflow/submit-f3x-step1.
 import { SubmitF3xStep2Component } from './submission-workflow/submit-f3x-step2.component';
 import { ReportSubmissionStatusComponent } from './submission-workflow/submit-f3x-status.component';
 import { TestDotFecComponent } from './test-dot-fec-workflow/test-dot-fec.component';
-import { ReportWebPrintComponent } from './report-web-print/report-web-print.component';
+import { PrintPreviewComponent } from '../print-preview/print-preview.component';
 import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
@@ -65,7 +65,7 @@ const routes: Routes = [
   {
     path: 'web-print/:reportId',
     title: 'Print preview',
-    component: ReportWebPrintComponent,
+    component: PrintPreviewComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',

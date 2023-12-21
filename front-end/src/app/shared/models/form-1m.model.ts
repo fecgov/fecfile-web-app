@@ -31,6 +31,13 @@ export class Form1M extends Report {
   get versionLabel() {
     return F1MFormVersionLabels[this.form_type] ?? '';
   }
+  override get routePrintPreviewBack() {
+    return '/reports';
+  }
+  override get routePrintPreviewSignAndSubmit() {
+    return '/reports';
+  }
+
   street_1?: string;
   street_2?: string;
   city?: string;

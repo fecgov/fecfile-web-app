@@ -23,6 +23,13 @@ export class Form99 extends Report {
   get versionLabel() {
     return F99FormVersionLabels[this.form_type] ?? '';
   }
+  override get routePrintPreviewBack() {
+    return '/reports/f99/edit/' + this.id;
+  }
+  override get routePrintPreviewSignAndSubmit() {
+    return '/reports/f99/edit/' + this.id;
+  }
+
   committee_name: string | undefined;
   street_1: string | undefined;
   street_2: string | undefined;
