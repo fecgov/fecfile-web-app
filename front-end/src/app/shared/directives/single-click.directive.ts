@@ -19,6 +19,9 @@ export class SingleClickDirective implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // If the single-click button disabled flag in the store has not been
+    // reset to false within the code itself, set the flag when routed away
+    // from the page as the button is destroyed.
     this.store.dispatch(singleClickEnableAction());
   }
 }
