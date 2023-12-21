@@ -32,12 +32,22 @@ export class Form3X extends Report {
   get formLabel() {
     return 'FORM 3X';
   }
+  override get reportCodeLabel() {
+    return getReportCodeLabel(this.report_code);
+  }
   get versionLabel() {
     return F3xFormVersionLabels[this.form_type] ?? '';
   }
   override get transactionTableTitle() {
     return `${this.formLabel}: ${getReportCodeLabel(this.report_code)}`;
   }
+  override get routePrintPreviewBack() {
+    return '/reports/f3x/detailed-summary/' + this.id;
+  }
+  override get routePrintPreviewSignAndSubmit() {
+    return '/reports/f3x/submit/step1/' + this.id;
+  }
+
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;
