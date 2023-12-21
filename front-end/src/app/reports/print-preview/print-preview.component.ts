@@ -35,7 +35,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (report) {
-          this.report = report as Report;
+          this.report = report;
           this.updatePrintStatus(report);
         }
       });
