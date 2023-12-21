@@ -1,7 +1,6 @@
 import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { iif, Observable, of } from 'rxjs';
-import { delay, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
