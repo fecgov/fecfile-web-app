@@ -13,6 +13,7 @@ export abstract class Report extends BaseModel {
   get transactionTableTitle(): string {
     return this.formLabel;
   }
+  hasChangeOfAddress = false;
   report_version: string | undefined; // Tracks amendment versions
   report_id: string | undefined; // FEC assigned report ID
   is_first: boolean | undefined;

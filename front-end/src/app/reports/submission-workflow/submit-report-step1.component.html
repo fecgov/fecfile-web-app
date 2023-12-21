@@ -4,7 +4,7 @@
   <p-card>
     <h1>Confirm information</h1>
     <h5>
-      <strong>{{ report.formLabel }}:</strong> {{ report?.report_code | reportCodeLabel }}
+      <strong>{{ report.formLabel }}:</strong> {{ report?.formSubLabel }}
     </h5>
     <p-divider></p-divider>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -39,50 +39,53 @@
           </div>
         </div>
       </div>
-      <p-divider></p-divider>
-      <div class="grid">
-        <div class="col-12">
-          <div class="field">
-            <h3>Verify physical address</h3>
-            <br />
-            <div>Has your address changed in the last 10 days?</div>
-          </div>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-2">
-          <div class="field">
-            <div class="radio-button-spacer">
-              <p-radioButton
-                name="change_of_address"
-                [value]="true"
-                label="YES"
-                formControlName="change_of_address"
-                ariaLabel="Address has changed in the last 10 days"
-              ></p-radioButton>
-            </div>
-            <app-error-messages
-              [form]="form"
-              fieldName="change_of_address"
-              [formSubmitted]="formSubmitted"
-              patternErrorMessage="Please select 'Yes' or 'No'"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-2">
-          <div class="field">
-            <div class="radio-button-spacer">
-              <p-radioButton
-                name="change_of_address"
-                [value]="false"
-                label="NO"
-                formControlName="change_of_address"
-                ariaLabel="Address has not changed in the last 10 days"
-              ></p-radioButton>
+      <div *ngIf="report.hasChangeOfAddress">
+        <p-divider></p-divider>
+        <div class="grid">
+          <div class="col-12">
+            <div class="field">
+              <h3>Verify physical address</h3>
+              <br />
+              <div>Has your address changed in the last 10 days?</div>
             </div>
           </div>
         </div>
+        <div class="grid">
+          <div class="col-2">
+            <div class="field">
+              <div class="radio-button-spacer">
+                <p-radioButton
+                  name="change_of_address"
+                  [value]="true"
+                  label="YES"
+                  formControlName="change_of_address"
+                  ariaLabel="Address has changed in the last 10 days"
+                ></p-radioButton>
+              </div>
+              <app-error-messages
+                [form]="form"
+                fieldName="change_of_address"
+                [formSubmitted]="formSubmitted"
+                patternErrorMessage="Please select 'Yes' or 'No'"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="field">
+              <div class="radio-button-spacer">
+                <p-radioButton
+                  name="change_of_address"
+                  [value]="false"
+                  label="NO"
+                  formControlName="change_of_address"
+                  ariaLabel="Address has not changed in the last 10 days"
+                ></p-radioButton>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
       <ng-container *ngIf="form.get('change_of_address')?.value">
         <!--
 

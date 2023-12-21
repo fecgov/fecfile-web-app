@@ -11,15 +11,11 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { of } from 'rxjs';
-import { CommitteeAccount } from '../../../shared/models/committee-account.model';
-import { Form3XService } from '../../../shared/services/form-3x.service';
-import { ReportsModule } from '../../reports.module';
 import { SubmitF3xStep1Component } from './submit-report-step1.component';
 
 describe('SubmitF3xStep1Component', () => {
   let component: SubmitF3xStep1Component;
   let fixture: ComponentFixture<SubmitF3xStep1Component>;
-  let reportService: Form3XService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -32,12 +28,10 @@ describe('SubmitF3xStep1Component', () => {
         CheckboxModule,
         RadioButtonModule,
         SharedModule,
-        ReportsModule,
       ],
       declarations: [SubmitF3xStep1Component],
       providers: [
         FormBuilder,
-        Form3XService,
         MessageService,
         provideMockStore(testMockStore),
         {

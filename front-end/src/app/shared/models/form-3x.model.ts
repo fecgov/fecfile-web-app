@@ -29,6 +29,7 @@ export class F3xCoverageDates {
 export class Form3X extends Report {
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
+  override hasChangeOfAddress = true;
   get formLabel() {
     return 'FORM 3X';
   }
