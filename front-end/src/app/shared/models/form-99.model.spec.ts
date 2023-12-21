@@ -1,6 +1,4 @@
-import { compact } from 'lodash';
 import { Form99, F99FormTypes } from './form-99.model';
-import { Component } from '@angular/core';
 
 describe('Form99', () => {
   it('should create an instance', () => {
