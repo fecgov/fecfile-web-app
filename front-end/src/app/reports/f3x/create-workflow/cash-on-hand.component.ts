@@ -63,7 +63,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.form3XService.update(payload, false, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, this.formProperties).subscribe(() => {
       if (this.report) {
         this.router.navigateByUrl(`/reports/transactions/report/${this.report.id}/list`);
       }

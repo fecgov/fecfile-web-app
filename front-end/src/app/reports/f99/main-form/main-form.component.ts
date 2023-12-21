@@ -113,7 +113,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     let save$: Observable<Report>;
     if (this.reportId) {
       summary.id = this.reportId;
-      save$ = this.form99Service.update(summary, false, this.formProperties);
+      save$ = this.form99Service.update(summary, this.formProperties);
     } else {
       save$ = this.form99Service.create(summary, this.formProperties);
     }
