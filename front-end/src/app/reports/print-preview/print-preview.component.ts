@@ -55,7 +55,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
         case 'FAILED':
           this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'failure';
-          this.printError = report.webprint_submission.fecfile_error;
+          this.printError = report.webprint_submission.fecfile_error ?? report.webprint_submission.fec_message;
           break;
         case 'PROCESSING':
           this.webPrintStage = 'checking';
