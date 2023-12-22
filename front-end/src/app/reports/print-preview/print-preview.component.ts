@@ -7,7 +7,7 @@ import { WebPrintService } from '../../shared/services/web-print.service';
 import { Report } from '../../shared/models/report.model';
 import { selectActiveReport } from '../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { spinnerOffAction, spinnerOnAction } from '../../store/spinner.actions';
+import { singleClickEnableAction } from '../../store/single-click.actions';
 
 @Component({
   selector: 'app-print-preview',
@@ -42,7 +42,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         if (report) {
-          this.report = report as Report;
+          this.report = report;
           this.updatePrintStatus(report);
         }
       });
@@ -59,15 +59,15 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     } else {
       switch (report?.webprint_submission.fec_status) {
         case 'COMPLETED':
-          this.store.dispatch(spinnerOffAction());
+          this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'success';
           this.downloadURL = report.webprint_submission.fec_image_url;
           this.submitDate = report.webprint_submission.created;
           break;
         case 'FAILED':
-          this.store.dispatch(spinnerOffAction());
+          this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'failure';
-          this.printError = report.webprint_submission.fecfile_error;
+          this.printError = report.webprint_submission.fecfile_error ?? report.webprint_submission.fec_message;
           break;
         case 'PROCESSING':
           this.webPrintStage = 'checking';
@@ -94,7 +94,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
 
   public submitPrintJob() {
     if (this.report.id) {
-      this.store.dispatch(spinnerOnAction());
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }

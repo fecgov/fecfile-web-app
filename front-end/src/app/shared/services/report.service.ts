@@ -52,15 +52,10 @@ export class ReportService implements TableListService<Report> {
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
-  public update(report: Report, spinner = false, fieldsToValidate: string[] = []): Observable<Report> {
+  public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
     const payload = report.toJson();
     return this.apiService
-      .put<Report>(
-        `${this.apiEndpoint}/${report.id}/`,
-        payload,
-        { fields_to_validate: fieldsToValidate.join(',') },
-        spinner
-      )
+      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => getReportFromJSON(response)));
   }
 

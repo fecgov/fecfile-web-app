@@ -10,6 +10,7 @@ import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'a
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { combineLatest, takeUntil } from 'rxjs';
 
@@ -119,6 +120,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
   public continue(): void {
     this.formSubmitted = true;
     if (this.form.invalid || this.report == undefined) {
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
     let addressFields = {};
@@ -136,7 +138,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
       confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
-    this.reportService.update(payload, true, this.formProperties).subscribe(() => {
+    this.reportService.update(payload, this.formProperties).subscribe(() => {
       if (this.report?.id) {
         this.router.navigateByUrl(this.getContinueUrl?.(this.report) ?? '');
       }

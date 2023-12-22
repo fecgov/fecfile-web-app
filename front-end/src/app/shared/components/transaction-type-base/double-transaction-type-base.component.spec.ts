@@ -244,4 +244,13 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.handleNavigate(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
+
+  describe('save', () => {
+    it('should bail out if transactions are invalid', () => {
+      component.transaction = undefined;
+      expect(function () {
+        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
+      }).toThrow(new Error('Fecfile: No transactions submitted for double-entry transaction form.'));
+    });
+  });
 });
