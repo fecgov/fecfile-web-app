@@ -49,7 +49,8 @@ export abstract class Report extends BaseModel {
   updated: Date | undefined;
   deleted: string | undefined;
 
-  abstract getFromJSON(): (json: any) => Report;
+  // prettier-ignore
+  abstract getFromJSON(): (json: any) => Report; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export enum ReportTypes {

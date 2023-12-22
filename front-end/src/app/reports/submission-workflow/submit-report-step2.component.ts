@@ -10,7 +10,6 @@ import { ReportService } from 'app/shared/services/report.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs';
 
@@ -90,7 +89,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       treasurer_prefix: committeeAccount?.treasurer_name_prefix,
       treasurer_suffix: committeeAccount?.treasurer_name_suffix,
     });
-    if (report && (report as any)['treasurer_last_name']) {
+    if (report && report['treasurer_last_name' as keyof Report]) {
       this.form.patchValue(report);
     }
   }

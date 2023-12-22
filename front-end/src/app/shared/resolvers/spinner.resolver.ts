@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { spinnerOffAction } from 'app/store/spinner.actions';
 
@@ -11,10 +10,9 @@ export class SpinnerResolver {
 
   /**
    * Returns the report record for the id passed in the URL
-   * @param {ActivatedRouteSnapshot} route
    * @returns {Observable<Report | undefined>}
    */
-  resolve(route: ActivatedRouteSnapshot) {
+  resolve() {
     this.store.dispatch(spinnerOffAction());
   }
 }

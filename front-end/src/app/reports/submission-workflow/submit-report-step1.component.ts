@@ -83,7 +83,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
       confirmation_email_2: undefined,
     });
     this.form.patchValue(committeeAccount);
-    if (report && (report as any)['confirmation_email_1']) {
+    if (report && report['confirmation_email_1']) {
       this.form.patchValue(report);
     }
   }

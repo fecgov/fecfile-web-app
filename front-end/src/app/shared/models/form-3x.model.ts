@@ -1,6 +1,6 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
-import { F3xReportCode, F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
+import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 
