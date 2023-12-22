@@ -107,9 +107,9 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
 
     //Observables are *defined* here ahead of their execution
 
-    save$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    save$.pipe(takeUntil(this.destroy$)).subscribe((report: Report) => {
       if (jump === 'continue') {
-        this.router.navigateByUrl('/reports');
+        this.router.navigateByUrl('/reports/f99/web-print/' + report.id);
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({

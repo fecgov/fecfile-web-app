@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { spinnerOffAction } from 'app/store/spinner.actions';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SpinnerResolver {
+export class SingleClickResolver {
   constructor(private store: Store) {}
 
   /**
-   * Returns the report record for the id passed in the URL
+   * Re-enables any singleClick buttons
    * @returns {Observable<Report | undefined>}
    */
   resolve() {
-    this.store.dispatch(spinnerOffAction());
+    this.store.dispatch(singleClickEnableAction());
   }
 }

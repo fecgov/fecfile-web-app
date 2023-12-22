@@ -134,7 +134,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });
 
-    return this.reportService.update(payload, false, this.formProperties);
+    return this.reportService.update(payload, this.formProperties);
   }
 
   get submitReport$(): Observable<boolean> {
