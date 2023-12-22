@@ -14,7 +14,6 @@ import { of } from 'rxjs';
 import { SubmitReportStep1Component } from './submit-report-step1.component';
 import { ReportService } from 'app/shared/services/report.service';
 import { ReportsModule } from '../reports.module';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 describe('SubmitReportStep1Component', () => {
   let component: SubmitReportStep1Component;

@@ -19,9 +19,7 @@ import { ReportsModule } from '../reports.module';
 describe('SubmitReportStep2Component', () => {
   let component: SubmitReportStep2Component;
   let fixture: ComponentFixture<SubmitReportStep2Component>;
-  let router: Router;
   let reportService: ReportService;
-  let apiService: ApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -61,10 +59,8 @@ describe('SubmitReportStep2Component', () => {
   });
 
   beforeEach(() => {
-    router = TestBed.inject(Router);
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(SubmitReportStep2Component);
-    apiService = TestBed.inject(ApiService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({ id: '999' })));
     fixture.detectChanges();
