@@ -33,7 +33,6 @@ describe('ReportResolver', () => {
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
-      console.log(`AHOY${response}`);
       expect(response).toEqual(form3X);
     });
 
