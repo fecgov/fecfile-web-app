@@ -99,4 +99,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
     return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
   }
+
+  public refreshReports() {
+    this.loading = true;
+    this.refreshTable();
+  }
 }

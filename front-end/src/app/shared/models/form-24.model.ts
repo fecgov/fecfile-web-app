@@ -29,7 +29,7 @@ export class Form24 extends Report {
     return '/reports';
   }
 
-  report_type_24_48: string | undefined;
+  report_type_24_48: '24' | '48' | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   committee_name: string | undefined;
   street_1: string | undefined;

@@ -1,6 +1,8 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { Form24 } from 'app/shared/models/form-24.model';
 
 @Component({
   selector: 'app-form-type-dialog',
@@ -9,13 +11,36 @@ import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.util
 })
 export class FormTypeDialogComponent {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
+  formTypes = FormTypes;
   selectedType?: FormTypes;
   @Input() noReports = true;
 
-  constructor(public router: Router, private changeDetectorRef: ChangeDetectorRef) {}
+  @Output() refreshReports = new EventEmitter();
+
+  form24Options = [
+    {
+      value: '24',
+      label: '24 Hour',
+    },
+    {
+      value: '48',
+      label: '48 Hour',
+    },
+  ];
+  selectedForm24Type: '24' | '48' | undefined;
+
+  constructor(
+    public router: Router,
+    private changeDetectorRef: ChangeDetectorRef,
+    private form24Service: Form24Service
+  ) {}
 
   goToReportForm(): void {
-    this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
+    if (this.getFormType(this.selectedType)?.createRoute) {
+      this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
+    } else if (this.selectedType === FormTypes.F24) {
+      this.createForm24();
+    }
   }
 
   getFormType(type?: FormTypes): FormType | undefined {
@@ -33,5 +58,16 @@ export class FormTypeDialogComponent {
 
   updateSelected(type: FormTypes) {
     this.selectedType = type;
+  }
+
+  createForm24() {
+    const form24 = Form24.fromJSON({
+      report_type_24_48: this.selectedForm24Type,
+    });
+    const create$ = this.form24Service.create(form24, ['report_type_24_48']);
+
+    create$.subscribe((report) => {
+      this.refreshReports.emit(report);
+    });
   }
 }
