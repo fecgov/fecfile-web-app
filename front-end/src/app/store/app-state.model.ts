@@ -5,7 +5,7 @@ import { SidebarState } from 'app/layout/sidebar/sidebar.component';
 
 export interface AppState {
   committeeAccount: CommitteeAccount;
-  spinnerOn: boolean;
+  singleClickDisabled: boolean;
   userLoginData: UserLoginData;
   activeReport: Report | undefined;
   sidebarState?: SidebarState;
