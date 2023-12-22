@@ -2,24 +2,35 @@ import { Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import { F3xReportCodes } from '../utils/report-code.utils';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
+  abstract schema: JsonSchema;
   abstract report_type: ReportTypes;
   abstract form_type: string;
   abstract get formLabel(): string;
-  get reportCodeLabel(): string | undefined {
-    return undefined;
-  }
+  abstract get formSubLabel(): string;
   abstract get versionLabel(): string;
-  get transactionTableTitle(): string {
-    return this.formLabel;
+  hasChangeOfAddress = false;
+  get reportCode(): F3xReportCodes | undefined {
+    return;
   }
-  abstract get routePrintPreviewBack(): string;
-  abstract get routePrintPreviewSignAndSubmit(): string;
+  get coverageDates(): { [date: string]: Date | undefined } | undefined {
+    return;
+  }
+  getBlocker(): string | undefined {
+    return;
+  }
+  get canAmend() {
+    return false;
+  }
 
   report_version: string | undefined; // Tracks amendment versions
   report_id: string | undefined; // FEC assigned report ID
+  confirmation_email_1: string | undefined;
+  confirmation_email_2: string | undefined;
   is_first: boolean | undefined;
 
   @Type(() => UploadSubmission)

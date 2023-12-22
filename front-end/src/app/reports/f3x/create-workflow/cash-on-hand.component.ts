@@ -10,6 +10,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   selector: 'app-cash-on-hand',
@@ -26,7 +27,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     private form3XService: Form3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    private store: Store
+    public store: Store
   ) {
     super();
   }
@@ -48,6 +49,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   public save(): void {
     this.formSubmitted = true;
     if (this.form.invalid) {
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
 
@@ -61,7 +63,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       },
     });
 
-    this.form3XService.update(payload, true, this.formProperties).subscribe(() => {
+    this.form3XService.update(payload, this.formProperties).subscribe(() => {
       if (this.report) {
         this.router.navigateByUrl(`/reports/transactions/report/${this.report.id}/list`);
       }

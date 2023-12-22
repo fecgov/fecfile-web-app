@@ -126,6 +126,7 @@ export class F3XMenuComponent extends DestroyerComponent implements OnInit {
               {
                 label: 'Report status',
                 routerLink: `/reports/f3x/submit/status/${activeReport?.id}`,
+                visible: !isEditable,
               },
             ],
           },

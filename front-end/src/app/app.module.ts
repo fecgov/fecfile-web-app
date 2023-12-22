@@ -17,7 +17,7 @@ import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
 import { sidebarStateReducer } from './store/sidebar-state.reducer';
-import { spinnerReducer } from './store/spinner.reducer';
+import { singleClickReducer } from './store/single-click.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -25,7 +25,6 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { ProgressBarModule } from 'primeng/progressbar';
 
 // Third party
 import { CookieService } from 'ngx-cookie-service';
@@ -55,7 +54,7 @@ import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component'
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'sidebarState'],
+    keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport', 'sidebarState'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -90,7 +89,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     StoreModule.forRoot(
       {
         committeeAccount: committeeAccountReducer,
-        spinnerOn: spinnerReducer,
+        singleClickDisabled: singleClickReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
         sidebarState: sidebarStateReducer,
@@ -102,7 +101,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     PanelMenuModule,
     PanelModule,
     ButtonModule,
-    ProgressBarModule,
     SharedModule,
     NgOptimizedImage,
   ],

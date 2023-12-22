@@ -8,8 +8,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class MemoTextService {
-  constructor(private apiService: ApiService) {
-  }
+  constructor(private apiService: ApiService) {}
 
   public get(id: string): Observable<MemoText> {
     return this.apiService.get<MemoText>(`/memo-text/${id}`).pipe(map((response) => MemoText.fromJSON(response)));
@@ -24,14 +23,14 @@ export class MemoTextService {
   public create(memoText: MemoText, fieldsToValidate: string[] = []): Observable<MemoText> {
     const payload = memoText.toJson();
     return this.apiService
-      .post<MemoText>(`/memo-text/`, payload, {fields_to_validate: fieldsToValidate.join(',')}, true)
+      .post<MemoText>(`/memo-text/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => MemoText.fromJSON(response)));
   }
 
   public update(memoText: MemoText, fieldsToValidate: string[] = []): Observable<MemoText> {
     const payload = memoText.toJson();
     return this.apiService
-      .put<MemoText>(`/memo-text/${memoText.id}/`, payload, {fields_to_validate: fieldsToValidate.join(',')}, true)
+      .put<MemoText>(`/memo-text/${memoText.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => MemoText.fromJSON(response)));
   }
 
