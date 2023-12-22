@@ -1,7 +1,8 @@
 import { Report, ReportTypes } from './report.model';
-import { Transform } from 'class-transformer';
+import { Transform, plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType } from './contact.model';
+import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -20,26 +21,19 @@ export const F1MFormVersionLabels: { [key in F1MFormTypes]: string } = {
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
+  override schema = f1mSchema;
   override report_type = ReportTypes.F1M;
   override form_type = F1MFormTypes.F1MN;
   get formLabel() {
     return 'FORM 1M';
   }
+  get formSubLabel() {
+    return '';
+  }
   get versionLabel() {
     return F1MFormVersionLabels[this.form_type] ?? '';
   }
-  override get routePrintPreviewBack() {
-    return '/reports';
-  }
-  override get routePrintPreviewSignAndSubmit() {
-    return '/reports';
-  }
 
-  street_1?: string;
-  street_2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
@@ -100,4 +94,9 @@ export class Form1M extends Report {
   V_candidate_state?: string;
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
+
+  // prettier-ignore
+  static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(Form1M, json);
+  }
 }

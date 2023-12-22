@@ -9,7 +9,7 @@ import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { MessageService } from 'primeng/api';
 import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F99FormTypes, Form99 } from 'app/shared/models/form-99.model';
+import { F99FormTypes, Form99, textCodes } from 'app/shared/models/form-99.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
@@ -33,20 +33,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     'message_text',
   ];
   formSubmitted = false;
-  textCodes = [
-    {
-      label: 'Disavowal Response',
-      value: 'MSI',
-    },
-    {
-      label: 'Filing Frequency Change Notice',
-      value: 'MSM',
-    },
-    {
-      label: 'Miscellaneous Report to the FEC',
-      value: 'MST',
-    },
-  ];
   templateMap = {
     street_1: 'street_1',
     street_2: 'street_2',
@@ -54,6 +40,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     state: 'state',
     zip: 'zip',
   } as TransactionTemplateMapType;
+  textCodes = textCodes;
 
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
   reportId: string | undefined;
@@ -120,9 +107,9 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
 
     //Observables are *defined* here ahead of their execution
 
-    save$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    save$.pipe(takeUntil(this.destroy$)).subscribe((report: Report) => {
       if (jump === 'continue') {
-        this.router.navigateByUrl('/reports');
+        this.router.navigateByUrl('/reports/f99/web-print/' + report.id);
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({

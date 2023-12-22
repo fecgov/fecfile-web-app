@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Form3X } from '../../shared/models/form-3x.model';
 import { WebPrintService } from '../../shared/services/web-print.service';
@@ -24,8 +24,15 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     | 'Your report is still being processed. Please check back later to access your PDF'
     | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
+  getBackUrl?: (report?: Report) => string;
+  getContinueUrl?: (report?: Report) => string;
 
-  constructor(private store: Store, public router: Router, private webPrintService: WebPrintService) {
+  constructor(
+    private store: Store,
+    public router: Router,
+    public route: ActivatedRoute,
+    private webPrintService: WebPrintService
+  ) {
     super();
   }
 
@@ -39,6 +46,11 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
           this.updatePrintStatus(report);
         }
       });
+
+    this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
+      this.getBackUrl = getBackUrl;
+      this.getContinueUrl = getContinueUrl;
+    });
   }
 
   public updatePrintStatus(report: Report) {

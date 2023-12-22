@@ -43,8 +43,8 @@ describe('Amendments', () => {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickLink('Submit report');
     PageUtils.urlCheck('/submit/step2');
-    PageUtils.enterValue('#filing_password', 'T3stUpl@ad');
-    cy.get(alias).find('p-checkbox[inputid="truth_statement"]').click();
+    PageUtils.enterValue('#filingPassword', 'T3stUpl@ad');
+    cy.get(alias).find('p-checkbox[inputid="userCertified"]').click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
 

@@ -2,8 +2,8 @@
   <div class="summary-header">
     <h1>Report level memo</h1>
     <div>
-      <strong>FORM 3X:</strong>
-      {{ report.report_code | reportCodeLabel }}
+      <strong>{{ report.formLabel }}</strong
+      >{{ report.formSubLabel }}
     </div>
   </div>
 
@@ -44,8 +44,14 @@
       <div class="col-4"></div>
       <div class="col-4 align-right">
         <div>
-          <button pButton pRipple appSingleClick label="Save & continue" class="p-button-primary"
-                  (click)="save()"></button>
+          <button
+            pButton
+            pRipple
+            appSingleClick
+            label="Save & continue"
+            class="p-button-primary"
+            (click)="save()"
+          ></button>
         </div>
       </div>
     </div>

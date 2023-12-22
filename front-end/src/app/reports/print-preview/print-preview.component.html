@@ -6,7 +6,7 @@
 <div class="grid">
   <div class="col-12">
     <h3 class="no-vert-margins">
-      {{ report.formLabel }}<ng-container *ngIf="report.reportCodeLabel">:</ng-container> {{ report.reportCodeLabel }}
+      <strong>{{ report.formLabel }}</strong> {{ report.formSubLabel }}
     </h3>
     <hr class="black-line" />
   </div>
@@ -98,7 +98,7 @@
       pRipple
       label="Back"
       class="p-button-secondary p-button-outlined button-full-width"
-      (click)="router.navigateByUrl(report.routePrintPreviewBack)"
+      (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
     ></button>
   </div>
   <div class="col-7"></div>
@@ -108,7 +108,7 @@
       pRipple
       label="Sign & submit report"
       class="p-button-secondary button-full-width"
-      (click)="router.navigateByUrl(report.routePrintPreviewSignAndSubmit)"
+      (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
     ></button>
   </div>
 </div>
