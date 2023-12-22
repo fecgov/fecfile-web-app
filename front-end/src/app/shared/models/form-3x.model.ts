@@ -186,7 +186,4 @@ export class Form3X extends Report {
     // json['form_type'] = F3xFormTypes.F3XT;
     return plainToClass(Form3X, json);
   }
-  override getFromJSON = () => {
-    return Form3X.fromJSON;
-  };
 }

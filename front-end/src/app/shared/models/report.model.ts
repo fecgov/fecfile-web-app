@@ -48,9 +48,6 @@ export abstract class Report extends BaseModel {
   @Transform(BaseModel.dateTransform)
   updated: Date | undefined;
   deleted: string | undefined;
-
-  // prettier-ignore
-  abstract getFromJSON(): (json: any) => Report; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export enum ReportTypes {

@@ -6,7 +6,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportService } from 'app/shared/services/report.service';
+import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -129,7 +129,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   get saveTreasurerName$(): Observable<Report | undefined> {
     if (!this.report) return of(undefined);
     this.loading = 1;
-    const payload: Report = this.report.getFromJSON()({
+    const payload: Report = getReportFromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });

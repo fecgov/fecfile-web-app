@@ -45,9 +45,6 @@ export class Form99 extends Report {
   static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Form99, json);
   }
-  override getFromJSON = () => {
-    return Form99.fromJSON;
-  };
 }
 
 export const textCodes = [

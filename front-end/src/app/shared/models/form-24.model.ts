@@ -47,7 +47,4 @@ export class Form24 extends Report {
   static fromJSON(json: any): Form24 { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Form24, json);
   }
-  override getFromJSON = () => {
-    return Form24.fromJSON;
-  };
 }
