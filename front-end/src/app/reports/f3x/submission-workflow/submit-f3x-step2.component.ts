@@ -167,7 +167,7 @@ export class SubmitF3xStep2Component extends DestroyerComponent implements OnIni
       ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });
 
-    return this.form3XService.update(payload, false, this.formProperties);
+    return this.form3XService.update(payload, this.formProperties);
   }
 
   private submitReport(): Observable<boolean> {

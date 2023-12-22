@@ -279,7 +279,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public updateItem(item: Transaction) {
     if (this.itemService.update) {
       this.itemService
-        .update(item, false)
+        .update(item)
         .pipe(take(1), takeUntil(this.destroy$))
         .subscribe(() => {
           this.loadTableItems({});

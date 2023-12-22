@@ -18,6 +18,7 @@ import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/
 import { FormControl } from '@angular/forms';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-navigation-control',
@@ -33,6 +34,7 @@ export class NavigationControlComponent implements OnInit {
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
 
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
@@ -100,7 +102,7 @@ export class NavigationControlComponent implements OnInit {
     }
     const typeId = config as TransactionTypes;
     if (!getTransactionTypeClass(typeId)) {
-      return {label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId)};
+      return { label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId) };
     }
     const type = TransactionTypeUtils.factory(typeId);
     return {

@@ -18,6 +18,11 @@ import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-ba
 import { of } from 'rxjs';
 import { TransactionContactUtils } from "./transaction-contact.utils";
 import { Contact } from "../../models/contact.model";
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent
+} from "../../models/transaction-navigation-controls.model";
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
@@ -187,6 +192,15 @@ describe('TripleTransactionTypeBaseComponent', () => {
       const selectItem: SelectItem<Contact> = {value: testContact};
       component.childUpdateFormWithTertiaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(selectItem, component.childForm_2, component.childTransaction_2, component.childContactIdMap_2['contact_3'])
+    });
+  });
+
+  describe('save', () => {
+    it('should bail out if transactions are invalid', () => {
+      component.transaction = undefined;
+      expect(function () {
+        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
+      }).toThrow(new Error('Fecfile: No transactions submitted for triple-entry transaction form.'));
     });
   });
 });

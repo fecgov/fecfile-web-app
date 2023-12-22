@@ -12,7 +12,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ListboxModule } from 'primeng/listbox';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
@@ -80,7 +79,6 @@ import { MainFormComponent } from './f1m/main-form/main-form.component';
     SharedModule,
     TooltipModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule,
     InputNumberModule,
     RippleModule,
     NgOptimizedImage,
