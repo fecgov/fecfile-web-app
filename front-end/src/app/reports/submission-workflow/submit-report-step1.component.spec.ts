@@ -43,11 +43,12 @@ describe('SubmitReportStep1Component', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              data: {
-                report: Form3X.fromJSON({ report_code: 'Q1' }),
-              },
-            },
+            data: of({
+              report: Form3X.fromJSON({
+                report_code: 'Q1',
+                id: '999',
+              }),
+            }),
           },
         },
       ],
