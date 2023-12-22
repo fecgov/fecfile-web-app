@@ -9,6 +9,8 @@ import { Form24Service } from 'app/shared/services/form-24.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { of } from 'rxjs';
+import { Form24 } from 'app/shared/models/form-24.model';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
@@ -60,5 +62,17 @@ describe('FormTypeDialogComponent', () => {
       component.updateSelected(FormTypes.F3X);
       expect(component.selectedType).toEqual(FormTypes.F3X);
     });
+  });
+
+  it('should create Form24', () => {
+    component.updateSelected(FormTypes.F24);
+    expect(component.selectedType).toEqual(FormTypes.F24);
+
+    component.selectedForm24Type = '48';
+
+    const create = spyOn(form24Service, 'create').and.returnValue(of(Form24.fromJSON({})));
+
+    component.goToReportForm();
+    expect(create).toHaveBeenCalled();
   });
 });
