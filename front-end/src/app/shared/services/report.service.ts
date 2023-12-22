@@ -9,10 +9,12 @@ import { ApiService } from './api.service';
 import { Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
+import { Form1M } from '../models/form-1m.model';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getReportFromJSON(json: any): Report {
+export function getReportFromJSON(json: any): Report {
   if (json.report_type) {
+    if (json.report_type === ReportTypes.F1M) return Form1M.fromJSON(json);
     if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json);
     if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);
     if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json);

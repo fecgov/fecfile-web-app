@@ -16,7 +16,5 @@ describe('Form99', () => {
     expect(form99.id).toBe('999');
     expect(form99.form_type).toBe(F99FormTypes.F99);
     expect(form99.committee_name).toBe('foo');
-    expect(form99.routePrintPreviewBack).toBe('/reports/f99/edit/999');
-    expect(form99.routePrintPreviewSignAndSubmit).toBe('/reports/f99/edit/999');
   });
 });

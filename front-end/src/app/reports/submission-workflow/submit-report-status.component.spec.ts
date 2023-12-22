@@ -7,11 +7,11 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { ReportSubmissionStatusComponent } from './submit-f3x-status.component';
+import { SubmitReportStatusComponent } from './submit-report-status.component';
 
 describe('ReportSummaryComponent', () => {
-  let component: ReportSubmissionStatusComponent;
-  let fixture: ComponentFixture<ReportSubmissionStatusComponent>;
+  let component: SubmitReportStatusComponent;
+  let fixture: ComponentFixture<SubmitReportStatusComponent>;
   const f3x: Form3X = Form3X.fromJSON({
     id: '999',
     coverage_from_date: '2022-05-25',
@@ -22,7 +22,7 @@ describe('ReportSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SharedModule, DividerModule, CardModule, RouterTestingModule.withRoutes([])],
-      declarations: [ReportSubmissionStatusComponent],
+      declarations: [SubmitReportStatusComponent],
       providers: [
         provideMockStore(testMockStore),
         {
@@ -40,7 +40,7 @@ describe('ReportSummaryComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportSubmissionStatusComponent);
+    fixture = TestBed.createComponent(SubmitReportStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -29,26 +29,26 @@ import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/re
 import { ReportLevelMemoComponent } from './f3x/report-level-memo/report-level-memo.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
-import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
-import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
-import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { FormTypeDialogComponent } from './form-type-dialog/form-type-dialog.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
 import { RippleModule } from 'primeng/ripple';
 import { MainFormComponent } from './f1m/main-form/main-form.component';
+import { SubmitReportStep1Component } from './submission-workflow/submit-report-step1.component';
+import { SubmitReportStep2Component } from './submission-workflow/submit-report-step2.component';
+import { SubmitReportStatusComponent } from './submission-workflow/submit-report-status.component';
 
 @NgModule({
   declarations: [
     ReportListComponent,
     CreateF3XStep1Component,
-    SubmitF3xStep1Component,
-    SubmitF3xStep2Component,
+    SubmitReportStep2Component,
+    SubmitReportStep1Component,
+    SubmitReportStatusComponent,
     ReportSummaryComponent,
     ReportDetailedSummaryComponent,
     ReportLevelMemoComponent,
-    ReportSubmissionStatusComponent,
     PrintPreviewComponent,
     TestDotFecComponent,
     CashOnHandComponent,
