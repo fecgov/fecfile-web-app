@@ -5,7 +5,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
-import { SingleClickResolver } from './shared/resolvers/singleClick.resolver';
+import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 
 const routes: Routes = [
   {
