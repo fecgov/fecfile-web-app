@@ -53,7 +53,7 @@ export class Form3X extends Report {
     return getReportCodeLabel(this.report_code) ?? '';
   }
   get versionLabel() {
-    return F3xFormVersionLabels[this.form_type] ?? '';
+    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
   }
 
   committee_name: string | undefined;

@@ -23,7 +23,7 @@ export class Form99 extends Report {
     return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
   }
   get versionLabel() {
-    return F99FormVersionLabels[this.form_type] ?? '';
+    return `${F99FormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
   }
 
   committee_name: string | undefined;
