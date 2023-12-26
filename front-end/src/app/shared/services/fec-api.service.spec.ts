@@ -7,7 +7,6 @@ import { FecFiling } from '../models/fec-filing.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { FecApiService } from './fec-api.service';
 import { Candidate } from '../models/candidate.model';
-import { environment } from '../../../environments/environment';
 
 describe('FecApiService', () => {
   let httpTestingController: HttpTestingController;
@@ -45,7 +44,7 @@ describe('FecApiService', () => {
       });
 
       const req = httpTestingController.expectOne(
-        'https://api.open.fec.gov/v1/candidate/P12345678/?api_key=' + environment.fecApiKey
+        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678'
       );
 
       expect(req.request.method).toEqual('GET');
@@ -80,7 +79,7 @@ describe('FecApiService', () => {
 
   describe('#getCommitteeRecentFiling()', () => {
     it('should return most recent filing from realtime endpoint', () => {
-      const f1Filing: FecFiling = FecFiling.fromJSON({ form_type: 'F1N', pdf_url: 'go here' });
+      const f1Filing: FecFiling = FecFiling.fromJSON({form_type: 'F1N', pdf_url: 'go here'});
 
       service.getCommitteeRecentFiling('C00601211').subscribe((mostRecentFiling) => {
         expect(mostRecentFiling).toEqual(f1Filing);
@@ -94,7 +93,7 @@ describe('FecApiService', () => {
   });
 
   it('should return most recent filing from nightly endpoint', () => {
-    const f2Filing: FecFiling = FecFiling.fromJSON({ form_type: 'F2', pdf_url: 'dont go here' });
+    const f2Filing: FecFiling = FecFiling.fromJSON({form_type: 'F2', pdf_url: 'dont go here'});
 
     service.getCommitteeRecentFiling('C00601211').subscribe((mostRecentFiling) => {
       expect(mostRecentFiling).toEqual(f2Filing);

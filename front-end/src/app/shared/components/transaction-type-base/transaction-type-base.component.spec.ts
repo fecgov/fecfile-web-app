@@ -31,7 +31,7 @@ describe('TransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TransactionTypeBaseComponent>;
   let testConfirmationService: ConfirmationService;
 
-  //spys
+  // spies
   let navigateToSpy: jasmine.Spy;
   let transactionServiceSpy: jasmine.SpyObj<TransactionService>;
   let confirmSpy: jasmine.Spy;

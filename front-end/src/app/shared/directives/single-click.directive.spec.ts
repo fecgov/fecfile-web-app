@@ -1,19 +1,18 @@
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SingleClickDirective } from './single-click.directive';
-import { SharedModule } from "../shared.module";
-import { By } from "@angular/platform-browser";
-import {Store, StoreModule} from "@ngrx/store";
-import { spinnerOffAction, spinnerOnAction } from "../../store/spinner.actions";
-import {spinnerReducer} from "../../store/spinner.reducer";
+import { SharedModule } from '../shared.module';
+import { By } from '@angular/platform-browser';
+import { Store, StoreModule } from '@ngrx/store';
+import { singleClickEnableAction } from '../../store/single-click.actions';
+import { singleClickReducer } from '../../store/single-click.reducer';
 
 @Component({
   standalone: true,
-  template: "<button #box appSingleClick>Test</button>",
+  template: '<button #box appSingleClick>Test</button>',
   imports: [SharedModule],
 })
-class TestComponent {
-}
+class TestComponent {}
 
 describe('SingleClickDirective', () => {
   let des: DebugElement[];
@@ -21,7 +20,7 @@ describe('SingleClickDirective', () => {
   let store: Store;
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [TestComponent, SharedModule, StoreModule.forRoot({spinnerOn: spinnerReducer})],
+      imports: [TestComponent, SharedModule, StoreModule.forRoot({ singleClickDisabled: singleClickReducer })],
     }).createComponent(TestComponent);
     store = TestBed.inject(Store);
     fixture.detectChanges(); // initial binding
@@ -34,28 +33,11 @@ describe('SingleClickDirective', () => {
     spyOn(button, 'setAttribute');
     spyOn(button, 'removeAttribute');
     button.click();
-
+    tick(300);
     expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
-    tick(3001);
-
-    expect(button.removeAttribute).toHaveBeenCalled();
-  }));
-
-  it('should wait on spinner if spinner starts', fakeAsync(() => {
-    const button = des[0].nativeElement as HTMLButtonElement;
-    spyOn(button, 'setAttribute');
-    spyOn(button, 'removeAttribute');
-    button.click();
-    fixture.detectChanges();
-    expect(button.removeAttribute).toHaveBeenCalledTimes(0);
-    store.dispatch(spinnerOnAction());
-    fixture.detectChanges();
-    expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
-    // Called twice. Once in the initial click. Once in the subscription
-    expect(button.setAttribute).toHaveBeenCalledTimes(2);
-    expect(button.removeAttribute).toHaveBeenCalledTimes(0);
-    tick(3001);
-    store.dispatch(spinnerOffAction());
+    expect(button.setAttribute).toHaveBeenCalledTimes(1);
+    store.dispatch(singleClickEnableAction());
+    tick(300);
     expect(button.removeAttribute).toHaveBeenCalledTimes(1);
   }));
 });

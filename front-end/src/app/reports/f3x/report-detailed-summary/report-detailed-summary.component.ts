@@ -33,12 +33,12 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report;
-        if (!report.calculation_status) {
+        this.report = report as Form3X;
+        if (!(report as Form3X).calculation_status) {
           this.apiService
             .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })
             .subscribe(() => this.refreshSummary());
-        } else if (report.calculation_status != 'SUCCEEDED') {
+        } else if ((report as Form3X).calculation_status != 'SUCCEEDED') {
           of(true)
             .pipe(delay(1000), takeUntil(this.destroy$))
             .subscribe(() => this.refreshSummary());

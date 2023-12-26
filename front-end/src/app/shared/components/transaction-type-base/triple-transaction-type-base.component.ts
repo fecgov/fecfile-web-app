@@ -4,7 +4,7 @@ import { NavigationEvent } from 'app/shared/models/transaction-navigation-contro
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType
+  TransactionType,
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -17,6 +17,7 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -32,7 +33,8 @@ import { TransactionFormUtils } from './transaction-form.utils';
 })
 export abstract class TripleTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties_2: string[] = [];
   childTransactionType_2?: TransactionType;
   childTransaction_2?: Transaction;
@@ -65,8 +67,9 @@ export abstract class TripleTransactionTypeBaseComponent
     this.childForm_2 = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties_2));
 
     if (
-      this.childTransactionType_2?.getInheritedFields(
-        this.childTransaction_2)?.includes('memo_code' as TemplateMapKeyType) &&
+      this.childTransactionType_2
+        ?.getInheritedFields(this.childTransaction_2)
+        ?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
       this.childMemoCodeCheckboxLabel_2$ = this.memoCodeCheckboxLabel$;
@@ -103,6 +106,7 @@ export abstract class TripleTransactionTypeBaseComponent
         this.childForm_2
       );
     } else {
+      this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for triple-entry transaction form.');
     }
 
@@ -123,9 +127,7 @@ export abstract class TripleTransactionTypeBaseComponent
   }
 
   override isInvalid(): boolean {
-    return super.isInvalid() ||
-      this.childForm_2.invalid ||
-      !this.childTransaction_2;
+    return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 
   override get confirmation$(): Observable<boolean> {
@@ -143,8 +145,10 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
     super.updateFormWithPrimaryContact(selectItem);
-    if (this.childTransaction_2?.transactionType?.getUseParentContact(
-      this.childTransaction_2) && this.transaction?.contact_1) {
+    if (
+      this.childTransaction_2?.transactionType?.getUseParentContact(this.childTransaction_2) &&
+      this.transaction?.contact_1
+    ) {
       this.childTransaction_2.contact_1 = this.transaction.contact_1;
       this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
     }

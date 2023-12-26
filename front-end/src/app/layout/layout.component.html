@@ -1,39 +1,32 @@
 <app-banner></app-banner>
-<div [ngClass]="isVisible ? '': 'container'">
-    <div class="row">
-        <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-5  fec-background-gradient" *ngIf="isVisible">
-            <app-sidebar></app-sidebar>
-        </div>
-        <div [ngClass]="isVisible ? 'col-xxl-10 col-xl-9 col-lg-8 col-md-7 col-sm-7  ' : 'col-12'">
-            <div class="col-12 header-container">
-                <app-header></app-header>
-            </div>
-            <div class="col no-padding">
-                <div class="main-content">
-                    <div class="grid">
-                        <div class="col-12">
-                            <app-committee-banner></app-committee-banner>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <div class="col-12">
-                            <div *ngIf="progressBarVisible$ | async">
-                                <p-progressBar mode="indeterminate"></p-progressBar>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <div class="col-12 router-outlet">
-                            <router-outlet></router-outlet>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12 no-padding">
-                        <app-footer></app-footer>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div [ngClass]="showSidebar ? '' : 'container'">
+  <div class="row">
+    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-5 fec-background-gradient" *ngIf="showSidebar">
+      <app-sidebar></app-sidebar>
     </div>
+    <div [ngClass]="showSidebar ? 'col-xxl-10 col-xl-9 col-lg-8 col-md-7 col-sm-7  ' : 'col-12'">
+      <div class="col-12 header-container">
+        <app-header></app-header>
+      </div>
+      <div class="col no-padding">
+        <div class="main-content">
+          <div class="grid">
+            <div class="col-12">
+              <app-committee-banner></app-committee-banner>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12 router-outlet">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12 no-padding">
+            <app-footer></app-footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

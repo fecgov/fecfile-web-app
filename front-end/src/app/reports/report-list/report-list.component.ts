@@ -1,14 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report } from '../../shared/models/report.model';
-import { CashOnHand, Form3X } from '../../shared/models/form-3x.model';
-import { LabelList } from '../../shared/utils/label.utils';
+import { Report, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
-import { F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,23 +12,13 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
-  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
-  cashOnHand: CashOnHand = {
-    report_id: undefined,
-    value: undefined,
-  };
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
       (report: Report) => report.report_status === 'In progress'
     ),
-    new TableAction(
-      'Amend',
-      this.amendReport.bind(this),
-      (report: Report) => report.report_status === 'Submission success'
-    ),
+    new TableAction('Amend', this.amendReport.bind(this), (report: Report) => report.canAmend),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
@@ -42,7 +28,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   ];
 
   constructor(
-    private store: Store,
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
@@ -50,19 +35,13 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     public router: Router
   ) {
     super(messageService, confirmationService, elementRef);
-    this.caption = "Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.";
+    this.caption =
+      'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
   }
 
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-
-    this.store
-      .select(selectCashOnHand)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cashOnHand: CashOnHand) => {
-        this.cashOnHand = cashOnHand;
-      });
   }
 
   protected getEmptyItem(): Report {
@@ -71,11 +50,18 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   public override editItem(item: Report): void {
     if (!this.itemService.isEditable(item)) {
-      this.router.navigateByUrl(`/reports/f3x/submit/status/${item.id}`);
-    } else if (item.id === this.cashOnHand.report_id) {
-      this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-    } else {
-      this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+      this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
+      return;
+    }
+
+    if (item.report_type === ReportTypes.F3X) {
+      if (item.is_first) {
+        this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
+      } else {
+        this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+      }
+    } else if (item.report_type === ReportTypes.F99) {
+      this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
     }
   }
 
@@ -103,5 +89,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    */
   public displayName(item: Report): string {
     return item.form_type ?? '';
+  }
+
+  public noCashOnHand(): boolean {
+    const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
+    return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
   }
 }
