@@ -31,7 +31,7 @@ export class Form1M extends Report {
     return '';
   }
   get versionLabel() {
-    return F1MFormVersionLabels[this.form_type] ?? '';
+    return `${F1MFormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
   }
 
   committee_type?: CommitteeType;
