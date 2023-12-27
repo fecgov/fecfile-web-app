@@ -19,6 +19,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
+  pollingTime = 2000;
   pollingStatusMessage:
     | 'This may take a while...'
     | 'Your report is still being processed. Please check back later to access your PDF'
@@ -67,7 +68,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
         case 'FAILED':
           this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'failure';
-          this.printError = report.webprint_submission.fecfile_error ?? report.webprint_submission.fec_message;
+          this.printError = report.webprint_submission.fecfile_error;
           break;
         case 'PROCESSING':
           this.webPrintStage = 'checking';
@@ -79,19 +80,26 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public pollPrintStatus() {
-    const pollingTime = 5000;
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
-    // Check for report status. This is a backup to the status check made
-    // in webPrintService.submitPrintJob() call.
     setTimeout(() => {
       this.refreshReportStatus();
-    }, pollingTime);
+    }, this.pollingTime);
   }
 
   public refreshReportStatus() {
-    if (this.report.id) this.webPrintService.getStatus(this.report.id);
+    if (this.report.id) {
+      this.webPrintService.getStatus(this.report.id);
+      if (
+        !this.report.webprint_submission?.fec_status ||
+        this.report.webprint_submission?.fec_status === 'PROCESSING'
+      ) {
+        setTimeout(() => {
+          this.refreshReportStatus();
+        }, this.pollingTime);
+      }
+    }
   }
 
   public submitPrintJob() {
