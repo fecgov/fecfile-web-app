@@ -79,10 +79,12 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public pollPrintStatus() {
-    const pollingTime = 3000;
+    const pollingTime = 5000;
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
+    // Check for report status. This is a backup to the status check made
+    // in webPrintService.submitPrintJob() call.
     setTimeout(() => {
       this.refreshReportStatus();
     }, pollingTime);
