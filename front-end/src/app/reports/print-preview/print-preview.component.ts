@@ -79,7 +79,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public pollPrintStatus() {
-    const pollingTime = 1000;
+    const pollingTime = 3000;
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
