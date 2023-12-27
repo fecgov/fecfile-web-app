@@ -83,6 +83,8 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
+    // Check for report status. This is a backup to the status check made
+    // in webPrintService.submitPrintJob() call.
     setTimeout(() => {
       this.refreshReportStatus();
     }, pollingTime);
