@@ -79,16 +79,13 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public pollPrintStatus() {
+    const pollingTime = 5000;
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
-    // We poll twice, once with a slight pause and once at a longer duration for slow connections.
     setTimeout(() => {
       this.refreshReportStatus();
-    }, 3000);
-    setTimeout(() => {
-      this.refreshReportStatus();
-    }, 6000);
+    }, pollingTime);
   }
 
   public refreshReportStatus() {
