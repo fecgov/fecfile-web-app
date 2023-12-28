@@ -21,11 +21,11 @@
       ngSrc="assets/img/image-placeholder.png"
       draggable="false"
       alt="Print success image"
-      [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' }"
+      [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' && !report.webprint_submission?.fec_status }"
       height="271"
       width="450"
     />
-    <ng-container *ngIf="webPrintStage === 'checking'">
+    <ng-container *ngIf="webPrintStage === 'checking' && !report.webprint_submission?.fec_status">
       <div class="fec-loader-div col-12">
         <img
           class="image-max-width fec-loader-image"
@@ -46,6 +46,16 @@
       </div>
     </ng-container>
   </div>
+  <ng-container *ngIf="webPrintStage === 'checking' && report.webprint_submission?.fec_status === 'PROCESSING'">
+    <div class="col-12">
+      <h1 class="align-center">
+        <br /><br />
+        <strong>Your report is still being processed...</strong>
+        <br />
+      </h1>
+      <h3 class="align-center">PLEASE CHECK BACK LATER TO ACCESS YOUR PDF</h3>
+    </div>
+  </ng-container>
 </div>
 <div class="grid">
   <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
