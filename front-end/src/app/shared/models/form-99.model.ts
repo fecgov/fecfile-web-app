@@ -27,7 +27,7 @@ export class Form99 extends Report {
   }
 
   get versionLabel() {
-    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`;
+    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
   committee_name: string | undefined;
