@@ -3,12 +3,12 @@
     *ngIf="controlType === 'button'"
     pButton
     pRipple
-    appSingleClick
     [label]="navigationControl?.label || ''"
     [icon]="navigationControl?.icon || ''"
     [class]="navigationControl?.ngClass || ''"
     (click)="click()"
     [disabled]="isDisabled()"
+    appSingleClick
   ></button>
   <p-dropdown
     *ngIf="controlType === 'dropdown'"
@@ -22,6 +22,7 @@
     panelStyleClass="navigation-dropdown-panel"
     (onChange)="onDropdownChange($event)"
     [disabled]="isDisabled()"
+    appSingleClick
     [group]="isGroupedDropdown"
   >
     <ng-template let-group pTemplate="group">

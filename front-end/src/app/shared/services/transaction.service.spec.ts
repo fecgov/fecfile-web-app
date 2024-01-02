@@ -1,6 +1,6 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import {fakeAsync, TestBed, tick} from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { Transaction, AggregationGroups } from '../models/transaction.model';
@@ -187,4 +187,30 @@ describe('TransactionService', () => {
     req.flush(mockResponse);
     httpTestingController.verify();
   });
+
+  it('#multisave() should PUT an array of records', fakeAsync(() => {
+    const transactions: SchATransaction[] = [
+      SchATransaction.fromJSON({
+        id: '1',
+        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+      SchATransaction.fromJSON({
+        id: '2',
+        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+      SchATransaction.fromJSON({
+        id: '3',
+        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+    ];
+
+    service.multisave(transactions).subscribe((response) => {
+      expect(response[0]?.id).toEqual('1');
+    });
+    tick(100);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/`);
+    expect(req.request.method).toEqual('PUT');
+    req.flush(transactions);
+    httpTestingController.verify();
+  }));
 });

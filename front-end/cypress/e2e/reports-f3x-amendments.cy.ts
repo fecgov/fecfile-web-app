@@ -1,28 +1,29 @@
+import { defaultFormData as contactFormData } from './models/ContactFormModel';
+import { defaultFormData as reportFormData } from './models/ReportFormModel';
+import { ContactListPage } from './pages/contactListPage';
+import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { LoginPage } from './pages/loginPage';
 import { PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { ContactFormData, defaultFormData as contactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData } from './models/ReportFormModel';
 
-const organizationFormData: ContactFormData = {
-  ...contactFormData,
-  ...{ contact_type: 'Organization' },
-};
 describe('Amendments', () => {
   beforeEach(() => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
     ReportListPage.goToPage();
   });
 
   it('should test Create an amendment', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
+    const formData = {
+      ...contactFormData,
+      ...{
+        contact_type: 'Organization',
+      },
+    };
+    ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
 
     // Create report to add loan too
@@ -42,8 +43,8 @@ describe('Amendments', () => {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickLink('Submit report');
     PageUtils.urlCheck('/submit/step2');
-    PageUtils.enterValue('#filing_password', 'T3stUpl@ad');
-    cy.get(alias).find('p-checkbox[inputid="truth_statement"]').click();
+    PageUtils.enterValue('#filingPassword', 'T3stUpl@ad');
+    cy.get(alias).find('p-checkbox[inputid="userCertified"]').click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
 

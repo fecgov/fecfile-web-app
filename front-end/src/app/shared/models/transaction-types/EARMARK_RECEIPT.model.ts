@@ -11,7 +11,7 @@ export class EARMARK_RECEIPT extends EARMARK {
   override dependentChildTransactionTypes = [ScheduleATransactionTypes.EARMARK_MEMO];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    if (!transaction.children) return '';
+    if (!transaction.children?.length) return '';
     const earmarkMemo: SchATransaction = transaction.children[0] as SchATransaction;
     let conduit = earmarkMemo.contributor_organization_name || '';
     if (

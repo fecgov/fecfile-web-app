@@ -11,6 +11,7 @@ import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.mo
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
@@ -94,9 +95,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
-        (transaction.children ?? []).some(
-          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
-        ),
+        !!transaction.loan_agreement_id,
       () => true
     ),
     new TableAction(
@@ -106,9 +105,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         isPulledForwardLoan(transaction) &&
-        !(transaction.children ?? []).some(
-          (transaction) => transaction.transaction_type_identifier === ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
-        ),
+        !transaction.loan_agreement_id,
       () => true
     ),
     new TableAction(
@@ -135,6 +132,22 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
         this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Reattribute',
+      this.createReattribution.bind(this),
+      (transaction: Transaction) =>
+        transaction.transactionType.scheduleId === ScheduleIds.A &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction_id &&
+        !ReattRedesUtils.isReattRedes(transaction, [
+          ReattRedesTypes.REATTRIBUTION_FROM,
+          ReattRedesTypes.REATTRIBUTION_TO,
+          ReattRedesTypes.REDESIGNATION_FROM,
+          ReattRedesTypes.REDESIGNATION_TO,
+        ]) &&
+        !ReattRedesUtils.isAtAmountLimit(transaction),
       () => true
     ),
   ];
@@ -186,14 +199,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override editItem(item: Transaction): void {
-    this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
+    this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
   }
 
   public editLoanAgreement(transaction: Transaction): void {
-    const agreement = (transaction.children ?? []).find(
-      (child) => child.transaction_type_identifier == ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT
-    );
-    if (agreement) this.router.navigate([`${agreement.id}`], { relativeTo: this.activatedRoute });
+    if (transaction.loan_agreement_id)
+      this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
   }
 
   public createLoanAgreement(transaction: Transaction): void {
@@ -240,6 +251,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
     );
   }
+
   public createDebtRepaymentReceived(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`
@@ -251,9 +263,16 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
     );
   }
+
   public createDebtRepaymentMade(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
+    );
+  }
+
+  public createReattribution(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
     );
   }
 

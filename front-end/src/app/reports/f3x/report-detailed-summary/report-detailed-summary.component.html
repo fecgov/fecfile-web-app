@@ -2,8 +2,8 @@
   <div class="summary-header">
     <h1>Detailed summary page</h1>
     <div>
-      <strong>FORM 3X:</strong>
-      {{ report.report_code | reportCodeLabel }}
+      <strong>{{ report.formLabel }}</strong
+      >{{ report.formSubLabel }}
     </div>
   </div>
   <div *ngIf="(calculationFinished$ | async) === false">
@@ -478,30 +478,29 @@
       </tr>
     </table>
   </div>
+  <div class="grid">
+    <div class="col-4">
+      <div>
+        <button
+          pButton
+          pRipple
+          label="Back"
+          class="p-button-secondary"
+          (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
+        ></button>
+      </div>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4 align-right">
+      <div>
+        <button
+          pButton
+          pRipple
+          label="See print preview"
+          class="p-button-primary"
+          (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
+        ></button>
+      </div>
+    </div>
+  </div>
 </p-card>
-
-<div class="grid">
-  <div class="col-4">
-    <div>
-      <button
-        pButton
-        pRipple
-        label="Back"
-        class="p-button-secondary"
-        (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
-      ></button>
-    </div>
-  </div>
-  <div class="col-4"></div>
-  <div class="col-4 align-right">
-    <div>
-      <button
-        pButton
-        pRipple
-        label="See print preview"
-        class="p-button-primary"
-        (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
-      ></button>
-    </div>
-  </div>
-</div>

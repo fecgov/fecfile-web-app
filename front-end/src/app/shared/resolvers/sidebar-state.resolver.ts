@@ -8,7 +8,7 @@ import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 @Injectable({
   providedIn: 'root',
 })
-export class SidebarStateResolver  {
+export class SidebarStateResolver {
   constructor(private store: Store) {}
 
   /**
@@ -17,7 +17,11 @@ export class SidebarStateResolver  {
    * @returns {Observable<Report | undefined>}
    */
   resolve(route: ActivatedRouteSnapshot): Observable<SidebarState | undefined> {
-    const sidebarState = route.data['sidebarState'];
+    const sidebarSection = route.data['sidebarSection'];
+    let sidebarState: SidebarState | undefined;
+    if (sidebarSection != undefined) {
+      sidebarState = new SidebarState(sidebarSection);
+    }
     this.store.dispatch(setSidebarStateAction({ payload: sidebarState }));
     return of(sidebarState);
   }
