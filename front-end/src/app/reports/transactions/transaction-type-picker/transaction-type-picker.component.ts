@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report } from 'app/shared/models/report.model';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
@@ -86,14 +86,18 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
 
   getTransactionGroups(): TransactionGroupTypes[] {
     if (this.category === 'disbursement') {
-      return [
-        ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
-        ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
-        ScheduleBTransactionGroups.OTHER_EXPENDITURES,
-        ScheduleBTransactionGroups.REFUND,
-        ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
-        ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES,
-      ];
+      if (this.report?.report_type === ReportTypes.F3X) {
+        return [
+          ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
+          ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+          ScheduleBTransactionGroups.OTHER_EXPENDITURES,
+          ScheduleBTransactionGroups.REFUND,
+          ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+          ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES,
+        ];
+      } else if (this.report?.report_type === ReportTypes.F24) {
+        return [ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES];
+      }
     }
     if (this.category === 'loans-and-debts') {
       return [ScheduleCTransactionGroups.LOANS, ScheduleDTransactionGroups.DEBTS];

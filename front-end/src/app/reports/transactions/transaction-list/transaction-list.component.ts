@@ -6,6 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-transaction-list',
@@ -14,30 +15,41 @@ import { Report } from 'app/shared/models/report.model';
 })
 export class TransactionListComponent extends DestroyerComponent implements OnInit {
   report: Report | undefined;
+  reportTypes = ReportTypes;
 
   public tableActions: TableAction[] = [
     new TableAction(
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
-      (report: Report) => report.report_status === 'In progress',
+      (report: Report) => {
+        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+      },
       () => true
     ),
     new TableAction(
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
-      (report: Report) => report.report_status === 'In progress',
+      (report: Report) => {
+        return (
+          report.report_status === 'In progress' && [ReportTypes.F3X, ReportTypes.F24].includes(report.report_type)
+        );
+      },
       () => true
     ),
     new TableAction(
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
-      (report: Report) => report.report_status === 'In progress',
+      (report: Report) => {
+        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+      },
       () => true
     ),
     new TableAction(
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
-      (report: Report) => report.report_status === 'In progress',
+      (report: Report) => {
+        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+      },
       () => false
     ),
   ];

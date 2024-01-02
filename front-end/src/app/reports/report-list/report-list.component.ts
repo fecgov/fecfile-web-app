@@ -54,14 +54,19 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       return;
     }
 
-    if (item.report_type === ReportTypes.F3X) {
-      if (item.is_first) {
-        this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-      } else {
+    switch (item.report_type) {
+      case ReportTypes.F3X:
+        if (item.is_first) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
+        } else {
+          this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+        }
+        break;
+      case ReportTypes.F99:
+        this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
+        break;
+      case ReportTypes.F24:
         this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-      }
-    } else if (item.report_type === ReportTypes.F99) {
-      this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
     }
   }
 
