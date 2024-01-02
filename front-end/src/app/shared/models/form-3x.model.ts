@@ -40,7 +40,7 @@ export class Form3X extends Report {
   }
 
   override get coverageDates(): { [date: string]: Date | undefined } {
-    return {coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date};
+    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
   }
 
   override getBlocker() {
@@ -62,11 +62,7 @@ export class Form3X extends Report {
   }
 
   get versionLabel() {
-<<<<<<< HEAD
-    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
-=======
     return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
->>>>>>> e276b3986696169b3155bbc58c2328cac27f30b6
   }
 
   committee_name: string | undefined;

@@ -29,11 +29,7 @@ export class Form24 extends Report {
   }
 
   get versionLabel() {
-<<<<<<< HEAD
-    return `${F24FormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
-=======
     return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
->>>>>>> e276b3986696169b3155bbc58c2328cac27f30b6
   }
 
   report_type_24_48: string | undefined;

@@ -23,15 +23,11 @@ export class Form99 extends Report {
   }
 
   get formSubLabel() {
-    return textCodes.find(({value}) => value === this.text_code)?.label ?? '';
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
   }
 
   get versionLabel() {
-<<<<<<< HEAD
-    return `${F99FormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
-=======
     return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
->>>>>>> e276b3986696169b3155bbc58c2328cac27f30b6
   }
 
   committee_name: string | undefined;
