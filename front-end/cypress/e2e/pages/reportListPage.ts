@@ -4,9 +4,9 @@ export class ReportListPage {
     cy.get('.navbar-nav').find('.nav-link').contains('Reports').click();
   }
 
-  static clickCreateButton(force: boolean = false) {
-    cy.get("button[label='Create a new report']").click({ force: force });
-    cy.intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' }).as(
+  static clickCreateButton(force = false) {
+    cy.get("button[label='Create a new report']").click({force});
+    cy.intercept({method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/'}).as(
       'coverageDates'
     );
     cy.get('#typeDropdown').click();

@@ -1,5 +1,5 @@
 import { Report, ReportTypes } from './report.model';
-import { Transform, plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
@@ -8,6 +8,7 @@ export enum CommitteeTypes {
   STATE_PTY = 'X',
   OTHER = 'N',
 }
+
 export enum F1MFormTypes {
   F1MN = 'F1MN',
   F1MA = 'F1MA',
@@ -24,14 +25,21 @@ export class Form1M extends Report {
   override schema = f1mSchema;
   override report_type = ReportTypes.F1M;
   override form_type = F1MFormTypes.F1MN;
+
   get formLabel() {
     return 'FORM 1M';
   }
+
   get formSubLabel() {
     return '';
   }
+
   get versionLabel() {
+<<<<<<< HEAD
     return `${F1MFormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
+=======
+    return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+>>>>>>> e276b3986696169b3155bbc58c2328cac27f30b6
   }
 
   committee_type?: CommitteeType;

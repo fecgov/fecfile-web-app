@@ -17,10 +17,12 @@ export const F3xFormVersionLabels: { [key in F3xFormTypes]: string } = {
   [F3xFormTypes.F3XA]: 'Amendment',
   [F3xFormTypes.F3XT]: 'Termination',
 };
+
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
   report_code: F3xReportCodes | undefined;
+
   // prettier-ignore
   static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(F3xCoverageDates, json);
@@ -32,28 +34,39 @@ export class Form3X extends Report {
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
+
   override get reportCode(): F3xReportCodes | undefined {
     return this.report_code;
   }
+
   override get coverageDates(): { [date: string]: Date | undefined } {
-    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
+    return {coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date};
   }
+
   override getBlocker() {
     if (!this.L6a_cash_on_hand_jan_1_ytd)
       return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
     return;
   }
+
   override get canAmend(): boolean {
     return this.report_status === 'Submission success';
   }
+
   get formLabel() {
     return 'FORM 3X';
   }
+
   get formSubLabel() {
     return getReportCodeLabel(this.report_code) ?? '';
   }
+
   get versionLabel() {
+<<<<<<< HEAD
     return `${F3xFormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
+=======
+    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+>>>>>>> e276b3986696169b3155bbc58c2328cac27f30b6
   }
 
   committee_name: string | undefined;

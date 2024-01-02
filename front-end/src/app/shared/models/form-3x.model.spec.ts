@@ -1,6 +1,7 @@
-import { Form3X, F3xFormTypes } from './form-3x.model';
+import { F3xFormTypes, Form3X } from './form-3x.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
+import { F3xReportCodes } from "../utils/report-code.utils";
 
 describe('Form3X', () => {
   it('should create an instance', () => {
@@ -44,5 +45,63 @@ describe('Form3X', () => {
     expect(form3X.webprint_submission?.fec_status).toBe('COMPLETED');
     expect(form3X.webprint_submission?.created).toBeInstanceOf(Date);
     expect(form3X.webprint_submission?.created?.getFullYear()).toBe(2010);
+  });
+
+  it('should set formLabel to "Form 3X"', () => {
+    const data = {
+      id: '999',
+      form_type: F3xFormTypes.F3XT,
+      committee_name: 'foo',
+    };
+    const form3X = Form3X.fromJSON(data);
+    expect(form3X.formLabel).toEqual('FORM 3X');
+  });
+
+  describe('formSubLabel', () => {
+    it('should return empty string if report_code is undefined', () => {
+      const data = {
+        id: '999',
+        form_type: F3xFormTypes.F3XT,
+        committee_name: 'foo',
+        report_code: undefined
+      };
+      const form3X = Form3X.fromJSON(data);
+      expect(form3X.formSubLabel).toEqual('');
+    });
+
+    it('should display the appropriate sub label', () => {
+      const data = {
+        id: '999',
+        form_type: F3xFormTypes.F3XT,
+        committee_name: 'foo',
+        report_code: F3xReportCodes.Q1
+      };
+      const form3X = Form3X.fromJSON(data);
+      expect(form3X.formSubLabel).toEqual('APRIL 15 QUARTERLY REPORT (Q1)');
+    });
+  });
+
+  describe('versionLabel', () => {
+    it('should return just version label if report version is undefined', () => {
+      const data = {
+        id: '999',
+        form_type: F3xFormTypes.F3XN,
+        committee_name: 'foo',
+        report_version: undefined
+      };
+      const form3X = Form3X.fromJSON(data);
+      expect(form3X.versionLabel).toEqual('Original');
+    });
+
+    it('should also display report version if defined', () => {
+      const data = {
+        id: '999',
+        form_type: F3xFormTypes.F3XN,
+        committee_name: 'foo',
+        report_version: '1'
+      };
+      const form3X = Form3X.fromJSON(data);
+      expect(form3X.versionLabel).toEqual('Original 1');
+    });
   });
 });

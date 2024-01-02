@@ -12,18 +12,26 @@ export type F99FormType = F99FormTypes.F99;
 export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
   [F99FormTypes.F99]: 'Original',
 };
+
 export class Form99 extends Report {
   override schema = f99Schema;
   override report_type = ReportTypes.F99;
   override form_type = F99FormTypes.F99;
+
   get formLabel() {
     return 'FORM 99';
   }
+
   get formSubLabel() {
-    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
+    return textCodes.find(({value}) => value === this.text_code)?.label ?? '';
   }
+
   get versionLabel() {
+<<<<<<< HEAD
     return `${F99FormVersionLabels[this.form_type]} ${this.report_version}` ?? '';
+=======
+    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+>>>>>>> e276b3986696169b3155bbc58c2328cac27f30b6
   }
 
   committee_name: string | undefined;
