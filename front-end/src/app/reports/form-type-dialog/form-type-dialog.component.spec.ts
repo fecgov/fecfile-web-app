@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -11,6 +11,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
 import { Form24 } from 'app/shared/models/form-24.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
@@ -20,9 +22,36 @@ describe('FormTypeDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), DialogModule, HttpClientTestingModule],
+      imports: [
+        RouterTestingModule.withRoutes([
+          {
+            path: 'reports/transactions/report/999/list',
+            redirectTo: '',
+          },
+        ]),
+        DialogModule,
+        HttpClientTestingModule,
+      ],
       declarations: [Dialog, FormTypeDialogComponent],
-      providers: [Form24Service, provideMockStore(testMockStore)],
+      providers: [
+        Form24Service,
+        provideMockStore(testMockStore),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                report: Form3X.fromJSON({
+                  report_type: ReportTypes.F3X,
+                }),
+              },
+            },
+            params: of({
+              catalog: 'receipt',
+            }),
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FormTypeDialogComponent);

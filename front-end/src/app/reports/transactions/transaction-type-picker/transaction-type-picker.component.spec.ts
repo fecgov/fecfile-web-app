@@ -13,6 +13,7 @@ import { of } from 'rxjs';
 import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionGroups, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -28,7 +29,9 @@ describe('TransactionTypePickerComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: Form3X.fromJSON({}),
+                report: Form3X.fromJSON({
+                  report_type: ReportTypes.F3X,
+                }),
               },
             },
             params: of({
