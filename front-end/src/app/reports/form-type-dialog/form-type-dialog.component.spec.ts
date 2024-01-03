@@ -25,7 +25,7 @@ describe('FormTypeDialogComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           {
-            path: 'reports/transactions/report/999/list',
+            path: 'reports/transactions/report/2401/list',
             redirectTo: '',
           },
         ]),
@@ -99,7 +99,13 @@ describe('FormTypeDialogComponent', () => {
 
     component.selectedForm24Type = '48';
 
-    const create = spyOn(form24Service, 'create').and.returnValue(of(Form24.fromJSON({})));
+    const create = spyOn(form24Service, 'create').and.returnValue(
+      of(
+        Form24.fromJSON({
+          id: 2401,
+        })
+      )
+    );
 
     component.goToReportForm();
     expect(create).toHaveBeenCalled();
