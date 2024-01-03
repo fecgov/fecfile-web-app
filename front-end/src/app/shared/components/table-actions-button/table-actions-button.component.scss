@@ -1,4 +1,6 @@
-.absolute-correction {
-  position: absolute;
-  margin-top: -19px;
+.drop-down .dropdown-menu[data-bs-popper] {
+  top: auto;
+  left: auto;
+  margin-top: 0;
+  margin-bottom: 0.125rem;
 }
