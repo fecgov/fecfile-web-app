@@ -37,16 +37,16 @@ describe('CreateF3XStep1Component', () => {
     is_first: true,
   });
 
-  const first = new Date('01/01/2023');
-  const second = new Date('01/02/2023');
-  const third = new Date('01/03/2023');
-  const fourth = new Date('01/04/2023');
-  const fifth = new Date('01/05/2023');
-  const sixth = new Date('01/06/2023');
-  const seventh = new Date('01/07/2023');
-  const ninth = new Date('01/09/2023');
-  const eigth = new Date('01/08/2023');
-  const tenth = new Date('01/10/2023');
+  const first = new Date('01/01/2024');
+  const second = new Date('01/02/2024');
+  const third = new Date('01/03/2024');
+  const fourth = new Date('01/04/2024');
+  const fifth = new Date('01/05/2024');
+  const sixth = new Date('01/06/2024');
+  const seventh = new Date('01/07/2024');
+  const ninth = new Date('01/09/2024');
+  const eigth = new Date('01/08/2024');
+  const tenth = new Date('01/10/2024');
   const thirdThroughFifth = F3xCoverageDates.fromJSON({
     report_code: 'Q1',
     coverage_from_date: third,
@@ -177,9 +177,9 @@ describe('CreateF3XStep1Component', () => {
       );
     };
     const hitsQ1Msg =
-      'You have entered coverage dates that overlap the coverage dates of the following report: APRIL 15 QUARTERLY REPORT (Q1)  01/03/2023 - 01/05/2023';
+      'You have entered coverage dates that overlap the coverage dates of the following report: APRIL 15 QUARTERLY REPORT (Q1)  01/03/2024 - 01/05/2024';
     const hitsQ2Msg =
-      'You have entered coverage dates that overlap the coverage dates of the following report: JULY 15 QUARTERLY REPORT (Q2)  01/07/2023 - 01/09/2023';
+      'You have entered coverage dates that overlap the coverage dates of the following report: JULY 15 QUARTERLY REPORT (Q2)  01/07/2024 - 01/09/2024';
 
     /**
      * FC, TC: from/through control

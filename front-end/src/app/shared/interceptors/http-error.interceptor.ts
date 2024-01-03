@@ -30,9 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Outgoing HTTP Error: ${error.error.message}`;
         } else {
-          errorMessage = `Incoming HTTP Error - [Error Code]: ${error.status},  [Message]: ${
-            error.message
-          }, [Server Message]: ${JSON.stringify(error.error)}`;
+          errorMessage = `Incoming HTTP Error - [Error Code]: ${error.status} ${error.statusText}`;
         }
         if (error && error.status === HttpStatusCode.Forbidden) {
           this.store.dispatch(userLoggedOutAction());
