@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { Form3X, CashOnHand } from '../models/form-3x.model';
+import { Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
-import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
+import { Form1M } from '../models/form-1m.model';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getReportFromJSON(json: any): Report {
+export function getReportFromJSON(json: any): Report {
   if (json.report_type) {
+    if (json.report_type === ReportTypes.F1M) return Form1M.fromJSON(json);
     if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json);
     if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);
     if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json);
@@ -33,7 +34,6 @@ export class ReportService implements TableListService<Report> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => getReportFromJSON(item));
-        this.setStoreCashOnHand(response.results);
         return response;
       })
     );
@@ -91,30 +91,5 @@ export class ReportService implements TableListService<Report> {
 
   public startAmendment(report: Report): Observable<string> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
-  }
-
-  /**
-   * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
-   * @param reports - List of reports on the current page of the Reports table
-   */
-  public setStoreCashOnHand(reports: Report[]) {
-    let payload: CashOnHand | undefined;
-
-    if (reports.length === 0) {
-      payload = {
-        report_id: undefined,
-        value: undefined,
-      };
-    } else if (reports.length > 0) {
-      const report: Form3X = reports[0] as Form3X;
-      const value = report.L6a_cash_on_hand_jan_1_ytd ?? 1.0;
-      payload = {
-        report_id: report.id,
-        value: value,
-      };
-    }
-    if (payload) {
-      this.store.dispatch(setCashOnHandAction({ payload: payload }));
-    }
   }
 }

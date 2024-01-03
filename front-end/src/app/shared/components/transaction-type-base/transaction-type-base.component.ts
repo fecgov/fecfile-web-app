@@ -1,13 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -16,7 +14,6 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -25,6 +22,7 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   template: '',
@@ -52,8 +50,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected router: Router,
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
-    protected reportService: ReportService
-  ) { }
+    protected reportService: ReportService,
+    protected activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -95,15 +94,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
-        // If this is a reattribution/redesignation transaction, initialize
-        // its specialized validation rules and text written to the purpose description.
-        if (
-          this.transaction &&
-          'reattribution_redesignation_tag' in this.transaction &&
-          this.transaction.reattribution_redesignation_tag
-        ) {
-          ReattRedesUtils.initValidators(this.form, this.transaction as SchATransaction & SchBTransaction, report);
-        }
       });
   }
 
@@ -126,7 +116,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
-      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+      this.store.dispatch(singleClickEnableAction());
+      throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -134,12 +125,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.formProperties
     );
+    this.processPayload(payload, navigationEvent);
+  }
+
+  processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
-      const responseFromApi = this.writeToApi(payload);
-      responseFromApi.subscribe((transaction) => {
+      this.writeToApi(payload).subscribe((transaction) => {
         navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
         this.navigateTo(navigationEvent);
       });
+    } else {
+      this.store.dispatch(singleClickEnableAction());
     }
   }
 
@@ -148,7 +144,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form: FormGroup,
     targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
   ) {
-    const templateMap = transaction.transactionType?.templateMap;
+    const templateMap = transaction.transactionType.templateMap;
     if (!templateMap) {
       throw new Error('Fecfile: Cannot find template map when confirming transaction');
     }
@@ -203,16 +199,27 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     );
   }
 
+  isInvalid(): boolean {
+    return this.form.invalid || !this.transaction;
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.transaction) return of(false);
+    return this.confirmWithUser(this.transaction, this.form);
+  }
+
   handleNavigate(navigationEvent: NavigationEvent): void {
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (this.form.invalid || !this.transaction) {
+      if (this.isInvalid()) {
+        this.store.dispatch(singleClickEnableAction());
         return;
       }
-      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: boolean) => {
+      this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
+        else this.store.dispatch(singleClickEnableAction());
       });
     } else {
       this.navigateTo(navigationEvent);

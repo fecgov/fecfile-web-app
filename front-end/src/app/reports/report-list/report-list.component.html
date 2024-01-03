@@ -9,25 +9,26 @@
         label="Create a new report"
         icon="pi pi-plus"
         class="mr-2 add-button"
-        (click)="addItem()"
-        [disabled]="items.length === 1 && !cashOnHand.value"
+        data-bs-toggle="modal"
+        data-bs-target="#modal"
+        [disabled]="noCashOnHand()"
       ></button>
     </ng-template>
   </p-toolbar>
 
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="10"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
-      [showCurrentPageReport]="true"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+    [showCurrentPageReport]="true"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -39,9 +40,9 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th pSortableColumn="TBD" id="form-type-column" role="columnheader">
+        <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
           Form type
-          <p-sortIcon field="TBD"></p-sortIcon>
+          <p-sortIcon field="form_type"></p-sortIcon>
         </th>
         <th pSortableColumn="report_code_label" id="report-code-column" role="columnheader">
           Type of report
@@ -59,24 +60,24 @@
           Version
           <p-sortIcon field="form_type"></p-sortIcon>
         </th>
-        <th pSortableColumn="date_filed" id="date-filed-column" role="columnheader">
+        <th pSortableColumn="upload_submission__created" id="date-filed-column" role="columnheader">
           Date filed
-          <p-sortIcon field="date_filed"></p-sortIcon>
+          <p-sortIcon field="upload_submission__created"></p-sortIcon>
         </th>
         <th id="actions" role="columnheader">Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td>{{ item.form_type | label : f3xFormTypeLabels }}</td>
+        <td>{{ item.formLabel }}</td>
         <td>{{ item.report_code_label }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
-          >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
+            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
           >
         </td>
         <td>{{ item.report_status }}</td>
-        <td>{{ item | reportVersion }}</td>
+        <td>{{ item.versionLabel }}</td>
         <td>{{ item.upload_submission?.created | fecDate }}</td>
         <td>
           <app-table-actions-button
@@ -93,4 +94,4 @@
   </p-table>
 </div>
 
-<app-form-type-dialog [(detailVisible)]="detailVisible"></app-form-type-dialog>
+<app-form-type-dialog [noReports]="totalItems === 0"></app-form-type-dialog>

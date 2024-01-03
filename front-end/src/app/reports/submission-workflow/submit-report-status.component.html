@@ -1,0 +1,109 @@
+<h1>Report status</h1>
+<h5>
+  <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
+</h5>
+<p-divider></p-divider>
+<p-card>
+  <div class="grid">
+    <div class="col-12">
+      <h1 *ngIf="report?.upload_submission?.fec_status === 'ACCEPTED'" class="super-header">
+        Congratulations. Your report was accepted by the FEC.
+      </h1>
+      <h1 *ngIf="report?.upload_submission?.fec_status === 'REJECTED'" class="super-header">
+        Your report has been rejected.
+      </h1>
+      <h1
+        *ngIf="
+          report?.upload_submission?.fec_status === 'PROCESSING' ||
+          (!report?.upload_submission?.fec_status &&
+            report?.upload_submission?.fecfile_task_state &&
+            report?.upload_submission?.fecfile_task_state !== 'FAILED')
+        "
+        class="super-header"
+      >
+        Thank you for submitting your report. It is currently being processed.
+      </h1>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <div class="grid">
+        <div class="col-12">
+          <h5 class="no-vert-margins">YOUR FORM TYPE:</h5>
+          <h3 class="no-vert-margins">
+            {{ report?.formLabel }}
+          </h3>
+          <br />
+        </div>
+        <div class="col-12" *ngIf="reportCode">
+          <h5 class="no-vert-margins">YOUR REPORT TYPE:</h5>
+          <h3 class="no-vert-margins">
+            {{ reportCode | reportCodeLabel }}
+          </h3>
+          <br />
+        </div>
+        <div class="col-12" *ngIf="coverageDates">
+          <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
+          <h3 class="no-vert-margins no-wrap">
+            {{ coverageDates['coverage_from_date'] || null | longDate }} —
+            <wbr />
+            {{ coverageDates['coverage_through_date'] || null | longDate }}
+          </h3>
+          <br />
+        </div>
+        <div class="col-12">
+          <h5 class="no-vert-margins word-break">CONFIRMATION EMAILS:</h5>
+          <h3 class="no-vert-margins word-break">
+            {{ report?.confirmation_email_1 }} <br />
+            {{ report?.confirmation_email_2 }}
+          </h3>
+          <br />
+        </div>
+        <ng-container *ngIf="report?.upload_submission?.fec_report_id">
+          <div class="col-12">
+            <h5 class="no-vert-margins">FILING ID:</h5>
+            <h3 class="no-vert-margins">
+              {{ report?.upload_submission?.fec_report_id }}
+            </h3>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="col-8">
+      <img
+        class="image-max-width"
+        ngSrc="assets/img/image-placeholder.png"
+        draggable="false"
+        alt="Form submitted success image"
+        height="271"
+        width="450"
+      />
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <p *ngIf="!['ACCEPTED', 'REJECTED'].includes(report?.upload_submission?.fec_status || '')">
+        The FEC will send a report status message to the confirmation emails you provided during the submission process.
+        If any problems are encountered during the process, Web Upload will terminate the upload session and relay the
+        specifics of the error.
+      </p>
+      <p *ngIf="report?.upload_submission?.fec_status === 'REJECTED' && report?.upload_submission?.fec_message">
+        FEC Error Message: {{ report?.upload_submission?.fec_message }}
+      </p>
+    </div>
+  </div>
+
+  <p-divider></p-divider>
+  <div class="grid">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <button
+        pButton
+        pRipple
+        label="Close & return to manage reports"
+        class="p-button-primary button-full-width"
+        (click)="backToReports()"
+      ></button>
+    </div>
+  </div>
+</p-card>

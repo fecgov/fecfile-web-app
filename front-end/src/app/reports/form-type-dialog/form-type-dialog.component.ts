@@ -1,21 +1,18 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormType, FormTypes, FORM_TYPES } from 'app/shared/utils/form-type.utils';
+import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
+  styleUrls: ['./form-type-dialog.component.scss'],
 })
-export class FormTypeDialogComponent implements OnChanges {
-  @Input() detailVisible = false;
-  @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+export class FormTypeDialogComponent {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
-  constructor(public router: Router, private changeDetectorRef: ChangeDetectorRef) { }
+  @Input() noReports = true;
 
-  ngOnChanges(): void {
-    this.changeDetectorRef.detectChanges();
-  }
+  constructor(public router: Router, private changeDetectorRef: ChangeDetectorRef) {}
 
   goToReportForm(): void {
     this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
@@ -25,7 +22,16 @@ export class FormTypeDialogComponent implements OnChanges {
     return type ? FORM_TYPES.get(type) : undefined;
   }
 
-  onHide() {
-    this.detailVisibleChange.emit(false);
+  get dropdownButtonText(): string {
+    if (this.selectedType) {
+      const type = this.getFormType(this.selectedType);
+      return `<span class="option"><b>${type?.label}:</b> ${type?.description}</span>`;
+    } else {
+      return '<span></span>';
+    }
+  }
+
+  updateSelected(type: FormTypes) {
+    this.selectedType = type;
   }
 }

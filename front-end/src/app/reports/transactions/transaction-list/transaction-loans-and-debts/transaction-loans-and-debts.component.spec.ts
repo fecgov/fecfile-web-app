@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
@@ -75,8 +75,8 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('test editItem', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const testTransaction: Transaction = { id: 'testId', report_id: '1' } as unknown as Transaction;
     component.editItem(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
@@ -93,7 +93,7 @@ describe('TransactionReceiptsComponent', () => {
     const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
     component.reportIsEditable = true;
     expect(tableAction.isAvailable(transaction)).toBeFalse();
-    transaction.children = [getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)];
+    transaction.loan_agreement_id = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 
@@ -108,7 +108,7 @@ describe('TransactionReceiptsComponent', () => {
     transaction.loan_id = 'testLoanId';
     component.reportIsEditable = true;
     expect(tableAction.isAvailable(transaction)).toBeTrue();
-    transaction.children = [getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)];
+    transaction.loan_agreement_id = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeFalse();
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 

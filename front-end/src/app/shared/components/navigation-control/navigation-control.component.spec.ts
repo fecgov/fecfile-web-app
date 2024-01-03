@@ -12,6 +12,8 @@ import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { testMockStore } from "../../utils/unit-test.utils";
+import { provideMockStore } from "@ngrx/store/testing";
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -21,7 +23,7 @@ describe('NavigationControlComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ButtonModule, DropdownModule, ReactiveFormsModule],
       declarations: [NavigationControlComponent, Dropdown],
-      providers: [FormBuilder],
+      providers: [FormBuilder, provideMockStore(testMockStore)]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationControlComponent);

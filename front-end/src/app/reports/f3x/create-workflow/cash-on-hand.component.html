@@ -48,29 +48,37 @@
         </div>
       </div>
     </form>
+
+    <div class="grid">
+      <div class="col-2">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          class="p-button-secondary"
+          (click)="router.navigateByUrl('/reports')"
+        ></button>
+      </div>
+      <div class="col-5"></div>
+      <div class="col-2">
+        <button
+          pButton
+          pRipple
+          label="Skip for now"
+          class="p-button-primary"
+          (click)="router.navigateByUrl('/reports/transactions/report/' + report?.id + '/list')"
+        ></button>
+      </div>
+      <div class="col-3">
+        <button
+          pButton
+          pRipple
+          appSingleClick
+          label="Save & continue"
+          class="p-button-primary"
+          (click)="save()"
+        ></button>
+      </div>
+    </div>
   </p-card>
-  <div class="grid">
-    <div class="col-2">
-      <button
-        pButton
-        pRipple
-        label="Cancel"
-        class="p-button-secondary"
-        (click)="router.navigateByUrl('/reports')"
-      ></button>
-    </div>
-    <div class="col-5"></div>
-    <div class="col-2">
-      <button
-        pButton
-        pRipple
-        label="Skip for now"
-        class="p-button-primary"
-        (click)="router.navigateByUrl('/reports/transactions/report/' + report?.id + '/list')"
-      ></button>
-    </div>
-    <div class="col-3">
-      <button pButton pRipple appSingleClick label="Save & continue" class="p-button-primary" (click)="save()"></button>
-    </div>
-  </div>
 </div>
