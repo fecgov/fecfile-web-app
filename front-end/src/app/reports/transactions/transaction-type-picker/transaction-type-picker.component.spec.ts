@@ -14,6 +14,8 @@ import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.m
 import { ScheduleCTransactionGroups, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ReportTypes } from 'app/shared/models/report.model';
+import { Form24 } from 'app/shared/models/form-24.model';
+import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -47,6 +49,9 @@ describe('TransactionTypePickerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionTypePickerComponent);
     component = fixture.componentInstance;
+    component.report = Form3X.fromJSON({
+      report_type: ReportTypes.F3X,
+    });
     fixture.detectChanges();
   });
 
@@ -59,6 +64,17 @@ describe('TransactionTypePickerComponent', () => {
     fixture.detectChanges();
     const groups = component.getTransactionGroups();
     expect(groups[0]).toBe(ScheduleBTransactionGroups.OPERATING_EXPENDITURES);
+  });
+
+  it('should show only independent expenditures when in an F24', () => {
+    component.category = 'disbursement';
+    fixture.detectChanges();
+    component.report = Form24.fromJSON({
+      report_type: ReportTypes.F24,
+    });
+    const groups = component.getTransactionGroups();
+    expect(groups[0]).toBe(ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES);
+    expect(groups.length).toEqual(1);
   });
 
   it('should change for loans and debts category', () => {
