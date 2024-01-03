@@ -21,14 +21,9 @@ describe('ReattRedesUtils', () => {
 
     txn.reatt_redes_total = 100;
     txn.contribution_amount = 100;
+    txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     result = ReattRedesUtils.isAtAmountLimit(txn);
     expect(result).toBeTrue();
-
-    txn.reatt_redes_total = 200;
-    txn.contribution_amount = 100;
-    expect(() => ReattRedesUtils.isAtAmountLimit(txn)).toThrow(
-      new Error('Fecfile: Transaction (AC9877E1) has more reattributions or redesignations that its amount allows.')
-    );
   });
 
   it('should overlay forms correctly', () => {

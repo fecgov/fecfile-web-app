@@ -23,21 +23,15 @@ export class ReattRedesUtils {
 
   public static isAtAmountLimit(transaction: Transaction | undefined): boolean {
     const txn = transaction as SchATransaction | SchBTransaction;
-    if (txn.reatt_redes_total !== undefined) {
+    if (
+      ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
+      txn.reatt_redes_total !== undefined
+    ) {
       if (
-        +txn.reatt_redes_total ===
+        +txn.reatt_redes_total >=
         +(txn[txn.transactionType.templateMap.amount as keyof (SchATransaction | SchBTransaction)] ?? 0)
       ) {
         return true;
-      }
-      if (
-        txn.reatt_redes_total &&
-        +txn.reatt_redes_total >
-          +(txn[txn.transactionType.templateMap.amount as keyof (SchATransaction | SchBTransaction)] ?? 0)
-      ) {
-        throw new Error(
-          `Fecfile: Transaction (${txn.transaction_id}) has more reattributions or redesignations that its amount allows.`
-        );
       }
     }
     return false;
