@@ -19,7 +19,8 @@ import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
   providedIn: 'root',
 })
 export class TransactionResolver {
-  constructor(public transactionService: TransactionService) {}
+  constructor(public transactionService: TransactionService) {
+  }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -82,7 +83,7 @@ export class TransactionResolver {
     if (transaction.children) {
       transaction.children = [];
       // tune page size
-      const params = { parent: transaction.id ?? '', page_size: 100 };
+      const params = {parent: transaction.id ?? '', page_size: 100};
       return this.transactionService.getTableData(1, '', params).pipe(
         expand((page: ListRestResponse) => {
           return page.next ? this.transactionService.getTableData(page.pageNumber + 1, '', params) : EMPTY;
@@ -110,26 +111,26 @@ export class TransactionResolver {
     return of(transaction);
   }
 
-  resolveNewChildTransaction(
-    parentTransactionId: string,
-    childTransactionTypeName: string
-  ): Observable<Transaction | undefined> {
-    return this.transactionService.get(String(parentTransactionId)).pipe(
-      mergeMap((parentTransaction: Transaction) => {
-        // If there is a grandparent transaction, then we need to retrieve it
-        if (parentTransaction.parent_transaction_id) {
-          return this.transactionService.get(parentTransaction.parent_transaction_id).pipe(
-            map((grandparent) => {
-              parentTransaction.parent_transaction = grandparent;
-              return this.getNewChildTransaction(parentTransaction, childTransactionTypeName);
-            })
-          );
-        }
-        // Otherwise we just need to return an observable of the parent transaction
-        return of(this.getNewChildTransaction(parentTransaction, childTransactionTypeName));
-      })
-    );
-  }
+  // resolveNewChildTransaction(
+  //   parentTransactionId: string,
+  //   childTransactionTypeName: string
+  // ): Observable<Transaction | undefined> {
+  //   return this.transactionService.get(String(parentTransactionId)).pipe(
+  //     mergeMap((parentTransaction: Transaction) => {
+  //       // If there is a grandparent transaction, then we need to retrieve it
+  //       if (parentTransaction.parent_transaction_id) {
+  //         return this.transactionService.get(parentTransaction.parent_transaction_id).pipe(
+  //           map((grandparent) => {
+  //             parentTransaction.parent_transaction = grandparent;
+  //             return this.getNewChildTransaction(parentTransaction, childTransactionTypeName);
+  //           })
+  //         );
+  //       }
+  //       // Otherwise we just need to return an observable of the parent transaction
+  //       return of(this.getNewChildTransaction(parentTransaction, childTransactionTypeName));
+  //     })
+  //   );
+  // }
 
   resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
     return this.transactionService.get(toId).pipe(

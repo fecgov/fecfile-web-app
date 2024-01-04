@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { catchError, of } from 'rxjs';
 import { Contact } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
 import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
 import { Transaction } from '../models/transaction.model';
@@ -14,6 +14,7 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
+import { ReattributedUtils } from "../utils/reatt-redes/reattributed.utils";
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -191,47 +192,47 @@ describe('TransactionResolver', () => {
       });
     });
 
-    it('should add reattribution', () => {
+    it('should add redesignation', () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
         return of(
-          SchATransaction.fromJSON({
+          SchBTransaction.fromJSON({
             id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+            transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+            transactionType: TransactionTypeUtils.factory(ScheduleBTransactionTypes.OPERATING_EXPENDITURE),
             contact_id: '123',
             contact_1: Contact.fromJSON({id: 123}),
           })
         );
       });
       const route = {
-        queryParamMap: convertToParamMap({reattribution: '1'}),
+        queryParamMap: convertToParamMap({redesignation: '1'}),
         paramMap: convertToParamMap({
           reportId: 1,
-          transactionType: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          transactionType: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
         }),
       };
 
       resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
         expect(transaction).toBeTruthy();
         if (transaction) {
-          expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
+          expect((transaction as SchBTransaction).reattribution_redesignation_tag).toEqual('REDESIGNATION_TO');
           expect(
-            ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag
-          ).toEqual('REATTRIBUTION_FROM');
+            ((transaction as SchBTransaction).children[0] as SchBTransaction).reattribution_redesignation_tag
+          ).toEqual('REDESIGNATION_FROM');
         }
       });
     });
   });
 
-  describe('resolveNewChildTransaction', () => {
-    xit('should attach child for transaction with dependent child transaction type', () => {
-      resolver.resolveNewChildTransaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
-        if (transaction?.children) {
-          expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');
-        }
-      });
-    });
-  });
+  // describe('resolveNewChildTransaction', () => {
+  //   it('should attach child for transaction with dependent child transaction type', () => {
+  //     resolver.resolveNewChildTransaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
+  //       if (transaction?.children) {
+  //         expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');
+  //       }
+  //     });
+  //   });
+  // });
 
   describe('resolveExistingTransactionFromId', () => {
     it('should throw an error if trying to resolve an invalid transaction type identifier', () => {
@@ -239,12 +240,11 @@ describe('TransactionResolver', () => {
       resolver
         .resolveExistingTransactionFromId('10')
         .pipe(
-          catchError((err) =>
-            of(
+          catchError((err) => {
               expect(err.message).toBe(
-                "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10"
-              )
-            )
+                "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10")
+              return of(err);
+            }
           )
         )
         .subscribe();
@@ -265,12 +265,12 @@ describe('TransactionResolver', () => {
       resolver
         .resolveExistingTransactionFromId('10')
         .pipe(
-          catchError((err) =>
-            of(
+          catchError((err) => {
               expect(err.message).toBe(
                 'Fecfile: Transaction 999 (EARMARK_MEMO) is a dependent transaction type but does not have a parent transaction.'
               )
-            )
+              return of(err)
+            }
           )
         )
         .subscribe();
@@ -420,4 +420,55 @@ describe('TransactionResolver', () => {
     });
   });
 
+  describe('resolveNewReattribution', () => {
+    const route = {
+      queryParamMap: convertToParamMap({reattribution: '1'}),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+    };
+    beforeEach(() => {
+      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+        return of(
+          SchATransaction.fromJSON({
+            id: id,
+            transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+            contact_id: '123',
+            contact_1: Contact.fromJSON({id: 123}),
+          })
+        );
+      });
+
+    })
+    it('should add reattribution', () => {
+      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
+        expect(transaction).toBeTruthy();
+        if (transaction) {
+          expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
+          expect(
+            ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag
+          ).toEqual('REATTRIBUTION_FROM');
+        }
+      });
+    });
+
+    it('should throw error if redesignated does not have transaction_type_identifier', () => {
+      spyOn(ReattributedUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
+        return SchATransaction.fromJSON({
+          id: id,
+          transaction_type_identifier: undefined,
+          transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({id: 123}),
+        });
+      });
+      resolver.resolve(route as ActivatedRouteSnapshot).subscribe({
+        error: (err) => {
+          expect(err).toEqual(new Error('Fecfile online: originating reattribution transaction type not found.'))
+        }
+      });
+    });
+  });
 });
