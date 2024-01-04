@@ -306,6 +306,9 @@ workflows:
             - test
             - dependency-check
             - e2e-test
+          filters:
+            branches:
+              only: /develop|release\/sprint-\d+|main/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
