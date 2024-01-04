@@ -37,7 +37,7 @@ const formData = {
     others_liable: 'NO',
     collateral: 'NO',
     future_income: 'NO',
-    date_incurred: new Date('04/27/2023'),
+    date_incurred: new Date('04/27/2024'),
   },
 };
 
@@ -67,7 +67,7 @@ describe('Loans', () => {
     ContactListPage.enterFormData(individualContactFormData);
     PageUtils.clickButton('Save');
 
-    // Create report to add loan too
+    // Create report to add loan to
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormDataApril);
@@ -112,7 +112,7 @@ describe('Loans', () => {
       if (currentUrl.includes('cash-on-hand')) {
         PageUtils.urlCheck('cash-on-hand');
         PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
-        PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
+        PageUtils.calendarSetValue('p-calendar', new Date('05/27/2024'), alias);
         PageUtils.clickButton('Save & continue');
       }
     });
@@ -131,7 +131,7 @@ describe('Loans', () => {
         date_received: undefined,
         secured: undefined,
         memo_text: '',
-        date_incurred: new Date('05/27/2023'),
+        date_incurred: new Date('05/27/2024'),
         amount: 65000,
       },
     };
@@ -154,7 +154,7 @@ describe('Loans', () => {
     cy.contains('Review loan agreement').click();
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
-    PageUtils.valueCheck('#date_incurred', '05/27/2023');
+    PageUtils.valueCheck('#date_incurred', '05/27/2024');
   });
 
   it('should test: Loan Received from Bank', () => {
