@@ -1,11 +1,10 @@
-import { combineLatest, of } from 'rxjs';
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { ContactTypes } from '../../models/contact.model';
+import { AbstractFromUtils } from "./abstract-from.utils";
 
-export class RedesignationFromUtils {
+export class RedesignationFromUtils extends AbstractFromUtils {
   public static overlayTransactionProperties(
     transaction: SchBTransaction,
     redesignatedTransaction?: SchBTransaction,
@@ -32,7 +31,7 @@ export class RedesignationFromUtils {
       generatePurposeDescription: (transaction: SchBTransaction): string => {
         return transaction[
           transaction.transactionType.templateMap.purpose_description as keyof SchBTransaction
-        ] as string;
+          ] as string;
       },
     });
 
@@ -46,52 +45,7 @@ export class RedesignationFromUtils {
     return transaction;
   }
 
-  public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
-    // Update purpose description for rules that are independent of the transaction date being in the report.
-    fromForm.get('expenditure_purpose_descrip')?.clearValidators();
-    fromForm.get('memo_code')?.clearValidators();
-
-    // Watch for changes to the "TO" transaction entity name and then update the "FROM" transaction expenditure purpose description.
-    combineLatest([
-      toForm.get(transaction.transactionType.templateMap.organization_name)?.valueChanges ?? of(null),
-      toForm.get(transaction.transactionType.templateMap.first_name)?.valueChanges ?? of(null),
-      toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges ?? of(null),
-    ]).subscribe(([orgName, firstName, lastName]) => {
-      if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-        fromForm.get('expenditure_purpose_descrip')?.setValue(`Redesignation to ${lastName}, ${firstName}`);
-      } else {
-        fromForm.get('expenditure_purpose_descrip')?.setValue(`Redesignation to ${orgName}`);
-      }
-    });
-
-    // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
-    toForm.get(transaction.transactionType.templateMap.amount)?.valueChanges.subscribe((amount) => {
-      fromForm.get(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
-    });
-
-    const readOnlyFields = [
-      'organization_name',
-      'last_name',
-      'first_name',
-      'middle_name',
-      'prefix',
-      'suffix',
-      'employer',
-      'occupation',
-      'street_1',
-      'street_2',
-      'city',
-      'state',
-      'zip',
-      'amount',
-      'purpose_description',
-      'committee_fec_id',
-      'committee_name',
-    ];
-    readOnlyFields.forEach((field) =>
-      fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
-    );
-
-    return fromForm;
+  public static override overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
+    return super.overlayForm(fromForm, transaction, toForm, 'Redesignation');
   }
 }

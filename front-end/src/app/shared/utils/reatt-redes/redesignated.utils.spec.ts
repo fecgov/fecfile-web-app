@@ -21,7 +21,7 @@ describe('Redesignated Utils', () => {
     });
 
     it('should alert if transaction has reattribution_redesignation_tag but is not the current report', () => {
-      const alertSpy = spyOn(window, 'alert');
+      spyOn(window, 'alert');
       data = {
         id: '999',
         form_type: 'SA11Ai',
