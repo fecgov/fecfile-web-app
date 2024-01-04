@@ -118,7 +118,7 @@ jobs:
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/api/v1/user/login/authenticate \
               -wait-retry-interval 2s \
-              -timeout 60s; \
+              -timeout 120s; \
           working_directory: ~/project/fecfile-web-api
       - run:
           name: execute e2e tests
