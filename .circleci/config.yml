@@ -297,16 +297,15 @@ workflows:
       - lint
       - test
       - dependency-check
+      - e2e-test:
+          filters:
+            branches:
+              only: /patch\/587|release\/sprint-\d+|main/
       - deploy:
           requires:
             - test
             - dependency-check
-      - e2e-test:
-          requires:
-            - deploy
-          filters:
-            branches:
-              only: /release\/sprint-\d+|main/
+            - e2e-test
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
