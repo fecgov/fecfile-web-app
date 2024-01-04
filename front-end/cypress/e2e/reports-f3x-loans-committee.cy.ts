@@ -101,7 +101,7 @@ describe('Loans', () => {
     cy.contains('Loan By Committee').should('exist');
     cy.contains('Loan Made').should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Receive loan repayment').click();
+    cy.contains('Receive loan repayment').click({ force: true });
 
     PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
     PageUtils.searchBoxInput(committeeFormData.committee_id);
