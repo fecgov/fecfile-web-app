@@ -12,11 +12,12 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
+import { Report } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../styles.scss'],
 })
 export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
@@ -24,7 +25,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
-  report: Form3X = new Form3X();
+  report = new Form3X() as Report;
   committeeAccountId: string | undefined;
 
   assignedMemoText: MemoText = new MemoText();
@@ -56,7 +57,8 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as Form3X;
+        this.report = report as Report;
+        console.log(this.report);
         if (this.report && this.report.id) {
           this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
             if (memoTextList && memoTextList.length > 0) {
@@ -80,7 +82,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     });
     payload.report_id = this.report.id;
 
-    const nextUrl = `/reports/f3x/submit/step1/${this.report.id}`;
+    const nextUrl = `/reports/${this.report.report_type.toLowerCase()}/submit/step1/${this.report.id}`;
 
     if (this.assignedMemoText.id) {
       this.memoTextService.update(payload, this.formProperties).subscribe(() => {

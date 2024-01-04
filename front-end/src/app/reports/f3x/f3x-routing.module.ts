@@ -4,7 +4,7 @@ import { CreateF3XStep1Component } from './create-workflow/create-f3x-step1.comp
 import { ReportSummaryComponent } from './report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { ReportLevelMemoComponent } from './report-level-memo/report-level-memo.component';
+import { ReportLevelMemoComponent } from '../report-level-memo/report-level-memo.component';
 import { TestDotFecComponent } from './test-dot-fec-workflow/test-dot-fec.component';
 import { PrintPreviewComponent } from '../print-preview/print-preview.component';
 import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';

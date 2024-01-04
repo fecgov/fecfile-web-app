@@ -26,7 +26,7 @@ import { AppSelectButtonComponent } from '../shared/components/app-selectbutton.
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
-import { ReportLevelMemoComponent } from './f3x/report-level-memo/report-level-memo.component';
+import { ReportLevelMemoComponent } from './report-level-memo/report-level-memo.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { PrintPreviewComponent } from './print-preview/print-preview.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
