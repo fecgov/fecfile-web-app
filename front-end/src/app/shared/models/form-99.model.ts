@@ -23,7 +23,7 @@ export class Form99 extends Report {
   }
 
   get formSubLabel() {
-    return 'MISCELLANEOUS REPORT TO FEC';
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
   }
 
   get versionLabel() {
