@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, ValidatorFn, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Transaction } from '../../models/transaction.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
@@ -35,6 +35,16 @@ export class ReattRedesUtils {
       ) {
         return true;
       }
+
+      if (
+        txn.reatt_redes_total &&
+        +txn.reatt_redes_total >
+        +(txn[txn.transactionType.templateMap.amount as keyof (SchATransaction | SchBTransaction)] ?? 0)
+      ) {
+        throw new Error(
+          `Fecfile: Transaction (${txn.transaction_id}) has more reattributions or redesignations that its amount allows.`
+        );
+      }
     }
     return false;
   }
@@ -59,6 +69,7 @@ export class ReattRedesUtils {
    * New validation rules for the transaction amount of reattribution from and redesignation from transactions.
    * These rules supplant the original rules for a given transaction.
    * @param transaction
+   * @param mustBeNegative
    * @returns
    */
   public static amountValidator(transaction: SchATransaction | SchBTransaction, mustBeNegative = false): ValidatorFn {
@@ -67,17 +78,17 @@ export class ReattRedesUtils {
 
       if (amount !== null) {
         if (mustBeNegative && amount >= 0) {
-          return { exclusiveMax: { exclusiveMax: 0 } };
+          return {exclusiveMax: {exclusiveMax: 0}};
         }
         if (!mustBeNegative && amount < 0) {
-          return { exclusiveMin: { exclusiveMin: 0 } };
+          return {exclusiveMin: {exclusiveMin: 0}};
         }
 
         const amountKey = transaction.transactionType.templateMap.amount;
         const originalAmount =
           ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
             amountKey as keyof (SchATransaction | SchBTransaction)
-          ] as number) ?? 0;
+            ] as number) ?? 0;
         const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
         let limit = originalAmount - reattRedesTotal;
         if (transaction.id) limit += +(transaction[amountKey as keyof (SchATransaction | SchBTransaction)] as number); // If editing, add value back into limit restriction.
