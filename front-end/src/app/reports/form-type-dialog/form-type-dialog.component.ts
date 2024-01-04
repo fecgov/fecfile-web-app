@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 
@@ -7,14 +7,29 @@ import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.util
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
 })
-export class FormTypeDialogComponent {
+export class FormTypeDialogComponent implements OnChanges, AfterViewInit {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
   @Input() noReports = true;
+  @Input() dialogVisible = false;
+  @Output() dialogClose = new EventEmitter<undefined>();
+  @ViewChild('dialog') dialog?: ElementRef;
 
-  constructor(public router: Router, private changeDetectorRef: ChangeDetectorRef) {}
+  constructor(public router: Router) {
+  }
+
+  ngAfterViewInit() {
+    this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());
+  }
+
+  ngOnChanges(): void {
+    if (this.dialogVisible) {
+      this.dialog?.nativeElement.showModal();
+    }
+  }
 
   goToReportForm(): void {
+    this.dialog?.nativeElement.close();
     this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
   }
 
@@ -34,4 +49,6 @@ export class FormTypeDialogComponent {
   updateSelected(type: FormTypes) {
     this.selectedType = type;
   }
+
+
 }

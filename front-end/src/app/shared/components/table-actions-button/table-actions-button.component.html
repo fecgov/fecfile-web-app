@@ -1,7 +1,6 @@
-<div class="dropdown" [ngClass]="isAbsolute ? 'absolute-correction' : ''">
+<div class="drop-down position-static">
   <p-button
     data-bs-toggle="dropdown"
-    data-bs-display="static"
     pRipple
     [icon]="buttonIcon"
     [label]="buttonLabel"
@@ -9,9 +8,8 @@
     [ariaLabel]="buttonAriaLabel"
   ></p-button>
   <ul class="dropdown-menu ">
-    <li *ngFor="let action of tableActions; let index = index">
+    <li *ngFor="let action of filteredActions; let index = index">
       <button
-        *ngIf="!action.isAvailable || action.isAvailable(actionItem)"
         [disabled]="!action.isEnabled(actionItem)"
         pButton
         pRipple
@@ -25,4 +23,3 @@
     </li>
   </ul>
 </div>
-
