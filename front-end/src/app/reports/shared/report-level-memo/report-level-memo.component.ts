@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -17,7 +17,7 @@ import { Report } from 'app/shared/models/report.model';
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../styles.scss'],
+  styleUrls: ['../../styles.scss'],
 })
 export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
@@ -27,6 +27,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   report = new Form3X() as Report;
   committeeAccountId: string | undefined;
+  nextUrl = '';
 
   assignedMemoText: MemoText = new MemoText();
 
@@ -37,6 +38,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     private store: Store,
     protected fb: FormBuilder,
     public router: Router,
+    public route: ActivatedRoute,
     public memoTextService: MemoTextService,
     private messageService: MessageService
   ) {
@@ -58,7 +60,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as Report;
-        console.log(this.report);
         if (this.report && this.report.id) {
           this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
             if (memoTextList && memoTextList.length > 0) {
@@ -67,6 +68,9 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
             }
           });
         }
+        this.route.data.subscribe(({ getNextUrl }) => {
+          this.nextUrl = getNextUrl(this.report);
+        });
       });
 
     ValidateUtils.addJsonSchemaValidators(this.form, textSchema, false);
@@ -82,11 +86,9 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     });
     payload.report_id = this.report.id;
 
-    const nextUrl = `/reports/${this.report.report_type.toLowerCase()}/submit/step1/${this.report.id}`;
-
     if (this.assignedMemoText.id) {
       this.memoTextService.update(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl(nextUrl);
+        this.router.navigateByUrl(this.nextUrl);
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -96,7 +98,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       });
     } else {
       this.memoTextService.create(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl(nextUrl);
+        this.router.navigateByUrl(this.nextUrl);
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',

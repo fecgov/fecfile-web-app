@@ -4,12 +4,12 @@ import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.gu
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
-import { PrintPreviewComponent } from '../print-preview/print-preview.component';
+import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
 import { Report } from 'app/shared/models/report.model';
 import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
-import { ReportLevelMemoComponent } from '../report-level-memo/report-level-memo.component';
+import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -71,7 +71,10 @@ const routes: Routes = [
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    data: {
+      sidebarSection: ReportSidebarSection.REVIEW,
+      getNextUrl: (report?: Report) => `/reports/transactions/report/${report?.id}/list`,
+    },
     runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
