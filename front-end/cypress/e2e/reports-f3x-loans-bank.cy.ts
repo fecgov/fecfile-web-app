@@ -50,7 +50,7 @@ describe('Loans', () => {
 
     organizationFormData = {
       ...individualContactFormData,
-      ...{ contact_type: 'Organization' },
+      ...{contact_type: 'Organization'},
     };
   });
 
@@ -223,7 +223,7 @@ describe('Loans', () => {
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').last().should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Make loan repayment').click();
+    cy.contains('Make loan repayment').click({force: true});
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);

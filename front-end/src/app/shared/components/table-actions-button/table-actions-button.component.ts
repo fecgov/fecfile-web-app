@@ -14,4 +14,8 @@ export class TableActionsButtonComponent {
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
   @Output() tableActionClick = new EventEmitter<{ action: TableAction, actionItem: any }>();// eslint-disable-line @typescript-eslint/no-explicit-any
+
+  get filteredActions(): TableAction[] {
+    return this.tableActions.filter(action => !action.isAvailable || action.isAvailable(this.actionItem))
+  }
 }
