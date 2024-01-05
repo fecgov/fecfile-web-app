@@ -37,7 +37,7 @@ const formData = {
     others_liable: 'NO',
     collateral: 'NO',
     future_income: 'NO',
-    date_incurred: new Date('04/27/2023'),
+    date_incurred: new Date('04/27/2024'),
   },
 };
 
@@ -67,7 +67,7 @@ describe('Loans', () => {
     ContactListPage.enterFormData(individualContactFormData);
     PageUtils.clickButton('Save');
 
-    // Create report to add loan too
+    // Create report to add loan to
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(reportFormDataApril);
@@ -104,18 +104,16 @@ describe('Loans', () => {
     // Create report to add loan too
     ReportListPage.goToPage();
     const alias = PageUtils.getAlias('');
-    cy.get(alias).contains('JULY 15').siblings().last().find('app-table-actions-button').children().last().click();
-
-    cy.get(alias).contains('Edit report').first().click();
+    cy.get(alias)
+      .contains('JULY 15')
+      .siblings()
+      .last()
+      .find('app-table-actions-button')
+      .children()
+      .last()
+      .as('secondReportKabob');
+    cy.get('@secondReportKabob').contains('Edit report').first().click({ force: true });
     cy.wait(500);
-    cy.url().then((currentUrl) => {
-      if (currentUrl.includes('cash-on-hand')) {
-        PageUtils.urlCheck('cash-on-hand');
-        PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
-        PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
-        PageUtils.clickButton('Save & continue');
-      }
-    });
     cy.get(alias)
       .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()
@@ -131,7 +129,7 @@ describe('Loans', () => {
         date_received: undefined,
         secured: undefined,
         memo_text: '',
-        date_incurred: new Date('05/27/2023'),
+        date_incurred: new Date('05/27/2024'),
         amount: 65000,
       },
     };
@@ -154,7 +152,7 @@ describe('Loans', () => {
     cy.contains('Review loan agreement').click();
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
-    PageUtils.valueCheck('#date_incurred', '05/27/2023');
+    PageUtils.valueCheck('#date_incurred', '05/27/2024');
   });
 
   it('should test: Loan Received from Bank', () => {
@@ -223,7 +221,7 @@ describe('Loans', () => {
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').last().should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Make loan repayment').click();
+    cy.contains('Make loan repayment').click({ force: true });
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
