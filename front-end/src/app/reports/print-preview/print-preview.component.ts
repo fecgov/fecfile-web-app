@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Form3X } from '../../shared/models/form-3x.model';
 import { WebPrintService } from '../../shared/services/web-print.service';
 import { Report } from '../../shared/models/report.model';
 import { selectActiveReport } from '../../store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { spinnerOffAction, spinnerOnAction } from '../../store/spinner.actions';
+import { singleClickEnableAction } from '../../store/single-click.actions';
 
 @Component({
   selector: 'app-print-preview',
@@ -19,13 +19,21 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
+  pollingTime = 2000;
   pollingStatusMessage:
     | 'This may take a while...'
     | 'Your report is still being processed. Please check back later to access your PDF'
     | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
+  getBackUrl?: (report?: Report) => string;
+  getContinueUrl?: (report?: Report) => string;
 
-  constructor(private store: Store, public router: Router, private webPrintService: WebPrintService) {
+  constructor(
+    private store: Store,
+    public router: Router,
+    public route: ActivatedRoute,
+    private webPrintService: WebPrintService
+  ) {
     super();
   }
 
@@ -39,6 +47,11 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
           this.updatePrintStatus(report);
         }
       });
+
+    this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
+      this.getBackUrl = getBackUrl;
+      this.getContinueUrl = getContinueUrl;
+    });
   }
 
   public updatePrintStatus(report: Report) {
@@ -47,13 +60,13 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     } else {
       switch (report?.webprint_submission.fec_status) {
         case 'COMPLETED':
-          this.store.dispatch(spinnerOffAction());
+          this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'success';
           this.downloadURL = report.webprint_submission.fec_image_url;
           this.submitDate = report.webprint_submission.created;
           break;
         case 'FAILED':
-          this.store.dispatch(spinnerOffAction());
+          this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'failure';
           this.printError = report.webprint_submission.fecfile_error;
           break;
@@ -67,22 +80,30 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public pollPrintStatus() {
-    const pollingTime = 1000;
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
     setTimeout(() => {
       this.refreshReportStatus();
-    }, pollingTime);
+    }, this.pollingTime);
   }
 
   public refreshReportStatus() {
-    if (this.report.id) this.webPrintService.getStatus(this.report.id);
+    if (this.report.id) {
+      this.webPrintService.getStatus(this.report.id);
+      if (
+        !this.report.webprint_submission?.fec_status ||
+        this.report.webprint_submission?.fec_status === 'PROCESSING'
+      ) {
+        setTimeout(() => {
+          this.refreshReportStatus();
+        }, this.pollingTime);
+      }
+    }
   }
 
   public submitPrintJob() {
     if (this.report.id) {
-      this.store.dispatch(spinnerOnAction());
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }

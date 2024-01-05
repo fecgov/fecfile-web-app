@@ -1,6 +1,7 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
+import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -11,20 +12,22 @@ export type F99FormType = F99FormTypes.F99;
 export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
   [F99FormTypes.F99]: 'Original',
 };
+
 export class Form99 extends Report {
+  override schema = f99Schema;
   override report_type = ReportTypes.F99;
   override form_type = F99FormTypes.F99;
+
   get formLabel() {
     return 'FORM 99';
   }
+
+  get formSubLabel() {
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
+  }
+
   get versionLabel() {
-    return F99FormVersionLabels[this.form_type] ?? '';
-  }
-  override get routePrintPreviewBack() {
-    return '/reports/f99/edit/' + this.id;
-  }
-  override get routePrintPreviewSignAndSubmit() {
-    return '/reports/f99/edit/' + this.id;
+    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
   committee_name: string | undefined;
@@ -47,3 +50,18 @@ export class Form99 extends Report {
     return plainToClass(Form99, json);
   }
 }
+
+export const textCodes = [
+  {
+    label: 'Disavowal Response',
+    value: 'MSI',
+  },
+  {
+    label: 'Filing Frequency Change Notice',
+    value: 'MSM',
+  },
+  {
+    label: 'Miscellaneous Report to the FEC',
+    value: 'MST',
+  },
+];

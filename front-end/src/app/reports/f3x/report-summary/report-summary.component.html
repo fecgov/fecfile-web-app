@@ -2,8 +2,8 @@
   <div class="summary-header">
     <h1>Summary page</h1>
     <div>
-      <strong>FORM 3X:</strong>
-      {{ report.report_code | reportCodeLabel }}
+      <strong>{{ report.formLabel }}</strong
+      >{{ report.formSubLabel }}
     </div>
   </div>
 
@@ -84,30 +84,30 @@
       </tr>
     </table>
   </div>
-</p-card>
 
-<div class="grid">
-  <div class="col-4">
-    <div>
-      <button
-        pButton
-        pRipple
-        label="Back"
-        class="p-button-secondary"
-        (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
-      ></button>
+  <div class="grid">
+    <div class="col-4">
+      <div>
+        <button
+          pButton
+          pRipple
+          label="Back"
+          class="p-button-secondary"
+          (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
+        ></button>
+      </div>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4 align-right">
+      <div>
+        <button
+          pButton
+          pRipple
+          label="Review detailed summary page"
+          class="p-button-primary"
+          (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+        ></button>
+      </div>
     </div>
   </div>
-  <div class="col-4"></div>
-  <div class="col-4 align-right">
-    <div>
-      <button
-        pButton
-        pRipple
-        label="Review detailed summary page"
-        class="p-button-primary"
-        (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
-      ></button>
-    </div>
-  </div>
-</div>
+</p-card>

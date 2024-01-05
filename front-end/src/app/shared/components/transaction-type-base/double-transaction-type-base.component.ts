@@ -20,7 +20,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
-import { spinnerOffAction } from "../../../store/spinner.actions";
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -35,7 +35,8 @@ import { spinnerOffAction } from "../../../store/spinner.actions";
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -134,7 +135,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
     }
 
@@ -166,10 +167,9 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override get confirmation$(): Observable<boolean> {
     if (!this.childTransaction) return of(false);
-    return concat(
-      super.confirmation$,
-      this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
-    ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed))
+    return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
+      reduce((accumulator, confirmed) => accumulator && confirmed)
+    );
   }
 
   override resetForm() {

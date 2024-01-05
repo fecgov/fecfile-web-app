@@ -5,9 +5,6 @@ import { ReportSummaryComponent } from './report-summary/report-summary.componen
 import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportLevelMemoComponent } from './report-level-memo/report-level-memo.component';
-import { SubmitF3xStep1Component } from './submission-workflow/submit-f3x-step1.component';
-import { SubmitF3xStep2Component } from './submission-workflow/submit-f3x-step2.component';
-import { ReportSubmissionStatusComponent } from './submission-workflow/submit-f3x-status.component';
 import { TestDotFecComponent } from './test-dot-fec-workflow/test-dot-fec.component';
 import { PrintPreviewComponent } from '../print-preview/print-preview.component';
 import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';
@@ -15,6 +12,10 @@ import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
+import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
+import { Report } from 'app/shared/models/report.model';
+import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
+import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -67,7 +68,11 @@ const routes: Routes = [
     title: 'Print preview',
     component: PrintPreviewComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    data: {
+      sidebarSection: ReportSidebarSection.REVIEW,
+      getBackUrl: (report?: Report) => '/reports/f3x/detailed-summary/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3x/submit/step1/' + report?.id,
+    },
     runGuardsAndResolvers: 'always',
   },
   {
@@ -82,25 +87,33 @@ const routes: Routes = [
   {
     path: 'submit/step1/:reportId',
     title: 'Confirm information',
-    component: SubmitF3xStep1Component,
+    component: SubmitReportStep1Component,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+    data: {
+      sidebarSection: ReportSidebarSection.SUBMISSION,
+      getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3x/submit/step2/' + report?.id,
+    },
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'submit/step2/:reportId',
     title: 'Submit report',
-    component: SubmitF3xStep2Component,
+    component: SubmitReportStep2Component,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+    data: {
+      sidebarSection: ReportSidebarSection.SUBMISSION,
+      getBackUrl: (report?: Report) => '/reports/f3x/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3x/submit/status/' + report?.id,
+    },
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'submit/status/:reportId',
     title: 'Report status',
-    component: ReportSubmissionStatusComponent,
+    component: SubmitReportStatusComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',

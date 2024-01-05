@@ -6,7 +6,10 @@
           <h1 class="gandhi-bold size-36">Transactions in this report</h1>
         </div>
         <div class="col-12">
-          <span class="subtitle">{{ report?.transactionTableTitle }}</span>
+          <span class="subtitle"
+          ><strong>{{ report?.formLabel }}</strong
+          >{{ report?.formSubLabel }}</span
+          >
         </div>
       </div>
     </ng-template>
@@ -16,7 +19,6 @@
         *ngIf="report?.report_status === 'In progress'"
         [tableActions]="tableActions"
         [actionItem]="report"
-        [isAbsolute]="false"
         (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-plus"
         buttonLabel="Add new transaction"

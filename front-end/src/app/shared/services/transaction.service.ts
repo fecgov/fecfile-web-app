@@ -19,8 +19,7 @@ import { CandidateOfficeTypes } from '../models/contact.model';
 export class TransactionService implements TableListService<Transaction> {
   tableDataEndpoint = '/transactions';
 
-  constructor(protected apiService: ApiService, protected datePipe: DatePipe) {
-  }
+  constructor(protected apiService: ApiService, protected datePipe: DatePipe) {}
 
   public getTableData(
     pageNumber = 1,
@@ -138,19 +137,19 @@ export class TransactionService implements TableListService<Transaction> {
     return of(undefined);
   }
 
-  public create(transaction: Transaction, spinner = false): Observable<Transaction> {
+  public create(transaction: Transaction): Observable<Transaction> {
     console.log(transaction.transactionType.apiEndpoint);
     const payload = this.preparePayload(transaction);
     console.log(transaction.transactionType.apiEndpoint);
     return this.apiService
-      .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload, spinner)
+      .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 
-  public update(transaction: Transaction, spinner = false): Observable<Transaction> {
+  public update(transaction: Transaction): Observable<Transaction> {
     const payload = this.preparePayload(transaction);
     return this.apiService
-      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {}, spinner)
+      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {})
       .pipe(map((response) => getFromJSON(response)));
   }
 
@@ -171,7 +170,11 @@ export class TransactionService implements TableListService<Transaction> {
 
   public multisave(transactions: Transaction[]): Observable<Transaction[]> {
     const payload = transactions.map((t) => this.preparePayload(t));
-    return this.apiService.put<Transaction[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/`, payload, {}, true);
+    return this.apiService.put<Transaction[]>(
+      `${transactions[0].transactionType?.apiEndpoint}/multisave/`,
+      payload,
+      {}
+    );
   }
 
   /**

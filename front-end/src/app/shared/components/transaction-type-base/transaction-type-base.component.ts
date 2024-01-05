@@ -22,7 +22,7 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { spinnerOffAction } from "../../../store/spinner.actions";
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   template: '',
@@ -52,8 +52,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected store: Store,
     protected reportService: ReportService,
     protected activatedRoute: ActivatedRoute
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -77,7 +76,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({[this.templateMap.amount]: -1 * amount});
+            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
           }
         });
     }
@@ -106,9 +105,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   writeToApi(payload: Transaction): Observable<Transaction> {
     if (payload.id) {
-      return this.transactionService.update(payload, true);
+      return this.transactionService.update(payload);
     } else {
-      return this.transactionService.create(payload, true);
+      return this.transactionService.create(payload);
     }
   }
 
@@ -117,6 +116,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
+      this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
@@ -125,18 +125,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.formProperties
     );
-    this.processPayload(payload, navigationEvent)
+    this.processPayload(payload, navigationEvent);
   }
 
   processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
       this.writeToApi(payload).subscribe((transaction) => {
-        this.store.dispatch(spinnerOffAction());
         navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
         this.navigateTo(navigationEvent);
       });
     } else {
-      this.store.dispatch(spinnerOffAction());
+      this.store.dispatch(singleClickEnableAction());
     }
   }
 
@@ -213,11 +212,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (this.isInvalid()) return;
+      if (this.isInvalid()) {
+        this.store.dispatch(singleClickEnableAction());
+        return;
+      }
       this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
-        else this.store.dispatch(spinnerOffAction());
+        else this.store.dispatch(singleClickEnableAction());
       });
     } else {
       this.navigateTo(navigationEvent);
