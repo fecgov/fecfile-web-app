@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, takeUntil } from "rxjs";
+import { takeUntil } from "rxjs";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectSpinnerStatus } from "./store/spinner.selectors";
 import { selectSidebarState } from "./store/sidebar-state.selectors";
 import { DestroyerComponent } from "./shared/components/app-destroyer.component";
 
@@ -12,7 +11,6 @@ import { DestroyerComponent } from "./shared/components/app-destroyer.component"
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent extends DestroyerComponent implements OnInit {
-  progressBarVisible$: Observable<{ spinnerOn: boolean }> | undefined;
   showSidebar = false;
 
   constructor(private store: Store, private activatedRoute: ActivatedRoute) {
@@ -20,8 +18,6 @@ export class AppComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.progressBarVisible$ = this.store.select(selectSpinnerStatus);
-
     this.store
       .select(selectSidebarState)
       .pipe(takeUntil(this.destroy$))
