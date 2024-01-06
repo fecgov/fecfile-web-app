@@ -46,5 +46,5 @@ Authentication must be configured in a set of evironment variables:
 An E2E test job was added to the fecfile-web-app CircleCI configuration file and a corresponding technical details section added to the Cypress README.md.  This job can be kicked off using the following command (You will need to ensure you pass additional required environment variables to the job as needed and documented in the Cypress README.md.  Also, you may need to temporarily add 'e2e-test' to each workflow defined under the CircleCI config's 'workflows' section so that the command line can find it.  You also may need to add 'sudo' in front of the docker commands (otherwise it will complain about not being able to find Docker Daemon listening)). 
 
 ```
-sudo circleci local execute -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} --job e2e-test
+sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} --job e2e-test
 ```

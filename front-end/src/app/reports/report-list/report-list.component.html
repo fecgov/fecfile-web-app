@@ -9,8 +9,7 @@
         label="Create a new report"
         icon="pi pi-plus"
         class="mr-2 add-button"
-        data-bs-toggle="modal"
-        data-bs-target="#modal"
+        (click)="showDialog()"
         [disabled]="noCashOnHand()"
       ></button>
     </ng-template>
@@ -94,4 +93,8 @@
   </p-table>
 </div>
 
-<app-form-type-dialog [noReports]="totalItems === 0" (refreshReports)="this.refreshReports()"></app-form-type-dialog>
+<app-form-type-dialog
+  [noReports]="totalItems === 0"
+  (dialogClose)="dialogVisible = false"
+  [dialogVisible]="dialogVisible"
+></app-form-type-dialog>

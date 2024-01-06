@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
+  dialogVisible = false;
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',
@@ -96,8 +97,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
   }
 
-  public refreshReports() {
-    this.loading = true;
-    this.refreshTable();
+  public showDialog(): void {
+    this.dialogVisible = true;
   }
 }
