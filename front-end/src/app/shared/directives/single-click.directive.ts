@@ -1,24 +1,27 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectSingleClickDisabled } from '../../store/single-click.selectors';
+import { singleClickDisableAction, singleClickEnableAction } from '../../store/single-click.actions';
 
 @Directive({
-  selector: '[appSingleClick]'
+  selector: '[appSingleClick]',
 })
-export class SingleClickDirective {
-  disableTimeoutMs = 3000;
-
-  @Input() set appSingleClick(value: string) {
-    const numValue = Number(value);
-    if (value && !isNaN(numValue)) {
-      this.disableTimeoutMs = numValue;
-    }
+export class SingleClickDirective implements OnDestroy {
+  constructor(private el: ElementRef, private store: Store) {
+    this.store.select(selectSingleClickDisabled).subscribe((disabled) => {
+      if (disabled) this.el.nativeElement.setAttribute('disabled', 'true');
+      else this.el.nativeElement.removeAttribute('disabled');
+    });
   }
 
-  constructor(private el: ElementRef) { }
-
   @HostListener('click') onClick() {
-    this.el.nativeElement.setAttribute('disabled', 'true');
-    setTimeout(() => {
-      this.el.nativeElement.removeAttribute('disabled');
-    }, this.disableTimeoutMs);
+    this.store.dispatch(singleClickDisableAction());
+  }
+
+  ngOnDestroy(): void {
+    // If the single-click button disabled flag in the store has not been
+    // reset to false within the code itself, set the flag when routed away
+    // from the page as the button is destroyed.
+    this.store.dispatch(singleClickEnableAction());
   }
 }

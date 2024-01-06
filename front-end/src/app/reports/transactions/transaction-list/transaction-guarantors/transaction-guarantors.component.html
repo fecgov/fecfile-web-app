@@ -1,22 +1,22 @@
 <div class="card">
   <p-table
     #dt
-    [value]="transactions ?? []"
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
     responsiveLayout="scroll"
     dataKey="id"
     [paginator]="true"
     [rows]="rowsPerPage"
     [totalRecords]="totalItems"
-    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} ' + tableLabel"
+    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
     [showCurrentPageReport]="true"
     sortField="created"
-    [customSort]="true"
-    (sortFunction)="sortMethod($event)"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
         <div class="col-9 flex align-items-center justify-content-between">
-          <h5 class="gandhi-bold size-24">{{ tableLabel }}</h5>
+          <h5 class="gandhi-bold size-24">Guarantors</h5>
         </div>
         <div class="col-3 align-right">
           Results per table:
@@ -34,10 +34,12 @@
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="name" id="name-column" role="columnheader">
-          {{ nameHeader }} <p-sortIcon field="name"></p-sortIcon>
+          Name
+          <p-sortIcon field="name"></p-sortIcon>
         </th>
         <th pSortableColumn="amount" id="amount-column" role="columnheader">
-          {{ amountHeader }} <p-sortIcon field="amount"></p-sortIcon>
+          Guaranteed financial information amount
+          <p-sortIcon field="amount"></p-sortIcon>
         </th>
         <th id="buttons" role="columnheader">Actions</th>
       </tr>
@@ -51,20 +53,22 @@
         </td>
         <td>
           <span class="float-right">
-            {{ item[item.transactionType.templateMap.amount] | currency }}
+            {{ item.amount | currency }}
           </span>
-                </td>
-                <td>
-                    <app-table-actions-button
-                            [tableActions]="rowActions"
-                            [actionItem]="item"
-                            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-                            buttonIcon="pi pi-ellipsis-v"
-                            buttonStyleClass="p-button-text"
-                            buttonAriaLabel="action"
-                    ></app-table-actions-button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+        </td>
+        <td>
+          <app-table-actions-button
+            [tableActions]="rowActions"
+            [actionItem]="item"
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="p-button-text"
+            buttonAriaLabel="action"
+          ></app-table-actions-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

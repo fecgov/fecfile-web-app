@@ -26,9 +26,9 @@ export function enterFilingDetails(details: FilingDetails, save = true) {
   cy.get('input[formControlName="treasurer_middle_name"]').overwrite(details.middle_name);
   cy.get('input[formControlName="treasurer_prefix"]').overwrite(details.prefix);
   cy.get('input[formControlName="treasurer_suffix"]').overwrite(details.suffix);
-  cy.get('input[formControlName="filing_password"]').overwrite(details.filing_pw);
+  cy.get('input[formControlName="filingPassword"]').overwrite(details.filing_pw);
 
-  cy.get('p-checkbox[formControlName="truth_statement"]').find('div').last().click({ force: true });
+  cy.get('p-checkbox[formControlName="userCertified"]').find('div').last().click({ force: true });
 
   if (save) {
     cy.get('button[label="Submit"]').click();

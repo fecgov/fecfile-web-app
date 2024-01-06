@@ -1,9 +1,12 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
 
-
 p {
   max-width: 100%;
   line-height: 1.5;
+}
+
+hr.black-line {
+  color: black;
 }
 
 .grid {
@@ -20,11 +23,6 @@ p {
   color: black;
   text-decoration: none;
   border-bottom: 1px black dotted;
-}
-
-.p-dialog .p-dialog-header,
-.p-dialog .p-dialog-footer {
-  background-color: #eee;
 }
 
 li {
@@ -116,7 +114,7 @@ label.disabled {
 
 .font-karla-bold {
   font-family: karla-bold, karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-  Segoe UI Symbol;
+    Segoe UI Symbol;
 }
 
 .fec-background-gradient {
@@ -410,4 +408,8 @@ label.disabled {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+table {
+  caption-side: top;
 }

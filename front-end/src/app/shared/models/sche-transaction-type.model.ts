@@ -1,20 +1,19 @@
-import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
-import { hasFields, CANDIDATE_FIELDS } from '../utils/transaction-type-properties';
+import { CANDIDATE_FIELDS, hasFields } from '../utils/transaction-type-properties';
 import { FormGroup } from '@angular/forms';
 
 export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
 
-  override showAggregate = false;
   override contactTitle = 'Payee';
   override amountInputHeader = 'Expenditure information';
   override dateLabel = 'DISBURSEMENT DATE';
   override date2Label = 'DISSEMINATION DATE';
-  override aggregateLabel = 'CALENDAR YEAR-TO-DATE';
   override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
   override signatoryOneHeader = 'Committee treasurer';
   override committeeCandidateHeader = 'Candidate information';
+
   override hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS) && !!form?.get('support_oppose_code')?.value;
   }

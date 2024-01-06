@@ -2,11 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
 import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
-
-export interface CashOnHand {
-  report_id: string | undefined;
-  value: number | undefined;
-}
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -21,10 +17,12 @@ export const F3xFormVersionLabels: { [key in F3xFormTypes]: string } = {
   [F3xFormTypes.F3XA]: 'Amendment',
   [F3xFormTypes.F3XT]: 'Termination',
 };
+
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
   report_code: F3xReportCodes | undefined;
+
   // prettier-ignore
   static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(F3xCoverageDates, json);
@@ -32,17 +30,41 @@ export class F3xCoverageDates {
 }
 
 export class Form3X extends Report {
+  override schema = f3xSchema;
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
+  override hasChangeOfAddress = true;
+
+  override get reportCode(): F3xReportCodes | undefined {
+    return this.report_code;
+  }
+
+  override get coverageDates(): { [date: string]: Date | undefined } {
+    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
+  }
+
+  override getBlocker() {
+    if (!this.L6a_cash_on_hand_jan_1_ytd)
+      return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
+    return;
+  }
+
+  override get canAmend(): boolean {
+    return this.report_status === 'Submission success';
+  }
+
   get formLabel() {
     return 'FORM 3X';
   }
+
+  get formSubLabel() {
+    return getReportCodeLabel(this.report_code) ?? '';
+  }
+
   get versionLabel() {
-    return F3xFormVersionLabels[this.form_type] ?? '';
+    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
-  override get transactionTableTitle() {
-    return `${this.formLabel}: ${getReportCodeLabel(this.report_code)}`;
-  }
+
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;
@@ -62,8 +84,6 @@ export class Form3X extends Report {
   treasurer_middle_name: string | undefined;
   treasurer_prefix: string | undefined;
   treasurer_suffix: string | undefined;
-  confirmation_email_1: string | undefined;
-  confirmation_email_2: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | undefined;
   L6b_cash_on_hand_beginning_period: number | undefined;

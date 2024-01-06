@@ -1,1 +1,3 @@
-describe('F1MMenuComponent', () => {});
+describe('F1MMenuComponent', () => {
+  return;
+});

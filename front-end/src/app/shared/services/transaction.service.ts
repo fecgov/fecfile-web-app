@@ -149,7 +149,7 @@ export class TransactionService implements TableListService<Transaction> {
   public update(transaction: Transaction): Observable<Transaction> {
     const payload = this.preparePayload(transaction);
     return this.apiService
-      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload)
+      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {})
       .pipe(map((response) => getFromJSON(response)));
   }
 
@@ -170,7 +170,11 @@ export class TransactionService implements TableListService<Transaction> {
 
   public multisave(transactions: Transaction[]): Observable<Transaction[]> {
     const payload = transactions.map((t) => this.preparePayload(t));
-    return this.apiService.put<Transaction[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/`, payload);
+    return this.apiService.put<Transaction[]>(
+      `${transactions[0].transactionType?.apiEndpoint}/multisave/`,
+      payload,
+      {}
+    );
   }
 
   /**

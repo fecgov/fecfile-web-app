@@ -22,6 +22,7 @@ import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   template: '',
@@ -115,6 +116,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
+      this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
@@ -123,12 +125,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form,
       this.formProperties
     );
+    this.processPayload(payload, navigationEvent);
+  }
+
+  processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
-      const responseFromApi = this.writeToApi(payload);
-      responseFromApi.subscribe((transaction) => {
+      this.writeToApi(payload).subscribe((transaction) => {
         navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
         this.navigateTo(navigationEvent);
       });
+    } else {
+      this.store.dispatch(singleClickEnableAction());
     }
   }
 
@@ -137,7 +144,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form: FormGroup,
     targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
   ) {
-    const templateMap = transaction.transactionType?.templateMap;
+    const templateMap = transaction.transactionType.templateMap;
     if (!templateMap) {
       throw new Error('Fecfile: Cannot find template map when confirming transaction');
     }
@@ -192,16 +199,27 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     );
   }
 
+  isInvalid(): boolean {
+    return this.form.invalid || !this.transaction;
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.transaction) return of(false);
+    return this.confirmWithUser(this.transaction, this.form);
+  }
+
   handleNavigate(navigationEvent: NavigationEvent): void {
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (this.form.invalid || !this.transaction) {
+      if (this.isInvalid()) {
+        this.store.dispatch(singleClickEnableAction());
         return;
       }
-      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: boolean) => {
+      this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
         if (confirmed) this.save(navigationEvent);
+        else this.store.dispatch(singleClickEnableAction());
       });
     } else {
       this.navigateTo(navigationEvent);

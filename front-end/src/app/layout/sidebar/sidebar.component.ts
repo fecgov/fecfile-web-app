@@ -16,15 +16,16 @@ export class SidebarComponent {
   }
 }
 
-export enum ReportSidebarState {
+export enum ReportSidebarSection {
   'TRANSACTIONS',
   'REVIEW',
   'SUBMISSION',
+  'CREATE',
 }
 
 export class SidebarState {
-  section: ReportSidebarState;
-  constructor(section: ReportSidebarState) {
+  section: ReportSidebarSection;
+  constructor(section: ReportSidebarSection) {
     this.section = section;
   }
 }

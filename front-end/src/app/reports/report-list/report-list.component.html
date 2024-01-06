@@ -9,8 +9,8 @@
         label="Create a new report"
         icon="pi pi-plus"
         class="mr-2 add-button"
-        (click)="addItem()"
-        [disabled]="items.length === 1 && !cashOnHand.value"
+        (click)="showDialog()"
+        [disabled]="noCashOnHand()"
       ></button>
     </ng-template>
   </p-toolbar>
@@ -93,4 +93,8 @@
   </p-table>
 </div>
 
-<app-form-type-dialog [(detailVisible)]="detailVisible"></app-form-type-dialog>
+<app-form-type-dialog
+  [noReports]="totalItems === 0"
+  (dialogClose)="dialogVisible = false"
+  [dialogVisible]="dialogVisible"
+></app-form-type-dialog>
