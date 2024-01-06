@@ -1,24 +1,18 @@
-<div
-  class="modal fade"
-  id="modal"
-  data-bs-keyboard="true"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title" id="staticBackdropLabel">Create a new Report</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+<dialog #dialog>
+  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h1 class="dialog-title" id="dialog-title">Create a new report</h1>
+        <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
       </div>
-      <div class="modal-body">
+      <div class="dialog-body">
         <div class="dropdown">
           <label id="type-label" for="typeDropdown">FORM TYPE</label>
           <button
             class="btn dropdown-toggle"
             type="button"
             id="typeDropdown"
+            [autofocus]="true"
             data-bs-toggle="dropdown"
             aria-expanded="false"
             [innerHTML]="dropdownButtonText"
@@ -42,7 +36,7 @@
           ></p-selectButton>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="dialog-footer">
         <button
           pButton
           pRipple
@@ -51,10 +45,9 @@
           "
           label="Start building report"
           class="p-button-primary"
-          data-bs-dismiss="modal"
           (click)="goToReportForm()"
         ></button>
       </div>
     </div>
   </div>
-</div>
+</dialog>

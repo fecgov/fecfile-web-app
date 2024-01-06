@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -9,11 +9,14 @@ import { Form24 } from 'app/shared/models/form-24.model';
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
 })
-export class FormTypeDialogComponent {
+export class FormTypeDialogComponent implements OnChanges, AfterViewInit {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   formTypes = FormTypes;
   selectedType?: FormTypes;
   @Input() noReports = true;
+  @Input() dialogVisible = false;
+  @Output() dialogClose = new EventEmitter<undefined>();
+  @ViewChild('dialog') dialog?: ElementRef;
 
   @Output() refreshReports = new EventEmitter();
 
@@ -29,13 +32,20 @@ export class FormTypeDialogComponent {
   ];
   selectedForm24Type: '24' | '48' | undefined;
 
-  constructor(
-    public router: Router,
-    private changeDetectorRef: ChangeDetectorRef,
-    private form24Service: Form24Service
-  ) {}
+  constructor(public router: Router, private form24Service: Form24Service) {}
+
+  ngAfterViewInit() {
+    this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());
+  }
+
+  ngOnChanges(): void {
+    if (this.dialogVisible) {
+      this.dialog?.nativeElement.showModal();
+    }
+  }
 
   goToReportForm(): void {
+    this.dialog?.nativeElement.close();
     if (this.getFormType(this.selectedType)?.createRoute) {
       this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
     } else if (this.selectedType === FormTypes.F24) {
@@ -69,5 +79,7 @@ export class FormTypeDialogComponent {
     create$.subscribe((report) => {
       this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
     });
+
+    this.selectedType = undefined;
   }
 }
