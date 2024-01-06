@@ -77,7 +77,7 @@ export class FormTypeDialogComponent implements OnChanges, AfterViewInit {
     const create$ = this.form24Service.create(form24, ['report_type_24_48']);
 
     create$.subscribe((report) => {
-      this.refreshReports.emit(report);
+      this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
     });
 
     this.selectedType = undefined;

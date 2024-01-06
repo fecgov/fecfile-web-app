@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Form3X } from '../../shared/models/form-3x.model';
-import { WebPrintService } from '../../shared/services/web-print.service';
-import { Report } from '../../shared/models/report.model';
-import { selectActiveReport } from '../../store/active-report.selectors';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { WebPrintService } from 'app/shared/services/web-print.service';
+import { Report } from 'app/shared/models/report.model';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { singleClickEnableAction } from '../../store/single-click.actions';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
-  styleUrls: ['../styles.scss'],
+  styleUrls: ['../../styles.scss'],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   report: Report = new Form3X() as unknown as Report;
