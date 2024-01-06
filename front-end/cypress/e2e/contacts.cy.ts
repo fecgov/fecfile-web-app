@@ -9,7 +9,7 @@ describe('Manage contacts', () => {
     ContactListPage.deleteAllContacts();
     ContactListPage.goToPage();
   });
-  
+
   it('Create an Individual contact', () => {
     cy.runLighthouse('contacts', 'list');
 
@@ -17,14 +17,14 @@ describe('Manage contacts', () => {
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', `${formData['last_name']}, ${formData['first_name']}`).should('exist');
+    cy.contains('Add Contact').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
-  }); 
+  });
 
   it('Create a Candidate contact', () => {
     PageUtils.clickButton('New');
@@ -37,14 +37,14 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', `${formData['last_name']}, ${formData['first_name']}`).should('exist');
+    cy.contains('Add Contact').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Candidate');
     ContactListPage.assertFormData(formData);
-  }); 
+  });
 
   it('Create a Committee contact', () => {
     PageUtils.clickButton('New');
@@ -57,7 +57,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', formData['name']).should('exist');
+    cy.contains('Add Contact').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -77,7 +77,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', formData['name']).should('exist');
+    cy.contains('Add Contact').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -149,5 +149,5 @@ describe('Manage contacts', () => {
   xit('Delete contact', () => {
     // test if trash can disabled if transactions are associated with the contact
     // test actual delete when no transactions associated with contact
-  }); 
+  });
 });
