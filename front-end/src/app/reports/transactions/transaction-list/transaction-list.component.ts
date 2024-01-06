@@ -5,8 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Report } from 'app/shared/models/report.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-transaction-list',

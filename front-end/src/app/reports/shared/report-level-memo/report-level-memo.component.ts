@@ -59,8 +59,8 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as Report;
-        if (this.report && this.report.id) {
+        this.report = report;
+        if (this.report?.id) {
           this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
             if (memoTextList && memoTextList.length > 0) {
               this.assignedMemoText = memoTextList[0];
