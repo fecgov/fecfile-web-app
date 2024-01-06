@@ -5,20 +5,29 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FormTypeDialogComponent } from './form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { of } from 'rxjs';
+import { Form24 } from 'app/shared/models/form-24.model';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
   let fixture: ComponentFixture<FormTypeDialogComponent>;
   let router: Router;
+  let form24Service: Form24Service;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), DialogModule],
+      imports: [RouterTestingModule.withRoutes([]), DialogModule, HttpClientTestingModule],
       declarations: [Dialog, FormTypeDialogComponent],
+      providers: [Form24Service, provideMockStore(testMockStore)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FormTypeDialogComponent);
     router = TestBed.inject(Router);
+    form24Service = TestBed.inject(Form24Service);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -38,12 +47,14 @@ describe('FormTypeDialogComponent', () => {
 
   describe('dropdownButtonText', () => {
     it('should return an empty span if there is no selected type', () => {
-      expect(component.dropdownButtonText).toEqual('<span></span>')
+      expect(component.dropdownButtonText).toEqual('<span></span>');
     });
     it('should return a correctly formatted string if there is a selected type', () => {
       component.selectedType = FormTypes.F3X;
-      expect(component.dropdownButtonText).toEqual('<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>')
-    })
+      expect(component.dropdownButtonText).toEqual(
+        '<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>'
+      );
+    });
   });
 
   describe('updateSelected', () => {
@@ -51,5 +62,17 @@ describe('FormTypeDialogComponent', () => {
       component.updateSelected(FormTypes.F3X);
       expect(component.selectedType).toEqual(FormTypes.F3X);
     });
+  });
+
+  it('should create Form24', () => {
+    component.updateSelected(FormTypes.F24);
+    expect(component.selectedType).toEqual(FormTypes.F24);
+
+    component.selectedForm24Type = '48';
+
+    const create = spyOn(form24Service, 'create').and.returnValue(of(Form24.fromJSON({})));
+
+    component.goToReportForm();
+    expect(create).toHaveBeenCalled();
   });
 });

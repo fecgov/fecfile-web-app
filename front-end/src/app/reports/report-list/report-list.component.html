@@ -16,18 +16,18 @@
   </p-toolbar>
 
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="10"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
-      [showCurrentPageReport]="true"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+    [showCurrentPageReport]="true"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -72,7 +72,7 @@
         <td>{{ item.report_code_label }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
-          >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
+            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
           >
         </td>
         <td>{{ item.report_status }}</td>
@@ -93,5 +93,8 @@
   </p-table>
 </div>
 
-<app-form-type-dialog [noReports]="totalItems === 0" (dialogClose)="dialogVisible = false"
-                      [dialogVisible]="dialogVisible"></app-form-type-dialog>
+<app-form-type-dialog
+  [noReports]="totalItems === 0"
+  (dialogClose)="dialogVisible = false"
+  [dialogVisible]="dialogVisible"
+></app-form-type-dialog>

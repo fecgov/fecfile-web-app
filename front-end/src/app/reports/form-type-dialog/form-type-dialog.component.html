@@ -8,23 +8,41 @@
       <div class="dialog-body">
         <div class="dropdown">
           <label id="type-label" for="typeDropdown">FORM TYPE</label>
-          <button class="btn dropdown-toggle " type="button" id="typeDropdown" [autofocus]="true"
-                  data-bs-toggle="dropdown" aria-expanded="false" [innerHTML]="dropdownButtonText">
-          </button>
+          <button
+            class="btn dropdown-toggle"
+            type="button"
+            id="typeDropdown"
+            [autofocus]="true"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            [innerHTML]="dropdownButtonText"
+          ></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li *ngFor="let type of formTypeOptions">
               <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
-                <span class="option"> <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span>
+                <span class="option">
+                  <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
+                >
               </button>
             </li>
           </ul>
+        </div>
+        <div class="modal-item-margin" *ngIf="selectedType === formTypes.F24">
+          <label for="form24Options">REPORT TYPE</label>
+          <p-selectButton
+            id="form24Options"
+            [options]="form24Options"
+            [(ngModel)]="selectedForm24Type"
+          ></p-selectButton>
         </div>
       </div>
       <div class="dialog-footer">
         <button
           pButton
           pRipple
-          [disabled]="!getFormType(selectedType)?.createRoute"
+          [disabled]="
+            !getFormType(selectedType)?.createRoute && (!(selectedType === formTypes.F24) || !selectedForm24Type)
+          "
           label="Start building report"
           class="p-button-primary"
           (click)="goToReportForm()"

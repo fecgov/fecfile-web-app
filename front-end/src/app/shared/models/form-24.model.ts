@@ -18,8 +18,7 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
 export class Form24 extends Report {
   override schema = f24Schema;
   override report_type = ReportTypes.F24;
-  override form_type = F24FormTypes.F24A;
-
+  override form_type = F24FormTypes.F24N;
   get formLabel() {
     return 'FORM 24';
   }
@@ -32,7 +31,7 @@ export class Form24 extends Report {
     return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  report_type_24_48: string | undefined;
+  report_type_24_48: '24' | '48' | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   committee_name: string | undefined;
   street_1: string | undefined;
