@@ -40,6 +40,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { LayoutComponent } from './layout/layout.component';
 import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
+import { F24MenuComponent } from './layout/sidebar/menus/f24/f24-menu.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
@@ -77,6 +78,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     F3XMenuComponent,
     F1MMenuComponent,
     F99MenuComponent,
+    F24MenuComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,9 +7,9 @@ import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { PrintPreviewComponent } from './print-preview.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Form3XService } from '../../shared/services/form-3x.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { of } from 'rxjs';
-import { WebPrintService } from '../../shared/services/web-print.service';
+import { WebPrintService } from 'app/shared/services/web-print.service';
 
 describe('PrintPreviewComponent', () => {
   let component: PrintPreviewComponent;

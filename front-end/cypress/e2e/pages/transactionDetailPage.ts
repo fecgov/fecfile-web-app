@@ -77,7 +77,7 @@ export class TransactionDetailPage {
         .find('div.grid')
         .children()
         .find("p-calendar[inputid='date_signed']")
-        .type('04/27/2023');
+        .type('04/27/2024');
     }
   }
 
@@ -230,7 +230,7 @@ export class TransactionDetailPage {
         .find('div.grid')
         .children()
         .find("p-calendar[inputid='date_signed']")
-        .type('04/27/2023');
+        .type('04/27/2024');
     }
   }
 

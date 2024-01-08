@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
+  dialogVisible = false;
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',
@@ -54,14 +55,19 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       return;
     }
 
-    if (item.report_type === ReportTypes.F3X) {
-      if (item.is_first) {
-        this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-      } else {
+    switch (item.report_type) {
+      case ReportTypes.F3X:
+        if (item.is_first) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
+        } else {
+          this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+        }
+        break;
+      case ReportTypes.F99:
+        this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
+        break;
+      case ReportTypes.F24:
         this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-      }
-    } else if (item.report_type === ReportTypes.F99) {
-      this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
     }
   }
 
@@ -94,5 +100,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   public noCashOnHand(): boolean {
     const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
     return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
+  }
+
+  public showDialog(): void {
+    this.dialogVisible = true;
   }
 }

@@ -45,7 +45,7 @@ describe('CreateF3XStep1Component', () => {
   const sixth = new Date('01/06/2024');
   const seventh = new Date('01/07/2024');
   const ninth = new Date('01/09/2024');
-  const eigth = new Date('01/08/2024');
+  const eighth = new Date('01/08/2024');
   const tenth = new Date('01/10/2024');
   const thirdThroughFifth = F3xCoverageDates.fromJSON({
     report_code: 'Q1',
@@ -130,21 +130,21 @@ describe('CreateF3XStep1Component', () => {
     spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.form.patchValue({ ...f3x });
+    component.form.patchValue({...f3x});
     component.save();
     expect(component.form.invalid).toBe(false);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
-    component.form.patchValue({ ...f3x });
+    component.form.patchValue({...f3x});
     component.save('continue');
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 
   it('#save should not save with invalid f3x record', () => {
     spyOn(form3XService, 'create').and.returnValue(of(f3x));
-    component.form.patchValue({ ...f3x });
-    component.form.patchValue({ form_type: 'NO-GOOD' });
+    component.form.patchValue({...f3x});
+    component.form.patchValue({form_type: 'NO-GOOD'});
     component.save();
     expect(component.form.invalid).toBe(true);
   });
@@ -170,10 +170,10 @@ describe('CreateF3XStep1Component', () => {
       });
       validator(group);
       expect(group.get('coverage_from_date')?.errors).toEqual(
-        expectedFromMessage ? { invaliddate: { msg: expectedFromMessage } } : null
+        expectedFromMessage ? {invaliddate: {msg: expectedFromMessage}} : null
       );
       expect(group.get('coverage_through_date')?.errors).toEqual(
-        expectedThroughMessage ? { invaliddate: { msg: expectedThroughMessage } } : null
+        expectedThroughMessage ? {invaliddate: {msg: expectedThroughMessage}} : null
       );
     };
     const hitsQ1Msg =
@@ -192,13 +192,13 @@ describe('CreateF3XStep1Component', () => {
     foo([thirdThroughFifth, seventhThroughNinth], first, fourth, null, hitsQ1Msg);
 
     //FC--[1--1]--[2--TC--2]
-    foo([thirdThroughFifth, seventhThroughNinth], first, eigth, hitsQ1Msg, hitsQ1Msg);
+    foo([thirdThroughFifth, seventhThroughNinth], first, eighth, hitsQ1Msg, hitsQ1Msg);
 
     //[1--FC--1]--[2--TC--2]
-    foo([thirdThroughFifth, seventhThroughNinth], fourth, eigth, hitsQ1Msg, hitsQ2Msg);
+    foo([thirdThroughFifth, seventhThroughNinth], fourth, eighth, hitsQ1Msg, hitsQ2Msg);
 
     //[1--1]--FC--[2--TC--2]
-    foo([thirdThroughFifth, seventhThroughNinth], sixth, eigth, null, hitsQ2Msg);
+    foo([thirdThroughFifth, seventhThroughNinth], sixth, eighth, null, hitsQ2Msg);
 
     //FC--TC--[1--1]--[2--2]
     foo([thirdThroughFifth, seventhThroughNinth], first, second, null, null);

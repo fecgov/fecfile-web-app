@@ -46,7 +46,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
-        transaction.transactionType.scheduleId === ScheduleIds.A,
+        transaction.transactionType.scheduleId === ScheduleIds.A || transaction.transactionType.scheduleId === ScheduleIds.E,
       () => true
     ),
     new TableAction(
@@ -57,7 +57,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
-        transaction.transactionType.scheduleId === ScheduleIds.A,
+        (transaction.transactionType.scheduleId === ScheduleIds.A || transaction.transactionType.scheduleId === ScheduleIds.E),
       () => true
     ),
     new TableAction(
@@ -184,7 +184,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return { report_id: reportId, page_size: this.rowsPerPage };
+    return {report_id: reportId, page_size: this.rowsPerPage};
   }
 
   onRowsPerPageChange() {
@@ -204,7 +204,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public editLoanAgreement(transaction: Transaction): void {
     if (transaction.loan_agreement_id)
-      this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
+      this.router.navigate([`${transaction.loan_agreement_id}`], {relativeTo: this.activatedRoute});
   }
 
   public createLoanAgreement(transaction: Transaction): void {

@@ -14,21 +14,24 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
   [F24FormTypes.F24N]: 'Original',
   [F24FormTypes.F24A]: 'Amendment',
 };
+
 export class Form24 extends Report {
   override schema = f24Schema;
   override report_type = ReportTypes.F24;
-  override form_type = F24FormTypes.F24A;
+  override form_type = F24FormTypes.F24N;
   get formLabel() {
     return 'FORM 24';
   }
+
   get formSubLabel() {
     return '';
   }
+
   get versionLabel() {
-    return F24FormVersionLabels[this.form_type] ?? '';
+    return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  report_type_24_48: string | undefined;
+  report_type_24_48: '24' | '48' | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   committee_name: string | undefined;
   street_1: string | undefined;

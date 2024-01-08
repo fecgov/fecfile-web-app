@@ -90,6 +90,7 @@ export const testActiveReport: Form3X = Form3X.fromJSON({
   coverage_from_date: '2022-05-25',
   coverage_through_date: '2022-06-30',
   form_type: 'F3XN',
+  report_type: 'F3X',
   report_code: 'Q1',
   upload_submission: UploadSubmission.fromJSON({}),
   webprint_submission: {

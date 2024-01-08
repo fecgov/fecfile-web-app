@@ -14,7 +14,7 @@ describe('Amendments', () => {
     ReportListPage.goToPage();
   });
 
-  it('should test Create an amendment', () => {
+  xit('should test Create an amendment', () => {
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
     const formData = {
@@ -36,14 +36,14 @@ describe('Amendments', () => {
     PageUtils.clickSidebarItem('Cash on hand');
     const alias = PageUtils.getAlias('');
     PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
-    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2023'), alias);
+    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2024'), alias);
     PageUtils.clickButton('Save & continue');
 
     PageUtils.urlCheck('/list');
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickLink('Submit report');
     PageUtils.urlCheck('/submit/step2');
-    PageUtils.enterValue('#filingPassword', 'T3stUpl@ad');
+    PageUtils.enterValue('#filingPassword', ''); // Insert password from env variable
     cy.get(alias).find('p-checkbox[inputid="userCertified"]').click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');

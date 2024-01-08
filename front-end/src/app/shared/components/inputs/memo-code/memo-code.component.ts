@@ -6,6 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
+import { ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-memo-code',
@@ -20,6 +21,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   memoCodeReadOnly = false;
   coverageDate: Date = new Date();
   coverageDateQuestion = 'Did you mean to date this transaction outside of the report coverage period?';
+  reportTypes = ReportTypes;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   report?: Form3X;
