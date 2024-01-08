@@ -1,7 +1,11 @@
+
+#sidebar-container {
+  min-height: calc(100vh - 2rem);
+}
+
 .main-content {
-  margin-left: 32px;
-  margin-right: 32px;
-  margin-bottom: 32px;
+  margin: 0;
+  padding: 0;
 }
 
 .header-container {
@@ -11,4 +15,30 @@
 
 .row {
   margin: 0;
+}
+
+.footer-full {
+  position: absolute;
+  width: 100%;
+}
+
+app-footer {
+  padding: 0;
+}
+
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.content-offset {
+  padding-bottom: 314px;
+}
+
+.sidebar-content-container {
+  min-height: calc(100vh - 2rem);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
