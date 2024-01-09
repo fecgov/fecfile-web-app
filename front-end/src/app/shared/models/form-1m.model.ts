@@ -3,6 +3,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { Contact } from './contact.model';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -98,6 +99,8 @@ export class Form1M extends Report {
   V_candidate_state?: string;
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
+
+  contact_affiliated?: Contact;
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any

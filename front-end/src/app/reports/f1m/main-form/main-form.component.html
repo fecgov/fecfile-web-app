@@ -99,13 +99,11 @@
         </div>
       </div>
     </div>
-
     <div class="grid">
       <div class="col-12">
         <hr />
       </div>
     </div>
-
     <div class="grid">
       <div class="col-12">
         <h2>Address</h2>
@@ -117,19 +115,18 @@
         <hr />
       </div>
     </div>
-
     <div class="grid">
       <div class="col-12">
         <p>I certify that one of the following situations is correct:</p>
         <div class="field grid">
-          <label for="status_by">STATUS BY</label>
+          <label for="statusBy">STATUS BY</label>
           <div class="col-12">
             <p-radioButton
               inputId="affiliation"
-              name="status_by"
+              name="statusBy"
               value="affiliation"
               label="AFFILIATION"
-              formControlName="status_by"
+              formControlName="statusBy"
               [class]="
                 statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
                   ? 'ng-invalid ng-dirty'
@@ -140,11 +137,11 @@
           <div class="col-12">
             <p-radioButton
               inputId="qualification"
-              name="status_by"
+              name="statusBy"
               value="qualification"
               label="QUALIFICATION"
               [disabled]="true"
-              formControlName="status_by"
+              formControlName="statusBy"
               [class]="
                 statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
                   ? 'ng-invalid ng-dirty'
@@ -155,7 +152,7 @@
           <div class="col-12">
             <app-error-messages
               [form]="form"
-              fieldName="status_by"
+              fieldName="statusBy"
               [formSubmitted]="formSubmitted"
               requiredErrorMessage="An answer is required."
             ></app-error-messages>
@@ -163,44 +160,42 @@
         </div>
       </div>
     </div>
-
-    <div class="grid" *ngIf="form.get('status_by')?.value === 'affiliation'">
+    <br />
+    <div class="grid" *ngIf="statusByControl?.value === 'affiliation'">
       <div class="col-12">
         <h2>Affiliation</h2>
-      </div>
-      <div class="col-12">
         <p>
           The committee submitted its Statement of Organization (FORM 1) and simultaneously qualified as a
           multicandidate committee through its affiliation with:
         </p>
       </div>
       <div class="col-12">
-        <div class="field">
+        <div
+          class="field"
+          [ngClass]="{
+            'transaction-contact-invalid': contactAffiliatedLookupControl?.status === 'INVALID'
+          }"
+        >
           <label for="entity_type">LOOKUP</label>
           <app-transaction-contact-lookup
-            contactProperty="contact_1"
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
-            (contactTypeSelect)="contactTypeSelected($event)"
-            (contactSelect)="updateFormWithPrimaryContact($event)"
+            (contactSelect)="updateAffiliatedContact($event)"
           >
           </app-transaction-contact-lookup>
+          <app-error-messages
+            [form]="form"
+            fieldName="contactAffiliatedLookup"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
-
-      <div class="grid">
+      <ng-container *ngIf="report.contact_affiliated">
         <div class="col-9">
           <div class="field">
             <label for="affiliated_committee_name">AFFILIATED COMMITTEE NAME</label>
-            <input
-              class="readonly"
-              type="text"
-              pInputText
-              id="affiliated_committee_name"
-              [readonly]="true"
-              formControlName="affiliated_committee_name"
-            />
+            <input type="text" pInputText id="affiliated_committee_name" formControlName="affiliated_committee_name" />
             <app-error-messages
               [form]="form"
               fieldName="affiliated_committee_name"
@@ -212,9 +207,7 @@
           <div class="field">
             <label for="affiliated_committee_fec_id">AFFILIATED COMMITTEE ID</label>
             <input
-              class="readonly"
               type="text"
-              [readonly]="true"
               pInputText
               id="affiliated_committee_fec_id"
               formControlName="affiliated_committee_fec_id"
@@ -226,9 +219,6 @@
             ></app-error-messages>
           </div>
         </div>
-      </div>
-
-      <div class="grid">
         <div class="col-3">
           <div class="field">
             <label for="name">AFFILIATED DATE</label>
@@ -241,14 +231,12 @@
               [form]="form"
               fieldName="affiliated_date_form_f1_filed"
               [formSubmitted]="formSubmitted"
-              requiredErrorMessage="At least ONE date field must be entered."
             ></app-error-messages>
           </div>
         </div>
-      </div>
+      </ng-container>
     </div>
   </form>
-
   <div class="grid">
     <div class="col-12">
       <hr />
@@ -258,11 +246,11 @@
     <div class="col-2">
       <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
     </div>
-    <div class="col-6"></div>
-    <div class="col-1">
+    <div class="col-5"></div>
+    <div class="col-2 align-right">
       <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
     </div>
-    <div class="col-3">
+    <div class="col-3 align-right">
       <button
         pButton
         pRipple

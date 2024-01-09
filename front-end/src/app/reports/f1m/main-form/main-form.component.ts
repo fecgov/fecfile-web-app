@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { MessageService } from 'primeng/api';
@@ -12,6 +13,9 @@ import { Report } from 'app/shared/models/report.model';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { SelectItem } from 'primeng/api';
+import { Contact } from 'app/shared/models/contact.model';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 @Component({
   selector: 'app-main-form',
@@ -19,7 +23,7 @@ import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   formProperties: string[] = [
-    'status_by',
+    'committee_type',
     'filer_committee_id_number',
     'committee_name',
     'street_1',
@@ -27,10 +31,11 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     'city',
     'state',
     'zip',
-    'committee_type',
     'affiliated_date_form_f1_filed',
     'affiliated_committee_fec_id',
     'affiliated_committee_name',
+    'statusBy',
+    'contactAffiliatedLookup',
   ];
   schema = f1mSchema;
   webprintURL = '/reports/f1m/web-print/';
@@ -42,9 +47,12 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     zip: 'zip',
   } as TransactionTemplateMapType;
 
-  statusByControl: AbstractControl | null = null;
   committeeTypeControl: AbstractControl | null = null;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  statusByControl: AbstractControl | null = null;
+  contactAffiliatedLookupControl: AbstractControl | null = null;
+
+  report = new Form1M();
 
   constructor(
     protected override store: Store,
@@ -64,16 +72,38 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
 
-    this.statusByControl = this.form.get('status_by');
-    this.statusByControl?.addValidators(Validators.required);
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((activeReport) => {
+        if (this.reportId) {
+          this.report = activeReport as Form1M;
+        }
+      });
+
     this.committeeTypeControl = this.form.get('committee_type');
+    this.statusByControl = this.form.get('statusBy');
+    this.statusByControl?.addValidators(Validators.required);
+    this.contactAffiliatedLookupControl = this.form.get('contactAffiliatedLookup');
+    // this.contactAffiliatedLookupControl?.addValidators(Validators.required);
+
+    this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
+      ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
+      if (value === 'affiliation') {
+        this.contactAffiliatedLookupControl?.addValidators(Validators.required);
+        this.contactAffiliatedLookupControl?.updateValueAndValidity();
+        this.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
+        this.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
+        this.form.get('affiliated_committee_name')?.addValidators(Validators.required);
+      }
+    });
   }
 
-  contactTypeSelected($event: any) {
-    alert('here');
-  }
-
-  updateFormWithPrimaryContact($event: any) {
-    alert('there');
+  updateAffiliatedContact($event: SelectItem<Contact>) {
+    this.report.contact_affiliated = $event.value;
+    this.form.get('affiliated_committee_fec_id')?.setValue($event.value.committee_id);
+    this.form.get('affiliated_committee_name')?.setValue($event.value.name);
+    this.contactAffiliatedLookupControl?.clearValidators();
+    this.contactAffiliatedLookupControl?.updateValueAndValidity();
   }
 }
