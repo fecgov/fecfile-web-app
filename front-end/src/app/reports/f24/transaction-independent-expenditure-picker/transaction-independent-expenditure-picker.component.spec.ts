@@ -7,15 +7,9 @@ import { SharedModule } from 'app/shared/shared.module';
 import { AccordionModule } from 'primeng/accordion';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker.component';
 import { of } from 'rxjs';
-import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionGroups, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { Form24 } from 'app/shared/models/form-24.model';
-import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.model';
 
 describe('TransactionIndependentExpenditurePickerComponent', () => {
   let component: TransactionIndependentExpenditurePickerComponent;

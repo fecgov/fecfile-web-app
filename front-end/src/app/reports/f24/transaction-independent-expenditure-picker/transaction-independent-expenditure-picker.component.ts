@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/models/report.model';
-import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
-import { TransactionTypeUtils, getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import {
   ScheduleETransactionGroups,
