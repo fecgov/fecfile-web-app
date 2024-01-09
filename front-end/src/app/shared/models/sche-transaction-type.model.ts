@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
 
 export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
-
+  override showAggregate = false;
   override contactTitle = 'Payee';
   override amountInputHeader = 'Expenditure information';
   override dateLabel = 'DISBURSEMENT DATE';
