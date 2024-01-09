@@ -22,9 +22,9 @@ export const F1MFormVersionLabels: { [key in F1MFormTypes]: string } = {
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
-  override schema = f1mSchema;
-  override report_type = ReportTypes.F1M;
-  override form_type = F1MFormTypes.F1MN;
+  schema = f1mSchema;
+  report_type = ReportTypes.F1M;
+  form_type = F1MFormTypes.F1MN;
 
   get formLabel() {
     return 'FORM 1M';
@@ -104,18 +104,3 @@ export class Form1M extends Report {
     return plainToClass(Form1M, json);
   }
 }
-
-export const COMMITTEE_TO_1M_FIELDS = {
-  filer_committee_id_number: 'committee_id',
-  committee_name: 'name',
-  street_1: 'street_1',
-  street_2: 'street_2',
-  city: 'city',
-  state: 'state',
-  zip: 'zip',
-  email: 'email',
-  website: 'website',
-  committee_type: 'committee_type',
-  treasurer_last_name: 'treasurer_name_2',
-  treasurer_first_name: 'treasurer_name_1',
-};
