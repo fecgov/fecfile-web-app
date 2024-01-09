@@ -1,0 +1,11 @@
+<p-card>
+  <h1>{{ this.title }}</h1>
+  <p-divider></p-divider>
+  <div class="grid">
+    <div class="col-12" *ngFor="let transactionType of transactionTypes">
+      <a [routerLink]="getRouterLink(transactionType)">
+        {{ transactionType | label : transactionTypeLabels }}
+      </a>
+    </div>
+  </div>
+</p-card>

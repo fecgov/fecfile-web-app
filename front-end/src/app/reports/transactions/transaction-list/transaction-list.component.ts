@@ -30,9 +30,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
       (report: Report) => {
-        return (
-          report.report_status === 'In progress' && [ReportTypes.F3X, ReportTypes.F24].includes(report.report_type)
-        );
+        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
       },
       () => true
     ),
@@ -52,6 +50,14 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       },
       () => false
     ),
+    new TableAction(
+      'Add an independent expenditure',
+      this.createF24Transactions.bind(this),
+      (report: Report) => {
+        return report.report_status === 'In progress' && report.report_type === ReportTypes.F24;
+      },
+      () => true
+    ),
   ];
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {
@@ -67,6 +73,10 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
 
   createTransactions(transactionCategory: string, report?: Report): void {
     this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
+  }
+
+  createF24Transactions(report?: Report): void {
+    this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
   }
 
   public onTableActionClick(action: TableAction, report?: Report) {
