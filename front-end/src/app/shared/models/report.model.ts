@@ -14,6 +14,9 @@ export abstract class Report extends BaseModel {
   abstract get formSubLabel(): string;
   abstract get versionLabel(): string;
   hasChangeOfAddress = false;
+  submitAlertText =
+    'Are you sure you want to submit this form electronically? Please note that you cannot undo this action. Any changes needed will need to be filed as an amended report.';
+
   get reportCode(): F3xReportCodes | undefined {
     return;
   }
