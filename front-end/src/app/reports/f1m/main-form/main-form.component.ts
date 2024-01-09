@@ -1,54 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { DateUtils } from 'app/shared/utils/date.utils';
-import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import {
-  electionReportCodes,
-  F3xReportCodes,
-  F3X_REPORT_CODE_MAP,
-  getReportCodeLabel,
-  monthlyElectionYearReportCodes,
-  monthlyNonElectionYearReportCodes,
-  quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes,
-} from 'app/shared/utils/report-code.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { environment } from 'environments/environment';
-import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { schema as f1MSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { MessageService } from 'primeng/api';
-import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
-import { ReportService } from '../../../shared/services/report.service';
-import * as _ from 'lodash';
+import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Form1M, COMMITTEE_TO_1M_FIELDS } from 'app/shared/models/form-1m.model';
-import { Form1MService } from 'app/shared/services/form-1m.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
+import { Form1M } from 'app/shared/models/form-1m.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { Form1MService } from 'app/shared/services/form-1m.service';
+import { Report } from 'app/shared/models/report.model';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 @Component({
   selector: 'app-main-form',
   templateUrl: './main-form.component.html',
-  styleUrls: ['./main-form.component.scss'],
 })
 export class MainFormComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'status_by',
-    'form_type',
     'filer_committee_id_number',
     'committee_name',
     'street_1',
@@ -56,51 +30,61 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     'city',
     'state',
     'zip',
-    'email',
-    'website',
+    // 'email',
+    // 'website',
     'committee_type',
-    'treasurer_last_name',
-    'treasurer_first_name',
+    // 'treasurer_last_name',
+    // 'treasurer_first_name',
+    'affiliated_date_form_f1_filed',
+    'affiliated_committee_fec_id',
+    'affiliated_committee_name',
   ];
-  stateOptions: PrimeOptions = [];
   formSubmitted = false;
+  templateMap = {
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+  } as TransactionTemplateMapType;
+
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  reportId: string | undefined;
 
   constructor(
     private store: Store,
-    private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
     private form1MService: Form1MService,
-    private fecApiService: FecApiService,
+    private messageService: MessageService,
     protected router: Router,
-    private activatedRoute: ActivatedRoute,
-    private reportService: ReportService
+    private activatedRoute: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
-    const reportId = this.activatedRoute.snapshot.data['reportId'];
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (reportId && report) {
-          this.form.patchValue(report);
-        }
-      });
+    this.reportId = this.activatedRoute.snapshot.params['reportId'];
+    const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+    const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
 
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
-        Object.entries(COMMITTEE_TO_1M_FIELDS).forEach(([field, committeeField]) => {
-          this.form.get(field)?.setValue(committeeAccount[committeeField as keyof CommitteeAccount]);
-        });
-      });
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+    combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
+      this.setConstantFormValues(committeeAccount);
+      if (this.reportId) this.form.patchValue(activeReport);
+    });
 
-    ValidateUtils.addJsonSchemaValidators(this.form, f1mSchema, false);
+    ValidateUtils.addJsonSchemaValidators(this.form, f1MSchema, false);
+  }
+
+  setConstantFormValues(committeeAccount: CommitteeAccount) {
+    this.form.patchValue({
+      street_1: committeeAccount.street_1,
+      street_2: committeeAccount.street_2,
+      city: committeeAccount.city,
+      state: committeeAccount.state,
+      zip: committeeAccount.zip,
+      filer_committee_id_number: committeeAccount.committee_id,
+      committee_name: committeeAccount.name,
+    });
   }
 
   public goBack() {
@@ -111,11 +95,33 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
 
-    const form1M: Form1M = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, f1mSchema, this.formProperties));
+    const summary: Form1M = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, f1MSchema, this.formProperties));
+    let save$: Observable<Report>;
+    if (this.reportId) {
+      summary.id = this.reportId;
+      save$ = this.form1MService.update(summary, this.formProperties);
+    } else {
+      save$ = this.form1MService.create(summary, this.formProperties);
+    }
 
-    const create$ = this.form1MService.create(form1M, this.formProperties);
+    //Observables are *defined* here ahead of their execution
+
+    save$.pipe(takeUntil(this.destroy$)).subscribe((report: Report) => {
+      if (jump === 'continue') {
+        this.router.navigateByUrl('/reports/f1m/web-print/' + report.id);
+      } else {
+        this.router.navigateByUrl('/reports');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Form 1M saved',
+          life: 3000,
+        });
+      }
+    });
   }
 }

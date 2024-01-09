@@ -9,7 +9,7 @@ import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { MessageService } from 'primeng/api';
 import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F99FormTypes, Form99, textCodes } from 'app/shared/models/form-99.model';
+import { Form99, textCodes } from 'app/shared/models/form-99.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
@@ -22,7 +22,6 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 })
 export class MainFormComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
-    'form_type',
     'filer_committee_id_number',
     'committee_name',
     'street_1',
@@ -79,7 +78,6 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
       zip: committeeAccount.zip,
       filer_committee_id_number: committeeAccount.committee_id,
       committee_name: committeeAccount.name,
-      form_type: F99FormTypes.F99,
     });
   }
 
@@ -114,7 +112,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Contact Updated',
+          detail: 'Form 99 saved',
           life: 3000,
         });
       }

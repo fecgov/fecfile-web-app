@@ -13,7 +13,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <h2>Contributor</h2>
+        <h2>Committee</h2>
       </div>
     </div>
     <div class="grid">
@@ -21,7 +21,7 @@
         <div class="field">
           <label for="name">COMMITTEE NAME</label>
           <input
-            class="p-disabled"
+            class="readonly"
             type="text"
             pInputText
             id="committee_name"
@@ -34,7 +34,7 @@
         <div class="field">
           <label for="committee_id">COMMITTEE ID</label>
           <input
-            class="p-disabled"
+            class="readonly"
             type="text"
             [readonly]="true"
             pInputText
@@ -81,61 +81,23 @@
         <h2>Address</h2>
       </div>
     </div>
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label for="street_1">STREET ADDRESS</label>
-          <input class="p-disabled" type="text" [readonly]="true" pInputText id="street_1" formControlName="street_1" />
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="field">
-          <label for="street_2">APARTMENT, SUITE, ETC.</label>
-          <input class="p-disabled" type="text" [readonly]="true" pInputText id="street_2" formControlName="street_2" />
-        </div>
-      </div>
-    </div>
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label for="city">CITY</label>
-          <input class="p-disabled" type="text" [readonly]="true" pInputText id="city" formControlName="city" />
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="field">
-          <label for="state">STATE/PROVINCE</label>
-          <p-dropdown
-            inputId="state"
-            formControlName="state"
-            [options]="stateOptions"
-            [readonly]="true"
-            [autoDisplayFirst]="false"
-            appendTo="body"
-          ></p-dropdown>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="field">
-          <label for="zip">ZIP/POSTAL CODE</label>
-          <input class="p-disabled" type="text" [readonly]="true" pInputText id="zip" formControlName="zip" />
-        </div>
-      </div>
-    </div>
+    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
+    <!--
     <div class="grid">
       <div class="col-6 long-word-value">
         <div class="field">
           <label for="email">EMAIL</label>
-          <input class="p-disabled" type="text" [readonly]="true" pInputText id="email" formControlName="email" />
+          <input class="readonly" type="text" [readonly]="true" pInputText id="email" formControlName="email" />
         </div>
       </div>
       <div class="col-6 long-word-value">
         <div class="field">
           <label for="website">WEBSITE</label>
-          <input class="p-disabled" type="text" [readonly]="true" pInputText id="website" formControlName="website" />
+          <input class="readonly" type="text" [readonly]="true" pInputText id="website" formControlName="website" />
         </div>
       </div>
     </div>
+  -->
 
     <div class="grid">
       <div class="col-12">
