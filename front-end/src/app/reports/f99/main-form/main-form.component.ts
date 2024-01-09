@@ -14,6 +14,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { Report } from 'app/shared/models/report.model';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 @Component({
   selector: 'app-main-form',
@@ -93,6 +94,7 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
 

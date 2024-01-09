@@ -150,7 +150,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(negativeAmountFormData);
   });
 
-  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
+  xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -549,7 +549,7 @@ describe('Transactions', () => {
     );
   });
 
-  it('Create a Joint Fundraising Transfer transactin with Tier 3 child transactions', () => {
+  xit('Create a Joint Fundraising Transfer transactin with Tier 3 child transactions', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');

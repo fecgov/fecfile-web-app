@@ -4,7 +4,7 @@ import { PageUtils } from './pageUtils';
 export class ContactListPage {
   static goToPage() {
     cy.visit('/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+    cy.get('.navbar-nav').find('.nav-link').contains('Contacts').click();
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
