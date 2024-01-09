@@ -16,6 +16,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
+import { Report } from 'app/shared/models/report.model';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
@@ -53,6 +54,7 @@ describe('ReportLevelMemoComponent', () => {
           useValue: {
             data: of({
               report: f3x,
+              getNextUrl: (report?: Report) => `/reports/f3x/submit/step1/${report?.id}`,
             }),
           },
         },

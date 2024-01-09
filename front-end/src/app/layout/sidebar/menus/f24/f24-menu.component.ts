@@ -83,7 +83,6 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
                 label: 'Add a report level memo',
                 routerLink: `/reports/f24/memo/${activeReport?.id}`,
                 visible: isEditable,
-                disabled: true,
               },
             ],
           },

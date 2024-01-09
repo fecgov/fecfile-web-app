@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -12,6 +12,7 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
+import { Report } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -24,8 +25,9 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
-  report: Form3X = new Form3X();
+  report = new Form3X() as Report;
   committeeAccountId: string | undefined;
+  nextUrl = '';
 
   assignedMemoText: MemoText = new MemoText();
 
@@ -36,6 +38,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     private store: Store,
     protected fb: FormBuilder,
     public router: Router,
+    public route: ActivatedRoute,
     public memoTextService: MemoTextService,
     private messageService: MessageService
   ) {
@@ -56,8 +59,8 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.report = report as Form3X;
-        if (this.report && this.report.id) {
+        this.report = report;
+        if (this.report?.id) {
           this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
             if (memoTextList && memoTextList.length > 0) {
               this.assignedMemoText = memoTextList[0];
@@ -65,6 +68,9 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
             }
           });
         }
+        this.route.data.subscribe(({ getNextUrl }) => {
+          this.nextUrl = getNextUrl(this.report);
+        });
       });
 
     ValidateUtils.addJsonSchemaValidators(this.form, textSchema, false);
@@ -80,11 +86,9 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     });
     payload.report_id = this.report.id;
 
-    const nextUrl = `/reports/f3x/submit/step1/${this.report.id}`;
-
     if (this.assignedMemoText.id) {
       this.memoTextService.update(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl(nextUrl);
+        this.router.navigateByUrl(this.nextUrl);
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -94,7 +98,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
       });
     } else {
       this.memoTextService.create(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl(nextUrl);
+        this.router.navigateByUrl(this.nextUrl);
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',

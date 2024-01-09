@@ -101,8 +101,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     }
 
     this.confirmationService.confirm({
-      message:
-        'Are you sure you want to submit this form electronically? Please note that you cannot undo this action. Any changes needed will need to be filed as an amended report.',
+      message: this.report?.submitAlertText,
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

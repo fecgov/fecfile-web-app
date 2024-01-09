@@ -63,17 +63,14 @@ export class MainFormComponent extends DestroyerComponent implements OnInit {
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
 
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
-      if (this.reportId) {
-        this.form.patchValue(activeReport);
-      } else {
-        this.setDefaultFormValues(committeeAccount);
-      }
+      this.setConstantFormValues(committeeAccount);
+      if (this.reportId) this.form.patchValue(activeReport);
     });
 
     ValidateUtils.addJsonSchemaValidators(this.form, f99Schema, false);
   }
 
-  setDefaultFormValues(committeeAccount: CommitteeAccount) {
+  setConstantFormValues(committeeAccount: CommitteeAccount) {
     this.form.patchValue({
       street_1: committeeAccount.street_1,
       street_2: committeeAccount.street_2,
