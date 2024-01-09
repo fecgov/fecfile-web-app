@@ -122,9 +122,10 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[2].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[3].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[0].isAvailable(f24_params)).toEqual(false);
-    expect(component.tableActions[1].isAvailable(f24_params)).toEqual(true);
+    expect(component.tableActions[1].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[2].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[3].isAvailable(f24_params)).toEqual(false);
+    expect(component.tableActions[4].isAvailable(f24_params)).toEqual(true);
     expect(component.tableActions[0].isEnabled({})).toEqual(true);
     expect(component.tableActions[1].isEnabled({})).toEqual(true);
     expect(component.tableActions[2].isEnabled({})).toEqual(true);
