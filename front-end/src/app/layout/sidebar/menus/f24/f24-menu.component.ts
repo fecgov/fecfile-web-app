@@ -42,8 +42,8 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
             routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
           },
           {
-            label: 'Add a disbursement',
-            routerLink: `/reports/transactions/report/${activeReport?.id}/select/disbursement`,
+            label: 'Add an independent expenditure',
+            routerLink: `/reports/f24/report/${activeReport?.id}/transactions/select/independent-expenditures`,
           },
         ];
 

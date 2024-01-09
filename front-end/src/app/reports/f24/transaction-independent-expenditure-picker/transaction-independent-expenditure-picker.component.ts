@@ -14,11 +14,10 @@ import {
   ScheduleETransactionTypes,
 } from 'app/shared/models/sche-transaction.model';
 
-type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
-
 @Component({
   selector: 'app-transaction-independent-expenditure-picker',
   templateUrl: './transaction-independent-expenditure-picker.component.html',
+  styleUrls: ['./transaction-independent-expenditure-picker.component.scss'],
 })
 export class TransactionIndependentExpenditurePickerComponent extends DestroyerComponent implements OnInit {
   transactionTypeLabels = ScheduleETransactionTypeLabels;

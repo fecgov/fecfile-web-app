@@ -53,6 +53,7 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { SupportOpposeInputComponent } from './components/inputs/support-oppose-input/support-oppose-input.component';
 import { SingleClickDirective } from './directives/single-click.directive';
 import { RippleModule } from 'primeng/ripple';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { RippleModule } from 'primeng/ripple';
     FormsModule,
     DialogModule,
     DividerModule,
+    CardModule,
     ConfirmDialogModule,
     OverlayPanelModule,
     ReactiveFormsModule,

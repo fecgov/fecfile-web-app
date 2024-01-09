@@ -32,7 +32,6 @@ import { TransactionInputComponent } from './transaction-input/transaction-input
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 import { TransactionGuarantorsComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
 import { TransactionChildrenListContainerComponent } from './transaction-children-list-container/transaction-children-list-container.component';
-import { TransactionIndependentExpenditurePickerComponent } from '../f24/transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +49,6 @@ import { TransactionIndependentExpenditurePickerComponent } from '../f24/transac
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,
     TransactionNavigationComponent,
-    TransactionIndependentExpenditurePickerComponent,
   ],
   imports: [
     AccordionModule,

@@ -1,11 +1,16 @@
-<p-card>
-  <h1>{{ this.title }}</h1>
-  <p-divider></p-divider>
-  <div class="grid">
-    <div class="col-12" *ngFor="let transactionType of transactionTypes">
-      <a [routerLink]="getRouterLink(transactionType)">
-        {{ transactionType | label : transactionTypeLabels }}
-      </a>
+<div class="grid">
+  <h1 class="col-12 reduce-vert-spacing">{{ this.title }}</h1>
+  <h3 class="col-12 reduce-vert-spacing">Form 24 #1</h3>
+  <p-divider class="col-12 reduce-vert-spacing"></p-divider>
+  <p-card>
+    <h2 class="reduce-vert-spacing">Disbursements</h2>
+    <p-divider></p-divider>
+    <div class="grid">
+      <div class="col-12" *ngFor="let transactionType of transactionTypes">
+        <a [routerLink]="getRouterLink(transactionType)">
+          {{ transactionType | label : transactionTypeLabels }}
+        </a>
+      </div>
     </div>
-  </div>
-</p-card>
+  </p-card>
+</div>
