@@ -12,6 +12,7 @@ describe('Redesignated Utils', () => {
         form_type: 'SA11Ai',
         payee_organization_name: 'foo',
         expenditure_date: undefined,
+        expenditure_purpose_descrip: '',
         fields_to_validate: ['abc', 'expenditure_purpose_descrip']
       };
       transaction = SchBTransaction.fromJSON(data);

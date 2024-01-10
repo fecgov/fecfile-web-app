@@ -50,7 +50,7 @@ export class ReattRedesUtils {
       ReattributionFromUtils.overlayForm(fromForm, fromTransaction as SchATransaction, toForm);
     }
     if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_TO) {
-      RedesignationToUtils.overlayForm(toForm, toTransaction as SchBTransaction, fromTransaction as SchBTransaction);
+      RedesignationToUtils.overlayForm(toForm, toTransaction as SchBTransaction);
       RedesignationFromUtils.overlayForm(fromForm, fromTransaction as SchBTransaction, toForm);
     }
   }

@@ -22,9 +22,8 @@ export class RedesignatedUtils {
 
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }
-
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) => field !== transaction.transactionType.templateMap.purpose_description
+      (field) => field !== 'expenditure_purpose_descrip'
     );
 
     return transaction;

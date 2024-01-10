@@ -73,7 +73,7 @@ export class RedesignationToUtils {
     'category_code'
   ];
 
-  public static overlayForm(form: FormGroup, toTransaction: SchBTransaction, fromTransaction: SchBTransaction): FormGroup {
+  public static overlayForm(form: FormGroup, toTransaction: SchBTransaction): FormGroup {
     // Add additional amount validation
     form
       .get(toTransaction.transactionType.templateMap.amount)
@@ -93,10 +93,10 @@ export class RedesignationToUtils {
     form.get('memo_code')?.disable();
     // }
     form.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
-    form.get('payee_organization_name')?.setValue(fromTransaction.contact_1?.name);
-    form.get('beneficiary_committee_fec_id')?.setValue(fromTransaction.contact_1?.committee_id);
+    form.get('payee_organization_name')?.setValue(toTransaction.contact_1?.name);
+    form.get('beneficiary_committee_fec_id')?.setValue(toTransaction.contact_1?.committee_id);
     RedesignationToUtils.readOnlyFields.forEach((field) =>
-      form.get(fromTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
+      form.get(toTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
     );
     return form;
   }
