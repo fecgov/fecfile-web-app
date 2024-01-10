@@ -345,7 +345,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     });
   });
 
-  fdescribe('updateElectionData', () => {
+  describe('updateElectionData', () => {
     it("should bail if no templatemap or it's not schedule B", () => {
       component.childTransaction = undefined;
       component.updateElectionData();
