@@ -81,7 +81,6 @@ export class RedesignationFromUtils {
     const orgName = toForm.get(transaction.transactionType.templateMap.organization_name)?.value;
     const firstName = toForm.get(transaction.transactionType.templateMap.first_name)?.value;
     const lastName = toForm.get(transaction.transactionType.templateMap.last_name)?.value;
-    const amount = toForm.get(transaction.transactionType.templateMap.amount)?.value;
 
     if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
       purposeDescControl?.setValue(`Redesignation to ${lastName}, ${firstName}`);
