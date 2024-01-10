@@ -77,7 +77,6 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
               {
                 label: 'View print preview',
                 routerLink: `/reports/f24/web-print/${activeReport?.id}`,
-                disabled: true,
               },
               {
                 label: 'Add a report level memo',
