@@ -57,6 +57,7 @@ export class LoginService {
         window.location.href = environment.loginDotGovLogoutUrl;
       }
     }
+    return false;
   }
 
   public clearUserLoggedInCookies() {
