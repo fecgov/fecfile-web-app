@@ -1,7 +1,7 @@
 <div
   class="grid"
   *ngIf="
-    isEditable && !!!transactionType?.getUseParentContact(transaction) && !!!transactionType?.hidePrimaryContactLookup
+    isEditable && !transactionType?.getUseParentContact(transaction) && !transactionType?.hidePrimaryContactLookup
   "
 >
   <div class="col-12">
@@ -27,7 +27,7 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [entityRole]="this.form.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
-      [includeFecId]="!!transactionType.hasCommitteeFecId()"
+      [includeFecId]="transactionType.hasCommitteeFecId()"
     ></app-committee-input>
   </ng-container>
   <ng-container *ngIf="this.form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
@@ -188,10 +188,12 @@
     <ng-container *ngIf="transaction?.transactionType?.hasSupportOpposeCode()">
       <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted"></app-support-oppose-input>
     </ng-container>
-    <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation(form)">
+    <ng-container
+      *ngIf="transaction?.transactionType?.hasCandidateInformation(form) && !transactionType?.hidePrimaryContactLookup ">
       <label for="contact_2"
-        >LOOKUP
-        <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container></label
+      >LOOKUP
+        <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form) ">(OPTIONAL)</ng-container>
+      </label
       >
       <app-transaction-contact-lookup
         contactProperty="contact_2"
@@ -207,7 +209,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
-          [hasCandidateOfficeInput]="!!transactionType.hasCandidateOffice()"
+          [hasCandidateOfficeInput]="transactionType.hasCandidateOffice()"
         ></app-candidate-input>
       </ng-container>
     </ng-container>

@@ -24,7 +24,7 @@ export class RedesignatedUtils {
     }
 
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) => field !== 'expenditure_purpose_descrip'
+      (field) => field !== transaction.transactionType.templateMap.purpose_description
     );
 
     return transaction;
