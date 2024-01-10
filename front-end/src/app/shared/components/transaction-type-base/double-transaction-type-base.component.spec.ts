@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -22,6 +22,7 @@ import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-t
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { ReattRedesTypes, ReattRedesUtils } from "../../utils/reatt-redes/reatt-redes.utils";
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [
@@ -251,6 +252,25 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       expect(function () {
         component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
       }).toThrow(new Error('Fecfile: No transactions submitted for double-entry transaction form.'));
+    });
+  });
+
+  describe('reattribution and redesignation', () => {
+    it('should update child primary contacts', () => {
+      if (!component.transaction) throw Error("Bad test setup");
+      const isReatRedesSpy = spyOn(ReattRedesUtils, 'isReattRedes').and.callThrough();
+      const overlaySpy = spyOn(ReattRedesUtils, 'overlayForms').and.callThrough();
+      const childFormSpy = spyOn(component, 'childUpdateFormWithPrimaryContact');
+      const primaryContactSpy = spyOn(component, 'updateFormWithPrimaryContact');
+      const updateElectionDataSpy = spyOn(component, 'updateElectionData');
+      component.transaction.reatt_redes = component.transaction;
+      (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      component.ngOnInit();
+      expect(isReatRedesSpy).toHaveBeenCalledTimes(1);
+      expect(overlaySpy).toHaveBeenCalledTimes(1);
+      expect(childFormSpy).toHaveBeenCalledTimes(1);
+      expect(primaryContactSpy).toHaveBeenCalledTimes(1);
+      expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -136,11 +136,11 @@ describe('ReattRedesUtils', () => {
 
       control.setValue(-10);
       validatorResult = validatorFunction(control);
-      expect(validatorResult && validatorResult['exclusiveMin']['exclusiveMin']).toBe(0);
+      expect(validatorResult?.['exclusiveMin']['exclusiveMin']).toBe(0);
 
       control.setValue(50);
       validatorResult = validatorFunction(control);
-      expect(validatorResult && validatorResult['max']['max']).toBe(25);
+      expect(validatorResult?.['max']['max']).toBe(25);
     });
   });
 

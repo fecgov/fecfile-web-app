@@ -257,7 +257,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     );
   }
 
-  private updateElectionData() {
+  updateElectionData() {
     const templateMap = this.transaction?.transactionType?.templateMap;
     const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
     if (!templateMap || !schedB) return;

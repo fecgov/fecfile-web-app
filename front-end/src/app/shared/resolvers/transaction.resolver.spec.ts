@@ -59,7 +59,7 @@ describe('TransactionResolver', () => {
     expect(resolver).toBeTruthy();
   });
 
-  describe('resolve', () => {
+  describe('resolve existing', () => {
     it('should return an existing transaction', () => {
       const route = {
         queryParamMap: convertToParamMap({}),
@@ -75,17 +75,6 @@ describe('TransactionResolver', () => {
         if (response) {
           expect('Offsets to Operating Expenditures').toEqual(response.transactionType?.title || '');
         }
-      });
-    });
-
-    it('should return undefined', () => {
-      const route = {
-        queryParamMap: convertToParamMap({}),
-        paramMap: convertToParamMap({transactionId: undefined}),
-      };
-
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
-        expect(response).toEqual(undefined);
       });
     });
 
@@ -106,6 +95,19 @@ describe('TransactionResolver', () => {
       });
     });
 
+    it('should return undefined', () => {
+      const route = {
+        queryParamMap: convertToParamMap({}),
+        paramMap: convertToParamMap({transactionId: undefined}),
+      };
+
+      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
+        expect(response).toEqual(undefined);
+      });
+    });
+  });
+
+  describe('resolve', () => {
     it('should return a child transaction', () => {
       const route = {
         queryParamMap: convertToParamMap({}),
