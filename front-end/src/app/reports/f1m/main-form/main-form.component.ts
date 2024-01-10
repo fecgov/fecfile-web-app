@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, AbstractControl, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs';
@@ -85,7 +85,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
     this.contactAffiliatedLookupControl = this.form.get('contactAffiliatedLookup');
-    // this.contactAffiliatedLookupControl?.addValidators(Validators.required);
 
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
       ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
