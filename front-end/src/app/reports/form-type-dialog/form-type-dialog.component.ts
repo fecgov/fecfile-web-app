@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form24 } from 'app/shared/models/form-24.model';
-import { Observable, filter, of, takeUntil } from 'rxjs';
+import { Observable, filter, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
