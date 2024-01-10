@@ -9,6 +9,8 @@ import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,8 +21,10 @@ import { InputTextModule } from 'primeng/inputtext';
     ConfirmDialogModule,
     DividerModule,
     DropdownModule,
+    CardModule,
     InputTextareaModule,
     InputTextModule,
   ],
+  declarations: [TransactionIndependentExpenditurePickerComponent],
 })
 export class F24Module {}
