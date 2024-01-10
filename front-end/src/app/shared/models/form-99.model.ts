@@ -17,6 +17,8 @@ export class Form99 extends Report {
   schema = f99Schema;
   report_type = ReportTypes.F99;
   form_type = F99FormTypes.F99;
+  override submitAlertText =
+    'Are you sure you want to submit this form electronically? Please note that you cannot undo this action.';
 
   get formLabel() {
     return 'FORM 99';
