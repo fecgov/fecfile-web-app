@@ -94,7 +94,7 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transactionType.showAggregate && !transaction.force_unaggregated) {
+    if (transactionType.showAggregate) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),
@@ -203,7 +203,9 @@ export class TransactionFormUtils {
   ) {
     const key = previousTransaction?.transactionType?.templateMap[field] as keyof ScheduleTransaction;
     const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
-    if (transaction.transactionType?.isRefund) {
+    if (transaction.force_unaggregated) {
+      form.get(templateMap[field])?.setValue(previousAggregate);
+    } else if (transaction.transactionType?.isRefund) {
       form.get(templateMap[field])?.setValue(previousAggregate - +amount);
     } else {
       form.get(templateMap[field])?.setValue(previousAggregate + +amount);
