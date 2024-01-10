@@ -43,8 +43,8 @@ export class RedesignationFromUtils {
     // Remove purpose description and memo code from list of fields to validate on the backend
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
       (field) =>
-        field !== transaction.transactionType.templateMap.purpose_description &&
-        field !== transaction.transactionType.templateMap.memo_code
+        field !== 'expenditure_purpose_descrip' &&
+        field !== 'memo_code'
     );
     return transaction;
   }

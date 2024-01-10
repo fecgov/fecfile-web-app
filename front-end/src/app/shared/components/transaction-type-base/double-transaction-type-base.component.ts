@@ -209,7 +209,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
 
-  protected updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
+  updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.
@@ -258,27 +258,24 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   updateElectionData() {
-    const templateMap = this.transaction?.transactionType?.templateMap;
     const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
-    if (!templateMap || !schedB) return;
-    this.childForm.get(templateMap.election_code)?.setValue(schedB.election_code);
-    this.childForm.get(templateMap.election_other_description)?.setValue(schedB.election_other_description);
-    this.childForm.get(templateMap.category_code)?.setValue(schedB.category_code);
-    this.form.get(templateMap.category_code)?.setValue(schedB.category_code);
+    if (!schedB) return;
+    this.form.get('category_code')?.setValue(schedB.category_code);
+    this.form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
+    this.form.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
+    this.form.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+    this.form.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
+    this.form.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
+    this.form.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
 
-    this.form.get(templateMap.candidate_fec_id)?.setValue(schedB.beneficiary_candidate_fec_id);
-    this.form.get(templateMap.candidate_last_name)?.setValue(schedB.beneficiary_candidate_last_name);
-    this.form.get(templateMap.candidate_first_name)?.setValue(schedB.beneficiary_candidate_first_name);
-    this.form.get(templateMap.candidate_office)?.setValue(schedB.beneficiary_candidate_office);
-    this.form.get(templateMap.candidate_state)?.setValue(schedB.beneficiary_candidate_state);
-    this.form.get(templateMap.candidate_district)?.setValue(schedB.beneficiary_candidate_district);
-
-    this.childForm.get(templateMap.category_code)?.setValue(schedB.category_code);
-    this.childForm.get(templateMap.candidate_fec_id)?.setValue(schedB.beneficiary_candidate_fec_id);
-    this.childForm.get(templateMap.candidate_last_name)?.setValue(schedB.beneficiary_candidate_last_name);
-    this.childForm.get(templateMap.candidate_first_name)?.setValue(schedB.beneficiary_candidate_first_name);
-    this.childForm.get(templateMap.candidate_office)?.setValue(schedB.beneficiary_candidate_office);
-    this.childForm.get(templateMap.candidate_state)?.setValue(schedB.beneficiary_candidate_state);
-    this.childForm.get(templateMap.candidate_district)?.setValue(schedB.beneficiary_candidate_district);
+    this.childForm.get('election_code')?.setValue(schedB.election_code);
+    this.childForm.get('election_other_description')?.setValue(schedB.election_other_description);
+    this.childForm.get('category_code')?.setValue(schedB.category_code);
+    this.childForm.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
+    this.childForm.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
+    this.childForm.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+    this.childForm.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
+    this.childForm.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
+    this.childForm.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
   }
 }
