@@ -7,7 +7,7 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { Report } from 'app/shared/models/report.model';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
@@ -83,7 +83,9 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   }
 
   getReportPayload(): Report {
-    return Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
+    const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
+    this.updateContactsWithForm(this.report, this.form);
+    return Object.assign(this.report, formValues);
   }
 
   override ngOnInit(): void {
@@ -178,5 +180,23 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       concatAll(),
       reduce((accumulator, confirmed) => accumulator && confirmed)
     );
+  }
+
+  updateContactsWithForm(report: Form1M, form: FormGroup) {
+    Object.entries(contactConfigs).forEach(([contactKey, config]: [string, { [formField: string]: string }]) => {
+      if (report[contactKey as keyof Form1M]) {
+        const contact = report[contactKey as keyof Form1M] as Contact;
+        const contactChanges = TransactionContactUtils.getContactChanges(
+          form,
+          contact,
+          templateMapConfigs[contactKey] as TransactionTemplateMapType,
+          config
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
+          contact[property] = value as never;
+        });
+      }
+    });
   }
 }
