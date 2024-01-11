@@ -8,7 +8,7 @@ import { ReportService } from '../../../../shared/services/report.service';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.utils';
-import { SidebarState } from '../../sidebar.component';
+import { SidebarState, ReportSidebarSection } from '../../sidebar.component';
 
 @Component({
   selector: 'app-f1m-menu',
@@ -31,7 +31,63 @@ export class F1MMenuComponent extends DestroyerComponent implements OnInit {
       takeUntil(this.destroy$),
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       switchMap(([sidebarState, activeReport]: [SidebarState, Report | undefined]) => {
-        return of([] as MenuItem[]);
+        // const isEditable = this.reportService.isEditable(activeReport);
+
+        return of([
+          {
+            label: 'CREATE A REPORT',
+            expanded: sidebarState?.section == ReportSidebarSection.CREATE,
+            items: [
+              {
+                label: 'Edit your report',
+                routerLink: [`/reports/f1m/edit/${activeReport?.id}`],
+              },
+            ],
+          },
+          {
+            label: 'REVIEW A REPORT',
+            expanded: sidebarState?.section == ReportSidebarSection.REVIEW,
+            items: [
+              // {
+              //   label: 'View summary page',
+              //   routerLink: [`/reports/f1m/summary/${activeReport?.id}`],
+              // },
+              // {
+              //   label: 'View detailed summary page',
+              //   routerLink: [`/reports/f1m/detailed-summary/${activeReport?.id}`],
+              // },
+              // {
+              //   label: 'View print preview',
+              //   routerLink: [`/reports/f1m/web-print/${activeReport?.id}`],
+              // },
+              // {
+              //   label: 'Add a report level memo',
+              //   routerLink: [`/reports/f1m/memo/${activeReport?.id}`],
+              //   visible: isEditable,
+              // },
+            ],
+          },
+          {
+            label: 'SIGN & SUBMIT',
+            expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
+            items: [
+              // {
+              //   label: 'Confirm information',
+              //   routerLink: [`/reports/f1m/submit/step1/${activeReport?.id}`],
+              //   visible: isEditable,
+              // },
+              // {
+              //   label: 'Submit report',
+              //   routerLink: [`/reports/f1m/submit/step2/${activeReport?.id}`],
+              //   visible: isEditable,
+              // },
+              // {
+              //   label: 'Report status',
+              //   routerLink: [`/reports/f1m/submit/status/${activeReport?.id}`],
+              // },
+            ],
+          },
+        ] as MenuItem[]);
       })
     );
   }

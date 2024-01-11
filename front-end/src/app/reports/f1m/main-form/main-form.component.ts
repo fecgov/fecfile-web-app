@@ -82,12 +82,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     super(store, fb, reportService, messageService, router, activatedRoute);
   }
 
-  getReportPayload(): Report {
-    const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
-    this.updateContactsWithForm(this.report, this.form);
-    return Object.assign(this.report, formValues);
-  }
-
   override ngOnInit(): void {
     super.ngOnInit();
 
@@ -97,6 +91,11 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       .subscribe((activeReport) => {
         if (this.reportId) {
           this.report = activeReport as Form1M;
+
+          // Set the statusBy radio button based on form values
+          if (this.report.affiliated_committee_name) {
+            this.form.get('statusBy')?.setValue('affiliation');
+          }
         }
       });
 
@@ -108,11 +107,16 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
       ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
       if (value === 'affiliation') {
-        this.contactAffiliatedLookupControl?.addValidators(Validators.required);
-        this.contactAffiliatedLookupControl?.updateValueAndValidity();
+        if (!this.report.affiliated_committee_name) {
+          this.contactAffiliatedLookupControl?.addValidators(Validators.required);
+          this.contactAffiliatedLookupControl?.updateValueAndValidity();
+        }
         this.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
         this.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
         this.form.get('affiliated_committee_name')?.addValidators(Validators.required);
+      } else {
+        this.contactAffiliatedLookupControl?.clearValidators();
+        this.contactAffiliatedLookupControl?.updateValueAndValidity();
       }
     });
   }
@@ -123,6 +127,12 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.form.get('affiliated_committee_name')?.setValue($event.value.name);
     this.contactAffiliatedLookupControl?.clearValidators();
     this.contactAffiliatedLookupControl?.updateValueAndValidity();
+  }
+
+  getReportPayload(): Report {
+    const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
+    this.updateContactsWithForm(this.report, this.form);
+    return Object.assign(this.report, formValues);
   }
 
   public override save(jump: 'continue' | undefined = undefined) {

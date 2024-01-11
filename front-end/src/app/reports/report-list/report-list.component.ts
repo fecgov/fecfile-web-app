@@ -68,6 +68,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         break;
       case ReportTypes.F24:
         this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+        break;
+      case ReportTypes.F1M:
+        this.router.navigateByUrl(`/reports/f1m/edit/${item.id}`);
+        break;
     }
   }
 
