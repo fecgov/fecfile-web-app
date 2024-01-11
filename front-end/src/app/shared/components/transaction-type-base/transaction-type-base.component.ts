@@ -18,7 +18,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
+import { concatAll, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
