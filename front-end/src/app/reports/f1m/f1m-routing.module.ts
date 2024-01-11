@@ -6,6 +6,8 @@ import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolve
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { PrintPreviewComponent } from '../shared/print-preview/print-preview.component';
 import { Report } from 'app/shared/models/report.model';
+import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
+import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guard';
 
 const routes: Routes = [
   {
@@ -30,6 +32,18 @@ const routes: Routes = [
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
       getContinueUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
+    },
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'memo/:reportId',
+    title: 'Add a report level memo',
+    component: ReportLevelMemoComponent,
+    canActivate: [ReportIsEditableGuard],
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    data: {
+      sidebarSection: ReportSidebarSection.REVIEW,
+      getNextUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
