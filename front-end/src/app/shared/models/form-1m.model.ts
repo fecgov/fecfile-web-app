@@ -32,7 +32,7 @@ export class Form1M extends Report {
   }
 
   get formSubLabel() {
-    return '';
+    return 'NOTIFICATION OF MULTICANDIDATE STATUS';
   }
 
   get versionLabel() {

@@ -31,7 +31,7 @@ const routes: Routes = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
@@ -43,7 +43,7 @@ const routes: Routes = [
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
+      getNextUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
