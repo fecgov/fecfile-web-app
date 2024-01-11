@@ -133,7 +133,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     this.confirmation$.subscribe((confirmed: boolean) => {
       // if every confirmation was accepted
-      if (confirmed) this.store.dispatch(singleClickEnableAction()); // super.save(jump);
+      if (confirmed) super.save(jump);
       else this.store.dispatch(singleClickEnableAction());
     });
   }
@@ -171,24 +171,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       })
       .filter((message) => !!message)
       .map((message: string) => {
-        return new Observable<boolean>((subscriber) => {
-          this.confirmationService.confirm({
-            key: 'dialog',
-            header: 'Confirm',
-            icon: 'pi pi-info-circle',
-            message: message,
-            acceptLabel: 'Continue',
-            rejectLabel: 'Cancel',
-            accept: () => {
-              subscriber.next(true);
-              subscriber.complete();
-            },
-            reject: () => {
-              subscriber.next(false);
-              subscriber.complete();
-            },
-          });
-        }).pipe(delay(500));
+        return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, 'dialog');
       });
 
     return from([of(true), ...confirmations$]).pipe(

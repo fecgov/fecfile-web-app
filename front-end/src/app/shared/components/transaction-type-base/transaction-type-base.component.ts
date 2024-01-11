@@ -172,24 +172,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       })
       .filter((message) => !!message)
       .map((message: string) => {
-        return new Observable<boolean>((subscriber) => {
-          this.confirmationService.confirm({
-            key: targetDialog,
-            header: 'Confirm',
-            icon: 'pi pi-info-circle',
-            message: message,
-            acceptLabel: 'Continue',
-            rejectLabel: 'Cancel',
-            accept: () => {
-              subscriber.next(true);
-              subscriber.complete();
-            },
-            reject: () => {
-              subscriber.next(false);
-              subscriber.complete();
-            },
-          });
-        }).pipe(delay(500));
+        return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, targetDialog);
       });
 
     return from([of(true), ...confirmations$]).pipe(
