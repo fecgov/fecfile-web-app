@@ -15,6 +15,7 @@ export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
 
 export class Form99 extends Report {
   override schema = f99Schema;
+  override apiToken = 'form-99';
   override report_type = ReportTypes.F99;
   override form_type = F99FormTypes.F99;
   override submitAlertText =

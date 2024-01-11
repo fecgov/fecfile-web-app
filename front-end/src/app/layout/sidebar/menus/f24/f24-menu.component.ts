@@ -65,16 +65,6 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
             expanded: sidebarState?.section == ReportSidebarSection.REVIEW,
             items: [
               {
-                label: 'View summary page',
-                routerLink: `/reports/f24/summary/${activeReport?.id}`,
-                disabled: true,
-              },
-              {
-                label: 'View detailed summary page',
-                routerLink: `/reports/f24/detailed-summary/${activeReport?.id}`,
-                disabled: true,
-              },
-              {
                 label: 'View print preview',
                 routerLink: `/reports/f24/web-print/${activeReport?.id}`,
               },

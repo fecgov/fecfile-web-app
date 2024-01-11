@@ -17,6 +17,7 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
 
 export class Form24 extends Report {
   override schema = f24Schema;
+  override apiToken = 'form-24';
   override report_type = ReportTypes.F24;
   override form_type = F24FormTypes.F24N;
   get formLabel() {
@@ -29,6 +30,10 @@ export class Form24 extends Report {
 
   get versionLabel() {
     return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+  }
+
+  override get canAmend(): boolean {
+    return this.report_status === 'Submission success';
   }
 
   report_type_24_48: '24' | '48' | undefined;

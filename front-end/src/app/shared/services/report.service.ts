@@ -90,6 +90,6 @@ export class ReportService implements TableListService<Report> {
   }
 
   public startAmendment(report: Report): Observable<string> {
-    return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
+    return this.apiService.post(`${this.apiEndpoint}/${report.apiToken}/${report.id}/amend/`, {});
   }
 }

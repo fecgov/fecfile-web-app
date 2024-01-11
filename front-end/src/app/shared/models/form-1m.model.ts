@@ -23,6 +23,7 @@ export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
   override schema = f1mSchema;
+  override apiToken = 'form-1m';
   override report_type = ReportTypes.F1M;
   override form_type = F1MFormTypes.F1MN;
 
