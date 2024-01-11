@@ -10,7 +10,6 @@ import { TransactionContactUtils } from './transaction-contact.utils';
 import { Subject } from 'rxjs';
 import { SelectItem } from 'primeng/api';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 describe('ContactUtils', () => {
