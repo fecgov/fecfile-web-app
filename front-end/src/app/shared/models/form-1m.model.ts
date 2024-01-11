@@ -1,5 +1,5 @@
 import { Report, ReportTypes } from './report.model';
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
@@ -100,7 +100,9 @@ export class Form1M extends Report {
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
 
+  @Type(() => Contact)
   contact_affiliated?: Contact;
+  contact_affiliated_id?: string;
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any

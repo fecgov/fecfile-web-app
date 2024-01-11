@@ -29,7 +29,7 @@ const contactConfigs: { [contactKey: string]: { [formField: string]: string } } 
 const templateMapConfigs: { [contactKey: string]: { [formField: string]: string } } = {
   contact_affiliated: {
     committee_name: 'affiliated_committee_name',
-    committee_fec_id: 'affiliated_date_committee_fec_id',
+    committee_fec_id: 'affiliated_committee_fec_id',
   },
 };
 
@@ -90,7 +90,10 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((activeReport) => {
         if (this.reportId) {
-          this.report = activeReport as Form1M;
+          // A deep copy of activeReport has to be made because the actual activeReport
+          // object is set to read-only by the NgRx store.
+          this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(activeReport)));
+          if (this.report?.contact_affiliated) this.report.contact_affiliated_id = this.report.contact_affiliated.id;
 
           // Set the statusBy radio button based on form values
           if (this.report.affiliated_committee_name) {
