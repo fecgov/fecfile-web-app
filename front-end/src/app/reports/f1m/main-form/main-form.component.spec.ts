@@ -5,7 +5,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { AppSelectButtonComponent } from 'app/shared/components/app-selectbutton.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -19,7 +19,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { Form1M } from 'app/shared/models/form-1m.model';
-import { ConfirmationService } from 'primeng/api';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
