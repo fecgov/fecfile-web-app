@@ -18,7 +18,8 @@ export class TransactionContactUtils {
     contactType: ContactTypes,
     form: FormGroup,
     templateMap: TransactionTemplateMapType,
-    contactKey: string
+    contactKey: string,
+    messagePrologue = 'By saving this transaction'
   ): string {
     let confirmationContactTitle = '';
     if (!templateMap) {
@@ -50,7 +51,7 @@ export class TransactionContactUtils {
         }</b>`;
         break;
     }
-    return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`;
+    return `${messagePrologue}, you're also creating a new ${confirmationContactTitle}.`;
   }
 
   /**

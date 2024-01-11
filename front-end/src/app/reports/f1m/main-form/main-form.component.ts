@@ -153,7 +153,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
               contact.type,
               form,
               templateMapConfigs[contactKey] as TransactionTemplateMapType,
-              contactKey
+              contactKey,
+              'By saving this report'
             );
           }
           const changes = TransactionContactUtils.getContactChanges(
