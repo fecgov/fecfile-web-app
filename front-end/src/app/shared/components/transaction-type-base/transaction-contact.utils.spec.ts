@@ -17,10 +17,6 @@ describe('ContactUtils', () => {
   let form: FormGroup;
   let selectItem: SelectItem<Contact>;
   let contactId$: Subject<string>;
-  let testIndividualTransaction: SchATransaction;
-  let testOrganizationTransaction: SchATransaction;
-  let testCommitteeTransaction: SchATransaction;
-  let testCandidateTransaction: SchATransaction;
 
   beforeEach(() => {
     form = new FormGroup({
@@ -68,26 +64,12 @@ describe('ContactUtils', () => {
     };
 
     contactId$ = new Subject();
-
-    testIndividualTransaction = SchATransaction.fromJSON({
-      entity_type: ContactTypes.INDIVIDUAL,
-    });
-    testOrganizationTransaction = SchATransaction.fromJSON({
-      entity_type: ContactTypes.ORGANIZATION,
-    });
-    testCommitteeTransaction = SchATransaction.fromJSON({
-      entity_type: ContactTypes.COMMITTEE,
-    });
-    testCandidateTransaction = SchATransaction.fromJSON({
-      entity_type: ContactTypes.CANDIDATE,
-    });
   });
 
   it('test getCreateTransactionContactConfirmationMessage', () => {
     let output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.INDIVIDUAL,
       form,
-      testIndividualTransaction,
       testTemplateMap,
       'contact_1'
     );
@@ -98,7 +80,6 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.COMMITTEE,
       form,
-      testCommitteeTransaction,
       testTemplateMap,
       'contact_1'
     );
@@ -109,7 +90,6 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.COMMITTEE,
       form,
-      testCommitteeTransaction,
       testTemplateMap,
       'contact_3'
     );
@@ -120,7 +100,6 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.ORGANIZATION,
       form,
-      testOrganizationTransaction,
       testTemplateMap,
       'contact_1'
     );
@@ -131,7 +110,6 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.ORGANIZATION,
       form,
-      testOrganizationTransaction,
       testTemplateMap,
       'contact_2'
     );
@@ -142,7 +120,6 @@ describe('ContactUtils', () => {
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.CANDIDATE,
       form,
-      testCandidateTransaction,
       testTemplateMap,
       'contact_2'
     );
