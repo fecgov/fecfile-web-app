@@ -152,7 +152,7 @@ describe('Loans', () => {
     PageUtils.clickButton('Save & add loan guarantor');
     cy.wait('@saveGuarantor');
     PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-    PageUtils.clickButton('Cancel', '', true);
+    PageUtils.clickButton('Cancel');
 
     PageUtils.urlCheck('/list');
     cy.contains('Loan By Committee').click();
