@@ -17,7 +17,6 @@ export class TransactionContactUtils {
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
-    transaction: Transaction,
     templateMap: TransactionTemplateMapType,
     contactKey: string
   ): string {

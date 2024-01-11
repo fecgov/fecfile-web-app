@@ -159,7 +159,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
-              transaction,
               templateMap,
               contactKey
             );

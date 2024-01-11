@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { takeUntil } from 'rxjs';
+import { takeUntil, of, from, Observable, delay, concatAll, reduce } from 'rxjs';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
@@ -16,6 +16,22 @@ import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model
 import { SelectItem } from 'primeng/api';
 import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
+
+const contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {
+  contact_affiliated: {
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+  },
+};
+
+const templateMapConfigs: { [contactKey: string]: { [formField: string]: string } } = {
+  contact_affiliated: {
+    committee_name: 'affiliated_committee_name',
+    committee_fec_id: 'affiliated_date_committee_fec_id',
+  },
+};
 
 @Component({
   selector: 'app-main-form',
@@ -60,7 +76,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     protected override reportService: Form1MService,
     protected override messageService: MessageService,
     protected override router: Router,
-    protected override activatedRoute: ActivatedRoute
+    protected override activatedRoute: ActivatedRoute,
+    protected confirmationService: ConfirmationService
   ) {
     super(store, fb, reportService, messageService, router, activatedRoute);
   }
@@ -104,5 +121,78 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.form.get('affiliated_committee_name')?.setValue($event.value.name);
     this.contactAffiliatedLookupControl?.clearValidators();
     this.contactAffiliatedLookupControl?.updateValueAndValidity();
+  }
+
+  public override save(jump: 'continue' | undefined = undefined) {
+    this.formSubmitted = true;
+
+    if (this.form.invalid) {
+      this.store.dispatch(singleClickEnableAction());
+      return;
+    }
+
+    this.confirmation$.subscribe((confirmed: boolean) => {
+      // if every confirmation was accepted
+      if (confirmed) this.store.dispatch(singleClickEnableAction()); // super.save(jump);
+      else this.store.dispatch(singleClickEnableAction());
+    });
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.report) return of(false);
+    return this.confirmWithUser(this.report, this.form);
+  }
+
+  confirmWithUser(report: Form1M, form: FormGroup) {
+    const confirmations$ = Object.entries(contactConfigs)
+      .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
+        if (report[contactKey as keyof Form1M]) {
+          const contact = report[contactKey as keyof Form1M] as Contact;
+          if (!contact.id) {
+            return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+              contact.type,
+              form,
+              templateMapConfigs[contactKey] as TransactionTemplateMapType,
+              contactKey
+            );
+          }
+          const changes = TransactionContactUtils.getContactChanges(
+            form,
+            contact,
+            templateMapConfigs[contactKey] as TransactionTemplateMapType,
+            config
+          );
+          if (changes.length > 0) {
+            return TransactionContactUtils.getContactChangesMessage(contact, changes);
+          }
+        }
+        return '';
+      })
+      .filter((message) => !!message)
+      .map((message: string) => {
+        return new Observable<boolean>((subscriber) => {
+          this.confirmationService.confirm({
+            key: 'dialog',
+            header: 'Confirm',
+            icon: 'pi pi-info-circle',
+            message: message,
+            acceptLabel: 'Continue',
+            rejectLabel: 'Cancel',
+            accept: () => {
+              subscriber.next(true);
+              subscriber.complete();
+            },
+            reject: () => {
+              subscriber.next(false);
+              subscriber.complete();
+            },
+          });
+        }).pipe(delay(500));
+      });
+
+    return from([of(true), ...confirmations$]).pipe(
+      concatAll(),
+      reduce((accumulator, confirmed) => accumulator && confirmed)
+    );
   }
 }
