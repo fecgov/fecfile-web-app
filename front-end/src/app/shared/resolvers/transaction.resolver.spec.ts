@@ -226,16 +226,6 @@ describe('TransactionResolver', () => {
     });
   });
 
-  // describe('resolveNewChildTransaction', () => {
-  //   it('should attach child for transaction with dependent child transaction type', () => {
-  //     resolver.resolveNewChildTransaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
-  //       if (transaction?.children) {
-  //         expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');
-  //       }
-  //     });
-  //   });
-  // });
-
   describe('resolveExistingTransactionFromId', () => {
     it('should throw an error if trying to resolve an invalid transaction type identifier', () => {
       spyOn(resolver.transactionService, 'get').and.returnValue(of({} as SchATransaction));
