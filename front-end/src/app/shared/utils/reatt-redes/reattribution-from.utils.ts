@@ -67,9 +67,9 @@ export class ReattributionFromUtils {
   ];
 
   public static overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
-    const purposeDescControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
+    const purposeDescriptionControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.
-    purposeDescControl?.clearValidators();
+    purposeDescriptionControl?.clearValidators();
     fromForm.get('memo_code')?.clearValidators();
 
     // Watch for changes to the "TO" transaction entity name and then update the "FROM" transaction expenditure purpose description.
@@ -79,9 +79,9 @@ export class ReattributionFromUtils {
       toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges ?? of(null),
     ]).subscribe(([orgName, firstName, lastName]) => {
       if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-        purposeDescControl?.setValue(`Reattribution to ${lastName}, ${firstName}`);
+        purposeDescriptionControl?.setValue(`Reattribution to ${lastName}, ${firstName}`);
       } else {
-        purposeDescControl?.setValue(`Reattribution to ${orgName}`);
+        purposeDescriptionControl?.setValue(`Reattribution to ${orgName}`);
       }
     });
 

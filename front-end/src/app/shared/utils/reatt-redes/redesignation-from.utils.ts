@@ -73,9 +73,9 @@ export class RedesignationFromUtils {
   ];
 
   public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
-    const purposeDescControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
+    const purposeDescriptionControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.
-    purposeDescControl?.clearValidators();
+    purposeDescriptionControl?.clearValidators();
     fromForm.get('memo_code')?.clearValidators();
 
     const orgName = toForm.get(transaction.transactionType.templateMap.organization_name)?.value;
@@ -83,9 +83,9 @@ export class RedesignationFromUtils {
     const lastName = toForm.get(transaction.transactionType.templateMap.last_name)?.value;
 
     if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-      purposeDescControl?.setValue(`Redesignation to ${lastName}, ${firstName}`);
+      purposeDescriptionControl?.setValue(`Redesignation to ${lastName}, ${firstName}`);
     } else {
-      purposeDescControl?.setValue(`Reattribution to ${orgName}`);
+      purposeDescriptionControl?.setValue(`Reattribution to ${orgName}`);
     }
 
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
