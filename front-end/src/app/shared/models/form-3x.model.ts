@@ -31,7 +31,7 @@ export class F3xCoverageDates {
 
 export class Form3X extends Report {
   override schema = f3xSchema;
-  override apiToken = 'form-3x';
+  override apiPathSuffix = 'form-3x';
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
