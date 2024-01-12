@@ -2,7 +2,6 @@ import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { getTransactionName, TransactionTypes } from '../../models/transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { ContactTypes } from "../../models/contact.model";
 import { TemplateMapKeyType } from "../../models/transaction-type.model";
 
 export class RedesignationToUtils {
@@ -70,7 +69,16 @@ export class RedesignationToUtils {
     'purpose_description',
     'committee_fec_id',
     'committee_name',
-    'category_code'
+    'category_code',
+    'candidate_fec_id',
+    'candidate_last_name',
+    'candidate_first_name',
+    'candidate_middle_name',
+    'candidate_prefix',
+    'candidate_suffix',
+    'candidate_office',
+    'candidate_state',
+    'candidate_district'
   ];
 
   public static overlayForm(form: FormGroup, toTransaction: SchBTransaction): FormGroup {
@@ -84,17 +92,7 @@ export class RedesignationToUtils {
     form.get('memo_code')?.clearValidators();
     form.get('memo_code')?.setValue(false);
 
-    // Memo Code required to be X unless original "Redesignated" transaction in current report period
-    // if (transaction.report_id === transaction.reatt_redes?.report_id) {
-    //   form.get('memo_code')?.setValue(false);
-    //   form.get('memo_code')?.enable();
-    // } else {
-    form.get('memo_code')?.setValue(true);
-    form.get('memo_code')?.disable();
-    // }
-    form.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
-    form.get('payee_organization_name')?.setValue(toTransaction.contact_1?.name);
-    form.get('beneficiary_committee_fec_id')?.setValue(toTransaction.contact_1?.committee_id);
+
     RedesignationToUtils.readOnlyFields.forEach((field) =>
       form.get(toTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
     );

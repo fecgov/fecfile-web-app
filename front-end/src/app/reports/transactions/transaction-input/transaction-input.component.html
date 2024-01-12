@@ -189,20 +189,22 @@
       <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted"></app-support-oppose-input>
     </ng-container>
     <ng-container
-      *ngIf="transaction?.transactionType?.hasCandidateInformation(form) && !transactionType?.hidePrimaryContactLookup ">
-      <label for="contact_2"
-      >LOOKUP
-        <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form) ">(OPTIONAL)</ng-container>
-      </label
-      >
-      <app-transaction-contact-lookup
-        contactProperty="contact_2"
-        [transaction]="transaction"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        [contactTypeOptions]="candidateContactTypeOptions"
-        (contactSelect)="updateFormWithCandidateContact($event)"
-      ></app-transaction-contact-lookup>
+      *ngIf="transaction?.transactionType?.hasCandidateInformation(form) ">
+      <ng-container *ngIf=" !transactionType?.hidePrimaryContactLookup">
+        <label for="contact_2"
+        >LOOKUP
+          <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form) ">(OPTIONAL)</ng-container>
+        </label
+        >
+        <app-transaction-contact-lookup
+          contactProperty="contact_2"
+          [transaction]="transaction"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [contactTypeOptions]="candidateContactTypeOptions"
+          (contactSelect)="updateFormWithCandidateContact($event)"
+        ></app-transaction-contact-lookup>
+      </ng-container>
       <ng-container *ngIf="transaction?.contact_2">
         <app-candidate-input
           [transaction]="transaction"

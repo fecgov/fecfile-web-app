@@ -103,6 +103,12 @@ export abstract class DoubleTransactionTypeBaseComponent
         this.updateFormWithPrimaryContact({
           value: this.transaction?.reatt_redes?.contact_1,
         } as SelectItem);
+        this.updateFormWithSecondaryContact({
+          value: this.transaction?.reatt_redes?.contact_2,
+        } as SelectItem);
+        this.childUpdateFormWithSecondaryContact({
+          value: this.transaction?.reatt_redes?.contact_2,
+        } as SelectItem);
         this.updateElectionData();
       }
     }
