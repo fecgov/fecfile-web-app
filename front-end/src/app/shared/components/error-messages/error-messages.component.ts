@@ -20,7 +20,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() requiredTrueErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
   @Input() uniqueFecIdMessage = 'FEC IDs must be unique';
-  @Input() dateAfterMessage = "TO date must fall chronologically after FROM date";
+  @Input() isAfterMessage = 'TO date must fall chronologically after FROM date';
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {
@@ -143,8 +143,7 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
-  constructor(@Inject(LOCALE_ID) private localeId: string) {
-  }
+  constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
     if (!this.control) {
