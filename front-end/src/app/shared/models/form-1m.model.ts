@@ -1,9 +1,8 @@
 import { Report, ReportTypes } from './report.model';
 import { plainToClass, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { CandidateOfficeType } from './contact.model';
+import { Contact, CandidateOfficeType } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { Contact } from './contact.model';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -39,8 +38,13 @@ export class Form1M extends Report {
     return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  committee_type?: CommitteeType;
   committee_name?: string;
+  street_1?: string;
+  street_2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
   @Transform(BaseModel.dateTransform) affiliated_date_committee_fec_id?: Date;
@@ -100,6 +104,16 @@ export class Form1M extends Report {
   V_candidate_state?: string;
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
+
+  @Transform(BaseModel.dateTransform) date_of_original_registration?: Date;
+  @Transform(BaseModel.dateTransform) date_of_51st_contributor?: Date;
+  @Transform(BaseModel.dateTransform) date_committee_met_requirements?: Date;
+  treasurer_last_name?: string;
+  treasurer_first_name?: string;
+  treasurer_middle_name?: string;
+  treasurer_prefix?: string;
+  treasurer_suffix?: string;
+  @Transform(BaseModel.dateTransform) date_signed?: Date;
 
   @Type(() => Contact)
   contact_affiliated?: Contact;
