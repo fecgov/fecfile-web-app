@@ -133,7 +133,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   getReportPayload(): Report {
     const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
     this.updateContactsWithForm(this.report, this.form);
-    return formValues;
+    return Object.assign(this.report, formValues);
   }
 
   public override save(jump: 'continue' | undefined = undefined) {
