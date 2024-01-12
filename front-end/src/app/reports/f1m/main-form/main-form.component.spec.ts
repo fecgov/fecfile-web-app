@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MainFormComponent } from './main-form.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { initialState as initActiveReport } from 'app/store/active-report.reducer';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { AppSelectButtonComponent } from 'app/shared/components/app-selectbutton.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -17,14 +18,21 @@ import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
   let fixture: ComponentFixture<MainFormComponent>;
   let router: Router;
-  let form1mService: Form1MService;
+  const testActiveReport: Form1M = Form1M.fromJSON({ id: '99' });
+  const testMockStore = {
+    initialState: {
+      fecfile_online_activeReport: initActiveReport,
+    },
+    selectors: [{ selector: selectActiveReport, value: testActiveReport }],
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -50,23 +58,17 @@ describe('MainFormComponent', () => {
       ],
     });
     router = TestBed.inject(Router);
-    form1mService = TestBed.inject(Form1MService);
     fixture = TestBed.createComponent(MainFormComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
-  it('should go back', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.goBack();
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-  });
-
-  xit('should save', () => {
+  it('ngOnit should set form controls', () => {
+    fixture.detectChanges();
     component.form.patchValue({
       committee_type: 'X',
       filer_committee_id_number: 'C000000001',
@@ -79,21 +81,26 @@ describe('MainFormComponent', () => {
       affiliated_date_form_f1_filed: Date(),
       affiliated_committee_fec_id: 'C00000002',
       affiliated_committee_name: 'affiliated committee',
+      statusBy: '',
     });
-    const createSpy = spyOn(form1mService, 'create').and.returnValue(of(Form1M.fromJSON({})));
-    const updateSpy = spyOn(form1mService, 'update').and.returnValue(of(Form1M.fromJSON({})));
-    const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.save();
+    const contact_affiliated = Contact.fromJSON({
+      id: '10',
+    });
 
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-    expect(createSpy).toHaveBeenCalledTimes(1);
+    component.report = Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' });
+    component.reportId = '99';
+    component.report.contact_affiliated = contact_affiliated;
+    component.schema = schema;
 
-    component.reportId = '999';
-    component.report = Form1M.fromJSON({ id: '999' });
-    component.save('continue');
+    component.ngOnInit();
+    component.form.patchValue({ statusBy: 'affiliation' });
+    component.form.patchValue({ affiliated_committee_name: '' });
+    fixture.detectChanges();
+    expect(component.form.get('affiliated_committee_name')?.valid).toBeFalse();
 
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-    expect(updateSpy).toHaveBeenCalledTimes(1);
+    component.form.patchValue({ statusBy: 'qualification' });
+    fixture.detectChanges();
+    expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
   });
 });

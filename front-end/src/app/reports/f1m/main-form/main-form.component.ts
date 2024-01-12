@@ -91,7 +91,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           // A deep copy of activeReport has to be made because the actual activeReport
           // object is set to read-only by the NgRx store.
           this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(activeReport)));
-          if (this.report?.contact_affiliated) this.report.contact_affiliated_id = this.report.contact_affiliated.id;
 
           // Set the statusBy radio button based on form values
           if (this.report.affiliated_committee_name) {
@@ -110,15 +109,17 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       if (value === 'affiliation') {
         if (!this.report.affiliated_committee_name) {
           this.contactAffiliatedLookupControl?.addValidators(Validators.required);
-          this.contactAffiliatedLookupControl?.updateValueAndValidity();
         }
         this.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
         this.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
         this.form.get('affiliated_committee_name')?.addValidators(Validators.required);
       } else {
         this.contactAffiliatedLookupControl?.clearValidators();
-        this.contactAffiliatedLookupControl?.updateValueAndValidity();
       }
+      this.form.get('affiliated_date_form_f1_filed')?.updateValueAndValidity();
+      this.form.get('affiliated_committee_fec_id')?.updateValueAndValidity();
+      this.form.get('affiliated_committee_name')?.updateValueAndValidity();
+      this.contactAffiliatedLookupControl?.updateValueAndValidity();
     });
   }
 
