@@ -45,7 +45,7 @@ export class Form1M extends Report {
   @Transform(BaseModel.dateTransform) affiliated_date_committee_fec_id?: Date;
   affiliated_committee_name?: string;
 
-  I_candidate_id_number?: string;
+  I_candidate_id?: string;
   I_candidate_last_name?: string;
   I_candidate_first_name?: string;
   I_candidate_middle_name?: string;
@@ -56,7 +56,7 @@ export class Form1M extends Report {
   I_candidate_district?: string;
   @Transform(BaseModel.dateTransform) I_date_of_contribution?: Date;
 
-  II_candidate_id_number?: string;
+  II_candidate_id?: string;
   II_candidate_last_name?: string;
   II_candidate_first_name?: string;
   II_candidate_middle_name?: string;
@@ -67,7 +67,7 @@ export class Form1M extends Report {
   II_candidate_district?: string;
   @Transform(BaseModel.dateTransform) II_date_of_contribution?: Date;
 
-  III_candidate_id_number?: string;
+  III_candidate_id?: string;
   III_candidate_last_name?: string;
   III_candidate_first_name?: string;
   III_candidate_middle_name?: string;
@@ -78,7 +78,7 @@ export class Form1M extends Report {
   III_candidate_district?: string;
   @Transform(BaseModel.dateTransform) III_date_of_contribution?: Date;
 
-  IV_candidate_id_number?: string;
+  IV_candidate_id?: string;
   IV_candidate_last_name?: string;
   IV_candidate_first_name?: string;
   IV_candidate_middle_name?: string;
@@ -89,7 +89,7 @@ export class Form1M extends Report {
   IV_candidate_district?: string;
   @Transform(BaseModel.dateTransform) IV_date_of_contribution?: Date;
 
-  V_candidate_id_number?: string;
+  V_candidate_id?: string;
   V_candidate_last_name?: string;
   V_candidate_first_name?: string;
   V_candidate_middle_name?: string;
