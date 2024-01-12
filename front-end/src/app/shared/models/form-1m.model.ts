@@ -40,6 +40,7 @@ export class Form1M extends Report {
   }
 
   committee_type?: CommitteeType;
+  committee_name?: string;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
   @Transform(BaseModel.dateTransform) affiliated_date_committee_fec_id?: Date;

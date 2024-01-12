@@ -17,16 +17,14 @@ import { Form1MService } from 'app/shared/services/form-1m.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
   let fixture: ComponentFixture<MainFormComponent>;
-  let router: Router;
-  const testActiveReport: Form1M = Form1M.fromJSON({ id: '99' });
+  const testActiveReport: Form1M = Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' });
   const testMockStore = {
     initialState: {
       fecfile_online_activeReport: initActiveReport,
@@ -55,9 +53,14 @@ describe('MainFormComponent', () => {
         MessageService,
         FecDatePipe,
         provideMockStore(testMockStore),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: { reportId: '99' } },
+          },
+        },
       ],
     });
-    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(MainFormComponent);
     component = fixture.componentInstance;
   });
@@ -67,7 +70,12 @@ describe('MainFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('ngOnit should set form controls', () => {
+  it('ngOnInit should set up an edited report', () => {
+    fixture.detectChanges();
+    expect(component.form.get('statusBy')?.value).toBe('affiliation');
+  });
+
+  it('ngOnInit should set form controls', () => {
     fixture.detectChanges();
     component.form.patchValue({
       committee_type: 'X',
@@ -89,9 +97,7 @@ describe('MainFormComponent', () => {
     });
 
     component.report = Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' });
-    component.reportId = '99';
     component.report.contact_affiliated = contact_affiliated;
-    component.schema = schema;
 
     component.ngOnInit();
     component.form.patchValue({ statusBy: 'affiliation' });
@@ -102,5 +108,54 @@ describe('MainFormComponent', () => {
     component.form.patchValue({ statusBy: 'qualification' });
     fixture.detectChanges();
     expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
+  });
+
+  it('updateAffiliatedContact should set values in form', () => {
+    fixture.detectChanges();
+    const $event = {
+      value: Contact.fromJSON({
+        committee_id: 'C00000008',
+        name: 'xyz',
+      }),
+    };
+    component.updateAffiliatedContact($event);
+    expect(component.form.get('affiliated_committee_fec_id')?.value).toBe('C00000008');
+    expect(component.form.get('affiliated_committee_name')?.value).toBe('xyz');
+  });
+
+  it('getReportPayload should update and return the report properties', () => {
+    fixture.detectChanges();
+    component.form.patchValue({
+      committee_type: 'X',
+      filer_committee_id_number: 'C000000001',
+      committee_name: 'test committee',
+      street_1: '123 Main St.',
+      street_2: '',
+      city: 'test city',
+      state: 'DC',
+      zip: '22222',
+      affiliated_date_form_f1_filed: Date(),
+      affiliated_committee_fec_id: 'C00000002',
+      affiliated_committee_name: 'affiliated committee',
+      statusBy: '',
+    });
+
+    const contact_affiliated = Contact.fromJSON({
+      id: '10',
+      name: 'committee name',
+      committee_id: 'C000000009',
+    });
+
+    component.report = Form1M.fromJSON({
+      id: '99',
+      committee_name: 'replaced committee',
+      contact_affiliated: contact_affiliated,
+    });
+    component.report.contact_affiliated = contact_affiliated;
+
+    const payload = component.getReportPayload();
+    expect((payload as Form1M).contact_affiliated?.name).toBe('affiliated committee');
+    expect((payload as Form1M).contact_affiliated?.committee_id).toBe('C00000002');
+    expect((payload as Form1M).committee_name).toBe('test committee');
   });
 });
