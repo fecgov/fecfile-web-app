@@ -31,7 +31,7 @@ export class RedesignationFromUtils {
       dateLabel: 'REDESIGNATION DATE',
       amountLabel: 'REDESIGNATION AMOUNT',
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
-      hidePrimaryContactLookup: true,
+      hideContactLookup: true,
       // noop generatePurposeDescription to inform dynamic input label
       generatePurposeDescription: (transaction: SchBTransaction): string => {
         return transaction[

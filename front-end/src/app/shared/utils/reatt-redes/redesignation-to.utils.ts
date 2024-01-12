@@ -39,7 +39,7 @@ export class RedesignationToUtils {
         const name = getTransactionName(transaction.reatt_redes as SchBTransaction);
         return `Redesignation from ${name}`;
       },
-      hidePrimaryContactLookup: true,
+      hideContactLookup: true,
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend

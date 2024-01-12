@@ -26,7 +26,7 @@ export class ReattributionFromUtils {
       dateLabel: 'REATTRIBUTION DATE',
       amountLabel: 'REATTRIBUTED AMOUNT',
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
-      hidePrimaryContactLookup: true,
+      hideContactLookup: true,
       contactTypeOptions: [(transaction.reatt_redes as SchATransaction).entity_type],
       // noop generatePurposeDescription to inform dynamic input label
       generatePurposeDescription: (transaction: SchATransaction): string => {

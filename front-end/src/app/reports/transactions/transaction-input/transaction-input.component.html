@@ -1,7 +1,7 @@
 <div
   class="grid"
   *ngIf="
-    isEditable && !transactionType?.getUseParentContact(transaction) && !transactionType?.hidePrimaryContactLookup
+    isEditable && !transactionType?.getUseParentContact(transaction) && !transactionType?.hideContactLookup
   "
 >
   <div class="col-12">
@@ -190,7 +190,7 @@
     </ng-container>
     <ng-container
       *ngIf="transaction?.transactionType?.hasCandidateInformation(form) ">
-      <ng-container *ngIf=" !transactionType?.hidePrimaryContactLookup">
+      <ng-container *ngIf=" !transactionType?.hideContactLookup">
         <label for="contact_2"
         >LOOKUP
           <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form) ">(OPTIONAL)</ng-container>
