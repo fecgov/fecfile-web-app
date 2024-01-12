@@ -74,7 +74,7 @@ describe('ReattRedesUtils', () => {
       fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
 
       ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-      expect(toForm.get('memo_code')?.enabled).toBeFalse();
+      expect(toForm.get('memo_code')?.enabled).toBeTrue();
       expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
     });
   });
