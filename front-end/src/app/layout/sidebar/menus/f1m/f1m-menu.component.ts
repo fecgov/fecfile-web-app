@@ -56,15 +56,15 @@ export class F1MMenuComponent extends DestroyerComponent implements OnInit {
               //   label: 'View detailed summary page',
               //   routerLink: [`/reports/f1m/detailed-summary/${activeReport?.id}`],
               // },
-              // {
-              //   label: 'View print preview',
-              //   routerLink: [`/reports/f1m/web-print/${activeReport?.id}`],
-              // },
-              // {
-              //   label: 'Add a report level memo',
-              //   routerLink: [`/reports/f1m/memo/${activeReport?.id}`],
-              //   visible: isEditable,
-              // },
+              {
+                label: 'View print preview',
+                routerLink: [`/reports/f1m/web-print/${activeReport?.id}`],
+              },
+              {
+                label: 'Add a report level memo',
+                routerLink: [`/reports/f1m/memo/${activeReport?.id}`],
+                visible: isEditable,
+              },
             ],
           },
           {

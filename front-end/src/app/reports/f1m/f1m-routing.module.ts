@@ -10,6 +10,7 @@ import { Report } from 'app/shared/models/report.model';
 import { PrintPreviewComponent } from '../shared/print-preview/print-preview.component';
 import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
+import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,18 @@ const routes: Routes = [
     component: SubmitReportStatusComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'memo/:reportId',
+    title: 'Add a report level memo',
+    component: ReportLevelMemoComponent,
+    canActivate: [ReportIsEditableGuard],
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    data: {
+      sidebarSection: ReportSidebarSection.REVIEW,
+      getNextUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
+    },
     runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },

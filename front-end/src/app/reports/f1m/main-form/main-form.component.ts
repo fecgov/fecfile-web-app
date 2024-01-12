@@ -5,16 +5,14 @@ import { Store } from '@ngrx/store';
 import { takeUntil, of, from, Observable, concatAll, reduce } from 'rxjs';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { Report } from 'app/shared/models/report.model';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
-import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { SelectItem } from 'primeng/api';
-import { Contact } from 'app/shared/models/contact.model';
+import { ContactTypeLabels, ContactTypes, Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -29,7 +27,7 @@ const contactConfigs: { [contactKey: string]: { [formField: string]: string } } 
 const templateMapConfigs: { [contactKey: string]: { [formField: string]: string } } = {
   contact_affiliated: {
     committee_name: 'affiliated_committee_name',
-    committee_fec_id: 'affiliated_date_committee_fec_id',
+    committee_fec_id: 'affiliated_committee_fec_id',
   },
 };
 
@@ -90,7 +88,10 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((activeReport) => {
         if (this.reportId) {
-          this.report = activeReport as Form1M;
+          // A deep copy of activeReport has to be made because the actual activeReport
+          // object is set to read-only by the NgRx store.
+          this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(activeReport)));
+          if (this.report?.contact_affiliated) this.report.contact_affiliated_id = this.report.contact_affiliated.id;
 
           // Set the statusBy radio button based on form values
           if (this.report.affiliated_committee_name) {
@@ -132,7 +133,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   getReportPayload(): Report {
     const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
     this.updateContactsWithForm(this.report, this.form);
-    return Object.assign(this.report, formValues);
+    return formValues;
   }
 
   public override save(jump: 'continue' | undefined = undefined) {

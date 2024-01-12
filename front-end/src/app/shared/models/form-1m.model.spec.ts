@@ -1,4 +1,4 @@
-import { F1MFormTypes, Form1M } from "./form-1m.model";
+import { F1MFormTypes, Form1M } from './form-1m.model';
 
 describe('Form-1M', () => {
   it('should create an instance', () => {
@@ -22,7 +22,7 @@ describe('Form-1M', () => {
       committee_name: 'foo',
     };
     const form = Form1M.fromJSON(data);
-    expect(form.formSubLabel).toEqual('');
+    expect(form.formSubLabel).toEqual('NOTIFICATION OF MULTICANDIDATE STATUS');
   });
 
   describe('versionLabel', () => {
@@ -31,7 +31,7 @@ describe('Form-1M', () => {
         id: '999',
         form_type: F1MFormTypes.F1MN,
         committee_name: 'foo',
-        report_version: undefined
+        report_version: undefined,
       };
       const form = Form1M.fromJSON(data);
       expect(form.versionLabel).toEqual('Original');
@@ -42,7 +42,7 @@ describe('Form-1M', () => {
         id: '999',
         form_type: F1MFormTypes.F1MN,
         committee_name: 'foo',
-        report_version: '1'
+        report_version: '1',
       };
       const form = Form1M.fromJSON(data);
       expect(form.versionLabel).toEqual('Original 1');
