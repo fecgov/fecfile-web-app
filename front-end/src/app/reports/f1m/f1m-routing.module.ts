@@ -39,6 +39,18 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
   },
   {
+    path: 'memo/:reportId',
+    title: 'Add a report level memo',
+    component: ReportLevelMemoComponent,
+    canActivate: [ReportIsEditableGuard],
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    data: {
+      sidebarSection: ReportSidebarSection.REVIEW,
+      getNextUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
+    },
+    runGuardsAndResolvers: 'always',
+  },
+  {
     path: 'submit/step1/:reportId',
     title: 'Confirm information',
     component: SubmitReportStep1Component,
@@ -70,18 +82,6 @@ const routes: Routes = [
     component: SubmitReportStatusComponent,
     resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'memo/:reportId',
-    title: 'Add a report level memo',
-    component: ReportLevelMemoComponent,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
-    },
     runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
