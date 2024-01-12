@@ -110,28 +110,7 @@ export class TransactionResolver {
     }
     return of(transaction);
   }
-
-  // resolveNewChildTransaction(
-  //   parentTransactionId: string,
-  //   childTransactionTypeName: string
-  // ): Observable<Transaction | undefined> {
-  //   return this.transactionService.get(String(parentTransactionId)).pipe(
-  //     mergeMap((parentTransaction: Transaction) => {
-  //       // If there is a grandparent transaction, then we need to retrieve it
-  //       if (parentTransaction.parent_transaction_id) {
-  //         return this.transactionService.get(parentTransaction.parent_transaction_id).pipe(
-  //           map((grandparent) => {
-  //             parentTransaction.parent_transaction = grandparent;
-  //             return this.getNewChildTransaction(parentTransaction, childTransactionTypeName);
-  //           })
-  //         );
-  //       }
-  //       // Otherwise we just need to return an observable of the parent transaction
-  //       return of(this.getNewChildTransaction(parentTransaction, childTransactionTypeName));
-  //     })
-  //   );
-  // }
-
+  
   resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
     return this.transactionService.get(toId).pipe(
       map((to: Transaction) => {
