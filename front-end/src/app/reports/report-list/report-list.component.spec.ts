@@ -16,6 +16,7 @@ import { TableAction } from 'app/shared/components/table-list-base/table-list-ba
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { ReportService } from 'app/shared/services/report.service';
+import { Form1M } from 'app/shared/models/form-1m.model';
 import { of } from 'rxjs';
 
 describe('ReportListComponent', () => {
@@ -84,5 +85,12 @@ describe('ReportListComponent', () => {
     const item: Report = Form3X.fromJSON({ form_type: F3xFormTypes.F3XT });
     const name: string = component.displayName(item);
     expect(name).toBe(F3xFormTypes.F3XT);
+  });
+
+  it('edit a F1M should go to F1M edit page', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const item: Report = Form1M.fromJSON({ id: '99', report_type: ReportTypes.F1M });
+    component.editItem(item);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f1m/edit/99');
   });
 });
