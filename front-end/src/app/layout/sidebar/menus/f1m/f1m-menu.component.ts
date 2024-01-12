@@ -31,7 +31,7 @@ export class F1MMenuComponent extends DestroyerComponent implements OnInit {
       takeUntil(this.destroy$),
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       switchMap(([sidebarState, activeReport]: [SidebarState, Report | undefined]) => {
-        // const isEditable = this.reportService.isEditable(activeReport);
+        const isEditable = this.reportService.isEditable(activeReport);
 
         return of([
           {
@@ -71,20 +71,20 @@ export class F1MMenuComponent extends DestroyerComponent implements OnInit {
             label: 'SIGN & SUBMIT',
             expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
             items: [
-              // {
-              //   label: 'Confirm information',
-              //   routerLink: [`/reports/f1m/submit/step1/${activeReport?.id}`],
-              //   visible: isEditable,
-              // },
-              // {
-              //   label: 'Submit report',
-              //   routerLink: [`/reports/f1m/submit/step2/${activeReport?.id}`],
-              //   visible: isEditable,
-              // },
-              // {
-              //   label: 'Report status',
-              //   routerLink: [`/reports/f1m/submit/status/${activeReport?.id}`],
-              // },
+              {
+                label: 'Confirm information',
+                routerLink: [`/reports/f1m/submit/step1/${activeReport?.id}`],
+                visible: isEditable,
+              },
+              {
+                label: 'Submit report',
+                routerLink: [`/reports/f1m/submit/step2/${activeReport?.id}`],
+                visible: isEditable,
+              },
+              {
+                label: 'Report status',
+                routerLink: [`/reports/f1m/submit/status/${activeReport?.id}`],
+              },
             ],
           },
         ] as MenuItem[]);
