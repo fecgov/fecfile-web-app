@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Report, ReportTypes } from './report.model';
+import { Report, ReportStatus, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
 
@@ -29,6 +29,10 @@ export class Form24 extends Report {
 
   get versionLabel() {
     return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+  }
+
+  override get canAmend(): boolean {
+    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
 
   report_type_24_48: '24' | '48' | undefined;

@@ -1,5 +1,5 @@
 import { DateUtils } from './date.utils';
-import { FormControl } from "@angular/forms";
+import { FormControl } from '@angular/forms';
 
 describe('DateUtils', () => {
   it('should create an instance', () => {
@@ -78,7 +78,7 @@ describe('DateUtils', () => {
   describe('dateBefore', () => {
     it('should not check if either date is null', () => {
       const otherControl = new FormControl<Date>(new Date());
-      const control = new FormControl<Date>(new Date(), [DateUtils.dateAfter(otherControl)]);
+      const control = new FormControl<Date>(new Date(), [DateUtils.isAfter(otherControl)]);
       otherControl.setValue(null);
       control.updateValueAndValidity();
       expect(control.valid).toBeTrue();
@@ -90,16 +90,16 @@ describe('DateUtils', () => {
     });
 
     it("should verify that the control's date comes after the date of the other control", () => {
-      const otherControl = new FormControl<Date>(new Date());
-      const control = new FormControl<Date>(new Date(), {
-        validators: [DateUtils.dateAfter(otherControl)],
-        nonNullable: true
+      const otherControl = new FormControl<Date>(new Date(2024, 1, 2));
+      const control = new FormControl<Date>(new Date(2024, 1, 1), {
+        validators: [DateUtils.isAfter(otherControl)],
+        nonNullable: true,
       });
       control.updateValueAndValidity();
       expect(control.valid).toBeFalse();
-      if (!control.errors) throw new Error("Bad test");
-      expect(control.errors['dateAfter']).toBeTrue();
-      control.setValue(new Date(control.getRawValue().getTime() + 1000));
+      if (!control.errors) throw new Error('Bad test');
+      expect(control.errors['isAfter']).not.toBeNull();
+      control.setValue(new Date(2024, 1, 3));
       expect(control.valid).toBeTrue();
     });
   });

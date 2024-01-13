@@ -4,8 +4,8 @@
   <small class="p-error" *ngIf="control?.hasError('requiredTrue')">{{ requiredTrueErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
   <small class="p-error" *ngIf="!control?.hasError('max') && control?.hasError('maxlength')">{{
-      maxLengthErrorMessage
-    }}</small>
+    maxLengthErrorMessage
+  }}</small>
   <small class="p-error" *ngIf="control?.hasError('min')">{{ minErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('max')">{{ maxErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('exclusiveMax')">{{ exclusiveMaxErrorMessage }}</small>
@@ -14,9 +14,9 @@
   <small
     class="p-error"
     *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"
-  >{{ emailErrorMessage }}</small
+    >{{ emailErrorMessage }}</small
   >
-  <small class="p-error" *ngIf="control?.hasError('dateAfter')">{{ dateAfterMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('isAfter')">{{ isAfterMessage }}</small>
   <small
     class="p-error"
     *ngIf="
@@ -28,9 +28,9 @@
       !control?.hasError('exclusiveMax') &&
       !control?.hasError('exclusiveMin') &&
       !control?.hasError('invaliddate') &&
-      !control?.hasError('dateAfter') &&
+      !control?.hasError('isAfter') &&
       control?.hasError('pattern')
     "
-  >{{ patternErrorMessage }}</small
+    >{{ patternErrorMessage }}</small
   >
 </ng-container>

@@ -119,7 +119,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
-      DateUtils.dateAfter(this.form.controls['coverage_from_date']),
+      DateUtils.isAfter(this.form.controls['coverage_from_date']),
     ]);
     this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
