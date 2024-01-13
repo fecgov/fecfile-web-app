@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Report, ReportTypes } from 'app/shared/models/report.model';
+import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-transaction-list',
@@ -15,13 +15,14 @@ import { Report, ReportTypes } from 'app/shared/models/report.model';
 export class TransactionListComponent extends DestroyerComponent implements OnInit {
   report: Report | undefined;
   reportTypes = ReportTypes;
+  reportStatus = ReportStatus;
 
   public tableActions: TableAction[] = [
     new TableAction(
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
       (report: Report) => {
-        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
       () => true
     ),
@@ -29,7 +30,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
       (report: Report) => {
-        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
       () => true
     ),
@@ -37,7 +38,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
       (report: Report) => {
-        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
       () => true
     ),
@@ -45,7 +46,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
       (report: Report) => {
-        return report.report_status === 'In progress' && report.report_type === ReportTypes.F3X;
+        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
       () => false
     ),
@@ -53,7 +54,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add an independent expenditure',
       this.createF24Transactions.bind(this),
       (report: Report) => {
-        return report.report_status === 'In progress' && report.report_type === ReportTypes.F24;
+        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F24;
       },
       () => true
     ),

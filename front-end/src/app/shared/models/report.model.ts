@@ -59,3 +59,8 @@ export enum ReportTypes {
   F99 = 'F99',
   F1M = 'F1M',
 }
+
+export enum ReportStatus {
+  IN_PROGRESS = 'In progress',
+  SUBMIT_SUCCESS = 'Submission success',
+}

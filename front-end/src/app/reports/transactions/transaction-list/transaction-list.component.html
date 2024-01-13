@@ -7,8 +7,8 @@
         </div>
         <div class="col-12">
           <span class="subtitle"
-          ><strong>{{ report?.formLabel }}</strong
-          >{{ report?.formSubLabel }}</span
+            ><strong>{{ report?.formLabel }}</strong
+            >{{ report?.formSubLabel }}</span
           >
         </div>
       </div>
@@ -16,7 +16,7 @@
 
     <ng-template pTemplate="right">
       <app-table-actions-button
-        *ngIf="report?.report_status === 'In progress'"
+        *ngIf="report?.report_status === reportStatus.IN_PROGRESS"
         [tableActions]="tableActions"
         [actionItem]="report"
         (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
