@@ -77,7 +77,7 @@ describe('ReportService', () => {
       expect(response).toEqual('amended 1');
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${report.apiPathSuffix}/1/amend/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/amend/`);
     expect(req.request.method).toEqual('POST');
     req.flush('amended 1');
     httpTestingController.verify();

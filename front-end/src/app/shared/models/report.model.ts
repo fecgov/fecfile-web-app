@@ -8,7 +8,6 @@ import { F3xReportCodes } from '../utils/report-code.utils';
 export abstract class Report extends BaseModel {
   id: string | undefined;
   abstract schema: JsonSchema;
-  abstract apiPathSuffix: string;
   abstract report_type: ReportTypes;
   abstract form_type: string;
   abstract get formLabel(): string;

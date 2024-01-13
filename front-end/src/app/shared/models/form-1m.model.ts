@@ -23,7 +23,6 @@ export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
   schema = f1mSchema;
-  apiPathSuffix = 'form-1m';
   report_type = ReportTypes.F1M;
   form_type = F1MFormTypes.F1MN;
 

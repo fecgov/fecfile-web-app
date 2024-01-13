@@ -17,7 +17,6 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
 
 export class Form24 extends Report {
   schema = f24Schema;
-  apiPathSuffix = 'form-24';
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
   get formLabel() {
