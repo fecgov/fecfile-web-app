@@ -16,10 +16,10 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
 };
 
 export class Form24 extends Report {
-  override schema = f24Schema;
-  override apiPathSuffix = 'form-24';
-  override report_type = ReportTypes.F24;
-  override form_type = F24FormTypes.F24N;
+  schema = f24Schema;
+  apiPathSuffix = 'form-24';
+  report_type = ReportTypes.F24;
+  form_type = F24FormTypes.F24N;
   get formLabel() {
     return 'FORM 24';
   }

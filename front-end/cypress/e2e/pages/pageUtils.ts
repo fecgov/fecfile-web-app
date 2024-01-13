@@ -20,7 +20,7 @@ export class PageUtils {
         cy.get(alias).find(querySelector).click();
       }
       cy.contains('p-dropdownitem', value).should('be.visible');
-      cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
+      cy.contains('p-dropdownitem', value).click();
     }
   }
 

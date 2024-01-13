@@ -1,8 +1,8 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { SelectItem } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { ConfirmationService, SelectItem } from 'primeng/api';
+import { Observable, Subject, delay } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
 export class TransactionContactUtils {
@@ -17,9 +17,9 @@ export class TransactionContactUtils {
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
-    transaction: Transaction,
     templateMap: TransactionTemplateMapType,
-    contactKey: string
+    contactKey: string,
+    messagePrologue = 'By saving this transaction'
   ): string {
     let confirmationContactTitle = '';
     if (!templateMap) {
@@ -51,7 +51,7 @@ export class TransactionContactUtils {
         }</b>`;
         break;
     }
-    return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`;
+    return `${messagePrologue}, you're also creating a new ${confirmationContactTitle}.`;
   }
 
   /**
@@ -103,6 +103,31 @@ export class TransactionContactUtils {
       `Your suggested changes for <b>${contact.getNameString()}</b> will affect all transactions involving this contact.` +
       `<br><br>${changesMessage}`
     );
+  }
+
+  static displayConfirmationPopup(
+    message: string,
+    confirmationService: ConfirmationService,
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
+  ): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      confirmationService.confirm({
+        key: targetDialog,
+        header: 'Confirm',
+        icon: 'pi pi-info-circle',
+        message: message,
+        acceptLabel: 'Continue',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          subscriber.next(true);
+          subscriber.complete();
+        },
+        reject: () => {
+          subscriber.next(false);
+          subscriber.complete();
+        },
+      });
+    }).pipe(delay(500));
   }
 
   /**

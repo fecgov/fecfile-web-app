@@ -14,10 +14,10 @@ export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
 };
 
 export class Form99 extends Report {
-  override schema = f99Schema;
-  override apiPathSuffix = 'form-99';
-  override report_type = ReportTypes.F99;
-  override form_type = F99FormTypes.F99;
+  schema = f99Schema;
+  apiPathSuffix = 'form-99';
+  report_type = ReportTypes.F99;
+  form_type = F99FormTypes.F99;
   override submitAlertText =
     'Are you sure you want to submit this form electronically? Please note that you cannot undo this action.';
 
