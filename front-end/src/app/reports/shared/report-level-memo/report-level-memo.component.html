@@ -2,8 +2,10 @@
   <div class="summary-header">
     <h1>Report level memo</h1>
     <div>
-      <strong>{{ report.formLabel }}</strong
-      >{{ report.formSubLabel }}
+      <span class="bold"
+        >{{ report.formLabel }}<ng-container *ngIf="report.formSubLabel">:</ng-container>
+        {{ report.formSubLabel }}</span
+      >
     </div>
   </div>
 
