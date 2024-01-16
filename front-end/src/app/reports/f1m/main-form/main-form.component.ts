@@ -16,20 +16,7 @@ import { ContactTypeLabels, ContactTypes, Contact } from 'app/shared/models/cont
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-
-const contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {
-  contact_affiliated: {
-    committee_name: 'name',
-    committee_fec_id: 'committee_id',
-  },
-};
-
-const templateMapConfigs: { [contactKey: string]: { [formField: string]: string } } = {
-  contact_affiliated: {
-    committee_name: 'affiliated_committee_name',
-    committee_fec_id: 'affiliated_committee_fec_id',
-  },
-};
+import { AffiliatedContact, CandidateContact } from './contact';
 
 @Component({
   selector: 'app-main-form',
@@ -48,9 +35,67 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     'affiliated_date_form_f1_filed',
     'affiliated_committee_fec_id',
     'affiliated_committee_name',
+    'affiliated_date_form_f1_filed',
+    'affiliated_date_committee_fec_id',
+    'affiliated_committee_name',
+    'I_candidate_id_number',
+    'I_candidate_last_name',
+    'I_candidate_first_name',
+    'I_candidate_middle_name',
+    'I_candidate_prefix',
+    'I_candidate_suffix',
+    'I_candidate_office',
+    'I_candidate_state',
+    'I_candidate_district',
+    'I_date_of_contribution',
+    'II_candidate_id_number',
+    'II_candidate_last_name',
+    'II_candidate_first_name',
+    'II_candidate_middle_name',
+    'II_candidate_prefix',
+    'II_candidate_suffix',
+    'II_candidate_office',
+    'II_candidate_state',
+    'II_candidate_district',
+    'II_date_of_contribution',
+    'III_candidate_id_number',
+    'III_candidate_last_name',
+    'III_candidate_first_name',
+    'III_candidate_middle_name',
+    'III_candidate_prefix',
+    'III_candidate_suffix',
+    'III_candidate_office',
+    'III_candidate_state',
+    'III_candidate_district',
+    'III_date_of_contribution',
+    'IV_candidate_id_number',
+    'IV_candidate_last_name',
+    'IV_candidate_first_name',
+    'IV_candidate_middle_name',
+    'IV_candidate_prefix',
+    'IV_candidate_suffix',
+    'IV_candidate_office',
+    'IV_candidate_state',
+    'IV_candidate_district',
+    'IV_date_of_contribution',
+    'V_candidate_id_number',
+    'V_candidate_last_name',
+    'V_candidate_first_name',
+    'V_candidate_middle_name',
+    'V_candidate_prefix',
+    'V_candidate_suffix',
+    'V_candidate_office',
+    'V_candidate_state',
+    'V_candidate_district',
+    'V_date_of_contribution',
+    'date_of_original_registration',
+    'date_of_51st_contributor',
+    'date_committee_met_requirements',
+
     'statusBy',
-    'contactAffiliatedLookup',
   ];
+  contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
+  templateMapConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   schema = f1mSchema;
   webprintURL = '/reports/f1m/web-print/';
   templateMap = {
@@ -62,9 +107,9 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   } as TransactionTemplateMapType;
 
   committeeTypeControl: AbstractControl | null = null;
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
   statusByControl: AbstractControl | null = null;
-  contactAffiliatedLookupControl: AbstractControl | null = null;
+  affiliatedContact?: AffiliatedContact;
+  candidateContacts: CandidateContact[] = [];
 
   report = new Form1M();
 
@@ -95,6 +140,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           // Set the statusBy radio button based on form values
           if (this.report.affiliated_committee_name) {
             this.form.get('statusBy')?.setValue('affiliation');
+          } else {
+            this.form.get('statusBy')?.setValue('qualification');
           }
         }
       });
@@ -102,33 +149,26 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.committeeTypeControl = this.form.get('committee_type');
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
-    this.contactAffiliatedLookupControl = this.form.get('contactAffiliatedLookup');
+    this.affiliatedContact = new AffiliatedContact(this);
+    this.candidateContacts = [new CandidateContact('I', this)];
 
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
       ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
       if (value === 'affiliation') {
         if (!this.report.affiliated_committee_name) {
-          this.contactAffiliatedLookupControl?.addValidators(Validators.required);
+          this.affiliatedContact?.control?.addValidators(Validators.required);
         }
         this.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
         this.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
         this.form.get('affiliated_committee_name')?.addValidators(Validators.required);
       } else {
-        this.contactAffiliatedLookupControl?.clearValidators();
+        this.affiliatedContact?.control?.clearValidators();
       }
       this.form.get('affiliated_date_form_f1_filed')?.updateValueAndValidity();
       this.form.get('affiliated_committee_fec_id')?.updateValueAndValidity();
       this.form.get('affiliated_committee_name')?.updateValueAndValidity();
-      this.contactAffiliatedLookupControl?.updateValueAndValidity();
+      this.affiliatedContact?.control?.updateValueAndValidity();
     });
-  }
-
-  updateAffiliatedContact($event: SelectItem<Contact>) {
-    this.report.contact_affiliated = $event.value;
-    this.form.get('affiliated_committee_fec_id')?.setValue($event.value.committee_id);
-    this.form.get('affiliated_committee_name')?.setValue($event.value.name);
-    this.contactAffiliatedLookupControl?.clearValidators();
-    this.contactAffiliatedLookupControl?.updateValueAndValidity();
   }
 
   getReportPayload(): Report {
@@ -158,7 +198,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   }
 
   confirmWithUser(report: Form1M, form: FormGroup) {
-    const confirmations$ = Object.entries(contactConfigs)
+    const confirmations$ = Object.entries(this.contactConfigs)
       .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (report[contactKey as keyof Form1M]) {
           const contact = report[contactKey as keyof Form1M] as Contact;
@@ -166,7 +206,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
-              templateMapConfigs[contactKey] as TransactionTemplateMapType,
+              this.templateMapConfigs[contactKey] as TransactionTemplateMapType,
               contactKey,
               'By saving this report'
             );
@@ -174,7 +214,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           const changes = TransactionContactUtils.getContactChanges(
             form,
             contact,
-            templateMapConfigs[contactKey] as TransactionTemplateMapType,
+            this.templateMapConfigs[contactKey] as TransactionTemplateMapType,
             config
           );
           if (changes.length > 0) {
@@ -195,13 +235,13 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   }
 
   updateContactsWithForm(report: Form1M, form: FormGroup) {
-    Object.entries(contactConfigs).forEach(([contactKey, config]: [string, { [formField: string]: string }]) => {
+    Object.entries(this.contactConfigs).forEach(([contactKey, config]: [string, { [formField: string]: string }]) => {
       if (report[contactKey as keyof Form1M]) {
         const contact = report[contactKey as keyof Form1M] as Contact;
         const contactChanges = TransactionContactUtils.getContactChanges(
           form,
           contact,
-          templateMapConfigs[contactKey] as TransactionTemplateMapType,
+          this.templateMapConfigs[contactKey] as TransactionTemplateMapType,
           config
         );
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

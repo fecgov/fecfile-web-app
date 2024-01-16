@@ -115,9 +115,18 @@ export class Form1M extends Report {
   treasurer_suffix?: string;
   @Transform(BaseModel.dateTransform) date_signed?: Date;
 
-  @Type(() => Contact)
-  contact_affiliated?: Contact;
+  @Type(() => Contact) contact_affiliated?: Contact;
   contact_affiliated_id?: string;
+  @Type(() => Contact) contact_candidate_I?: Contact;
+  contact_candidate_I_id?: string;
+  @Type(() => Contact) contact_candidate_II?: Contact;
+  contact_candidate_II_id?: string;
+  @Type(() => Contact) contact_candidate_III?: Contact;
+  contact_candidate_III_id?: string;
+  @Type(() => Contact) contact_candidate_IV?: Contact;
+  contact_candidate_IV_id?: string;
+  @Type(() => Contact) contact_candidate_V?: Contact;
+  contact_candidate_V_id?: string;
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
