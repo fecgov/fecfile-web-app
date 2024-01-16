@@ -1,21 +1,27 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { lastValueFrom, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { ReattRedesUtils } from "../../../shared/utils/reatt-redes/reatt-redes.utils";
+import { ReportService } from "../../../shared/services/report.service";
 
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
-  styleUrls: ['../transaction.scss'],
+  styleUrls: ['../transaction.scss', 'transaction-list.component.scss'],
 })
-export class TransactionListComponent extends DestroyerComponent implements OnInit {
+export class TransactionListComponent extends DestroyerComponent implements OnInit, AfterViewInit {
   report: Report | undefined;
   reportTypes = ReportTypes;
   reportStatus = ReportStatus;
+  availableReports: Report[] = [];
+  selectedReport?: Report;
+
+  @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
 
   public tableActions: TableAction[] = [
     new TableAction(
@@ -60,7 +66,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     ),
   ];
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store, private reportService: ReportService) {
     super();
   }
 
@@ -69,6 +75,16 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
+
+
+    ReattRedesUtils.selectReportDialogSubject.subscribe(() => {
+      this.selectReportDialog?.nativeElement.show();
+    })
+  }
+
+  async ngAfterViewInit() {
+    const response = await lastValueFrom(this.reportService.getTableData());
+    this.availableReports = (response.results as Report[]).filter(report => this.reportService.isEditable(report));
   }
 
   createTransactions(transactionCategory: string, report?: Report): void {
@@ -82,9 +98,13 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   public onTableActionClick(action: TableAction, report?: Report) {
     action.action(report);
   }
+
+  createReattribution() {
+    console.log(this.selectedReport?.id ?? "No ID")
+  }
 }
 
-@Pipe({ name: 'memoCode' })
+@Pipe({name: 'memoCode'})
 export class MemoCodePipe implements PipeTransform {
   transform(value: boolean) {
     return value ? 'Y' : '-';

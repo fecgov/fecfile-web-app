@@ -139,7 +139,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       this.createReattribution.bind(this),
       (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.A &&
-        this.reportIsEditable &&
         !transaction.parent_transaction_id &&
         !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REATTRIBUTION_FROM,
@@ -152,14 +151,14 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
-  constructor(
+  protected constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected store: Store,
-    protected reportService: ReportService
+    protected reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef);
   }
@@ -270,10 +269,15 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     );
   }
 
-  public createReattribution(transaction: Transaction): void {
-    this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
-    );
+  public async createReattribution(transaction: Transaction): Promise<void> {
+    if (this.reportIsEditable) {
+      await this.router.navigateByUrl(
+        `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
+      )
+    } else {
+      ReattRedesUtils.selectReportDialogSubject.next(transaction);
+    }
+
   }
 
   public updateItem(item: Transaction) {
@@ -293,4 +297,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
     return '';
   }
+
+
 }
