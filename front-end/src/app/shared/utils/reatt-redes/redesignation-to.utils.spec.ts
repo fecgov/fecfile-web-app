@@ -32,11 +32,11 @@ describe('RedesignationToUtils', () => {
       });
 
       RedesignationToUtils.overlayForm(toForm, transaction);
-      expect(toForm.get('memo_code')?.value).toBeFalse();
+      expect(toForm.get('memo_code')?.value).toBeTrue();
 
       transaction.report_id = '999';
       RedesignationToUtils.overlayForm(toForm, transaction);
-      expect(toForm.get('memo_code')?.value).toBeFalse();
+      expect(toForm.get('memo_code')?.value).toBeTrue();
     });
   });
 });

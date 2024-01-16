@@ -2,7 +2,7 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { ContactTypes } from "../../models/contact.model";
+import { DateTime } from "luxon";
 
 export class RedesignationFromUtils {
   public static overlayTransactionProperties(
@@ -34,9 +34,11 @@ export class RedesignationFromUtils {
       hideContactLookup: true,
       // noop generatePurposeDescription to inform dynamic input label
       generatePurposeDescription: (transaction: SchBTransaction): string => {
-        return transaction[
-          transaction.transactionType.templateMap.purpose_description as keyof SchBTransaction
-          ] as string;
+        if (!transaction.reatt_redes) return '';
+        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+        if (!expenditureDate) throw new Error("No Expenditure Date!");
+        const date = DateTime.fromJSDate(expenditureDate);
+        return `Redesignation from ${date.toFormat('MM/dd/yyyy')}`;
       },
     });
 
@@ -73,33 +75,29 @@ export class RedesignationFromUtils {
   ];
 
   public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
-    const purposeDescriptionControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
+    const templateMap = transaction.transactionType.templateMap;
+    const purposeDescriptionControl = fromForm.get(templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.
     purposeDescriptionControl?.clearValidators();
     fromForm.get('memo_code')?.clearValidators();
 
-    const orgName = toForm.get(transaction.transactionType.templateMap.organization_name)?.value;
-    const firstName = toForm.get(transaction.transactionType.templateMap.first_name)?.value;
-    const lastName = toForm.get(transaction.transactionType.templateMap.last_name)?.value;
-
-    if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-      purposeDescriptionControl?.setValue(`Redesignation to ${lastName}, ${firstName}`);
-    } else {
-      purposeDescriptionControl?.setValue(`Reattribution to ${orgName}`);
-    }
-
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
-    toForm.get(transaction.transactionType.templateMap.amount)?.valueChanges.subscribe((amount) => {
-      fromForm.get(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
+    toForm.get(templateMap.amount)?.valueChanges.subscribe((amount) => {
+      fromForm.get(templateMap.amount)?.setValue(-1 * parseFloat(amount));
     });
-    toForm.get(transaction.transactionType.templateMap.date)?.valueChanges.subscribe((date) => {
-      fromForm.get(transaction.transactionType.templateMap.date)?.setValue(date);
+    toForm.get(templateMap.date)?.valueChanges.subscribe((date) => {
+      fromForm.get(templateMap.date)?.setValue(date);
     });
 
     RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
+      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable()
     );
-
+    fromForm.get('text4000')?.statusChanges.subscribe(v => {
+      console.log(v);
+    })
+    fromForm.get('text4000')?.valueChanges.subscribe(v => {
+      console.log(v);
+    })
     return fromForm;
   }
 }

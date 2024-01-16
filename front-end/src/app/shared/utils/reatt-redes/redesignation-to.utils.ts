@@ -1,8 +1,9 @@
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import { getTransactionName, TransactionTypes } from '../../models/transaction.model';
+import { TransactionTypes } from '../../models/transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { TemplateMapKeyType } from "../../models/transaction-type.model";
+import { DateTime } from "luxon";
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(
@@ -36,8 +37,10 @@ export class RedesignationToUtils {
       dependentChildTransactionTypes: [transaction.transaction_type_identifier as TransactionTypes],
       generatePurposeDescription: (transaction: SchBTransaction): string => {
         if (!transaction.reatt_redes) return '';
-        const name = getTransactionName(transaction.reatt_redes as SchBTransaction);
-        return `Redesignation from ${name}`;
+        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+        if (!expenditureDate) throw new Error("No Expenditure Date!");
+        const date = DateTime.fromJSDate(expenditureDate);
+        return `Redesignation from ${date.toFormat('MM/dd/yyyy')}`;
       },
       hideContactLookup: true,
     });
@@ -78,7 +81,8 @@ export class RedesignationToUtils {
     'candidate_suffix',
     'candidate_office',
     'candidate_state',
-    'candidate_district'
+    'candidate_district',
+    'memo_code'
   ];
 
   public static overlayForm(form: FormGroup, toTransaction: SchBTransaction): FormGroup {
@@ -90,7 +94,7 @@ export class RedesignationToUtils {
     // Clear normal schema validation from redesignation TO form
     form.get(toTransaction.transactionType.templateMap.purpose_description)?.clearValidators();
     form.get('memo_code')?.clearValidators();
-    form.get('memo_code')?.setValue(false);
+    form.get('memo_code')?.setValue(true);
 
 
     RedesignationToUtils.readOnlyFields.forEach((field) =>
