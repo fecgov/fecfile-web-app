@@ -1,7 +1,7 @@
 import { Report, ReportTypes } from './report.model';
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { CandidateOfficeType } from './contact.model';
+import { Contact, CandidateOfficeType } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 export enum CommitteeTypes {
@@ -22,22 +22,28 @@ export const F1MFormVersionLabels: { [key in F1MFormTypes]: string } = {
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
-  override schema = f1mSchema;
-  override report_type = ReportTypes.F1M;
-  override form_type = F1MFormTypes.F1MN;
+  schema = f1mSchema;
+  report_type = ReportTypes.F1M;
+  form_type = F1MFormTypes.F1MN;
 
   get formLabel() {
     return 'FORM 1M';
   }
 
   get formSubLabel() {
-    return '';
+    return 'NOTIFICATION OF MULTICANDIDATE STATUS';
   }
 
   get versionLabel() {
     return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
+  committee_name?: string;
+  street_1?: string;
+  street_2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
@@ -98,6 +104,20 @@ export class Form1M extends Report {
   V_candidate_state?: string;
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
+
+  @Transform(BaseModel.dateTransform) date_of_original_registration?: Date;
+  @Transform(BaseModel.dateTransform) date_of_51st_contributor?: Date;
+  @Transform(BaseModel.dateTransform) date_committee_met_requirements?: Date;
+  treasurer_last_name?: string;
+  treasurer_first_name?: string;
+  treasurer_middle_name?: string;
+  treasurer_prefix?: string;
+  treasurer_suffix?: string;
+  @Transform(BaseModel.dateTransform) date_signed?: Date;
+
+  @Type(() => Contact)
+  contact_affiliated?: Contact;
+  contact_affiliated_id?: string;
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any

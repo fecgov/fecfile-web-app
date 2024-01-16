@@ -1,4 +1,4 @@
-<footer>
+<footer [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
   <div id="footer-upper">
     <div class="grid">
       <div class="col-6">
@@ -14,7 +14,7 @@
   </div>
   <div id="footer-lower" class="grid">
     <div class="col-6">
-      <img alt="The seal of the Federal Election Commission" id="fec-seal" src="assets/img/fec-seal-inverse.svg" />
+      <img alt="The seal of the Federal Election Commission" id="fec-seal" src="assets/img/fec-seal-inverse.svg"/>
       <p id="fec-title">Federal Election Commission</p>
       <p id="fec-address" class="font-karla">1050 First Street, NE Washington, DC 20463</p>
     </div>

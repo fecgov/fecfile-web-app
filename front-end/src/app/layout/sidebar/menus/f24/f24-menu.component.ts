@@ -42,8 +42,8 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
             routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
           },
           {
-            label: 'Add a disbursement',
-            routerLink: `/reports/transactions/report/${activeReport?.id}/select/disbursement`,
+            label: 'Add an independent expenditure',
+            routerLink: `/reports/f24/report/${activeReport?.id}/transactions/select/independent-expenditures`,
           },
         ];
 
@@ -65,19 +65,8 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
             expanded: sidebarState?.section == ReportSidebarSection.REVIEW,
             items: [
               {
-                label: 'View summary page',
-                routerLink: `/reports/f24/summary/${activeReport?.id}`,
-                disabled: true,
-              },
-              {
-                label: 'View detailed summary page',
-                routerLink: `/reports/f24/detailed-summary/${activeReport?.id}`,
-                disabled: true,
-              },
-              {
                 label: 'View print preview',
                 routerLink: `/reports/f24/web-print/${activeReport?.id}`,
-                disabled: true,
               },
               {
                 label: 'Add a report level memo',
@@ -94,19 +83,16 @@ export class F24MenuComponent extends DestroyerComponent implements OnInit {
                 label: 'Confirm information',
                 routerLink: `/reports/f24/submit/step1/${activeReport?.id}`,
                 visible: isEditable,
-                disabled: true,
               },
               {
                 label: 'Submit report',
                 routerLink: `/reports/f24/submit/step2/${activeReport?.id}`,
                 visible: isEditable,
-                disabled: true,
               },
               {
                 label: 'Report status',
                 routerLink: `/reports/f24/submit/status/${activeReport?.id}`,
                 visible: !isEditable,
-                disabled: true,
               },
             ],
           },

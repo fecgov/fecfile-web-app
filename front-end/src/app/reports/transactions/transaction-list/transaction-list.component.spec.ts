@@ -15,7 +15,7 @@ import { MemoCodePipe, TransactionListComponent } from './transaction-list.compo
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -110,11 +110,11 @@ describe('TransactionListComponent', () => {
   });
   it('should show the correct table actions', () => {
     const f3x_params = {
-      report_status: 'In progress',
+      report_status: ReportStatus.IN_PROGRESS,
       report_type: ReportTypes.F3X,
     };
     const f24_params = {
-      report_status: 'In progress',
+      report_status: ReportStatus.IN_PROGRESS,
       report_type: ReportTypes.F24,
     };
     expect(component.tableActions[0].isAvailable(f3x_params)).toEqual(true);
@@ -122,9 +122,10 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[2].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[3].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[0].isAvailable(f24_params)).toEqual(false);
-    expect(component.tableActions[1].isAvailable(f24_params)).toEqual(true);
+    expect(component.tableActions[1].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[2].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[3].isAvailable(f24_params)).toEqual(false);
+    expect(component.tableActions[4].isAvailable(f24_params)).toEqual(true);
     expect(component.tableActions[0].isEnabled({})).toEqual(true);
     expect(component.tableActions[1].isEnabled({})).toEqual(true);
     expect(component.tableActions[2].isEnabled({})).toEqual(true);

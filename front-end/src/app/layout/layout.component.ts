@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectSidebarState } from 'app/store/sidebar-state.selectors';
+
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { Store } from "@ngrx/store";
+import { ActivatedRoute } from "@angular/router";
+import { selectSidebarState } from "../store/sidebar-state.selectors";
+import { takeUntil } from "rxjs";
 
 @Component({
   selector: 'app-layout',
@@ -12,7 +14,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 export class LayoutComponent extends DestroyerComponent implements OnInit {
   showSidebar = false;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private activatedRoute: ActivatedRoute) {
     super();
   }
 
@@ -25,4 +27,5 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
         this.showSidebar = !!state;
       });
   }
+
 }

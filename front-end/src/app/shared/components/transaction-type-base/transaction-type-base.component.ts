@@ -18,7 +18,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { concatAll, delay, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
+import { concatAll, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -159,7 +159,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
-              transaction,
               templateMap,
               contactKey
             );
@@ -173,24 +172,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       })
       .filter((message) => !!message)
       .map((message: string) => {
-        return new Observable<boolean>((subscriber) => {
-          this.confirmationService.confirm({
-            key: targetDialog,
-            header: 'Confirm',
-            icon: 'pi pi-info-circle',
-            message: message,
-            acceptLabel: 'Continue',
-            rejectLabel: 'Cancel',
-            accept: () => {
-              subscriber.next(true);
-              subscriber.complete();
-            },
-            reject: () => {
-              subscriber.next(false);
-              subscriber.complete();
-            },
-          });
-        }).pipe(delay(500));
+        return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, targetDialog);
       });
 
     return from([of(true), ...confirmations$]).pipe(

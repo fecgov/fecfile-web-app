@@ -10,115 +10,125 @@
     </h3>
     <hr class="black-line" />
   </div>
-  <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
-    <div class="col-12">
-      <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
+</div>
+<p-card>
+  <div class="grid">
+    <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
+      <div class="col-12">
+        <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
+      </div>
+    </ng-container>
+    <div class="col-12 flex justify-content-center">
+      <img
+        class="image-max-width image-centered-horiz"
+        ngSrc="assets/img/image-placeholder.png"
+        draggable="false"
+        alt="Print success image"
+        [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' && !report.webprint_submission?.fec_status }"
+        height="271"
+        width="450"
+      />
+      <ng-container *ngIf="webPrintStage === 'checking' && !report.webprint_submission?.fec_status">
+        <div class="fec-loader-div col-12">
+          <img
+            class="image-max-width fec-loader-image"
+            ngSrc="assets/img/fec-loading-flag.gif"
+            draggable="false"
+            alt="The report's web print status is loading..."
+            height="103"
+            width="114"
+          />
+          <h1 class="align-center super-header">
+            <br /><br />
+            <strong>Compiling your preview</strong>
+            <br />
+          </h1>
+          <h2 class="align-center">
+            {{ pollingStatusMessage }}
+          </h2>
+        </div>
+      </ng-container>
     </div>
-  </ng-container>
-  <div class="col-12 flex justify-content-center">
-    <img
-      class="image-max-width image-centered-horiz"
-      ngSrc="assets/img/image-placeholder.png"
-      draggable="false"
-      alt="Print success image"
-      [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' && !report.webprint_submission?.fec_status }"
-      height="271"
-      width="450"
-    />
-    <ng-container *ngIf="webPrintStage === 'checking' && !report.webprint_submission?.fec_status">
-      <div class="fec-loader-div col-12">
-        <img
-          class="image-max-width fec-loader-image"
-          ngSrc="assets/img/fec-loading-flag.gif"
-          draggable="false"
-          alt="The report's web print status is loading..."
-          height="103"
-          width="114"
-        />
-        <h1 class="align-center super-header">
+    <ng-container *ngIf="webPrintStage === 'checking' && report.webprint_submission?.fec_status === 'PROCESSING'">
+      <div class="col-12">
+        <h1 class="align-center">
           <br /><br />
-          <strong>Compiling your preview</strong>
+          <strong>Your report is still being processed...</strong>
           <br />
         </h1>
-        <h2 class="align-center">
-          {{ pollingStatusMessage }}
-        </h2>
+        <h3 class="align-center">PLEASE CHECK BACK LATER TO ACCESS YOUR PDF</h3>
       </div>
     </ng-container>
   </div>
-  <ng-container *ngIf="webPrintStage === 'checking' && report.webprint_submission?.fec_status === 'PROCESSING'">
-    <div class="col-12">
-      <h1 class="align-center">
-        <br /><br />
-        <strong>Your report is still being processed...</strong>
-        <br />
-      </h1>
-      <h3 class="align-center">PLEASE CHECK BACK LATER TO ACCESS YOUR PDF</h3>
-    </div>
-  </ng-container>
-</div>
-<div class="grid">
-  <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
-    <ng-container *ngIf="webPrintStage === 'failure'">
-      <div class="col-12">
-        <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
+  <div class="grid">
+    <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
+      <ng-container *ngIf="webPrintStage === 'failure'">
+        <div class="col-12">
+          <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
+        </div>
+      </ng-container>
+      <div class="col-5"></div>
+      <div class="col-2">
+        <button
+          pButton
+          pRipple
+          appSingleClick
+          label="Compile PDF"
+          class="p-button-warning button-full-width"
+          (click)="submitPrintJob()"
+        ></button>
       </div>
     </ng-container>
-    <div class="col-5"></div>
-    <div class="col-2">
-      <button
-        pButton
-        pRipple
-        appSingleClick
-        label="Compile PDF"
-        class="p-button-warning button-full-width"
-        (click)="submitPrintJob()"
-      ></button>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="webPrintStage === 'success'">
-    <h1 class="col-12 align-center">PDF compiled</h1>
-    <div class="bold col-12 align-center">SUBMITTED ON:</div>
-    <div class="col-12 align-center">{{ submitDate }}</div>
-    <div class="col-3"></div>
-    <div class="col-2">
-      <button pButton pRipple label="Open PDF" class="p-button-info button-full-width" (click)="downloadPDF()"></button>
-    </div>
-    <div class="col-2">
-      <p class="align-center"><strong>OR</strong></p>
-    </div>
-    <div class="col-2">
-      <button
-        pButton
-        pRipple
-        appSingleClick
-        label="Compile New PDF"
-        class="p-button-warning button-full-width"
-        (click)="submitPrintJob()"
-      ></button>
-    </div>
-  </ng-container>
-</div>
+    <ng-container *ngIf="webPrintStage === 'success'">
+      <h1 class="col-12 align-center">PDF compiled</h1>
+      <div class="bold col-12 align-center">SUBMITTED ON:</div>
+      <div class="col-12 align-center">{{ submitDate }}</div>
+      <div class="col-3"></div>
+      <div class="col-2">
+        <button
+          pButton
+          pRipple
+          label="Open PDF"
+          class="p-button-info button-full-width"
+          (click)="downloadPDF()"
+        ></button>
+      </div>
+      <div class="col-2">
+        <p class="align-center"><strong>OR</strong></p>
+      </div>
+      <div class="col-2">
+        <button
+          pButton
+          pRipple
+          appSingleClick
+          label="Compile New PDF"
+          class="p-button-warning button-full-width"
+          (click)="submitPrintJob()"
+        ></button>
+      </div>
+    </ng-container>
+  </div>
 
-<p-divider></p-divider>
-<div class="grid">
-  <div class="col-2">
-    <button
-      pButton
-      pRipple
-      label="Back"
-      class="p-button-secondary p-button-outlined button-full-width"
-      (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
-    ></button>
+  <p-divider></p-divider>
+  <div class="grid">
+    <div class="col-2">
+      <button
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-secondary p-button-outlined button-full-width"
+        (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
+      ></button>
+    </div>
+    <div class="col-7"></div>
+    <div class="col-3">
+      <button
+        pButton
+        pRipple
+        label="Sign & submit report"
+        class="p-button-secondary button-full-width"
+        (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
+      ></button>
+    </div>
   </div>
-  <div class="col-7"></div>
-  <div class="col-3">
-    <button
-      pButton
-      pRipple
-      label="Sign & submit report"
-      class="p-button-secondary button-full-width"
-      (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
-    ></button>
-  </div>
-</div>
+</p-card>

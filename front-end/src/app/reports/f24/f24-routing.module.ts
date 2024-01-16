@@ -10,6 +10,7 @@ import { Report } from 'app/shared/models/report.model';
 import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
+import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -19,6 +20,15 @@ import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-lev
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 const routes: Routes = [
+  {
+    path: 'report/:reportId/transactions/select/independent-expenditures',
+    component: TransactionIndependentExpenditurePickerComponent,
+    canActivate: [ReportIsEditableGuard],
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    data: {
+      sidebarSection: ReportSidebarSection.TRANSACTIONS,
+    },
+  },
   {
     path: 'web-print/:reportId',
     title: 'Print preview',

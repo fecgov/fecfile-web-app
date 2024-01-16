@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Report, ReportTypes } from './report.model';
+import { Report, ReportTypes, ReportStatus } from './report.model';
 import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -30,7 +30,7 @@ export class F3xCoverageDates {
 }
 
 export class Form3X extends Report {
-  override schema = f3xSchema;
+  schema = f3xSchema;
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
@@ -50,7 +50,7 @@ export class Form3X extends Report {
   }
 
   override get canAmend(): boolean {
-    return this.report_status === 'Submission success';
+    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
 
   get formLabel() {
