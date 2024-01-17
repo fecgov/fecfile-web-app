@@ -5,14 +5,13 @@ import { Store } from '@ngrx/store';
 import { takeUntil, of, from, Observable, concatAll, reduce } from 'rxjs';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { Report } from 'app/shared/models/report.model';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
-import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
-import { ContactTypeLabels, ContactTypes, Contact } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -95,7 +94,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     'statusBy',
   ];
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
-  templateMapConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
+  templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
   schema = f1mSchema;
   webprintURL = '/reports/f1m/web-print/';
   templateMap = {
@@ -108,7 +107,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   committeeTypeControl: AbstractControl | null = null;
   statusByControl: AbstractControl | null = null;
-  affiliatedContact?: AffiliatedContact;
+  affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
   candidateContacts: CandidateContact[] = [];
 
   report = new Form1M();

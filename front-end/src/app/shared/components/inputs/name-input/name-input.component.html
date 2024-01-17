@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="col-4">
       <div class="field">
-        <label for="last_name">LAST NAME</label>
+        <label for="last_name">{{ labelPrefix }} LAST NAME</label>
         <input type="text" pInputText id="last_name" [formControlName]="lastNameFieldName" />
         <app-error-messages
           [form]="form"
@@ -13,7 +13,7 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="first_name">FIRST NAME</label>
+        <label for="first_name">{{ labelPrefix }} FIRST NAME</label>
         <input type="text" pInputText id="first_name" [formControlName]="firstNameFieldName" />
         <app-error-messages
           [form]="form"
@@ -24,7 +24,7 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+        <label for="middle_name">{{ labelPrefix }} MIDDLE NAME (OPTIONAL)</label>
         <input type="text" pInputText id="middle_name" [formControlName]="middleNameFieldName" />
         <app-error-messages
           [form]="form"
@@ -37,7 +37,7 @@
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <label for="prefix">PREFIX (OPTIONAL)</label>
+        <label for="prefix">{{ labelPrefix }} PREFIX (OPTIONAL)</label>
         <input type="text" pInputText id="prefix" [formControlName]="prefixFieldName" />
         <app-error-messages
           [form]="form"
@@ -48,7 +48,7 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="suffix">SUFFIX (OPTIONAL)</label>
+        <label for="suffix">{{ labelPrefix }} SUFFIX (OPTIONAL)</label>
         <input type="text" pInputText id="suffix" [formControlName]="suffixFieldName" />
         <app-error-messages
           [form]="form"
