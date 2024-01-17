@@ -1,16 +1,16 @@
-import { LoginPage } from './pages/loginPage';
-import { PageUtils } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultDebtFormData as debtFormData } from './models/TransactionFormModel';
-import { ContactFormData, defaultFormData as contactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData } from './models/ReportFormModel';
+import { LoginPage } from '../pages/loginPage';
+import { PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { ContactListPage } from '../pages/contactListPage';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { defaultDebtFormData as debtFormData } from '../models/TransactionFormModel';
+import { ContactFormData, defaultFormData as contactFormData } from '../models/ContactFormModel';
+import { defaultFormData as reportFormData } from '../models/ReportFormModel';
 
 const committeeFormData: ContactFormData = {
   ...contactFormData,
-  ...{ contact_type: 'Committee' },
+  ...{contact_type: 'Committee'},
 };
 
 describe('Debts', () => {

@@ -72,3 +72,12 @@ export const defaultFormData: ContactFormData = {
   name: PageUtils.randomString(10),
 };
 
+export const organizationFormData: ContactFormData = {
+  ...defaultFormData,
+  ...{contact_type: 'Organization'},
+};
+
+export const candidateFormData: ContactFormData = {
+  ...defaultFormData,
+  ...{contact_type: 'Candidate'},
+};

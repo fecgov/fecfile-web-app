@@ -1,3 +1,7 @@
+import { F3xCreateReportPage } from "./f3xCreateReportPage";
+import { defaultFormData as defaultReportFormData } from "../models/ReportFormModel";
+import { PageUtils } from "./pageUtils";
+
 export class ReportListPage {
   static goToPage() {
     cy.visit('/dashboard');
@@ -44,5 +48,13 @@ export class ReportListPage {
         },
       });
     });
+  }
+
+
+  static createF3X(fd = defaultReportFormData) {
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateButton(true);
+    F3xCreateReportPage.enterFormData(fd);
+    PageUtils.clickButton('Save and continue');
   }
 }

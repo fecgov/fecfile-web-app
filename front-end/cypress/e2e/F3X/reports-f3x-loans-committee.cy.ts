@@ -1,16 +1,16 @@
-import { LoginPage } from './pages/loginPage';
-import { currentYear, PageUtils } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultLoanFormData } from './models/TransactionFormModel';
-import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData } from './models/ReportFormModel';
+import { LoginPage } from '../pages/loginPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { ContactListPage } from '../pages/contactListPage';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { defaultLoanFormData } from '../models/TransactionFormModel';
+import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
+import { defaultFormData as reportFormData } from '../models/ReportFormModel';
 
 const committeeFormData: ContactFormData = {
   ...individualContactFormData,
-  ...{ contact_type: 'Committee' },
+  ...{contact_type: 'Committee'},
 };
 
 const formData = {
@@ -101,7 +101,7 @@ describe('Loans', () => {
     cy.contains('Loan By Committee').should('exist');
     cy.contains('Loan Made').should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Receive loan repayment').click({ force: true });
+    cy.contains('Receive loan repayment').click({force: true});
 
     PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
     PageUtils.searchBoxInput(committeeFormData.committee_id);

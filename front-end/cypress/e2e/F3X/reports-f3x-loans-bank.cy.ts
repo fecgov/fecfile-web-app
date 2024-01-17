@@ -1,12 +1,11 @@
-import { ContactFormData, defaultFormData as individualContactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData, F3xCreateReportFormData } from './models/ReportFormModel';
-import { defaultLoanFormData } from './models/TransactionFormModel';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { LoginPage } from './pages/loginPage';
-import { currentYear, PageUtils } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
+import { defaultFormData as individualContactFormData, organizationFormData } from '../models/ContactFormModel';
+import { defaultFormData as reportFormData, F3xCreateReportFormData } from '../models/ReportFormModel';
+import { defaultLoanFormData } from '../models/TransactionFormModel';
+import { ContactListPage } from '../pages/contactListPage';
+import { LoginPage } from '../pages/loginPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
 
 const reportFormDataApril: F3xCreateReportFormData = {
   ...reportFormData,
@@ -25,8 +24,6 @@ const reportFormDataJuly: F3xCreateReportFormData = {
     coverage_through_date: new Date(currentYear, 7, 30),
   },
 };
-
-let organizationFormData: ContactFormData;
 
 const formData = {
   ...defaultLoanFormData,
@@ -47,31 +44,12 @@ describe('Loans', () => {
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
     ReportListPage.goToPage();
-
-    organizationFormData = {
-      ...individualContactFormData,
-      ...{ contact_type: 'Organization' },
-    };
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-
-    // Create individual
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan to
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormDataApril);
-    PageUtils.clickButton('Save and continue');
+    ContactListPage.createOrganization();
+    ContactListPage.createIndividual();
+    ReportListPage.createF3X(reportFormDataApril);
 
     // Navigate to loans
     PageUtils.clickSidebarItem('Add loans and debts');
@@ -89,16 +67,13 @@ describe('Loans', () => {
     cy.contains('Loan Received from Bank').should('exist');
 
     // go back to reports, make new report
-
     // Create report
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton(true);
-    F3xCreateReportPage.enterFormData(reportFormDataJuly);
     cy.intercept({
       method: 'Post',
       url: 'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency,report_type_category,report_code,coverage_from_date,coverage_through_date,date_of_election,state_of_election,form_type',
     }).as('saveReport');
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X(reportFormDataJuly);
+
     cy.wait('@saveReport');
 
     // Create report to add loan too
@@ -112,7 +87,7 @@ describe('Loans', () => {
       .children()
       .last()
       .as('secondReportKabob');
-    cy.get('@secondReportKabob').contains('Edit report').first().click({ force: true });
+    cy.get('@secondReportKabob').contains('Edit report').first().click({force: true});
     cy.wait(500);
     cy.get(alias)
       .find("[datatest='" + 'loans-and-debts-button' + "']")
@@ -156,23 +131,9 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-
-    // Create individual
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
+    ContactListPage.createOrganization();
+    ContactListPage.createIndividual();
+    ReportListPage.createF3X();
 
     // Navigate to loans
     PageUtils.clickSidebarItem('Add loans and debts');
@@ -192,17 +153,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
+    ContactListPage.createOrganization();
+    ReportListPage.createF3X();
 
     // Navigate to loans
     PageUtils.clickSidebarItem('Add loans and debts');
@@ -221,7 +173,7 @@ describe('Loans', () => {
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').last().should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Make loan repayment').click({ force: true });
+    cy.contains('Make loan repayment').click({force: true});
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
@@ -233,17 +185,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
+    ContactListPage.createOrganization();
+    ReportListPage.createF3X();
 
     // Navigate to loans
     PageUtils.clickSidebarItem('Add loans and debts');
@@ -275,23 +218,9 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-
-    // Create individual
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
+    ContactListPage.createOrganization();
+    ContactListPage.createIndividual();
+    ReportListPage.createF3X();
 
     // Navigate to loans
     PageUtils.clickSidebarItem('Add loans and debts');

@@ -1,0 +1,35 @@
+<dialog #selectReportDialog>
+  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h1 class="dialog-title" id="dialog-title">Select a report</h1>
+        <button type="button" class="btn-close" (click)="cancel()" aria-label="Cancel"></button>
+      </div>
+      <div class="dialog-body">
+        <p>
+          Pick the open report on which you would like to reattribute a contribution or a portion of it to a different
+          contributor.
+        </p>
+        <label for="report-selector">OPEN REPORTS</label>
+        <select id="report-selector" class="form-select" aria-label="Default select example"
+                [(ngModel)]="selectedReport">
+          <option selected></option>
+          <option *ngFor="let report of availableReports" [ngValue]="report">
+            {{report.formLabel}}: {{report.formSubLabel}}
+          </option>
+        </select>
+      </div>
+      <div class="dialog-footer">
+        <button pButton pRipple class="p-button-secondary" (click)="cancel()">Cancel</button>
+        <button
+          pButton
+          pRipple
+          class="p-button-primary"
+          [disabled]="!selectedReport"
+          (click)="createReattribution()"
+          label="Continue"
+        ></button>
+      </div>
+    </div>
+  </div>
+</dialog>

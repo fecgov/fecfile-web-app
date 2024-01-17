@@ -1,24 +1,24 @@
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { LoginPage } from './pages/loginPage';
-import { PageUtils, currentYear } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { defaultFormData as individualContactFormData, ContactFormData } from './models/ContactFormModel';
-import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
+import { ContactListPage } from '../pages/contactListPage';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { LoginPage } from '../pages/loginPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
+import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
 import {
   defaultScheduleFormData as defaultTransactionFormData,
   DisbursementFormData,
-} from './models/TransactionFormModel';
+} from '../models/TransactionFormModel';
 
 const organizationFormData: ContactFormData = {
   ...individualContactFormData,
-  ...{ contact_type: 'Organization' },
+  ...{contact_type: 'Organization'},
 };
 
 const candidateFormData: ContactFormData = {
   ...individualContactFormData,
-  ...{ contact_type: 'Candidate' },
+  ...{contact_type: 'Candidate'},
 };
 
 const independantExpVoidData: DisbursementFormData = {

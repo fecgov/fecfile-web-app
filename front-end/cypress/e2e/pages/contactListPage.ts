@@ -1,7 +1,13 @@
-import { ContactFormData } from '../models/ContactFormModel';
+import {
+  candidateFormData,
+  ContactFormData,
+  defaultFormData as individualContactFormData,
+  organizationFormData
+} from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
+
   static goToPage() {
     cy.visit('/dashboard');
     cy.get('.navbar-nav').find('.nav-link').contains('Contacts').click();
@@ -127,5 +133,23 @@ export class ContactListPage {
         },
       });
     });
+  }
+
+  static createIndividual(fd = individualContactFormData) {
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(fd);
+    PageUtils.clickButton('Save');
+  }
+
+  static createOrganization(fd = organizationFormData) {
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(fd);
+    PageUtils.clickButton('Save');
+  }
+
+  static createCandidate(fd = candidateFormData) {
+
   }
 }

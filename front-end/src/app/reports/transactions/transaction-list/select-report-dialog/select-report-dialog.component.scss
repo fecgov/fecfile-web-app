@@ -89,3 +89,11 @@ label {
   border-radius: 0.25rem;
   opacity: 0.5;
 }
+
+select {
+  background-color: #FFFFFF;
+}
+
+select:hover {
+  background-color: rgba(0, 123, 255, 0.04);
+}

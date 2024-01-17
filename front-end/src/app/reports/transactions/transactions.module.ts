@@ -42,6 +42,7 @@ import {
 } from './transaction-children-list-container/transaction-children-list-container.component';
 import { RippleModule } from "primeng/ripple";
 import { SelectButtonModule } from "primeng/selectbutton";
+import { SelectReportDialogComponent } from './transaction-list/select-report-dialog/select-report-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { SelectButtonModule } from "primeng/selectbutton";
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,
     TransactionNavigationComponent,
+    SelectReportDialogComponent,
   ],
   imports: [
     AccordionModule,

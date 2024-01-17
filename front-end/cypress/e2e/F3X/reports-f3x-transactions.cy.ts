@@ -1,13 +1,13 @@
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { TransactionTableColumns } from './pages/f3xTransactionListPage';
-import { LoginPage } from './pages/loginPage';
-import { PageUtils, currentYear } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData } from './models/ContactFormModel';
-import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
-import { defaultScheduleFormData, formTransactionDataForSchedule } from './models/TransactionFormModel';
+import { ContactListPage } from '../pages/contactListPage';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
+import { LoginPage } from '../pages/loginPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
+import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
+import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -80,14 +80,14 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Organization' },
+      ...{contact_type: 'Organization'},
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
     const formTransactionData = {
       ...scheduleData,
-      ...{ amount: 200.01, category_code: '005 Polling Expenses' },
+      ...{amount: 200.01, category_code: '005 Polling Expenses'},
     };
     TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.clickButton('Save');
@@ -163,14 +163,14 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Organization' },
+      ...{contact_type: 'Organization'},
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
     const formTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{ purpose_description: '', category_code: '' },
+      ...{purpose_description: '', category_code: ''},
     };
     TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
@@ -184,7 +184,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
     const memoFormTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{ memo_code: true, purpose_description: '', category_code: '' },
+      ...{memo_code: true, purpose_description: '', category_code: ''},
     };
 
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
@@ -232,7 +232,7 @@ describe('Transactions', () => {
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData({
       ...formTransactionData,
-      ...{ purpose_description: 'See Partnership Attribution(s) below' },
+      ...{purpose_description: 'See Partnership Attribution(s) below'},
     });
     PageUtils.clickButton('Cancel');
     PageUtils.urlCheck('/list');
@@ -243,7 +243,7 @@ describe('Transactions', () => {
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData({
       ...memoFormTransactionData,
-      ...{ purpose_description: 'Partnership Attribution' },
+      ...{purpose_description: 'Partnership Attribution'},
     });
   });
 
@@ -259,7 +259,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Committee' },
+      ...{contact_type: 'Committee'},
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -303,7 +303,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Committee' },
+      ...{contact_type: 'Committee'},
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -346,7 +346,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Organization' },
+      ...{contact_type: 'Organization'},
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -408,7 +408,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('STEP TWO');
     cy.get('p-accordiontab').last().as('stepTwoAccordion');
     PageUtils.clickLink('Create a new contact', '@stepTwoAccordion');
-    const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
+    const stepTwoContactFormData = {...defaultContactFormData, ...{contact_type: 'Committee'}};
     ContactListPage.enterFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
     TransactionDetailPage.enterScheduleFormData(transactionFormData, true, '@stepTwoAccordion');
@@ -443,7 +443,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(
       {
         ...transactionFormData,
-        ...{ purpose_description: `Earmarked through ${defaultContactFormData['name']}` },
+        ...{purpose_description: `Earmarked through ${defaultContactFormData['name']}`},
       },
       '@stepOneAccordion'
     );
@@ -456,7 +456,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(
       {
         ...transactionFormData,
-        ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
+        ...{memo_code: true, purpose_description: 'Total earmarked through conduit.'},
       },
       '@stepTwoAccordion'
     );
@@ -474,7 +474,7 @@ describe('Transactions', () => {
     // Enter STEP ONE transaction
     cy.get('p-accordiontab').first().as('stepOneAccordion');
     PageUtils.clickLink('Create a new contact', '@stepOneAccordion');
-    const stepOneContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
+    const stepOneContactFormData = {...defaultContactFormData, ...{contact_type: 'Committee'}};
     ContactListPage.enterFormData(stepOneContactFormData, true, '@stepOneAccordion');
     PageUtils.clickButton('Save & continue', '@stepOneAccordion');
 
@@ -543,7 +543,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(
       {
         ...transactionFormData,
-        ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
+        ...{memo_code: true, purpose_description: 'Total earmarked through conduit.'},
       },
       '@stepTwoAccordion'
     );
@@ -562,7 +562,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const committeeFormContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Committee' },
+      ...{contact_type: 'Committee'},
     };
     ContactListPage.enterFormData(committeeFormContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -585,7 +585,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const organizationFormContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Organization' },
+      ...{contact_type: 'Organization'},
     };
     ContactListPage.enterFormData(organizationFormContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -607,7 +607,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const individualFormContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Individual' },
+      ...{contact_type: 'Individual'},
     };
     ContactListPage.enterFormData(individualFormContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -657,7 +657,7 @@ describe('Transactions', () => {
     ContactListPage.assertFormData(committeeFormContactData, true);
     TransactionDetailPage.assertFormData({
       ...tier1TransactionData,
-      ...{ purpose_description: 'Transfer of Joint Fundraising Proceeds' },
+      ...{purpose_description: 'Transfer of Joint Fundraising Proceeds'},
     });
     PageUtils.clickButton('Cancel');
   });
