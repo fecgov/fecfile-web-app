@@ -131,6 +131,13 @@ describe('Transactions', () => {
   });
 
   xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
+    function checkTable(index: number, type: string, containMemo: boolean, value: string) {
+      cy.get('tbody tr').eq(index).as('row');
+      cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
+      cy.get('@row').find('td').eq(TransactionTableColumns.memo_code).should(containMemo ? 'contain' : 'not.contain', 'Y');
+      cy.get('@row').find('td').eq(TransactionTableColumns.aggregate).should('contain', value);
+    }
+
     F3XSetup();
     StartTransaction.Receipts().Individual().Partnership();
 
@@ -178,26 +185,9 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save');
 
     // Assert transaction list table is correct
-    cy.get('tbody tr').eq(0).as('row-1');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Receipt');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
-
-    cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2')
-      .find('td')
-      .eq(TransactionTableColumns.transaction_type)
-      .should('contain', 'Partnership Attribution');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
-
-    cy.get('tbody tr').eq(2).as('row-3');
-    cy.get('@row-3')
-      .find('td')
-      .eq(TransactionTableColumns.transaction_type)
-      .should('contain', 'Partnership Attribution');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$400.02');
+    checkTable(0, 'Partnership Receipt', false, '$200.01');
+    checkTable(1, 'Partnership Attribution', true, '$200.01');
+    checkTable(2, 'Partnership Attribution', true, '$400.02');
 
     // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');

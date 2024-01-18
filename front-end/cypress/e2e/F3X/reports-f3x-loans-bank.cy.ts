@@ -6,7 +6,7 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from "./start-transaction/start-transaction";
-import { F3XSetup, reportFormDataApril, reportFormDataJuly } from "./f3x-setup";
+import { F3XSetup, reportFormDataApril, reportFormDataJuly, Setup } from "./f3x-setup";
 
 
 const formData = {
@@ -22,6 +22,18 @@ const formData = {
   },
 };
 
+function setupLoanFromBank(setup: Setup) {
+  F3XSetup(setup);
+  StartTransaction.Loans().FromBank();
+
+  PageUtils.searchBoxInput(organizationFormData.name);
+  formData.date_received = undefined;
+  TransactionDetailPage.enterLoanFormData(formData);
+
+  PageUtils.clickLink('STEP TWO:');
+  TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
+}
+
 describe('Loans', () => {
   beforeEach(() => {
     LoginPage.login();
@@ -31,15 +43,8 @@ describe('Loans', () => {
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    F3XSetup({individual: true, organization: true, report: reportFormDataApril});
-    StartTransaction.Loans().FromBank();
+    setupLoanFromBank({individual: true, organization: true, report: reportFormDataApril});
 
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-    PageUtils.clickLink('STEP TWO:');
-    TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').should('exist');
@@ -99,32 +104,16 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    F3XSetup({individual: true, organization: true});
-    StartTransaction.Loans().FromBank();
+    setupLoanFromBank({individual: true, organization: true});
 
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-
-    PageUtils.clickLink('STEP TWO:');
-    TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').should('exist');
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
-    F3XSetup({organization: true});
-    StartTransaction.Loans().FromBank();
+    setupLoanFromBank({organization: true});
 
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-
-    PageUtils.clickLink('STEP TWO:');
-    TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton('Save transactions');
 
     PageUtils.urlCheck('/list');
@@ -142,16 +131,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
-    F3XSetup({organization: true});
-    StartTransaction.Loans().FromBank();
+    setupLoanFromBank({organization: true});
 
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-
-    PageUtils.clickLink('STEP TWO:');
-    TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
     PageUtils.clickButton('Save transactions');
 
     PageUtils.urlCheck('/list');
@@ -170,16 +151,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
-    F3XSetup({organization: true, individual: true});
-    StartTransaction.Loans().FromBank();
-
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.searchBoxInput(organizationFormData.name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-
-    PageUtils.clickLink('STEP TWO:');
-    TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
+    setupLoanFromBank({individual: true, organization: true});
 
     PageUtils.clickButton('Save & add loan guarantor');
 

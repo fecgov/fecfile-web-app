@@ -211,7 +211,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
 export class TableAction {
   label: string;
-  action: (item?: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  action: (item?: any) => void | Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
   isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
   isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
   constructor(

@@ -20,6 +20,16 @@ const formData = {
   },
 };
 
+function setupLoanByCommittee() {
+  F3XSetup({committee: true, individual: true})
+  StartTransaction.Loans().ByCommittee();
+  // Search for created committee and enter load data, then add load gaurantor
+  PageUtils.urlCheck('LOAN_BY_COMMITTEE');
+  PageUtils.searchBoxInput(committeeFormData.committee_id);
+  formData.date_received = undefined;
+  TransactionDetailPage.enterLoanFormData(formData);
+}
+
 describe('Loans', () => {
   beforeEach(() => {
     LoginPage.login();
@@ -27,19 +37,11 @@ describe('Loans', () => {
     ContactListPage.deleteAllContacts();
     ContactListPage.goToPage();
     ReportListPage.goToPage();
+
   });
 
   it('should test: Loan By Committee', () => {
-    F3XSetup({committee: true, individual: true})
-    StartTransaction.Loans().ByCommittee();
-
-    // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
-    PageUtils.searchBoxInput(committeeFormData.committee_id);
-
-    formData.date_received = undefined;
-
-    TransactionDetailPage.enterLoanFormData(formData);
+    setupLoanByCommittee();
     PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
     cy.contains('Loan By Committee').should('exist');
@@ -47,15 +49,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee - Receive loan repayment', () => {
-    F3XSetup({committee: true, individual: true})
-    StartTransaction.Loans().ByCommittee();
-
     // Search for created committee and enter load data, then add load gaurantor
-    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
-    PageUtils.searchBoxInput(committeeFormData.committee_id);
-
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
+    setupLoanByCommittee();
     PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
     cy.contains('Loan By Committee').should('exist');
@@ -74,15 +69,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee - add Guarantor', () => {
-    F3XSetup({committee: true, individual: true})
-    StartTransaction.Loans().ByCommittee();
-
-    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
-    PageUtils.searchBoxInput(committeeFormData.committee_id);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
+    setupLoanByCommittee();
     PageUtils.clickButton('Save & add loan guarantor');
-
     PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
     PageUtils.searchBoxInput(individualContactFormData.last_name);
     cy.get('#amount').safeType(formData['amount']);

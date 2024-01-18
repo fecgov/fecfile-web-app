@@ -3,7 +3,11 @@ import { LoginPage } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
+import {
+  ContactFormData,
+  createIndividual,
+  defaultFormData as individualContactFormData
+} from '../models/ContactFormModel';
 import { StartTransaction } from "./start-transaction/start-transaction";
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from "./f3x-setup";
 import { ScheduleFormData } from "../models/TransactionFormModel";
@@ -34,29 +38,7 @@ const reattributeData: ScheduleFormData = {
   memo_text: '',
 }
 
-const assignee: ContactFormData = {
-  contact_type: 'Individual',
-  last_name: PageUtils.randomString(10),
-  first_name: PageUtils.randomString(10),
-  middle_name: PageUtils.randomString(10),
-  prefix: PageUtils.randomString(5),
-  suffix: PageUtils.randomString(5),
-  country: 'United States of America',
-  street_1: PageUtils.randomString(10),
-  street_2: PageUtils.randomString(10),
-  city: PageUtils.randomString(10),
-  state: 'District of Columbia',
-  zip: PageUtils.randomString(5),
-  phone: PageUtils.randomString(10, 'numeric'),
-  employer: PageUtils.randomString(20),
-  occupation: PageUtils.randomString(20),
-  candidate_id: 'H2AZ12345',
-  candidate_office: 'House',
-  candidate_state: 'Virginia',
-  candidate_district: '01',
-  committee_id: 'C' + PageUtils.randomString(8, 'numeric'),
-  name: PageUtils.randomString(10),
-}
+const assignee: ContactFormData = createIndividual();
 
 function CreateReceipt() {
   F3XSetup({individual: true, candidate: true, report: reportFormDataApril});
