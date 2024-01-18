@@ -1,4 +1,4 @@
-import { AbstractControl, FormControl } from '@angular/forms';
+import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
@@ -7,7 +7,7 @@ import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
-abstract class F1MContact {
+export abstract class F1MContact {
   contactKey: keyof Form1M;
   get contactLookupKey(): string {
     return `${this.contactKey}_lookup`;
@@ -15,6 +15,9 @@ abstract class F1MContact {
   abstract contactTypeOptions: PrimeOptions;
   component: MainFormComponent;
   control: AbstractControl | null;
+  abstract enableValidation(): void;
+  abstract disableValidation(): void;
+  abstract updateValueAndValidity(): void;
 
   constructor(contactKey: keyof Form1M, component: MainFormComponent) {
     this.contactKey = contactKey;
@@ -50,6 +53,38 @@ export class AffiliatedContact extends F1MContact {
       committee_name: 'affiliated_committee_name',
       committee_fec_id: 'affiliated_committee_fec_id',
     } as TransactionTemplateMapType;
+  }
+
+  enableValidation() {
+    if (!this.component.report.affiliated_committee_name) {
+      this.control?.addValidators(Validators.required);
+    }
+    this.component.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
+    this.component.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
+    this.component.form.get('affiliated_committee_name')?.addValidators(Validators.required);
+    this.updateValueAndValidity();
+  }
+
+  disableValidation() {
+    this.control?.clearValidators();
+    this.component.report.contact_affiliated = undefined;
+
+    this.component.form.get('affiliated_date_form_f1_filed')?.clearValidators();
+    this.component.form.get('affiliated_committee_fec_id')?.clearValidators();
+    this.component.form.get('affiliated_committee_name')?.clearValidators();
+
+    this.component.form.get('affiliated_date_form_f1_filed')?.setValue(undefined);
+    this.component.form.get('affiliated_committee_fec_id')?.setValue(undefined);
+    this.component.form.get('affiliated_committee_name')?.setValue(undefined);
+
+    this.updateValueAndValidity();
+  }
+
+  updateValueAndValidity() {
+    this.control?.updateValueAndValidity();
+    this.component.form.get('affiliated_date_form_f1_filed')?.updateValueAndValidity();
+    this.component.form.get('affiliated_committee_fec_id')?.updateValueAndValidity();
+    this.component.form.get('affiliated_committee_name')?.updateValueAndValidity();
   }
 }
 
@@ -88,5 +123,51 @@ export class CandidateContact extends F1MContact {
       candidate_state: `${id}_candidate_state`,
       candidate_district: `${id}_candidate_district`,
     } as TransactionTemplateMapType;
+  }
+
+  enableValidation() {
+    if (!this.component.report[`${this.id}_candidate_id_number` as keyof Form1M]) {
+      this.control?.addValidators(Validators.required);
+    }
+    this.component.form.get(`${this.id}_candidate_id_number`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.id}_candidate_last_name`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.id}_candidate_first_name`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.id}_candidate_office`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.id}_date_of_contribution`)?.addValidators(Validators.required);
+    this.updateValueAndValidity();
+  }
+
+  disableValidation() {
+    this.control?.clearValidators();
+    (this.component.report[this.contactKey as keyof Form1M] as Contact | undefined) = undefined;
+
+    this.component.form.get(`${this.id}_candidate_id_number`)?.clearValidators();
+    this.component.form.get(`${this.id}_candidate_last_name`)?.clearValidators();
+    this.component.form.get(`${this.id}_candidate_first_name`)?.clearValidators();
+    this.component.form.get(`${this.id}_candidate_office`)?.clearValidators();
+    this.component.form.get(`${this.id}_candidate_state`)?.clearValidators();
+    this.component.form.get(`${this.id}_candidate_district`)?.clearValidators();
+    this.component.form.get(`${this.id}_date_of_contribution`)?.clearValidators();
+
+    this.component.form.get(`${this.id}_candidate_id_number`)?.setValue(undefined);
+    this.component.form.get(`${this.id}_candidate_last_name`)?.setValue(undefined);
+    this.component.form.get(`${this.id}_candidate_first_name`)?.setValue(undefined);
+    this.component.form.get(`${this.id}_candidate_office`)?.setValue(undefined);
+    this.component.form.get(`${this.id}_candidate_state`)?.setValue(undefined);
+    this.component.form.get(`${this.id}_candidate_district`)?.setValue(undefined);
+    this.component.form.get(`${this.id}_date_of_contribution`)?.setValue(undefined);
+
+    this.updateValueAndValidity();
+  }
+
+  updateValueAndValidity() {
+    this.control?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_candidate_id_number`)?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_candidate_last_name`)?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_candidate_first_name`)?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_candidate_office`)?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_candidate_state`)?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_candidate_district`)?.updateValueAndValidity();
+    this.component.form.get(`${this.id}_date_of_contribution`)?.updateValueAndValidity();
   }
 }

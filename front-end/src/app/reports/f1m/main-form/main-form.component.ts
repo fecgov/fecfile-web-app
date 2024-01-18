@@ -15,7 +15,7 @@ import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { AffiliatedContact, CandidateContact } from './contact';
+import { F1MContact, AffiliatedContact, CandidateContact } from './contact';
 
 @Component({
   selector: 'app-main-form',
@@ -149,25 +149,44 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
     this.affiliatedContact = new AffiliatedContact(this);
-    this.candidateContacts = [new CandidateContact('I', this)];
+    this.candidateContacts = [
+      new CandidateContact('I', this),
+      new CandidateContact('II', this),
+      new CandidateContact('III', this),
+      new CandidateContact('IV', this),
+      new CandidateContact('V', this),
+    ];
 
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
       ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
       if (value === 'affiliation') {
-        if (!this.report.affiliated_committee_name) {
-          this.affiliatedContact?.control?.addValidators(Validators.required);
-        }
-        this.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
-        this.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
-        this.form.get('affiliated_committee_name')?.addValidators(Validators.required);
+        this.enableValidation([this.affiliatedContact]);
+        this.disableValidation(this.candidateContacts);
+        this.form.get('date_of_original_registration')?.clearValidators();
+        this.form.get('date_of_51st_contributor')?.clearValidators();
+        this.form.get('date_committee_met_requirements')?.clearValidators();
+        this.form.get('date_of_original_registration')?.setValue(undefined);
+        this.form.get('date_of_51st_contributor')?.setValue(undefined);
+        this.form.get('date_committee_met_requirements')?.setValue(undefined);
       } else {
-        this.affiliatedContact?.control?.clearValidators();
+        this.enableValidation(this.candidateContacts);
+        this.form.get('date_of_original_registration')?.addValidators(Validators.required);
+        this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
+        this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
+        this.disableValidation([this.affiliatedContact]);
       }
-      this.form.get('affiliated_date_form_f1_filed')?.updateValueAndValidity();
-      this.form.get('affiliated_committee_fec_id')?.updateValueAndValidity();
-      this.form.get('affiliated_committee_name')?.updateValueAndValidity();
-      this.affiliatedContact?.control?.updateValueAndValidity();
+      this.form.get('date_of_original_registration')?.updateValueAndValidity();
+      this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
+      this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
     });
+  }
+
+  enableValidation(contacts: F1MContact[]) {
+    contacts.forEach((contact: F1MContact) => contact.enableValidation());
+  }
+
+  disableValidation(contacts: F1MContact[]) {
+    contacts.forEach((contact: F1MContact) => contact.disableValidation());
   }
 
   getReportPayload(): Report {

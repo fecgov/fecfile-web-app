@@ -259,6 +259,11 @@
             </div>
           </div>
         </div>
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="statusByControl?.value === 'qualification'">
@@ -345,6 +350,7 @@
                 [form]="form"
                 [fieldName]="candidateContact.contactLookupKey"
                 [formSubmitted]="formSubmitted"
+                requiredErrorMessage="Candidate information is required"
               ></app-error-messages>
             </div>
           </div>
@@ -403,14 +409,14 @@
             </div>
           </div>
         </ng-container>
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
       </ng-container>
     </ng-container>
   </form>
-  <div class="grid">
-    <div class="col-12">
-      <hr />
-    </div>
-  </div>
   <div class="grid">
     <div class="col-2">
       <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
