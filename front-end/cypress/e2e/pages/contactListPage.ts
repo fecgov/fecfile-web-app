@@ -136,31 +136,26 @@ export class ContactListPage {
     });
   }
 
-  static createIndividual(fd = individualContactFormData) {
+  private static create(fd: ContactFormData) {
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
     ContactListPage.enterFormData(fd);
     PageUtils.clickButton('Save');
+  }
+
+  static createIndividual(fd = individualContactFormData) {
+    ContactListPage.create(fd);
   }
 
   static createOrganization(fd = organizationFormData) {
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(fd);
-    PageUtils.clickButton('Save');
+    ContactListPage.create(fd);
   }
 
   static createCandidate(fd = candidateFormData) {
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(fd);
-    PageUtils.clickButton('Save');
+    ContactListPage.create(fd);
   }
 
   static createCommittee(fd = committeeFormData) {
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(fd);
-    PageUtils.clickButton('Save');
+    ContactListPage.create(fd);
   }
 }

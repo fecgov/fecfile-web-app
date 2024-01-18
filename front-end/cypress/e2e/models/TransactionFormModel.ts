@@ -36,18 +36,6 @@ export const defaultScheduleFormData: ScheduleFormData = {
   memo_text: PageUtils.randomString(20),
 };
 
-export class ReceiptFormData extends ScheduleFormData {
-  constructor(formData: ReceiptFormData) {
-    super(formData);
-  }
-}
-
-export class ReattributeFormData extends ScheduleFormData {
-  constructor(formData: ReattributeFormData) {
-    super(formData);
-  }
-}
-
 export class DisbursementFormData extends ScheduleFormData {
   date2: Date | undefined;
   supportOpposeCode: string;

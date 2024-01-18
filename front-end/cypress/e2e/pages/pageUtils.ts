@@ -28,11 +28,7 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
     const currentDate: Date = new Date();
     //
-    if (calendar.includes('date_incurred') || calendar.includes('due_date') || calendar.includes('date_signed')) {
-      cy.get(alias).find(calendar).first().as('calendarElement').click();
-    } else {
-      cy.get(alias).find(calendar).first().as('calendarElement').click();
-    }
+    cy.get(alias).find(calendar).first().as('calendarElement').click();
 
     cy.get('@calendarElement').find('.p-datepicker-year').first().click();
     //    Choose the year

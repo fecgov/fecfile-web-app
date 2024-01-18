@@ -197,17 +197,17 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     action.action(transaction);
   }
 
-  override editItem(item: Transaction): void {
-    this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
+  override async editItem(item: Transaction): Promise<void> {
+    await this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
   }
 
-  public editLoanAgreement(transaction: Transaction): void {
+  public async editLoanAgreement(transaction: Transaction): Promise<void> {
     if (transaction.loan_agreement_id)
-      this.router.navigate([`${transaction.loan_agreement_id}`], {relativeTo: this.activatedRoute});
+      await this.router.navigate([`${transaction.loan_agreement_id}`], {relativeTo: this.activatedRoute});
   }
 
-  public createLoanAgreement(transaction: Transaction): void {
-    this.router.navigateByUrl(
+  public async createLoanAgreement(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`
     );
   }
@@ -245,26 +245,26 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     });
   }
 
-  public createLoanRepaymentReceived(transaction: Transaction): void {
-    this.router.navigateByUrl(
+  public async createLoanRepaymentReceived(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
     );
   }
 
-  public createDebtRepaymentReceived(transaction: Transaction): void {
-    this.router.navigateByUrl(
+  public async createDebtRepaymentReceived(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`
     );
   }
 
-  public createLoanRepaymentMade(transaction: Transaction): void {
-    this.router.navigateByUrl(
+  public async createLoanRepaymentMade(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
     );
   }
 
-  public createDebtRepaymentMade(transaction: Transaction): void {
-    this.router.navigateByUrl(
+  public async createDebtRepaymentMade(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
     );
   }

@@ -4,13 +4,13 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
-import { ReattributeFormData, ReceiptFormData, } from '../models/TransactionFormModel';
 import { StartTransaction } from "./start-transaction/start-transaction";
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from "./f3x-setup";
+import { ScheduleFormData } from "../models/TransactionFormModel";
 
 const APRIL_15 = 'APRIL 15';
 
-const receiptData: ReceiptFormData = {
+const receiptData: ScheduleFormData = {
   amount: 100.55,
   category_code: '',
   date_received: new Date(currentYear, 4 - 1, 27),
@@ -22,7 +22,7 @@ const receiptData: ReceiptFormData = {
   memo_text: PageUtils.randomString(20),
 };
 
-const reattributeData: ReattributeFormData = {
+const reattributeData: ScheduleFormData = {
   amount: 100.55,
   category_code: '',
   date_received: new Date(currentYear, 4 - 1, 27),
@@ -65,7 +65,7 @@ function CreateReceipt() {
   cy.get('[role="searchbox"]').type(individualContactFormData.last_name.slice(0, 1));
   cy.contains(individualContactFormData.last_name).should('exist');
   cy.contains(individualContactFormData.last_name).click();
-  TransactionDetailPage.enterScheduleFormData(new ReceiptFormData(receiptData));
+  TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData));
 
 
   PageUtils.clickButton('Save');
@@ -86,7 +86,7 @@ function Reattribute(old = false) {
   cy.get('[role="searchbox"]').type(assignee.last_name.slice(0, 1));
   cy.contains(assignee.last_name).should('exist');
   cy.contains(assignee.last_name).click();
-  TransactionDetailPage.enterScheduleFormData(new ReattributeFormData(reattributeData));
+  TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(reattributeData));
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
