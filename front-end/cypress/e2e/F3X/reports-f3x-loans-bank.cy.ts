@@ -1,29 +1,13 @@
 import { defaultFormData as individualContactFormData, organizationFormData } from '../models/ContactFormModel';
-import { defaultFormData as reportFormData, F3xCreateReportFormData } from '../models/ReportFormModel';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { ContactListPage } from '../pages/contactListPage';
 import { LoginPage } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { StartTransaction } from "./start-transaction/start-transaction";
+import { F3XSetup, reportFormDataApril, reportFormDataJuly } from "./f3x-setup";
 
-const reportFormDataApril: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q1',
-    coverage_from_date: new Date(currentYear, 0, 1),
-    coverage_through_date: new Date(currentYear, 3, 30),
-  },
-};
-
-const reportFormDataJuly: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q2',
-    coverage_from_date: new Date(currentYear, 4, 1),
-    coverage_through_date: new Date(currentYear, 7, 30),
-  },
-};
 
 const formData = {
   ...defaultLoanFormData,
@@ -47,14 +31,8 @@ describe('Loans', () => {
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    ContactListPage.createOrganization();
-    ContactListPage.createIndividual();
-    ReportListPage.createF3X(reportFormDataApril);
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan Received from Bank');
+    F3XSetup({individual: true, organization: true, report: reportFormDataApril});
+    StartTransaction.Loans().FromBank();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -131,14 +109,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    ContactListPage.createOrganization();
-    ContactListPage.createIndividual();
-    ReportListPage.createF3X();
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan Received from Bank');
+    F3XSetup({individual: true, organization: true});
+    StartTransaction.Loans().FromBank();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -153,13 +125,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
-    ContactListPage.createOrganization();
-    ReportListPage.createF3X();
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan Received from Bank');
+    F3XSetup({organization: true});
+    StartTransaction.Loans().FromBank();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -185,13 +152,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
-    ContactListPage.createOrganization();
-    ReportListPage.createF3X();
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan Received from Bank');
+    F3XSetup({organization: true});
+    StartTransaction.Loans().FromBank();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -218,14 +180,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
-    ContactListPage.createOrganization();
-    ContactListPage.createIndividual();
-    ReportListPage.createF3X();
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan Received from Bank');
+    F3XSetup({organization: true, individual: true});
+    StartTransaction.Loans().FromBank();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.searchBoxInput(organizationFormData.name);

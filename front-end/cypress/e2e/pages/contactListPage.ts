@@ -1,5 +1,6 @@
 import {
   candidateFormData,
+  committeeFormData,
   ContactFormData,
   defaultFormData as individualContactFormData,
   organizationFormData
@@ -150,6 +151,16 @@ export class ContactListPage {
   }
 
   static createCandidate(fd = candidateFormData) {
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(fd);
+    PageUtils.clickButton('Save');
+  }
 
+  static createCommittee(fd = committeeFormData) {
+    ContactListPage.goToPage();
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData(fd);
+    PageUtils.clickButton('Save');
   }
 }

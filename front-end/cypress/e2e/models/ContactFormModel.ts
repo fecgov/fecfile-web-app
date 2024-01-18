@@ -81,3 +81,8 @@ export const candidateFormData: ContactFormData = {
   ...defaultFormData,
   ...{contact_type: 'Candidate'},
 };
+
+export const committeeFormData: ContactFormData = {
+  ...defaultFormData,
+  ...{contact_type: 'Committee'},
+};

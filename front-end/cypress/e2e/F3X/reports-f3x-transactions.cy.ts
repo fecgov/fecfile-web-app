@@ -8,6 +8,8 @@ import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
+import { F3XSetup } from "./f3x-setup";
+import { StartTransaction } from "./start-transaction/start-transaction";
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -29,20 +31,8 @@ describe('Transactions', () => {
   it('Create an Individual Receipt transaction using the contact lookup', () => {
     cy.runLighthouse('reports', 'transactions-list');
 
-    // Create an individual contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(defaultContactFormData);
-    PageUtils.clickButton('Save');
-
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Individual Receipt');
+    F3XSetup({individual: true})
+    StartTransaction.Receipts().Individual().IndividualReceipt();
 
     // Select the contact from the contact lookup
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
@@ -69,13 +59,8 @@ describe('Transactions', () => {
   });
 
   it('Create an Other Disbursement transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a disbursement');
-    PageUtils.clickLink('OTHER EXPENDITURES');
-    PageUtils.clickLink('Other Disbursement');
+    F3XSetup();
+    StartTransaction.Disbursements().Other().Other();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -109,13 +94,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Returned/Bounced Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Returned();
 
     PageUtils.clickLink('Create a new contact');
     ContactListPage.enterFormData(defaultContactFormData, true);
@@ -151,14 +131,8 @@ describe('Transactions', () => {
   });
 
   xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    // Create a receipt
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Partnership Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Partnership();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -248,13 +222,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Party Receipt transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM REGISTERED FILERS');
-    PageUtils.clickLink('Party Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().RegisteredFilers().Party();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -292,13 +261,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Group I transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('REFUNDS');
-    PageUtils.clickLink('Refund of Contribution to Other Political Committee');
+    F3XSetup();
+    StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {

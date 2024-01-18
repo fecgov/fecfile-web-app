@@ -3,10 +3,10 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { ContactListPage } from '../pages/contactListPage';
-import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
-import { defaultFormData as reportFormData } from '../models/ReportFormModel';
+import { F3XSetup } from "./f3x-setup";
+import { StartTransaction } from "./start-transaction/start-transaction";
 
 const committeeFormData: ContactFormData = {
   ...individualContactFormData,
@@ -30,28 +30,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-
-    // Create individual
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan By Committee');
+    F3XSetup({committee: true, individual: true})
+    StartTransaction.Loans().ByCommittee();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');
@@ -67,28 +47,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee - Receive loan repayment', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-
-    // Create individual
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan By Committee');
+    F3XSetup({committee: true, individual: true})
+    StartTransaction.Loans().ByCommittee();
 
     // Search for created committee and enter load data, then add load gaurantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');
@@ -114,28 +74,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee - add Guarantor', () => {
-    // Create a committee contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-
-    // Create individual
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(individualContactFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('LOANS');
-    PageUtils.clickLink('Loan By Committee');
+    F3XSetup({committee: true, individual: true})
+    StartTransaction.Loans().ByCommittee();
 
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');
     PageUtils.searchBoxInput(committeeFormData.committee_id);

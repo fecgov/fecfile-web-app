@@ -3,15 +3,11 @@ import { PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { ContactListPage } from '../pages/contactListPage';
-import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { defaultDebtFormData as debtFormData } from '../models/TransactionFormModel';
-import { ContactFormData, defaultFormData as contactFormData } from '../models/ContactFormModel';
-import { defaultFormData as reportFormData } from '../models/ReportFormModel';
+import { committeeFormData } from '../models/ContactFormModel';
+import { F3XSetup } from "./f3x-setup";
+import { StartTransaction } from "./start-transaction/start-transaction";
 
-const committeeFormData: ContactFormData = {
-  ...contactFormData,
-  ...{contact_type: 'Committee'},
-};
 
 describe('Debts', () => {
   beforeEach(() => {
@@ -23,21 +19,8 @@ describe('Debts', () => {
   });
 
   it('should test Debt Owed By Committee loan', () => {
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('DEBTS');
-    PageUtils.clickLink('Debt Owed By Committee');
+    F3XSetup({committee: true});
+    StartTransaction.Debts().ByCommittee();
 
     PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
     PageUtils.containedOnPage('Debt Owed By Committee');
@@ -51,21 +34,8 @@ describe('Debts', () => {
   });
 
   it('should test Owed To Committee loan', () => {
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-
-    // Create report to add loan too
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(reportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    // Navigate to loans
-    PageUtils.clickSidebarItem('Add loans and debts');
-    PageUtils.clickLink('DEBTS');
-    PageUtils.clickLink('Debt Owed To Committee');
+    F3XSetup({committee: true});
+    StartTransaction.Debts().ToCommittee();
 
     PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
     PageUtils.containedOnPage('Debt Owed To Committee');
