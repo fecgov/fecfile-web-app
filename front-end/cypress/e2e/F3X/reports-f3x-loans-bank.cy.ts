@@ -55,18 +55,8 @@ describe('Loans', () => {
     cy.wait('@saveReport');
 
     // Create report to add loan too
-    ReportListPage.goToPage();
+    ReportListPage.editReport('JULY 15');
     const alias = PageUtils.getAlias('');
-    cy.get(alias)
-      .contains('JULY 15')
-      .siblings()
-      .last()
-      .find('app-table-actions-button')
-      .children()
-      .last()
-      .as('secondReportKabob');
-    cy.get('@secondReportKabob').contains('Edit report').first().click({force: true});
-    cy.wait(500);
     cy.get(alias)
       .find("[datatest='" + 'loans-and-debts-button' + "']")
       .children()

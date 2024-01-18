@@ -1,6 +1,7 @@
 import { F3xCreateReportPage } from "./f3xCreateReportPage";
 import { defaultFormData as defaultReportFormData } from "../models/ReportFormModel";
 import { PageUtils } from "./pageUtils";
+import { defaultFormData as cohFormData, F3xCashOnHandPage } from "./f3xCashOnHandPage";
 
 export class ReportListPage {
   static goToPage() {
@@ -56,5 +57,26 @@ export class ReportListPage {
     ReportListPage.clickCreateButton(true);
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
+  }
+
+  static editReport(reportName: string, fieldName = 'Edit report') {
+    ReportListPage.goToPage();
+    PageUtils.getKabob(reportName).contains(fieldName).first().click({force: true});
+    cy.wait(500);
+  }
+
+  static submitReport(reportName: string, fd = cohFormData) {
+    ReportListPage.editReport(reportName);
+    F3xCashOnHandPage.enterFormData(fd);
+    PageUtils.clickButton('Save & continue');
+    PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
+    PageUtils.clickSidebarItem('Submit report');
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('#filingPassword').type('Test123!');
+    cy.get(alias).find('.p-checkbox').click();
+    PageUtils.clickButton('Submit');
+    PageUtils.clickButton('Yes');
+    ReportListPage.goToPage();
+
   }
 }

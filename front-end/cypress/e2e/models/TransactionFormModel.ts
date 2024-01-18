@@ -42,6 +42,12 @@ export class ReceiptFormData extends ScheduleFormData {
   }
 }
 
+export class ReattributeFormData extends ScheduleFormData {
+  constructor(formData: ReattributeFormData) {
+    super(formData);
+  }
+}
+
 export class DisbursementFormData extends ScheduleFormData {
   date2: Date | undefined;
   supportOpposeCode: string;

@@ -7,14 +7,6 @@ export class ReattributedUtils {
       if (transaction.report_id === activeReportId) {
         transaction.contribution_purpose_descrip = 'See reattribution below.';
       } else {
-        // The originating transaction is not in the current report, so we make a MEMO copy and
-        // set the copy reatt_redes_id, reattribution_redesignation_tag, and purpose_description
-        transaction.id = undefined;
-        transaction.parent_transaction_id = undefined;
-        transaction.report_id = activeReportId;
-        transaction.reatt_redes_id = transaction.id;
-        transaction.children = [];
-        transaction.memo_code = true;
         transaction.contribution_purpose_descrip = `(Originally disclosed on ${transaction.report?.report_type}.) See attribution below.`;
       }
 

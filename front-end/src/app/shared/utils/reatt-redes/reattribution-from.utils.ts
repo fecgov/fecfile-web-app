@@ -27,12 +27,12 @@ export class ReattributionFromUtils {
       amountLabel: 'REATTRIBUTED AMOUNT',
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
       hidePrimaryContactLookup: true,
-      contactTypeOptions: [(transaction.reatt_redes as SchATransaction).entity_type],
+      contactTypeOptions: [(transaction.reatt_redes as SchATransaction)?.entity_type ?? ''],
       // noop generatePurposeDescription to inform dynamic input label
       generatePurposeDescription: (transaction: SchATransaction): string => {
         return transaction[
           transaction.transactionType.templateMap.purpose_description as keyof SchATransaction
-        ] as string;
+          ] as string;
       },
     });
 
