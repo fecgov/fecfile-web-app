@@ -18,7 +18,7 @@ export class SelectReportDialogComponent implements OnInit {
   transaction?: Transaction;
   @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
 
-  constructor(private router: Router, private reportService: ReportService) {
+  constructor(public router: Router, private reportService: ReportService) {
   }
 
   async ngOnInit() {
