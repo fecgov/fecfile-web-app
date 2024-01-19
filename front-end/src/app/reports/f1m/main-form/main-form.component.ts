@@ -125,6 +125,9 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   updateAffiliatedContact($event: SelectItem<Contact>) {
     this.report.contact_affiliated = $event.value;
+    if (this.report.contact_affiliated.id) {
+      this.report.contact_affiliated_id = this.report.contact_affiliated.id;
+    }
     this.form.get('affiliated_committee_fec_id')?.setValue($event.value.committee_id);
     this.form.get('affiliated_committee_name')?.setValue($event.value.name);
     this.contactAffiliatedLookupControl?.clearValidators();
