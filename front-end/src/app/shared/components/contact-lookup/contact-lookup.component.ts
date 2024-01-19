@@ -2,18 +2,18 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import {
+  CandidateOfficeType,
+  CandidateOfficeTypeLabels,
   Contact,
   ContactTypeLabels,
   ContactTypes,
-  FecApiLookupData,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
-  CandidateOfficeType,
-  CandidateOfficeTypeLabels,
+  FecApiLookupData,
 } from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
-import { LabelList, PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
+import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
 

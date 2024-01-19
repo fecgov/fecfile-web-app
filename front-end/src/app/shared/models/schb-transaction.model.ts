@@ -1,8 +1,12 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction, AggregationGroups } from './transaction.model';
+import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { ReattRedesTypes } from "../utils/reatt-redes/reatt-redes.utils";
+import { RedesignatedUtils } from "../utils/reatt-redes/redesignated.utils";
+import { RedesignationToUtils } from "../utils/reatt-redes/redesignation-to.utils";
+import { RedesignationFromUtils } from "../utils/reatt-redes/redesignation-from.utils";
 
 export class SchBTransaction extends Transaction {
   entity_type: string | undefined;
@@ -57,9 +61,10 @@ export class SchBTransaction extends Transaction {
       ...super.getFieldsNotToValidate(),
     ];
   }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchBTransaction {
-    const transaction = plainToClass(SchBTransaction, json);
+    let transaction = plainToClass(SchBTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
@@ -72,6 +77,25 @@ export class SchBTransaction extends Transaction {
         return getFromJSON(child, depth - 1);
       });
     }
+
+    switch (transaction.reattribution_redesignation_tag) {
+      case ReattRedesTypes.REDESIGNATED: {
+        transaction = RedesignatedUtils.overlayTransactionProperties(transaction);
+        break;
+      }
+      case ReattRedesTypes.REDESIGNATION_TO: {
+        transaction = RedesignationToUtils.overlayTransactionProperties(transaction);
+        break;
+      }
+      case ReattRedesTypes.REDESIGNATION_FROM: {
+        transaction = RedesignationFromUtils.overlayTransactionProperties(transaction);
+        break;
+      }
+    }
+    if (depth > 0 && transaction.reatt_redes) {
+      transaction.reatt_redes = getFromJSON(transaction.reatt_redes, depth - 1);
+    }
+
     return transaction;
   }
 }

@@ -6,7 +6,7 @@ import {
   STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY,
 } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { takeUntil, of, combineLatest } from 'rxjs';
+import { combineLatest, of, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
 
@@ -75,7 +75,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
         });
         this.form.get(this.stateFormControlName)?.enable();
         this.form.get(this.districtFormControlName)?.disable();
-      } else {
+      } else if (!this.transaction?.reatt_redes) {
         this.form.get(this.stateFormControlName)?.enable();
         this.form.get(this.districtFormControlName)?.enable();
       }
