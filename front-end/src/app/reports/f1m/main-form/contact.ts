@@ -28,6 +28,9 @@ export abstract class F1MContact {
 
   update($event: SelectItem<Contact>) {
     (this.component.report[this.contactKey as keyof Form1M] as Contact) = $event.value;
+    if ($event.value.id) {
+      (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string) = $event.value.id;
+    }
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.contactKey])) {
       this.component.form
         .get(this.component.templateMapConfigs[this.contactKey][key as keyof TransactionTemplateMapType])
@@ -68,6 +71,10 @@ export class AffiliatedContact extends F1MContact {
   disableValidation() {
     this.control?.clearValidators();
     this.component.report.contact_affiliated = undefined;
+    this.component.report.contact_affiliated_id = null;
+    this.component.report.affiliated_date_form_f1_filed = undefined;
+    this.component.report.affiliated_committee_fec_id = undefined;
+    this.component.report.affiliated_committee_name = undefined;
 
     this.component.form.get('affiliated_date_form_f1_filed')?.clearValidators();
     this.component.form.get('affiliated_committee_fec_id')?.clearValidators();
@@ -140,6 +147,15 @@ export class CandidateContact extends F1MContact {
   disableValidation() {
     this.control?.clearValidators();
     (this.component.report[this.contactKey as keyof Form1M] as Contact | undefined) = undefined;
+    (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = null;
+    (this.component.report[`${this.id}_candidate_id_number` as keyof Form1M] as string | undefined) = undefined;
+    (this.component.report[`${this.id}_candidate_last_name` as keyof Form1M] as string | undefined) = undefined;
+    (this.component.report[`${this.id}_candidate_first_name` as keyof Form1M] as string | undefined) = undefined;
+    (this.component.report[`${this.id}_candidate_office` as keyof Form1M] as string | undefined) = undefined;
+    (this.component.report[`${this.id}_candidate_state` as keyof Form1M] as string | undefined) = undefined;
+    (this.component.report[`${this.id}_candidate_district` as keyof Form1M] as string | undefined) = undefined;
+    (this.component.report[`${this.id}_candidate_date_of_contribution` as keyof Form1M] as Date | undefined) =
+      undefined;
 
     this.component.form.get(`${this.id}_candidate_id_number`)?.clearValidators();
     this.component.form.get(`${this.id}_candidate_last_name`)?.clearValidators();

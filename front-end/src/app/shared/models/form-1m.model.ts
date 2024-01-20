@@ -47,7 +47,7 @@ export class Form1M extends Report {
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
-  @Transform(BaseModel.dateTransform) affiliated_date_committee_fec_id?: Date;
+  affiliated_committee_fec_id?: string;
   affiliated_committee_name?: string;
 
   I_candidate_id_number?: string;
@@ -116,17 +116,17 @@ export class Form1M extends Report {
   @Transform(BaseModel.dateTransform) date_signed?: Date;
 
   @Type(() => Contact) contact_affiliated?: Contact;
-  contact_affiliated_id?: string;
+  contact_affiliated_id?: string | null;
   @Type(() => Contact) contact_candidate_I?: Contact;
-  contact_candidate_I_id?: string;
+  contact_candidate_I_id?: string | null;
   @Type(() => Contact) contact_candidate_II?: Contact;
-  contact_candidate_II_id?: string;
+  contact_candidate_II_id?: string | null;
   @Type(() => Contact) contact_candidate_III?: Contact;
-  contact_candidate_III_id?: string;
+  contact_candidate_III_id?: string | null;
   @Type(() => Contact) contact_candidate_IV?: Contact;
-  contact_candidate_IV_id?: string;
+  contact_candidate_IV_id?: string | null;
   @Type(() => Contact) contact_candidate_V?: Contact;
-  contact_candidate_V_id?: string;
+  contact_candidate_V_id?: string | null;
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any

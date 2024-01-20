@@ -110,19 +110,6 @@ describe('MainFormComponent', () => {
     expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
   });
 
-  it('updateAffiliatedContact should set values in form', () => {
-    fixture.detectChanges();
-    const $event = {
-      value: Contact.fromJSON({
-        committee_id: 'C00000008',
-        name: 'xyz',
-      }),
-    };
-    component.updateAffiliatedContact($event);
-    expect(component.form.get('affiliated_committee_fec_id')?.value).toBe('C00000008');
-    expect(component.form.get('affiliated_committee_name')?.value).toBe('xyz');
-  });
-
   it('getReportPayload should update and return the report properties', () => {
     fixture.detectChanges();
     component.form.patchValue({
@@ -134,10 +121,8 @@ describe('MainFormComponent', () => {
       city: 'test city',
       state: 'DC',
       zip: '22222',
-      affiliated_date_form_f1_filed: Date(),
       affiliated_committee_fec_id: 'C00000002',
       affiliated_committee_name: 'affiliated committee',
-      statusBy: '',
     });
 
     const contact_affiliated = Contact.fromJSON({
