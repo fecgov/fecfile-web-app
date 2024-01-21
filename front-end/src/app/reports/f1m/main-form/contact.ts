@@ -1,7 +1,6 @@
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { PrimeOptions } from 'app/shared/utils/label.utils';
-import { LabelUtils } from 'app/shared/utils/label.utils';
+import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
@@ -13,11 +12,10 @@ export abstract class F1MContact {
     return `${this.contactKey}_lookup`;
   }
   abstract contactTypeOptions: PrimeOptions;
+  abstract formFields: string[];
   component: MainFormComponent;
   control: AbstractControl | null;
   abstract enableValidation(): void;
-  abstract disableValidation(): void;
-  abstract updateValueAndValidity(): void;
 
   constructor(contactKey: keyof Form1M, component: MainFormComponent) {
     this.contactKey = contactKey;
@@ -26,8 +24,13 @@ export abstract class F1MContact {
     this.control = component.form.get(this.contactLookupKey);
   }
 
+  /**
+   * Update the values in the form controls and contact object embedded in the
+   * report object from the event emitted by the contact lookup component
+   * @param $event
+   */
   update($event: SelectItem<Contact>) {
-    (this.component.report[this.contactKey as keyof Form1M] as Contact) = $event.value;
+    (this.component.report[this.contactKey] as Contact) = $event.value;
     if ($event.value.id) {
       (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string) = $event.value.id;
     }
@@ -39,10 +42,30 @@ export abstract class F1MContact {
     this.control?.clearValidators();
     this.control?.updateValueAndValidity();
   }
+
+  disableValidation() {
+    this.control?.clearValidators();
+    (this.component.report[this.contactKey] as Contact | undefined) = undefined;
+    (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = null;
+
+    this.formFields.forEach((field: string) => {
+      (this.component.report[field as keyof Form1M] as string | undefined) = undefined;
+      this.component.form.get(field)?.clearValidators();
+      this.component.form.get(field)?.setValue(undefined);
+    });
+
+    this.updateValueAndValidity();
+  }
+
+  updateValueAndValidity() {
+    this.control?.updateValueAndValidity();
+    this.formFields.forEach((field: string) => this.component.form.get(field)?.updateValueAndValidity());
+  }
 }
 
 export class AffiliatedContact extends F1MContact {
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  formFields = ['affiliated_date_form_f1_filed', 'affiliated_committee_fec_id', 'affiliated_committee_name'];
 
   constructor(component: MainFormComponent) {
     super('contact_affiliated', component);
@@ -62,42 +85,16 @@ export class AffiliatedContact extends F1MContact {
     if (!this.component.report.affiliated_committee_name) {
       this.control?.addValidators(Validators.required);
     }
-    this.component.form.get('affiliated_date_form_f1_filed')?.addValidators(Validators.required);
-    this.component.form.get('affiliated_committee_fec_id')?.addValidators(Validators.required);
-    this.component.form.get('affiliated_committee_name')?.addValidators(Validators.required);
+    this.formFields.forEach((field: string) => this.component.form.get(field)?.addValidators(Validators.required));
     this.updateValueAndValidity();
-  }
-
-  disableValidation() {
-    this.control?.clearValidators();
-    this.component.report.contact_affiliated = undefined;
-    this.component.report.contact_affiliated_id = null;
-    this.component.report.affiliated_date_form_f1_filed = undefined;
-    this.component.report.affiliated_committee_fec_id = undefined;
-    this.component.report.affiliated_committee_name = undefined;
-
-    this.component.form.get('affiliated_date_form_f1_filed')?.clearValidators();
-    this.component.form.get('affiliated_committee_fec_id')?.clearValidators();
-    this.component.form.get('affiliated_committee_name')?.clearValidators();
-
-    this.component.form.get('affiliated_date_form_f1_filed')?.setValue(undefined);
-    this.component.form.get('affiliated_committee_fec_id')?.setValue(undefined);
-    this.component.form.get('affiliated_committee_name')?.setValue(undefined);
-
-    this.updateValueAndValidity();
-  }
-
-  updateValueAndValidity() {
-    this.control?.updateValueAndValidity();
-    this.component.form.get('affiliated_date_form_f1_filed')?.updateValueAndValidity();
-    this.component.form.get('affiliated_committee_fec_id')?.updateValueAndValidity();
-    this.component.form.get('affiliated_committee_name')?.updateValueAndValidity();
   }
 }
 
 export class CandidateContact extends F1MContact {
   id: string;
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  formFields: string[] = [];
+
   get dateOfContributionField() {
     return `${this.id}_date_of_contribution`;
   }
@@ -106,6 +103,19 @@ export class CandidateContact extends F1MContact {
     super(`contact_candidate_${id}` as keyof Form1M, component);
 
     this.id = id;
+
+    this.formFields = [
+      `${this.id}_candidate_id_number`,
+      `${this.id}_candidate_last_name`,
+      `${this.id}_candidate_first_name`,
+      `${this.id}_candidate_middle_name`,
+      `${this.id}_candidate_prefix`,
+      `${this.id}_candidate_suffix`,
+      `${this.id}_candidate_office`,
+      `${this.id}_candidate_state`,
+      `${this.id}_candidate_district`,
+      `${this.id}_date_of_contribution`,
+    ];
 
     component.contactConfigs[this.contactKey] = {
       candidate_fec_id: 'candidate_id',
@@ -142,48 +152,5 @@ export class CandidateContact extends F1MContact {
     this.component.form.get(`${this.id}_candidate_office`)?.addValidators(Validators.required);
     this.component.form.get(`${this.id}_date_of_contribution`)?.addValidators(Validators.required);
     this.updateValueAndValidity();
-  }
-
-  disableValidation() {
-    this.control?.clearValidators();
-    (this.component.report[this.contactKey as keyof Form1M] as Contact | undefined) = undefined;
-    (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = null;
-    (this.component.report[`${this.id}_candidate_id_number` as keyof Form1M] as string | undefined) = undefined;
-    (this.component.report[`${this.id}_candidate_last_name` as keyof Form1M] as string | undefined) = undefined;
-    (this.component.report[`${this.id}_candidate_first_name` as keyof Form1M] as string | undefined) = undefined;
-    (this.component.report[`${this.id}_candidate_office` as keyof Form1M] as string | undefined) = undefined;
-    (this.component.report[`${this.id}_candidate_state` as keyof Form1M] as string | undefined) = undefined;
-    (this.component.report[`${this.id}_candidate_district` as keyof Form1M] as string | undefined) = undefined;
-    (this.component.report[`${this.id}_candidate_date_of_contribution` as keyof Form1M] as Date | undefined) =
-      undefined;
-
-    this.component.form.get(`${this.id}_candidate_id_number`)?.clearValidators();
-    this.component.form.get(`${this.id}_candidate_last_name`)?.clearValidators();
-    this.component.form.get(`${this.id}_candidate_first_name`)?.clearValidators();
-    this.component.form.get(`${this.id}_candidate_office`)?.clearValidators();
-    this.component.form.get(`${this.id}_candidate_state`)?.clearValidators();
-    this.component.form.get(`${this.id}_candidate_district`)?.clearValidators();
-    this.component.form.get(`${this.id}_date_of_contribution`)?.clearValidators();
-
-    this.component.form.get(`${this.id}_candidate_id_number`)?.setValue(undefined);
-    this.component.form.get(`${this.id}_candidate_last_name`)?.setValue(undefined);
-    this.component.form.get(`${this.id}_candidate_first_name`)?.setValue(undefined);
-    this.component.form.get(`${this.id}_candidate_office`)?.setValue(undefined);
-    this.component.form.get(`${this.id}_candidate_state`)?.setValue(undefined);
-    this.component.form.get(`${this.id}_candidate_district`)?.setValue(undefined);
-    this.component.form.get(`${this.id}_date_of_contribution`)?.setValue(undefined);
-
-    this.updateValueAndValidity();
-  }
-
-  updateValueAndValidity() {
-    this.control?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_candidate_id_number`)?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_candidate_last_name`)?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_candidate_first_name`)?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_candidate_office`)?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_candidate_state`)?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_candidate_district`)?.updateValueAndValidity();
-    this.component.form.get(`${this.id}_date_of_contribution`)?.updateValueAndValidity();
   }
 }

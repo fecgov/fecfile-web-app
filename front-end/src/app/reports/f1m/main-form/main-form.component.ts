@@ -221,7 +221,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
             return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
               contact.type,
               form,
-              this.templateMapConfigs[contactKey] as TransactionTemplateMapType,
+              this.templateMapConfigs[contactKey],
               contactKey,
               'By saving this report'
             );
@@ -229,7 +229,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           const changes = TransactionContactUtils.getContactChanges(
             form,
             contact,
-            this.templateMapConfigs[contactKey] as TransactionTemplateMapType,
+            this.templateMapConfigs[contactKey],
             config
           );
           if (changes.length > 0) {
@@ -256,7 +256,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
         const contactChanges = TransactionContactUtils.getContactChanges(
           form,
           contact,
-          this.templateMapConfigs[contactKey] as TransactionTemplateMapType,
+          this.templateMapConfigs[contactKey],
           config
         );
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
