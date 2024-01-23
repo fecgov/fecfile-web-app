@@ -52,7 +52,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected store: Store,
     protected reportService: ReportService,
     protected activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -76,7 +77,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
+            this.form.patchValue({[this.templateMap.amount]: -1 * amount});
           }
         });
     }
