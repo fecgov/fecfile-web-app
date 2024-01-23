@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { ReattRedesTypes, ReattRedesUtils } from "../../../utils/reatt-redes/reatt-redes.utils";
 
 @Component({
   selector: 'app-election-input',
@@ -10,13 +9,13 @@ import { ReattRedesTypes, ReattRedesUtils } from "../../../utils/reatt-redes/rea
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
   electionTypeOptions = [
-    {label: 'Primary (P)', value: 'P'},
-    {label: 'General (G)', value: 'G'},
-    {label: 'Convention (C)', value: 'C'},
-    {label: 'Runoff (R)', value: 'R'},
-    {label: 'Special (S)', value: 'S'},
-    {label: 'Recount (E)', value: 'E'},
-    {label: 'Other (O)', value: 'O'},
+    { label: 'Primary (P)', value: 'P' },
+    { label: 'General (G)', value: 'G' },
+    { label: 'Convention (C)', value: 'C' },
+    { label: 'Runoff (R)', value: 'R' },
+    { label: 'Special (S)', value: 'S' },
+    { label: 'Recount (E)', value: 'E' },
+    { label: 'Other (O)', value: 'O' },
   ];
 
   ngOnInit(): void {
@@ -32,8 +31,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
       new FormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')])
     );
 
-    if (election_code?.disabled && !ReattRedesUtils.isReattRedes(this.transaction, [ReattRedesTypes.REDESIGNATION_FROM])) {
-      this.form.disable();
+    // If the election_code is disabled, extend that through to the proxy electionType and electionYear form elements.
+    if (election_code?.disabled) {
+      this.form.get('electionType')?.disable();
+      this.form.get('electionYear')?.disable();
     }
 
     // Check for maditoryField designation and disable if necessary
