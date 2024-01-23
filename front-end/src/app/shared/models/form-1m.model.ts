@@ -25,6 +25,8 @@ export class Form1M extends Report {
   schema = f1mSchema;
   report_type = ReportTypes.F1M;
   form_type = F1MFormTypes.F1MN;
+  override submitAlertText =
+    'Are you sure you want to submit this form electronically? Please note that you cannot undo this action.';
 
   get formLabel() {
     return 'FORM 1M';

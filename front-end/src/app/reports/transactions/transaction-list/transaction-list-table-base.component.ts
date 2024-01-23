@@ -144,6 +144,19 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REATTRIBUTION_FROM,
           ReattRedesTypes.REATTRIBUTION_TO,
+        ]) &&
+        !ReattRedesUtils.isAtAmountLimit(transaction),
+      () => true
+    ),
+    new TableAction(
+      'Redesignate',
+      this.createRedesignation.bind(this),
+      (transaction: Transaction) =>
+        transaction.transactionType.scheduleId === ScheduleIds.B &&
+        transaction.transactionType.hasElectionInformation() &&
+        this.reportIsEditable &&
+        !transaction.parent_transaction_id &&
+        !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REDESIGNATION_FROM,
           ReattRedesTypes.REDESIGNATION_TO,
         ]) &&
@@ -273,6 +286,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public createReattribution(transaction: Transaction): void {
     this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
+    );
+  }
+
+  public createRedesignation(transaction: Transaction): void {
+    this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`
     );
   }
 

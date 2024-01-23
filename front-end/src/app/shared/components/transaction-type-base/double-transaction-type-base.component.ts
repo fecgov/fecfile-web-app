@@ -17,7 +17,7 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
@@ -35,8 +35,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -100,6 +99,18 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childUpdateFormWithPrimaryContact({
         value: this.transaction?.reatt_redes?.contact_1,
       } as SelectItem);
+      if ((this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_TO) {
+        this.updateFormWithPrimaryContact({
+          value: this.transaction?.reatt_redes?.contact_1,
+        } as SelectItem);
+        this.updateFormWithSecondaryContact({
+          value: this.transaction?.reatt_redes?.contact_2,
+        } as SelectItem);
+        this.childUpdateFormWithSecondaryContact({
+          value: this.transaction?.reatt_redes?.contact_2,
+        } as SelectItem);
+        this.updateElectionData();
+      }
     }
   }
 
@@ -203,7 +214,8 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
-  protected updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
+
+  updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.
@@ -249,5 +261,27 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction,
       this.childContactIdMap['contact_3']
     );
+  }
+
+  updateElectionData() {
+    const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
+    if (!schedB) return;
+    this.form.get('category_code')?.setValue(schedB.category_code);
+    this.form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
+    this.form.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
+    this.form.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+    this.form.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
+    this.form.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
+    this.form.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
+
+    this.childForm.get('election_code')?.setValue(schedB.election_code);
+    this.childForm.get('election_other_description')?.setValue(schedB.election_other_description);
+    this.childForm.get('category_code')?.setValue(schedB.category_code);
+    this.childForm.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
+    this.childForm.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
+    this.childForm.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+    this.childForm.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
+    this.childForm.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
+    this.childForm.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
   }
 }

@@ -31,8 +31,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
       new FormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')])
     );
 
+    // If the election_code is disabled, extend that through to the proxy electionType and electionYear form elements.
     if (election_code?.disabled) {
-      this.form.disable();
+      this.form.get('electionType')?.disable();
+      this.form.get('electionYear')?.disable();
     }
 
     // Check for maditoryField designation and disable if necessary
