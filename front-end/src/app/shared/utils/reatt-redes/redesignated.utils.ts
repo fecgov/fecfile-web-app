@@ -5,16 +5,19 @@ import { MemoText } from 'app/shared/models/memo-text.model';
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {
     if (!transaction.reattribution_redesignation_tag) {
-      const prefix = `[Original purpose description: ${transaction?.expenditure_purpose_descrip}] `;
-      if (transaction.memo_text) {
-        transaction.memo_text.text_prefix = prefix;
-        transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
-      } else {
-        transaction.memo_text = MemoText.fromJSON({
-          text_prefix: prefix,
-          text4000: prefix,
-        });
+      if (transaction.expenditure_purpose_descrip) {
+        const prefix = `[Original purpose description: ${transaction?.expenditure_purpose_descrip || ''}] `;
+        if (transaction.memo_text) {
+          transaction.memo_text.text_prefix = prefix;
+          transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000 || '';
+        } else {
+          transaction.memo_text = MemoText.fromJSON({
+            text_prefix: prefix,
+            text4000: prefix,
+          });
+        }
       }
+
       if (transaction.report_id === activeReportId) {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
