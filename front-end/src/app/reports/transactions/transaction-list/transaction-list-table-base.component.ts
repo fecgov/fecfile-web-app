@@ -143,6 +143,18 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REATTRIBUTION_FROM,
           ReattRedesTypes.REATTRIBUTION_TO,
+        ]) &&
+        !ReattRedesUtils.isAtAmountLimit(transaction),
+      () => true
+    ),
+    new TableAction(
+      'Redesignate',
+      this.createRedesignation.bind(this),
+      (transaction: Transaction) =>
+        transaction.transactionType.scheduleId === ScheduleIds.B &&
+        transaction.transactionType.hasElectionInformation() &&
+        !transaction.parent_transaction_id &&
+        !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REDESIGNATION_FROM,
           ReattRedesTypes.REDESIGNATION_TO,
         ]) &&
@@ -275,9 +287,14 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
       )
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next(transaction);
+      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
     }
+  }
 
+  public async createRedesignation(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
+      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`
+    );
   }
 
   public updateItem(item: Transaction) {

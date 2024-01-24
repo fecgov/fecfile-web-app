@@ -3,14 +3,14 @@ import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,
+  CATEGORY_CODE,
   ELECTION_FIELDS,
   EMPLOYEE_INFO_FIELDS,
+  hasFields,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
-  CATEGORY_CODE,
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
-  hasFields,
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
@@ -52,7 +52,7 @@ export abstract class TransactionType {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getInheritedFields = (transaction: Transaction) => this.inheritedFields;
 
-  hidePrimaryContactLookup = false; // Set to true to hide the contact lookup for the primary contact
+  hideContactLookup = false; // Set to true to hide the contact lookup for the primary contact
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getUseParentContact = (transaction?: Transaction) => this.useParentContact;
@@ -63,6 +63,7 @@ export abstract class TransactionType {
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
     return this.navigationControls;
@@ -109,6 +110,7 @@ export abstract class TransactionType {
   getFooter(transaction?: Transaction): string | undefined {
     return this.footer;
   }
+
   contactTitle?: string; // Title for primary contact
   signatoryOneHeader?: string; // Label for the signatory_1 section in the form
   signatoryTwoHeader?: string; // Label for the signatory_2 section in the form
@@ -164,49 +166,64 @@ export abstract class TransactionType {
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
+
   hasCommitteeOrCandidateInformation(): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired;
   }
+
   hasCommitteeFecId(): boolean {
     return hasFields(this.formFields, ['committee_fec_id']);
   }
+
   hasEmployeeFields(): boolean {
     return hasFields(this.formFields, EMPLOYEE_INFO_FIELDS);
   }
+
   hasCandidateOffice(): boolean {
     return hasFields(this.formFields, CANDIDATE_OFFICE_FIELDS);
   }
+
   hasLoanFinanceFields(): boolean {
     return hasFields(this.formFields, LOAN_FINANCE_FIELDS);
   }
+
   hasLoanTermsFields(): boolean {
     return hasFields(this.formFields, LOAN_TERMS_FIELDS);
   }
+
   hasCategoryCode(): boolean {
     return hasFields(this.formFields, CATEGORY_CODE);
   }
+
   hasDate(): boolean {
     return hasFields(this.formFields, ['date']);
   }
+
   hasMemoCode(): boolean {
     return hasFields(this.formFields, ['memo_code']);
   }
+
   hasMemoText(): boolean {
     return hasFields(this.formFields, ['text4000']);
   }
+
   hasSignature1(): boolean {
     return hasFields(this.formFields, SIGNATORY_1_FIELDS);
   }
+
   hasSignature2(): boolean {
     return hasFields(this.formFields, SIGNATORY_2_FIELDS);
   }
+
   hasSupportOpposeCode(): boolean {
     return hasFields(this.formFields, ['support_oppose_code']);
   }
+
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
 }

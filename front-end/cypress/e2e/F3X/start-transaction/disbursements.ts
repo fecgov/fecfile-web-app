@@ -1,14 +1,17 @@
-import { PageUtils } from "../../pages/pageUtils";
+import { PageUtils } from '../../pages/pageUtils';
 
 export class Disbursements {
+  static Contributions() {
+    PageUtils.clickLink('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+    return Contributions;
+  }
 
-  // FEDERAL ELECTION ACTIVITY EXPENDITURES
   static Federal() {
     PageUtils.clickLink('FEDERAL ELECTION ACTIVITY EXPENDITURES');
     return Federal;
   }
 
-  static IndependentExpenditure() {
+  static Independent() {
     PageUtils.clickLink('INDEPENDENT EXPENDITURES');
     return Independent;
   }
@@ -19,6 +22,14 @@ export class Disbursements {
   }
 }
 
+export class Contributions {
+  static TO_CANDIDATE = 'Contribution to Candidate';
+
+  static ToCandidate() {
+    PageUtils.clickLink('Contribution to Candidate');
+  }
+}
+
 export class Federal {
   static HundredPercentFederalElectionActivityPayment() {
     PageUtils.clickLink('100% Federal Election Activity Payment');
@@ -26,8 +37,14 @@ export class Federal {
 }
 
 export class Independent {
+  static INDEPENDENT_EXPENDITURE = 'Independent Expenditure';
+
   static IndependentExpenditureVoid() {
     PageUtils.clickLink('Independent Expenditure - Void');
+  }
+
+  static IndependentExpenditure() {
+    PageUtils.clickLink(Independent.INDEPENDENT_EXPENDITURE);
   }
 }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
+import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
 
 @Component({
   selector: 'app-election-input',
@@ -19,7 +20,7 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   ];
 
   ngOnInit(): void {
-    // Get inital values for election type and year for additional form inputs
+    // Get initial values for election type and year for additional form inputs
     const election_code = this.form.get('election_code');
     const electionType = election_code?.value?.slice(0, 1) || '';
     const electionYear = election_code?.value?.slice(1, 5) || '';
@@ -28,14 +29,18 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     this.form.addControl('electionType', new FormControl(electionType, Validators.required));
     this.form.addControl(
       'electionYear',
-      new FormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')])
+      new FormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')]),
     );
 
     if (election_code?.disabled) {
-      this.form.disable();
+      this.form.get('electionType')?.disable();
+      this.form.get('electionYear')?.disable();
+      if (!ReattRedesUtils.isReattRedes(this.transaction, [ReattRedesTypes.REDESIGNATION_FROM])) {
+        this.form.disable();
+      }
     }
 
-    // Check for maditoryField designation and disable if necessary
+    // Check for mandatory Field designation and disable if necessary
     if (this.transaction && 'electionType' in this.transaction.transactionType.mandatoryFormValues) {
       this.form.get('electionType')?.setValue(this.transaction.transactionType.mandatoryFormValues['electionType']);
       this.form.get('electionType')?.disable();

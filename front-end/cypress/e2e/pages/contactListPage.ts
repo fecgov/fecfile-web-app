@@ -3,12 +3,11 @@ import {
   committeeFormData,
   ContactFormData,
   defaultFormData as individualContactFormData,
-  organizationFormData
+  organizationFormData,
 } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
-
   static goToPage() {
     cy.visit('/dashboard');
     cy.get('.navbar-nav').find('.nav-link').contains('Contacts').click();
@@ -18,7 +17,9 @@ export class ContactListPage {
     alias = PageUtils.getAlias(alias);
 
     if (!excludeContactType) {
-      PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
+      alias = PageUtils.getAlias(alias);
+      const selector = cy.get(alias).find('#entity_type_dropdown').first();
+      selector.select(formData['contact_type']);
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
@@ -139,11 +140,13 @@ export class ContactListPage {
   private static create(fd: ContactFormData) {
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
+    cy.wait(150);
     ContactListPage.enterFormData(fd);
     PageUtils.clickButton('Save');
   }
 
   static createIndividual(fd = individualContactFormData) {
+    fd.contact_type = 'Individual';
     ContactListPage.create(fd);
   }
 

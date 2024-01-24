@@ -14,11 +14,7 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      if (querySelector.includes('due_date_setting') || querySelector.includes('interest_rate_setting')) {
-        cy.get(alias).find(querySelector).first().click();
-      } else {
-        cy.get(alias).find(querySelector).click();
-      }
+      cy.get(alias).find(querySelector).first().click();
       cy.contains('p-dropdownitem', value).should('be.visible');
       cy.contains('p-dropdownitem', value).click();
     }
@@ -61,7 +57,7 @@ export class PageUtils {
   static randomString(
     strLength: number,
     charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' | 'symbols' = 'alphanumeric',
-    includeCurlyBraces = true
+    includeCurlyBraces = true,
   ): string {
     // prettier-ignore
     let symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '|', '~', '`'];
@@ -108,7 +104,7 @@ export class PageUtils {
 
   static clickSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click({force: true});
+    cy.get('@menuItem').click({ force: true });
   }
 
   static getAlias(alias = ''): string {
@@ -128,7 +124,7 @@ export class PageUtils {
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
     if (force) {
-      cy.get(alias).contains('button', name).click({force: true});
+      cy.get(alias).contains('button', name).click({ force: true });
     } else {
       cy.get(alias).contains('button', name).click();
     }
@@ -147,7 +143,7 @@ export class PageUtils {
   static searchBoxInput(input: string) {
     cy.get('[role="searchbox"]').type(input.slice(0, 3));
     cy.contains(input).should('exist');
-    cy.contains(input).click({force: true});
+    cy.contains(input).click({ force: true });
   }
 
   static enterValue(fieldName: string, fieldValue: any) {
@@ -181,6 +177,7 @@ export class PageUtils {
     const alias = PageUtils.getAlias('');
     cy.get(alias)
       .contains(identifier)
+      .parent('td')
       .siblings()
       .last()
       .find('app-table-actions-button')

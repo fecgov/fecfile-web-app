@@ -17,6 +17,7 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
@@ -178,7 +179,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
-  protected updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
+  updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.

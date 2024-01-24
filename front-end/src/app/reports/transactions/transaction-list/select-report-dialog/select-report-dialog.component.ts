@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Report } from "../../../../shared/models/report.model";
-import { ReattRedesUtils } from "../../../../shared/utils/reatt-redes/reatt-redes.utils";
+import { ReattRedesTypes, ReattRedesUtils } from "../../../../shared/utils/reatt-redes/reatt-redes.utils";
 import { lastValueFrom } from "rxjs";
 import { ReportService } from "../../../../shared/services/report.service";
 import { Router } from "@angular/router";
@@ -16,14 +16,16 @@ export class SelectReportDialogComponent implements OnInit {
   selectedReport?: Report;
 
   transaction?: Transaction;
+  type?: ReattRedesTypes;
   @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
 
   constructor(public router: Router, private reportService: ReportService) {
   }
 
   async ngOnInit() {
-    ReattRedesUtils.selectReportDialogSubject.subscribe(transaction => {
-      this.transaction = transaction;
+    ReattRedesUtils.selectReportDialogSubject.subscribe((data) => {
+      this.transaction = data[0];
+      this.type = data[1]
       this.selectReportDialog?.nativeElement.show();
     })
 
@@ -41,5 +43,9 @@ export class SelectReportDialogComponent implements OnInit {
   cancel() {
     this.transaction = undefined;
     this.selectReportDialog?.nativeElement.close();
+  }
+
+  get reattRedes(): string {
+    return ReattRedesUtils.isReattribute(this.type) ? 'reattribute' : 'redesignate';
   }
 }

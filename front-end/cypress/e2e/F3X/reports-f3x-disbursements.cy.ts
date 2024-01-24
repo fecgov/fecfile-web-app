@@ -3,7 +3,11 @@ import { LoginPage } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
+import {
+  candidateFormData,
+  defaultFormData as individualContactFormData,
+  organizationFormData
+} from '../models/ContactFormModel';
 import {
   defaultScheduleFormData as defaultTransactionFormData,
   DisbursementFormData,
@@ -11,15 +15,6 @@ import {
 import { F3XSetup } from "./f3x-setup";
 import { StartTransaction } from "./start-transaction/start-transaction";
 
-const organizationFormData: ContactFormData = {
-  ...individualContactFormData,
-  ...{contact_type: 'Organization'},
-};
-
-const candidateFormData: ContactFormData = {
-  ...individualContactFormData,
-  ...{contact_type: 'Candidate'},
-};
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -61,7 +56,7 @@ describe('Disbursements', () => {
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
     F3XSetup({organization: true, candidate: true});
-    StartTransaction.Disbursements().IndependentExpenditure().IndependentExpenditureVoid();
+    StartTransaction.Disbursements().Independent().IndependentExpenditureVoid();
 
     cy.get('#entity_type_dropdown').type(organizationFormData.contact_type);
     cy.contains('LOOKUP').should('exist');

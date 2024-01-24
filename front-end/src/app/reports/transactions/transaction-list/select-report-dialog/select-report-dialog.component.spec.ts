@@ -9,7 +9,7 @@ import { testMockStore, testScheduleATransaction } from "../../../../shared/util
 import { of } from "rxjs";
 import { F3xFormTypes, Form3X } from "../../../../shared/models/form-3x.model";
 import { ListRestResponse } from "../../../../shared/models/rest-api.model";
-import { ReattRedesUtils } from "../../../../shared/utils/reatt-redes/reatt-redes.utils";
+import { ReattRedesTypes, ReattRedesUtils } from "../../../../shared/utils/reatt-redes/reatt-redes.utils";
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -56,7 +56,7 @@ describe('SelectReportDialogComponent', () => {
 
   it('should clear and close on cancel', async () => {
     await component.ngOnInit();
-    ReattRedesUtils.selectReportDialogSubject.next(testScheduleATransaction);
+    ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
     expect(component.transaction).toBeTruthy();
 
     component.cancel();
@@ -77,7 +77,7 @@ describe('SelectReportDialogComponent', () => {
     it('should redirect based on the selected report and transaction', async () => {
       const routerSpy = spyOn(component.router, 'navigateByUrl');
       await component.ngOnInit();
-      ReattRedesUtils.selectReportDialogSubject.next(testScheduleATransaction);
+      ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
       component.selectedReport = component.availableReports[0];
       try {
         await component.createReattribution();

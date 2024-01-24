@@ -4,7 +4,9 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
-import { Subject } from "rxjs";
+import { Subject } from 'rxjs';
+import { RedesignationToUtils } from './redesignation-to.utils';
+import { RedesignationFromUtils } from './redesignation-from.utils';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -16,12 +18,20 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static selectReportDialogSubject: Subject<Transaction> = new Subject<Transaction>();
+  public static selectReportDialogSubject = new Subject<[Transaction, ReattRedesTypes]>();
 
   public static isReattRedes(transaction: Transaction | undefined, types: ReattRedesTypes[] = []): boolean {
     if (!transaction || !('reattribution_redesignation_tag' in transaction)) return false;
     if (types.length === 0) return !!transaction.reattribution_redesignation_tag;
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
+  }
+
+  public static isReattribute(type: ReattRedesTypes | undefined): boolean {
+    return (
+      type === ReattRedesTypes.REATTRIBUTED ||
+      type === ReattRedesTypes.REATTRIBUTION_TO ||
+      type === ReattRedesTypes.REATTRIBUTION_FROM
+    );
   }
 
   public static isAtAmountLimit(transaction: Transaction | undefined): boolean {
@@ -44,11 +54,15 @@ export class ReattRedesUtils {
     toForm: FormGroup,
     toTransaction: SchATransaction | SchBTransaction,
     fromForm: FormGroup,
-    fromTransaction: SchATransaction | SchBTransaction
+    fromTransaction: SchATransaction | SchBTransaction,
   ): void {
     if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
       ReattributionToUtils.overlayForm(toForm, toTransaction as SchATransaction);
       ReattributionFromUtils.overlayForm(fromForm, fromTransaction as SchATransaction, toForm);
+    }
+    if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_TO) {
+      RedesignationToUtils.overlayForm(toForm, toTransaction as SchBTransaction);
+      RedesignationFromUtils.overlayForm(fromForm, fromTransaction as SchBTransaction, toForm);
     }
   }
 
@@ -56,6 +70,7 @@ export class ReattRedesUtils {
    * New validation rules for the transaction amount of reattribution from and redesignation from transactions.
    * These rules supplant the original rules for a given transaction.
    * @param transaction
+   * @param mustBeNegative
    * @returns
    */
   public static amountValidator(transaction: SchATransaction | SchBTransaction, mustBeNegative = false): ValidatorFn {
@@ -64,17 +79,17 @@ export class ReattRedesUtils {
 
       if (amount !== null) {
         if (mustBeNegative && amount >= 0) {
-          return {exclusiveMax: {exclusiveMax: 0}};
+          return { exclusiveMax: { exclusiveMax: 0 } };
         }
         if (!mustBeNegative && amount < 0) {
-          return {exclusiveMin: {exclusiveMin: 0}};
+          return { exclusiveMin: { exclusiveMin: 0 } };
         }
 
         const amountKey = transaction.transactionType.templateMap.amount;
         const originalAmount =
           ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
             amountKey as keyof (SchATransaction | SchBTransaction)
-            ] as number) ?? 0;
+          ] as number) ?? 0;
         const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
         let limit = originalAmount - reattRedesTotal;
         if (transaction.id) limit += +(transaction[amountKey as keyof (SchATransaction | SchBTransaction)] as number); // If editing, add value back into limit restriction.

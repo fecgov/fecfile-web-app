@@ -5,12 +5,14 @@ import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import {
   ContactFormData,
-  createIndividual,
+  ContactType,
+  createContact,
   defaultFormData as individualContactFormData
 } from '../models/ContactFormModel';
 import { StartTransaction } from "./start-transaction/start-transaction";
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from "./f3x-setup";
 import { ScheduleFormData } from "../models/TransactionFormModel";
+import { Individual } from "./start-transaction/receipts";
 
 const APRIL_15 = 'APRIL 15';
 
@@ -38,7 +40,7 @@ const reattributeData: ScheduleFormData = {
   memo_text: '',
 }
 
-const assignee: ContactFormData = createIndividual();
+const assignee: ContactFormData = createContact(ContactType.INDIVIDUAL);
 
 function CreateReceipt() {
   F3XSetup({individual: true, candidate: true, report: reportFormDataApril});
@@ -52,7 +54,7 @@ function CreateReceipt() {
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
-  cy.contains('Individual Receipt').should('exist');
+  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
 
 function Reattribute(old = false) {
@@ -72,7 +74,7 @@ function Reattribute(old = false) {
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
-  cy.contains('Individual Receipt').should('exist');
+  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
 
 
