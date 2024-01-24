@@ -23,8 +23,8 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
       );
     }
 
-    if (this.transaction?.transactionType?.memoTextPrefix) {
-      this.initPrefix(this.templateMap.text4000, this.transaction?.transactionType?.memoTextPrefix);
+    if (this.transaction?.memo_text?.text_prefix) {
+      this.initPrefix(this.templateMap.text4000, this.transaction.memo_text.text_prefix);
     }
   }
 

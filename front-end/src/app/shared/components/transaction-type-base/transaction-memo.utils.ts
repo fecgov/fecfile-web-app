@@ -9,6 +9,7 @@ export class TransactionMemoUtils {
       if (text && text.length > 0) {
         const memo_text = MemoText.fromJSON({
           text4000: text,
+          text_prefix: transaction.memo_text?.text_prefix,
           report_id: transaction?.report_id,
           rec_type: 'TEXT',
         });
