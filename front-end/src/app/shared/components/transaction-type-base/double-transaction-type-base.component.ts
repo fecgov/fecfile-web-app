@@ -17,9 +17,6 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
@@ -84,23 +81,9 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactIdMap,
-      this.contactService
+      this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
-
-    // If the parent is a reattribution/redesignation transaction, initialize
-    // its specialized validation rules and form element behavior.
-    if (ReattRedesUtils.isReattRedes(this.transaction)) {
-      ReattRedesUtils.overlayForms(
-        this.form,
-        this.transaction as SchATransaction | SchBTransaction,
-        this.childForm,
-        this.childTransaction as SchATransaction | SchBTransaction
-      );
-      this.childUpdateFormWithPrimaryContact({
-        value: this.transaction?.reatt_redes?.contact_1,
-      } as SelectItem);
-    }
   }
 
   override ngOnDestroy(): void {
@@ -142,7 +125,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
-      this.formProperties
+      this.formProperties,
     );
 
     payload.children = [
@@ -150,15 +133,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     ];
     payload.children[0].report_id = payload.report_id;
 
-    if (ReattRedesUtils.isReattRedes(payload)) {
-      const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
-      this.transactionService.multisave(payloads).subscribe((response) => {
-        navigationEvent.transaction = response[0];
-        this.navigateTo(navigationEvent);
-      });
-    } else {
-      this.processPayload(payload, navigationEvent);
-    }
+    this.processPayload(payload, navigationEvent);
   }
 
   override isInvalid(): boolean {
@@ -168,7 +143,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   override get confirmation$(): Observable<boolean> {
     if (!this.childTransaction) return of(false);
     return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
-      reduce((accumulator, confirmed) => accumulator && confirmed)
+      reduce((accumulator, confirmed) => accumulator && confirmed),
     );
   }
 
@@ -193,7 +168,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_1']
+      this.childContactIdMap['contact_1'],
     );
 
     if (this.childTransaction) {
@@ -229,7 +204,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2']
+      this.childContactIdMap['contact_2'],
     );
   }
 
@@ -238,7 +213,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2']
+      this.childContactIdMap['contact_2'],
     );
   }
 
@@ -247,7 +222,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_3']
+      this.childContactIdMap['contact_3'],
     );
   }
 }
