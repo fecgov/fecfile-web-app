@@ -62,6 +62,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (!this.transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        this.committeeAccount = committeeAccount;
+      });
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
     this.formProperties = this.transactionType.getFormControlNames();
@@ -80,7 +86,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({[this.templateMap.amount]: -1 * amount});
+            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
           }
         });
     }
@@ -98,13 +104,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
-      });
-
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
-        this.committeeAccount = committeeAccount;
       });
   }
 
