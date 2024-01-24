@@ -6,10 +6,10 @@ export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {
     if (!transaction.reattribution_redesignation_tag) {
       if (transaction.contribution_purpose_descrip) {
-        const prefix = `[Original purpose description: ${transaction?.contribution_purpose_descrip || ''}] `;
+        const prefix = `[Original purpose description: ${transaction?.contribution_purpose_descrip}] `;
         if (transaction.memo_text) {
           transaction.memo_text.text_prefix = prefix;
-          transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000 || '';
+          transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
         } else {
           transaction.memo_text = MemoText.fromJSON({
             text_prefix: prefix,
