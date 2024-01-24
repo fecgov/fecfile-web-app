@@ -29,7 +29,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     {field: "transaction_type_identifier", label: "Type"},
     {field: "name", label: "Name"},
     {field: "date", label: "Date incurred"},
-    {field: "transaction_table_amount", label: "Amount"},
+    {field: "loans_debts_transaction_table_amount", label: "Amount"},
     {field: "balance", label: "Balance"}
   ];
 
