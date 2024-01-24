@@ -61,7 +61,7 @@
           {{ item[item.transactionType.templateMap.date] | fecDate }}
         </td>
         <td>
-          {{ item['amount'] | currency }}
+          {{ item['transaction_table_amount'] | currency }}
         </td>
         <td>
           {{ item['balance'] | currency }}

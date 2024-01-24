@@ -4,7 +4,6 @@ import { TableAction } from '../table-list-base/table-list-base.component';
 @Component({
   selector: 'app-table-actions-button',
   templateUrl: './table-actions-button.component.html',
-  styleUrls: ['./table-actions-button.component.scss']
 })
 export class TableActionsButtonComponent {
   @Input() tableActions: TableAction[] = [];
@@ -13,9 +12,9 @@ export class TableActionsButtonComponent {
   @Input() buttonLabel = '';
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
-  @Output() tableActionClick = new EventEmitter<{ action: TableAction, actionItem: any }>();// eslint-disable-line @typescript-eslint/no-explicit-any
+  @Output() tableActionClick = new EventEmitter<{ action: TableAction; actionItem: any }>(); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   get filteredActions(): TableAction[] {
-    return this.tableActions.filter(action => !action.isAvailable || action.isAvailable(this.actionItem))
+    return this.tableActions.filter((action) => !action.isAvailable || action.isAvailable(this.actionItem));
   }
 }
