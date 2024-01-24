@@ -43,6 +43,7 @@ import {
 import { RippleModule } from "primeng/ripple";
 import { SelectButtonModule } from "primeng/selectbutton";
 import { SelectReportDialogComponent } from './transaction-list/select-report-dialog/select-report-dialog.component';
+import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { SelectReportDialogComponent } from './transaction-list/select-report-di
     TransactionInputComponent,
     TransactionNavigationComponent,
     SelectReportDialogComponent,
+    ReattRedesTransactionTypeDetailComponent,
   ],
   imports: [
     AccordionModule,

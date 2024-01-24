@@ -17,14 +17,13 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
  * user needs to fill out and submit to the back end.
  *
- * The primany transaction code is inherited from the TransactionTypeBaseComponent. This
+ * The primary transaction code is inherited from the TransactionTypeBaseComponent. This
  * abstract component class adds a child transaction that is defined in the parent
  * transaction's TransactionType class.
  */
@@ -180,9 +179,9 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
-    // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
+    // Some inherited fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
-    // Afterwards, inheritted fields are updated to match parent values.
+    // Afterwards, inherited fields are updated to match parent values.
 
     childTransaction.transactionType?.getInheritedFields(childTransaction)?.forEach((inherittedField) => {
       if (childTransaction.transactionType) {
