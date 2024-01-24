@@ -2,10 +2,11 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent,
+  NavigationEvent
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -17,12 +18,13 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { concatAll, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 @Component({
   template: '',
@@ -40,6 +42,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   form: FormGroup = this.fb.group({});
   isEditable = true;
   memoCodeCheckboxLabel$ = of('');
+  committeeAccount?: CommitteeAccount;
 
   constructor(
     protected messageService: MessageService,
@@ -95,6 +98,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .subscribe((report) => {
         this.isEditable = this.reportService.isEditable(report);
         if (!this.isEditable) this.form.disable();
+      });
+
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        this.committeeAccount = committeeAccount;
       });
   }
 
@@ -247,7 +257,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   resetForm() {
     this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
+    TransactionFormUtils.resetForm(this.form, this.transaction,
+      this.contactTypeOptions, this.committeeAccount);
   }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {

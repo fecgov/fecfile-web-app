@@ -114,6 +114,7 @@ export abstract class TransactionType {
   contactTitle?: string; // Title for primary contact
   signatoryOneHeader?: string; // Label for the signatory_1 section in the form
   signatoryTwoHeader?: string; // Label for the signatory_2 section in the form
+  populateSignatoryOneWithTreasurer?: boolean; // Flag whether to populate signatory_1 fields with treasurer info
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
