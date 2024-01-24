@@ -21,16 +21,16 @@
       <div class="field">
         <label
           for="candidate_state"
-          [ngClass]="{
-            disabled: this.form.get(this.stateFormControlName)?.disabled
-          }"
-          >CANDIDATE STATE</label
+        >CANDIDATE STATE</label
         >
         <p-dropdown
           inputId="candidate_state"
           [formControlName]="this.stateFormControlName"
           [options]="candidateStateOptions"
           [autoDisplayFirst]="false"
+          [ngClass]="{
+            disabled: this.form.get(this.stateFormControlName)?.disabled
+          }"
           appendTo="body"
         ></p-dropdown>
         <app-error-messages
@@ -44,15 +44,15 @@
       <div class="field">
         <label
           for="candidate_district"
-          [ngClass]="{
-            disabled: this.form.get(this.districtFormControlName)?.disabled
-          }"
-          >CANDIDATE DISTRICT</label
+        >CANDIDATE DISTRICT</label
         >
         <p-dropdown
           inputId="candidate_district"
           [formControlName]="this.districtFormControlName"
           [options]="candidateDistrictOptions"
+          [ngClass]="{
+            disabled: this.form.get(this.stateFormControlName)?.disabled
+          }"
           appendTo="body"
           [autoDisplayFirst]="false"
         ></p-dropdown>

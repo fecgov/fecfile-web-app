@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -44,7 +44,8 @@ export class TransactionContactLookupComponent implements OnInit {
   currentContactLabel = 'Individual';
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
-  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
+  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {
+  }
 
   ngOnInit(): void {
     // Set the contact type options in the child dialog component to the first contact type option
@@ -65,11 +66,11 @@ export class TransactionContactLookupComponent implements OnInit {
       this.transaction?.transactionType.templateMap.candidate_office &&
       this.transaction.transactionType.mandatoryFormValues &&
       this.transaction.transactionType.templateMap.candidate_office in
-        this.transaction.transactionType.mandatoryFormValues
+      this.transaction.transactionType.mandatoryFormValues
     ) {
       this.mandatoryCandidateOffice = this.transaction.transactionType.mandatoryFormValues[
         this.transaction.transactionType.templateMap.candidate_office
-      ] as CandidateOfficeType;
+        ] as CandidateOfficeType;
     }
 
     // If needed, create a local form control to manage validation and add the
@@ -78,7 +79,7 @@ export class TransactionContactLookupComponent implements OnInit {
     if (this.contactProperty === 'contact_2') {
       this.errorMessageFormControl = new FormControl(null, () => {
         if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired(this.form)) {
-          return { required: true };
+          return {required: true};
         }
         return null;
       });
@@ -87,7 +88,7 @@ export class TransactionContactLookupComponent implements OnInit {
     if (this.contactProperty === 'contact_3') {
       this.errorMessageFormControl = new FormControl(null, () => {
         if (!this.transaction?.contact_3 && this.transaction?.transactionType?.contact3IsRequired) {
-          return { required: true };
+          return {required: true};
         }
         return null;
       });
