@@ -1,4 +1,4 @@
-import { PageUtils } from "../pages/pageUtils";
+import { PageUtils } from '../pages/pageUtils';
 
 export class ContactFormData {
   contact_type: string;
@@ -48,26 +48,24 @@ export class ContactFormData {
   }
 }
 
-export const defaultFormData: ContactFormData = createIndividual();
+export enum ContactType {
+  INDIVIDUAL = 'Individual',
+  COMMITTEE = 'Committee',
+  ORGANIZATION = 'Organization',
+  CANDIDATE = 'Candidate',
+}
 
-export const organizationFormData: ContactFormData = {
-  ...defaultFormData,
-  ...{contact_type: 'Organization'},
-};
+export const defaultFormData: ContactFormData = createContact(ContactType.INDIVIDUAL);
 
-export const candidateFormData: ContactFormData = {
-  ...defaultFormData,
-  ...{contact_type: 'Candidate'},
-};
+export const organizationFormData: ContactFormData = createContact(ContactType.ORGANIZATION);
 
-export const committeeFormData: ContactFormData = {
-  ...defaultFormData,
-  ...{contact_type: 'Committee'},
-};
+export const candidateFormData: ContactFormData = createContact(ContactType.CANDIDATE);
 
-export function createIndividual(): ContactFormData {
+export const committeeFormData: ContactFormData = createContact(ContactType.COMMITTEE);
+
+export function createContact(contact_type: ContactType): ContactFormData {
   return {
-    contact_type: 'Individual',
+    contact_type,
     last_name: PageUtils.randomString(10),
     first_name: PageUtils.randomString(10),
     middle_name: PageUtils.randomString(10),

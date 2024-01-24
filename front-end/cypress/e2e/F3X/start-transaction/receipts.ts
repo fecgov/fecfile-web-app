@@ -19,8 +19,11 @@ export class Receipts {
 }
 
 export class Individual {
+
+  static INDIVIDUAL_RECEIPT = 'Individual Receipt';
+
   static IndividualReceipt() {
-    PageUtils.clickLink('Individual Receipt');
+    PageUtils.clickLink(Individual.INDIVIDUAL_RECEIPT);
   }
 
   static Returned() {

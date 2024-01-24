@@ -1,6 +1,7 @@
 <div class="p-fluid">
   <div [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl?.status === 'INVALID' }">
     <app-contact-lookup
+      [contactProperty]="contactProperty"
       [contactTypeOptions]="contactTypeOptions"
       [candidateOffice]="mandatoryCandidateOffice"
       (contactTypeSelect)="contactTypeSelected($event)"

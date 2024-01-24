@@ -23,6 +23,7 @@ import { DestroyerComponent } from '../app-destroyer.component';
   styleUrls: ['./contact-lookup.component.scss'],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+  @Input() contactProperty = "contact_1"
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;
@@ -40,7 +41,6 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   contactType = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
-  contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
@@ -57,7 +57,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   ngOnInit(): void {
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
     this.contactTypeFormControl.setValue(this.contactType);
-    this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
+
+    if (this.contactTypeOptions.length === 1) this.contactTypeFormControl.disable()
     if (this.candidateOffice) {
       this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
     }

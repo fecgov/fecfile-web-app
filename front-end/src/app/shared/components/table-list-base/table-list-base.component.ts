@@ -27,7 +27,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   constructor(
     protected messageService: MessageService,
     protected confirmationService: ConfirmationService,
-    protected elementRef: ElementRef
+    protected elementRef: ElementRef,
   ) {
     super();
   }
@@ -54,7 +54,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
         const captionElem = table.createCaption();
         captionElem.innerHTML = this.caption;
         (<HTMLElement>captionElem).className = 'sr-only';
-
       }
     }
   }
@@ -88,9 +87,9 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       event = this.pagerState
         ? this.pagerState
         : {
-          first: 0,
-          rows: this.rowsPerPage,
-        };
+            first: 0,
+            rows: this.rowsPerPage,
+          };
     }
 
     // Calculate the record page number to retrieve from the API.
@@ -162,7 +161,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
           this.refreshTable();
-          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000});
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },
     });
@@ -186,7 +185,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
       this.selectedItems = [];
       this.refreshTable();
-      this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000});
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
   }
 
@@ -218,7 +217,7 @@ export class TableAction {
     label: string,
     action: (item?: any) => void | Promise<void>, // eslint-disable-line @typescript-eslint/no-explicit-any
     isAvailable?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
-    isEnabled?: (item?: any) => boolean // eslint-disable-line @typescript-eslint/no-explicit-any
+    isEnabled?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
     this.label = label;
     this.action = action;

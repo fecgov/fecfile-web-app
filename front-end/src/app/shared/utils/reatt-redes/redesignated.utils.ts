@@ -7,10 +7,8 @@ export class RedesignatedUtils {
       if (transaction.report_id === activeReportId) {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
-        alert('Not implemented yet. Only implement transactions in the current report.');
-        return transaction;
+        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${transaction.report?.report_type}.) See attribution below.See redesignation below.`
       }
-
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(

@@ -2,13 +2,13 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 
 export class RedesignationFromUtils {
   public static overlayTransactionProperties(
     transaction: SchBTransaction,
     redesignatedTransaction?: SchBTransaction,
-    activeReportId?: string
+    activeReportId?: string,
   ): SchBTransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
@@ -36,7 +36,7 @@ export class RedesignationFromUtils {
       generatePurposeDescription: (transaction: SchBTransaction): string => {
         if (!transaction.reatt_redes) return '';
         const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
-        if (!expenditureDate) throw new Error("No Expenditure Date!");
+        if (!expenditureDate) throw new Error('No Expenditure Date!');
         const date = DateTime.fromJSDate(expenditureDate);
         return `Redesignation from ${date.toFormat('MM/dd/yyyy')}`;
       },
@@ -44,9 +44,7 @@ export class RedesignationFromUtils {
 
     // Remove purpose description and memo code from list of fields to validate on the backend
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) =>
-        field !== 'expenditure_purpose_descrip' &&
-        field !== 'memo_code'
+      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code',
     );
     return transaction;
   }
@@ -71,7 +69,16 @@ export class RedesignationFromUtils {
     'committee_name',
     'election_code',
     'election_other_description',
-    'category_code'
+    'category_code',
+    'candidate_fec_id',
+    'candidate_last_name',
+    'candidate_first_name',
+    'candidate_middle_name',
+    'candidate_prefix',
+    'candidate_suffix',
+    'candidate_office',
+    'candidate_state',
+    'candidate_district',
   ];
 
   public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
@@ -90,14 +97,9 @@ export class RedesignationFromUtils {
     });
 
     RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable()
+      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable(),
     );
-    fromForm.get('text4000')?.statusChanges.subscribe(v => {
-      console.log(v);
-    })
-    fromForm.get('text4000')?.valueChanges.subscribe(v => {
-      console.log(v);
-    })
+    
     return fromForm;
   }
 }

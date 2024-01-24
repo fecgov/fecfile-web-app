@@ -153,7 +153,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.B &&
         transaction.transactionType.hasElectionInformation() &&
-        this.reportIsEditable &&
         !transaction.parent_transaction_id &&
         !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REDESIGNATION_FROM,
@@ -288,13 +287,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
       )
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next(transaction);
+      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
     }
-
   }
 
-  public createRedesignation(transaction: Transaction): void {
-    this.router.navigateByUrl(
+  public async createRedesignation(transaction: Transaction): Promise<void> {
+    await this.router.navigateByUrl(
       `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`
     );
   }

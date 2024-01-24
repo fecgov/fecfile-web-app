@@ -35,7 +35,8 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -83,7 +84,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactIdMap,
-      this.contactService
+      this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
 
@@ -94,12 +95,15 @@ export abstract class DoubleTransactionTypeBaseComponent
         this.form,
         this.transaction as SchATransaction | SchBTransaction,
         this.childForm,
-        this.childTransaction as SchATransaction | SchBTransaction
+        this.childTransaction as SchATransaction | SchBTransaction,
       );
       this.childUpdateFormWithPrimaryContact({
         value: this.transaction?.reatt_redes?.contact_1,
       } as SelectItem);
-      if ((this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_TO) {
+      if (
+        (this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag ===
+        ReattRedesTypes.REDESIGNATION_TO
+      ) {
         this.updateFormWithPrimaryContact({
           value: this.transaction?.reatt_redes?.contact_1,
         } as SelectItem);
@@ -153,7 +157,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
-      this.formProperties
+      this.formProperties,
     );
 
     payload.children = [
@@ -179,7 +183,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   override get confirmation$(): Observable<boolean> {
     if (!this.childTransaction) return of(false);
     return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
-      reduce((accumulator, confirmed) => accumulator && confirmed)
+      reduce((accumulator, confirmed) => accumulator && confirmed),
     );
   }
 
@@ -204,7 +208,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_1']
+      this.childContactIdMap['contact_1'],
     );
 
     if (this.childTransaction) {
@@ -213,7 +217,6 @@ export abstract class DoubleTransactionTypeBaseComponent
       throw new Error('Fecfile: Missing child transaction.');
     }
   }
-
 
   updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
@@ -241,7 +244,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2']
+      this.childContactIdMap['contact_2'],
     );
   }
 
@@ -250,7 +253,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2']
+      this.childContactIdMap['contact_2'],
     );
   }
 
@@ -259,7 +262,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_3']
+      this.childContactIdMap['contact_3'],
     );
   }
 
@@ -270,6 +273,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
     this.form.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
     this.form.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+    this.form.get('beneficiary_candidate_middle_name')?.setValue(schedB.beneficiary_candidate_middle_name);
+    this.form.get('beneficiary_candidate_prefix')?.setValue(schedB.beneficiary_candidate_prefix);
+    this.form.get('beneficiary_candidate_suffix')?.setValue(schedB.beneficiary_candidate_suffix);
     this.form.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
     this.form.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
     this.form.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
@@ -280,6 +286,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childForm.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
     this.childForm.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
     this.childForm.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+    this.childForm.get('beneficiary_candidate_middle_name')?.setValue(schedB.beneficiary_candidate_middle_name);
+    this.childForm.get('beneficiary_candidate_prefix')?.setValue(schedB.beneficiary_candidate_prefix);
+    this.childForm.get('beneficiary_candidate_suffix')?.setValue(schedB.beneficiary_candidate_suffix);
     this.childForm.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
     this.childForm.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
     this.childForm.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
