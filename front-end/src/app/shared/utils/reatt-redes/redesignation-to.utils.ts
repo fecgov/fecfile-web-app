@@ -32,6 +32,7 @@ export class RedesignationToUtils {
       contactTitle: 'Contact',
       dateLabel: 'REDESIGNATION DATE',
       amountLabel: 'REDESIGNATED AMOUNT',
+      electionLabelPrefix: 'NEW',
       footer:
         'The information in this redesignation will automatically create a related disbursement. Review the disbursement, or continue without reviewing and "Save transactions."',
       dependentChildTransactionTypes: [transaction.transaction_type_identifier as TransactionTypes],

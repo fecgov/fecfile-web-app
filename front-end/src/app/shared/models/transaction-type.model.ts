@@ -98,6 +98,7 @@ export abstract class TransactionType {
   calendarYTDLabel = 'CALENDAR YEAR-TO-DATE PER ELECTION FOR OFFICE SOUGHT';
   amountInputHeader = '';
   amountLabel = 'AMOUNT';
+  electionLabelPrefix = ''; // Prefix to labels in app-election-input component
   debtInputHeader = '';
   committeeCandidateHeader = 'Committee/Candidate information';
   purposeDescripLabel = '';
