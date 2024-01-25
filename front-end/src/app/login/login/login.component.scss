@@ -3,11 +3,11 @@
 .dashboard-example-img {
 	height: 600px;
 	width: 600px;
-	position: fixed;
+	position: absolute;
 }
 
 .login-box {
-	margin-top: 100px;
+	margin-top: 80px;
 	margin-left: 20%;
 }
 
@@ -71,9 +71,20 @@
 	transition: color .1s linear;
 }
 
-.login-page {
+.debug-login {
+	margin-right: 60px;
+}
+
+.content-offset {
+	position: relative;
+	min-height: 100vh;
 	background-color: #ece8e8;
-	position: fixed;
+}
+
+.login-page {
 	height: 100%;
 	width: 100%;
+	max-width: 100%;
+	overflow: scroll;
+	padding-bottom: 224px;
 }
