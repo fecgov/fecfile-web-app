@@ -27,7 +27,7 @@
       }
       .link {
         font-family: 'Lato-Reg', Sans-serif;
-        color: #ca1a0f; //#C80505;
+        color: #ca1a0f;
         top: 150px;
         text-align: right;
       }
@@ -54,10 +54,7 @@
         @extend .text-error;
       }
       .login__btn {
-        //@include button-variant($primaryBlue, $primaryBlue);
-        //@include button-size($input-btn-padding-y, $input-btn-padding-x, 1.5em, $input-btn-line-height, $btn-border-radius);
         cursor: pointer;
-        //font-family: $mainFontFamily;
         width: 140px;
         height: 40px;
         margin-left: 30px;
