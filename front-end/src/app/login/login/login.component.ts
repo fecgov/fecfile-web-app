@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
   }
 
   navigateToLoginDotGov() {
-    window.location.href = this.loginDotGovAuthUrl || '';
+    window.location.href = this.loginDotGovAuthUrl ?? '';
   }
 
   checkLocalLoginAvailability() {
