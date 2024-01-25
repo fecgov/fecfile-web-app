@@ -1,26 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType,
+  TransactionType
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
 import { concat, Observable, of, reduce } from 'rxjs';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -185,7 +185,8 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override resetForm() {
     super.resetForm();
-    TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
+    TransactionFormUtils.resetForm(this.childForm, this.childTransaction,
+      this.childContactTypeOptions, this.committeeAccount);
   }
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
