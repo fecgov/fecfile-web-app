@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -8,6 +8,8 @@ import { BaseInputComponent } from '../base-input.component';
   templateUrl: './election-input.component.html',
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
+  @Input() labelPrefix = '';
+
   electionTypeOptions = [
     { label: 'Primary (P)', value: 'P' },
     { label: 'General (G)', value: 'G' },
@@ -19,6 +21,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   ];
 
   ngOnInit(): void {
+    if (this.transaction?.transactionType.electionLabelPrefix) {
+      this.labelPrefix = this.transaction?.transactionType.electionLabelPrefix;
+    }
+
     // Get inital values for election type and year for additional form inputs
     const election_code = this.form.get('election_code');
     const electionType = election_code?.value?.slice(0, 1) || '';
