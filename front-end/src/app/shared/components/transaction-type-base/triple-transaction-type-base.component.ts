@@ -4,7 +4,7 @@ import { NavigationEvent } from 'app/shared/models/transaction-navigation-contro
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType,
+  TransactionType
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -12,12 +12,12 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
 import { concat, Observable, of, reduce } from 'rxjs';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -33,8 +33,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 })
 export abstract class TripleTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   childFormProperties_2: string[] = [];
   childTransactionType_2?: TransactionType;
   childTransaction_2?: Transaction;
@@ -140,7 +139,8 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override resetForm() {
     super.resetForm();
-    TransactionFormUtils.resetForm(this.childForm_2, this.childTransaction_2, this.childContactTypeOptions_2);
+    TransactionFormUtils.resetForm(this.childForm_2, this.childTransaction_2,
+      this.childContactTypeOptions_2, this.committeeAccount);
   }
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
