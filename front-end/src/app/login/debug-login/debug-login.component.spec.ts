@@ -6,7 +6,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { environment } from 'environments/environment';
 import { of, throwError } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { DebugLoginComponent } from './debug-login.component';
@@ -65,11 +64,6 @@ describe('DebugLoginComponent', () => {
     expect(component.loginEmailInputError).toBeFalse();
   });
 
-  xit('navigateToLoginDotGov should href environment location', () => {
-    component.navigateToLoginDotGov();
-    expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
-  });
-
   it('should doSignIn success', () => {
     spyOn(loginService, 'logIn').and.returnValue(of({ is_allowed: true } as UserLoginData));
     component.hasFailed = true;
@@ -102,12 +96,5 @@ describe('DebugLoginComponent', () => {
     expect(component.show).toBeFalse();
     component.showPassword();
     expect(component.show).toBeTrue();
-  });
-
-  it('should adjust localLoginAvailable', () => {
-    expect(component.localLoginAvailable).toBe(false);
-    spyOn(loginService, 'checkLocalLoginAvailability').and.returnValue(of(true));
-    component.checkLocalLoginAvailability();
-    expect(component.localLoginAvailable).toBe(true);
   });
 });

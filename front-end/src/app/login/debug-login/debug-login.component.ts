@@ -23,8 +23,6 @@ export class DebugLoginComponent implements OnInit {
   public titleF!: string;
   public titleR!: string;
   public show!: boolean;
-  public loginDotGovAuthUrl: string | undefined;
-  public localLoginAvailable = false;
 
   constructor(
     private fb: FormBuilder,
@@ -48,8 +46,6 @@ export class DebugLoginComponent implements OnInit {
     this.titleR = this.appTitle.substring(3);
     this.loginService.clearUserLoggedInCookies();
     this.store.dispatch(userLoggedOutAction());
-    this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
-    this.checkLocalLoginAvailability();
   }
 
   /**
@@ -109,15 +105,5 @@ export class DebugLoginComponent implements OnInit {
 
   showPassword() {
     this.show = !this.show;
-  }
-
-  navigateToLoginDotGov() {
-    window.location.href = this.loginDotGovAuthUrl || '';
-  }
-
-  checkLocalLoginAvailability() {
-    this.loginService.checkLocalLoginAvailability().subscribe((available) => {
-      this.localLoginAvailable = available;
-    });
   }
 }
