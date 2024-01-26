@@ -143,11 +143,10 @@ export class ReattRedesUtils {
       }
     }
 
-    transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) =>
-        field !==
-        (transaction instanceof SchATransaction ? 'contribution_purpose_descrip' : 'expenditure_purpose_descrip')
-    );
+    const purpose_field =
+      transaction instanceof SchATransaction ? 'contribution_purpose_descrip' : 'expenditure_purpose_descrip';
+
+    transaction.fields_to_validate = transaction.fields_to_validate?.filter((field) => field !== purpose_field);
 
     return transaction;
   }
