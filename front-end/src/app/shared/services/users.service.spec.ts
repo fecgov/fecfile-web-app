@@ -54,7 +54,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committee/users/?page=1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees//users/?page=1`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
