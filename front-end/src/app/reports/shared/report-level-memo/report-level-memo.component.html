@@ -2,15 +2,19 @@
   <div class="summary-header">
     <h1>Report level memo</h1>
     <div>
-      <strong>{{ report.formLabel }}</strong
-      >{{ report.formSubLabel }}
+      <span class="bold"
+        >{{ report.formLabel }}<ng-container *ngIf="report.formSubLabel">:</ng-container>
+        {{ report.formSubLabel }}</span
+      >
     </div>
   </div>
 
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-11">
-        <label for="{{ text4kFormProperty }}"><strong>ENTER A MEMO RELATED TO THIS FORM 3X</strong> (OPTIONAL)</label>
+        <label for="{{ text4kFormProperty }}">
+          <strong> ENTER A MEMO RELATED TO THIS FORM {{ report.report_type.slice(1) }} </strong> (OPTIONAL)
+        </label>
         <div>
           <textarea
             id="{{ text4kFormProperty }}"

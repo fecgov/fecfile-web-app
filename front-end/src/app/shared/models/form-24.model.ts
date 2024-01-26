@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Report, ReportTypes } from './report.model';
+import { Report, ReportStatus, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
 
@@ -16,10 +16,9 @@ export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
 };
 
 export class Form24 extends Report {
-  override schema = f24Schema;
-  override report_type = ReportTypes.F24;
-  override form_type = F24FormTypes.F24A;
-
+  schema = f24Schema;
+  report_type = ReportTypes.F24;
+  form_type = F24FormTypes.F24N;
   get formLabel() {
     return 'FORM 24';
   }
@@ -32,7 +31,11 @@ export class Form24 extends Report {
     return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  report_type_24_48: string | undefined;
+  override get canAmend(): boolean {
+    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
+  }
+
+  report_type_24_48: '24' | '48' | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   committee_name: string | undefined;
   street_1: string | undefined;

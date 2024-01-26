@@ -1,5 +1,7 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
@@ -9,15 +11,14 @@ import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { combineLatestWith, Observable, of, startWith, BehaviorSubject, switchMap, takeUntil, merge } from 'rxjs';
+import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
-import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
-import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 
 export class TransactionFormUtils {
   /**
@@ -94,7 +95,7 @@ export class TransactionFormUtils {
         });
     }
 
-    if (transactionType.showAggregate && !transaction.force_unaggregated) {
+    if (transactionType.showAggregate) {
       const previous_transaction$: Observable<Transaction | undefined> =
         form.get(templateMap.date)?.valueChanges.pipe(
           startWith(form.get(templateMap.date)?.value),
@@ -203,7 +204,9 @@ export class TransactionFormUtils {
   ) {
     const key = previousTransaction?.transactionType?.templateMap[field] as keyof ScheduleTransaction;
     const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
-    if (transaction.transactionType?.isRefund) {
+    if (transaction.force_unaggregated) {
+      form.get(templateMap[field])?.setValue(previousAggregate);
+    } else if (transaction.transactionType?.isRefund) {
       form.get(templateMap[field])?.setValue(previousAggregate - +amount);
     } else {
       form.get(templateMap[field])?.setValue(previousAggregate + +amount);
@@ -280,7 +283,12 @@ export class TransactionFormUtils {
     return formValues;
   }
 
-  static resetForm(form: FormGroup, transaction: Transaction | undefined, contactTypeOptions: PrimeOptions) {
+  static resetForm(
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactTypeOptions: PrimeOptions,
+    committeeAccount?: CommitteeAccount
+  ) {
     form.reset();
     form.markAsPristine();
     form.markAsUntouched();
@@ -295,6 +303,16 @@ export class TransactionFormUtils {
         [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
       });
+
+      if (transaction?.transactionType?.populateSignatoryOneWithTreasurer && committeeAccount) {
+        form.patchValue({
+          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_1,
+          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_middle_name]: committeeAccount.treasurer_name_middle,
+          [transaction.transactionType.templateMap.signatory_1_prefix]: committeeAccount.treasurer_name_prefix,
+          [transaction.transactionType.templateMap.signatory_1_suffix]: committeeAccount.treasurer_name_suffix,
+        });
+      }
     }
   }
 

@@ -5,7 +5,7 @@ import { MainFormComponent } from './main-form/main-form.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
-import { PrintPreviewComponent } from '../print-preview/print-preview.component';
+import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
 import { Report } from 'app/shared/models/report.model';
 import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
