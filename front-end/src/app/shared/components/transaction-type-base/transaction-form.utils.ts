@@ -13,11 +13,11 @@ import { combineLatestWith, Observable, of, startWith, BehaviorSubject, switchMa
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
-import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 export class TransactionFormUtils {
   /**
@@ -40,7 +40,7 @@ export class TransactionFormUtils {
     if (transaction && transaction.id) {
       form.patchValue({ ...transaction });
 
-      TransactionMemoUtils.patchMemoText(transaction, form);
+      TransactionFormUtils.patchMemoText(transaction, form);
       form.get('entity_type')?.disable();
     } else {
       component.resetForm();
@@ -229,7 +229,7 @@ export class TransactionFormUtils {
     }
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
-    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+    formValues = TransactionFormUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
@@ -309,5 +309,35 @@ export class TransactionFormUtils {
   static isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
     // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
     return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
+  }
+
+  // prettier-ignore
+  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+      const text = form.get('text4000')?.value;
+      if (text && text.length > 0) {
+        const memo_text = MemoText.fromJSON({
+          text4000: text,
+          text_prefix: transaction.memo_text?.text_prefix,
+          report_id: transaction?.report_id,
+          rec_type: 'TEXT',
+        });
+  
+        if (transaction?.id) {
+          memo_text.transaction_uuid = transaction.id;
+        }
+  
+        formValues['memo_text'] = memo_text;
+      } else {
+        formValues['memo_text'] = undefined;
+      }
+  
+      return formValues;
+    }
+
+  static patchMemoText(transaction: Transaction | undefined, form: FormGroup) {
+    const memo_text = transaction?.memo_text;
+    if (memo_text?.text4000) {
+      form.patchValue({ text4000: memo_text.text4000 });
+    }
   }
 }
