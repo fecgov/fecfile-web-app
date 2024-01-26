@@ -3,8 +3,8 @@ import { map, mergeMap, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiService } from './fec-api.service';
 import { Store } from '@ngrx/store';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { ApiService } from './api.service';
+import { ListRestResponse } from '../models/rest-api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +25,8 @@ export class CommitteeAccountService {
   }
 
   public getCommittees(): Observable<CommitteeAccount[]> {
-    return this.apiService.get<any>(`/committees/`).pipe(map((response) => response.results as CommitteeAccount[]));
+    return this.apiService
+      .get<ListRestResponse>(`/committees/`)
+      .pipe(map((response) => response.results as CommitteeAccount[]));
   }
 }
