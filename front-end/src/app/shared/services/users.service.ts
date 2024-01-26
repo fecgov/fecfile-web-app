@@ -19,10 +19,9 @@ export class UsersService implements TableListService<CommitteeUser> {
       parameter_string += `&ordering=${ordering}`;
     }
     return this.committeeAccountService.getCommittees().pipe(
-      mergeMap((committees) => {
-        console.log('AHOY' + JSON.stringify(committees));
-        return this.apiService.get<ListRestResponse>(`/committees/${committees[0].id}/users/${parameter_string}`);
-      }),
+      mergeMap((committees) =>
+        this.apiService.get<ListRestResponse>(`/committees/${committees[0].id}/users/${parameter_string}`)
+      ),
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => CommitteeUser.fromJSON(item));
         return response;
