@@ -146,7 +146,9 @@ describe('ReattRedesUtils', () => {
   });
 
   it('overlayTransactionProperties should override default properties for a SchATransaction', () => {
-    const transaction = testScheduleATransaction;
+    const transaction = SchATransaction.fromJSON({
+      ...testScheduleATransaction,
+    });
 
     const overlay = ReattRedesUtils.overlayTransactionProperties(
       transaction,
@@ -159,7 +161,9 @@ describe('ReattRedesUtils', () => {
   });
 
   it('overlayTransactionProperties should override default properties for a SchBTransaction', () => {
-    const transaction = testScheduleBTransaction;
+    const transaction = SchBTransaction.fromJSON({
+      ...testScheduleBTransaction,
+    });
     transaction.report_id = '3cd741da-aa57-4cc3-8530-667e8b7bad78';
 
     const overlay = ReattRedesUtils.overlayTransactionProperties(
