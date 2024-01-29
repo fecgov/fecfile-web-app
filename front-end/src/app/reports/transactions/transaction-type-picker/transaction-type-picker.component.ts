@@ -85,7 +85,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   }
 
   getTransactionGroups(): TransactionGroupTypes[] {
-    console.log('HEY');
     if (this.category === 'disbursement') {
       if (this.report?.report_type === ReportTypes.F3X) {
         return [
