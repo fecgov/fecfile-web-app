@@ -22,28 +22,21 @@ import { DoubleTransactionDetailComponent } from './double-transaction-detail/do
 import { TripleTransactionDetailComponent } from './triple-transaction-detail/triple-transaction-detail.component';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
-import {
-  TransactionDisbursementsComponent
-} from './transaction-list/transaction-disbursements/transaction-disbursements.component';
+import { TransactionDisbursementsComponent } from './transaction-list/transaction-disbursements/transaction-disbursements.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionReceiptsComponent } from './transaction-list/transaction-receipts/transaction-receipts.component';
-import {
-  TransactionLoansAndDebtsComponent
-} from './transaction-list/transaction-loans-and-debts/transaction-loans-and-debts.component';
+import { TransactionLoansAndDebtsComponent } from './transaction-list/transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionInputComponent } from './transaction-input/transaction-input.component';
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
-import {
-  TransactionGuarantorsComponent
-} from './transaction-list/transaction-guarantors/transaction-guarantors.component';
-import {
-  TransactionChildrenListContainerComponent
-} from './transaction-children-list-container/transaction-children-list-container.component';
-import { RippleModule } from "primeng/ripple";
-import { SelectButtonModule } from "primeng/selectbutton";
+import { TransactionGuarantorsComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
+import { TransactionChildrenListContainerComponent } from './transaction-children-list-container/transaction-children-list-container.component';
+import { RippleModule } from 'primeng/ripple';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { SelectReportDialogComponent } from './transaction-list/select-report-dialog/select-report-dialog.component';
 import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
+import { TransactionAccordionTabComponent } from './transaction-accordion-tab/transaction-accordion-tab.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +56,7 @@ import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transact
     TransactionNavigationComponent,
     SelectReportDialogComponent,
     ReattRedesTransactionTypeDetailComponent,
+    TransactionAccordionTabComponent,
   ],
   imports: [
     AccordionModule,
@@ -87,5 +81,4 @@ import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transact
     SelectButtonModule,
   ],
 })
-export class TransactionsModule {
-}
+export class TransactionsModule {}

@@ -9,19 +9,19 @@ import { MenuItem } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { ReportService } from '../../../shared/services/report.service';
 
-@Component({})
+@Component({
+  template: '',
+})
 export abstract class AbstractMenuComponent extends DestroyerComponent implements OnInit {
   activeReport$?: Observable<Report | undefined>;
   items$: Observable<MenuItem[]> = of([]);
-  reportString: string;
+  reportString?: string;
 
   protected constructor(
     private store: Store,
     private reportService: ReportService,
-    reportString: string,
   ) {
     super();
-    this.reportString = reportString;
   }
 
   ngOnInit(): void {

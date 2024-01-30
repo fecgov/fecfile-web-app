@@ -16,7 +16,8 @@ export class F1MMenuComponent extends AbstractMenuComponent implements OnInit {
   subHeading: string = FORM_TYPES.get(FormTypes.F1M)?.description as string;
 
   constructor(store: Store, reportService: ReportService) {
-    super(store, reportService, 'f1m');
+    super(store, reportService);
+    this.reportString = 'f1m';
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {

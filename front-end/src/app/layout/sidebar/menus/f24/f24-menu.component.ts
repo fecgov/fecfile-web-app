@@ -15,7 +15,8 @@ export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
   formLabel?: string;
 
   constructor(store: Store, reportService: ReportService) {
-    super(store, reportService, 'f24');
+    super(store, reportService);
+    this.reportString = 'f24';
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {

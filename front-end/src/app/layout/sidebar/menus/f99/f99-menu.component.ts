@@ -13,7 +13,8 @@ import { AbstractMenuComponent } from '../abstract-menu.component';
 })
 export class F99MenuComponent extends AbstractMenuComponent implements OnInit {
   constructor(store: Store, reportService: ReportService) {
-    super(store, reportService, 'f99');
+    super(store, reportService);
+    this.reportString = 'f99';
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {

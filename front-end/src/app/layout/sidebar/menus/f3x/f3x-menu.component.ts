@@ -19,7 +19,8 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   coverage_through_date?: Date;
 
   constructor(store: Store, reportService: ReportService) {
-    super(store, reportService, 'f3x');
+    super(store, reportService);
+    this.reportString = 'f3x';
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {

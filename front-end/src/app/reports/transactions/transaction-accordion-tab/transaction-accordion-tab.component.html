@@ -1,0 +1,29 @@
+<p-accordionTab>
+  <ng-template pTemplate="header">
+    <strong>{{ transactionType?.accordionTitle }}:</strong>
+    <p style="font-weight: normal">
+      {{ transactionType?.accordionSubText }}
+    </p></ng-template
+  >
+  <div class="p-fluid">
+    <h2 *ngIf="transactionType?.formTitle">
+      {{ transactionType?.formTitle }}
+    </h2>
+    <h3>{{ transactionType?.contactTitle }}</h3>
+    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <app-transaction-input
+        [isEditable]="isEditable"
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [transaction]="transaction"
+        [contactTypeOptions]="contactTypeOptions"
+        [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+        (primaryContactSelect)="updateFormWithPrimaryContact.emit($event)"
+        (candidateContactSelect)="updateFormWithCandidateContact.emit($event)"
+        (secondaryContactSelect)="updateFormWithSecondaryContact.emit($event)"
+        (tertiaryContactSelect)="updateFormWithTertiaryContact.emit($event)"
+      >
+      </app-transaction-input>
+    </form>
+  </div>
+</p-accordionTab>
