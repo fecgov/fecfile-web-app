@@ -10,17 +10,14 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
 import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
-import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
-import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionResolver {
-  constructor(public transactionService: TransactionService) {
-  }
+  constructor(public transactionService: TransactionService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -83,7 +80,7 @@ export class TransactionResolver {
     if (transaction.children) {
       transaction.children = [];
       // tune page size
-      const params = {parent: transaction.id ?? '', page_size: 100};
+      const params = { parent: transaction.id ?? '', page_size: 100 };
       return this.transactionService.getTableData(1, '', params).pipe(
         expand((page: ListRestResponse) => {
           return page.next ? this.transactionService.getTableData(page.pageNumber + 1, '', params) : EMPTY;
@@ -110,7 +107,7 @@ export class TransactionResolver {
     }
     return of(transaction);
   }
-  
+
   resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
     return this.transactionService.get(toId).pipe(
       map((to: Transaction) => {
@@ -133,10 +130,10 @@ export class TransactionResolver {
   resolveNewReattribution(reportId: string, originatingId: string) {
     return this.transactionService.get(originatingId).pipe(
       map((originatingTransaction: Transaction) => {
-        const reattributed = ReattributedUtils.overlayTransactionProperties(
+        const reattributed = ReattRedesUtils.overlayTransactionProperties(
           originatingTransaction as SchATransaction,
           reportId
-        );
+        ) as SchATransaction;
         if (!reattributed.transaction_type_identifier) {
           throw Error('Fecfile online: originating reattribution transaction type not found.');
         }
@@ -157,10 +154,10 @@ export class TransactionResolver {
   resolveNewRedesignation(reportId: string, originatingId: string) {
     return this.transactionService.get(originatingId).pipe(
       map((originatingTransaction: Transaction) => {
-        const redesignated = RedesignatedUtils.overlayTransactionProperties(
+        const redesignated = ReattRedesUtils.overlayTransactionProperties(
           originatingTransaction as SchBTransaction,
           reportId
-        );
+        ) as SchBTransaction;
         if (!redesignated.transaction_type_identifier) {
           throw Error('Fecfile online: originating redesignation transaction type not found.');
         }

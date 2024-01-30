@@ -6,6 +6,7 @@ import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -68,17 +69,17 @@ export class ReattRedesUtils {
 
       if (amount !== null) {
         if (mustBeNegative && amount >= 0) {
-          return {exclusiveMax: {exclusiveMax: 0}};
+          return { exclusiveMax: { exclusiveMax: 0 } };
         }
         if (!mustBeNegative && amount < 0) {
-          return {exclusiveMin: {exclusiveMin: 0}};
+          return { exclusiveMin: { exclusiveMin: 0 } };
         }
 
         const amountKey = transaction.transactionType.templateMap.amount;
         const originalAmount =
           ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
             amountKey as keyof (SchATransaction | SchBTransaction)
-            ] as number) ?? 0;
+          ] as number) ?? 0;
         const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
         let limit = originalAmount - reattRedesTotal;
         if (transaction.id) limit += +(transaction[amountKey as keyof (SchATransaction | SchBTransaction)] as number); // If editing, add value back into limit restriction.
@@ -100,5 +101,53 @@ export class ReattRedesUtils {
     const reattributed = payload.reatt_redes as SchATransaction | SchBTransaction;
     const to = payload as SchATransaction | SchBTransaction; // The FROM transaction is in the TO children[]
     return [reattributed, to];
+  }
+
+  public static overlayTransactionProperties(
+    transaction: SchATransaction | SchBTransaction,
+    activeReportId?: string
+  ): SchATransaction | SchBTransaction {
+    if (!transaction.reattribution_redesignation_tag) {
+      const purpose_descrip =
+        (transaction as SchATransaction).contribution_purpose_descrip ??
+        (transaction as SchBTransaction).expenditure_purpose_descrip;
+
+      if (purpose_descrip) {
+        const prefix = `[Original purpose description: ${purpose_descrip}] `;
+        if (transaction.memo_text) {
+          transaction.memo_text.text_prefix = prefix;
+          transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
+        } else {
+          transaction.memo_text = MemoText.fromJSON({
+            text_prefix: prefix,
+            text4000: prefix,
+          });
+        }
+      }
+
+      if (transaction.report_id === activeReportId) {
+        if (transaction instanceof SchATransaction) {
+          transaction.contribution_purpose_descrip = 'See reattribution below.';
+        } else if (transaction instanceof SchBTransaction) {
+          transaction.expenditure_purpose_descrip = 'See redesignation below.';
+        }
+      } else {
+        alert('Not implemented yet. Only implement transactions in the current report.');
+        return transaction;
+      }
+
+      if (transaction instanceof SchATransaction) {
+        transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+      } else if (transaction instanceof SchBTransaction) {
+        transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
+      }
+    }
+
+    const purpose_field =
+      transaction instanceof SchATransaction ? 'contribution_purpose_descrip' : 'expenditure_purpose_descrip';
+
+    transaction.fields_to_validate = transaction.fields_to_validate?.filter((field) => field !== purpose_field);
+
+    return transaction;
   }
 }
