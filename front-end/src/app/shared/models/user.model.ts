@@ -8,10 +8,7 @@ import { LabelUtils } from '../utils/label.utils';
  * after a successful login.
  */
 export type UserLoginData = {
-  committee_id: string;
-  email: string;
-  is_allowed: boolean;
-  login_dot_gov: boolean;
+  login_dot_gov?: boolean;
 };
 
 export class CommitteeUser {

@@ -12,11 +12,11 @@ import { UserLoginData } from '../models/user.model';
   providedIn: 'root',
 })
 export class ApiService {
-  private loggedInEmail: string | undefined;
+  private loginDotGov: boolean | undefined;
 
   constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.loggedInEmail = userLoginData.email;
+      this.loginDotGov = userLoginData.login_dot_gov;
     });
   }
 
@@ -94,6 +94,6 @@ export class ApiService {
   }
 
   public isAuthenticated() {
-    return !!this.loggedInEmail || this.cookieService.check(environment.ffapiEmailCookieName);
+    return !!this.loginDotGov || this.cookieService.check(environment.ffapiLoginDotGovCookieName);
   }
 }

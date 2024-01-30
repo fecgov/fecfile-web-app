@@ -61,10 +61,11 @@ export class LoginService {
   }
 
   public clearUserLoggedInCookies() {
-    this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
+    this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
+    this.cookieService.delete(environment.ffapiFirstNameCookieName);
+    this.cookieService.delete(environment.ffapiLastNameCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
     this.cookieService.delete(environment.sessionIdCookieName);
-    this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {

@@ -39,22 +39,14 @@ describe('DashboardComponent', () => {
   });
 
   it('#dispatchUserLoggedInFromCookies happy path', () => {
-    const testCommitteeId = 'testCommitteeId';
     const testEmail = 'testEmail';
-    const testIsAllowed = true;
     const testLoginDotGov = false;
 
     const expectedUserLoginData: UserLoginData = {
-      committee_id: testCommitteeId,
-      email: testEmail,
-      is_allowed: testIsAllowed,
       login_dot_gov: testLoginDotGov,
     };
     spyOn(cookieService, 'check').and.returnValue(true);
     spyOn(cookieService, 'get').and.callFake((name: string) => {
-      if (name === environment.ffapiCommitteeIdCookieName) {
-        return testCommitteeId;
-      }
       if (name === environment.ffapiEmailCookieName) {
         return testEmail;
       }
