@@ -6,6 +6,25 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { SelectItem } from 'primeng/api';
 import { NavigationEvent } from '../../models/transaction-navigation-controls.model';
 import { Transaction } from '../../models/transaction.model';
+import { lastValueFrom, Observable } from 'rxjs';
+import { getContactTypeOptions } from '../../utils/transaction-type-properties';
+import { ValidateUtils } from '../../utils/validate.utils';
+import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
+import { PrimeOptions } from '../../utils/label.utils';
+import { FormGroup } from '@angular/forms';
+import { ContactIdMapType } from './transaction-contact.utils';
+import { TransactionMemoUtils } from './transaction-memo.utils';
+
+interface Originating {
+  transaction: Transaction;
+  transactionType: TransactionType;
+  templateMap: TransactionTemplateMapType;
+  formProperties: string[];
+  contactTypeOptions: PrimeOptions;
+  form: FormGroup;
+  memoCodeCheckboxLabel$: Observable<string>;
+  contactIdMap: ContactIdMapType;
+}
 
 @Component({
   template: '',
@@ -14,9 +33,12 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  override ngOnInit(): void {
-    super.ngOnInit();
+  FormGroup = this.fb.group({});
+  pullForward = false;
+  originating: Originating = {} as Originating;
 
+  override async ngOnInit(): Promise<void> {
+    super.ngOnInit();
     // If the parent is a reattribution/redesignation transaction, initialize
     // its specialized validation rules and form element behavior.
     ReattRedesUtils.overlayForms(
@@ -43,11 +65,15 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       } as SelectItem);
       this.updateElectionData();
     }
+    await this.initializePullForward();
   }
 
-  override processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
-    const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
-    this.transactionService.multisave(payloads).subscribe((response) => {
+  override processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
+    const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(
+      payload,
+      this.originating.transaction,
+    );
+    this.transactionService.multiSaveReattRedes(payloads).subscribe((response) => {
       navigationEvent.transaction = response[0];
       this.navigateTo(navigationEvent);
     });
@@ -56,28 +82,48 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   updateElectionData() {
     const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
     if (!schedB) return;
-    this.form.get('category_code')?.setValue(schedB.category_code);
-    this.form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
-    this.form.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
-    this.form.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
-    this.form.get('beneficiary_candidate_middle_name')?.setValue(schedB.beneficiary_candidate_middle_name);
-    this.form.get('beneficiary_candidate_prefix')?.setValue(schedB.beneficiary_candidate_prefix);
-    this.form.get('beneficiary_candidate_suffix')?.setValue(schedB.beneficiary_candidate_suffix);
-    this.form.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
-    this.form.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
-    this.form.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
+    const forms = [this.form, this.childForm];
+    forms.forEach((form) => {
+      form.get('category_code')?.setValue(schedB.category_code);
+      form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
+      form.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
+      form.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
+      form.get('beneficiary_candidate_middle_name')?.setValue(schedB.beneficiary_candidate_middle_name);
+      form.get('beneficiary_candidate_prefix')?.setValue(schedB.beneficiary_candidate_prefix);
+      form.get('beneficiary_candidate_suffix')?.setValue(schedB.beneficiary_candidate_suffix);
+      form.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
+      form.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
+      form.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
+    });
 
     this.childForm.get('election_code')?.setValue(schedB.election_code);
     this.childForm.get('election_other_description')?.setValue(schedB.election_other_description);
-    this.childForm.get('category_code')?.setValue(schedB.category_code);
-    this.childForm.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
-    this.childForm.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
-    this.childForm.get('beneficiary_candidate_first_name')?.setValue(schedB.beneficiary_candidate_first_name);
-    this.childForm.get('beneficiary_candidate_middle_name')?.setValue(schedB.beneficiary_candidate_middle_name);
-    this.childForm.get('beneficiary_candidate_prefix')?.setValue(schedB.beneficiary_candidate_prefix);
-    this.childForm.get('beneficiary_candidate_suffix')?.setValue(schedB.beneficiary_candidate_suffix);
-    this.childForm.get('beneficiary_candidate_office')?.setValue(schedB.beneficiary_candidate_office);
-    this.childForm.get('beneficiary_candidate_state')?.setValue(schedB.beneficiary_candidate_state);
-    this.childForm.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
+  }
+
+  private async initializePullForward() {
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    const reattributionId = this.activatedRoute.snapshot.queryParams['reattribution'];
+    this.originating.transaction = await lastValueFrom(this.transactionService.get(reattributionId));
+    this.pullForward = this.originating.transaction.report_id !== reportId;
+    if (!this.pullForward) return;
+
+    this.originating.transactionType = this.originating.transaction.transactionType;
+    this.originating.templateMap = this.originating.transactionType.templateMap;
+    this.originating.formProperties = this.originating.transactionType.getFormControlNames();
+    this.originating.contactTypeOptions = getContactTypeOptions(
+      this.originating.transactionType.contactTypeOptions ?? [],
+    );
+
+    this.originating.form = this.fb.group(ValidateUtils.getFormGroupFields(this.originating.formProperties));
+    this.originating.contactIdMap = {};
+    this.originating.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
+      this.originating.form,
+      this.originating.transactionType,
+    );
+
+    this.originating.form.patchValue({ ...this.originating.transaction });
+    this.originating.form.get(this.originating.templateMap['memo_code'])?.setValue(true);
+    TransactionMemoUtils.patchMemoText(this.originating.transaction, this.originating.form);
+    this.originating.form.disable();
   }
 }

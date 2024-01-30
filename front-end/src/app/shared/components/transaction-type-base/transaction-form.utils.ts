@@ -9,10 +9,8 @@ import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { combineLatestWith, Observable, of, startWith, BehaviorSubject, switchMap, takeUntil, merge } from 'rxjs';
+import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
-import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
@@ -29,13 +27,14 @@ export class TransactionFormUtils {
    * @param form - parent or child (i.e. form or childForm)
    * @param transaction - parent or child
    * @param contactIdMap - parent or child
+   * @param contactService
    */
   static onInit(
-    component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
+    component: TransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
-    contactService: ContactService
+    contactService: ContactService,
   ): void {
     if (transaction && transaction.id) {
       form.patchValue({ ...transaction });
@@ -103,16 +102,16 @@ export class TransactionFormUtils {
             return component.transactionService.getPreviousTransactionForAggregate(
               transaction,
               contactId,
-              contribution_date
+              contribution_date,
             );
-          })
+          }),
         ) || of(undefined);
       form
         .get(templateMap.amount)
         ?.valueChanges.pipe(
           startWith(form.get(templateMap.amount)?.value),
           combineLatestWith(previous_transaction$, of(transaction)),
-          takeUntil(component.destroy$)
+          takeUntil(component.destroy$),
         )
         .subscribe(([amount, previous_transaction, transaction]) => {
           this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
@@ -131,7 +130,7 @@ export class TransactionFormUtils {
             (form.get(templateMap.election_code) as AbstractControl).valueChanges,
             (form.get(templateMap.candidate_office) as AbstractControl).valueChanges,
             (form.get(templateMap.candidate_state) as AbstractControl).valueChanges,
-            (form.get(templateMap.candidate_district) as AbstractControl).valueChanges
+            (form.get(templateMap.candidate_district) as AbstractControl).valueChanges,
           ).pipe(
             switchMap(() => {
               const disbursement_date = form.get(templateMap.date)?.value as Date | undefined;
@@ -148,16 +147,16 @@ export class TransactionFormUtils {
                 election_code,
                 candidate_office,
                 candidate_state,
-                candidate_district
+                candidate_district,
               );
-            })
+            }),
           ) || of(undefined);
         form
           .get(templateMap.amount)
           ?.valueChanges.pipe(
             startWith(form.get(templateMap.amount)?.value),
             combineLatestWith(previous_election$, of(transaction)),
-            takeUntil(component.destroy$)
+            takeUntil(component.destroy$),
           )
           .subscribe(([amount, previous_election, transaction]) => {
             this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previous_election, amount);
@@ -199,7 +198,7 @@ export class TransactionFormUtils {
     templateMap: TransactionTemplateMapType,
     transaction: Transaction,
     previousTransaction: Transaction | undefined,
-    amount: number
+    amount: number,
   ) {
     const key = previousTransaction?.transactionType?.templateMap[field] as keyof ScheduleTransaction;
     const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
@@ -215,7 +214,7 @@ export class TransactionFormUtils {
   static getPayloadTransaction(
     transaction: Transaction | undefined,
     form: FormGroup,
-    formProperties: string[]
+    formProperties: string[],
   ): Transaction {
     if (!transaction) {
       throw new Error('Fecfile: Payload transaction not found');

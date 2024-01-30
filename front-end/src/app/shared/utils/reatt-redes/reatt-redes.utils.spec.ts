@@ -92,26 +92,26 @@ describe('ReattRedesUtils', () => {
       toTxn.reatt_redes = reattributed;
       toTxn.children[0] = fromTxn;
 
-      const result = ReattRedesUtils.getPayloads(payload);
+      const result = ReattRedesUtils.getPayloads(payload, reattributed);
 
       expect(result[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
       expect(result[1].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTION_TO);
       expect((result[1].children[0] as SchATransaction).reattribution_redesignation_tag).toBe(
-        ReattRedesTypes.REATTRIBUTION_FROM
+        ReattRedesTypes.REATTRIBUTION_FROM,
       );
     });
   });
 
   describe('amountValidator', () => {
     let control: FormControl;
-    const txn = {...testScheduleATransaction} as SchATransaction;
-    txn.reatt_redes = {...testScheduleATransaction} as SchATransaction;
+    const txn = { ...testScheduleATransaction } as SchATransaction;
+    txn.reatt_redes = { ...testScheduleATransaction } as SchATransaction;
     (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
     (txn.reatt_redes as SchATransaction).contribution_amount = 100;
 
     beforeEach(() => {
       control = new FormControl();
-    })
+    });
 
     it('should limit max value to negative when mustBeNegative is true', () => {
       const validatorFunction = ReattRedesUtils.amountValidator(txn, true);
@@ -143,5 +143,4 @@ describe('ReattRedesUtils', () => {
       expect(validatorResult?.['max']['max']).toBe(25);
     });
   });
-
 });

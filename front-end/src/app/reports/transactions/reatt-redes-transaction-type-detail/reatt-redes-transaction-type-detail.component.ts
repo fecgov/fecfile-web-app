@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { ReattRedesTransactionTypeBaseComponent } from '../../../shared/components/transaction-type-base/reatt-redes-transaction-type-base.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../../shared/services/transaction.service';
@@ -14,7 +14,10 @@ import { ReportService } from '../../../shared/services/report.service';
   templateUrl: './reatt-redes-transaction-type-detail.component.html',
   styleUrls: ['../transaction.scss', './reatt-redes-transaction-type-detail.component.scss'],
 })
-export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransactionTypeBaseComponent implements OnInit {
+export class ReattRedesTransactionTypeDetailComponent
+  extends ReattRedesTransactionTypeBaseComponent
+  implements OnInit, OnChanges
+{
   accordionActiveIndex = 0; // Value determines which accordion pane to open by default
 
   constructor(
@@ -43,10 +46,8 @@ export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransact
     );
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-
-    // Determine which accordion pane to open initially based on transaction id in page URL
+  override async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
       this.accordionActiveIndex = 1;

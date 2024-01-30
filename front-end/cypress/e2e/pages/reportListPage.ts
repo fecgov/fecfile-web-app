@@ -1,7 +1,7 @@
-import { F3xCreateReportPage } from "./f3xCreateReportPage";
-import { defaultFormData as defaultReportFormData } from "../models/ReportFormModel";
-import { PageUtils } from "./pageUtils";
-import { defaultFormData as cohFormData, F3xCashOnHandPage } from "./f3xCashOnHandPage";
+import { F3xCreateReportPage } from './f3xCreateReportPage';
+import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
+import { PageUtils } from './pageUtils';
+import { defaultFormData as cohFormData, F3xCashOnHandPage } from './f3xCashOnHandPage';
 
 export class ReportListPage {
   static goToPage() {
@@ -10,9 +10,9 @@ export class ReportListPage {
   }
 
   static clickCreateButton(force = false) {
-    cy.get("button[label='Create a new report']").click({force});
-    cy.intercept({method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/'}).as(
-      'coverageDates'
+    cy.get("button[label='Create a new report']").click({ force });
+    cy.intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' }).as(
+      'coverageDates',
     );
     cy.get('#typeDropdown').click();
     cy.get('button').contains('Form 3X').click();
@@ -51,7 +51,6 @@ export class ReportListPage {
     });
   }
 
-
   static createF3X(fd = defaultReportFormData) {
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton(true);
@@ -61,7 +60,8 @@ export class ReportListPage {
 
   static editReport(reportName: string, fieldName = 'Edit report') {
     ReportListPage.goToPage();
-    PageUtils.getKabob(reportName).contains(fieldName).first().click({force: true});
+    cy.wait(500);
+    PageUtils.getKabob(reportName).contains(fieldName).first().click({ force: true });
     cy.wait(500);
   }
 
@@ -77,6 +77,5 @@ export class ReportListPage {
     PageUtils.clickButton('Submit');
     PageUtils.clickButton('Yes');
     ReportListPage.goToPage();
-
   }
 }

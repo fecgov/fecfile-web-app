@@ -7,12 +7,12 @@ import {
   ContactFormData,
   ContactType,
   createContact,
-  defaultFormData as individualContactFormData
+  defaultFormData as individualContactFormData,
 } from '../models/ContactFormModel';
-import { StartTransaction } from "./start-transaction/start-transaction";
-import { F3XSetup, reportFormDataApril, reportFormDataJuly } from "./f3x-setup";
-import { ScheduleFormData } from "../models/TransactionFormModel";
-import { Individual } from "./start-transaction/receipts";
+import { StartTransaction } from './start-transaction/start-transaction';
+import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
+import { ScheduleFormData } from '../models/TransactionFormModel';
+import { Individual } from './start-transaction/receipts';
 
 const APRIL_15 = 'APRIL 15';
 
@@ -38,12 +38,12 @@ const reattributeData: ScheduleFormData = {
   purpose_description: undefined,
   memo_code: false,
   memo_text: '',
-}
+};
 
 const assignee: ContactFormData = createContact(ContactType.INDIVIDUAL);
 
 function CreateReceipt() {
-  F3XSetup({individual: true, candidate: true, report: reportFormDataApril});
+  F3XSetup({ individual: true, candidate: true, report: reportFormDataApril });
   StartTransaction.Receipts().Individual().IndividualReceipt();
 
   cy.get('[role="searchbox"]').type(individualContactFormData.last_name.slice(0, 1));
@@ -51,14 +51,13 @@ function CreateReceipt() {
   cy.contains(individualContactFormData.last_name).click();
   TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData));
 
-
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
   cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
 
 function Reattribute(old = false) {
-  PageUtils.getKabob(' 11(a)(ii) ').contains('Reattribute').first().click({force: true});
+  PageUtils.getKabob(' 11(a)(ii) ').contains('Reattribute').first().click({ force: true });
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');
@@ -76,7 +75,6 @@ function Reattribute(old = false) {
   PageUtils.urlCheck('/list');
   cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
-
 
 describe('Reattributions', () => {
   beforeEach(() => {
@@ -105,5 +103,4 @@ describe('Reattributions', () => {
     cy.wait(500);
     Reattribute(true);
   });
-
 });

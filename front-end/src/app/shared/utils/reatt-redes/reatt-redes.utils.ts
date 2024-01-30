@@ -7,6 +7,8 @@ import { ReattributionFromUtils } from './reattribution-from.utils';
 import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
+import { ReattributedUtils } from './reattributed.utils';
+import { RedesignatedUtils } from './redesignated.utils';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -107,9 +109,29 @@ export class ReattRedesUtils {
     };
   }
 
-  public static getPayloads(payload: Transaction): (SchATransaction | SchBTransaction)[] {
-    const reattributed = payload.reatt_redes as SchATransaction | SchBTransaction;
+  public static getPayloads(
+    payload: SchATransaction | SchBTransaction,
+    originatingTransaction: Transaction | undefined,
+  ): (SchATransaction | SchBTransaction)[] {
+    let reattributed: SchATransaction | SchBTransaction;
     const to = payload as SchATransaction | SchBTransaction; // The FROM transaction is in the TO children[]
+
+    if (originatingTransaction) {
+      if (ReattRedesTypes.REATTRIBUTION_TO === payload.reattribution_redesignation_tag)
+        reattributed = ReattributedUtils.getPayload(
+          payload as SchATransaction,
+          originatingTransaction as SchATransaction,
+        );
+      else
+        reattributed = RedesignatedUtils.getPayload(
+          payload as SchBTransaction,
+          originatingTransaction as SchBTransaction,
+          payload.report_id,
+        );
+    } else {
+      reattributed = payload.reatt_redes as SchATransaction | SchBTransaction;
+    }
+
     return [reattributed, to];
   }
 }

@@ -177,7 +177,7 @@ export class PageUtils {
     const alias = PageUtils.getAlias('');
     cy.get(alias)
       .contains(identifier)
-      .parent('td')
+      .closest('td')
       .siblings()
       .last()
       .find('app-table-actions-button')
