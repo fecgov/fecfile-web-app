@@ -1,5 +1,7 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
@@ -11,11 +13,10 @@ import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
-import { TransactionMemoUtils } from './transaction-memo.utils';
-import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
-import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 export class TransactionFormUtils {
   /**
@@ -39,7 +40,7 @@ export class TransactionFormUtils {
     if (transaction && transaction.id) {
       form.patchValue({ ...transaction });
 
-      TransactionMemoUtils.patchMemoText(transaction, form);
+      TransactionFormUtils.patchMemoText(transaction, form);
       form.get('entity_type')?.disable();
     } else {
       component.resetForm();
@@ -230,7 +231,7 @@ export class TransactionFormUtils {
     }
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
-    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+    formValues = TransactionFormUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
@@ -281,7 +282,12 @@ export class TransactionFormUtils {
     return formValues;
   }
 
-  static resetForm(form: FormGroup, transaction: Transaction | undefined, contactTypeOptions: PrimeOptions) {
+  static resetForm(
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactTypeOptions: PrimeOptions,
+    committeeAccount?: CommitteeAccount,
+  ) {
     form.reset();
     form.markAsPristine();
     form.markAsUntouched();
@@ -296,6 +302,16 @@ export class TransactionFormUtils {
         [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
       });
+
+      if (transaction?.transactionType?.populateSignatoryOneWithTreasurer && committeeAccount) {
+        form.patchValue({
+          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_1,
+          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_middle_name]: committeeAccount.treasurer_name_middle,
+          [transaction.transactionType.templateMap.signatory_1_prefix]: committeeAccount.treasurer_name_prefix,
+          [transaction.transactionType.templateMap.signatory_1_suffix]: committeeAccount.treasurer_name_suffix,
+        });
+      }
     }
   }
 
@@ -310,5 +326,35 @@ export class TransactionFormUtils {
   static isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
     // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
     return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
+  }
+
+  // prettier-ignore
+  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const text = form.get('text4000')?.value;
+    if (text && text.length > 0) {
+      const memo_text = MemoText.fromJSON({
+        text4000: text,
+        text_prefix: transaction.memo_text?.text_prefix,
+        report_id: transaction?.report_id,
+        rec_type: 'TEXT',
+      });
+
+      if (transaction?.id) {
+        memo_text.transaction_uuid = transaction.id;
+      }
+
+      formValues['memo_text'] = memo_text;
+    } else {
+      formValues['memo_text'] = undefined;
+    }
+
+    return formValues;
+  }
+
+  static patchMemoText(transaction: Transaction | undefined, form: FormGroup) {
+    const memo_text = transaction?.memo_text;
+    if (memo_text?.text4000) {
+      form.patchValue({ text4000: memo_text.text4000 });
+    }
   }
 }

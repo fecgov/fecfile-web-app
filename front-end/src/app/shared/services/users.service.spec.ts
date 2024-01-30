@@ -6,18 +6,25 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { environment } from '../../../environments/environment';
 import { CommitteeUser } from '../models/user.model';
 import { UsersService } from './users.service';
+import { CommitteeAccountService } from './committee-account.service';
+import { of } from 'rxjs';
+import { CommitteeAccount } from '../models/committee-account.model';
 
-describe('TransactionService', () => {
+describe('UserService', () => {
   let service: UsersService;
   let httpTestingController: HttpTestingController;
+  let committeeAccountService: CommitteeAccountService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UsersService, provideMockStore(testMockStore)],
+      providers: [UsersService, provideMockStore(testMockStore), CommitteeAccountService],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(UsersService);
+
+    committeeAccountService = TestBed.inject(CommitteeAccountService);
+    spyOn(committeeAccountService, 'getCommittees').and.callFake(() => of([{ id: '123' }] as CommitteeAccount[]));
   });
 
   it('should be created', () => {
@@ -53,8 +60,7 @@ describe('TransactionService', () => {
     service.getTableData().subscribe((response: ListRestResponse) => {
       expect(response).toEqual(mockResponse);
     });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committee/users/?page=1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/123/users/?page=1`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();

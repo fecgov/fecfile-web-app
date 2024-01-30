@@ -30,13 +30,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'View',
       this.editItem.bind(this),
       () => !this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Edit',
       this.editItem.bind(this),
       () => this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Aggregate',
@@ -47,7 +47,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
-      () => true
+      () => true,
     ),
     new TableAction(
       'Unaggregate',
@@ -58,7 +58,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
-      () => true
+      () => true,
     ),
     new TableAction(
       'Itemize',
@@ -69,7 +69,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
-      () => true
+      () => true,
     ),
     new TableAction(
       'Unitemize',
@@ -80,14 +80,14 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
-      () => true
+      () => true,
     ),
     new TableAction(
       'Receive loan repayment',
       this.createLoanRepaymentReceived.bind(this),
       (transaction: Transaction) =>
         transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE && this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Review loan agreement',
@@ -96,7 +96,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         this.reportIsEditable &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         !!transaction.loan_agreement_id,
-      () => true
+      () => true,
     ),
     new TableAction(
       'New loan agreement',
@@ -106,7 +106,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         isPulledForwardLoan(transaction) &&
         !transaction.loan_agreement_id,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Make loan repayment',
@@ -116,7 +116,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
         ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Report debt repayment',
@@ -124,7 +124,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
         this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Report debt repayment',
@@ -132,7 +132,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
         this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Reattribute',
@@ -145,7 +145,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ReattRedesTypes.REATTRIBUTION_TO,
         ]) &&
         !ReattRedesUtils.isAtAmountLimit(transaction),
-      () => true
+      () => true,
     ),
     new TableAction(
       'Redesignate',
@@ -159,7 +159,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ReattRedesTypes.REDESIGNATION_TO,
         ]) &&
         !ReattRedesUtils.isAtAmountLimit(transaction),
-      () => true
+      () => true,
     ),
   ];
 
@@ -195,7 +195,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return {report_id: reportId, page_size: this.rowsPerPage};
+    return { report_id: reportId, page_size: this.rowsPerPage };
   }
 
   onRowsPerPageChange() {
@@ -205,22 +205,18 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     });
   }
 
-  public onRowActionClick(action: TableAction, transaction: Transaction) {
-    action.action(transaction);
-  }
-
   override async editItem(item: Transaction): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
   }
 
   public async editLoanAgreement(transaction: Transaction): Promise<void> {
     if (transaction.loan_agreement_id)
-      await this.router.navigate([`${transaction.loan_agreement_id}`], {relativeTo: this.activatedRoute});
+      await this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
   }
 
   public async createLoanAgreement(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`
+      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
     );
   }
 
@@ -259,33 +255,33 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public async createLoanRepaymentReceived(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`,
     );
   }
 
   public async createDebtRepaymentReceived(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`
+      `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`,
     );
   }
 
   public async createLoanRepaymentMade(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`
+      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`,
     );
   }
 
   public async createDebtRepaymentMade(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`
+      `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`,
     );
   }
 
   public async createReattribution(transaction: Transaction): Promise<void> {
     if (this.reportIsEditable) {
       await this.router.navigateByUrl(
-        `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`
-      )
+        `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
+      );
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
     }
@@ -293,7 +289,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public async createRedesignation(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`
+      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
     );
   }
 
@@ -314,6 +310,4 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
     return '';
   }
-
-
 }

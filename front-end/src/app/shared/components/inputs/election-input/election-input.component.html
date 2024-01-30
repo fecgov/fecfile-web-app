@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <label for="electionType">ELECTION TYPE</label>
+        <label for="electionType">{{ labelPrefix }} ELECTION TYPE</label>
         <p-dropdown
           inputId="electionType"
           [options]="electionTypeOptions"
@@ -24,7 +24,7 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="electionYear">ELECTION YEAR</label>
+        <label for="electionYear">{{ labelPrefix }} ELECTION YEAR</label>
         <p-inputNumber
           inputId="electionYear"
           [format]="false"
@@ -42,7 +42,7 @@
     <div class="col-6">
       <div class="field">
         <label for="election_other_description"
-          >ELECTION DESCRIPTION <span class="label-note">(REQUIRED IF OTHER)</span></label
+          >{{ labelPrefix }} ELECTION DESCRIPTION <span class="label-note">(REQUIRED IF OTHER)</span></label
         >
         <input
           type="text"

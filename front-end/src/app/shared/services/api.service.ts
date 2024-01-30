@@ -1,22 +1,22 @@
 import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { UserLoginData } from '../models/user.model';
 import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
+import { UserLoginData } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private loggedInCommitteeId: string | undefined;
+  private loggedInEmail: string | undefined;
 
   constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.loggedInCommitteeId = userLoginData.committee_id;
+      this.loggedInEmail = userLoginData.email;
     });
   }
 
@@ -71,21 +71,21 @@ export class ApiService {
   public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
   // prettier-ignore
   public postAbsoluteUrl<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${endpoint}`, payload, {headers: headers, params: params, withCredentials: true});
+    return this.http.post<T>(`${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
   // prettier-ignore
   public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
   public delete<T>(endpoint: string): Observable<T> {
@@ -94,6 +94,6 @@ export class ApiService {
   }
 
   public isAuthenticated() {
-    return !!this.loggedInCommitteeId || this.cookieService.check(environment.ffapiCommitteeIdCookieName);
+    return !!this.loggedInEmail || this.cookieService.check(environment.ffapiEmailCookieName);
   }
 }

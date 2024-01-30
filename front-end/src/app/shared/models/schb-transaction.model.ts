@@ -3,10 +3,9 @@ import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ReattRedesTypes } from "../utils/reatt-redes/reatt-redes.utils";
-import { RedesignatedUtils } from "../utils/reatt-redes/redesignated.utils";
-import { RedesignationToUtils } from "../utils/reatt-redes/redesignation-to.utils";
-import { RedesignationFromUtils } from "../utils/reatt-redes/redesignation-from.utils";
+import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
+import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 
 export class SchBTransaction extends Transaction {
   entity_type: string | undefined;
@@ -80,7 +79,7 @@ export class SchBTransaction extends Transaction {
 
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REDESIGNATED: {
-        transaction = RedesignatedUtils.overlayTransactionProperties(transaction);
+        transaction = ReattRedesUtils.overlayTransactionProperties(transaction) as SchBTransaction;
         break;
       }
       case ReattRedesTypes.REDESIGNATION_TO: {

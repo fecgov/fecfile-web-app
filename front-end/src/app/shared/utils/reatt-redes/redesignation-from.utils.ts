@@ -2,7 +2,7 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { DateTime } from 'luxon';
+import { DateUtils } from '../date.utils';
 
 export class RedesignationFromUtils {
   public static overlayTransactionProperties(
@@ -37,8 +37,8 @@ export class RedesignationFromUtils {
         if (!transaction.reatt_redes) return '';
         const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
         if (!expenditureDate) throw new Error('No Expenditure Date!');
-        const date = DateTime.fromJSDate(expenditureDate);
-        return `Redesignation from ${date.toFormat('MM/dd/yyyy')}`;
+
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
       },
     });
 
@@ -99,7 +99,7 @@ export class RedesignationFromUtils {
     RedesignationFromUtils.readOnlyFields.forEach((field) =>
       fromForm.get(templateMap[field as TemplateMapKeyType])?.disable(),
     );
-    
+
     return fromForm;
   }
 }

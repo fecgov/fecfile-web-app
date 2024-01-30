@@ -206,6 +206,10 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     return {};
   }
+
+  public onRowActionClick(action: TableAction, item: T) {
+    action.action(item);
+  }
 }
 
 export class TableAction {

@@ -149,7 +149,12 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override resetForm() {
     super.resetForm();
-    TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
+    TransactionFormUtils.resetForm(
+      this.childForm,
+      this.childTransaction,
+      this.childContactTypeOptions,
+      this.committeeAccount,
+    );
   }
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {

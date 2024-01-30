@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   }
 
   dispatchUserLoggedInFromCookies() {
-    if (this.cookieService.check(environment.ffapiCommitteeIdCookieName)) {
+    if (this.cookieService.check(environment.ffapiEmailCookieName)) {
       const userLoginData: UserLoginData = {
         committee_id: this.cookieService.get(environment.ffapiCommitteeIdCookieName),
         email: this.cookieService.get(environment.ffapiEmailCookieName),

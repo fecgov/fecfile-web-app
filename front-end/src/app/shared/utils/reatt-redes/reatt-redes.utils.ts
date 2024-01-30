@@ -9,6 +9,7 @@ import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { ReattributedUtils } from './reattributed.utils';
 import { RedesignatedUtils } from './redesignated.utils';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -133,5 +134,53 @@ export class ReattRedesUtils {
     }
 
     return [reattributed, to];
+  }
+
+  public static overlayTransactionProperties(
+    transaction: SchATransaction | SchBTransaction,
+    activeReportId?: string,
+  ): SchATransaction | SchBTransaction {
+    if (!transaction.reattribution_redesignation_tag) {
+      const purpose_descrip =
+        (transaction as SchATransaction).contribution_purpose_descrip ??
+        (transaction as SchBTransaction).expenditure_purpose_descrip;
+
+      if (purpose_descrip) {
+        const prefix = `[Original purpose description: ${purpose_descrip}] `;
+        if (transaction.memo_text) {
+          transaction.memo_text.text_prefix = prefix;
+          transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
+        } else {
+          transaction.memo_text = MemoText.fromJSON({
+            text_prefix: prefix,
+            text4000: prefix,
+          });
+        }
+      }
+
+      if (transaction.report_id === activeReportId) {
+        if (transaction instanceof SchATransaction) {
+          transaction.contribution_purpose_descrip = 'See reattribution below.';
+        } else {
+          transaction.expenditure_purpose_descrip = 'See redesignation below.';
+        }
+      } else {
+        alert('Not implemented yet. Only implement transactions in the current report.');
+        return transaction;
+      }
+
+      if (transaction instanceof SchATransaction) {
+        transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+      } else {
+        transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
+      }
+    }
+
+    const purpose_field =
+      transaction instanceof SchATransaction ? 'contribution_purpose_descrip' : 'expenditure_purpose_descrip';
+
+    transaction.fields_to_validate = transaction.fields_to_validate?.filter((field) => field !== purpose_field);
+
+    return transaction;
   }
 }
