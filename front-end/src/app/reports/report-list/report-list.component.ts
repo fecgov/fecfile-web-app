@@ -88,10 +88,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.router.navigateByUrl(`/reports/f3x/test-dot-fec/${item.id}`);
   }
 
-  public onRowActionClick(action: TableAction, report: Report) {
-    action.action(report);
-  }
-
   /**
    * Get the display name for the contact to show in the table column.
    * @param item
