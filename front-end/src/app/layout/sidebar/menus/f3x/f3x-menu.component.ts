@@ -19,7 +19,7 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   coverage_through_date?: Date;
 
   constructor(store: Store, reportService: ReportService) {
-    super(store, reportService);
+    super(store, reportService, 'f3x');
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {
@@ -51,62 +51,31 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
         ...transactionItems,
       ];
     }
-    return [
+    const reviewReport = this.reviewReport(sidebarState);
+    reviewReport.items = [
       {
-        label: 'ENTER A TRANSACTION',
-        expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
+        label: 'View summary page',
+        routerLink: `/reports/f3x/summary/${activeReport?.id}`,
+      },
+      {
+        label: 'View detailed summary page',
+        routerLink: `/reports/f3x/detailed-summary/${activeReport?.id}`,
+      },
+      this.printPreview(activeReport),
+      {
+        label: 'Add a report level memo',
+        routerLink: `/reports/f3x/memo/${activeReport?.id}`,
         visible: isEditable,
-        items: transactionItems,
       },
-      {
-        label: 'REVIEW TRANSACTIONS',
-        expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
-        visible: !isEditable,
-        routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
-      },
-      {
-        label: 'REVIEW A REPORT',
-        expanded: sidebarState?.section == ReportSidebarSection.REVIEW,
-        items: [
-          {
-            label: 'View summary page',
-            routerLink: `/reports/f3x/summary/${activeReport?.id}`,
-          },
-          {
-            label: 'View detailed summary page',
-            routerLink: `/reports/f3x/detailed-summary/${activeReport?.id}`,
-          },
-          {
-            label: 'View print preview',
-            routerLink: `/reports/f3x/web-print/${activeReport?.id}`,
-          },
-          {
-            label: 'Add a report level memo',
-            routerLink: `/reports/f3x/memo/${activeReport?.id}`,
-            visible: isEditable,
-          },
-        ],
-      },
+    ];
+    return [
+      this.enterTransaction(sidebarState, isEditable, transactionItems),
+      this.reviewTransactions(sidebarState, activeReport, isEditable),
+      reviewReport,
       {
         label: 'SUBMIT YOUR REPORT',
         expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
-        items: [
-          {
-            label: 'Confirm information',
-            routerLink: `/reports/f3x/submit/step1/${activeReport?.id}`,
-            visible: isEditable,
-          },
-          {
-            label: 'Submit report',
-            routerLink: `/reports/f3x/submit/step2/${activeReport?.id}`,
-            visible: isEditable,
-          },
-          {
-            label: 'Report status',
-            routerLink: `/reports/f3x/submit/status/${activeReport?.id}`,
-            visible: !isEditable,
-          },
-        ],
+        items: this.submitReportArray(activeReport, isEditable),
       },
     ];
   }

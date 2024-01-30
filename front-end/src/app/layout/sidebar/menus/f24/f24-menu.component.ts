@@ -15,7 +15,7 @@ export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
   formLabel?: string;
 
   constructor(store: Store, reportService: ReportService) {
-    super(store, reportService);
+    super(store, reportService, 'f24');
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {
@@ -29,54 +29,16 @@ export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
         routerLink: `/reports/f24/report/${activeReport?.id}/transactions/select/independent-expenditures`,
       },
     ];
+    const reviewReport = this.reviewReport(sidebarState);
+    reviewReport.items = [this.printPreview(activeReport), this.addReportLevelMenu(activeReport, isEditable)];
     return [
-      {
-        label: 'ENTER A TRANSACTION',
-        expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
-        visible: isEditable,
-        items: transactionItems,
-      },
-      {
-        label: 'REVIEW TRANSACTIONS',
-        expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
-        visible: !isEditable,
-        routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
-      },
-      {
-        label: 'REVIEW A REPORT',
-        expanded: sidebarState?.section == ReportSidebarSection.REVIEW,
-        items: [
-          {
-            label: 'View print preview',
-            routerLink: `/reports/f24/web-print/${activeReport?.id}`,
-          },
-          {
-            label: 'Add a report level memo',
-            routerLink: `/reports/f24/memo/${activeReport?.id}`,
-            visible: isEditable,
-          },
-        ],
-      },
+      this.enterTransaction(sidebarState, isEditable, transactionItems),
+      this.reviewTransactions(sidebarState, activeReport, isEditable),
+      reviewReport,
       {
         label: 'SIGN & SUBMIT',
         expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
-        items: [
-          {
-            label: 'Confirm information',
-            routerLink: `/reports/f24/submit/step1/${activeReport?.id}`,
-            visible: isEditable,
-          },
-          {
-            label: 'Submit report',
-            routerLink: `/reports/f24/submit/step2/${activeReport?.id}`,
-            visible: isEditable,
-          },
-          {
-            label: 'Report status',
-            routerLink: `/reports/f24/submit/status/${activeReport?.id}`,
-            visible: !isEditable,
-          },
-        ],
+        items: this.submitReportArray(activeReport, isEditable),
       },
     ] as MenuItem[];
   }
