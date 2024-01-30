@@ -13,7 +13,7 @@ import { TransactionTemplateMapType, TransactionType } from '../../models/transa
 import { PrimeOptions } from '../../utils/label.utils';
 import { FormGroup } from '@angular/forms';
 import { ContactIdMapType } from './transaction-contact.utils';
-import { TransactionMemoUtils } from './transaction-memo.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
 
 interface Originating {
   transaction: Transaction;
@@ -123,7 +123,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
     this.originating.form.patchValue({ ...this.originating.transaction });
     this.originating.form.get(this.originating.templateMap['memo_code'])?.setValue(true);
-    TransactionMemoUtils.patchMemoText(this.originating.transaction, this.originating.form);
+    TransactionFormUtils.patchMemoText(this.originating.transaction, this.originating.form);
     this.originating.form.disable();
   }
 }
