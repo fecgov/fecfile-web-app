@@ -23,7 +23,7 @@ export class TransactionDetailPage {
   }
 
   private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
-    if (formData.category_code != '') {
+    if (formData.category_code) {
       PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
     }
   }
@@ -42,7 +42,7 @@ export class TransactionDetailPage {
 
   private static enterPurpose(formData: ScheduleFormData, alias: string) {
     if (formData.purpose_description) {
-      const element = cy.get(alias).find('textarea#purpose_description').first();
+      cy.get(alias).find('textarea#purpose_description').first().safeType(formData.purpose_description);
     }
   }
 

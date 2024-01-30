@@ -1,7 +1,6 @@
-import { PageUtils } from "../../pages/pageUtils";
+import { PageUtils } from '../../pages/pageUtils';
 
 export class Receipts {
-
   static Individual() {
     PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
     return Individual;
@@ -19,8 +18,7 @@ export class Receipts {
 }
 
 export class Individual {
-
-  static INDIVIDUAL_RECEIPT = 'Individual Receipt';
+  static readonly INDIVIDUAL_RECEIPT = 'Individual Receipt';
 
   static IndividualReceipt() {
     PageUtils.clickLink(Individual.INDIVIDUAL_RECEIPT);

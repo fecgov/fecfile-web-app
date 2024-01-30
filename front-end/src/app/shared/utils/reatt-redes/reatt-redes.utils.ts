@@ -20,7 +20,7 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static selectReportDialogSubject = new Subject<[Transaction, ReattRedesTypes]>();
+  public static readonly selectReportDialogSubject = new Subject<[Transaction, ReattRedesTypes]>();
 
   public static isReattRedes(transaction: Transaction | undefined, types: ReattRedesTypes[] = []): boolean {
     if (!transaction || !('reattribution_redesignation_tag' in transaction)) return false;
@@ -114,7 +114,7 @@ export class ReattRedesUtils {
     originatingTransaction: Transaction | undefined,
   ): (SchATransaction | SchBTransaction)[] {
     let reattributed: SchATransaction | SchBTransaction;
-    const to = payload as SchATransaction | SchBTransaction; // The FROM transaction is in the TO children[]
+    const to = payload; // The FROM transaction is in the TO children[]
 
     if (originatingTransaction) {
       if (ReattRedesTypes.REATTRIBUTION_TO === payload.reattribution_redesignation_tag)

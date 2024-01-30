@@ -23,7 +23,7 @@ export class Disbursements {
 }
 
 export class Contributions {
-  static TO_CANDIDATE = 'Contribution to Candidate';
+  static readonly TO_CANDIDATE = 'Contribution to Candidate';
 
   static ToCandidate() {
     PageUtils.clickLink('Contribution to Candidate');
@@ -37,7 +37,7 @@ export class Federal {
 }
 
 export class Independent {
-  static INDEPENDENT_EXPENDITURE = 'Independent Expenditure';
+  static readonly INDEPENDENT_EXPENDITURE = 'Independent Expenditure';
 
   static IndependentExpenditureVoid() {
     PageUtils.clickLink('Independent Expenditure - Void');
