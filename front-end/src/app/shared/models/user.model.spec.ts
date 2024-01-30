@@ -12,7 +12,7 @@ describe('CommitteeUser', () => {
   });
   it('should be created correctly from JSON', () => {
     const json = {
-      role: 'C_ADMIN',
+      role: 'COMMITTEE_ADMINISTRATOR',
       first_name: 'test',
       last_name: 'testson',
       email: 'test@test.com',
@@ -27,7 +27,7 @@ describe('CommitteeUser', () => {
   });
   it('should return the correct role label when role is not null', () => {
     const cUser = new CommitteeUser();
-    cUser.role = 'C_ADMIN';
+    cUser.role = 'COMMITTEE_ADMINISTRATOR';
     expect(cUser.getRoleLabel()).toBe('Committee Administrator');
   });
   it('should return an empty string for a role label if role is null', () => {
