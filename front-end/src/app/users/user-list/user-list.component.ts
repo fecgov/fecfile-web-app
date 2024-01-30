@@ -1,6 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { UsersService } from '../../shared/services/users.service';
 import { CommitteeUser } from '../../shared/models/user.model';
 
@@ -10,6 +10,7 @@ import { CommitteeUser } from '../../shared/models/user.model';
 })
 export class UserListComponent extends TableListBaseComponent<CommitteeUser> {
   override item: CommitteeUser = this.getEmptyItem();
+  public rowActions: TableAction[] = [];
 
   constructor(
     protected override messageService: MessageService,
