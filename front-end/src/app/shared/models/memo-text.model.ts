@@ -7,6 +7,7 @@ export class MemoText extends BaseModel {
   transaction_id_number: string | undefined;
   transaction_uuid: string | undefined;
   text4000: string | undefined;
+  text_prefix: string | undefined;
 
   report_id: string | undefined; // Foreign key to the Form3X model
 

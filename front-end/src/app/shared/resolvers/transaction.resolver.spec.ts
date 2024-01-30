@@ -14,7 +14,7 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
-import { ReattributedUtils } from "../utils/reatt-redes/reattributed.utils";
+import { ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -33,7 +33,7 @@ describe('TransactionResolver', () => {
                 id: transactionId,
                 transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
                 contact_id: '123',
-                contact_1: Contact.fromJSON({id: 123}),
+                contact_1: Contact.fromJSON({ id: 123 }),
               })
             ),
           getTableData: () =>
@@ -63,7 +63,7 @@ describe('TransactionResolver', () => {
     it('should return an existing transaction', () => {
       const route = {
         queryParamMap: convertToParamMap({}),
-        paramMap: convertToParamMap({transactionId: '999'}),
+        paramMap: convertToParamMap({ transactionId: '999' }),
       };
 
       const testContact: Contact = new Contact();
@@ -98,7 +98,7 @@ describe('TransactionResolver', () => {
     it('should return undefined', () => {
       const route = {
         queryParamMap: convertToParamMap({}),
-        paramMap: convertToParamMap({transactionId: undefined}),
+        paramMap: convertToParamMap({ transactionId: undefined }),
       };
 
       resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
@@ -125,7 +125,7 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         )
       );
@@ -146,12 +146,12 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
             transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         );
       });
       const route = {
-        queryParamMap: convertToParamMap({debt: '1'}),
+        queryParamMap: convertToParamMap({ debt: '1' }),
         paramMap: convertToParamMap({
           reportId: 1,
           transactionType: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
@@ -174,12 +174,12 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
             transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         );
       });
       const route = {
-        queryParamMap: convertToParamMap({loan: '1'}),
+        queryParamMap: convertToParamMap({ loan: '1' }),
         paramMap: convertToParamMap({
           reportId: 1,
           transactionType: ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE,
@@ -202,12 +202,12 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
             transactionType: TransactionTypeUtils.factory(ScheduleBTransactionTypes.OPERATING_EXPENDITURE),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         );
       });
       const route = {
-        queryParamMap: convertToParamMap({redesignation: '1'}),
+        queryParamMap: convertToParamMap({ redesignation: '1' }),
         paramMap: convertToParamMap({
           reportId: 1,
           transactionType: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
@@ -233,11 +233,11 @@ describe('TransactionResolver', () => {
         .resolveExistingTransactionFromId('10')
         .pipe(
           catchError((err) => {
-              expect(err.message).toBe(
-                "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10")
-              return of(err);
-            }
-          )
+            expect(err.message).toBe(
+              "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10"
+            );
+            return of(err);
+          })
         )
         .subscribe();
     });
@@ -250,7 +250,7 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         )
       );
@@ -258,12 +258,11 @@ describe('TransactionResolver', () => {
         .resolveExistingTransactionFromId('10')
         .pipe(
           catchError((err) => {
-              expect(err.message).toBe(
-                'Fecfile: Transaction 999 (EARMARK_MEMO) is a dependent transaction type but does not have a parent transaction.'
-              )
-              return of(err)
-            }
-          )
+            expect(err.message).toBe(
+              'Fecfile: Transaction 999 (EARMARK_MEMO) is a dependent transaction type but does not have a parent transaction.'
+            );
+            return of(err);
+          })
         )
         .subscribe();
     });
@@ -276,7 +275,7 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction_id: 2,
           })
         )
@@ -296,13 +295,13 @@ describe('TransactionResolver', () => {
               ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction: SchATransaction.fromJSON({
               id: '2',
               transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
               transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
               contact_id: '123',
-              contact_1: Contact.fromJSON({id: 123}),
+              contact_1: Contact.fromJSON({ id: 123 }),
             }),
           })
         );
@@ -323,7 +322,7 @@ describe('TransactionResolver', () => {
               ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction: SchATransaction.fromJSON({
               id: '2',
               transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
@@ -331,13 +330,13 @@ describe('TransactionResolver', () => {
                 ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
               ),
               contact_id: '123',
-              contact_1: Contact.fromJSON({id: 123}),
+              contact_1: Contact.fromJSON({ id: 123 }),
               parent_transaction: SchATransaction.fromJSON({
                 id: '1',
                 transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
                 transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
                 contact_id: '123',
-                contact_1: Contact.fromJSON({id: 123}),
+                contact_1: Contact.fromJSON({ id: 123 }),
               }),
             }),
           })
@@ -358,13 +357,13 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
             transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
             debt: SchDTransaction.fromJSON({
               id: '2',
               transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
               transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
               contact_id: '123',
-              contact_1: Contact.fromJSON({id: 123}),
+              contact_1: Contact.fromJSON({ id: 123 }),
             }),
           })
         );
@@ -383,13 +382,13 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
             transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
             loan: SchCTransaction.fromJSON({
               id: '2',
               transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
               transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_BY_COMMITTEE),
               contact_id: '123',
-              contact_1: Contact.fromJSON({id: 123}),
+              contact_1: Contact.fromJSON({ id: 123 }),
             }),
           })
         );
@@ -414,7 +413,7 @@ describe('TransactionResolver', () => {
 
   describe('resolveNewReattribution', () => {
     const route = {
-      queryParamMap: convertToParamMap({reattribution: '1'}),
+      queryParamMap: convertToParamMap({ reattribution: '1' }),
       paramMap: convertToParamMap({
         reportId: 1,
         transactionType: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -428,12 +427,11 @@ describe('TransactionResolver', () => {
             transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
             contact_id: '123',
-            contact_1: Contact.fromJSON({id: 123}),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         );
       });
-
-    })
+    });
     it('should add reattribution', () => {
       resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
         expect(transaction).toBeTruthy();
@@ -447,19 +445,19 @@ describe('TransactionResolver', () => {
     });
 
     it('should throw error if redesignated does not have transaction_type_identifier', () => {
-      spyOn(ReattributedUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
+      spyOn(ReattRedesUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
         return SchATransaction.fromJSON({
           id: id,
           transaction_type_identifier: undefined,
           transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
           contact_id: '123',
-          contact_1: Contact.fromJSON({id: 123}),
+          contact_1: Contact.fromJSON({ id: 123 }),
         });
       });
       resolver.resolve(route as ActivatedRouteSnapshot).subscribe({
         error: (err) => {
-          expect(err).toEqual(new Error('Fecfile online: originating reattribution transaction type not found.'))
-        }
+          expect(err).toEqual(new Error('Fecfile online: originating reattribution transaction type not found.'));
+        },
       });
     });
   });

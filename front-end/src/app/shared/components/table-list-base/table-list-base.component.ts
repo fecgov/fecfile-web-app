@@ -54,7 +54,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
         const captionElem = table.createCaption();
         captionElem.innerHTML = this.caption;
         (<HTMLElement>captionElem).className = 'sr-only';
-
       }
     }
   }
@@ -88,9 +87,9 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       event = this.pagerState
         ? this.pagerState
         : {
-          first: 0,
-          rows: this.rowsPerPage,
-        };
+            first: 0,
+            rows: this.rowsPerPage,
+          };
     }
 
     // Calculate the record page number to retrieve from the API.
@@ -162,7 +161,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
           this.refreshTable();
-          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000});
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },
     });
@@ -186,7 +185,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
       this.selectedItems = [];
       this.refreshTable();
-      this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000});
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
   }
 
@@ -206,6 +205,10 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
   public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     return {};
+  }
+
+  public onRowActionClick(action: TableAction, item: T) {
+    action.action(item);
   }
 }
 

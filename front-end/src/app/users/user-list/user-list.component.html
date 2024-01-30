@@ -45,9 +45,14 @@
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="name" id="name-column" role="columnheader">Name <p-sortIcon field="name"></p-sortIcon></th>
-        <th pSortableColumn="email" id="email-column" role="columnheader">Email <p-sortIcon field="email"></p-sortIcon></th>
+        <th pSortableColumn="email" id="email-column" role="columnheader">
+          Email <p-sortIcon field="email"></p-sortIcon>
+        </th>
         <th pSortableColumn="role" id="role-column" role="columnheader">Role <p-sortIcon field="role"></p-sortIcon></th>
-        <th pSortableColumn="is_active" id="active-column" role="columnheader">Status <p-sortIcon field="is_active"></p-sortIcon></th>
+        <th pSortableColumn="is_active" id="active-column" role="columnheader">
+          Status <p-sortIcon field="is_active"></p-sortIcon>
+        </th>
+        <th id="buttons" role="columnheader">Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
@@ -55,7 +60,16 @@
         <td>{{ item.last_name }}, {{ item.first_name }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.getRoleLabel() }}</td>
-        <td>Registered </td>
+        <td>Registered</td>
+        <td>
+          <app-table-actions-button
+            [tableActions]="rowActions"
+            [actionItem]="item"
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+          ></app-table-actions-button>
+        </td>
       </tr>
     </ng-template>
   </p-table>

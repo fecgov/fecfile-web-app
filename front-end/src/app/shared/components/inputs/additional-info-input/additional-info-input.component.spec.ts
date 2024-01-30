@@ -5,6 +5,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 describe('AdditionalInfoInputComponent', () => {
   let component: AdditionalInfoInputComponent;
@@ -60,6 +61,23 @@ describe('AdditionalInfoInputComponent', () => {
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
       component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc'
+    );
+  });
+
+  it('should detect memo prefixes', () => {
+    expect(component.form.get(testTemplateMap.text4000)?.value).toEqual('');
+    if (component.transaction) {
+      component.transaction.memo_text = MemoText.fromJSON({
+        text_prefix: 'MEMO PREFIX:',
+      });
+    }
+    component.ngOnInit();
+    component.form.patchValue({
+      [testTemplateMap.text4000]: 'abc',
+    });
+    fixture.detectChanges();
+    expect(component.form.get(testTemplateMap.text4000)?.value).toBe(
+      component.transaction?.memo_text?.text_prefix + ' '
     );
   });
 });
