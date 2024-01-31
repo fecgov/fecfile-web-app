@@ -145,6 +145,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
     it('should save all transaction', () => {
       if (!component.transaction) throw Error('Bad test setup');
+      component.originating.transaction = component.transaction;
       spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
       const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() => of([testTransaction]));
       const navSpy = spyOn(component, 'navigateTo').and.callFake(() => {
