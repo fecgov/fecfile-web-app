@@ -149,7 +149,8 @@ describe('ReattRedesUtils', () => {
     const transaction = SchATransaction.fromJSON({
       ...testScheduleATransaction,
     });
-
+    expect(transaction.reattribution_redesignation_tag).toBeFalsy();
+    expect(transaction.report_id).toBe('3cd741da-aa57-4cc3-8530-667e8b7bad78');
     const overlay = ReattRedesUtils.overlayTransactionProperties(
       transaction,
       '3cd741da-aa57-4cc3-8530-667e8b7bad78',
@@ -174,15 +175,5 @@ describe('ReattRedesUtils', () => {
     expect(overlay.fields_to_validate?.includes('expenditure_purpose_descrip')).toBeFalse();
     expect(overlay.expenditure_purpose_descrip).toBe('See redesignation below.');
     expect(overlay.reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
-  });
-
-  xit('overlayTransactionProperties should handle a different report', () => {
-    const transaction = { ...testScheduleATransaction } as SchATransaction;
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction,
-      'not-the-same-report-as-orig',
-    ) as SchATransaction;
-    expect(overlay.report_id).toBe('not-the-same-report-as-orig');
-    expect(overlay.contribution_purpose_descrip).toBe('(Originally disclosed on M1.) See attribution below.');
   });
 });

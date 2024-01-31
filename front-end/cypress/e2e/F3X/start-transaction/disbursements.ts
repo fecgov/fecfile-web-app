@@ -34,6 +34,10 @@ export class Federal {
   static HundredPercentFederalElectionActivityPayment() {
     PageUtils.clickLink('100% Federal Election Activity Payment');
   }
+
+  static CreditCardPayment() {
+    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
+  }
 }
 
 export class Independent {

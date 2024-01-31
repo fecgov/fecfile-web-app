@@ -8,8 +8,8 @@ import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
-import { F3XSetup } from "./f3x-setup";
-import { StartTransaction } from "./start-transaction/start-transaction";
+import { F3XSetup } from './f3x-setup';
+import { StartTransaction } from './start-transaction/start-transaction';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -31,7 +31,7 @@ describe('Transactions', () => {
   it('Create an Individual Receipt transaction using the contact lookup', () => {
     cy.runLighthouse('reports', 'transactions-list');
 
-    F3XSetup({individual: true})
+    F3XSetup({ individual: true });
     StartTransaction.Receipts().Individual().IndividualReceipt();
 
     // Select the contact from the contact lookup
@@ -65,14 +65,14 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Organization'},
+      ...{ contact_type: 'Organization' },
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
     const formTransactionData = {
       ...scheduleData,
-      ...{amount: 200.01, category_code: '005 Polling Expenses'},
+      ...{ amount: 200.01, category_code: '005 Polling Expenses' },
     };
     TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.clickButton('Save');
@@ -134,7 +134,10 @@ describe('Transactions', () => {
     function checkTable(index: number, type: string, containMemo: boolean, value: string) {
       cy.get('tbody tr').eq(index).as('row');
       cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
-      cy.get('@row').find('td').eq(TransactionTableColumns.memo_code).should(containMemo ? 'contain' : 'not.contain', 'Y');
+      cy.get('@row')
+        .find('td')
+        .eq(TransactionTableColumns.memo_code)
+        .should(containMemo ? 'contain' : 'not.contain', 'Y');
       cy.get('@row').find('td').eq(TransactionTableColumns.aggregate).should('contain', value);
     }
 
@@ -144,14 +147,14 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Organization'},
+      ...{ contact_type: 'Organization' },
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
 
     const formTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{purpose_description: '', category_code: ''},
+      ...{ purpose_description: '', category_code: '' },
     };
     TransactionDetailPage.enterScheduleFormData(formTransactionData);
     PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
@@ -165,7 +168,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
     const memoFormTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{memo_code: true, purpose_description: '', category_code: ''},
+      ...{ memo_code: true, purpose_description: '', category_code: '' },
     };
 
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
@@ -196,7 +199,7 @@ describe('Transactions', () => {
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData({
       ...formTransactionData,
-      ...{purpose_description: 'See Partnership Attribution(s) below'},
+      ...{ purpose_description: 'See Partnership Attribution(s) below' },
     });
     PageUtils.clickButton('Cancel');
     PageUtils.urlCheck('/list');
@@ -207,7 +210,7 @@ describe('Transactions', () => {
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData({
       ...memoFormTransactionData,
-      ...{purpose_description: 'Partnership Attribution'},
+      ...{ purpose_description: 'Partnership Attribution' },
     });
   });
 
@@ -218,7 +221,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Committee'},
+      ...{ contact_type: 'Committee' },
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -257,7 +260,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Committee'},
+      ...{ contact_type: 'Committee' },
     };
     ContactListPage.enterFormData(formContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -289,21 +292,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a disbursement');
-    PageUtils.clickLink('FEDERAL ELECTION ACTIVITY EXPENDITURES');
-    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-
-    PageUtils.clickLink('Create a new contact');
-    const formContactData = {
-      ...defaultContactFormData,
-      ...{contact_type: 'Organization'},
-    };
-    ContactListPage.enterFormData(formContactData, true);
-    PageUtils.clickButton('Save & continue');
+    F3XSetup({ organization: true });
+    StartTransaction.Disbursements().Federal().CreditCardPayment();
 
     const transactionFormData = {
       ...formTransactionDataForSchedule,
@@ -322,7 +312,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('contain', formContactData['name']);
+    cy.get('tr').should('contain', defaultContactFormData['name']);
     cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
     cy.get('tr').should('contain', '$' + transactionFormData.amount);
 
@@ -330,18 +320,13 @@ describe('Transactions', () => {
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    ContactListPage.assertFormData(formContactData, true);
+    ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
   it('Create a dual-entry Earmark Receipt transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Earmark Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Earmark();
 
     // Enter STEP ONE transaction
     cy.get('p-accordiontab').first().as('stepOneAccordion');
@@ -362,7 +347,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('STEP TWO');
     cy.get('p-accordiontab').last().as('stepTwoAccordion');
     PageUtils.clickLink('Create a new contact', '@stepTwoAccordion');
-    const stepTwoContactFormData = {...defaultContactFormData, ...{contact_type: 'Committee'}};
+    const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
     ContactListPage.enterFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
     TransactionDetailPage.enterScheduleFormData(transactionFormData, true, '@stepTwoAccordion');
@@ -397,9 +382,9 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(
       {
         ...transactionFormData,
-        ...{purpose_description: `Earmarked through ${defaultContactFormData['name']}`},
+        ...{ purpose_description: `Earmarked through ${defaultContactFormData['name']}` },
       },
-      '@stepOneAccordion'
+      '@stepOneAccordion',
     );
 
     // Check form values of memo edit form
@@ -410,9 +395,9 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(
       {
         ...transactionFormData,
-        ...{memo_code: true, purpose_description: 'Total earmarked through conduit.'},
+        ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
       },
-      '@stepTwoAccordion'
+      '@stepTwoAccordion',
     );
   });
 
@@ -428,7 +413,7 @@ describe('Transactions', () => {
     // Enter STEP ONE transaction
     cy.get('p-accordiontab').first().as('stepOneAccordion');
     PageUtils.clickLink('Create a new contact', '@stepOneAccordion');
-    const stepOneContactFormData = {...defaultContactFormData, ...{contact_type: 'Committee'}};
+    const stepOneContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
     ContactListPage.enterFormData(stepOneContactFormData, true, '@stepOneAccordion');
     PageUtils.clickButton('Save & continue', '@stepOneAccordion');
 
@@ -486,7 +471,7 @@ describe('Transactions', () => {
           purpose_description: `Earmarked through ${defaultContactFormData['first_name']} ${defaultContactFormData['last_name']}`,
         },
       },
-      '@stepOneAccordion'
+      '@stepOneAccordion',
     );
 
     // Check form values of memo edit form
@@ -497,9 +482,9 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(
       {
         ...transactionFormData,
-        ...{memo_code: true, purpose_description: 'Total earmarked through conduit.'},
+        ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
       },
-      '@stepTwoAccordion'
+      '@stepTwoAccordion',
     );
   });
 
@@ -516,7 +501,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const committeeFormContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Committee'},
+      ...{ contact_type: 'Committee' },
     };
     ContactListPage.enterFormData(committeeFormContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -539,7 +524,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const organizationFormContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Organization'},
+      ...{ contact_type: 'Organization' },
     };
     ContactListPage.enterFormData(organizationFormContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -561,7 +546,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Create a new contact');
     const individualFormContactData = {
       ...defaultContactFormData,
-      ...{contact_type: 'Individual'},
+      ...{ contact_type: 'Individual' },
     };
     ContactListPage.enterFormData(individualFormContactData, true);
     PageUtils.clickButton('Save & continue');
@@ -611,7 +596,7 @@ describe('Transactions', () => {
     ContactListPage.assertFormData(committeeFormContactData, true);
     TransactionDetailPage.assertFormData({
       ...tier1TransactionData,
-      ...{purpose_description: 'Transfer of Joint Fundraising Proceeds'},
+      ...{ purpose_description: 'Transfer of Joint Fundraising Proceeds' },
     });
     PageUtils.clickButton('Cancel');
   });

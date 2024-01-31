@@ -31,6 +31,10 @@ export class Individual {
   static Partnership() {
     PageUtils.clickLink('Partnership Receipt');
   }
+
+  static Earmark() {
+    PageUtils.clickLink('Earmark Receipt');
+  }
 }
 
 export class RegisteredFilers {

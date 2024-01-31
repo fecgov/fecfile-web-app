@@ -18,60 +18,13 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getTestTransactionByType, testMockStore } from '../../utils/unit-test.utils';
 import { FecDatePipe } from '../../pipes/fec-date.pipe';
-import { ReattRedesTransactionTypeBaseComponent } from './reatt-redes-transaction-type-base.component';
 import { RedesignationToUtils } from '../../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-from.utils';
-
-class TestReattTransactionTypeBaseComponent extends ReattRedesTransactionTypeBaseComponent {
-  override formProperties: string[] = [
-    'entity_type',
-    'contributor_organization_name',
-    'contributor_last_name',
-    'contributor_first_name',
-    'contributor_middle_name',
-    'contributor_prefix',
-    'contributor_suffix',
-    'contributor_street_1',
-    'contributor_street_2',
-    'contributor_city',
-    'contributor_state',
-    'contributor_zip',
-    'contributor_employer',
-    'contributor_occupation',
-    'contribution_date',
-    'contribution_amount',
-    'contribution_aggregate',
-    'contribution_purpose_descrip',
-    'memo_code',
-    'text4000',
-  ];
-  override childFormProperties: string[] = [
-    'entity_type',
-    'contributor_organization_name',
-    'contributor_last_name',
-    'contributor_first_name',
-    'contributor_middle_name',
-    'contributor_prefix',
-    'contributor_suffix',
-    'contributor_street_1',
-    'contributor_street_2',
-    'contributor_city',
-    'contributor_state',
-    'contributor_zip',
-    'contributor_employer',
-    'contributor_occupation',
-    'contribution_date',
-    'contribution_amount',
-    'contribution_aggregate',
-    'contribution_purpose_descrip',
-    'memo_code',
-    'text4000',
-  ];
-}
+import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 
 describe('ReattTransactionTypeBaseComponent', () => {
-  let component: TestReattTransactionTypeBaseComponent;
-  let fixture: ComponentFixture<TestReattTransactionTypeBaseComponent>;
+  let component: ReattRedesTransactionTypeDetailComponent;
+  let fixture: ComponentFixture<ReattRedesTransactionTypeDetailComponent>;
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
@@ -79,7 +32,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestReattTransactionTypeBaseComponent],
+      declarations: [ReattRedesTransactionTypeDetailComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [
         DatePipe,
@@ -110,7 +63,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
     });
     transactionService = TestBed.inject(TransactionService);
 
-    fixture = TestBed.createComponent(TestReattTransactionTypeBaseComponent);
+    fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
     component.childTransaction = testTransaction;
