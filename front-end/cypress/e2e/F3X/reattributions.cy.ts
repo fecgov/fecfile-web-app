@@ -81,8 +81,6 @@ describe('Reattributions', () => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
-    ReportListPage.goToPage();
   });
 
   it('should test reattributing a Schedule A in the current report', () => {

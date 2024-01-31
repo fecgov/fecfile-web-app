@@ -32,7 +32,7 @@ export class ReattributedUtils {
     reattributed.report = undefined;
     reattributed.contribution_purpose_descrip = `(Originally disclosed on ${originatingTransaction.report?.report_type}.) See attribution below.`;
     reattributed.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
-
+    reattributed.force_unaggregated = true;
     reattributed.fields_to_validate = reattributed.fields_to_validate?.filter(
       (field) => field !== 'contribution_purpose_descrip',
     );

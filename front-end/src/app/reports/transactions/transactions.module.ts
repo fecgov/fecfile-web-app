@@ -36,7 +36,6 @@ import { RippleModule } from 'primeng/ripple';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SelectReportDialogComponent } from './transaction-list/select-report-dialog/select-report-dialog.component';
 import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
-import { TransactionAccordionTabComponent } from './transaction-accordion-tab/transaction-accordion-tab.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +55,6 @@ import { TransactionAccordionTabComponent } from './transaction-accordion-tab/tr
     TransactionNavigationComponent,
     SelectReportDialogComponent,
     ReattRedesTransactionTypeDetailComponent,
-    TransactionAccordionTabComponent,
   ],
   imports: [
     AccordionModule,

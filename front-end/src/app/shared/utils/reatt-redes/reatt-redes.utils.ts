@@ -112,28 +112,28 @@ export class ReattRedesUtils {
 
   public static getPayloads(
     payload: SchATransaction | SchBTransaction,
-    originatingTransaction: Transaction | undefined,
+    originatingTransaction: Transaction,
   ): (SchATransaction | SchBTransaction)[] {
-    let reattributed: SchATransaction | SchBTransaction;
+    let reattRedes: SchATransaction | SchBTransaction;
     const to = payload; // The FROM transaction is in the TO children[]
 
-    if (originatingTransaction) {
+    if (originatingTransaction.report_id !== payload.report_id) {
       if (ReattRedesTypes.REATTRIBUTION_TO === payload.reattribution_redesignation_tag)
-        reattributed = ReattributedUtils.getPayload(
+        reattRedes = ReattributedUtils.getPayload(
           payload as SchATransaction,
           originatingTransaction as SchATransaction,
         );
       else
-        reattributed = RedesignatedUtils.getPayload(
+        reattRedes = RedesignatedUtils.getPayload(
           payload as SchBTransaction,
           originatingTransaction as SchBTransaction,
           payload.report_id,
         );
     } else {
-      reattributed = payload.reatt_redes as SchATransaction | SchBTransaction;
+      reattRedes = payload.reatt_redes as SchATransaction | SchBTransaction;
     }
 
-    return [reattributed, to];
+    return [reattRedes, to];
   }
 
   public static overlayTransactionProperties(
@@ -164,9 +164,6 @@ export class ReattRedesUtils {
         } else {
           transaction.expenditure_purpose_descrip = 'See redesignation below.';
         }
-      } else {
-        alert('Not implemented yet. Only implement transactions in the current report.');
-        return transaction;
       }
 
       if (transaction instanceof SchATransaction) {

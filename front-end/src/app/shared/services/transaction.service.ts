@@ -9,9 +9,6 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
-// import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
-// import { SchATransaction } from '../models/scha-transaction.model';
-// import { SchBTransaction } from '../models/schb-transaction.model';
 
 @Injectable({
   providedIn: 'root',
