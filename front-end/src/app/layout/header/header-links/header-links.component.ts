@@ -12,7 +12,7 @@ export class HeaderLinksComponent {
   loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   @Input() ratio = 1;
   @Input() full = false;
-  @Input() loginPage = false;
+  @Input() loginHeader = false;
 
   constructor(loginService: LoginService) {
     this.loginService = loginService;

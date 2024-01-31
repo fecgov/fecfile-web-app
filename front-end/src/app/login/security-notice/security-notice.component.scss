@@ -1,0 +1,89 @@
+@import '../../shared/scss/global';
+
+.dashboard-example-img {
+	height: 600px;
+	width: 600px;
+	position: absolute;
+}
+
+.login-box {
+	margin-top: 80px;
+	margin-left: 20%;
+}
+
+.login-box-header {
+	font-family: "karla-bold", Sans-serif;
+	font-size: 32px;
+	padding:0px;
+}
+
+.header-filers {
+	color: #212121
+}
+
+.header-productivity {
+	color: #164F85
+}
+
+.description-text{
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	color: #212121;
+}
+
+.login-button {
+	background-color: #112e51;
+	color: #ffffff;
+	border-radius: 4px;
+	display: inline-block;
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	padding: 8px 20px;
+	text-align: center;
+	vertical-align: middle;
+	margin-right:20px;
+	margin-bottom:18px;
+}
+
+.signup-button {
+	background-color: #367F90;
+	color: #ffffff;
+	border-radius: 4px;
+	display: inline-block;
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	padding: 8px 20px;
+	text-align: center;
+	vertical-align: middle;
+	margin-bottom:18px;
+}
+
+.learn-more-link {
+	margin-left:10px;
+	font-family: "karla-bold", Sans-serif;
+	font-size: 14px;
+	color: #112e51;
+	border-bottom: 1px dotted #112e51;
+	cursor: pointer;
+	text-decoration: none;
+	transition: color .1s linear;
+}
+
+.debug-login {
+	margin-right: 60px;
+}
+
+.content-offset {
+	position: relative;
+	min-height: 100vh;
+}
+
+.login-page {
+	height: 100%;
+	width: 100%;
+	max-width: 100%;
+	overflow: auto;
+	padding-bottom: 224px;
+}

@@ -1,15 +1,18 @@
-<div id="page-container">
+<div
+  id="page-container"
+  [ngClass]="[loginBackground ? 'login-background' : '', securityNoticeBackground ? 'security-notice-background' : '']"
+>
   <app-banner></app-banner>
 
   <!--  Begin Sidebar section -->
   <div *ngIf="showSidebar">
     <div class="inline-flex w-100">
-      <div class=" fec-background-gradient flex-shrink-1" id="sidebar-container">
+      <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
         <app-sidebar></app-sidebar>
       </div>
-      <div class="sidebar-content-container ">
-        <div class="header-container">
-          <app-header></app-header>
+      <div class="sidebar-content-container">
+        <div class="header-container" *ngIf="showHeader">
+          <app-header [loginHeader]="loginHeader"></app-header>
         </div>
         <div class="main-content">
           <div class="grid">
@@ -52,6 +55,6 @@
       </div>
     </div>
   </div>
-  <app-footer *ngIf="!showSidebar"></app-footer>
+  <app-footer *ngIf="!showSidebar" [showUpperFooter]="showUpperFooter"></app-footer>
   <!-- End No Sidebar section -->
 </div>
