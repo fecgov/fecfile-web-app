@@ -42,10 +42,7 @@ describe('Reattributed', () => {
     it('should handle a different report', () => {
       const transaction = { ...testScheduleATransaction } as SchATransaction;
       transaction.reattribution_redesignation_tag = undefined;
-      const overlay = ReattributedUtils.overlayTransactionProperties(
-        transaction,
-        'not-the-same-report-as-orig',
-      ) as SchATransaction;
+      const overlay = ReattributedUtils.overlayTransactionProperties(transaction, 'not-the-same-report-as-orig');
       expect(overlay.report_id).toBe('not-the-same-report-as-orig');
       expect(overlay.contribution_purpose_descrip).toBe('(Originally disclosed on M1.) See attribution below.');
     });
