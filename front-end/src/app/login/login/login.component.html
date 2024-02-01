@@ -1,41 +1,39 @@
-<div class="content-offset">
-  <div class="login-page container grid">
-    <div class="col-6 col-xs-12">
-      <div class="grid">
-        <div class="login-box">
-          <h1 class="col-12 login-box-header header-filers">Made for filers</h1>
-          <h1 class="col-12 login-box-header header-productivity">Built for productivity</h1>
-          <p class="col-12 description-text">
-            FECFile is a FREE Web-based software system that committees can use for electronic filing. and the
-            Electronic Filing Office is available to answer filers' questions about the system.
-          </p>
-          <div class="col-12">
-            <button type="button" (click)="navigateToLoginDotGov()" class="login-button">
-              <ng-template [ngIf]="true">Log into FECFile</ng-template>
-            </button>
-            <button type="button" class="signup-button">
-              <ng-template [ngIf]="true">Sign up with Login.gov</ng-template>
-            </button>
-          </div>
-          <div class="col-12">
-            <a href="https://www.login.gov/what-is-login/" class="learn-more-link">Learn more about Login.gov</a>
-          </div>
-          <div class="grid" *ngIf="this.localLoginAvailable">
-            <div class="col-12 debug-login">
-              <app-debug-login></app-debug-login>
-            </div>
+<div class="login-page container grid">
+  <div class="col-6 col-xs-12">
+    <div class="grid">
+      <div class="login-box">
+        <h1 class="col-12 login-box-header header-filers">Made for filers</h1>
+        <h1 class="col-12 login-box-header header-productivity">Built for productivity</h1>
+        <p class="col-12 description-text">
+          FECFile is a FREE Web-based software system that committees can use for electronic filing. and the Electronic
+          Filing Office is available to answer filers' questions about the system.
+        </p>
+        <div class="col-12">
+          <button type="button" (click)="navigateToLoginDotGov()" class="login-button">
+            <ng-template [ngIf]="true">Log into FECFile</ng-template>
+          </button>
+          <button type="button" class="signup-button">
+            <ng-template [ngIf]="true">Sign up with Login.gov</ng-template>
+          </button>
+        </div>
+        <div class="col-12">
+          <a href="https://www.login.gov/what-is-login/" class="learn-more-link">Learn more about Login.gov</a>
+        </div>
+        <div class="grid" *ngIf="this.localLoginAvailable">
+          <div class="col-12 debug-login">
+            <app-debug-login></app-debug-login>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-6">
-      <img
-        ngSrc="assets/img/dashboard-example.svg"
-        class="dashboard-example-img"
-        height="600"
-        width="600"
-        alt="An example of the FECFile dashboard"
-      />
-    </div>
+  </div>
+  <div class="col-6">
+    <img
+      ngSrc="assets/img/dashboard-example.svg"
+      class="dashboard-example-img"
+      height="600"
+      width="600"
+      alt="An example of the FECFile dashboard"
+    />
   </div>
 </div>

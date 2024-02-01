@@ -1,9 +1,10 @@
 @import '../../shared/scss/global';
 
 .dashboard-example-img {
-	height: 600px;
 	width: 600px;
 	position: absolute;
+	max-height: calc(100vh - 350px);
+	overflow: hidden;
 }
 
 .login-box {
@@ -75,16 +76,9 @@
 	margin-right: 60px;
 }
 
-.content-offset {
-	position: relative;
-	min-height: 100vh;
-	background-color: #ece8e8;
-}
-
 .login-page {
-	height: 100%;
 	width: 100%;
 	max-width: 100%;
+	max-height: calc(100vh - 350px);
 	overflow: auto;
-	padding-bottom: 224px;
 }

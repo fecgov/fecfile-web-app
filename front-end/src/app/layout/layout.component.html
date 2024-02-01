@@ -16,7 +16,7 @@
         </div>
         <div class="main-content">
           <div class="grid">
-            <div class="col-12">
+            <div class="col-12" *ngIf="showCommitteeBanner">
               <app-committee-banner></app-committee-banner>
             </div>
           </div>
@@ -38,12 +38,12 @@
   <!-- Begin No Sidebar section -->
   <div *ngIf="!showSidebar" class="content-offset">
     <div class="container">
-      <div class="header-container">
-        <app-header></app-header>
+      <div class="header-container" *ngIf="showHeader">
+        <app-header [loginHeader]="loginHeader"></app-header>
       </div>
       <div class="col-12 main-content">
         <div class="grid">
-          <div class="col-12">
+          <div class="col-12" *ngIf="showCommitteeBanner">
             <app-committee-banner></app-committee-banner>
           </div>
         </div>

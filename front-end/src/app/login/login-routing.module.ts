@@ -11,6 +11,7 @@ const routes: Routes = [
     pathMatch: 'full',
     data: {
       showUpperFooter: false,
+      showCommitteeBanner: false,
       loginHeader: true,
       loginBackground: true,
     },

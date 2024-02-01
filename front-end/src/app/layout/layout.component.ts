@@ -2,16 +2,9 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Store } from '@ngrx/store';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  ActivationStart,
-  NavigationEnd,
-  Router,
-  RoutesRecognized,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { selectSidebarState } from '../store/sidebar-state.selectors';
-import { filter, switchMap, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { collectRouteData } from 'app/shared/utils/route.utils';
 
 @Component({
@@ -19,12 +12,13 @@ import { collectRouteData } from 'app/shared/utils/route.utils';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent extends DestroyerComponent implements OnInit, AfterViewInit {
+export class LayoutComponent extends DestroyerComponent implements OnInit {
   showSidebar = false;
 
   showUpperFooter = true;
   showHeader = true;
   loginHeader = false;
+  showCommitteeBanner = true;
 
   loginBackground = false;
   securityNoticeBackground = false;
@@ -42,23 +36,15 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
         this.showSidebar = !!state;
       });
 
-    this.router.events.subscribe((data) => {
-      if (data instanceof ActivationStart) {
-        const routeData = data.snapshot.data;
-        if (routeData) {
-          //console.log(routeData);
-        }
-      }
-    });
-  }
-
-  ngAfterViewInit(): void {
     const data = collectRouteData(this.router);
+    console.log(data);
     this.showUpperFooter = data['showUpperFooter'] ?? this.showUpperFooter;
+    this.showCommitteeBanner = data['showCommitteeBanner'] ?? this.showCommitteeBanner;
     this.showHeader = data['showHeader'] ?? this.showHeader;
     this.loginHeader = data['loginHeader'] ?? this.loginHeader;
 
     this.loginBackground = data['loginBackground'] ?? this.loginBackground;
     this.securityNoticeBackground = data['securityNoticeBackground'] ?? this.securityNoticeBackground;
+    console.log(this.showCommitteeBanner);
   }
 }
