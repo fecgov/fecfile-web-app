@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
@@ -38,11 +38,11 @@ export class LoginService extends DestroyerComponent {
    *
    * @return     {Observable}  The JSON response.
    */
-  public logIn(email: string, cmteId: string, password: string): Observable<UserLoginData> {
+  public logIn(email: string, cmteId: string, password: string): Observable<null> {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
-    return this.apiService.post<UserLoginData>('/user/login/authenticate', {
+    return this.apiService.post<null>('/user/login/authenticate', {
       username,
       password,
     });
@@ -92,5 +92,18 @@ export class LoginService extends DestroyerComponent {
       !!this.userLoginData.last_name;
   }
 
+  public dispatchUserLoggedInFromCookies() {
+    if (this.cookieService.check(environment.ffapiEmailCookieName)) {
+      const userLoginData: UserLoginData = {
+        first_name: this.cookieService.get(environment.ffapiFirstNameCookieName),
+        last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
+        email: this.cookieService.get(environment.ffapiEmailCookieName),
+        login_dot_gov: this.cookieService.get(
+          environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
+      };
+      this.clearUserFecfileApiCookies();
+      this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
+    }
+  }
 
 }

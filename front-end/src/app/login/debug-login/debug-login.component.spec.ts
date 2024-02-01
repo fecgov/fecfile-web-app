@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
 import { BannerComponent } from 'app/layout/banner/banner.component';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of, throwError } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
@@ -65,7 +64,7 @@ describe('DebugLoginComponent', () => {
   });
 
   it('should doSignIn success', () => {
-    spyOn(loginService, 'logIn').and.returnValue(of({} as UserLoginData));
+    spyOn(loginService, 'logIn').and.returnValue(of());
     component.hasFailed = true;
     component.doSignIn();
     expect(component.isBusy).toBeFalse();

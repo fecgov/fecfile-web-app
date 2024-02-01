@@ -1,14 +1,14 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { environment } from 'environments/environment';
 import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
-import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
+import { UserLoginData } from '../models/user.model';
 import { LoginService } from './login.service';
 
 describe('LoginService', () => {
@@ -21,7 +21,7 @@ describe('LoginService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
+      providers: [ApiService, LoginService, CookieService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(LoginService);
@@ -35,8 +35,7 @@ describe('LoginService', () => {
   });
 
   it('#signIn should authenticate in the back end', () => {
-    service.logIn('email@fec.gov', 'C00000000', 'test').subscribe((response: UserLoginData) => {
-      expect(response).toEqual(testUserLoginData);
+    service.logIn('email@fec.gov', 'C00000000', 'test').subscribe(() => {
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/user/login/authenticate`);
@@ -88,4 +87,39 @@ describe('LoginService', () => {
     const retval = service.userHasProfileData();
     expect(retval).toBeTrue();
   });
+
+  it('#dispatchUserLoggedInFromCookies happy path', () => {
+    const testFirstName = 'testFirstName';
+    const testLastName = 'testLastName';
+    const testEmail = 'testEmail';
+    const testLoginDotGov = false;
+
+    const expectedUserLoginData: UserLoginData = {
+      first_name: testFirstName,
+      last_name: testLastName,
+      email: testEmail,
+      login_dot_gov: testLoginDotGov
+    };
+    spyOn(cookieService, 'check').and.returnValue(true);
+    spyOn(cookieService, 'get').and.callFake((name: string) => {
+      if (name === environment.ffapiFirstNameCookieName) {
+        return testFirstName;
+      }
+      if (name === environment.ffapiLastNameCookieName) {
+        return testLastName;
+      }
+      if (name === environment.ffapiEmailCookieName) {
+        return testEmail;
+      }
+      if (name === environment.ffapiLoginDotGovCookieName) {
+        return testLoginDotGov.toString();
+      }
+      throw Error('fail!');
+    });
+    spyOn(store, 'dispatch');
+
+    service.dispatchUserLoggedInFromCookies();
+    expect(store.dispatch).toHaveBeenCalledWith(userLoggedInAction({ payload: expectedUserLoginData }));
+  });
+
 });
