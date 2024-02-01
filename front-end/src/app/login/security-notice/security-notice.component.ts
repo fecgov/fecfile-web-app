@@ -24,7 +24,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   userLoginData?: UserLoginData;
 
   form = new FormGroup({
-    'security-consent': new FormControl(),
+    'security-consent': new FormControl(false, [Validators.requiredTrue]),
   });
 
   constructor(
@@ -37,7 +37,6 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   }
 
   ngOnInit() {
-    this.form.get('security-consent')?.addValidators(Validators.requiredTrue);
     this.formSubmitted = false;
 
     this.store
@@ -46,11 +45,11 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       .subscribe((userLoginData: UserLoginData) => {
         this.formSubmitted = false;
         this.userLoginData = userLoginData;
+        console.log(this.userLoginData);
       });
   }
 
   signConsentForm() {
-    this.form.updateValueAndValidity();
     this.formSubmitted = true;
     if (this.form.invalid || !this.userLoginData) {
       this.store.dispatch(singleClickEnableAction());
@@ -62,11 +61,11 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       security_consent_date: new FecDatePipe().transform(new Date()),
     };
     console.log(updatedUserLoginData);
-    /*this.usersService.updateCurrentUser(updatedUserLoginData).pipe(
+    this.usersService.updateCurrentUser(updatedUserLoginData).pipe(
       map(() => {
         this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
         this.router.navigate(['dashboard']);
       })
-    );*/
+    );
   }
 }
