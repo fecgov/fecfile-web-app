@@ -50,12 +50,31 @@
       <ng-template pTemplate="footer">
         <p-divider></p-divider>
         <form class="flex align-items-center gap-1" [formGroup]="form">
-          <p-checkbox formControlName="security-consent" [value]="false" inputId="security-consent"></p-checkbox>
-          <label for="security-consent">You consent to the security notification for one year</label>
+          <div class="field">
+            <p-checkbox
+              formControlName="security-consent"
+              [binary]="true"
+              inputId="security-consent"
+              label="You consent to the security notification for one year"
+              ariaLabel="You consent to the security notification for one year"
+            ></p-checkbox>
+            <div class="col-12">
+              <app-error-messages
+                [form]="form"
+                fieldName="security-consent"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
         </form>
         <div class="align-center">
           <p-button class="security-notice-button" label="Decline and exit" (click)="loginService.logOut()"></p-button>
-          <p-button class="security-notice-button" label="Consent" styleClass="p-button-secondary"></p-button>
+          <p-button
+            class="security-notice-button"
+            label="Consent"
+            styleClass="p-button-secondary"
+            (click)="signConsentForm()"
+          ></p-button>
         </div>
       </ng-template>
     </p-card>
