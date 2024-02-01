@@ -55,3 +55,7 @@ select:active, select:hover {
 select:hover {
   border-color: #d6d7d9;
 }
+
+select:disabled:hover {
+  background-color: #e9ecef;
+}
