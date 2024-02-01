@@ -10,7 +10,7 @@ export class UserLoginDataGuard {
   constructor(
     private loginService: LoginService,
     private router: Router) { }
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivateChild(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (!this.loginService.userHasProfileData()) {
       this.router.navigate(['users/current']);
       return false;

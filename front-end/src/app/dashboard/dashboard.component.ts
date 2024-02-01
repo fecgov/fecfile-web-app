@@ -17,20 +17,20 @@ export class DashboardComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
-    this.dispatchUserLoggedInFromCookies();
+    if (this.cookieService.check(environment.ffapiEmailCookieName)) {
+      this.dispatchUserLoggedInFromCookies();
+    }
   }
 
   dispatchUserLoggedInFromCookies() {
-    if (this.cookieService.check(environment.ffapiLoginDotGovCookieName)) {
-      const userLoginData: UserLoginData = {
-        first_name: this.cookieService.get(environment.ffapiFirstNameCookieName),
-        last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
-        email: this.cookieService.get(environment.ffapiEmailCookieName),
-        login_dot_gov: this.cookieService.get(
-          environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
-      };
-      this.loginService.clearUserFecfileApiCookies();
-      this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
-    }
+    const userLoginData: UserLoginData = {
+      first_name: this.cookieService.get(environment.ffapiFirstNameCookieName),
+      last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
+      email: this.cookieService.get(environment.ffapiEmailCookieName),
+      login_dot_gov: this.cookieService.get(
+        environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
+    };
+    this.loginService.clearUserFecfileApiCookies();
+    this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
   }
 }

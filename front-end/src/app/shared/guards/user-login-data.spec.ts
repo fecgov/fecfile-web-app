@@ -28,14 +28,14 @@ describe('UserLoginDataGuard', () => {
 
   it('should allow if has profile data', () => {
     spyOn(loginService, 'userHasProfileData').and.returnValue(true);
-    const retval = guard.canActivate();
+    const retval = guard.canActivateChild();
     expect(retval).toEqual(true);
   });
 
   it('should disallow if no profile data', () => {
     spyOn(loginService, 'userHasProfileData').and.returnValue(false);
     const navigateSpy = spyOn(router, 'navigate');
-    const retval = guard.canActivate();
+    const retval = guard.canActivateChild();
     expect(navigateSpy).toHaveBeenCalledWith(['users/current']);
     expect(retval).toEqual(false);
   });
