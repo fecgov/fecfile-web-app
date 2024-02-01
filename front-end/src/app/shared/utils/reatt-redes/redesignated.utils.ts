@@ -8,7 +8,8 @@ export class RedesignatedUtils {
       if (transaction.report_id === activeReportId) {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
-        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${transaction.report?.report_type}.) See attribution below.See redesignation below.`;
+        transaction.report_id = activeReportId;
+        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${transaction.report?.report_type}.) See redesignation below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }
@@ -21,7 +22,7 @@ export class RedesignatedUtils {
 
   static getPayload(payload: SchBTransaction, originatingTransaction: SchBTransaction): SchBTransaction {
     if (!originatingTransaction.transaction_type_identifier) {
-      throw Error('Fecfile online: originating reattribution transaction type not found.');
+      throw Error('Fecfile online: originating redesignation transaction type not found.');
     }
     const redesignated = cloneDeep(payload.reatt_redes) as SchBTransaction;
     redesignated.report_id = payload.report_id;

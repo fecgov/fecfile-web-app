@@ -4,7 +4,7 @@ import { ReattributedUtils } from './reattributed.utils';
 import _ from 'lodash';
 import { ReattRedesTypes } from './reatt-redes.utils';
 
-describe('Reattributed', () => {
+describe('Reattributed Utils', () => {
   let payload: SchATransaction;
   let originatingTransaction: SchATransaction;
   beforeEach(() => {
@@ -40,9 +40,8 @@ describe('Reattributed', () => {
 
   describe('overlayTransactionProperties', () => {
     it('should handle a different report', () => {
-      const transaction = { ...testScheduleATransaction } as SchATransaction;
-      transaction.reattribution_redesignation_tag = undefined;
-      const overlay = ReattributedUtils.overlayTransactionProperties(transaction, 'not-the-same-report-as-orig');
+      payload.reattribution_redesignation_tag = undefined;
+      const overlay = ReattributedUtils.overlayTransactionProperties(payload, 'not-the-same-report-as-orig');
       expect(overlay.report_id).toBe('not-the-same-report-as-orig');
       expect(overlay.contribution_purpose_descrip).toBe('(Originally disclosed on M1.) See attribution below.');
     });
