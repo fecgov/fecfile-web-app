@@ -89,12 +89,10 @@ export class DebugLoginComponent implements OnInit {
 
     this.loginService.logIn(email, committeeId, password).subscribe({
       next: (res: UserLoginData) => {
-        if (res.is_allowed) {
-          this.store.dispatch(userLoggedInAction({ payload: res }));
-          this.ngZone.run(() => {
-            this.router.navigate(['dashboard']);
-          });
-        }
+        this.store.dispatch(userLoggedInAction({ payload: res }));
+        this.ngZone.run(() => {
+          this.router.navigate(['dashboard']);
+        });
       },
       error: () => {
         this.isBusy = false;

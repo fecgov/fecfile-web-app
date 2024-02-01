@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { UpdateCurrentUserComponent } from './update-current-user/update-current-user.component';
 import { UserListComponent } from './user-list/user-list.component';
 
 const routes: Routes = [
@@ -9,6 +10,12 @@ const routes: Routes = [
     title: 'Manage Users',
     pathMatch: 'full',
   },
+  {
+    path: 'current',
+    component: UpdateCurrentUserComponent,
+    title: 'Update User Profile',
+    pathMatch: 'full',
+  },
   { path: '**', redirectTo: '' },
 ];
 
@@ -16,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UsersRoutingModule {}
+export class UsersRoutingModule { }
