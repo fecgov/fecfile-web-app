@@ -1,24 +1,16 @@
 import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
-import { UserLoginData } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private loginDotGov: boolean | undefined;
-
-  constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
-    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.loginDotGov = userLoginData.login_dot_gov;
-    });
-  }
+  constructor(private http: HttpClient,
+    private cookieService: CookieService) { }
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -93,7 +85,4 @@ export class ApiService {
     return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
   }
 
-  public isAuthenticated() {
-    return !!this.loginDotGov || this.cookieService.check(environment.ffapiLoginDotGovCookieName);
-  }
 }

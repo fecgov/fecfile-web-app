@@ -3,13 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from 'app/shared/services/api.service';
+import { LoginService } from '../services/login.service';
+import { testMockStore } from '../utils/unit-test.utils';
 import { LoginGuard } from './login-page.guard';
 
 describe('LoginGuard', () => {
   let guard: LoginGuard;
-  let apiService: ApiService;
+  let loginService: LoginService;
   let router: Router;
 
   beforeEach(() => {
@@ -18,7 +19,7 @@ describe('LoginGuard', () => {
       providers: [ApiService, provideMockStore(testMockStore)],
     });
     guard = TestBed.inject(LoginGuard);
-    apiService = TestBed.inject(ApiService);
+    loginService = TestBed.inject(LoginService);
     router = TestBed.inject(Router);
   });
 
@@ -27,7 +28,7 @@ describe('LoginGuard', () => {
   });
 
   it('should reroute to dashboard if logged in', () => {
-    spyOn(apiService, 'isAuthenticated').and.returnValue(true);
+    spyOn(loginService, 'userIsAuthenticated').and.returnValue(true);
     const navigateSpy = spyOn(router, 'navigate');
     const retval = guard.canActivate();
     expect(navigateSpy).toHaveBeenCalledWith(['dashboard']);
@@ -35,7 +36,7 @@ describe('LoginGuard', () => {
   });
 
   it('should allow activate if not logged in', () => {
-    spyOn(apiService, 'isAuthenticated').and.returnValue(false);
+    spyOn(loginService, 'userIsAuthenticated').and.returnValue(false);
     const navigateSpy = spyOn(router, 'navigate');
     const retval = guard.canActivate();
     expect(navigateSpy).not.toHaveBeenCalled();

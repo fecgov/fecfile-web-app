@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { LayoutComponent } from './layout/layout.component';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 
@@ -10,6 +10,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
+    //    canActivateChild: [UserLoginDataGuard],
     runGuardsAndResolvers: 'always',
     children: [
       {

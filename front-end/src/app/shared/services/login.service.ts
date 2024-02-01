@@ -1,12 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
 
@@ -15,17 +15,19 @@ type EndpointAvailability = { endpoint_available: boolean };
 @Injectable({
   providedIn: 'root',
 })
-export class LoginService {
+export class LoginService extends DestroyerComponent {
   private userLoginData: UserLoginData | undefined;
   constructor(
     private store: Store,
-    private http: HttpClient,
     private apiService: ApiService,
     private cookieService: CookieService
   ) {
-    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.userLoginData = userLoginData;
-    });
+    super();
+    this.store.select(selectUserLoginData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((userLoginData: UserLoginData) => {
+        this.userLoginData = userLoginData;
+      });
   }
 
   /**
@@ -60,11 +62,15 @@ export class LoginService {
     return false;
   }
 
-  public clearUserLoggedInCookies() {
+  public clearUserFecfileApiCookies() {
     this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
     this.cookieService.delete(environment.ffapiFirstNameCookieName);
     this.cookieService.delete(environment.ffapiLastNameCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
+  }
+
+  public clearUserLoggedInCookies() {
+    this.clearUserFecfileApiCookies();
     this.cookieService.delete(environment.sessionIdCookieName);
   }
 
@@ -75,4 +81,16 @@ export class LoginService {
       })
     );
   }
+
+  public userIsAuthenticated() {
+    return !!this.userLoginData?.email ||
+      this.cookieService.check(environment.ffapiEmailCookieName);
+  }
+
+  public userHasProfileData() {
+    return !!this.userLoginData?.first_name &&
+      !!this.userLoginData.last_name;
+  }
+
+
 }

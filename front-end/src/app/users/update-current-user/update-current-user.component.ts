@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { UsersService } from 'app/shared/services/users.service';
+import { updateUserLoginDataAction } from 'app/store/login.actions';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { map, takeUntil } from 'rxjs';
 import { UserLoginData } from '../../shared/models/user.model';
 
@@ -16,6 +17,7 @@ import { UserLoginData } from '../../shared/models/user.model';
 })
 export class UpdateCurrentUserComponent extends DestroyerComponent implements OnInit {
   form: FormGroup = this.fb.group({});
+  formSubmitted = false;
 
   constructor(
     private store: Store,
@@ -35,10 +37,12 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
           userLoginData.last_name, Validators.required));
         this.form.setControl('email', new FormControl(
           userLoginData.email, Validators.required));
+        this.formSubmitted = false;
       });
   }
 
   continue() {
+    this.formSubmitted = true;
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
@@ -51,6 +55,8 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
     }
     this.usersService.updateCurrentUser(updatedUserLoginData).pipe(
       map(() => {
+        this.store.dispatch(updateUserLoginDataAction(
+          { payload: updatedUserLoginData }));
         this.router.navigate(['dashboard']);
       })
     );
