@@ -2,7 +2,6 @@ import { HttpContext, HttpErrorResponse, HttpStatusCode } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { userLoggedOutAction } from 'app/store/login.actions';
 import { throwError } from 'rxjs';
 import { testMockStore } from '../utils/unit-test.utils';
 
@@ -40,7 +39,6 @@ describe('HttpErrorInterceptor', () => {
       (x) => x,
       (y) => y
     );
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
   });
 
   it('should handle outgoing error', () => {

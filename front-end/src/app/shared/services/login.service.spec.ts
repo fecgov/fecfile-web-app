@@ -1,12 +1,11 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testUserLoginData, testMockStore } from '../utils/unit-test.utils';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { environment } from 'environments/environment';
+import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
-import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
 import { LoginService } from './login.service';
@@ -62,7 +61,6 @@ describe('LoginService', () => {
     spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
     expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(0);
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
@@ -75,7 +73,6 @@ describe('LoginService', () => {
     spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 });

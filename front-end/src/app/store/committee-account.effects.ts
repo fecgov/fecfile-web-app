@@ -17,7 +17,7 @@ export class CommitteeAccountEffects {
 
   loadCommitteeAccount$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(userLoggedInAction.type, refreshCommitteeAccountDetailsAction.type),
+      ofType(refreshCommitteeAccountDetailsAction.type),
       mergeMap(() =>
         this.committeeAccountService.getDetails().pipe(
           map((committeeAccount: CommitteeAccount) => ({

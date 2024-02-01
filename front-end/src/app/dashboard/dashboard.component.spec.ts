@@ -57,7 +57,6 @@ describe('DashboardComponent', () => {
     });
     spyOn(store, 'dispatch');
 
-    component.dispatchUserLoggedInFromCookies();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedInAction({ payload: expectedUserLoginData }));
   });
 });

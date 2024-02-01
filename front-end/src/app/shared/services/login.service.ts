@@ -1,14 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { setUserLoginDataAction } from 'app/store/user-login-data.actions';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
+import { UsersService } from './users.service';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -19,9 +20,10 @@ export class LoginService {
   private userLoginData: UserLoginData | undefined;
   constructor(
     private store: Store,
-    private http: HttpClient,
     private apiService: ApiService,
-    private cookieService: CookieService
+    private usersService: UsersService,
+    private cookieService: CookieService,
+    private router: Router
   ) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
       this.userLoginData = userLoginData;
@@ -47,12 +49,13 @@ export class LoginService {
   }
 
   public logOut() {
-    this.cookieService.delete('csrftoken');
     if (this.userLoginData && !this.userLoginData.login_dot_gov) {
       // Non-login.gov auth
-      this.store.dispatch(userLoggedOutAction());
+      this.apiService.get('/auth/logout').subscribe(() => {
+        this.clearUserLoggedInDataAndNavigateHome();
+      });
     } else {
-      this.store.dispatch(userLoggedOutForLoginDotGovAction());
+      this.store.dispatch(setUserLoginDataAction({}));
       if (environment.loginDotGovLogoutUrl) {
         window.location.href = environment.loginDotGovLogoutUrl;
       }
@@ -60,12 +63,14 @@ export class LoginService {
     return false;
   }
 
-  public clearUserLoggedInCookies() {
-    this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
-    this.cookieService.delete(environment.ffapiFirstNameCookieName);
-    this.cookieService.delete(environment.ffapiLastNameCookieName);
-    this.cookieService.delete(environment.ffapiEmailCookieName);
-    this.cookieService.delete(environment.sessionIdCookieName);
+  public clearUserLoggedInDataAndNavigateHome() {
+    this.clearUserLoggedInData();
+    this.router.navigate(['/']);
+  }
+
+  public clearUserLoggedInData() {
+    this.store.dispatch(setUserLoginDataAction({}));
+    this.cookieService.deleteAll();
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
@@ -75,4 +80,28 @@ export class LoginService {
       })
     );
   }
+
+  public hasUserLoginData() {
+    return !!this.userLoginData;
+  }
+
+  public refreshUserLoginDataIfNeeded() {
+    if (!this.userLoginData) {
+      return this.usersService.getCurrentUser().pipe(
+        map((response: UserLoginData) => {
+          return this.store.dispatch(setUserLoginDataAction({ payload: response }));
+        })
+      );
+    }
+    return of();
+  }
+
+  public userIsAuthenticated() {
+    return !!this.userLoginData?.email;
+  }
+
+  public userHasProfileData() {
+    return !!this.userLoginData?.first_name && !!this.userLoginData?.last_name;
+  }
+
 }

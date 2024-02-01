@@ -92,8 +92,4 @@ export class ApiService {
     const headers = this.getHeaders();
     return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
   }
-
-  public isAuthenticated() {
-    return !!this.loginDotGov || this.cookieService.check(environment.ffapiLoginDotGovCookieName);
-  }
 }

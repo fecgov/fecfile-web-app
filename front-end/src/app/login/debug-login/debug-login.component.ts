@@ -1,11 +1,11 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { UserLoginData } from 'app/shared/models/user.model';
+import { userLoggedInAction } from 'app/store/login.actions';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { Store } from '@ngrx/store';
-import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions';
 
 @Component({
   selector: 'app-debug-login',
@@ -44,8 +44,7 @@ export class DebugLoginComponent implements OnInit {
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
-    this.loginService.clearUserLoggedInCookies();
-    this.store.dispatch(userLoggedOutAction());
+    this.loginService.clearUserLoggedInData();
   }
 
   /**
