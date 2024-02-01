@@ -119,6 +119,8 @@ export class ReattRedesUtils {
           transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
         } else {
           transaction.memo_text = MemoText.fromJSON({
+            rec_type: 'TEXT',
+            report_id: transaction.report_id,
             text_prefix: prefix,
             text4000: prefix,
           });
