@@ -1,15 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Report } from "../../../../shared/models/report.model";
-import { ReattRedesTypes, ReattRedesUtils } from "../../../../shared/utils/reatt-redes/reatt-redes.utils";
-import { lastValueFrom } from "rxjs";
-import { ReportService } from "../../../../shared/services/report.service";
-import { Router } from "@angular/router";
-import { Transaction } from "../../../../shared/models/transaction.model";
+import { Report } from '../../../../shared/models/report.model';
+import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
+import { lastValueFrom } from 'rxjs';
+import { ReportService } from '../../../../shared/services/report.service';
+import { Router } from '@angular/router';
+import { Transaction } from '../../../../shared/models/transaction.model';
 
 @Component({
   selector: 'app-select-report-dialog',
   templateUrl: './select-report-dialog.component.html',
-  styleUrls: ['./select-report-dialog.component.scss']
+  styleUrls: ['./select-report-dialog.component.scss'],
 })
 export class SelectReportDialogComponent implements OnInit {
   availableReports: Report[] = [];
@@ -19,24 +19,26 @@ export class SelectReportDialogComponent implements OnInit {
   type?: ReattRedesTypes;
   @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
 
-  constructor(public router: Router, private reportService: ReportService) {
-  }
+  constructor(
+    public router: Router,
+    private reportService: ReportService,
+  ) {}
 
   async ngOnInit() {
     ReattRedesUtils.selectReportDialogSubject.subscribe((data) => {
       this.transaction = data[0];
-      this.type = data[1]
+      this.type = data[1];
       this.selectReportDialog?.nativeElement.show();
-    })
+    });
 
     const response = await lastValueFrom(this.reportService.getTableData());
-    this.availableReports = (response.results as Report[]).filter(report => this.reportService.isEditable(report));
+    this.availableReports = (response.results as Report[]).filter((report) => this.reportService.isEditable(report));
   }
 
   async createReattribution() {
-    if (!this.transaction) throw new Error("No base transaction");
+    if (!this.transaction) throw new Error('No base transaction');
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${this.selectedReport?.id}/create/${this.transaction.transaction_type_identifier}?reattribution=${this.transaction.id}`
+      `/reports/transactions/report/${this.selectedReport?.id}/create/${this.transaction.transaction_type_identifier}?${this.reattRedesignation}=${this.transaction.id}`,
     );
   }
 
@@ -47,5 +49,9 @@ export class SelectReportDialogComponent implements OnInit {
 
   get reattRedes(): string {
     return ReattRedesUtils.isReattribute(this.type) ? 'reattribute' : 'redesignate';
+  }
+
+  private get reattRedesignation(): string {
+    return ReattRedesUtils.isReattribute(this.type) ? 'reattribution' : 'redesignation';
   }
 }

@@ -127,7 +127,6 @@ export class ReattRedesUtils {
         reattRedes = RedesignatedUtils.getPayload(
           payload as SchBTransaction,
           originatingTransaction as SchBTransaction,
-          payload.report_id,
         );
     } else {
       reattRedes = payload.reatt_redes as SchATransaction | SchBTransaction;

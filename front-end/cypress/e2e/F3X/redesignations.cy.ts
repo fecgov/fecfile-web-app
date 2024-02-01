@@ -68,8 +68,6 @@ describe('Redesignations', () => {
     LoginPage.login();
     ReportListPage.deleteAllReports();
     ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
-    ReportListPage.goToPage();
   });
 
   it('should test redesignating a Schedule E contribution in the current report', () => {
@@ -78,7 +76,7 @@ describe('Redesignations', () => {
     Redesignate();
   });
 
-  xit('should test redesignating a Schedule E contribution from a submitted report', () => {
+  it('should test redesignating a Schedule E contribution from a submitted report', () => {
     // Create an individual contact to be used with contact lookup
     CreateContribution();
     ReportListPage.createF3X(reportFormDataJuly);

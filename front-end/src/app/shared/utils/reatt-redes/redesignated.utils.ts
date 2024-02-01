@@ -1,6 +1,6 @@
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { TransactionTypeUtils } from '../transaction-type.utils';
+import { cloneDeep } from 'lodash';
 
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {
@@ -19,18 +19,20 @@ export class RedesignatedUtils {
     return transaction;
   }
 
-  static getPayload(
-    payload: SchBTransaction,
-    originatingTransaction: SchBTransaction,
-    reportId: string | undefined,
-  ): SchBTransaction {
+  static getPayload(payload: SchBTransaction, originatingTransaction: SchBTransaction): SchBTransaction {
     if (!originatingTransaction.transaction_type_identifier) {
       throw Error('Fecfile online: originating reattribution transaction type not found.');
     }
-    const redesignated = TransactionTypeUtils.factory(
-      originatingTransaction.transaction_type_identifier,
-    ).getNewTransaction() as SchBTransaction;
-    redesignated.report_id = reportId;
-    return this.overlayTransactionProperties(redesignated);
+    const redesignated = cloneDeep(payload.reatt_redes) as SchBTransaction;
+    redesignated.report_id = payload.report_id;
+    redesignated.id = undefined;
+    redesignated.report = undefined;
+    redesignated.expenditure_purpose_descrip = `(Originally disclosed on ${payload.report?.report_type}.) See attribution below.See redesignation below.`;
+    redesignated.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
+    redesignated.force_unaggregated = true;
+    redesignated.fields_to_validate = redesignated.fields_to_validate?.filter(
+      (field) => field !== 'expenditure_purpose_descrip',
+    );
+    return redesignated;
   }
 }

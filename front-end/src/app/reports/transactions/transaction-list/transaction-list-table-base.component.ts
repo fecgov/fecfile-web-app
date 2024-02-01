@@ -288,9 +288,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public async createRedesignation(transaction: Transaction): Promise<void> {
-    await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
-    );
+    if (this.reportIsEditable) {
+      await this.router.navigateByUrl(
+        `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
+      );
+    } else {
+      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
+    }
   }
 
   public updateItem(item: Transaction) {

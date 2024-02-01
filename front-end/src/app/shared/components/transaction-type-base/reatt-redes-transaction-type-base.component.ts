@@ -102,8 +102,10 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   private async initializePullForward() {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    const reattributionId = this.activatedRoute.snapshot.queryParams['reattribution'];
-    this.originating.transaction = await lastValueFrom(this.transactionService.get(reattributionId));
+    const reattRedesId =
+      this.activatedRoute.snapshot.queryParams['reattribution'] ??
+      this.activatedRoute.snapshot.queryParams['redesignation'];
+    this.originating.transaction = await lastValueFrom(this.transactionService.get(reattRedesId));
     this.pullForward = this.originating.transaction.report_id !== reportId;
     if (!this.pullForward) return;
 

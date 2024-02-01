@@ -74,14 +74,14 @@
       </p>
     </ng-template>
     <div class="p-fluid">
-      <h2 *ngIf="originating.transactionType?.showParentTransactionTitle">
-        {{ originating.transaction?.parent_transaction?.transactionType?.title }}
+      <h2 *ngIf="originating.transactionType.showParentTransactionTitle">
+        {{ originating.transaction.parent_transaction?.transactionType?.title }}
       </h2>
-      <h2 [ngClass]="{ 'dark-gray-text': originating.transactionType?.showParentTransactionTitle }">
-        {{ originating.transactionType?.title }}
+      <h2 [ngClass]="{ 'dark-gray-text': originating.transactionType.showParentTransactionTitle }">
+        {{ originating.transactionType.title }}
       </h2>
-      <div *ngIf="originating.transactionType?.subTitle">{{ originating.transactionType?.subTitle }}</div>
-      <h3>{{ originating.transactionType?.contactTitle || 'Contact' }}</h3>
+      <div *ngIf="originating.transactionType.subTitle">{{ originating.transactionType.subTitle }}</div>
+      <h3>{{ originating.transactionType.contactTitle || 'Contact' }}</h3>
       <form id="pull-forward-form" [formGroup]="originating.form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <app-transaction-input
           [isEditable]="false"
