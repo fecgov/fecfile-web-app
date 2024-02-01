@@ -79,6 +79,9 @@ export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON(
 });
 
 export const testUserLoginData: UserLoginData = {
+  first_name: 'test_first_name',
+  last_name: 'test_last_name',
+  email: 'test_email@testhost.com',
   login_dot_gov: false,
 };
 

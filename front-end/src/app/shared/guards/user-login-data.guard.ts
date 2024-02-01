@@ -1,25 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { LoginService } from '../services/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginGuard {
+export class UserLoginDataGuard {
   constructor(
     private loginService: LoginService,
-    private router: Router,
-    private cookieService: CookieService) { }
+    private router: Router) { }
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.loginService.userIsAuthenticated()) {
-      this.router.navigate(['dashboard']);
+    if (!this.loginService.userHasProfileData()) {
+      this.router.navigate(['users/current']);
       return false;
-    } else {
-      this.cookieService.deleteAll();
-      return true;
     }
+    return true;
   }
-
 }

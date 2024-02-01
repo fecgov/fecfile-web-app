@@ -11,7 +11,9 @@ import { CommitteeAccountService } from './committee-account.service';
   providedIn: 'root',
 })
 export class UsersService implements TableListService<CommitteeUser> {
-  constructor(private apiService: ApiService, private committeeAccountService: CommitteeAccountService) { }
+  constructor(private apiService: ApiService,
+    private committeeAccountService: CommitteeAccountService
+  ) { }
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     let parameter_string = `?page=${pageNumber}`;

@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testUserLoginData, testMockStore } from '../utils/unit-test.utils';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { environment } from 'environments/environment';
+import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
 import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
@@ -77,5 +77,15 @@ describe('LoginService', () => {
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
+  });
+
+  it('userIsAuthenticated should return true', () => {
+    const retval = service.userIsAuthenticated();
+    expect(retval).toBeTrue();
+  });
+
+  it('userHasProfileData should return true', () => {
+    const retval = service.userHasProfileData();
+    expect(retval).toBeTrue();
   });
 });
