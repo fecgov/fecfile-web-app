@@ -24,6 +24,7 @@ const routes: Routes = [
     pathMatch: 'full',
     data: {
       showHeader: false,
+      showCommitteeBanner: false,
       securityNoticeBackground: true,
     },
   },
