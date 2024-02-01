@@ -1,13 +1,16 @@
 import { plainToClass } from 'class-transformer';
+import { LabelUtils } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { RoleLabels } from './role.model';
-import { LabelUtils } from '../utils/label.utils';
 
 /**
  * The UserLoginData type captures the fields returned from the server
  * after a successful login.
  */
 export type UserLoginData = {
+  first_name: string;
+  last_name: string;
+  email: string;
   login_dot_gov?: boolean;
 };
 
