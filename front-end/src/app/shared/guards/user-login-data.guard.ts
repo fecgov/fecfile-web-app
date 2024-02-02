@@ -4,6 +4,7 @@ import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update
 import { Observable } from 'rxjs';
 import { LoginService } from '../services/login.service';
 import { SecurityNoticeComponent } from 'app/login/security-notice/security-notice.component';
+import { LoginComponent } from 'app/login/login/login.component';
 
 @Injectable({
   providedIn: 'root',
@@ -13,21 +14,25 @@ export class UserLoginDataGuard {
   canActivateChild(
     childRoute: ActivatedRouteSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (
-      !this.loginService.userHasProfileData() &&
-      childRoute.component?.name &&
-      childRoute.component.name !== UpdateCurrentUserComponent.name
-    ) {
-      this.router.navigate(['/committee/users/current']);
-      return false;
-    }
-    if (
-      !this.loginService.userHasRecentSecurityConsentDate() &&
-      childRoute.component?.name &&
-      childRoute.component.name !== SecurityNoticeComponent.name
-    ) {
-      this.router.navigate(['/login/security-notice']);
-      return false;
+    // userProfileSetupPages contains a list of urls that are part of the process of logging in
+    // and setting up a user's profile, and they are the pages that should *not* be redirected from
+    const userProfileSetupPages = [UpdateCurrentUserComponent.name, SecurityNoticeComponent.name, LoginComponent.name];
+
+    if (childRoute.component?.name) {
+      if (userProfileSetupPages.includes(childRoute.component.name)) {
+        return true;
+      }
+
+      if (!this.loginService.userHasProfileData()) {
+        this.router.navigate(['/committee/users/current']);
+        console.log('UserProfile');
+        return false;
+      }
+      if (!this.loginService.userHasRecentSecurityConsentDate()) {
+        this.router.navigate(['/login/security-notice']);
+        console.log('UserSecurity');
+        return false;
+      }
     }
     return true;
   }

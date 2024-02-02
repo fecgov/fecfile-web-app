@@ -64,6 +64,7 @@ export class LoginService extends DestroyerComponent {
     this.cookieService.delete(environment.ffapiFirstNameCookieName);
     this.cookieService.delete(environment.ffapiLastNameCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
+    this.cookieService.delete(environment.ffapiSecurityConsentCookieName);
   }
 
   public clearUserLoggedInCookies() {
@@ -92,7 +93,9 @@ export class LoginService extends DestroyerComponent {
     const one_year_ago = new Date();
     one_year_ago.setFullYear(new Date().getFullYear() - 1);
 
-    return security_date === undefined || security_date === '' || new Date(security_date) <= one_year_ago;
+    const valid = security_date !== undefined && security_date !== '' && new Date(security_date) > one_year_ago;
+    console.log(valid);
+    return valid;
   }
 
   public dispatchUserLoggedInFromCookies() {
@@ -102,6 +105,7 @@ export class LoginService extends DestroyerComponent {
         last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
         email: this.cookieService.get(environment.ffapiEmailCookieName),
         login_dot_gov: this.cookieService.get(environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
+        security_consent_date: this.cookieService.get(environment.ffapiSecurityConsentCookieName),
       };
       this.clearUserFecfileApiCookies();
       this.store.dispatch(userLoggedInAction({ payload: userLoginData }));

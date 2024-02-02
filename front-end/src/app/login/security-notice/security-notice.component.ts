@@ -45,7 +45,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       .subscribe((userLoginData: UserLoginData) => {
         this.formSubmitted = false;
         this.userLoginData = userLoginData;
-        console.log(this.userLoginData);
+        console.log('Security Notice Component', this.userLoginData);
       });
   }
 
@@ -57,9 +57,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     }
 
     const updatedUserLoginData: UserLoginData = {
-      first_name: this.userLoginData.first_name,
-      last_name: this.userLoginData.last_name,
-      email: this.userLoginData.email,
+      ...this.userLoginData,
       security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
     };
     this.usersService

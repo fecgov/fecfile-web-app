@@ -16,6 +16,7 @@ export const environment = {
   ffapiFirstNameCookieName: 'ffapi_first_name',
   ffapiLastNameCookieName: 'ffapi_last_name',
   ffapiEmailCookieName: 'ffapi_email',
+  ffapiSecurityConsentCookieName: 'ffapi_security_consent_date',
   sessionIdCookieName: 'sessionid',
 };
 
