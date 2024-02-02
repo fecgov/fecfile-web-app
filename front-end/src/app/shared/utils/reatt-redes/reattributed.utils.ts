@@ -3,9 +3,11 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { cloneDeep } from 'lodash';
 import { MemoText } from '../../models/memo-text.model';
 import { getReportCodeLabel } from '../report-code.utils';
+import { Form3X } from '../../models/form-3x.model';
 
 export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {
+    if (!transaction.report) throw new Error('Transaction missing report');
     const prefix = `[Original purpose description: ${transaction.contribution_purpose_descrip}] `;
     if (transaction.memo_text) {
       transaction.memo_text.text_prefix = prefix;
@@ -21,7 +23,7 @@ export class ReattributedUtils {
       if (transaction.report_id === activeReportId) {
         transaction.contribution_purpose_descrip = 'See reattribution below.';
       } else {
-        transaction.contribution_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel(transaction.report?.reportCode)}.) See attribution below.`;
+        transaction.contribution_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel((transaction.report as Form3X).report_code)}.) See attribution below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     }

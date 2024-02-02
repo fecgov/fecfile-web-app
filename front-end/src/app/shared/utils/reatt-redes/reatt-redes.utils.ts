@@ -126,15 +126,4 @@ export class ReattRedesUtils {
 
     return [reattRedes, to];
   }
-
-  public static overlayTransactionProperties(
-    transaction: SchATransaction | SchBTransaction,
-    activeReportId?: string,
-  ): SchATransaction | SchBTransaction {
-    if (transaction instanceof SchATransaction) {
-      return ReattributedUtils.overlayTransactionProperties(transaction, activeReportId);
-    } else {
-      return RedesignatedUtils.overlayTransactionProperties(transaction, activeReportId);
-    }
-  }
 }

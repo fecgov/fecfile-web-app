@@ -1,8 +1,9 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { testScheduleBTransaction } from '../utils/unit-test.utils';
+import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 
 describe('SchBTransaction', () => {
   it('should create an instance', () => {
@@ -42,7 +43,7 @@ describe('SchBTransaction', () => {
 
   describe('redesignation from json', () => {
     it('should create reattribution_redesignation from json', () => {
-      const baseOverlaySpy = spyOn(ReattRedesUtils, 'overlayTransactionProperties').and.callThrough();
+      const baseOverlaySpy = spyOn(RedesignatedUtils, 'overlayTransactionProperties').and.callThrough();
 
       const json = {
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
@@ -61,7 +62,7 @@ describe('SchBTransaction', () => {
     });
 
     it('should create REDESIGNATED from json', () => {
-      const overlaySpy = spyOn(ReattRedesUtils, 'overlayTransactionProperties').and.callThrough();
+      const overlaySpy = spyOn(RedesignatedUtils, 'overlayTransactionProperties').and.callThrough();
 
       const json = {
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,

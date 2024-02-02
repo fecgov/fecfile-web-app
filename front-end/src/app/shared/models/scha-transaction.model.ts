@@ -3,9 +3,10 @@ import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
 import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 
 export class SchATransaction extends Transaction {
   entity_type: string | undefined;
@@ -69,7 +70,7 @@ export class SchATransaction extends Transaction {
     }
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REATTRIBUTED: {
-        transaction = ReattRedesUtils.overlayTransactionProperties(transaction) as SchATransaction;
+        transaction = ReattributedUtils.overlayTransactionProperties(transaction) as SchATransaction;
         break;
       }
       case ReattRedesTypes.REATTRIBUTION_TO: {

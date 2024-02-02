@@ -16,7 +16,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getTestTransactionByType, testMockStore } from '../../utils/unit-test.utils';
+import { getTestTransactionByType, testActiveReport, testMockStore } from '../../utils/unit-test.utils';
 import { FecDatePipe } from '../../pipes/fec-date.pipe';
 import { RedesignationToUtils } from '../../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-from.utils';
@@ -58,7 +58,8 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   beforeEach(() => {
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    testTransaction.report_id = '123';
+    testTransaction.report = testActiveReport;
+    testTransaction.report_id = '999';
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
@@ -76,6 +77,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
     component.transaction = testTransaction;
     component.childTransaction = testTransaction;
     let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    reattRedes.report = testActiveReport;
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
     component.transaction.reatt_redes = reattRedes;
     fixture.detectChanges();
