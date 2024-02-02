@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { updateUserLoginDataAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
@@ -23,7 +24,8 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
     private store: Store,
     private fb: FormBuilder,
     private router: Router,
-    private usersService: UsersService) {
+    private usersService: UsersService,
+    private loginService: LoginService) {
     super();
   }
 
@@ -34,7 +36,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
         this.form.setControl('last_name', new FormControl(
           userLoginData.last_name, Validators.required));
         this.form.setControl('first_name', new FormControl(
-          userLoginData.last_name, Validators.required));
+          userLoginData.first_name, Validators.required));
         this.form.setControl('email', new FormControl(
           userLoginData.email, Validators.required));
         this.formSubmitted = false;
@@ -49,21 +51,21 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
     }
 
     const updatedUserLoginData: UserLoginData = {
-      first_name: this.form.get('first_name')?.value(),
-      last_name: this.form.get('last_name')?.value(),
-      email: this.form.get('email')?.value()
+      first_name: this.form.get('first_name')?.value,
+      last_name: this.form.get('last_name')?.value,
+      email: this.form.get('email')?.value
     }
     this.usersService.updateCurrentUser(updatedUserLoginData).pipe(
-      map(() => {
+      map((response) => {
         this.store.dispatch(updateUserLoginDataAction(
-          { payload: updatedUserLoginData }));
+          { payload: response }));
         this.router.navigate(['dashboard']);
       })
-    );
+    ).subscribe();
   }
 
   cancel() {
-    this.router.navigate(['/']);
+    this.loginService.logOut();
   }
 
 }

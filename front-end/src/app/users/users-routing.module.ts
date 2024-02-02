@@ -15,6 +15,9 @@ const routes: Routes = [
     component: UpdateCurrentUserComponent,
     title: 'Update User Profile',
     pathMatch: 'full',
+    data: {
+      showCommitteeBanner: false,
+    },
   },
   { path: '**', redirectTo: '' },
 ];

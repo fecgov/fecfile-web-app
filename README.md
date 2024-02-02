@@ -32,6 +32,10 @@ From within the front-end directory, run the command:
 	`
 to start a local server for the application. The front-end can then be accessed through your browser at port 4200.
 
+### Running end-to-end (E2E) tests
+
+To run the end-to-end tests locally, `cd` into the front-end directory and run `ng e2e` at the command line.
+
 # Deployment (FEC team only)
 
 ### Create a feature branch

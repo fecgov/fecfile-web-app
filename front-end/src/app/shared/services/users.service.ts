@@ -36,13 +36,9 @@ export class UsersService implements TableListService<CommitteeUser> {
     return of(null);
   }
 
-  public getCurrentUser() {
-    return this.apiService.get<UserLoginData>('/users/current');
-  }
-
-  public updateCurrentUser(userLoginData: UserLoginData): Observable<null> {
+  public updateCurrentUser(userLoginData: UserLoginData): Observable<UserLoginData> {
     return this.apiService
-      .put<null>(`/users/current`, userLoginData)
+      .put<UserLoginData>(`/users/current/`, userLoginData)
       .pipe(map((response) => response));
   }
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Store } from '@ngrx/store';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { selectSidebarState } from '../store/sidebar-state.selectors';
-import { filter, takeUntil } from 'rxjs';
 import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
+import { Store } from '@ngrx/store';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { filter, takeUntil } from 'rxjs';
+import { selectSidebarState } from '../store/sidebar-state.selectors';
 
 @Component({
   selector: 'app-layout',

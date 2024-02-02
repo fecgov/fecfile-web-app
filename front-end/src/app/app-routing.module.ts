@@ -4,13 +4,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
+import { UserLoginDataGuard } from './shared/guards/user-login-data.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivateChild: [UserLoginDataGuard],
     resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
-    //    canActivateChild: [UserLoginDataGuard],
     runGuardsAndResolvers: 'always',
     children: [
       {
