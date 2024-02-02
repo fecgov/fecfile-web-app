@@ -13,7 +13,6 @@ import { of } from 'rxjs';
 describe('LoginComponent', () => {
   let component: SecurityNoticeComponent;
   let fixture: ComponentFixture<SecurityNoticeComponent>;
-  let loginService: LoginService;
   let usersService: UsersService;
 
   beforeEach(async () => {
@@ -36,7 +35,7 @@ describe('LoginComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SecurityNoticeComponent);
-    loginService = TestBed.inject(LoginService);
+    TestBed.inject(LoginService);
     usersService = TestBed.inject(UsersService);
     component = fixture.componentInstance;
     fixture.detectChanges();
