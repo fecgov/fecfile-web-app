@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './login/login/login.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
+import { UserLoginDataGuard } from './shared/guards/user-login-data.guard';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 
@@ -18,7 +19,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-//    canActivateChild: [UserLoginDataGuard],
+    canActivateChild: [UserLoginDataGuard],
     resolve: {sidebar: SidebarStateResolver, singleClick: SingleClickResolver},
     runGuardsAndResolvers: 'always',
     children: [

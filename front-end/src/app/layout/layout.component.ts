@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { NavigationEnd, Router } from '@angular/router';
 import { Store } from "@ngrx/store";
-import { ActivatedRoute } from "@angular/router";
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { filter, takeUntil } from "rxjs";
 import { selectSidebarState } from "../store/sidebar-state.selectors";
-import { takeUntil } from "rxjs";
 
 @Component({
   selector: 'app-layout',
@@ -13,9 +13,19 @@ import { takeUntil } from "rxjs";
 })
 export class LayoutComponent extends DestroyerComponent implements OnInit {
   showSidebar = false;
+  showCommitteeBanner = true;
+  hideCommitteeBannerUrlList = [
+    '/committee/users/current'
+  ];
 
-  constructor(private store: Store, private activatedRoute: ActivatedRoute) {
+  constructor(private store: Store, private router: Router) {
     super();
+    this.router.events.pipe(takeUntil(this.destroy$),
+      filter((event): event is NavigationEnd =>
+        event instanceof NavigationEnd)).subscribe(navEndEvent => {
+          this.showCommitteeBanner =
+            !this.hideCommitteeBannerUrlList.includes(navEndEvent.url);
+        });
   }
 
   ngOnInit(): void {
@@ -27,5 +37,4 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
         this.showSidebar = !!state;
       });
   }
-
 }

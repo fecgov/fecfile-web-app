@@ -39,7 +39,7 @@
         <app-header></app-header>
       </div>
       <div class="col-12 main-content">
-        <div class="grid">
+        <div *ngIf="showCommitteeBanner" class="grid">
           <div class="col-12">
             <app-committee-banner></app-committee-banner>
           </div>

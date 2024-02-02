@@ -36,6 +36,7 @@ describe('LoginService', () => {
 
   it('#signIn should authenticate in the back end', () => {
     service.logIn('email@fec.gov', 'C00000000', 'test').subscribe(() => {
+      expect(true).toBeTrue();
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/user/login/authenticate`);

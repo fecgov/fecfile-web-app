@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { updateUserLoginDataAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
@@ -23,7 +24,8 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
     private store: Store,
     private fb: FormBuilder,
     private router: Router,
-    private usersService: UsersService) {
+    private usersService: UsersService,
+    private loginService: LoginService) {
     super();
   }
 
@@ -63,7 +65,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
   }
 
   cancel() {
-    this.router.navigate(['/']);
+    this.loginService.logOut();
   }
 
 }
