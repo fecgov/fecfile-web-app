@@ -51,7 +51,7 @@ describe('Reattributed Utils', () => {
       expect(overlay.report).toBeTruthy();
       if (!overlay.report) throw new Error('');
       expect(overlay.contribution_purpose_descrip).toBe(
-        `(Originally disclosed on ${overlay.report.reportLabel}.) See attribution below.`,
+        `(Originally disclosed on APRIL 15 QUARTERLY REPORT (Q1).) See attribution below.`,
       );
     });
   });

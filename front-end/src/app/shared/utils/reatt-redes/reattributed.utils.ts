@@ -2,6 +2,7 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { cloneDeep } from 'lodash';
 import { MemoText } from '../../models/memo-text.model';
+import { getReportCodeLabel } from '../report-code.utils';
 
 export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {
@@ -20,7 +21,7 @@ export class ReattributedUtils {
       if (transaction.report_id === activeReportId) {
         transaction.contribution_purpose_descrip = 'See reattribution below.';
       } else {
-        transaction.contribution_purpose_descrip = `(Originally disclosed on ${transaction.report?.reportLabel}.) See attribution below.`;
+        transaction.contribution_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel(transaction.report?.reportCode)}.) See attribution below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     }
@@ -49,7 +50,7 @@ export class ReattributedUtils {
     reattributed.report = undefined;
     reattributed.memo_code = true;
     reattributed.force_unaggregated = true;
-    
+
     return reattributed;
   }
 }

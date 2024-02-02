@@ -3,6 +3,7 @@ import { RedesignatedUtils } from './redesignated.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
 import _ from 'lodash';
 import { testScheduleBTransaction } from '../unit-test.utils';
+import { F3xReportCodes } from '../report-code.utils';
 
 describe('Redesignated Utils', () => {
   let payload: SchBTransaction;
@@ -19,10 +20,14 @@ describe('Redesignated Utils', () => {
   describe('overlayTransactionProperties', () => {
     let data;
     it('should handle a different report', () => {
-      payload.reattribution_redesignation_tag = undefined;
-      const overlay = RedesignatedUtils.overlayTransactionProperties(payload, 'not-the-same-report-as-orig');
+      if (!payload.reatt_redes || !(payload.reatt_redes instanceof SchBTransaction)) throw new Error('Bad test setup');
+      expect(payload.reatt_redes.report?.reportCode).toBe(F3xReportCodes.Q1);
+      const overlay = RedesignatedUtils.overlayTransactionProperties(
+        payload.reatt_redes,
+        'not-the-same-report-as-orig',
+      );
       expect(overlay.expenditure_purpose_descrip).toBe(
-        '(Originally disclosed on FEBRUARY 20 (M2).) See redesignation below.',
+        '(Originally disclosed on APRIL 15 QUARTERLY REPORT (Q1).) See redesignation below.',
       );
     });
 

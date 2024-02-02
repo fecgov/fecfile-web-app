@@ -2,6 +2,7 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { cloneDeep } from 'lodash';
 import { MemoText } from '../../models/memo-text.model';
+import { getReportCodeLabel } from '../report-code.utils';
 
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {
@@ -10,7 +11,7 @@ export class RedesignatedUtils {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
         transaction.report_id = activeReportId;
-        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${transaction.report?.reportLabel}.) See redesignation below.`;
+        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel(transaction.report?.reportCode)}.) See redesignation below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }

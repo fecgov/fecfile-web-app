@@ -51,62 +51,6 @@ export abstract class Report extends BaseModel {
     return false;
   }
 
-  get reportLabel(): string {
-    if (!this.reportCode) return '';
-    switch (this.reportCode) {
-      case F3xReportCodes.Q1:
-        return 'APRIL 15 (Q1)';
-      case F3xReportCodes.Q2:
-        return 'JULY 15 (Q2)';
-      case F3xReportCodes.Q3:
-        return 'OCTOBER 15 (Q3)';
-      case F3xReportCodes.YE:
-        return 'JANUARY 31 (YE)';
-      case F3xReportCodes.TER:
-        return 'TERMINATION (TER)';
-      case F3xReportCodes.MY:
-        return 'JULY 31 (MY)';
-      case F3xReportCodes.TwelveG:
-        return 'GENERAL (12G)';
-      case F3xReportCodes.TwelveP:
-        return 'PRIMARY (12P)';
-      case F3xReportCodes.TwelveR:
-        return 'RUNOFF (12R)';
-      case F3xReportCodes.TwelveS:
-        return 'SPECIAL (12S)';
-      case F3xReportCodes.TwelveC:
-        return 'CONVENTION (12C)';
-      case F3xReportCodes.ThirtyG:
-        return 'GENERAL (30G)';
-      case F3xReportCodes.ThirtyR:
-        return 'RUNOFF (30R)';
-      case F3xReportCodes.ThirtyS:
-        return 'SPECIAL (30S)';
-      case F3xReportCodes.M2:
-        return 'FEBRUARY 20 (M2)';
-      case F3xReportCodes.M3:
-        return 'MARCH 30 (M3)';
-      case F3xReportCodes.M4:
-        return 'APRIL 20 (M4)';
-      case F3xReportCodes.M5:
-        return 'MAY 20 (M5)';
-      case F3xReportCodes.M6:
-        return 'JUNE 20 (M6)';
-      case F3xReportCodes.M7:
-        return 'JULY 20 (M7)';
-      case F3xReportCodes.M8:
-        return 'AUGUST 20 (M8)';
-      case F3xReportCodes.M9:
-        return 'SEPTEMBER 20 (M9)';
-      case F3xReportCodes.M10:
-        return 'OCTOBER 20 (M10)';
-      case F3xReportCodes.M11:
-        return 'NOVEMBER 20 (M11)';
-      case F3xReportCodes.M12:
-        return 'DECEMBER 20 (M12)';
-    }
-  }
-
   getBlocker(): string | undefined {
     return;
   }
