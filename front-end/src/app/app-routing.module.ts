@@ -15,6 +15,11 @@ const routes: Routes = [
     canActivateChild: [UserLoginDataGuard],
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'login',
+      },
+      {
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
