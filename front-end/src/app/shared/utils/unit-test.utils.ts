@@ -206,6 +206,7 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   donor_committee_fec_id: 'C00000000',
   report: {
     report_type: 'M1',
+    reportLabel: 'FEBRUARY 20 (M2)',
   },
 });
 
@@ -226,12 +227,13 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
   aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
   report: {
     report_type: 'M1',
+    reportLabel: 'FEBRUARY 20 (M2)',
   },
 });
 
 export function getTestTransactionByType(
   transactionType: TransactionTypes,
-  parentTransactionType?: TransactionTypes
+  parentTransactionType?: TransactionTypes,
 ): Transaction {
   const transaction = TransactionTypeUtils.factory(transactionType).getNewTransaction();
   if (parentTransactionType) {

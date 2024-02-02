@@ -93,7 +93,7 @@ describe('ReattRedesUtils', () => {
       toTxn.reatt_redes = reattributed;
       toTxn.children[0] = fromTxn;
 
-      const result = ReattRedesUtils.getPayloads(payload, reattributed);
+      const result = ReattRedesUtils.getPayloads(payload, false);
 
       expect(result[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
       expect(result[1].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTION_TO);

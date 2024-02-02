@@ -1,19 +1,17 @@
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { RedesignatedUtils } from './redesignated.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
-import _ from "lodash";
-import { testScheduleBTransaction } from "../unit-test.utils";
+import _ from 'lodash';
+import { testScheduleBTransaction } from '../unit-test.utils';
 
 describe('Redesignated Utils', () => {
   let payload: SchBTransaction;
-  let originatingTransaction: SchBTransaction;
+
   beforeEach(() => {
     payload = SchBTransaction.fromJSON({
       ...testScheduleBTransaction,
     });
-    originatingTransaction = SchBTransaction.fromJSON({
-      ...testScheduleBTransaction,
-    });
+    payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
     payload.reatt_redes = SchBTransaction.fromJSON({
       ...testScheduleBTransaction,
     });
@@ -23,8 +21,9 @@ describe('Redesignated Utils', () => {
     it('should handle a different report', () => {
       payload.reattribution_redesignation_tag = undefined;
       const overlay = RedesignatedUtils.overlayTransactionProperties(payload, 'not-the-same-report-as-orig');
-      expect(overlay.report_id).toBe('not-the-same-report-as-orig');
-      expect(overlay.expenditure_purpose_descrip).toBe('(Originally disclosed on M1.) See redesignation below.');
+      expect(overlay.expenditure_purpose_descrip).toBe(
+        '(Originally disclosed on FEBRUARY 20 (M2).) See redesignation below.',
+      );
     });
 
     it('should filter out "expenditure_purpose_descrip" from the transaction fields to validate', () => {
@@ -73,15 +72,18 @@ describe('Redesignated Utils', () => {
 
   describe('getPayload', () => {
     it('should throw error when originating missing transaction type', () => {
-      originatingTransaction.transaction_type_identifier = undefined;
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.transaction_type_identifier = undefined;
       expect(function () {
-        RedesignatedUtils.getPayload(payload, originatingTransaction);
+        RedesignatedUtils.getPayload(payload);
       }).toThrow(Error('Fecfile online: originating redesignation transaction type not found.'));
     });
 
     it('should clone to make reattributed', () => {
       const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
-      const redesignated = RedesignatedUtils.getPayload(payload, originatingTransaction);
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(payload.reatt_redes as SchBTransaction);
+      const redesignated = RedesignatedUtils.getPayload(payload);
       expect(cloneSpy).toHaveBeenCalledWith(payload.reatt_redes);
       expect(redesignated.report_id).toEqual(payload.report_id);
       expect(redesignated.report).toBeFalsy();

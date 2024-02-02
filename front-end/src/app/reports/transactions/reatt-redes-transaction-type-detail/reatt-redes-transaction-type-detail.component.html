@@ -1,6 +1,6 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
-<h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
+<h4 *ngIf="!isEditable" class="read-only-tag subtitle">READ ONLY</h4>
 <p class="group-description">{{ transactionType?.description }}</p>
 <p-accordion [activeIndex]="accordionActiveIndex">
   <p-accordionTab>
@@ -15,18 +15,18 @@
         {{ transactionType?.formTitle }}
       </h2>
       <h3>{{ transactionType?.contactTitle }}</h3>
-      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
         <app-transaction-input
-          [isEditable]="isEditable"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [transaction]="transaction"
-          [contactTypeOptions]="contactTypeOptions"
-          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
+          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
           (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
+          [contactTypeOptions]="contactTypeOptions"
+          [formSubmitted]="formSubmitted"
+          [form]="form"
+          [isEditable]="isEditable"
+          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+          [transaction]="transaction"
         >
         </app-transaction-input>
       </form>
@@ -46,20 +46,20 @@
         <em [innerHtml]="childTransactionType?.description"></em>
       </p>
       <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }" id="childForm">
         <app-transaction-input
-          [isEditable]="isEditable"
-          [form]="childForm"
-          [formSubmitted]="formSubmitted"
-          [transaction]="childTransaction"
-          [contactTypeOptions]="childContactTypeOptions"
-          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
-          [contributionAmountReadOnly]="true"
-          candidateInfoPosition="high"
-          (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
+          (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
           (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
           (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
+          [contactTypeOptions]="childContactTypeOptions"
+          [contributionAmountReadOnly]="true"
+          [formSubmitted]="formSubmitted"
+          [form]="childForm"
+          [isEditable]="isEditable"
+          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
+          [transaction]="childTransaction"
+          candidateInfoPosition="high"
         >
         </app-transaction-input>
       </form>
@@ -74,22 +74,23 @@
       </p>
     </ng-template>
     <div class="p-fluid">
-      <h2 *ngIf="originating.transactionType.showParentTransactionTitle">
-        {{ originating.transaction.parent_transaction?.transactionType?.title }}
+      <h2 *ngIf="transaction?.reatt_redes?.transactionType?.showParentTransactionTitle">
+        {{ transaction?.reatt_redes?.parent_transaction?.transactionType?.title }}
       </h2>
-      <h2 [ngClass]="{ 'dark-gray-text': originating.transactionType.showParentTransactionTitle }">
-        {{ originating.transactionType.title }}
+      <h2 [ngClass]="{ 'dark-gray-text': transaction?.reatt_redes?.transactionType?.showParentTransactionTitle }">
+        {{ transaction?.reatt_redes?.transactionType?.title }}
       </h2>
-      <div *ngIf="originating.transactionType.subTitle">{{ originating.transactionType.subTitle }}</div>
-      <h3>{{ originating.transactionType.contactTitle || 'Contact' }}</h3>
-      <form id="pull-forward-form" [formGroup]="originating.form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <div
+        *ngIf="transaction?.reatt_redes?.transactionType?.subTitle">{{ transaction?.reatt_redes?.transactionType?.subTitle }}</div>
+      <h3>{{ transaction?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
+      <form [formGroup]="reattributedData.form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="pull-forward-form">
         <app-transaction-input
-          [isEditable]="false"
-          [form]="originating.form"
+          [contactTypeOptions]="reattributedData.contactTypeOptions"
           [formSubmitted]="formSubmitted"
-          [transaction]="originating.transaction"
-          [contactTypeOptions]="originating.contactTypeOptions"
-          [memoCodeCheckboxLabel$]="originating.memoCodeCheckboxLabel$"
+          [form]="reattributedData.form"
+          [isEditable]="false"
+          [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
+          [transaction]="transaction?.reatt_redes"
         >
         </app-transaction-input>
       </form>

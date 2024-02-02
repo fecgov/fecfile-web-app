@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -52,18 +52,9 @@ export class SchBTransaction extends Transaction {
   reattribution_redesignation_tag: string | undefined;
   reatt_redes_total?: number; // Amount of total money that has been redesignated for a transaction.
 
-  override getFieldsNotToValidate(): string[] {
-    return [
-      'back_reference_tran_id_number',
-      'back_reference_sched_name',
-      //'beneficiary_committee_name',
-      ...super.getFieldsNotToValidate(),
-    ];
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchBTransaction {
-    let transaction = plainToClass(SchBTransaction, json);
+    let transaction = plainToInstance(SchBTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
@@ -96,6 +87,15 @@ export class SchBTransaction extends Transaction {
     }
 
     return transaction;
+  }
+
+  override getFieldsNotToValidate(): string[] {
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      //'beneficiary_committee_name',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
 }
 

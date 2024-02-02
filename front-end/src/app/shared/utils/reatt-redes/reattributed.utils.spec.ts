@@ -6,29 +6,32 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 
 describe('Reattributed Utils', () => {
   let payload: SchATransaction;
-  let originatingTransaction: SchATransaction;
   beforeEach(() => {
     payload = SchATransaction.fromJSON({
       ...testScheduleATransaction,
     });
-    originatingTransaction = SchATransaction.fromJSON({
-      ...testScheduleATransaction,
-    });
+    payload.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+
     payload.reatt_redes = SchATransaction.fromJSON({
       ...testScheduleATransaction,
     });
   });
   describe('getPayload', () => {
     it('should throw error when originating missing transaction type', () => {
-      originatingTransaction.transaction_type_identifier = undefined;
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.transaction_type_identifier = undefined;
       expect(function () {
-        ReattributedUtils.getPayload(payload, originatingTransaction);
+        ReattributedUtils.getPayload(payload);
       }).toThrow(Error('Fecfile online: originating reattribution transaction type not found.'));
     });
 
     it('should clone to make reattributed', () => {
       const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
-      const reattributed = ReattributedUtils.getPayload(payload, originatingTransaction);
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes = ReattributedUtils.overlayTransactionProperties(payload.reatt_redes as SchATransaction);
+      if (!payload.reatt_redes || !(payload.reatt_redes instanceof SchATransaction)) throw new Error('Bad test setup');
+      expect(payload.reatt_redes.reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
+      const reattributed = ReattributedUtils.getPayload(payload);
       expect(cloneSpy).toHaveBeenCalledWith(payload.reatt_redes);
       expect(reattributed.report_id).toEqual(payload.report_id);
       expect(reattributed.report).toBeFalsy();
@@ -40,10 +43,16 @@ describe('Reattributed Utils', () => {
 
   describe('overlayTransactionProperties', () => {
     it('should handle a different report', () => {
-      payload.reattribution_redesignation_tag = undefined;
-      const overlay = ReattributedUtils.overlayTransactionProperties(payload, 'not-the-same-report-as-orig');
-      expect(overlay.report_id).toBe('not-the-same-report-as-orig');
-      expect(overlay.contribution_purpose_descrip).toBe('(Originally disclosed on M1.) See attribution below.');
+      if (!payload.reatt_redes || !(payload.reatt_redes instanceof SchATransaction)) throw new Error('Bad test setup');
+      const overlay = ReattributedUtils.overlayTransactionProperties(
+        payload.reatt_redes,
+        'not-the-same-report-as-orig',
+      );
+      expect(overlay.report).toBeTruthy();
+      if (!overlay.report) throw new Error('');
+      expect(overlay.contribution_purpose_descrip).toBe(
+        `(Originally disclosed on ${overlay.report.reportLabel}.) See attribution below.`,
+      );
     });
   });
 });

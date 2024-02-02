@@ -5,20 +5,15 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { SelectItem } from 'primeng/api';
 import { NavigationEvent } from '../../models/transaction-navigation-controls.model';
-import { Transaction } from '../../models/transaction.model';
-import { lastValueFrom, Observable } from 'rxjs';
 import { getContactTypeOptions } from '../../utils/transaction-type-properties';
 import { ValidateUtils } from '../../utils/validate.utils';
-import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
+import { TransactionFormUtils } from './transaction-form.utils';
 import { PrimeOptions } from '../../utils/label.utils';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { ContactIdMapType } from './transaction-contact.utils';
-import { TransactionFormUtils } from './transaction-form.utils';
 
-interface Originating {
-  transaction: Transaction;
-  transactionType: TransactionType;
-  templateMap: TransactionTemplateMapType;
+interface AccordionData {
   formProperties: string[];
   contactTypeOptions: PrimeOptions;
   form: FormGroup;
@@ -35,7 +30,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 {
   FormGroup = this.fb.group({});
   pullForward = false;
-  originating: Originating = {} as Originating;
+  reattributedData = {} as AccordionData;
 
   override async ngOnInit(): Promise<void> {
     super.ngOnInit();
@@ -69,10 +64,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   }
 
   override processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
-    const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(
-      payload,
-      this.originating.transaction,
-    );
+    const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload, this.pullForward);
     this.transactionService.multiSaveReattRedes(payloads).subscribe((response) => {
       navigationEvent.transaction = response[0];
       this.navigateTo(navigationEvent);
@@ -102,31 +94,26 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   private async initializePullForward() {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    const reattRedesId =
-      this.activatedRoute.snapshot.queryParams['reattribution'] ??
-      this.activatedRoute.snapshot.queryParams['redesignation'];
-    if (!reattRedesId) return;
-    this.originating.transaction = await lastValueFrom(this.transactionService.get(reattRedesId));
-    this.pullForward = this.originating.transaction.report_id !== reportId;
+    const reatRedes = this.transaction?.reatt_redes;
+    if (!reatRedes) return;
+    this.pullForward = reatRedes.report_id !== reportId;
     if (!this.pullForward) return;
 
-    this.originating.transactionType = this.originating.transaction.transactionType;
-    this.originating.templateMap = this.originating.transactionType.templateMap;
-    this.originating.formProperties = this.originating.transactionType.getFormControlNames();
-    this.originating.contactTypeOptions = getContactTypeOptions(
-      this.originating.transactionType.contactTypeOptions ?? [],
+    this.reattributedData.formProperties = reatRedes.transactionType.getFormControlNames();
+    this.reattributedData.contactTypeOptions = getContactTypeOptions(
+      reatRedes.transactionType.contactTypeOptions ?? [],
     );
 
-    this.originating.form = this.fb.group(ValidateUtils.getFormGroupFields(this.originating.formProperties));
-    this.originating.contactIdMap = {};
-    this.originating.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
-      this.originating.form,
-      this.originating.transactionType,
+    this.reattributedData.form = this.fb.group(ValidateUtils.getFormGroupFields(this.reattributedData.formProperties));
+    this.reattributedData.contactIdMap = {};
+    this.reattributedData.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
+      this.reattributedData.form,
+      reatRedes.transactionType,
     );
 
-    this.originating.form.patchValue({ ...this.originating.transaction });
-    this.originating.form.get(this.originating.templateMap['memo_code'])?.setValue(true);
-    TransactionFormUtils.patchMemoText(this.originating.transaction, this.originating.form);
-    this.originating.form.disable();
+    this.reattributedData.form.patchValue({ ...reatRedes });
+    this.reattributedData.form.get(reatRedes.transactionType.templateMap['memo_code'])?.setValue(true);
+    TransactionFormUtils.patchMemoText(reatRedes, this.reattributedData.form);
+    this.reattributedData.form.disable();
   }
 }

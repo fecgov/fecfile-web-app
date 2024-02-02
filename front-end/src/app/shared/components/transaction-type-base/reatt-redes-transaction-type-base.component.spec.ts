@@ -21,6 +21,8 @@ import { FecDatePipe } from '../../pipes/fec-date.pipe';
 import { RedesignationToUtils } from '../../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-from.utils';
 import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
+import { ReattributedUtils } from '../../utils/reatt-redes/reattributed.utils';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -44,6 +46,12 @@ describe('ReattTransactionTypeBaseComponent', () => {
         FecDatePipe,
         ReportService,
         TransactionService,
+        {
+          ActivatedRoute,
+          useValue: {
+            params: of({ reportId: 123 }),
+          },
+        },
       ],
     }).compileComponents();
   });
@@ -67,6 +75,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
     component = fixture.componentInstance;
     component.transaction = testTransaction;
     component.childTransaction = testTransaction;
+    let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
+    component.transaction.reatt_redes = reattRedes;
     fixture.detectChanges();
   });
 
@@ -74,13 +85,6 @@ describe('ReattTransactionTypeBaseComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('reattribution and redesignation', () => {
-    beforeEach(() => {
-      testTransaction.reatt_redes = {
-        id: '999',
-        report_id: '999',
-        contribution_amount: 100,
-      } as unknown as SchATransaction;
-    });
     it('should update child primary contacts', () => {
       if (!component.transaction) throw Error('Bad test setup');
       const overlaySpy = spyOn(ReattRedesUtils, 'overlayForms').and.callThrough();
@@ -98,7 +102,6 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
     it('should save all transaction', () => {
       if (!component.transaction) throw Error('Bad test setup');
-      component.originating.transaction = component.transaction;
       spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
       const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() => of([testTransaction]));
       const navSpy = spyOn(component, 'navigateTo').and.callFake(() => {

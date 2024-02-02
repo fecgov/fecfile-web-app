@@ -111,22 +111,15 @@ export class ReattRedesUtils {
 
   public static getPayloads(
     payload: SchATransaction | SchBTransaction,
-    originatingTransaction: Transaction,
+    pullForward: boolean,
   ): (SchATransaction | SchBTransaction)[] {
     let reattRedes: SchATransaction | SchBTransaction;
     const to = payload; // The FROM transaction is in the TO children[]
 
-    if (originatingTransaction.report_id !== payload.report_id) {
+    if (pullForward) {
       if (ReattRedesTypes.REATTRIBUTION_TO === payload.reattribution_redesignation_tag)
-        reattRedes = ReattributedUtils.getPayload(
-          payload as SchATransaction,
-          originatingTransaction as SchATransaction,
-        );
-      else
-        reattRedes = RedesignatedUtils.getPayload(
-          payload as SchBTransaction,
-          originatingTransaction as SchBTransaction,
-        );
+        reattRedes = ReattributedUtils.getPayload(payload as SchATransaction);
+      else reattRedes = RedesignatedUtils.getPayload(payload as SchBTransaction);
     } else {
       reattRedes = payload.reatt_redes as SchATransaction | SchBTransaction;
     }
