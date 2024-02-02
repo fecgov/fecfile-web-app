@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    canActivateChild: [UserLoginDataGuard],
+    //canActivateChild: [UserLoginDataGuard],
     resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
