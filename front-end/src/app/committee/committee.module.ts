@@ -17,6 +17,7 @@ import { CommitteeInfoComponent } from './committee-info/committee-info.componen
 import { SelectCommitteeComponent } from './select-committee/select-committee.component';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   declarations: [ManageCommitteeComponent, SelectCommitteeComponent, CommitteeInfoComponent],
@@ -24,6 +25,7 @@ import { DropdownModule } from 'primeng/dropdown';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    CardModule,
     CommitteeRoutingModule,
     DropdownModule,
     DividerModule,

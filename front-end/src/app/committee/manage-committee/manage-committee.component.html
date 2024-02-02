@@ -1,10 +1,14 @@
 <p-toast></p-toast>
-<h1>Manage Users</h1>
-<ng-template pTemplate="right">
-  <button pButton pRipple label="Add User" icon="pi pi-plus" class="p-button"></button>
-</ng-template>
+<p-toolbar styleClass="mb-4">
+  <ng-template pTemplate="left">
+    <h1>Manage Users</h1>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <button pButton pRipple label="Add User" icon="pi pi-plus" class="p-button"></button>
+  </ng-template>
+</p-toolbar>
 <p-divider></p-divider>
-<div class="card">
+<p-card>
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left">
       <h1>Existing Users</h1>
@@ -33,10 +37,6 @@
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
         <h3 class="m-0">Existing Users</h3>
-        <span class="p-input-icon-left">
-          <em class="pi pi-search"></em>
-          <input pInputText type="text" placeholder="Search..." />
-        </span>
       </div>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
@@ -73,6 +73,6 @@
       </tr>
     </ng-template>
   </p-table>
-</div>
+</p-card>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
