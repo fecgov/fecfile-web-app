@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
 import { UserLoginData } from '../models/user.model';
 import { LoginService } from './login.service';
+import { DateUtils } from '../utils/date.utils';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -94,12 +95,14 @@ describe('LoginService', () => {
     const testLastName = 'testLastName';
     const testEmail = 'testEmail';
     const testLoginDotGov = false;
+    const testSecurityConsentDate = DateUtils.convertDateToFecFormat(new Date()) as string;
 
     const expectedUserLoginData: UserLoginData = {
       first_name: testFirstName,
       last_name: testLastName,
       email: testEmail,
-      login_dot_gov: testLoginDotGov
+      login_dot_gov: testLoginDotGov,
+      security_consent_date: testSecurityConsentDate,
     };
     spyOn(cookieService, 'check').and.returnValue(true);
     spyOn(cookieService, 'get').and.callFake((name: string) => {
@@ -115,6 +118,9 @@ describe('LoginService', () => {
       if (name === environment.ffapiLoginDotGovCookieName) {
         return testLoginDotGov.toString();
       }
+      if (name === environment.ffapiSecurityConsentCookieName) {
+        return testSecurityConsentDate;
+      }
       throw Error('fail!');
     });
     spyOn(store, 'dispatch');
@@ -122,5 +128,4 @@ describe('LoginService', () => {
     service.dispatchUserLoggedInFromCookies();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedInAction({ payload: expectedUserLoginData }));
   });
-
 });
