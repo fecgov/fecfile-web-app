@@ -105,6 +105,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     const reattRedesId =
       this.activatedRoute.snapshot.queryParams['reattribution'] ??
       this.activatedRoute.snapshot.queryParams['redesignation'];
+    if (!reattRedesId) return;
     this.originating.transaction = await lastValueFrom(this.transactionService.get(reattRedesId));
     this.pullForward = this.originating.transaction.report_id !== reportId;
     if (!this.pullForward) return;

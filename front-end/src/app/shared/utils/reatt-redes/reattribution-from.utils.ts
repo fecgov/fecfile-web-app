@@ -2,14 +2,34 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
-import { combineLatest, of } from "rxjs";
-import { ContactTypes } from "../../models/contact.model";
+import { combineLatest, of } from 'rxjs';
+import { ContactTypes } from '../../models/contact.model';
 
 export class ReattributionFromUtils {
+  private static readOnlyFields = [
+    'organization_name',
+    'last_name',
+    'first_name',
+    'middle_name',
+    'prefix',
+    'suffix',
+    'employer',
+    'occupation',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    'amount',
+    'purpose_description',
+    'committee_fec_id',
+    'committee_name',
+  ];
+
   public static overlayTransactionProperties(
     transaction: SchATransaction,
     reattributedTransaction?: SchATransaction,
-    activeReportId?: string
+    activeReportId?: string,
   ): SchATransaction {
     if (reattributedTransaction) {
       transaction.reatt_redes_id = reattributedTransaction.id;
@@ -33,7 +53,7 @@ export class ReattributionFromUtils {
       generatePurposeDescription: (transaction: SchATransaction): string => {
         return transaction[
           transaction.transactionType.templateMap.purpose_description as keyof SchATransaction
-          ] as string;
+        ] as string;
       },
     });
 
@@ -41,31 +61,11 @@ export class ReattributionFromUtils {
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
       (field) =>
         field !== transaction.transactionType.templateMap.purpose_description &&
-        field !== transaction.transactionType.templateMap.memo_code
+        field !== transaction.transactionType.templateMap.memo_code,
     );
 
     return transaction;
   }
-
-  private static readOnlyFields = [
-    'organization_name',
-    'last_name',
-    'first_name',
-    'middle_name',
-    'prefix',
-    'suffix',
-    'employer',
-    'occupation',
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
-    'amount',
-    'purpose_description',
-    'committee_fec_id',
-    'committee_name',
-  ];
 
   public static overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
     const purposeDescriptionControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
@@ -92,10 +92,9 @@ export class ReattributionFromUtils {
     });
 
     ReattributionFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
+      fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
     );
 
     return fromForm;
-
   }
 }
