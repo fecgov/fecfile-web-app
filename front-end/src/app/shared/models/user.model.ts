@@ -25,7 +25,6 @@ export class CommitteeUser {
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeUser { // eslint-disable-line @typescript-eslint/no-explicit-any
-    console.log("USER",json)
     return plainToClass(CommitteeUser, json);
   }
 
