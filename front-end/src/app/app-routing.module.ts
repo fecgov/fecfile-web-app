@@ -13,14 +13,15 @@ const routes: Routes = [
     component: LoginComponent,
     pathMatch: 'full',
     canActivate: [LoginGuard],
-    resolve: {sidebar: SidebarStateResolver}
+    resolve: { sidebar: SidebarStateResolver },
   },
   {
     path: '',
     component: LayoutComponent,
-    resolve: {sidebar: SidebarStateResolver, singleClick: SingleClickResolver},
+    resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
+      { path: 'committee', loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule) },
       {
         path: 'dashboard',
         component: DashboardComponent,
@@ -30,18 +31,17 @@ const routes: Routes = [
         path: 'reports',
         loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule),
       },
-      {path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule)},
-      {path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule)},
-      {path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule)},
-      {path: 'help', loadChildren: () => import('./help/help.module').then((m) => m.HelpModule)},
+      { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
+      // {path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule)},
+      { path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule) },
+      { path: 'help', loadChildren: () => import('./help/help.module').then((m) => m.HelpModule) },
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
       },
-      {path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule)},
     ],
   },
-  {path: '**', redirectTo: ''},
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
@@ -55,5 +55,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}
