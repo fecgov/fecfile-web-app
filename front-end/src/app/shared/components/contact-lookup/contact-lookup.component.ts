@@ -41,6 +41,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   contactType = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
+  contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
@@ -57,8 +58,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   ngOnInit(): void {
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
     this.contactTypeFormControl.setValue(this.contactType);
-
-    if (this.contactTypeOptions.length === 1) this.contactTypeFormControl.disable()
+    this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
     if (this.candidateOffice) {
       this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
     }

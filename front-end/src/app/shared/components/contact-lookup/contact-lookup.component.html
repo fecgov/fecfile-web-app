@@ -3,12 +3,16 @@
 </div>
 <div class="grid contact-lookup-container">
   <div class="col-3 pl-0 pr-0">
-    <select id="entity_type_dropdown" class="form-select" aria-label="Contact type selector"
-            [formControl]="contactTypeFormControl">
-      <option *ngFor="let option of contactTypeOptions" [ngValue]="option.value">
-        {{option.label}}
-      </option>
-    </select>
+    <p-dropdown
+      [formControl]="contactTypeFormControl"
+      inputId="entity_type"
+      [options]="contactTypeOptions"
+      [readonly]="contactTypeReadOnly"
+      styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
+      [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : ''"
+      id="entity_type_dropdown"
+    >
+    </p-dropdown>
   </div>
   <div *ngIf="showSearchBoxCallback()" class="col-4 pl-0">
     <p-autoComplete
