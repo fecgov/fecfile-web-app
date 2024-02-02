@@ -10,12 +10,12 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    canActivateChild: [UserLoginDataGuard],
     resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {
         path: 'dashboard',
+        canActivateChild: [UserLoginDataGuard],
         component: DashboardComponent,
         title: 'FECFile Dashboard',
       },
@@ -25,17 +25,39 @@ const routes: Routes = [
       },
       {
         path: 'reports',
+        canActivateChild: [UserLoginDataGuard],
         loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule),
       },
-      { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
-      { path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule) },
-      { path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule) },
-      { path: 'help', loadChildren: () => import('./help/help.module').then((m) => m.HelpModule) },
+      {
+        path: 'contacts',
+        loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule),
+        canActivateChild: [UserLoginDataGuard],
+      },
+      {
+        path: 'committee/users',
+        loadChildren: () => import('./users/users.module').then((m) => m.UsersModule),
+        canActivateChild: [UserLoginDataGuard],
+      },
+      {
+        path: 'tools',
+        loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule),
+        canActivateChild: [UserLoginDataGuard],
+      },
+      {
+        path: 'help',
+        loadChildren: () => import('./help/help.module').then((m) => m.HelpModule),
+        canActivateChild: [UserLoginDataGuard],
+      },
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
+        canActivateChild: [UserLoginDataGuard],
       },
-      { path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule) },
+      {
+        path: 'profile',
+        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
+        canActivateChild: [UserLoginDataGuard],
+      },
     ],
   },
   { path: '**', redirectTo: '' },

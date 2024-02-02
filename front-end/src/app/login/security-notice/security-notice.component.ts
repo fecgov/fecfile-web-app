@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
+import { DateUtils } from 'app/shared/utils/date.utils';
 import { updateUserLoginDataAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -57,15 +57,19 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     }
 
     const updatedUserLoginData: UserLoginData = {
-      ...this.userLoginData,
-      security_consent_date: new FecDatePipe().transform(new Date()),
+      first_name: this.userLoginData.first_name,
+      last_name: this.userLoginData.last_name,
+      email: this.userLoginData.email,
+      security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
     };
-    console.log(updatedUserLoginData);
-    this.usersService.updateCurrentUser(updatedUserLoginData).pipe(
-      map(() => {
-        this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
-        this.router.navigate(['dashboard']);
-      })
-    );
+    this.usersService
+      .updateCurrentUser(updatedUserLoginData)
+      .pipe(
+        map(() => {
+          this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
+          this.router.navigate(['dashboard']);
+        })
+      )
+      .subscribe();
   }
 }

@@ -9,8 +9,7 @@ import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient,
-    private cookieService: CookieService) { }
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -84,5 +83,4 @@ export class ApiService {
     const headers = this.getHeaders();
     return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
   }
-
 }
