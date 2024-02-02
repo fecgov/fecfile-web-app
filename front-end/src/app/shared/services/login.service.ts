@@ -16,7 +16,7 @@ type EndpointAvailability = { endpoint_available: boolean };
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
-  private userLoginData: UserLoginData | undefined;
+  public userLoginData: UserLoginData | undefined;
   constructor(private store: Store, private apiService: ApiService, private cookieService: CookieService) {
     super();
     this.store
@@ -91,11 +91,9 @@ export class LoginService extends DestroyerComponent {
   public userHasRecentSecurityConsentDate() {
     const security_date = this.userLoginData?.security_consent_date;
     const one_year_ago = new Date();
-    one_year_ago.setFullYear(new Date().getFullYear() - 1);
+    one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
 
-    const valid = security_date !== undefined && security_date !== '' && new Date(security_date) > one_year_ago;
-    console.log(valid);
-    return valid;
+    return security_date !== undefined && security_date !== '' && new Date(security_date) > one_year_ago;
   }
 
   public dispatchUserLoggedInFromCookies() {

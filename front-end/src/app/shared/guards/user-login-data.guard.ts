@@ -25,12 +25,10 @@ export class UserLoginDataGuard {
 
       if (!this.loginService.userHasProfileData()) {
         this.router.navigate(['/committee/users/current']);
-        console.log('UserProfile');
         return false;
       }
       if (!this.loginService.userHasRecentSecurityConsentDate()) {
         this.router.navigate(['/login/security-notice']);
-        console.log('UserSecurity');
         return false;
       }
     }

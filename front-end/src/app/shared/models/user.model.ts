@@ -11,7 +11,7 @@ export type UserLoginData = {
   first_name: string;
   last_name: string;
   email: string;
-  security_consent_date?: string;
+  security_consent_date: string | undefined;
   login_dot_gov?: boolean;
 };
 

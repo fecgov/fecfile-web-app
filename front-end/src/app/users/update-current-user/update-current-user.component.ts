@@ -25,20 +25,19 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
     private fb: FormBuilder,
     private router: Router,
     private usersService: UsersService,
-    private loginService: LoginService) {
+    private loginService: LoginService
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.store.select(selectUserLoginData)
+    this.store
+      .select(selectUserLoginData)
       .pipe(takeUntil(this.destroy$))
       .subscribe((userLoginData: UserLoginData) => {
-        this.form.setControl('last_name', new FormControl(
-          userLoginData.last_name, Validators.required));
-        this.form.setControl('first_name', new FormControl(
-          userLoginData.first_name, Validators.required));
-        this.form.setControl('email', new FormControl(
-          userLoginData.email, Validators.required));
+        this.form.setControl('last_name', new FormControl(userLoginData.last_name, Validators.required));
+        this.form.setControl('first_name', new FormControl(userLoginData.first_name, Validators.required));
+        this.form.setControl('email', new FormControl(userLoginData.email, Validators.required));
         this.formSubmitted = false;
       });
   }
@@ -50,22 +49,23 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
       return;
     }
 
-    const updatedUserLoginData: UserLoginData = {
+    const updatedUserLoginData = {
       first_name: this.form.get('first_name')?.value,
       last_name: this.form.get('last_name')?.value,
-      email: this.form.get('email')?.value
-    }
-    this.usersService.updateCurrentUser(updatedUserLoginData).pipe(
-      map((response) => {
-        this.store.dispatch(updateUserLoginDataAction(
-          { payload: response }));
-        this.router.navigate(['dashboard']);
-      })
-    ).subscribe();
+      email: this.form.get('email')?.value,
+    } as UserLoginData;
+    this.usersService
+      .updateCurrentUser(updatedUserLoginData)
+      .pipe(
+        map((response) => {
+          this.store.dispatch(updateUserLoginDataAction({ payload: response }));
+          this.router.navigate(['dashboard']);
+        })
+      )
+      .subscribe();
   }
 
   cancel() {
     this.loginService.logOut();
   }
-
 }
