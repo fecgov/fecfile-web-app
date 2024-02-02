@@ -149,12 +149,10 @@ describe('ReattRedesUtils', () => {
     const transaction = SchATransaction.fromJSON({
       ...testScheduleATransaction,
     });
+    const reportId = '3cd741da-aa57-4cc3-8530-667e8b7bad78';
     expect(transaction.reattribution_redesignation_tag).toBeFalsy();
-    expect(transaction.report_id).toBe('3cd741da-aa57-4cc3-8530-667e8b7bad78');
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction,
-      '3cd741da-aa57-4cc3-8530-667e8b7bad78',
-    ) as SchATransaction;
+    expect(transaction.report_id).toBe(reportId);
+    const overlay = ReattRedesUtils.overlayTransactionProperties(transaction, reportId) as SchATransaction;
 
     expect(overlay.fields_to_validate?.includes('contribution_purpose_descrip')).toBeFalse();
     expect(overlay.contribution_purpose_descrip).toBe('See reattribution below.');
