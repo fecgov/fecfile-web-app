@@ -102,32 +102,32 @@ describe('LoginService', () => {
 
     it('current date is valid', () => {
       const testDate = DateUtils.convertDateToFecFormat(new Date()) as string;
-      ((service.userLoginData as UserLoginData).security_consent_date = testDate),
-        expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
+      (service.userLoginData as UserLoginData).security_consent_date = testDate;
+      expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
     });
 
     it('recent date is valid', () => {
       const recentDate = new Date();
       recentDate.setMonth(recentDate.getMonth() - 6);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      ((service.userLoginData as UserLoginData).security_consent_date = testDate),
-        expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
+      (service.userLoginData as UserLoginData).security_consent_date = testDate;
+      expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
     });
 
     it('364 days ago is valid', () => {
       const recentDate = new Date();
       recentDate.setDate(recentDate.getDate() - 364);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      ((service.userLoginData as UserLoginData).security_consent_date = testDate),
-        expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
+      (service.userLoginData as UserLoginData).security_consent_date = testDate;
+      expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
     });
 
     it('one year ago is invalid', () => {
       const recentDate = new Date();
       recentDate.setFullYear(recentDate.getFullYear() - 1);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      ((service.userLoginData as UserLoginData).security_consent_date = testDate),
-        expect(service.userHasRecentSecurityConsentDate()).toBeFalse();
+      (service.userLoginData as UserLoginData).security_consent_date = testDate;
+      expect(service.userHasRecentSecurityConsentDate()).toBeFalse();
     });
   });
 
