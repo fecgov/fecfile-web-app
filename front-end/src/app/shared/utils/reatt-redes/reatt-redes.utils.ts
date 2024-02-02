@@ -4,8 +4,11 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
+import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
+import { ReattributedUtils } from './reattributed.utils';
+import { RedesignatedUtils } from './redesignated.utils';
 import { MemoText } from 'app/shared/models/memo-text.model';
 
 export enum ReattRedesTypes {
@@ -18,10 +21,20 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
+  public static readonly selectReportDialogSubject = new Subject<[Transaction, ReattRedesTypes]>();
+
   public static isReattRedes(transaction: Transaction | undefined, types: ReattRedesTypes[] = []): boolean {
     if (!transaction || !('reattribution_redesignation_tag' in transaction)) return false;
     if (types.length === 0) return !!transaction.reattribution_redesignation_tag;
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
+  }
+
+  public static isReattribute(type: ReattRedesTypes | undefined): boolean {
+    return (
+      type === ReattRedesTypes.REATTRIBUTED ||
+      type === ReattRedesTypes.REATTRIBUTION_TO ||
+      type === ReattRedesTypes.REATTRIBUTION_FROM
+    );
   }
 
   public static isAtAmountLimit(transaction: Transaction | undefined): boolean {
@@ -44,7 +57,7 @@ export class ReattRedesUtils {
     toForm: FormGroup,
     toTransaction: SchATransaction | SchBTransaction,
     fromForm: FormGroup,
-    fromTransaction: SchATransaction | SchBTransaction
+    fromTransaction: SchATransaction | SchBTransaction,
   ): void {
     if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
       ReattributionToUtils.overlayForm(toForm, toTransaction as SchATransaction);
@@ -97,15 +110,34 @@ export class ReattRedesUtils {
     };
   }
 
-  public static getPayloads(payload: Transaction): (SchATransaction | SchBTransaction)[] {
-    const reattributed = payload.reatt_redes as SchATransaction | SchBTransaction;
-    const to = payload as SchATransaction | SchBTransaction; // The FROM transaction is in the TO children[]
-    return [reattributed, to];
+  public static getPayloads(
+    payload: SchATransaction | SchBTransaction,
+    originatingTransaction: Transaction,
+  ): (SchATransaction | SchBTransaction)[] {
+    let reattRedes: SchATransaction | SchBTransaction;
+    const to = payload; // The FROM transaction is in the TO children[]
+
+    if (originatingTransaction.report_id !== payload.report_id) {
+      if (ReattRedesTypes.REATTRIBUTION_TO === payload.reattribution_redesignation_tag)
+        reattRedes = ReattributedUtils.getPayload(
+          payload as SchATransaction,
+          originatingTransaction as SchATransaction,
+        );
+      else
+        reattRedes = RedesignatedUtils.getPayload(
+          payload as SchBTransaction,
+          originatingTransaction as SchBTransaction,
+        );
+    } else {
+      reattRedes = payload.reatt_redes as SchATransaction | SchBTransaction;
+    }
+
+    return [reattRedes, to];
   }
 
   public static overlayTransactionProperties(
     transaction: SchATransaction | SchBTransaction,
-    activeReportId?: string
+    activeReportId?: string,
   ): SchATransaction | SchBTransaction {
     if (!transaction.reattribution_redesignation_tag) {
       const purpose_descrip =
@@ -130,17 +162,14 @@ export class ReattRedesUtils {
       if (transaction.report_id === activeReportId) {
         if (transaction instanceof SchATransaction) {
           transaction.contribution_purpose_descrip = 'See reattribution below.';
-        } else if (transaction instanceof SchBTransaction) {
+        } else {
           transaction.expenditure_purpose_descrip = 'See redesignation below.';
         }
-      } else {
-        alert('Not implemented yet. Only implement transactions in the current report.');
-        return transaction;
       }
 
       if (transaction instanceof SchATransaction) {
         transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
-      } else if (transaction instanceof SchBTransaction) {
+      } else {
         transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
       }
     }

@@ -211,6 +211,7 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
   form_type: 'SB21b',
+  report_id: '3cd741da-aa57-4cc3-8530-667e8b7bad78',
   transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.ORGANIZATION,
@@ -223,6 +224,9 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
   contribution_amount: 1,
   contribution_aggregate: 2,
   aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+  report: {
+    report_type: 'M1',
+  },
 });
 
 export function getTestTransactionByType(

@@ -1,8 +1,8 @@
-import { currentYear, PageUtils } from "../pages/pageUtils";
+import { currentYear, PageUtils } from '../pages/pageUtils';
 
 export class ScheduleFormData {
   amount: number;
-  category_code: string;
+  category_code?: string;
   date_received: Date | undefined;
   electionType: string | undefined; // electionType and electionYear are composite form data for election_code
   electionYear: number | undefined;
@@ -36,9 +36,18 @@ export const defaultScheduleFormData: ScheduleFormData = {
   memo_text: PageUtils.randomString(20),
 };
 
+export class ContributionFormData extends ScheduleFormData {
+  candidate?: string;
+
+  constructor(formData: ContributionFormData) {
+    super(formData);
+    this.candidate = formData.candidate;
+  }
+}
+
 export class DisbursementFormData extends ScheduleFormData {
-  date2: Date | undefined;
-  supportOpposeCode: string;
+  date2?: Date;
+  supportOpposeCode?: string;
   signatoryLastName: string;
   signatoryFirstName: string;
   signatoryDateSigned: Date | undefined;
@@ -95,39 +104,36 @@ export class LoanFormData extends ScheduleFormData {
   }
 }
 
-export class DebtFormData extends LoanFormData {
-
-}
+export class DebtFormData extends LoanFormData {}
 
 export const defaultDebtFormData: DebtFormData = {
   amount: 60000,
-  authorized_first_name: "",
-  authorized_last_name: "",
-  authorized_title: "",
-  category_code: "",
-  collateral: "",
+  authorized_first_name: '',
+  authorized_last_name: '',
+  authorized_title: '',
+  category_code: '',
+  collateral: '',
   date_incurred: undefined,
   date_received: undefined,
   date_signed: undefined,
   due_date: undefined,
-  due_date_setting: "",
+  due_date_setting: '',
   electionType: undefined,
   electionYear: undefined,
-  election_other_description: "",
-  first_name: "",
-  future_income: "",
-  interest_rate_setting: "",
+  election_other_description: '',
+  first_name: '',
+  future_income: '',
+  interest_rate_setting: '',
   interest_rate: undefined,
-  last_name: "",
-  line_of_credit: "",
-  loan_restructured: "",
+  last_name: '',
+  line_of_credit: '',
+  loan_restructured: '',
   memo_code: false,
-  memo_text: "",
-  others_liable: "",
+  memo_text: '',
+  others_liable: '',
   purpose_description: PageUtils.randomString(20),
   secured: undefined,
-
-}
+};
 
 export const defaultLoanFormData: LoanFormData = {
   amount: 60000,
@@ -135,28 +141,28 @@ export const defaultLoanFormData: LoanFormData = {
   authorized_last_name: PageUtils.randomString(6),
   authorized_title: PageUtils.randomString(6),
   category_code: '',
-  collateral: "NO",
+  collateral: 'NO',
   date_incurred: new Date(currentYear, 4 - 1, 27),
   date_received: new Date(currentYear, 4 - 1, 27),
   date_signed: new Date(currentYear, 4 - 1, 27),
   due_date: new Date(currentYear, 4 - 1, 27),
-  due_date_setting: "Enter a specific date",
+  due_date_setting: 'Enter a specific date',
   electionType: undefined,
   electionYear: undefined,
   election_other_description: '',
   first_name: PageUtils.randomString(6),
-  future_income: "NO",
-  interest_rate_setting: "Enter an exact percentage",
+  future_income: 'NO',
+  interest_rate_setting: 'Enter an exact percentage',
   interest_rate: 2.3,
   last_name: PageUtils.randomString(6),
-  line_of_credit: "NO",
-  loan_restructured: "NO",
+  line_of_credit: 'NO',
+  loan_restructured: 'NO',
   memo_code: false,
   memo_text: PageUtils.randomString(20),
-  others_liable: "NO",
+  others_liable: 'NO',
   purpose_description: PageUtils.randomString(20),
-  secured: "YES"
-}
+  secured: 'YES',
+};
 
 export const formTransactionDataForSchedule: ScheduleFormData = {
   ...defaultLoanFormData,
@@ -167,6 +173,5 @@ export const formTransactionDataForSchedule: ScheduleFormData = {
     due_date_setting: undefined,
     interest_rate_setting: undefined,
     secured: undefined,
-
   },
 };

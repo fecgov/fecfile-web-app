@@ -23,6 +23,7 @@ import { DestroyerComponent } from '../app-destroyer.component';
   styleUrls: ['./contact-lookup.component.scss'],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+  @Input() contactProperty = "contact_1"
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;

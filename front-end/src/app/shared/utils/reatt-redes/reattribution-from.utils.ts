@@ -28,6 +28,7 @@ export class ReattributionFromUtils {
       inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
       hideContactLookup: true,
       contactTypeOptions: [(transaction.reatt_redes as SchATransaction).entity_type],
+
       // noop generatePurposeDescription to inform dynamic input label
       generatePurposeDescription: (transaction: SchATransaction): string => {
         return transaction[

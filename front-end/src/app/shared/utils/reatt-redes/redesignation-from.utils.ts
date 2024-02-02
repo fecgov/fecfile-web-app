@@ -8,7 +8,7 @@ export class RedesignationFromUtils {
   public static overlayTransactionProperties(
     transaction: SchBTransaction,
     redesignatedTransaction?: SchBTransaction,
-    activeReportId?: string
+    activeReportId?: string,
   ): SchBTransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
@@ -37,13 +37,14 @@ export class RedesignationFromUtils {
         if (!transaction.reatt_redes) return '';
         const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
         if (!expenditureDate) throw new Error('No Expenditure Date!');
+
         return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
       },
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code'
+      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code',
     );
     return transaction;
   }
@@ -96,8 +97,9 @@ export class RedesignationFromUtils {
     });
 
     RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable()
+      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable(),
     );
+
     return fromForm;
   }
 }

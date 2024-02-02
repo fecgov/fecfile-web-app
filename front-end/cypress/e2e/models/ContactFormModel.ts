@@ -1,4 +1,4 @@
-import { PageUtils } from "../pages/pageUtils";
+import { PageUtils } from '../pages/pageUtils';
 
 export class ContactFormData {
   contact_type: string;
@@ -48,27 +48,43 @@ export class ContactFormData {
   }
 }
 
-export const defaultFormData: ContactFormData = {
-  contact_type: 'Individual',
-  last_name: PageUtils.randomString(10),
-  first_name: PageUtils.randomString(10),
-  middle_name: PageUtils.randomString(10),
-  prefix: PageUtils.randomString(5),
-  suffix: PageUtils.randomString(5),
-  country: 'United States of America',
-  street_1: PageUtils.randomString(10),
-  street_2: PageUtils.randomString(10),
-  city: PageUtils.randomString(10),
-  state: 'District of Columbia',
-  zip: PageUtils.randomString(5),
-  phone: PageUtils.randomString(10, 'numeric'),
-  employer: PageUtils.randomString(20),
-  occupation: PageUtils.randomString(20),
-  candidate_id: 'H2AZ12345',
-  candidate_office: 'House',
-  candidate_state: 'Virginia',
-  candidate_district: '01',
-  committee_id: 'C' + PageUtils.randomString(8, 'numeric'),
-  name: PageUtils.randomString(10),
-};
+export enum ContactType {
+  INDIVIDUAL = 'Individual',
+  COMMITTEE = 'Committee',
+  ORGANIZATION = 'Organization',
+  CANDIDATE = 'Candidate',
+}
 
+export const defaultFormData: ContactFormData = createContact(ContactType.INDIVIDUAL);
+
+export const organizationFormData: ContactFormData = createContact(ContactType.ORGANIZATION);
+
+export const candidateFormData: ContactFormData = createContact(ContactType.CANDIDATE);
+
+export const committeeFormData: ContactFormData = createContact(ContactType.COMMITTEE);
+
+export function createContact(contact_type: ContactType): ContactFormData {
+  return {
+    contact_type,
+    last_name: PageUtils.randomString(10),
+    first_name: PageUtils.randomString(10),
+    middle_name: PageUtils.randomString(10),
+    prefix: PageUtils.randomString(5),
+    suffix: PageUtils.randomString(5),
+    country: 'United States of America',
+    street_1: PageUtils.randomString(10),
+    street_2: PageUtils.randomString(10),
+    city: PageUtils.randomString(10),
+    state: 'District of Columbia',
+    zip: PageUtils.randomString(5),
+    phone: PageUtils.randomString(10, 'numeric'),
+    employer: PageUtils.randomString(20),
+    occupation: PageUtils.randomString(20),
+    candidate_id: 'H2AZ12345',
+    candidate_office: 'House',
+    candidate_state: 'Virginia',
+    candidate_district: '01',
+    committee_id: 'C' + PageUtils.randomString(8, 'numeric'),
+    name: PageUtils.randomString(10),
+  };
+}

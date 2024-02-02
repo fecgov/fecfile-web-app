@@ -3,8 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
-import { Transaction, isPulledForwardLoan } from 'app/shared/models/transaction.model';
+import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
+import { selectActiveReport } from '../../../store/active-report.selectors';
+import { ReportService } from '../../../shared/services/report.service';
+import { NavigationEvent } from '../../../shared/models/transaction-navigation-controls.model';
 
 @Component({
   selector: 'app-transaction-container',
@@ -12,9 +16,22 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 })
 export class TransactionContainerComponent extends DestroyerComponent {
   transaction: Transaction | undefined;
+  isEditable = true;
+  navigationEvent?: NavigationEvent;
 
-  constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
+  constructor(
+    activatedRoute: ActivatedRoute,
+    private store: Store,
+    private titleService: Title,
+    private reportService: ReportService,
+  ) {
     super();
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.isEditable = this.reportService.isEditable(report);
+      });
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.transaction = data['transaction'];
       if (this.transaction) {
@@ -27,6 +44,7 @@ export class TransactionContainerComponent extends DestroyerComponent {
   }
 
   transactionCardinality(): number {
+    if (ReattRedesUtils.isReattRedes(this.transaction)) return -1;
     if (isPulledForwardLoan(this.transaction)) {
       return 1;
     }
