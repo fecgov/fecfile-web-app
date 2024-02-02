@@ -45,7 +45,6 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       .subscribe((userLoginData: UserLoginData) => {
         this.formSubmitted = false;
         this.userLoginData = userLoginData;
-        console.log('Security Notice Component', this.userLoginData);
       });
   }
 

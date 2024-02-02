@@ -4,10 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testMockStore, testUserLoginData } from 'app/shared/utils/unit-test.utils';
 import { LoginService } from '../../shared/services/login.service';
 import { SecurityNoticeComponent } from './security-notice.component';
 import { UsersService } from 'app/shared/services/users.service';
+import { of } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: SecurityNoticeComponent;
@@ -43,5 +44,15 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should submit', () => {
+    const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(of(testUserLoginData));
+    component.signConsentForm();
+    expect(spy).not.toHaveBeenCalled();
+
+    component.form.get('security-consent')?.setValue(true);
+    component.signConsentForm();
+    expect(spy).toHaveBeenCalled();
   });
 });
