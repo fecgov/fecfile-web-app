@@ -6,7 +6,7 @@ import { getReportCodeLabel } from '../report-code.utils';
 
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {
-    if (!transaction.report) throw new Error('Transaction missing report');
+    // if (!transaction.report) throw new Error('Transaction missing report');
 
     if (!transaction.reattribution_redesignation_tag) {
       if (transaction.expenditure_purpose_descrip) {
