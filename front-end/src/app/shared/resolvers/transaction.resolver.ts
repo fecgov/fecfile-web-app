@@ -159,7 +159,7 @@ export class TransactionResolver {
         const redesignated = RedesignatedUtils.overlayTransactionProperties(
           originatingTransaction as SchBTransaction,
           reportId,
-        ) as SchBTransaction;
+        );
         if (!redesignated.transaction_type_identifier) {
           throw Error('Fecfile online: originating redesignation transaction type not found.');
         }

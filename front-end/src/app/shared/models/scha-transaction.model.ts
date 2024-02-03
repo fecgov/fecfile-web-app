@@ -70,7 +70,7 @@ export class SchATransaction extends Transaction {
     }
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REATTRIBUTED: {
-        transaction = ReattributedUtils.overlayTransactionProperties(transaction) as SchATransaction;
+        transaction = ReattributedUtils.overlayTransactionProperties(transaction);
         break;
       }
       case ReattRedesTypes.REATTRIBUTION_TO: {

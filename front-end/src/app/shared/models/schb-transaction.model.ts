@@ -71,7 +71,7 @@ export class SchBTransaction extends Transaction {
 
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REDESIGNATED: {
-        transaction = RedesignatedUtils.overlayTransactionProperties(transaction) as SchBTransaction;
+        transaction = RedesignatedUtils.overlayTransactionProperties(transaction);
         break;
       }
       case ReattRedesTypes.REDESIGNATION_TO: {

@@ -46,8 +46,10 @@ export class TransactionContainerComponent extends DestroyerComponent {
   transactionCardinality(): number {
     if (
       ReattRedesUtils.isReattRedes(this.transaction) &&
-      !(ReattRedesUtils.isReattRedes(this.transaction),
-      [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED] && this.transaction?.id)
+      !(
+        ReattRedesUtils.isReattRedes(this.transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
+        this.transaction?.id
+      )
     )
       return -1;
     if (isPulledForwardLoan(this.transaction)) {
