@@ -42,3 +42,20 @@
 .add-contact-container a {
   border-bottom: none;
 }
+
+select {
+  height: 48px;
+  border: 2px solid #aeb0b5;
+}
+
+select:active, select:hover {
+  background-color: white;
+}
+
+select:hover {
+  border-color: #d6d7d9;
+}
+
+select:disabled:hover {
+  background-color: #e9ecef;
+}

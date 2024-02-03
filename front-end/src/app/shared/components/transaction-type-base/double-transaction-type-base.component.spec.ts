@@ -1,17 +1,17 @@
 import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
@@ -20,11 +20,8 @@ import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-t
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { ReattRedesTypes, ReattRedesUtils } from "../../utils/reatt-redes/reatt-redes.utils";
-import { TransactionType } from "../../models/transaction-type.model";
-import { TransactionContactUtils } from "./transaction-contact.utils";
-import { RedesignationToUtils } from "../../utils/reatt-redes/redesignation-to.utils";
-import { RedesignationFromUtils } from "../../utils/reatt-redes/redesignation-from.utils";
+import { TransactionType } from '../../models/transaction-type.model';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [
@@ -95,7 +92,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         provideMockStore(testMockStore),
         FecDatePipe,
         ReportService,
-        TransactionService
+        TransactionService,
       ],
     }).compileComponents();
   });
@@ -131,14 +128,14 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.transaction = undefined;
       expect(function () {
         component.ngOnInit();
-      }).toThrow(new Error('Fecfile: Template map not found for transaction component'))
+      }).toThrow(new Error('Fecfile: Template map not found for transaction component'));
     });
 
     it('should throw error if no child transaction', () => {
       spyOn(component, 'getChildTransaction').and.callFake(() => undefined);
       expect(function () {
         component.ngOnInit();
-      }).toThrow(new Error('Fecfile: Child transaction not found for double-entry transaction form'))
+      }).toThrow(new Error('Fecfile: Child transaction not found for double-entry transaction form'));
     });
 
     it('should throw error if child transaction is missing template map', () => {
@@ -149,10 +146,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       });
       expect(function () {
         component.ngOnInit();
-      }).toThrow(new Error('Fecfile: Template map not found for double transaction double-entry transaction form'))
+      }).toThrow(new Error('Fecfile: Template map not found for double transaction double-entry transaction form'));
     });
   });
-
 
   it("should set the child transaction's contact when its shared with the parent", () => {
     component.transaction = testTransaction;
@@ -184,7 +180,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.form.get(component.templateMap.last_name)?.setValue('Last');
 
     expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
-      'Earmarked from First Last (Individual)'
+      'Earmarked from First Last (Individual)',
     );
   });
 
@@ -192,8 +188,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
 
-    expect(component.childTransaction.transactionType?.getInheritedFields(
-      component.childTransaction)).toContain('amount');
+    expect(component.childTransaction.transactionType?.getInheritedFields(component.childTransaction)).toContain(
+      'amount',
+    );
     component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
     component.form.get(component.templateMap.amount)?.setValue(250);
     expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
@@ -233,7 +230,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: '',
       text4000: '',
     });
-    Object.keys(component.form.controls).forEach(key => {
+    Object.keys(component.form.controls).forEach((key) => {
       component.form.get(key)?.updateValueAndValidity();
     });
     component.childForm.patchValue({
@@ -258,7 +255,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: true,
       text4000: '',
     });
-    Object.keys(component.childForm.controls).forEach(key => {
+    Object.keys(component.childForm.controls).forEach((key) => {
       component.childForm.get(key)?.updateValueAndValidity();
     });
 
@@ -275,144 +272,33 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     });
   });
 
-  describe('reattribution and redesignation', () => {
-    beforeEach(() => {
-      testTransaction.reatt_redes = {
-        id: '999',
-        report_id: '999',
-        contribution_amount: 100,
-      } as unknown as SchATransaction;
-    })
-    it('should update child primary contacts', () => {
-      if (!component.transaction) throw Error("Bad test setup");
-      const isReatRedesSpy = spyOn(ReattRedesUtils, 'isReattRedes').and.callThrough();
-      const overlaySpy = spyOn(ReattRedesUtils, 'overlayForms').and.callThrough();
-      const childFormSpy = spyOn(component, 'childUpdateFormWithPrimaryContact');
-      const primaryContactSpy = spyOn(component, 'updateFormWithPrimaryContact');
-      const updateElectionDataSpy = spyOn(component, 'updateElectionData');
-
-      (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-      component.ngOnInit();
-      expect(isReatRedesSpy).toHaveBeenCalledTimes(1);
-      expect(overlaySpy).toHaveBeenCalledTimes(1);
-      expect(childFormSpy).toHaveBeenCalledTimes(1);
-      expect(primaryContactSpy).toHaveBeenCalledTimes(1);
-      expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('should save all transaction', () => {
-      if (!component.transaction) throw Error("Bad test setup");
-      spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
-      const multiSaveSpy = spyOn(transactionService, 'multisave').and.callFake(() => of([testTransaction]));
-      const navSpy = spyOn(component, 'navigateTo').and.callFake(() => {
-        return;
-      });
-      component.ngOnInit();
-      component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
-
-      expect(multiSaveSpy).toHaveBeenCalledTimes(1);
-      expect(navSpy).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('confirmation$', () => {
     it('should return false if not child transaction', () => {
       component.childTransaction = undefined;
-      component.confirmation$.subscribe(v => expect(v).toBeFalse());
+      component.confirmation$.subscribe((v) => expect(v).toBeFalse());
     });
   });
 
   describe('childUpdateFormWithPrimaryContact', () => {
     it('should throw an error if no child transaction', () => {
       spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').and.callFake(() => {
-        return
+        return;
       });
       const contact = new Contact();
       component.childTransaction = undefined;
       expect(function () {
-        component.childUpdateFormWithPrimaryContact({value: contact});
-      }).toThrow(new Error('Fecfile: Missing child transaction.'))
+        component.childUpdateFormWithPrimaryContact({ value: contact });
+      }).toThrow(new Error('Fecfile: Missing child transaction.'));
     });
 
     it('should call updateInheritedFields', () => {
-      const updateInheritedFieldsSpy = spyOn(component, 'updateInheritedFields')
+      const updateInheritedFieldsSpy = spyOn(component, 'updateInheritedFields');
       spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').and.callFake(() => {
-        return
+        return;
       });
       const contact = new Contact();
-      component.childUpdateFormWithPrimaryContact({value: contact});
+      component.childUpdateFormWithPrimaryContact({ value: contact });
       expect(updateInheritedFieldsSpy).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('updateElectionData', () => {
-    it("should bail if no templatemap or it's not schedule B", () => {
-      component.childTransaction = undefined;
-      component.updateElectionData();
-      expect(component.childForm.get('election_code')).toBeFalsy();
-    });
-
-    it('should update election and candidate data for primary and child forms', () => {
-      const data = {
-        id: '999',
-        form_type: 'SA11Ai',
-        payee_organization_name: 'foo',
-        expenditure_date: undefined,
-        fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
-        report_id: "1",
-        transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
-        election_code: "A",
-        election_other_description: "A",
-        beneficiary_candidate_fec_id: "A",
-        beneficiary_candidate_last_name: "A",
-        beneficiary_candidate_first_name: "A",
-        beneficiary_candidate_office: "A",
-        beneficiary_candidate_state: "A",
-        beneficiary_candidate_district: "A",
-        category_code: "A"
-      };
-      component.transaction = RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      expect(component.transaction.transactionType.templateMap).toBeTruthy();
-      component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      component.childTransaction.reatt_redes = SchBTransaction.fromJSON(data);
-      component.childForm.addControl('election_code', new FormControl(''));
-      component.childForm.addControl('election_other_description', new FormControl(''));
-      component.childForm.addControl('category_code', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_fec_id', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_last_name', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_first_name', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_office', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_state', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_district', new FormControl(''));
-
-      component.form.addControl('category_code', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_fec_id', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_last_name', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_first_name', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_office', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_state', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_district', new FormControl(''));
-
-      expect(Object.keys(component.childForm.controls)).toContain('election_code')
-
-      component.updateElectionData();
-      expect(component.childForm.get('election_code')?.value).toBe('A');
-      expect(component.childForm.get('election_other_description')?.value).toBe('A');
-      expect(component.childForm.get('category_code')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_fec_id')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_last_name')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_first_name')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_office')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_state')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_district')?.value).toBe('A');
-
-      expect(component.form.get('category_code')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_fec_id')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_last_name')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_first_name')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_office')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_state')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_district')?.value).toBe('A');
     });
   });
 });

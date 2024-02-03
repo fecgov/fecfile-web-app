@@ -2,52 +2,8 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { DateUtils } from '../date.utils';
 
 export class RedesignationFromUtils {
-  public static overlayTransactionProperties(
-    transaction: SchBTransaction,
-    redesignatedTransaction?: SchBTransaction,
-    activeReportId?: string
-  ): SchBTransaction {
-    if (redesignatedTransaction) {
-      transaction.reatt_redes_id = redesignatedTransaction.id;
-      transaction.reatt_redes = redesignatedTransaction;
-      transaction.contact_1 = redesignatedTransaction.contact_1;
-      transaction.contact_1_id = redesignatedTransaction.contact_1_id;
-      transaction.contact_2_id = redesignatedTransaction.contact_2_id;
-      transaction.contact_2 = redesignatedTransaction.contact_2;
-      transaction.election_code = redesignatedTransaction.election_code;
-      transaction.election_other_description = redesignatedTransaction.election_other_description;
-    }
-    if (activeReportId) transaction.report_id = activeReportId;
-    transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
-
-    Object.assign(transaction.transactionType, {
-      accordionTitle: 'AUTO-POPULATED',
-      accordionSubText: 'Review contact, disbursement, and additional information in the redesignation from section.',
-      title: 'Redesignation from',
-      contactTitle: 'Contact',
-      dateLabel: 'REDESIGNATION DATE',
-      amountLabel: 'REDESIGNATION AMOUNT',
-      inheritedFields: ['date', 'memo_code'] as TemplateMapKeyType[],
-      hideContactLookup: true,
-      // noop generatePurposeDescription to inform dynamic input label
-      generatePurposeDescription: (transaction: SchBTransaction): string => {
-        if (!transaction.reatt_redes) return '';
-        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
-        if (!expenditureDate) throw new Error('No Expenditure Date!');
-        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
-      },
-    });
-
-    // Remove purpose description and memo code from list of fields to validate on the backend
-    transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code'
-    );
-    return transaction;
-  }
-
   private static readOnlyFields = [
     'organization_name',
     'last_name',
@@ -80,6 +36,36 @@ export class RedesignationFromUtils {
     'candidate_district',
   ];
 
+  public static overlayTransactionProperties(
+    transaction: SchBTransaction,
+    redesignatedTransaction?: SchBTransaction,
+    activeReportId?: string,
+  ): SchBTransaction {
+    if (redesignatedTransaction) {
+      transaction.reatt_redes_id = redesignatedTransaction.id;
+      transaction.reatt_redes = redesignatedTransaction;
+      transaction.contact_1 = redesignatedTransaction.contact_1;
+      transaction.contact_1_id = redesignatedTransaction.contact_1_id;
+      transaction.contact_2_id = redesignatedTransaction.contact_2_id;
+      transaction.contact_2 = redesignatedTransaction.contact_2;
+      transaction.election_code = redesignatedTransaction.election_code;
+      transaction.election_other_description = redesignatedTransaction.election_other_description;
+    }
+    if (activeReportId) transaction.report_id = activeReportId;
+    transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
+
+    Object.assign(transaction.transactionType, {
+      accordionTitle: 'AUTO-POPULATED',
+      accordionSubText: 'Review contact, disbursement, and additional information in the redesignation from section.',
+    });
+
+    // Remove purpose description and memo code from list of fields to validate on the backend
+    transaction.fields_to_validate = transaction.fields_to_validate?.filter(
+      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code',
+    );
+    return transaction;
+  }
+
   public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
     const templateMap = transaction.transactionType.templateMap;
     const purposeDescriptionControl = fromForm.get(templateMap.purpose_description);
@@ -96,8 +82,9 @@ export class RedesignationFromUtils {
     });
 
     RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable()
+      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable(),
     );
+
     return fromForm;
   }
 }

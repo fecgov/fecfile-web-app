@@ -27,7 +27,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   constructor(
     protected messageService: MessageService,
     protected confirmationService: ConfirmationService,
-    protected elementRef: ElementRef
+    protected elementRef: ElementRef,
   ) {
     super();
   }
@@ -214,14 +214,14 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
 export class TableAction {
   label: string;
-  action: (item?: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  action: (item?: any) => void | Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
   isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
   isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
   constructor(
     label: string,
-    action: (item?: any) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
+    action: (item?: any) => void | Promise<void>, // eslint-disable-line @typescript-eslint/no-explicit-any
     isAvailable?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
-    isEnabled?: (item?: any) => boolean // eslint-disable-line @typescript-eslint/no-explicit-any
+    isEnabled?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
     this.label = label;
     this.action = action;
