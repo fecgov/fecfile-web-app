@@ -6,29 +6,38 @@ import { getReportCodeLabel } from '../report-code.utils';
 
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {
+    if (!transaction.report) throw new Error('Transaction missing report');
+
     if (!transaction.reattribution_redesignation_tag) {
+      if (transaction.expenditure_purpose_descrip) {
+        const prefix = `[Original purpose description: ${transaction.expenditure_purpose_descrip}] `;
+        if (transaction.memo_text) {
+          if (!transaction.memo_text.text_prefix) {
+            transaction.memo_text.text_prefix = prefix;
+            transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
+          }
+        } else {
+          transaction.memo_text = MemoText.fromJSON({
+            rec_type: 'TEXT',
+            report_id: transaction?.report_id,
+            text_prefix: prefix,
+            text4000: prefix,
+          });
+        }
+      }
       if (transaction.report_id === activeReportId) {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
-        transaction.report_id = activeReportId;
         transaction.expenditure_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel(transaction.report?.reportCode)}.) See redesignation below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }
+
     Object.assign(transaction.transactionType, {
       accordionTitle: 'AUTO-POPULATED',
       accordionSubText: 'Review contact, disbursement, and additional information in the redesignation from section.',
     });
-    const prefix = `[Original purpose description: ${transaction.expenditure_purpose_descrip}] `;
-    if (transaction.memo_text) {
-      transaction.memo_text.text_prefix = prefix;
-      transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
-    } else {
-      transaction.memo_text = MemoText.fromJSON({
-        text_prefix: prefix,
-        text4000: prefix,
-      });
-    }
+
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
       (field) => field !== 'expenditure_purpose_descrip',
     );
@@ -48,6 +57,7 @@ export class RedesignatedUtils {
     redesignated.report = undefined;
     redesignated.memo_code = true;
     redesignated.force_unaggregated = true;
+    redesignated.children = []; // Children of original transaction do not copy over.
 
     return redesignated;
   }

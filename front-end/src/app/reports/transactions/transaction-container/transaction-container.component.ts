@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesTypes, ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportService } from '../../../shared/services/report.service';
 import { NavigationEvent } from '../../../shared/models/transaction-navigation-controls.model';
@@ -44,7 +44,12 @@ export class TransactionContainerComponent extends DestroyerComponent {
   }
 
   transactionCardinality(): number {
-    if (ReattRedesUtils.isReattRedes(this.transaction)) return -1;
+    if (
+      ReattRedesUtils.isReattRedes(this.transaction) &&
+      !(ReattRedesUtils.isReattRedes(this.transaction),
+      [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED] && this.transaction?.id)
+    )
+      return -1;
     if (isPulledForwardLoan(this.transaction)) {
       return 1;
     }

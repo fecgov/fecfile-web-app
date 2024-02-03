@@ -8,22 +8,28 @@ import { Form3X } from '../../models/form-3x.model';
 export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {
     if (!transaction.report) throw new Error('Transaction missing report');
-    const prefix = `[Original purpose description: ${transaction.contribution_purpose_descrip}] `;
-    if (transaction.memo_text) {
-      transaction.memo_text.text_prefix = prefix;
-      transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
-    } else {
-      transaction.memo_text = MemoText.fromJSON({
-        text_prefix: prefix,
-        text4000: prefix,
-      });
-    }
 
     if (!transaction.reattribution_redesignation_tag) {
+      if (transaction.contribution_purpose_descrip) {
+        const prefix = `[Original purpose description: ${transaction.contribution_purpose_descrip}] `;
+        if (transaction.memo_text) {
+          if (!transaction.memo_text.text_prefix) {
+            transaction.memo_text.text_prefix = prefix;
+            transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
+          }
+        } else {
+          transaction.memo_text = MemoText.fromJSON({
+            rec_type: 'TEXT',
+            report_id: transaction?.report_id,
+            text_prefix: prefix,
+            text4000: prefix,
+          });
+        }
+      }
       if (transaction.report_id === activeReportId) {
         transaction.contribution_purpose_descrip = 'See reattribution below.';
       } else {
-        transaction.contribution_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel((transaction.report as Form3X).report_code)}.) See attribution below.`;
+        transaction.contribution_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel((transaction.report as Form3X).report_code)}.) See reattribution below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     }
@@ -52,6 +58,7 @@ export class ReattributedUtils {
     reattributed.report = undefined;
     reattributed.memo_code = true;
     reattributed.force_unaggregated = true;
+    reattributed.children = []; // Children of original transaction do not copy over.
 
     return reattributed;
   }
