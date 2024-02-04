@@ -1,7 +1,7 @@
 import { Report, ReportTypes } from './report.model';
-import { plainToClass, Transform, Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { Contact, CandidateOfficeType } from './contact.model';
+import { CandidateOfficeType, Contact } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 export enum CommitteeTypes {
@@ -132,6 +132,6 @@ export class Form1M extends Report {
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Form1M, json);
+    return plainToInstance(Form1M, json);
   }
 }

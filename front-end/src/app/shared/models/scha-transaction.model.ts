@@ -1,11 +1,12 @@
-import { plainToClass, Transform } from 'class-transformer';
-import { Transaction, AggregationGroups } from './transaction.model';
+import { plainToInstance, Transform } from 'class-transformer';
+import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
 import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 
 export class SchATransaction extends Transaction {
   entity_type: string | undefined;
@@ -52,13 +53,9 @@ export class SchATransaction extends Transaction {
   reattribution_redesignation_tag: string | undefined;
   reatt_redes_total?: number; // Amount of total money that has been reattributed for a transaction.
 
-  override getFieldsNotToValidate(): string[] {
-    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchATransaction {
-    let transaction = plainToClass(SchATransaction, json);
+    let transaction = plainToInstance(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
@@ -73,7 +70,7 @@ export class SchATransaction extends Transaction {
     }
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REATTRIBUTED: {
-        transaction = ReattRedesUtils.overlayTransactionProperties(transaction) as SchATransaction;
+        transaction = ReattributedUtils.overlayTransactionProperties(transaction);
         break;
       }
       case ReattRedesTypes.REATTRIBUTION_TO: {
@@ -89,6 +86,10 @@ export class SchATransaction extends Transaction {
       transaction.reatt_redes = getFromJSON(transaction.reatt_redes, depth - 1);
     }
     return transaction;
+  }
+
+  override getFieldsNotToValidate(): string[] {
+    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
 }
 

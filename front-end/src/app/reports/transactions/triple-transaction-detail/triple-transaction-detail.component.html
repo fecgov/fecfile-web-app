@@ -1,4 +1,3 @@
-<p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
@@ -100,16 +99,3 @@
     </div>
   </p-accordionTab>
 </p-accordion>
-
-<app-transaction-children-list-container [transaction]="transaction"></app-transaction-children-list-container>
-
-<app-transaction-navigation
-
-  [isEditable]="isEditable"
-  [transaction]="transaction"
-  (navigate)="handleNavigate($event)"
-></app-transaction-navigation>
-
-<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
-<p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>
-<p-confirmDialog key="childDialog_2" [style]="{ width: '450px' }"></p-confirmDialog>

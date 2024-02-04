@@ -1,8 +1,7 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
-import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
+import { getTestIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -93,12 +92,12 @@ describe('ReattRedesUtils', () => {
       toTxn.reatt_redes = reattributed;
       toTxn.children[0] = fromTxn;
 
-      const result = ReattRedesUtils.getPayloads(payload);
+      const result = ReattRedesUtils.getPayloads(payload, false);
 
       expect(result[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
       expect(result[1].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTION_TO);
       expect((result[1].children[0] as SchATransaction).reattribution_redesignation_tag).toBe(
-        ReattRedesTypes.REATTRIBUTION_FROM
+        ReattRedesTypes.REATTRIBUTION_FROM,
       );
     });
   });
@@ -143,46 +142,5 @@ describe('ReattRedesUtils', () => {
       validatorResult = validatorFunction(control);
       expect(validatorResult?.['max']['max']).toBe(25);
     });
-  });
-
-  it('overlayTransactionProperties should override default properties for a SchATransaction', () => {
-    const transaction = SchATransaction.fromJSON({
-      ...testScheduleATransaction,
-    });
-
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction,
-      '3cd741da-aa57-4cc3-8530-667e8b7bad78'
-    ) as SchATransaction;
-
-    expect(overlay.fields_to_validate?.includes('contribution_purpose_descrip')).toBeFalse();
-    expect(overlay.contribution_purpose_descrip).toBe('See reattribution below.');
-    expect(overlay.reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
-  });
-
-  it('overlayTransactionProperties should override default properties for a SchBTransaction', () => {
-    const transaction = SchBTransaction.fromJSON({
-      ...testScheduleBTransaction,
-    });
-    transaction.report_id = '3cd741da-aa57-4cc3-8530-667e8b7bad78';
-
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction as SchBTransaction,
-      '3cd741da-aa57-4cc3-8530-667e8b7bad78'
-    ) as SchBTransaction;
-
-    expect(overlay.fields_to_validate?.includes('expenditure_purpose_descrip')).toBeFalse();
-    expect(overlay.expenditure_purpose_descrip).toBe('See redesignation below.');
-    expect(overlay.reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
-  });
-
-  xit('overlayTransactionProperties should handle a different report', () => {
-    const transaction = { ...testScheduleATransaction } as SchATransaction;
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction,
-      'not-the-same-report-as-orig'
-    ) as SchATransaction;
-    expect(overlay.report_id).toBe('not-the-same-report-as-orig');
-    expect(overlay.contribution_purpose_descrip).toBe('(Originally disclosed on M1.) See attribution below.');
   });
 });
