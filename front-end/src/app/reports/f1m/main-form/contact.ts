@@ -1,10 +1,24 @@
-import { AbstractControl, FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+
+/**
+ * Angular validation callback function to invalidate contacts with the same contact id.
+ * @param controlId
+ * @param component
+ * @returns
+ */
+function duplicateCandidateIdValidator(controlId: string, component: MainFormComponent): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    const isDuplicate = component.getSelectedContactIds(controlId).includes(value);
+    return isDuplicate ? { fecIdMustBeUnique: true } : null;
+  };
+}
 
 export abstract class F1MContact {
   contactKey: keyof Form1M;
@@ -39,6 +53,15 @@ export abstract class F1MContact {
         .get(this.component.templateMapConfigs[this.contactKey][key as keyof TransactionTemplateMapType])
         ?.setValue($event.value[value as keyof Contact]);
     }
+
+    // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.
+    const candidateIdControl = this.component.form.get(
+      this.component.templateMapConfigs[this.contactKey]['candidate_fec_id']
+    );
+    if (candidateIdControl?.invalid) {
+      candidateIdControl.markAsTouched();
+    }
+
     this.control?.clearValidators();
     this.control?.updateValueAndValidity();
   }
@@ -82,9 +105,11 @@ export class AffiliatedContact extends F1MContact {
   }
 
   enableValidation() {
+    // Enable validation to lookup control if missing first required contact field
     if (!this.component.report.affiliated_committee_name) {
       this.control?.addValidators(Validators.required);
     }
+
     this.formFields.forEach((field: string) => this.component.form.get(field)?.addValidators(Validators.required));
     this.updateValueAndValidity();
   }
@@ -97,6 +122,10 @@ export class CandidateContact extends F1MContact {
 
   get dateOfContributionField() {
     return `${this.id}_date_of_contribution`;
+  }
+
+  get candidateId() {
+    return this.component.form.get(`${this.id}_candidate_id_number`)?.value;
   }
 
   constructor(id: string, component: MainFormComponent) {
@@ -143,10 +172,14 @@ export class CandidateContact extends F1MContact {
   }
 
   enableValidation() {
+    // Enable validation to lookup control if missing first required contact field
     if (!this.component.report[`${this.id}_candidate_id_number` as keyof Form1M]) {
       this.control?.addValidators(Validators.required);
     }
-    this.component.form.get(`${this.id}_candidate_id_number`)?.addValidators(Validators.required);
+
+    this.component.form
+      .get(`${this.id}_candidate_id_number`)
+      ?.addValidators([Validators.required, duplicateCandidateIdValidator(this.id, this.component)]);
     this.component.form.get(`${this.id}_candidate_last_name`)?.addValidators(Validators.required);
     this.component.form.get(`${this.id}_candidate_first_name`)?.addValidators(Validators.required);
     this.component.form.get(`${this.id}_candidate_office`)?.addValidators(Validators.required);

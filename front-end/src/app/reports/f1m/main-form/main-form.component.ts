@@ -266,4 +266,18 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Generate a list of candidate contact ids that are currently entered in the F1M
+   * form so that we can check for duplicates and screen them from the lookup
+   * or raise a validation error on the screen.
+   * @param excludeControlId - values: I, II, III, IV, or V
+   * @returns string[] - list of contact ids currently selected by user for Qualifications
+   */
+  getSelectedContactIds(excludeControlId = '') {
+    return this.candidateContacts
+      .filter((c: CandidateContact) => c.id !== excludeControlId)
+      .map((c: CandidateContact) => c.candidateId)
+      .filter((id) => !!id);
+  }
 }
