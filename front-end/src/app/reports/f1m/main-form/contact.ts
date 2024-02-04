@@ -107,8 +107,8 @@ export class AffiliatedContact extends F1MContact {
   }
 
   enableValidation() {
-    // Enable validation to lookup control if missing first required contact field
-    if (!this.component.report.affiliated_committee_name) {
+    // Enable validation to lookup control if missing contact info
+    if (!this.component.report.contact_affiliated) {
       this.control?.addValidators(Validators.required);
     }
 
@@ -174,8 +174,8 @@ export class CandidateContact extends F1MContact {
   }
 
   enableValidation() {
-    // Enable validation to lookup control if missing first required contact field
-    if (!this.component.report[`${this.tag}_candidate_id_number` as keyof Form1M]) {
+    // Enable validation to lookup control if missing contact info
+    if (!this.component.report[`contact_candidate_${this.tag}`]) {
       this.control?.addValidators(Validators.required);
     }
 
