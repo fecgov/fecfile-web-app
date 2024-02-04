@@ -6,16 +6,18 @@ import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
+export type F1MContactTag = 'I' | 'II' | 'III' | 'IV' | 'V';
+
 /**
  * Angular validation callback function to invalidate contacts with the same contact id.
- * @param controlId
+ * @param contactTag
  * @param component
  * @returns
  */
-function duplicateCandidateIdValidator(controlId: string, component: MainFormComponent): ValidatorFn {
+function duplicateCandidateIdValidator(contactTag: F1MContactTag, component: MainFormComponent): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
-    const isDuplicate = component.getSelectedContactIds(controlId).includes(value);
+    const isDuplicate = component.getSelectedContactIds(contactTag).includes(value);
     return isDuplicate ? { fecIdMustBeUnique: true } : null;
   };
 }
@@ -116,34 +118,34 @@ export class AffiliatedContact extends F1MContact {
 }
 
 export class CandidateContact extends F1MContact {
-  id: string;
+  tag: F1MContactTag; // Valid values are: I, II, III, IV, V
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   formFields: string[] = [];
 
   get dateOfContributionField() {
-    return `${this.id}_date_of_contribution`;
+    return `${this.tag}_date_of_contribution`;
   }
 
   get candidateId() {
-    return this.component.form.get(`${this.id}_candidate_id_number`)?.value;
+    return this.component.form.get(`${this.tag}_candidate_id_number`)?.value;
   }
 
-  constructor(id: string, component: MainFormComponent) {
-    super(`contact_candidate_${id}` as keyof Form1M, component);
+  constructor(tag: F1MContactTag, component: MainFormComponent) {
+    super(`contact_candidate_${tag}` as keyof Form1M, component);
 
-    this.id = id;
+    this.tag = tag;
 
     this.formFields = [
-      `${this.id}_candidate_id_number`,
-      `${this.id}_candidate_last_name`,
-      `${this.id}_candidate_first_name`,
-      `${this.id}_candidate_middle_name`,
-      `${this.id}_candidate_prefix`,
-      `${this.id}_candidate_suffix`,
-      `${this.id}_candidate_office`,
-      `${this.id}_candidate_state`,
-      `${this.id}_candidate_district`,
-      `${this.id}_date_of_contribution`,
+      `${tag}_candidate_id_number`,
+      `${tag}_candidate_last_name`,
+      `${tag}_candidate_first_name`,
+      `${tag}_candidate_middle_name`,
+      `${tag}_candidate_prefix`,
+      `${tag}_candidate_suffix`,
+      `${tag}_candidate_office`,
+      `${tag}_candidate_state`,
+      `${tag}_candidate_district`,
+      `${tag}_date_of_contribution`,
     ];
 
     component.contactConfigs[this.contactKey] = {
@@ -159,31 +161,31 @@ export class CandidateContact extends F1MContact {
     };
 
     component.templateMapConfigs[this.contactKey] = {
-      candidate_fec_id: `${id}_candidate_id_number`,
-      candidate_last_name: `${id}_candidate_last_name`,
-      candidate_first_name: `${id}_candidate_first_name`,
-      candidate_middle_name: `${id}_candidate_middle_name`,
-      candidate_prefix: `${id}_candidate_prefix`,
-      candidate_suffix: `${id}_candidate_suffix`,
-      candidate_office: `${id}_candidate_office`,
-      candidate_state: `${id}_candidate_state`,
-      candidate_district: `${id}_candidate_district`,
+      candidate_fec_id: `${tag}_candidate_id_number`,
+      candidate_last_name: `${tag}_candidate_last_name`,
+      candidate_first_name: `${tag}_candidate_first_name`,
+      candidate_middle_name: `${tag}_candidate_middle_name`,
+      candidate_prefix: `${tag}_candidate_prefix`,
+      candidate_suffix: `${tag}_candidate_suffix`,
+      candidate_office: `${tag}_candidate_office`,
+      candidate_state: `${tag}_candidate_state`,
+      candidate_district: `${tag}_candidate_district`,
     } as TransactionTemplateMapType;
   }
 
   enableValidation() {
     // Enable validation to lookup control if missing first required contact field
-    if (!this.component.report[`${this.id}_candidate_id_number` as keyof Form1M]) {
+    if (!this.component.report[`${this.tag}_candidate_id_number` as keyof Form1M]) {
       this.control?.addValidators(Validators.required);
     }
 
     this.component.form
-      .get(`${this.id}_candidate_id_number`)
-      ?.addValidators([Validators.required, duplicateCandidateIdValidator(this.id, this.component)]);
-    this.component.form.get(`${this.id}_candidate_last_name`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.id}_candidate_first_name`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.id}_candidate_office`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.id}_date_of_contribution`)?.addValidators(Validators.required);
+      .get(`${this.tag}_candidate_id_number`)
+      ?.addValidators([Validators.required, duplicateCandidateIdValidator(this.tag, this.component)]);
+    this.component.form.get(`${this.tag}_candidate_last_name`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.tag}_candidate_first_name`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.tag}_candidate_office`)?.addValidators(Validators.required);
+    this.component.form.get(`${this.tag}_date_of_contribution`)?.addValidators(Validators.required);
     this.updateValueAndValidity();
   }
 }
