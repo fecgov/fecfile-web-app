@@ -1,7 +1,11 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
-import { getTestIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
+import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
+import { RedesignatedUtils } from './redesignated.utils';
+import _ from 'lodash';
+import { SchBTransaction } from '../../models/schb-transaction.model';
+import { MemoText } from '../../models/memo-text.model';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -141,6 +145,60 @@ describe('ReattRedesUtils', () => {
       control.setValue(50);
       validatorResult = validatorFunction(control);
       expect(validatorResult?.['max']['max']).toBe(25);
+    });
+  });
+
+  describe('getPayload', () => {
+    let payload: SchBTransaction;
+
+    beforeEach(() => {
+      payload = SchBTransaction.fromJSON({
+        ...testScheduleBTransaction,
+      });
+      payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      payload.reatt_redes = SchBTransaction.fromJSON({
+        ...testScheduleBTransaction,
+      });
+    });
+
+    it('should throw error when originating missing transaction type', () => {
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.transaction_type_identifier = undefined;
+      expect(function () {
+        ReattRedesUtils.getPayloads(payload, true);
+      }).toThrow(Error('Fecfile online: originating transaction type not found.'));
+    });
+
+    it('should clone ', () => {
+      const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.memo_text_id = 'TEST';
+      const memo = new MemoText();
+      memo.report_id = 'ORIGINAL';
+      memo.text_prefix = 'PREFIX';
+      memo.text4000 = 'MEMO TEXT';
+      memo.rec_type = 'TEXT';
+      memo.transaction_id_number = payload.reatt_redes.id;
+      memo.transaction_uuid = 'UUID';
+      payload.reatt_redes.memo_text = memo;
+      payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(payload.reatt_redes as SchBTransaction);
+      const cloned = ReattRedesUtils.getPayloads(payload, true);
+      expect(cloneSpy).toHaveBeenCalled();
+      expect(cloned[0].report_id).toEqual(payload.report_id);
+      expect(cloned[0].report).toBeFalsy();
+      expect(cloned[0].id).toBeFalsy();
+      expect(cloned[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
+      expect(cloned[0].force_unaggregated).toBeTrue();
+
+      // Test memo text
+      expect(cloned[0].memo_text_id).toBeFalsy();
+      expect(cloned[0].memo_text).toBeTruthy();
+      if (cloned[0].memo_text) {
+        expect(cloned[0].memo_text.id).toBeFalsy();
+        expect(cloned[0].memo_text?.transaction_uuid).toBeFalsy();
+        expect(cloned[0].memo_text?.transaction_id_number).toBeFalsy();
+        expect(cloned[0].memo_text?.report_id).toBe(payload.report_id);
+      }
     });
   });
 });
