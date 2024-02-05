@@ -13,11 +13,11 @@ export class LoginGuard {
     private router: Router,
     private cookieService: CookieService) { }
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.loginService.userIsAuthenticated()) {
-      this.router.navigate(['dashboard']);
+    if (!this.loginService.userIsAuthenticated()) {
+      this.cookieService.deleteAll();
+      this.router.navigate(['login']);
       return false;
     } else {
-      this.cookieService.deleteAll();
       return true;
     }
   }

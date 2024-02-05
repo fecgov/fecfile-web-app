@@ -45,7 +45,7 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
   activateCommittee(committee: CommitteeAccount): void {
     this.committeeAccountService.activateCommittee(committee.id).subscribe(() => {
       this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committee }));
-      this.router.navigateByUrl(``);
+      this.router.navigateByUrl(`dashboard`);
     });
   }
 }

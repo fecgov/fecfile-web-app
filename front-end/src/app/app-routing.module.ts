@@ -7,23 +7,62 @@ import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeGuard } from './shared/guards/committee.guard';
 import { SelectCommitteeComponent } from './committee/select-committee/select-committee.component';
 import { LoginComponent } from './login/login/login.component';
+import { LoginGuard } from './shared/guards/login-page.guard';
+import { UpdateCurrentUserComponent } from './users/update-current-user/update-current-user.component';
+import { nameGuard } from './shared/guards/name.guard';
+import { SecurityNoticeComponent } from './login/security-notice/security-notice.component';
+import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LayoutComponent,
-    children:[{path: '', component: LoginComponent, resolve: { sidebar: SidebarStateResolver }}]
+    children: [{ path: '', component: LoginComponent, resolve: { sidebar: SidebarStateResolver } }],
+  },
+  {
+    path: 'current',
+    component: LayoutComponent,
+    canActivate: [LoginGuard],
+    children: [
+      {
+        path: '',
+        component: UpdateCurrentUserComponent,
+        data: {
+          showCommitteeBanner: false,
+          showHeader: false,
+          showUpperFooter: false,
+        },
+      },
+    ],
+  },
+  {
+    path: 'security-notice',
+    title: 'Security Notice',
+    canActivate: [LoginGuard, nameGuard],
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: SecurityNoticeComponent,
+        data: {
+          showHeader: false,
+          showCommitteeBanner: false,
+          securityNoticeBackground: true,
+        },
+      },
+    ],
   },
   {
     path: 'select-committee',
     component: LayoutComponent,
+    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
     children: [{ path: '', component: SelectCommitteeComponent, resolve: { sidebar: SidebarStateResolver } }],
   },
   {
     path: '',
     component: LayoutComponent,
     resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
-    canActivate: [committeeGuard],
+    canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
     runGuardsAndResolvers: 'always',
     children: [
       { path: 'committee', loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule) },
