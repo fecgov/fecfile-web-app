@@ -6,7 +6,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
-import { concatMap, forkJoin, map, switchMap } from 'rxjs';
+import { concatMap, forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-select-committee',
