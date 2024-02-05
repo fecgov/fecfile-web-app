@@ -1,5 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
@@ -51,6 +51,24 @@ describe('CommitteeAccountService', () => {
     req.flush(mockResponse);
     httpTestingController.verify();
   });
+
+  it('should call api to activate', () => {
+    const committeeId = '123';
+    service.activateCommittee(committeeId).subscribe(() => {});
+
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/${committeeId}/activate/`);
+    expect(request.request.method).toEqual('POST');
+    request.flush(true);
+    httpTestingController.verify();
+  });
+
+  it('should call api get active committee', waitForAsync(() => {
+    service.getActiveCommittee().subscribe(() => {});
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/active/`);
+    expect(request.request.method).toEqual('GET');
+    request.flush(true);
+    httpTestingController.verify();
+  }));
 });
 
 describe('CommitteeMemberService', () => {
