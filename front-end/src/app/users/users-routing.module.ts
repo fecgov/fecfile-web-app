@@ -19,6 +19,8 @@ const routes: Routes = [
     pathMatch: 'full',
     data: {
       showCommitteeBanner: false,
+      showHeader: false,
+      showUpperFooter: false,
     },
   },
   { path: '**', redirectTo: '' },
