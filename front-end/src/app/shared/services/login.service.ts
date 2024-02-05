@@ -93,7 +93,7 @@ export class LoginService extends DestroyerComponent {
     const one_year_ago = new Date();
     one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
 
-    return security_date !== undefined && security_date !== '' && new Date(security_date) > one_year_ago;
+    return !!security_date && new Date(security_date) > one_year_ago;
   }
 
   public dispatchUserLoggedInFromCookies() {
