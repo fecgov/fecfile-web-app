@@ -2,10 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 
 import { testMockStore } from '../utils/unit-test.utils';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { CommitteeAccount } from '../models/committee-account.model';
+import { provideMockStore } from '@ngrx/store/testing';
 import { Observable } from 'rxjs';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { securityNoticeGuard } from './security-notice.guard';
 import { LoginService } from '../services/login.service';
 import { RouterTestingModule } from '@angular/router/testing';

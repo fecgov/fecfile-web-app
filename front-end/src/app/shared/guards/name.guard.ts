@@ -8,6 +8,6 @@ export const nameGuard: CanActivateFn = () => {
   if (!loginService.userHasProfileData()) {
     router.navigate(['/current']);
     return false;
-  };
+  }
   return true;
 };
