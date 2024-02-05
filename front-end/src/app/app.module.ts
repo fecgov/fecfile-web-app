@@ -42,8 +42,6 @@ import { LayoutComponent } from './layout/layout.component';
 import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
 import { F24MenuComponent } from './layout/sidebar/menus/f24/f24-menu.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
-import { LoginComponent } from './login/login/login.component';
-import { DebugLoginComponent } from './login/debug-login/debug-login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
@@ -74,8 +72,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     BannerComponent,
     SidebarComponent,
     FooterComponent,
-    LoginComponent,
-    DebugLoginComponent,
     DashboardComponent,
     F3XMenuComponent,
     F1MMenuComponent,

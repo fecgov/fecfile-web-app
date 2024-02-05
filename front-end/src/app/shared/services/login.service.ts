@@ -16,14 +16,11 @@ type EndpointAvailability = { endpoint_available: boolean };
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
-  private userLoginData: UserLoginData | undefined;
-  constructor(
-    private store: Store,
-    private apiService: ApiService,
-    private cookieService: CookieService
-  ) {
+  public userLoginData: UserLoginData | undefined;
+  constructor(private store: Store, private apiService: ApiService, private cookieService: CookieService) {
     super();
-    this.store.select(selectUserLoginData)
+    this.store
+      .select(selectUserLoginData)
       .pipe(takeUntil(this.destroy$))
       .subscribe((userLoginData: UserLoginData) => {
         this.userLoginData = userLoginData;
@@ -67,6 +64,7 @@ export class LoginService extends DestroyerComponent {
     this.cookieService.delete(environment.ffapiFirstNameCookieName);
     this.cookieService.delete(environment.ffapiLastNameCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
+    this.cookieService.delete(environment.ffapiSecurityConsentCookieName);
   }
 
   public clearUserLoggedInCookies() {
@@ -83,13 +81,19 @@ export class LoginService extends DestroyerComponent {
   }
 
   public userIsAuthenticated() {
-    return !!this.userLoginData?.email ||
-      this.cookieService.check(environment.ffapiEmailCookieName);
+    return !!this.userLoginData?.email || this.cookieService.check(environment.ffapiEmailCookieName);
   }
 
   public userHasProfileData() {
-    return !!this.userLoginData?.first_name &&
-      !!this.userLoginData.last_name;
+    return !!this.userLoginData?.first_name && !!this.userLoginData.last_name;
+  }
+
+  public userHasRecentSecurityConsentDate() {
+    const security_date = this.userLoginData?.security_consent_date;
+    const one_year_ago = new Date();
+    one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
+
+    return !!security_date && new Date(security_date) > one_year_ago;
   }
 
   public dispatchUserLoggedInFromCookies() {
@@ -98,12 +102,11 @@ export class LoginService extends DestroyerComponent {
         first_name: this.cookieService.get(environment.ffapiFirstNameCookieName),
         last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
         email: this.cookieService.get(environment.ffapiEmailCookieName),
-        login_dot_gov: this.cookieService.get(
-          environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
+        login_dot_gov: this.cookieService.get(environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
+        security_consent_date: this.cookieService.get(environment.ffapiSecurityConsentCookieName),
       };
       this.clearUserFecfileApiCookies();
       this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
     }
   }
-
 }

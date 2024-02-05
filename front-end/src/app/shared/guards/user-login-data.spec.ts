@@ -13,8 +13,8 @@ describe('UserLoginDataGuard', () => {
   let router: Router;
   const testActivatedRouteSnapshot = {
     component: {
-      name: 'test'
-    }
+      name: 'test',
+    },
   } as ActivatedRouteSnapshot;
 
   beforeEach(() => {
@@ -33,6 +33,7 @@ describe('UserLoginDataGuard', () => {
 
   it('should allow if has profile data', () => {
     spyOn(loginService, 'userHasProfileData').and.returnValue(true);
+    spyOn(loginService, 'userHasRecentSecurityConsentDate').and.returnValue(true);
     const retval = guard.canActivateChild(testActivatedRouteSnapshot);
     expect(retval).toEqual(true);
   });

@@ -1,12 +1,18 @@
 import { createReducer, on } from '@ngrx/store';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { updateUserLoginDataAction, userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from './login.actions';
+import {
+  updateUserLoginDataAction,
+  userLoggedInAction,
+  userLoggedOutAction,
+  userLoggedOutForLoginDotGovAction,
+} from './login.actions';
 
 export const initialState: UserLoginData = {
   first_name: '',
   last_name: '',
   email: '',
-  login_dot_gov: false
+  login_dot_gov: false,
+  security_consent_date: undefined,
 };
 
 export const loginReducer = createReducer(
