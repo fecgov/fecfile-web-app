@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -17,7 +18,8 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
   constructor(
     protected committeeAccountService: CommitteeAccountService,
     protected fecApiService: FecApiService,
-    protected store: Store
+    protected store: Store,
+    protected router: Router
   ) {
     super();
   }
@@ -37,6 +39,9 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
     this.committeeAccountService
       .activateCommittee(committee.id)
       .pipe(switchMap(() => this.committeeAccountService.getActiveCommittee()))
-      .subscribe((committee) => this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committee })));
+      .subscribe((committee) => {
+        this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committee }));
+        this.router.navigateByUrl(``);
+      });
   }
 }
