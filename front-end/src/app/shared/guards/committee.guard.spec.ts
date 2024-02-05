@@ -1,17 +1,44 @@
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 
 import { committeeGuard } from './committee.guard';
+import { testMockStore } from '../utils/unit-test.utils';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { Observable, of } from 'rxjs';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 
 describe('committeeGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => committeeGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => committeeGuard(...guardParameters));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideMockStore(testMockStore)],
+    });
   });
 
   it('should be created', () => {
     expect(executeGuard).toBeTruthy();
+  });
+
+  it('should return false without committee', () => {
+    const router = TestBed.inject(Router);
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.resolveTo(undefined);
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {} as any;
+    (executeGuard(route, state) as Observable<boolean>).subscribe((safe) => {
+      expect(safe).toBeFalse();
+      expect(navigateSpy).toHaveBeenCalled();
+    });
+  });
+  it('should return true with committee', () => {
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {} as any;
+    TestBed.inject(MockStore).overrideSelector(selectCommitteeAccount, CommitteeAccount.fromJSON({ id: '123' }));
+    TestBed.inject(MockStore).refreshState();
+    (executeGuard(route, state) as Observable<boolean>).subscribe((safe) => {
+      expect(safe).toBeTrue();
+    });
   });
 });

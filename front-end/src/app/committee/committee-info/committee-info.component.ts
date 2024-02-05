@@ -89,6 +89,6 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
+    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank', 'noopener');
   }
 }
