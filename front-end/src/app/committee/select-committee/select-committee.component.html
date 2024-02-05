@@ -1,1 +1,19 @@
-<p>select-committee works!</p>
+<div class="flex select-committee-columns">
+  <div class="col-6 left-side">
+    <h1>Get started now</h1>
+    <h5><strong>LET'S FILE YOUR FEC REPORT WITH FECFILE...</strong></h5>
+
+    <img src="assets/img/person-filing.jpg" draggable="false" alt="Person filing image" />
+  </div>
+  <div class="col-6 right-side">
+    <div class="select-committee-box">
+      <h2>Select a committee account</h2>
+      <p-card *ngFor="let committee of ['1', '2', '3']">
+        <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+      </p-card>
+      <h5><strong>LOOKING FOR AN EXISTING FEFILE COMMITTEE ACCOUNT?</strong></h5>
+      Contact the administrator for that committee.
+    </div>
+    <div class="create-committee-card"><img src="assets/img/blue-plus.png" />create a new committee</div>
+  </div>
+</div>

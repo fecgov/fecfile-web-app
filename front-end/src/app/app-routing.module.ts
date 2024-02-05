@@ -6,6 +6,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
+import { committeeGuard } from './shared/guards/committee.guard';
+import { SelectCommitteeComponent } from './committee/select-committee/select-committee.component';
 
 const routes: Routes = [
   {
@@ -16,9 +18,15 @@ const routes: Routes = [
     resolve: { sidebar: SidebarStateResolver },
   },
   {
+    path: 'select-committee',
+    component: LayoutComponent,
+    children: [{ path: '', component: SelectCommitteeComponent, resolve: { sidebar: SidebarStateResolver } }],
+  },
+  {
     path: '',
     component: LayoutComponent,
     resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
+    canActivate: [committeeGuard],
     runGuardsAndResolvers: 'always',
     children: [
       { path: 'committee', loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule) },

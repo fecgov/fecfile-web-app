@@ -100,7 +100,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
       },
       { metaReducers }
     ),
-    EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
+    EffectsModule.forRoot([LoginEffects]),
     MenubarModule,
     PanelMenuModule,
     PanelModule,

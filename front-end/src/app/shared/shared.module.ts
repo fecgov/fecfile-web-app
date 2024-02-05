@@ -54,6 +54,7 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
 import { SingleClickDirective } from './directives/single-click.directive';
 import { RippleModule } from 'primeng/ripple';
 import { CardModule } from 'primeng/card';
+import { SelectCommitteeComponent } from './guards/committee/select-committee/select-committee.component';
 
 @NgModule({
   imports: [
@@ -118,6 +119,7 @@ import { CardModule } from 'primeng/card';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
+    SelectCommitteeComponent,
   ],
   exports: [
     FecDatePipe,
