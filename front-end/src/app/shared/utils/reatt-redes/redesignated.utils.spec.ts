@@ -1,6 +1,6 @@
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { RedesignatedUtils } from './redesignated.utils';
-import { ReattRedesTypes } from './reatt-redes.utils';
+import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { testScheduleBTransaction } from '../unit-test.utils';
 import { F3xReportCodes } from '../report-code.utils';
 
@@ -71,6 +71,24 @@ describe('Redesignated Utils', () => {
       payload = RedesignatedUtils.overlayTransactionProperties(payload, '1');
       expect(payload.expenditure_purpose_descrip).toEqual('See redesignation below.');
       expect(payload.reattribution_redesignation_tag).toEqual(ReattRedesTypes.REDESIGNATED);
+    });
+
+    it('should update the memo', () => {
+      const updateMemoSpy = spyOn(ReattRedesUtils, 'updateMemo').and.callThrough();
+      data = {
+        id: '999',
+        form_type: 'SA11Ai',
+        payee_organization_name: 'foo',
+        expenditure_date: undefined,
+        fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
+        report_id: '1',
+        expenditure_purpose_descrip: 'PURPOSE',
+        text4000: 'MEMO',
+      };
+      payload = SchBTransaction.fromJSON(data);
+      payload = RedesignatedUtils.overlayTransactionProperties(payload, '1');
+      expect(payload.memo_text).toBeTruthy();
+      expect(updateMemoSpy).toHaveBeenCalled();
     });
   });
 });

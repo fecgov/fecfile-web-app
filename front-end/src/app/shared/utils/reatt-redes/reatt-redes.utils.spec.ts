@@ -5,6 +5,7 @@ import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransa
 import { RedesignatedUtils } from './redesignated.utils';
 import _ from 'lodash';
 import { SchBTransaction } from '../../models/schb-transaction.model';
+import { MemoText } from '../../models/memo-text.model';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -171,6 +172,15 @@ describe('ReattRedesUtils', () => {
     it('should clone ', () => {
       const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
       if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.memo_text_id = 'TEST';
+      const memo = new MemoText();
+      memo.report_id = 'ORIGINAL';
+      memo.text_prefix = 'PREFIX';
+      memo.text4000 = 'MEMO TEXT';
+      memo.rec_type = 'TEXT';
+      memo.transaction_id_number = payload.reatt_redes.id;
+      memo.transaction_uuid = 'UUID';
+      payload.reatt_redes.memo_text = memo;
       payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(payload.reatt_redes as SchBTransaction);
       const cloned = ReattRedesUtils.getPayloads(payload, true);
       expect(cloneSpy).toHaveBeenCalled();
@@ -179,6 +189,16 @@ describe('ReattRedesUtils', () => {
       expect(cloned[0].id).toBeFalsy();
       expect(cloned[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
       expect(cloned[0].force_unaggregated).toBeTrue();
+
+      // Test memo text
+      expect(cloned[0].memo_text_id).toBeFalsy();
+      expect(cloned[0].memo_text).toBeTruthy();
+      if (cloned[0].memo_text) {
+        expect(cloned[0].memo_text.id).toBeFalsy();
+        expect(cloned[0].memo_text?.transaction_uuid).toBeFalsy();
+        expect(cloned[0].memo_text?.transaction_id_number).toBeFalsy();
+        expect(cloned[0].memo_text?.report_id).toBe(payload.report_id);
+      }
     });
   });
 });
