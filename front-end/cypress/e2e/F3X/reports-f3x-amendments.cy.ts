@@ -1,10 +1,10 @@
-import { defaultFormData as contactFormData } from './models/ContactFormModel';
-import { defaultFormData as reportFormData } from './models/ReportFormModel';
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { LoginPage } from './pages/loginPage';
-import { PageUtils } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
+import { defaultFormData as contactFormData } from '../models/ContactFormModel';
+import { defaultFormData as reportFormData } from '../models/ReportFormModel';
+import { ContactListPage } from '../pages/contactListPage';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { LoginPage } from '../pages/loginPage';
+import { PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
 
 describe('Amendments', () => {
   beforeEach(() => {

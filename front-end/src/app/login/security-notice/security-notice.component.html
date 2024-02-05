@@ -1,0 +1,83 @@
+<!-- prettier-ignore -->
+<img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title.svg" />
+
+<div class="security-notice grid">
+  <div class="notice-box col-12">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="notice-header">
+          <h1>Security notification</h1>
+          <p-divider></p-divider>
+        </div>
+      </ng-template>
+
+      <div class="notice-content">
+        <p>
+          <strong>You are about to access the Federal Election Commission computer system.</strong>
+          <br /><br />
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+          <br /><br />
+          <strong>By using this system, you consent to the terms set forth in this notice.</strong>
+        </p>
+        <ul>
+          <li>
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+            laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+            totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+            explicabo.
+          </li>
+          <li>
+            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+            dolores eos qui ratione voluptatem sequi nesciunt.
+          </li>
+          <li>
+            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non
+            numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+            veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea?
+          </li>
+          <li>
+            Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel
+            illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusavmus et iusto odio
+            dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores.
+          </li>
+          <li>Et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa.</li>
+        </ul>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <p-divider></p-divider>
+        <form class="flex align-items-center gap-1" [formGroup]="form">
+          <div class="field">
+            <p-checkbox
+              formControlName="security-consent"
+              [binary]="true"
+              inputId="security-consent"
+              label="You consent to the security notification for one year"
+              ariaLabel="You consent to the security notification for one year"
+            ></p-checkbox>
+            <div class="col-12">
+              <app-error-messages
+                [form]="form"
+                fieldName="security-consent"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+        </form>
+        <div class="align-center">
+          <p-button class="security-notice-button" label="Decline and exit" (click)="loginService.logOut()"></p-button>
+          <p-button
+            class="security-notice-button"
+            label="Consent"
+            styleClass="p-button-secondary"
+            (click)="signConsentForm()"
+          ></p-button>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+  <div class="consent-box col-12"></div>
+</div>

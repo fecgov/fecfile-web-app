@@ -1,13 +1,15 @@
-import { ContactListPage } from './pages/contactListPage';
-import { F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { TransactionTableColumns } from './pages/f3xTransactionListPage';
-import { LoginPage } from './pages/loginPage';
-import { PageUtils, currentYear } from './pages/pageUtils';
-import { ReportListPage } from './pages/reportListPage';
-import { TransactionDetailPage } from './pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData } from './models/ContactFormModel';
-import { defaultFormData as defaultReportFormData } from './models/ReportFormModel';
-import { defaultScheduleFormData, formTransactionDataForSchedule } from './models/TransactionFormModel';
+import { ContactListPage } from '../pages/contactListPage';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
+import { LoginPage } from '../pages/loginPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
+import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
+import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
+import { F3XSetup } from './f3x-setup';
+import { StartTransaction } from './start-transaction/start-transaction';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -29,20 +31,8 @@ describe('Transactions', () => {
   it('Create an Individual Receipt transaction using the contact lookup', () => {
     cy.runLighthouse('reports', 'transactions-list');
 
-    // Create an individual contact to be used with contact lookup
-    ContactListPage.goToPage();
-    PageUtils.clickButton('New');
-    ContactListPage.enterFormData(defaultContactFormData);
-    PageUtils.clickButton('Save');
-
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Individual Receipt');
+    F3XSetup({ individual: true });
+    StartTransaction.Receipts().Individual().IndividualReceipt();
 
     // Select the contact from the contact lookup
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
@@ -69,13 +59,8 @@ describe('Transactions', () => {
   });
 
   it('Create an Other Disbursement transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a disbursement');
-    PageUtils.clickLink('OTHER EXPENDITURES');
-    PageUtils.clickLink('Other Disbursement');
+    F3XSetup();
+    StartTransaction.Disbursements().Other().Other();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -109,13 +94,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Returned/Bounced Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Returned();
 
     PageUtils.clickLink('Create a new contact');
     ContactListPage.enterFormData(defaultContactFormData, true);
@@ -151,14 +131,18 @@ describe('Transactions', () => {
   });
 
   xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
+    function checkTable(index: number, type: string, containMemo: boolean, value: string) {
+      cy.get('tbody tr').eq(index).as('row');
+      cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
+      cy.get('@row')
+        .find('td')
+        .eq(TransactionTableColumns.memo_code)
+        .should(containMemo ? 'contain' : 'not.contain', 'Y');
+      cy.get('@row').find('td').eq(TransactionTableColumns.aggregate).should('contain', value);
+    }
 
-    // Create a receipt
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Partnership Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Partnership();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -204,26 +188,9 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save');
 
     // Assert transaction list table is correct
-    cy.get('tbody tr').eq(0).as('row-1');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Partnership Receipt');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-    cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
-
-    cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2')
-      .find('td')
-      .eq(TransactionTableColumns.transaction_type)
-      .should('contain', 'Partnership Attribution');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
-
-    cy.get('tbody tr').eq(2).as('row-3');
-    cy.get('@row-3')
-      .find('td')
-      .eq(TransactionTableColumns.transaction_type)
-      .should('contain', 'Partnership Attribution');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-    cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$400.02');
+    checkTable(0, 'Partnership Receipt', false, '$200.01');
+    checkTable(1, 'Partnership Attribution', true, '$200.01');
+    checkTable(2, 'Partnership Attribution', true, '$400.02');
 
     // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');
@@ -248,13 +215,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Party Receipt transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM REGISTERED FILERS');
-    PageUtils.clickLink('Party Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().RegisteredFilers().Party();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -292,13 +254,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Group I transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('REFUNDS');
-    PageUtils.clickLink('Refund of Contribution to Other Political Committee');
+    F3XSetup();
+    StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
     PageUtils.clickLink('Create a new contact');
     const formContactData = {
@@ -335,21 +292,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a disbursement');
-    PageUtils.clickLink('FEDERAL ELECTION ACTIVITY EXPENDITURES');
-    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-
-    PageUtils.clickLink('Create a new contact');
-    const formContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Organization' },
-    };
-    ContactListPage.enterFormData(formContactData, true);
-    PageUtils.clickButton('Save & continue');
+    F3XSetup({ organization: true });
+    StartTransaction.Disbursements().Federal().CreditCardPayment();
 
     const transactionFormData = {
       ...formTransactionDataForSchedule,
@@ -368,7 +312,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('contain', formContactData['name']);
+    cy.get('tr').should('contain', defaultContactFormData['name']);
     cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
     cy.get('tr').should('contain', '$' + transactionFormData.amount);
 
@@ -376,18 +320,13 @@ describe('Transactions', () => {
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    ContactListPage.assertFormData(formContactData, true);
+    ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
   it('Create a dual-entry Earmark Receipt transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
-    PageUtils.clickLink('Earmark Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Earmark();
 
     // Enter STEP ONE transaction
     cy.get('p-accordiontab').first().as('stepOneAccordion');
@@ -445,7 +384,7 @@ describe('Transactions', () => {
         ...transactionFormData,
         ...{ purpose_description: `Earmarked through ${defaultContactFormData['name']}` },
       },
-      '@stepOneAccordion'
+      '@stepOneAccordion',
     );
 
     // Check form values of memo edit form
@@ -458,7 +397,7 @@ describe('Transactions', () => {
         ...transactionFormData,
         ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
       },
-      '@stepTwoAccordion'
+      '@stepTwoAccordion',
     );
   });
 
@@ -532,7 +471,7 @@ describe('Transactions', () => {
           purpose_description: `Earmarked through ${defaultContactFormData['first_name']} ${defaultContactFormData['last_name']}`,
         },
       },
-      '@stepOneAccordion'
+      '@stepOneAccordion',
     );
 
     // Check form values of memo edit form
@@ -545,7 +484,7 @@ describe('Transactions', () => {
         ...transactionFormData,
         ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
       },
-      '@stepTwoAccordion'
+      '@stepTwoAccordion',
     );
   });
 

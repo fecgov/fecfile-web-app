@@ -1,21 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login/login.component';
-import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginGuard } from './shared/guards/login-page.guard';
+import { LayoutComponent } from './layout/layout.component';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeGuard } from './shared/guards/committee.guard';
 import { SelectCommitteeComponent } from './committee/select-committee/select-committee.component';
+import { LoginComponent } from './login/login/login.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: LoginComponent,
-    pathMatch: 'full',
-    canActivate: [LoginGuard],
-    resolve: { sidebar: SidebarStateResolver },
+    path: 'login',
+    component: LayoutComponent,
+    children:[{path: '', component: LoginComponent, resolve: { sidebar: SidebarStateResolver }}]
   },
   {
     path: 'select-committee',
@@ -31,18 +28,35 @@ const routes: Routes = [
     children: [
       { path: 'committee', loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule) },
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'login',
+      },
+      {
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
       },
       {
+        path: 'login',
+        loadChildren: () => import('./login/login.module').then((m) => m.LoginModule),
+      },
+      {
         path: 'reports',
         loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule),
       },
-      { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
-      // {path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule)},
-      { path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule) },
-      { path: 'help', loadChildren: () => import('./help/help.module').then((m) => m.HelpModule) },
+      {
+        path: 'contacts',
+        loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule),
+      },
+      {
+        path: 'tools',
+        loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule),
+      },
+      {
+        path: 'help',
+        loadChildren: () => import('./help/help.module').then((m) => m.HelpModule),
+      },
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),

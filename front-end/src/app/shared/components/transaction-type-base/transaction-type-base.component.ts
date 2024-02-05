@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -29,9 +29,9 @@ import { TransactionFormUtils } from './transaction-form.utils';
 @Component({
   template: '',
 })
-export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy, OnChanges {
   @Input() transaction: Transaction | undefined;
-
+  @Input() navigationEvent?: NavigationEvent;
   formProperties: string[] = [];
   transactionType?: TransactionType;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -54,8 +54,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService,
-    protected activatedRoute: ActivatedRoute
-  ) {
+    protected activatedRoute: ActivatedRoute,
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['navigationEvent'] && this.navigationEvent) {
+      this.handleNavigate(this.navigationEvent);
+    }
   }
 
   ngOnInit(): void {
@@ -133,7 +138,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
-      this.formProperties
+      this.formProperties,
     );
     this.processPayload(payload, navigationEvent);
   }
@@ -152,7 +157,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   confirmWithUser(
     transaction: Transaction,
     form: FormGroup,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
   ) {
     const templateMap = transaction.transactionType.templateMap;
     if (!templateMap) {
@@ -170,7 +175,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
               contact.type,
               form,
               templateMap,
-              contactKey
+              contactKey,
             );
           }
           const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
@@ -187,7 +192,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     return from([of(true), ...confirmations$]).pipe(
       concatAll(),
-      reduce((accumulator, confirmed) => accumulator && confirmed)
+      reduce((accumulator, confirmed) => accumulator && confirmed),
     );
   }
 
@@ -232,7 +237,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       });
       if (event.transaction?.parent_transaction_id) {
         this.router.navigateByUrl(
-          `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
+          `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`,
         );
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
@@ -245,7 +250,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.router.navigateByUrl(
-        `${reportPath}/list/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`
+        `${reportPath}/list/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`,
       );
     } else if (event.destination === NavigationDestination.PARENT) {
       this.router.navigateByUrl(`${reportPath}/list/${event.transaction?.parent_transaction_id}`);
@@ -265,7 +270,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       selectItem,
       this.form,
       this.transaction,
-      this.contactIdMap['contact_1']
+      this.contactIdMap['contact_1'],
     );
   }
 
@@ -274,7 +279,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       selectItem,
       this.form,
       this.transaction,
-      this.contactIdMap['contact_2']
+      this.contactIdMap['contact_2'],
     );
   }
 
@@ -283,7 +288,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       selectItem,
       this.form,
       this.transaction,
-      this.contactIdMap['contact_2']
+      this.contactIdMap['contact_2'],
     );
   }
 
@@ -292,7 +297,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       selectItem,
       this.form,
       this.transaction,
-      this.contactIdMap['contact_3']
+      this.contactIdMap['contact_3'],
     );
   }
 
@@ -310,7 +315,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         return memoControl.hasValidator(Validators.requiredTrue) ? requiredLabel : optionalLabel;
       }),
       startWith(optionalLabel),
-      takeUntil(this.destroy$)
+      takeUntil(this.destroy$),
     );
   }
 

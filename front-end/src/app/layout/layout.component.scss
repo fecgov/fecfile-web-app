@@ -42,3 +42,15 @@ app-footer {
   display: flex;
   flex-direction: column;
 }
+
+.login-background {
+	background-color: #ece8e8;
+  max-height: 100vh;
+}
+
+.security-notice-background {
+  background-image: linear-gradient(90deg, #1a4f82, #ffffff00), url('/assets/img/security-notice-flag-background.jpg');
+  background-repeat: no-repeat, no-repeat;
+  background-size: cover, cover;
+  background-position-x: 0px, 90%;
+}

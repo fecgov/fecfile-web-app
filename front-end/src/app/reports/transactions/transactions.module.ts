@@ -32,6 +32,10 @@ import { TransactionInputComponent } from './transaction-input/transaction-input
 import { TransactionNavigationComponent } from './transaction-navigation/transaction-navigation.component';
 import { TransactionGuarantorsComponent } from './transaction-list/transaction-guarantors/transaction-guarantors.component';
 import { TransactionChildrenListContainerComponent } from './transaction-children-list-container/transaction-children-list-container.component';
+import { RippleModule } from 'primeng/ripple';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { SelectReportDialogComponent } from './transaction-list/select-report-dialog/select-report-dialog.component';
+import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,8 @@ import { TransactionChildrenListContainerComponent } from './transaction-childre
     TransactionLoansAndDebtsComponent,
     TransactionInputComponent,
     TransactionNavigationComponent,
+    SelectReportDialogComponent,
+    ReattRedesTransactionTypeDetailComponent,
   ],
   imports: [
     AccordionModule,
@@ -69,6 +75,8 @@ import { TransactionChildrenListContainerComponent } from './transaction-childre
     TableModule,
     SharedModule,
     ConfirmDialogModule,
+    RippleModule,
+    SelectButtonModule,
   ],
 })
 export class TransactionsModule {}

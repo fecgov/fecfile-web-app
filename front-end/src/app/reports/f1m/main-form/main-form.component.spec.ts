@@ -110,19 +110,6 @@ describe('MainFormComponent', () => {
     expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
   });
 
-  it('updateAffiliatedContact should set values in form', () => {
-    fixture.detectChanges();
-    const $event = {
-      value: Contact.fromJSON({
-        committee_id: 'C00000008',
-        name: 'xyz',
-      }),
-    };
-    component.updateAffiliatedContact($event);
-    expect(component.form.get('affiliated_committee_fec_id')?.value).toBe('C00000008');
-    expect(component.form.get('affiliated_committee_name')?.value).toBe('xyz');
-  });
-
   it('getReportPayload should update and return the report properties', () => {
     fixture.detectChanges();
     component.form.patchValue({
@@ -134,10 +121,8 @@ describe('MainFormComponent', () => {
       city: 'test city',
       state: 'DC',
       zip: '22222',
-      affiliated_date_form_f1_filed: Date(),
       affiliated_committee_fec_id: 'C00000002',
       affiliated_committee_name: 'affiliated committee',
-      statusBy: '',
     });
 
     const contact_affiliated = Contact.fromJSON({
@@ -157,5 +142,38 @@ describe('MainFormComponent', () => {
     expect((payload as Form1M).contact_affiliated?.name).toBe('affiliated committee');
     expect((payload as Form1M).contact_affiliated?.committee_id).toBe('C00000002');
     expect((payload as Form1M).committee_name).toBe('test committee');
+  });
+
+  it('getSelectedContactIds() should return correct ids', () => {
+    fixture.detectChanges();
+    component.form.patchValue({
+      statusBy: 'qualification',
+      I_candidate_id_number: 'P00000001',
+      II_candidate_id_number: 'P00000002',
+      III_candidate_id_number: 'P00000003',
+    });
+
+    let candidateIds = component.getSelectedContactIds();
+    expect(candidateIds.length).toBe(3);
+    expect(candidateIds.includes('P00000001')).toBeTrue();
+    expect(candidateIds.includes('P00000002')).toBeTrue();
+    expect(candidateIds.includes('P00000003')).toBeTrue();
+    expect(candidateIds.includes('P00000004')).toBeFalse();
+
+    candidateIds = component.getSelectedContactIds('II');
+    expect(candidateIds.length).toBe(2);
+    expect(candidateIds.includes('P00000001')).toBeTrue();
+    expect(candidateIds.includes('P00000002')).toBeFalse();
+    expect(candidateIds.includes('P00000003')).toBeTrue();
+    expect(candidateIds.includes('P00000004')).toBeFalse();
+
+    // Verify duplicating a candidtate id invalidates the form control.
+    const control = component.form.get('II_candidate_id_number');
+    expect(control).toBeTruthy();
+    expect(control?.valid).toBeTrue();
+    control?.setValue('P00000001');
+    expect(control?.valid).toBeFalse();
+    control?.setValue('P00000002');
+    expect(control?.valid).toBeTrue();
   });
 });

@@ -50,7 +50,10 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   searchTerm = '';
 
-  constructor(private contactService: ContactService, private fecApiService: FecApiService) {
+  constructor(
+    private contactService: ContactService,
+    private fecApiService: FecApiService,
+  ) {
     super();
   }
 
@@ -80,7 +83,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
               searchTerm,
               this.maxFecCommitteeResults,
               this.maxFecfileCommitteeResults,
-              this.candidateOffice
+              this.candidateOffice,
             )
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
@@ -163,7 +166,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             candidate_office: candidate.office,
             candidate_state: candidate.state === 'US' ? '' : candidate.state,
             candidate_district: candidate.district === '00' ? '' : candidate.district,
-          })
+          }),
         );
       });
     }
@@ -187,7 +190,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             state: committeeAccount.state,
             zip: committeeAccount.zip,
             telephone: phone,
-          })
+          }),
         );
       });
     }

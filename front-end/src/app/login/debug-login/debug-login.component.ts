@@ -1,11 +1,10 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { userLoggedOutAction } from 'app/store/login.actions';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { Store } from '@ngrx/store';
-import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions';
 
 @Component({
   selector: 'app-debug-login',
@@ -88,13 +87,11 @@ export class DebugLoginComponent implements OnInit {
     const email: string = this.form.get('emailId')?.value;
 
     this.loginService.logIn(email, committeeId, password).subscribe({
-      next: (res: UserLoginData) => {
-        if (res.is_allowed) {
-          this.store.dispatch(userLoggedInAction({ payload: res }));
-          this.ngZone.run(() => {
-            this.router.navigate(['dashboard']);
-          });
-        }
+      next: () => {
+        this.loginService.dispatchUserLoggedInFromCookies();
+        this.ngZone.run(() => {
+          this.router.navigate(['dashboard']);
+        });
       },
       error: () => {
         this.isBusy = false;
