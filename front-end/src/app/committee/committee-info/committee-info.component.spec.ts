@@ -7,22 +7,22 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SharedModule } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
-import { AccountInfoComponent } from './account-info.component';
+import { CommitteeInfoComponent } from './committee-info.component';
 
-describe('AccountInfoComponent', () => {
-  let component: AccountInfoComponent;
-  let fixture: ComponentFixture<AccountInfoComponent>;
+describe('CommitteeInfoComponent', () => {
+  let component: CommitteeInfoComponent;
+  let fixture: ComponentFixture<CommitteeInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [provideMockStore(testMockStore)],
-      declarations: [AccountInfoComponent, FecInternationalPhoneInputComponent],
+      declarations: [CommitteeInfoComponent, FecInternationalPhoneInputComponent],
       imports: [DividerModule, DropdownModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule, SharedModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccountInfoComponent);
+    fixture = TestBed.createComponent(CommitteeInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -35,6 +35,6 @@ describe('AccountInfoComponent', () => {
     spyOn(window, 'open');
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();
-    expect(window.open).toHaveBeenCalledWith('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
+    expect(window.open).toHaveBeenCalledWith('https://webforms.fec.gov/webforms/form1/index.htm', '_blank', 'noopener');
   });
 });

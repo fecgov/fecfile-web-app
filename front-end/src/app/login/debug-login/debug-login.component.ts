@@ -89,9 +89,7 @@ export class DebugLoginComponent implements OnInit {
     this.loginService.logIn(email, committeeId, password).subscribe({
       next: () => {
         this.loginService.dispatchUserLoggedInFromCookies();
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        });
+        this.router.navigate(['dashboard']);
       },
       error: () => {
         this.isBusy = false;

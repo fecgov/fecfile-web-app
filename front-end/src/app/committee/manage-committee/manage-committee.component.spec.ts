@@ -10,18 +10,18 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { CommitteeUser } from '../../shared/models/user.model';
-import { UserListComponent } from './user-list.component';
+import { ManageCommitteeComponent } from './manage-committee.component';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
 
-describe('ContactListComponent', () => {
-  let component: UserListComponent;
-  let fixture: ComponentFixture<UserListComponent>;
+describe('ManageCommitteeComponent', () => {
+  let component: ManageCommitteeComponent;
+  let fixture: ComponentFixture<ManageCommitteeComponent>;
 
-  const committeeUser = CommitteeUser.fromJSON({
+  const committeeMember = CommitteeMember.fromJSON({
     first_name: 'John',
     last_name: 'Smith',
     email: 'JS_Test@test.com',
-    role: 'C_ADMIN',
+    role: 'COMMITTEE_ADMINISTRATOR',
     is_active: true,
   });
 
@@ -36,13 +36,13 @@ describe('ContactListComponent', () => {
         FileUploadModule,
         ConfirmDialogModule,
       ],
-      declarations: [UserListComponent],
+      declarations: [ManageCommitteeComponent],
       providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserListComponent);
+    fixture = TestBed.createComponent(ManageCommitteeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -59,12 +59,12 @@ describe('ContactListComponent', () => {
 
   it('#editItem opens the dialog to edit an item', () => {
     component.isNewItem = true;
-    component.editItem(committeeUser);
+    component.editItem(committeeMember);
     expect(component.isNewItem).toBe(false);
   });
 
-  it("the Committee User's names should be correct", () => {
-    const name = `${committeeUser.last_name}, ${committeeUser.first_name}`;
+  it("the Committee Member's names should be correct", () => {
+    const name = `${committeeMember.last_name}, ${committeeMember.first_name}`;
     expect(name).toBe('Smith, John');
   });
 });

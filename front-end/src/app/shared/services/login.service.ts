@@ -9,6 +9,8 @@ import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
+import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
+import { CommitteeAccount } from '../models/committee-account.model';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -56,6 +58,7 @@ export class LoginService extends DestroyerComponent {
         window.location.href = environment.loginDotGovLogoutUrl;
       }
     }
+    this.store.dispatch(setCommitteeAccountDetailsAction({ payload: new CommitteeAccount() }));
     return false;
   }
 

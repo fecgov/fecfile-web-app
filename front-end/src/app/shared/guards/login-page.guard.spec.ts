@@ -27,19 +27,19 @@ describe('LoginGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should reroute to dashboard if logged in', () => {
+  it('should continue if logged in', () => {
     spyOn(loginService, 'userIsAuthenticated').and.returnValue(true);
-    const navigateSpy = spyOn(router, 'navigate');
-    const retval = guard.canActivate();
-    expect(navigateSpy).toHaveBeenCalledWith(['dashboard']);
-    expect(retval).toEqual(false);
-  });
-
-  it('should allow activate if not logged in', () => {
-    spyOn(loginService, 'userIsAuthenticated').and.returnValue(false);
     const navigateSpy = spyOn(router, 'navigate');
     const retval = guard.canActivate();
     expect(navigateSpy).not.toHaveBeenCalled();
     expect(retval).toEqual(true);
+  });
+
+  it('should redirect to login if not logged in', () => {
+    spyOn(loginService, 'userIsAuthenticated').and.returnValue(false);
+    const navigateSpy = spyOn(router, 'navigate');
+    const retval = guard.canActivate();
+    expect(navigateSpy).toHaveBeenCalledWith(['login']);
+    expect(retval).toEqual(false);
   });
 });

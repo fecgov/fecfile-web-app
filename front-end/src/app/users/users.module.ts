@@ -13,17 +13,14 @@ import { DividerModule } from 'primeng/divider';
 
 // App
 import { SharedModule } from '../shared/shared.module';
-import { UserListComponent } from './user-list/user-list.component';
-import { UsersRoutingModule } from './users-routing.module';
 import { UpdateCurrentUserComponent } from './update-current-user/update-current-user.component';
 
 @NgModule({
-  declarations: [UserListComponent, UpdateCurrentUserComponent],
+  declarations: [UpdateCurrentUserComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    UsersRoutingModule,
     TableModule,
     ToastModule,
     ToolbarModule,

@@ -1,28 +1,28 @@
 import { Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { UsersService } from '../../shared/services/users.service';
-import { CommitteeUser } from '../../shared/models/user.model';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { CommitteeMemberService } from 'app/shared/services/committee-account.service';
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
+  selector: 'app-manage-committee',
+  templateUrl: './manage-committee.component.html',
 })
-export class UserListComponent extends TableListBaseComponent<CommitteeUser> {
-  override item: CommitteeUser = this.getEmptyItem();
+export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
+  override item: CommitteeMember = this.getEmptyItem();
   public rowActions: TableAction[] = [];
 
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: UsersService
+    protected override itemService: CommitteeMemberService
   ) {
     super(messageService, confirmationService, elementRef);
   }
 
-  protected getEmptyItem(): CommitteeUser {
-    return new CommitteeUser();
+  protected getEmptyItem(): CommitteeMember {
+    return new CommitteeMember();
   }
 
   public override addItem() {
@@ -30,7 +30,7 @@ export class UserListComponent extends TableListBaseComponent<CommitteeUser> {
     this.isNewItem = true;
   }
 
-  public override editItem(item: CommitteeUser) {
+  public override editItem(item: CommitteeMember) {
     super.editItem(item);
     this.isNewItem = false;
   }

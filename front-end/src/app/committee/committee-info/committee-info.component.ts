@@ -11,11 +11,11 @@ import { Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './account-info.component.html',
-  styleUrls: ['./account-info.component.scss'],
+  selector: 'app-committee-info',
+  templateUrl: './committee-info.component.html',
+  styleUrls: ['./committee-info.component.scss'],
 })
-export class AccountInfoComponent extends DestroyerComponent implements OnInit, AfterViewInit {
+export class CommitteeInfoComponent extends DestroyerComponent implements OnInit, AfterViewInit {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   stateOptions: PrimeOptions = [];
@@ -89,6 +89,6 @@ export class AccountInfoComponent extends DestroyerComponent implements OnInit, 
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
+    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank', 'noopener');
   }
 }

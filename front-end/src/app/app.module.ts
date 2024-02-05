@@ -12,7 +12,6 @@ import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
-import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
@@ -50,6 +49,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
 import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component';
+import { UsersModule } from './users/users.module';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -80,6 +80,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   ],
   imports: [
     BrowserModule,
+    UsersModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -94,9 +95,9 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         activeReport: activeReportReducer,
         sidebarState: sidebarStateReducer,
       },
-      { metaReducers }
+      { metaReducers },
     ),
-    EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
+    EffectsModule.forRoot([LoginEffects]),
     MenubarModule,
     PanelMenuModule,
     PanelModule,
