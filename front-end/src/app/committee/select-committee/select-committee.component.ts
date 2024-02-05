@@ -28,8 +28,8 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
     this.committeeAccountService
       .getCommittees()
       .pipe(
-        concatMap(
-          (committees: CommitteeAccount[]) => forkJoin(committees.map((committee) => of(committee))) //this.fecApiService.getCommitteeDetails(committee.committee_id || '')))
+        concatMap((committees: CommitteeAccount[]) =>
+          forkJoin(committees.map((committee) => this.fecApiService.getCommitteeDetails(committee.committee_id || '')))
         )
       )
       .subscribe((committees) => (this.committees = committees));
