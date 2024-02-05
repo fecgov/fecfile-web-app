@@ -18,7 +18,6 @@ import { map, takeUntil } from 'rxjs';
   styleUrls: ['./security-notice.component.scss'],
 })
 export class SecurityNoticeComponent extends DestroyerComponent implements OnInit {
-  public loginDotGovAuthUrl: string | undefined;
   public localLoginAvailable = false;
   formSubmitted = false;
   userLoginData?: UserLoginData;
