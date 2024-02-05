@@ -2,7 +2,10 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
+import { RedesignatedUtils } from './redesignated.utils';
+import _ from 'lodash';
+import { SchBTransaction } from '../../models/schb-transaction.model';
+import { MemoText } from '../../models/memo-text.model';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -93,12 +96,12 @@ describe('ReattRedesUtils', () => {
       toTxn.reatt_redes = reattributed;
       toTxn.children[0] = fromTxn;
 
-      const result = ReattRedesUtils.getPayloads(payload);
+      const result = ReattRedesUtils.getPayloads(payload, false);
 
       expect(result[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
       expect(result[1].reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTION_TO);
       expect((result[1].children[0] as SchATransaction).reattribution_redesignation_tag).toBe(
-        ReattRedesTypes.REATTRIBUTION_FROM
+        ReattRedesTypes.REATTRIBUTION_FROM,
       );
     });
   });
@@ -145,44 +148,57 @@ describe('ReattRedesUtils', () => {
     });
   });
 
-  it('overlayTransactionProperties should override default properties for a SchATransaction', () => {
-    const transaction = SchATransaction.fromJSON({
-      ...testScheduleATransaction,
+  describe('getPayload', () => {
+    let payload: SchBTransaction;
+
+    beforeEach(() => {
+      payload = SchBTransaction.fromJSON({
+        ...testScheduleBTransaction,
+      });
+      payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      payload.reatt_redes = SchBTransaction.fromJSON({
+        ...testScheduleBTransaction,
+      });
     });
 
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction,
-      '3cd741da-aa57-4cc3-8530-667e8b7bad78'
-    ) as SchATransaction;
-
-    expect(overlay.fields_to_validate?.includes('contribution_purpose_descrip')).toBeFalse();
-    expect(overlay.contribution_purpose_descrip).toBe('See reattribution below.');
-    expect(overlay.reattribution_redesignation_tag).toBe(ReattRedesTypes.REATTRIBUTED);
-  });
-
-  it('overlayTransactionProperties should override default properties for a SchBTransaction', () => {
-    const transaction = SchBTransaction.fromJSON({
-      ...testScheduleBTransaction,
+    it('should throw error when originating missing transaction type', () => {
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.transaction_type_identifier = undefined;
+      expect(function () {
+        ReattRedesUtils.getPayloads(payload, true);
+      }).toThrow(Error('Fecfile online: originating transaction type not found.'));
     });
-    transaction.report_id = '3cd741da-aa57-4cc3-8530-667e8b7bad78';
 
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction as SchBTransaction,
-      '3cd741da-aa57-4cc3-8530-667e8b7bad78'
-    ) as SchBTransaction;
+    it('should clone ', () => {
+      const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.memo_text_id = 'TEST';
+      const memo = new MemoText();
+      memo.report_id = 'ORIGINAL';
+      memo.text_prefix = 'PREFIX';
+      memo.text4000 = 'MEMO TEXT';
+      memo.rec_type = 'TEXT';
+      memo.transaction_id_number = payload.reatt_redes.id;
+      memo.transaction_uuid = 'UUID';
+      payload.reatt_redes.memo_text = memo;
+      payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(payload.reatt_redes as SchBTransaction);
+      const cloned = ReattRedesUtils.getPayloads(payload, true);
+      expect(cloneSpy).toHaveBeenCalled();
+      expect(cloned[0].report_id).toEqual(payload.report_id);
+      expect(cloned[0].report).toBeFalsy();
+      expect(cloned[0].id).toBeFalsy();
+      expect(cloned[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
+      expect(cloned[0].force_unaggregated).toBeTrue();
 
-    expect(overlay.fields_to_validate?.includes('expenditure_purpose_descrip')).toBeFalse();
-    expect(overlay.expenditure_purpose_descrip).toBe('See redesignation below.');
-    expect(overlay.reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
-  });
-
-  xit('overlayTransactionProperties should handle a different report', () => {
-    const transaction = { ...testScheduleATransaction } as SchATransaction;
-    const overlay = ReattRedesUtils.overlayTransactionProperties(
-      transaction,
-      'not-the-same-report-as-orig'
-    ) as SchATransaction;
-    expect(overlay.report_id).toBe('not-the-same-report-as-orig');
-    expect(overlay.contribution_purpose_descrip).toBe('(Originally disclosed on M1.) See attribution below.');
+      // Test memo text
+      expect(cloned[0].memo_text_id).toBeFalsy();
+      expect(cloned[0].memo_text).toBeTruthy();
+      if (cloned[0].memo_text) {
+        expect(cloned[0].memo_text.id).toBeFalsy();
+        expect(cloned[0].memo_text?.transaction_uuid).toBeFalsy();
+        expect(cloned[0].memo_text?.transaction_id_number).toBeFalsy();
+        expect(cloned[0].memo_text?.report_id).toBe(payload.report_id);
+      }
+    });
   });
 });

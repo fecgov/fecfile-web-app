@@ -6,10 +6,11 @@ import { BaseModel } from './base.model';
  * after a successful login.
  */
 export type UserLoginData = {
-  committee_id: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  is_allowed: boolean;
-  login_dot_gov: boolean;
+  security_consent_date: string | undefined;
+  login_dot_gov?: boolean;
 };
 
 export class User extends BaseModel {

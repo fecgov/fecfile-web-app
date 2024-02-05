@@ -1,24 +1,15 @@
 import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
-import { UserLoginData } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private loggedInEmail: string | undefined;
-
-  constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
-    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.loggedInEmail = userLoginData.email;
-    });
-  }
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -91,9 +82,5 @@ export class ApiService {
   public delete<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
     return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
-  }
-
-  public isAuthenticated() {
-    return !!this.loggedInEmail || this.cookieService.check(environment.ffapiEmailCookieName);
   }
 }

@@ -24,10 +24,10 @@ describe('SchATransaction', () => {
 
   it('Updates the purpose description of a child transaction', () => {
     const parentTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT
+      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     ) as SchATransaction;
     const childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
+      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     ) as SchATransaction;
     parentTransaction.children = [childTransaction];
     parentTransaction.contributor_organization_name = 'Test Committee';
@@ -57,6 +57,11 @@ describe('SchATransaction', () => {
       reattribution_redesignation_tag: 'REATTRIBUTED',
       reatt_redes: {
         transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
+      },
+      report: {
+        report_type: 'F3X',
+        report_code: 'Q1',
+        reportCode: 'Q1',
       },
     };
     const transaction: SchATransaction = SchATransaction.fromJSON(json);

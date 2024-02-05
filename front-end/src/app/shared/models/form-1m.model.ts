@@ -1,7 +1,7 @@
 import { Report, ReportTypes } from './report.model';
-import { plainToClass, Transform, Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { Contact, CandidateOfficeType } from './contact.model';
+import { CandidateOfficeType, Contact } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 export enum CommitteeTypes {
@@ -49,7 +49,7 @@ export class Form1M extends Report {
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
-  @Transform(BaseModel.dateTransform) affiliated_date_committee_fec_id?: Date;
+  affiliated_committee_fec_id?: string;
   affiliated_committee_name?: string;
 
   I_candidate_id_number?: string;
@@ -117,12 +117,21 @@ export class Form1M extends Report {
   treasurer_suffix?: string;
   @Transform(BaseModel.dateTransform) date_signed?: Date;
 
-  @Type(() => Contact)
-  contact_affiliated?: Contact;
-  contact_affiliated_id?: string;
+  @Type(() => Contact) contact_affiliated?: Contact;
+  contact_affiliated_id?: string | null;
+  @Type(() => Contact) contact_candidate_I?: Contact;
+  contact_candidate_I_id?: string | null;
+  @Type(() => Contact) contact_candidate_II?: Contact;
+  contact_candidate_II_id?: string | null;
+  @Type(() => Contact) contact_candidate_III?: Contact;
+  contact_candidate_III_id?: string | null;
+  @Type(() => Contact) contact_candidate_IV?: Contact;
+  contact_candidate_IV_id?: string | null;
+  @Type(() => Contact) contact_candidate_V?: Contact;
+  contact_candidate_V_id?: string | null;
 
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Form1M, json);
+    return plainToInstance(Form1M, json);
   }
 }

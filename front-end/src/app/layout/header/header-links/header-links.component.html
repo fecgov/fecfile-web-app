@@ -1,5 +1,5 @@
 <ul class="navbar-nav">
-  <ng-container *ngIf="!loginPage">
+  <ng-container *ngIf="!loginHeader">
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" routerLink="/dashboard"><span [ngStyle]="{ 'font-size': fontSize }">Dashboard</span></a>
     </li>
@@ -71,7 +71,7 @@
       </ul>
     </li>
   </ng-container>
-  <ng-container *ngIf="loginPage">
+  <ng-container *ngIf="loginHeader">
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" [routerLink]=""><span [ngStyle]="{ 'font-size': fontSize }">Sign Up</span></a>
     </li>

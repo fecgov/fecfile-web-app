@@ -14,7 +14,7 @@ import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
-import { ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -34,7 +34,7 @@ describe('TransactionResolver', () => {
                 transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
                 contact_id: '123',
                 contact_1: Contact.fromJSON({ id: 123 }),
-              })
+              }),
             ),
           getTableData: () =>
             of({
@@ -126,8 +126,8 @@ describe('TransactionResolver', () => {
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-          })
-        )
+          }),
+        ),
       );
 
       resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
@@ -147,7 +147,7 @@ describe('TransactionResolver', () => {
             transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-          })
+          }),
         );
       });
       const route = {
@@ -175,7 +175,7 @@ describe('TransactionResolver', () => {
             transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-          })
+          }),
         );
       });
       const route = {
@@ -203,7 +203,7 @@ describe('TransactionResolver', () => {
             transactionType: TransactionTypeUtils.factory(ScheduleBTransactionTypes.OPERATING_EXPENDITURE),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-          })
+          }),
         );
       });
       const route = {
@@ -219,7 +219,7 @@ describe('TransactionResolver', () => {
         if (transaction) {
           expect((transaction as SchBTransaction).reattribution_redesignation_tag).toEqual('REDESIGNATION_TO');
           expect(
-            ((transaction as SchBTransaction).children[0] as SchBTransaction).reattribution_redesignation_tag
+            ((transaction as SchBTransaction).children[0] as SchBTransaction).reattribution_redesignation_tag,
           ).toEqual('REDESIGNATION_FROM');
         }
       });
@@ -234,10 +234,10 @@ describe('TransactionResolver', () => {
         .pipe(
           catchError((err) => {
             expect(err.message).toBe(
-              "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10"
+              "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10",
             );
             return of(err);
-          })
+          }),
         )
         .subscribe();
     });
@@ -251,18 +251,18 @@ describe('TransactionResolver', () => {
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-          })
-        )
+          }),
+        ),
       );
       resolver
         .resolveExistingTransactionFromId('10')
         .pipe(
           catchError((err) => {
             expect(err.message).toBe(
-              'Fecfile: Transaction 999 (EARMARK_MEMO) is a dependent transaction type but does not have a parent transaction.'
+              'Fecfile: Transaction 999 (EARMARK_MEMO) is a dependent transaction type but does not have a parent transaction.',
             );
             return of(err);
-          })
+          }),
         )
         .subscribe();
     });
@@ -277,8 +277,8 @@ describe('TransactionResolver', () => {
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction_id: 2,
-          })
-        )
+          }),
+        ),
       );
       resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
         if (transaction) expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
@@ -292,7 +292,7 @@ describe('TransactionResolver', () => {
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
+              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
@@ -303,7 +303,7 @@ describe('TransactionResolver', () => {
               contact_id: '123',
               contact_1: Contact.fromJSON({ id: 123 }),
             }),
-          })
+          }),
         );
       });
       resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
@@ -319,7 +319,7 @@ describe('TransactionResolver', () => {
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
+              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
@@ -327,7 +327,7 @@ describe('TransactionResolver', () => {
               id: '2',
               transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
               transactionType: TransactionTypeUtils.factory(
-                ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
+                ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
               ),
               contact_id: '123',
               contact_1: Contact.fromJSON({ id: 123 }),
@@ -339,7 +339,7 @@ describe('TransactionResolver', () => {
                 contact_1: Contact.fromJSON({ id: 123 }),
               }),
             }),
-          })
+          }),
         );
       });
       resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
@@ -365,7 +365,7 @@ describe('TransactionResolver', () => {
               contact_id: '123',
               contact_1: Contact.fromJSON({ id: 123 }),
             }),
-          })
+          }),
         );
       });
       resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
@@ -390,7 +390,7 @@ describe('TransactionResolver', () => {
               contact_id: '123',
               contact_1: Contact.fromJSON({ id: 123 }),
             }),
-          })
+          }),
         );
       });
       resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
@@ -428,7 +428,12 @@ describe('TransactionResolver', () => {
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-          })
+            report: {
+              report_type: 'F3X',
+              report_code: 'Q1',
+              reportCode: 'Q1',
+            },
+          }),
         );
       });
     });
@@ -438,14 +443,14 @@ describe('TransactionResolver', () => {
         if (transaction) {
           expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
           expect(
-            ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag
+            ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag,
           ).toEqual('REATTRIBUTION_FROM');
         }
       });
     });
 
     it('should throw error if redesignated does not have transaction_type_identifier', () => {
-      spyOn(ReattRedesUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
+      spyOn(ReattributedUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
         return SchATransaction.fromJSON({
           id: id,
           transaction_type_identifier: undefined,

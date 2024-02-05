@@ -1,11 +1,13 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { ReportService } from "../../../shared/services/report.service";
+import { Transaction } from "../../../shared/models/transaction.model";
 
 @Component({
   selector: 'app-transaction-list',
@@ -17,6 +19,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   reportTypes = ReportTypes;
   reportStatus = ReportStatus;
 
+  availableReports: Report[] = [];
   public tableActions: TableAction[] = [
     new TableAction(
       'Add a receipt',
@@ -59,24 +62,26 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       () => true
     ),
   ];
+  transaction?: Transaction;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {
+  constructor(private router: Router, private store: Store, private reportService: ReportService) {
     super();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
   }
 
-  createTransactions(transactionCategory: string, report?: Report): void {
-    this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
+
+  async createTransactions(transactionCategory: string, report?: Report): Promise<void> {
+    await this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
-  createF24Transactions(report?: Report): void {
-    this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
+  async createF24Transactions(report?: Report): Promise<void> {
+    await this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
   }
 
   public onTableActionClick(action: TableAction, report?: Report) {
@@ -84,7 +89,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   }
 }
 
-@Pipe({ name: 'memoCode' })
+@Pipe({name: 'memoCode'})
 export class MemoCodePipe implements PipeTransform {
   transform(value: boolean) {
     return value ? 'Y' : '-';

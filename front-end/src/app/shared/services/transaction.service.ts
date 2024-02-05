@@ -9,9 +9,6 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
-// import { ReattRedesTypes } from '../models/reattribution-redesignation/reattribution-redesignation-base.model';
-// import { SchATransaction } from '../models/scha-transaction.model';
-// import { SchBTransaction } from '../models/schb-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +16,15 @@ import { CandidateOfficeTypes } from '../models/contact.model';
 export class TransactionService implements TableListService<Transaction> {
   tableDataEndpoint = '/transactions';
 
-  constructor(protected apiService: ApiService, protected datePipe: DatePipe) {}
+  constructor(
+    protected apiService: ApiService,
+    protected datePipe: DatePipe,
+  ) {}
 
   public getTableData(
     pageNumber = 1,
     ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
   ): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'line_label_order_key';
@@ -36,7 +36,7 @@ export class TransactionService implements TableListService<Transaction> {
           response.results = response.results.map((item) => getFromJSON(item));
           response.pageNumber = pageNumber;
           return response;
-        })
+        }),
       );
   }
 
@@ -44,14 +44,14 @@ export class TransactionService implements TableListService<Transaction> {
     return this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`).pipe(
       map((response) => {
         return getFromJSON(response);
-      })
+      }),
     );
   }
 
   public getPreviousTransactionForAggregate(
     transaction: Transaction | undefined,
     contact_1_id: string,
-    action_date: Date
+    action_date: Date,
   ): Observable<Transaction | undefined> {
     const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
     const transaction_id: string = transaction?.id ?? '';
@@ -68,7 +68,7 @@ export class TransactionService implements TableListService<Transaction> {
             date: actionDateString,
             aggregation_group,
           },
-          [HttpStatusCode.NotFound]
+          [HttpStatusCode.NotFound],
         )
         .pipe(
           map((response) => {
@@ -76,7 +76,7 @@ export class TransactionService implements TableListService<Transaction> {
               return undefined;
             }
             return getFromJSON(response.body);
-          })
+          }),
         );
     }
     return of(undefined);
@@ -89,7 +89,7 @@ export class TransactionService implements TableListService<Transaction> {
     election_code: string | undefined,
     candidate_office: string | undefined,
     candidate_state: string | undefined,
-    candidate_district: string | undefined
+    candidate_district: string | undefined,
   ): Observable<Transaction | undefined> {
     let actionDateString: string = this.datePipe.transform(disbursement_date, 'yyyy-MM-dd') ?? '';
     if (actionDateString.length === 0) {
@@ -131,7 +131,7 @@ export class TransactionService implements TableListService<Transaction> {
               return undefined;
             }
             return getFromJSON(response.body);
-          })
+          }),
         );
     }
     return of(undefined);
@@ -159,12 +159,12 @@ export class TransactionService implements TableListService<Transaction> {
         if (transaction.transactionType?.updateParentOnSave && transaction.parent_transaction?.children) {
           // Remove deleted transaction from parent's list of children
           transaction.parent_transaction.children = transaction.parent_transaction.children.filter(
-            (child) => child.id !== transaction.id
+            (child) => child.id !== transaction.id,
           );
           const parentTransactionPayload = transaction.getUpdatedParent(true);
           this.update(parentTransactionPayload).subscribe();
         }
-      })
+      }),
     );
   }
 
@@ -173,7 +173,16 @@ export class TransactionService implements TableListService<Transaction> {
     return this.apiService.put<Transaction[]>(
       `${transactions[0].transactionType?.apiEndpoint}/multisave/`,
       payload,
-      {}
+      {},
+    );
+  }
+
+  public multiSaveReattRedes(transactions: Transaction[]): Observable<Transaction[]> {
+    const payload = transactions.map((t) => this.preparePayload(t));
+    return this.apiService.put<Transaction[]>(
+      `${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`,
+      payload,
+      {},
     );
   }
 

@@ -79,9 +79,10 @@ export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON(
 });
 
 export const testUserLoginData: UserLoginData = {
-  committee_id: 'C00000000',
-  email: 'email@fec.com',
-  is_allowed: true,
+  first_name: 'test_first_name',
+  last_name: 'test_last_name',
+  email: 'test_email@testhost.com',
+  security_consent_date: '2022-05-01',
   login_dot_gov: false,
 };
 
@@ -205,12 +206,15 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   memo_code: true,
   donor_committee_fec_id: 'C00000000',
   report: {
-    report_type: 'M1',
+    report_type: 'F3X',
+    report_code: 'Q1',
+    reportCode: 'Q1',
   },
 });
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
   form_type: 'SB21b',
+  report_id: '3cd741da-aa57-4cc3-8530-667e8b7bad78',
   transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.ORGANIZATION,
@@ -223,11 +227,16 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
   contribution_amount: 1,
   contribution_aggregate: 2,
   aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+  report: {
+    report_type: 'F3X',
+    report_code: 'Q1',
+    reportCode: 'Q1',
+  },
 });
 
 export function getTestTransactionByType(
   transactionType: TransactionTypes,
-  parentTransactionType?: TransactionTypes
+  parentTransactionType?: TransactionTypes,
 ): Transaction {
   const transaction = TransactionTypeUtils.factory(transactionType).getNewTransaction();
   if (parentTransactionType) {

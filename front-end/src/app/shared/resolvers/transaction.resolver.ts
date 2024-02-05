@@ -12,6 +12,8 @@ import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.util
 import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
+import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +41,7 @@ export class TransactionResolver {
         return this.transactionService.get(String(parentTransactionId)).pipe(
           mergeMap((parentTransaction: Transaction) => {
             return of(this.getNewChildTransaction(parentTransaction, transactionTypeName));
-          })
+          }),
         );
       }
       if (debtId) {
@@ -72,7 +74,7 @@ export class TransactionResolver {
           return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
         }
         return this.resolveExistingTransaction(transaction);
-      })
+      }),
     );
   }
 
@@ -88,7 +90,7 @@ export class TransactionResolver {
         reduce((transactionWithChildren: Transaction, page: ListRestResponse) => {
           transactionWithChildren.children?.push(...(page.results as Transaction[]));
           return transactionWithChildren;
-        }, transaction)
+        }, transaction),
       );
     }
     return of(transaction);
@@ -102,7 +104,7 @@ export class TransactionResolver {
     // If this transaction must be completed alongside other on-screen transactions, add them
     if (transactionType.dependentChildTransactionTypes) {
       transaction.children = transactionType.dependentChildTransactionTypes.map((type) =>
-        this.getNewChildTransaction(transaction, type)
+        this.getNewChildTransaction(transaction, type),
       );
     }
     return of(transaction);
@@ -123,55 +125,55 @@ export class TransactionResolver {
         }
         repayment.report_id = to.report_id;
         return repayment;
-      })
+      }),
     );
   }
 
   resolveNewReattribution(reportId: string, originatingId: string) {
     return this.transactionService.get(originatingId).pipe(
       map((originatingTransaction: Transaction) => {
-        const reattributed = ReattRedesUtils.overlayTransactionProperties(
+        const reattributed = ReattributedUtils.overlayTransactionProperties(
           originatingTransaction as SchATransaction,
-          reportId
-        ) as SchATransaction;
+          reportId,
+        );
         if (!reattributed.transaction_type_identifier) {
           throw Error('Fecfile online: originating reattribution transaction type not found.');
         }
         let to = TransactionTypeUtils.factory(
-          reattributed.transaction_type_identifier
+          reattributed.transaction_type_identifier,
         ).getNewTransaction() as SchATransaction;
         to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
         let from = TransactionTypeUtils.factory(
-          reattributed.transaction_type_identifier
+          reattributed.transaction_type_identifier,
         ).getNewTransaction() as SchATransaction;
         from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
         to.children = [from];
         return to;
-      })
+      }),
     );
   }
 
   resolveNewRedesignation(reportId: string, originatingId: string) {
     return this.transactionService.get(originatingId).pipe(
       map((originatingTransaction: Transaction) => {
-        const redesignated = ReattRedesUtils.overlayTransactionProperties(
+        const redesignated = RedesignatedUtils.overlayTransactionProperties(
           originatingTransaction as SchBTransaction,
-          reportId
-        ) as SchBTransaction;
+          reportId,
+        );
         if (!redesignated.transaction_type_identifier) {
           throw Error('Fecfile online: originating redesignation transaction type not found.');
         }
         let to = TransactionTypeUtils.factory(
-          redesignated.transaction_type_identifier
+          redesignated.transaction_type_identifier,
         ).getNewTransaction() as SchBTransaction;
         to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
         let from = TransactionTypeUtils.factory(
-          redesignated.transaction_type_identifier
+          redesignated.transaction_type_identifier,
         ).getNewTransaction() as SchBTransaction;
         from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
         to.children = [from];
         return to;
-      })
+      }),
     );
   }
 
