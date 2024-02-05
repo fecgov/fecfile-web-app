@@ -11,7 +11,7 @@ import { toggleSidebarVisibleAction } from '../../store/sidebar-state.actions';
 export class HeaderComponent {
   loginService: LoginService;
   private window = window;
-  @Input() loginPage = false;
+  @Input() loginHeader = false;
 
   constructor(loginService: LoginService, private store: Store) {
     this.loginService = loginService;

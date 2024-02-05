@@ -3,8 +3,8 @@ import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
+import { CommitteeUser, UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
-import { CommitteeUser } from '../models/user.model';
 import { CommitteeAccountService } from './committee-account.service';
 
 @Injectable({
@@ -32,5 +32,9 @@ export class UsersService implements TableListService<CommitteeUser> {
   // prettier-ignore
   public delete(_user: CommitteeUser): Observable<null> { // eslint-disable-line @typescript-eslint/no-unused-vars
     return of(null);
+  }
+
+  public updateCurrentUser(userLoginData: UserLoginData): Observable<UserLoginData> {
+    return this.apiService.put<UserLoginData>(`/users/current/`, userLoginData).pipe(map((response) => response));
   }
 }

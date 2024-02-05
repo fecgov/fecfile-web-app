@@ -79,9 +79,10 @@ export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON(
 });
 
 export const testUserLoginData: UserLoginData = {
-  committee_id: 'C00000000',
-  email: 'email@fec.com',
-  is_allowed: true,
+  first_name: 'test_first_name',
+  last_name: 'test_last_name',
+  email: 'test_email@testhost.com',
+  security_consent_date: '2022-05-01',
   login_dot_gov: false,
 };
 
