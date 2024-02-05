@@ -14,22 +14,18 @@ import { CommitteeMember } from '../models/committee-member.model';
 export class CommitteeAccountService {
   constructor(private fecApiService: FecApiService, private store: Store, private apiService: ApiService) {}
 
-  /**
-   * Gets the commitee account details.
-   *
-   * @return     {Observable}  The commitee details.
-   */
-  public getDetails(): Observable<CommitteeAccount> {
-    // for now just get the first committee
-    return this.getCommittees().pipe(
-      mergeMap((response) => this.fecApiService.getCommitteeDetails(response[0].committee_id as string))
-    );
-  }
-
   public getCommittees(): Observable<CommitteeAccount[]> {
     return this.apiService
       .get<ListRestResponse>(`/committees/`)
       .pipe(map((response) => response.results as CommitteeAccount[]));
+  }
+
+  public activateCommittee(committeeUUID?: string): Observable<boolean> {
+    return this.apiService.post(`/committees/${committeeUUID}/activate/`, {});
+  }
+
+  public getActiveCommittee(): Observable<CommitteeAccount> {
+    return this.apiService.get(`/committees/active/`);
   }
 }
 

@@ -12,7 +12,6 @@ import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
-import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
