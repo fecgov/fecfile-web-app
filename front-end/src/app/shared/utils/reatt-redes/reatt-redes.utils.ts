@@ -7,8 +7,8 @@ import { ReattributionFromUtils } from './reattribution-from.utils';
 import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
-import { ReattributedUtils } from './reattributed.utils';
-import { RedesignatedUtils } from './redesignated.utils';
+import { MemoText } from '../../models/memo-text.model';
+import { cloneDeep } from 'lodash';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -117,13 +117,57 @@ export class ReattRedesUtils {
     const to = payload; // The FROM transaction is in the TO children[]
 
     if (pullForward) {
-      if (ReattRedesTypes.REATTRIBUTION_TO === payload.reattribution_redesignation_tag)
-        reattRedes = ReattributedUtils.getPayload(payload as SchATransaction);
-      else reattRedes = RedesignatedUtils.getPayload(payload as SchBTransaction);
+      reattRedes = this.clone(payload);
+      payload.reatt_redes_id = undefined;
+      payload.reatt_redes = reattRedes;
     } else {
       reattRedes = payload.reatt_redes as SchATransaction | SchBTransaction;
     }
 
     return [reattRedes, to];
+  }
+
+  static updateMemo(transaction: SchATransaction | SchBTransaction, prefix: string) {
+    if (transaction.memo_text) {
+      if (!transaction.memo_text.text_prefix) {
+        transaction.memo_text.text_prefix = prefix;
+        transaction.memo_text.text4000 = prefix + transaction?.memo_text?.text4000;
+      }
+    } else {
+      transaction.memo_text = MemoText.fromJSON({
+        rec_type: 'TEXT',
+        report_id: transaction?.report_id,
+        text_prefix: prefix,
+        text4000: prefix,
+      });
+    }
+  }
+
+  private static clone(payload: SchATransaction | SchBTransaction): SchATransaction | SchBTransaction {
+    if (!payload.reatt_redes?.transaction_type_identifier) {
+      throw Error('Fecfile online: originating transaction type not found.');
+    }
+
+    const clone =
+      payload instanceof SchATransaction
+        ? (cloneDeep(payload.reatt_redes) as SchATransaction)
+        : (cloneDeep(payload.reatt_redes) as SchBTransaction);
+    if (clone.memo_text) {
+      clone.memo_text.id = undefined;
+      clone.memo_text.report_id = payload.report_id;
+      clone.memo_text.transaction_id_number = undefined;
+      clone.memo_text.transaction_uuid = undefined;
+      clone.memo_text_id = undefined;
+    }
+
+    clone.reatt_redes_id = payload.reatt_redes.id;
+    clone.report_id = payload.report_id;
+    clone.id = undefined;
+    clone.report = undefined;
+    clone.memo_code = true;
+    clone.force_unaggregated = true;
+    clone.children = []; // Children of original transaction do not copy over.
+
+    return clone;
   }
 }

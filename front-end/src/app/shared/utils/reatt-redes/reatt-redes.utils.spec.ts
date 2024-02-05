@@ -1,7 +1,10 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
-import { getTestIndividualReceipt, testScheduleATransaction } from '../unit-test.utils';
+import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
+import { RedesignatedUtils } from './redesignated.utils';
+import _ from 'lodash';
+import { SchBTransaction } from '../../models/schb-transaction.model';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -141,6 +144,41 @@ describe('ReattRedesUtils', () => {
       control.setValue(50);
       validatorResult = validatorFunction(control);
       expect(validatorResult?.['max']['max']).toBe(25);
+    });
+  });
+
+  describe('getPayload', () => {
+    let payload: SchBTransaction;
+
+    beforeEach(() => {
+      payload = SchBTransaction.fromJSON({
+        ...testScheduleBTransaction,
+      });
+      payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      payload.reatt_redes = SchBTransaction.fromJSON({
+        ...testScheduleBTransaction,
+      });
+    });
+
+    it('should throw error when originating missing transaction type', () => {
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes.transaction_type_identifier = undefined;
+      expect(function () {
+        ReattRedesUtils.getPayloads(payload, true);
+      }).toThrow(Error('Fecfile online: originating transaction type not found.'));
+    });
+
+    it('should clone ', () => {
+      const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
+      if (!payload.reatt_redes) throw new Error('Bad test setup');
+      payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(payload.reatt_redes as SchBTransaction);
+      const cloned = ReattRedesUtils.getPayloads(payload, true);
+      expect(cloneSpy).toHaveBeenCalled();
+      expect(cloned[0].report_id).toEqual(payload.report_id);
+      expect(cloned[0].report).toBeFalsy();
+      expect(cloned[0].id).toBeFalsy();
+      expect(cloned[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
+      expect(cloned[0].force_unaggregated).toBeTrue();
     });
   });
 });
