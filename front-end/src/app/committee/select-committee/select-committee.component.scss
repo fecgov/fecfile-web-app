@@ -27,7 +27,25 @@
     background-color: #f1f1f1;
     margin-top: 20px;
     font-size: large;
+    display: flex;
+    align-items: center;
+
+    .blue-box{
+        padding: 15px;
+        background-color: #132947;
+    }
+    .plus {
+        background-color: #ffffff;
+        padding: 13px;
+        border-radius: 100px;
+    }
+    .create-text {
+        padding:20px;
+        font-size: medium;
+        text-transform: uppercase;
+    }
 }
+
 
 .committee-list {
     max-height: 500px;
