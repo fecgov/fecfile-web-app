@@ -52,6 +52,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   }
 
   public delete(_: CommitteeMember): Observable<null> {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
     return of(null);
   }
 }
