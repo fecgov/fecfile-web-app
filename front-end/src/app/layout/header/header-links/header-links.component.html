@@ -1,5 +1,5 @@
 <ul class="navbar-nav">
-  <ng-container *ngIf="!loginHeader">
+  <ng-container *ngIf="headerStyle === headerStyles.DEFAULT">
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" routerLink="/dashboard"><span [ngStyle]="{ 'font-size': fontSize }">Dashboard</span></a>
     </li>
@@ -71,13 +71,20 @@
       </ul>
     </li>
   </ng-container>
-  <ng-container *ngIf="loginHeader">
+  <ng-container *ngIf="headerStyle === headerStyles.LOGIN">
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" [routerLink]=""><span [ngStyle]="{ 'font-size': fontSize }">Sign Up</span></a>
     </li>
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" (click)="navigateToLoginDotGov()">
         <span [ngStyle]="{ 'font-size': fontSize }">Log In</span>
+      </a>
+    </li>
+  </ng-container>
+  <ng-container *ngIf="headerStyle === headerStyles.LOGOUT">
+    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+      <a class="nav-link" href="#" (click)="loginService.logOut()">
+        <span [ngStyle]="{ 'font-size': fontSize }">Log Out</span>
       </a>
     </li>
   </ng-container>
