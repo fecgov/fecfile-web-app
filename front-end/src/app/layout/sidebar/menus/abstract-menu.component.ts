@@ -133,9 +133,9 @@ export abstract class AbstractMenuComponent extends DestroyerComponent implement
 
   reportStatus(activeReport: Report | undefined, isEditable: boolean): MenuItem {
     return {
-      label: 'Confirm information',
+      label: 'Report Status',
       routerLink: `/reports/${this.reportString}/submit/status/${activeReport?.id}`,
-      visible: isEditable,
+      visible: !isEditable,
     };
   }
 
