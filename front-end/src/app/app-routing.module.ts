@@ -17,7 +17,18 @@ const routes: Routes = [
   {
     path: 'login',
     component: LayoutComponent,
-    children: [{ path: '', component: LoginComponent, resolve: { sidebar: SidebarStateResolver } }],
+    children: [
+      {
+        path: '',
+        component: LoginComponent,
+        resolve: { sidebar: SidebarStateResolver },
+        data: {
+          showUpperFooter: false,
+          showCommitteeBanner: false,
+          loginHeader: true,
+        },
+      },
+    ],
   },
   {
     path: 'current',
@@ -56,7 +67,14 @@ const routes: Routes = [
     path: 'select-committee',
     component: LayoutComponent,
     canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
-    children: [{ path: '', component: SelectCommitteeComponent, resolve: { sidebar: SidebarStateResolver } }],
+    children: [
+      {
+        path: '',
+        component: SelectCommitteeComponent,
+        resolve: { sidebar: SidebarStateResolver },
+        data: { showUpperFooter: false },
+      },
+    ],
   },
   {
     path: '',
