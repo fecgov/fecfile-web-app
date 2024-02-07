@@ -1,13 +1,11 @@
 import { defaultFormData as individualContactFormData, organizationFormData } from '../models/ContactFormModel';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
-import { ContactListPage } from '../pages/contactListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { StartTransaction } from "./start-transaction/start-transaction";
-import { F3XSetup, reportFormDataApril, reportFormDataJuly, Setup } from "./f3x-setup";
-
+import { StartTransaction } from './start-transaction/start-transaction';
+import { F3XSetup, reportFormDataApril, reportFormDataJuly, Setup } from './f3x-setup';
 
 const formData = {
   ...defaultLoanFormData,
@@ -36,14 +34,11 @@ function setupLoanFromBank(setup: Setup) {
 
 describe('Loans', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
-    ReportListPage.goToPage();
+    Initialize();
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    setupLoanFromBank({individual: true, organization: true, report: reportFormDataApril});
+    setupLoanFromBank({ individual: true, organization: true, report: reportFormDataApril });
 
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
@@ -104,7 +99,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    setupLoanFromBank({individual: true, organization: true});
+    setupLoanFromBank({ individual: true, organization: true });
 
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
@@ -112,14 +107,14 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
-    setupLoanFromBank({organization: true});
+    setupLoanFromBank({ organization: true });
 
     PageUtils.clickButton('Save transactions');
 
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').last().should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Make loan repayment').click({force: true});
+    cy.contains('Make loan repayment').click({ force: true });
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
@@ -131,7 +126,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
-    setupLoanFromBank({organization: true});
+    setupLoanFromBank({ organization: true });
 
     PageUtils.clickButton('Save transactions');
 
@@ -151,7 +146,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
-    setupLoanFromBank({individual: true, organization: true});
+    setupLoanFromBank({ individual: true, organization: true });
 
     PageUtils.clickButton('Save & add loan guarantor');
 

@@ -1,25 +1,27 @@
 <div class="drop-down position-static">
-  <p-button
-    data-bs-toggle="dropdown"
-    pRipple
-    [icon]="buttonIcon"
-    [label]="buttonLabel"
-    [styleClass]="buttonStyleClass"
-    [ariaLabel]="buttonAriaLabel"
-  ></p-button>
-  <ul class="dropdown-menu ">
-    <li *ngFor="let action of filteredActions; let index = index">
-      <button
-        [disabled]="!action.isEnabled(actionItem)"
-        pButton
-        pRipple
-        type="button"
-        class="p-button-secondary p-button-text w-full text-left"
-        [id]="'button-' + index"
-        (click)="tableActionClick.emit({action, actionItem})"
-      >
-        {{ action.label }}
-      </button>
-    </li>
-  </ul>
+    <p-button
+            [ariaLabel]="buttonAriaLabel"
+            [icon]="buttonIcon"
+            [label]="buttonLabel"
+            [rounded]="rounded"
+            [severity]="severity"
+            [styleClass]="buttonStyleClass"
+            data-bs-toggle="dropdown"
+            pRipple
+    ></p-button>
+    <ul class="dropdown-menu ">
+        <li *ngFor="let action of filteredActions; let index = index">
+            <button
+                    (click)="tableActionClick.emit({action, actionItem})"
+                    [disabled]="!action.isEnabled(actionItem)"
+                    [id]="'button-' + index"
+                    class="p-button-secondary p-button-text w-full text-left"
+                    pButton
+                    pRipple
+                    type="button"
+            >
+                {{ action.label }}
+            </button>
+        </li>
+    </ul>
 </div>

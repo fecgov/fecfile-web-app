@@ -1,16 +1,14 @@
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
-import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { ContactListPage } from '../pages/contactListPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { ContactFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
-import { F3XSetup } from "./f3x-setup";
-import { StartTransaction } from "./start-transaction/start-transaction";
+import { F3XSetup } from './f3x-setup';
+import { StartTransaction } from './start-transaction/start-transaction';
 
 const committeeFormData: ContactFormData = {
   ...individualContactFormData,
-  ...{contact_type: 'Committee'},
+  ...{ contact_type: 'Committee' },
 };
 
 const formData = {
@@ -21,7 +19,7 @@ const formData = {
 };
 
 function setupLoanByCommittee() {
-  F3XSetup({committee: true, individual: true})
+  F3XSetup({ committee: true, individual: true });
   StartTransaction.Loans().ByCommittee();
   // Search for created committee and enter load data, then add load gaurantor
   PageUtils.urlCheck('LOAN_BY_COMMITTEE');
@@ -32,12 +30,7 @@ function setupLoanByCommittee() {
 
 describe('Loans', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
-    ReportListPage.goToPage();
-
+    Initialize();
   });
 
   it('should test: Loan By Committee', () => {
@@ -56,7 +49,7 @@ describe('Loans', () => {
     cy.contains('Loan By Committee').should('exist');
     cy.contains('Loan Made').should('exist');
     PageUtils.clickElement('loans-and-debts-button');
-    cy.contains('Receive loan repayment').click({force: true});
+    cy.contains('Receive loan repayment').click({ force: true });
 
     PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
     PageUtils.searchBoxInput(committeeFormData.committee_id);

@@ -1,20 +1,17 @@
-import { ContactListPage } from '../pages/contactListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
-import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import {
   candidateFormData,
   defaultFormData as individualContactFormData,
-  organizationFormData
+  organizationFormData,
 } from '../models/ContactFormModel';
 import {
   defaultScheduleFormData as defaultTransactionFormData,
   DisbursementFormData,
 } from '../models/TransactionFormModel';
-import { F3XSetup } from "./f3x-setup";
-import { StartTransaction } from "./start-transaction/start-transaction";
-
+import { F3XSetup } from './f3x-setup';
+import { StartTransaction } from './start-transaction/start-transaction';
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -29,15 +26,11 @@ const independentExpVoidData: DisbursementFormData = {
 
 describe('Disbursements', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
-    ContactListPage.goToPage();
-    ReportListPage.goToPage();
+    Initialize();
   });
 
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
-    F3XSetup({individual: true});
+    F3XSetup({ individual: true });
     StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
 
     cy.get('#entity_type_dropdown').type(individualContactFormData.contact_type);
@@ -55,7 +48,7 @@ describe('Disbursements', () => {
   });
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
-    F3XSetup({organization: true, candidate: true});
+    F3XSetup({ organization: true, candidate: true });
     StartTransaction.Disbursements().Independent().IndependentExpenditureVoid();
 
     cy.get('#entity_type_dropdown').type(organizationFormData.contact_type);

@@ -1,10 +1,10 @@
-import { LoginPage } from './pages/loginPage';
+import { Initialize } from './pages/loginPage';
 import { ProfileAccountPage } from './pages/profileAccountPage';
 import { ProfileUserListPage } from './pages/profileUserListPage';
 
 describe('Manage profile', () => {
   beforeEach(() => {
-    LoginPage.login();
+    Initialize();
   });
 
   it('Can view the Account Info page', () => {

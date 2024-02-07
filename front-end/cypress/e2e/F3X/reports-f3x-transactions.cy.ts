@@ -1,7 +1,7 @@
 import { ContactListPage } from '../pages/contactListPage';
 import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -22,10 +22,7 @@ const scheduleData = {
 
 describe('Transactions', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ContactListPage.deleteAllContacts();
-    ReportListPage.deleteAllReports();
-    ReportListPage.goToPage();
+    Initialize();
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {

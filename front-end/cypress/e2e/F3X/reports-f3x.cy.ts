@@ -1,4 +1,4 @@
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
@@ -8,9 +8,7 @@ import { defaultFormData } from '../models/ReportFormModel';
 
 describe('Manage reports', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ReportListPage.goToPage();
+    Initialize();
   });
 
   it('Create a Quarterly Election Year report', () => {
@@ -20,7 +18,7 @@ describe('Manage reports', () => {
 
     cy.runLighthouse('reports', 'create-report');
 
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save');
 
@@ -82,7 +80,7 @@ describe('Manage reports', () => {
   it('Create a report error for overlapping coverage dates', () => {
     // Create report #1
     ReportListPage.clickCreateButton();
-    const formData1 = {...defaultFormData};
+    const formData1 = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData1);
     PageUtils.clickButton('Save and continue');
     F3xCashOnHandPage.enterFormData(cohFormData);
@@ -108,7 +106,7 @@ describe('Manage reports', () => {
   xit('Create report with previous existing report types disabled', () => {
     // Create report #1
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save');
 
@@ -119,7 +117,7 @@ describe('Manage reports', () => {
 
   it('Create report and save cash on hand', () => {
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save and continue');
 
@@ -132,21 +130,21 @@ describe('Manage reports', () => {
 
   xit('Check values on the Summary Page', () => {
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save and continue');
   });
 
   xit('Check values on the Detail Summary Page', () => {
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save and continue');
   });
 
   it('Create a report level memo', () => {
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save and continue');
 
@@ -167,14 +165,14 @@ describe('Manage reports', () => {
 
   xit('Confirm report information', () => {
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save and continue');
   });
 
   xit('Submit a report', () => {
     ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
+    const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
     PageUtils.clickButton('Save and continue');
   });

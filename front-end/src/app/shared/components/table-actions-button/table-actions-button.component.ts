@@ -3,6 +3,7 @@ import { TableAction } from '../table-list-base/table-list-base.component';
 
 @Component({
   selector: 'app-table-actions-button',
+  styleUrls: ['./table-actions-button.component.scss'],
   templateUrl: './table-actions-button.component.html',
 })
 export class TableActionsButtonComponent {
@@ -12,6 +13,8 @@ export class TableActionsButtonComponent {
   @Input() buttonLabel = '';
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
+  @Input() rounded = false;
+  @Input() severity: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' = 'primary';
   @Output() tableActionClick = new EventEmitter<{ action: TableAction; actionItem: any }>(); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   get filteredActions(): TableAction[] {

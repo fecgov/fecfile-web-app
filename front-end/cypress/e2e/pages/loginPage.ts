@@ -1,3 +1,7 @@
+import { PageUtils } from './pageUtils';
+import { ReportListPage } from './reportListPage';
+import { ContactListPage } from './contactListPage';
+
 export class LoginPage {
   static login() {
     const sessionDuration = 10; //Login session duration in minutes
@@ -10,7 +14,7 @@ export class LoginPage {
       },
       {
         cacheAcrossSpecs: true,
-      }
+      },
     );
 
     //Retrieve the AUTH TOKEN from the created/restored session
@@ -63,7 +67,7 @@ function legacyLogin() {
   const fieldPassword = '#login-password';
 
   cy.fixture('FEC_Get_Committee_Account').then((response_body) => {
-    response_body.results[0].committee_id = committeeID; 
+    response_body.results[0].committee_id = committeeID;
     const response = {
       body: response_body,
       statusCode: 200,
@@ -72,7 +76,7 @@ function legacyLogin() {
     cy.intercept(
       'GET',
       `http://localhost:8080/api/v1/openfec/${response_body.results[0].committee_id}/committee/`,
-      response
+      response,
     ).as('GetCommitteeAccount');
   });
 
@@ -80,11 +84,22 @@ function legacyLogin() {
   cy.get(fieldEmail).type(email);
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');
+
+  const alias = PageUtils.getAlias('');
+  // cy.get(alias).find('p-checkbox[inputid="security-consent"]').children().first().click();
+  // cy.get(alias).find("p-button[label='Consent']").click();
   cy.wait('@GetCommitteeAccount');
+  cy.get(alias).find('.committee-list').click();
 }
 
 function retrieveAuthToken() {
   const storedData = localStorage.getItem('fecfile_online_userLoginData');
   const loginData = JSON.parse(storedData ?? '');
   return 'JWT ' + loginData.token;
+}
+
+export function Initialize() {
+  LoginPage.login();
+  ReportListPage.deleteAllReports();
+  ContactListPage.deleteAllContacts();
 }

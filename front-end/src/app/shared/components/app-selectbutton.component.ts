@@ -13,7 +13,7 @@ export const SELECTBUTTON_VALUE_ACCESSOR = {
   template: `
     <div [ngClass]="'p-selectbutton p-buttonset p-component'" [ngStyle]="style" [class]="styleClass ?? ''" role="group">
       <div
-        *ngFor="let option of options; let i = index"
+        *ngFor="let option of options; let index = index"
         #btn
         class="p-button p-component"
         [class]="option.styleClass"
@@ -24,8 +24,8 @@ export const SELECTBUTTON_VALUE_ACCESSOR = {
           'p-disabled': disabled || isOptionDisabled(option),
           'p-button-icon-only': option.icon && !getOptionLabel(option)
         }"
-        (click)="onItemClick($event, option, i)"
-        (keydown.enter)="onItemClick($event, option, i)"
+        (click)="onOptionClick.emit({ originalEvent: $event, option, index })"
+        (keydown.enter)="onOptionClick.emit({ originalEvent: $event, option, index })"
         [attr.title]="option.title"
         [attr.aria-label]="option.label"
         (blur)="onBlur()"
@@ -37,9 +37,7 @@ export const SELECTBUTTON_VALUE_ACCESSOR = {
           <span class="p-button-label">{{ getOptionLabel(option) }}</span>
         </ng-container>
         <ng-template #customcontent>
-          <ng-container
-            *ngTemplateOutlet="itemTemplate.template; context: { $implicit: option, index: i }"
-          ></ng-container>
+          <ng-container *ngTemplateOutlet="itemTemplate.template; context: { $implicit: option, index }"></ng-container>
         </ng-template>
       </div>
     </div>

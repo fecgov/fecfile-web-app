@@ -2031,7 +2031,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-button.p-button-raised {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
-.p-button.p-button-rounded {
+.p-button-rounded {
   border-radius: 4rem;
 }
 .p-button.p-button-icon-only {
@@ -2065,6 +2065,19 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-button.p-button-loading-label-only .p-button-loading-icon {
   margin-right: 0;
+}
+
+.rounded-text {
+  background: transparent;
+  color: black;
+  border: none;
+}
+
+.rounded-text:hover {
+  background-color: #164f85;
+  border-color: #164f85;
+  color: white;
+  border-width: 2px;
 }
 
 .p-fluid .p-button {
@@ -3733,6 +3746,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 0.75rem;
   border-radius: 4px;
 }
+
 .p-paginator .p-paginator-first,
 .p-paginator .p-paginator-prev,
 .p-paginator .p-paginator-next,
@@ -3745,6 +3759,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0 0 0 8px;
   transition: box-shadow 0.15s;
   border-radius: 2px;
+  text-align: center;
 }
 .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
 .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
@@ -3794,6 +3809,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0 0 0 8px;
   transition: box-shadow 0.15s;
   border-radius: 2px;
+  text-align: center;
 }
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: #112e51;

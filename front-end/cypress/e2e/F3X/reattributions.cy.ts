@@ -1,5 +1,5 @@
 import { ContactListPage } from '../pages/contactListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -78,9 +78,7 @@ function Reattribute(old = false) {
 
 describe('Reattributions', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
+    Initialize();
   });
 
   it('should test reattributing a Schedule A in the current report', () => {
