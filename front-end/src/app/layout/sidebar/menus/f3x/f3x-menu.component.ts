@@ -6,6 +6,8 @@ import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { AbstractMenuComponent } from '../abstract-menu.component';
+import { takeUntil } from 'rxjs';
+import { Form3X } from '../../../../shared/models/form-3x.model';
 
 @Component({
   selector: 'app-f3x-menu',
@@ -21,6 +23,17 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   constructor(store: Store, reportService: ReportService) {
     super(store, reportService);
     this.reportString = 'f3x';
+  }
+
+  override ngOnInit() {
+    super.ngOnInit();
+    if (!this.activeReport$) return;
+    this.activeReport$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+      this.formLabel = report?.formLabel;
+      this.report_code = (report as Form3X).report_code;
+      this.coverage_from_date = (report as Form3X).coverage_from_date;
+      this.coverage_through_date = (report as Form3X).coverage_through_date;
+    });
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {
