@@ -4,9 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { F3xQualifiedCommitteeTypeCodes, Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
+import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -36,6 +37,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   showBackdoorCode = false;
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
+  committeeAccount?: CommitteeAccount;
 
   constructor(
     public router: Router,
@@ -55,6 +57,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
+      this.committeeAccount = committeeAccount;
       ValidateUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
       this.initializeFormWithReport(this.report, committeeAccount);
     });
@@ -128,6 +131,10 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   get saveTreasurerName$(): Observable<Report | undefined> {
     if (!this.report) return of(undefined);
     this.loading = 1;
+    if (this.report instanceof Form3X) {
+      this.report.qualified_committee = !!this.committeeAccount?.committee_type &&
+        F3xQualifiedCommitteeTypeCodes.includes(this.committeeAccount.committee_type);
+    }
     const payload: Report = getReportFromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
