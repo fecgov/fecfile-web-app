@@ -97,6 +97,5 @@ describe('SubmitReportStep2Component', () => {
 
     expect(updateSpy).toHaveBeenCalled();
     expect(submtiSpy).toHaveBeenCalled();
-    expect((component.report as Form3X).qualified_committee).toBeFalse();
   });
 });

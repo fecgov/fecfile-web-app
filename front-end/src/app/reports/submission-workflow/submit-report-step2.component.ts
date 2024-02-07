@@ -131,14 +131,14 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   get saveTreasurerName$(): Observable<Report | undefined> {
     if (!this.report) return of(undefined);
     this.loading = 1;
-    if (this.report instanceof Form3X) {
-      this.report.qualified_committee = !!this.committeeAccount?.committee_type &&
-        F3xQualifiedCommitteeTypeCodes.includes(this.committeeAccount.committee_type);
-    }
     const payload: Report = getReportFromJSON({
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });
+    if (payload instanceof Form3X) {
+      payload.qualified_committee = !!this.committeeAccount?.committee_type &&
+        F3xQualifiedCommitteeTypeCodes.includes(this.committeeAccount.committee_type);
+    }
 
     return this.reportService.update(payload, this.formProperties);
   }
