@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LayoutComponent } from './layout/layout.component';
+import { BackgroundStyles, LayoutComponent } from './layout/layout.component';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeGuard } from './shared/guards/committee.guard';
@@ -12,12 +12,25 @@ import { UpdateCurrentUserComponent } from './users/update-current-user/update-c
 import { nameGuard } from './shared/guards/name.guard';
 import { SecurityNoticeComponent } from './login/security-notice/security-notice.component';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
+import { HeaderStyles } from './layout/header/header.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LayoutComponent,
-    children: [{ path: '', component: LoginComponent, resolve: { sidebar: SidebarStateResolver } }],
+    children: [
+      {
+        path: '',
+        component: LoginComponent,
+        resolve: { sidebar: SidebarStateResolver },
+        data: {
+          showUpperFooter: false,
+          showCommitteeBanner: false,
+          headerStyle: HeaderStyles.LOGIN,
+          backgroundStyle: BackgroundStyles.LOGIN,
+        },
+      },
+    ],
   },
   {
     path: 'current',
@@ -45,9 +58,10 @@ const routes: Routes = [
         path: '',
         component: SecurityNoticeComponent,
         data: {
-          showHeader: false,
           showCommitteeBanner: false,
-          securityNoticeBackground: true,
+          showUpperFooter: false,
+          showHeader: false,
+          backgroundStyle: BackgroundStyles.SECURITY_NOTICE,
         },
       },
     ],
@@ -56,7 +70,17 @@ const routes: Routes = [
     path: 'select-committee',
     component: LayoutComponent,
     canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
-    children: [{ path: '', component: SelectCommitteeComponent, resolve: { sidebar: SidebarStateResolver } }],
+    children: [
+      {
+        path: '',
+        component: SelectCommitteeComponent,
+        resolve: { sidebar: SidebarStateResolver },
+        data: {
+          showUpperFooter: false,
+          headerStyle: HeaderStyles.LOGOUT,
+        },
+      },
+    ],
   },
   {
     path: '',

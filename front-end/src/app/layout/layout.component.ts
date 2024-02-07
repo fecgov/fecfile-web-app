@@ -6,6 +6,13 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { filter, takeUntil } from 'rxjs';
 import { selectSidebarState } from '../store/sidebar-state.selectors';
+import { HeaderStyles } from './header/header.component';
+
+export enum BackgroundStyles {
+  'DEFAULT' = '',
+  'LOGIN' = 'login-background',
+  'SECURITY_NOTICE' = 'security-notice-background',
+}
 
 @Component({
   selector: 'app-layout',
@@ -17,7 +24,11 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
 
   showSidebar = false; // Legacy control set by a resolver and retrieved from the Store; could be refactored
 
-  constructor(private store: Store, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(
+    private store: Store,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+  ) {
     super();
   }
 
@@ -48,10 +59,9 @@ export class LayoutControls {
   // Default values
   showUpperFooter = true;
   showHeader = true;
-  loginHeader = false;
+  headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
-  loginBackground = false;
-  securityNoticeBackground = false;
+  backgroundStyle = BackgroundStyles.DEFAULT;
 
   constructor(data?: RouteData) {
     if (data) {
@@ -59,10 +69,8 @@ export class LayoutControls {
       this.showUpperFooter = data['showUpperFooter'] ?? this.showUpperFooter;
       this.showCommitteeBanner = data['showCommitteeBanner'] ?? this.showCommitteeBanner;
       this.showHeader = data['showHeader'] ?? this.showHeader;
-      this.loginHeader = data['loginHeader'] ?? this.loginHeader;
-
-      this.loginBackground = data['loginBackground'] ?? this.loginBackground;
-      this.securityNoticeBackground = data['securityNoticeBackground'] ?? this.securityNoticeBackground;
+      this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
+      this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
     }
   }
 }

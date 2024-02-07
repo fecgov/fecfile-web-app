@@ -3,6 +3,12 @@ import { LoginService } from 'app/shared/services/login.service';
 import { Store } from '@ngrx/store';
 import { toggleSidebarVisibleAction } from '../../store/sidebar-state.actions';
 
+export enum HeaderStyles {
+  'DEFAULT',
+  'LOGIN',
+  'LOGOUT',
+}
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -11,9 +17,12 @@ import { toggleSidebarVisibleAction } from '../../store/sidebar-state.actions';
 export class HeaderComponent {
   loginService: LoginService;
   private window = window;
-  @Input() loginHeader = false;
+  @Input() headerStyle = HeaderStyles.DEFAULT;
 
-  constructor(loginService: LoginService, private store: Store) {
+  constructor(
+    loginService: LoginService,
+    private store: Store,
+  ) {
     this.loginService = loginService;
   }
 
