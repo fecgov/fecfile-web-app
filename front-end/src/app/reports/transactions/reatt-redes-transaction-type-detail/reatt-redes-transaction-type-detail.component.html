@@ -41,7 +41,7 @@
       </p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{ childTransaction?.transactionType?.title }}</h2>
+      <h2>{{ childTransaction?.transactionType?.formTitle }}</h2>
       <p *ngIf="childTransactionType?.description">
         <em [innerHtml]="childTransactionType?.description"></em>
       </p>
@@ -69,9 +69,7 @@
   <p-accordionTab *ngIf="pullForward">
     <ng-template pTemplate="header">
       <strong>AUTO-POPULATED:</strong>
-      <p style="font-weight: normal">
-        Duplicate of the original transaction
-      </p>
+      <p style="font-weight: normal">Duplicate of the original transaction</p>
     </ng-template>
     <div class="p-fluid">
       <h2 *ngIf="transaction?.reatt_redes?.transactionType?.showParentTransactionTitle">
@@ -80,8 +78,9 @@
       <h2 [ngClass]="{ 'dark-gray-text': transaction?.reatt_redes?.transactionType?.showParentTransactionTitle }">
         {{ transaction?.reatt_redes?.transactionType?.title }}
       </h2>
-      <div
-        *ngIf="transaction?.reatt_redes?.transactionType?.subTitle">{{ transaction?.reatt_redes?.transactionType?.subTitle }}</div>
+      <div *ngIf="transaction?.reatt_redes?.transactionType?.subTitle">
+        {{ transaction?.reatt_redes?.transactionType?.subTitle }}
+      </div>
       <h3>{{ transaction?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
       <form [formGroup]="reattributedData.form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="pull-forward-form">
         <app-transaction-input
@@ -94,8 +93,6 @@
         >
         </app-transaction-input>
       </form>
-
     </div>
   </p-accordionTab>
 </p-accordion>
-
