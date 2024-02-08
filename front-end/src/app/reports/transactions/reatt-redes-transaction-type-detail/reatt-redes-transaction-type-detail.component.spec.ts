@@ -20,11 +20,14 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from '../../../shared/utils/unit-test.utils';
 import { FecDatePipe } from '../../../shared/pipes/fec-date.pipe';
 import { ScheduleATransactionTypes } from '../../../shared/models/scha-transaction.model';
+import { ReattRedesTransactionTypeBaseComponent } from '../../../shared/components/transaction-type-base/reatt-redes-transaction-type-base.component';
+import { DoubleTransactionTypeBaseComponent } from '../../../shared/components/transaction-type-base/double-transaction-type-base.component';
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
   let fixture: ComponentFixture<ReattRedesTransactionTypeDetailComponent>;
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -44,16 +47,22 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
         InputNumberModule,
         ConfirmDialogModule,
       ],
-      declarations: [ReattRedesTransactionTypeDetailComponent],
+      declarations: [
+        ReattRedesTransactionTypeDetailComponent,
+        ReattRedesTransactionTypeBaseComponent,
+        DoubleTransactionTypeBaseComponent,
+      ],
       providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
+    spyOn(component, 'getChildTransaction').and.callFake(() => transaction);
     component.transaction = transaction;
     component.templateMap = testTemplateMap;
+    await component.ngOnInit();
     fixture.detectChanges();
   });
 
