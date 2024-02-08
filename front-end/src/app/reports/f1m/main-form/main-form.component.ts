@@ -186,6 +186,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
       this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
     });
+    this.form.get('statusBy')?.updateValueAndValidity();
   }
 
   enableValidation(contacts: F1MContact[]) {
