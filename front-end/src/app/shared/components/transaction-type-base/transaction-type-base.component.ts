@@ -6,7 +6,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -25,6 +25,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 
 @Component({
   template: '',
@@ -107,7 +108,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.isEditable = this.reportService.isEditable(report);
+        this.isEditable =
+          this.reportService.isEditable(report) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
         if (!this.isEditable) this.form.disable();
       });
   }
@@ -261,8 +263,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
 
   resetForm() {
     this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transaction,
-      this.contactTypeOptions, this.committeeAccount);
+    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions, this.committeeAccount);
   }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {

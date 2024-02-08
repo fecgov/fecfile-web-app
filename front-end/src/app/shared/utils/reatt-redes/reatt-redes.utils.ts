@@ -170,4 +170,19 @@ export class ReattRedesUtils {
 
     return clone;
   }
+
+  /**
+   * Return true if this transaction is a pulled-forward copy
+   * @param transaction
+   * @returns
+   */
+  static isCopyFromPreviousReport(transaction: Transaction | undefined): boolean {
+    if (
+      ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
+      transaction?.reatt_redes_id
+    )
+      return true;
+
+    return false;
+  }
 }
