@@ -47,9 +47,7 @@ export abstract class F1MContact {
    */
   update($event: SelectItem<Contact>) {
     (this.component.report[this.contactKey] as Contact) = $event.value;
-    if ($event.value.id) {
-      (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string) = $event.value.id;
-    }
+    (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = $event.value.id ?? null;
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.contactKey])) {
       this.component.form
         .get(this.component.templateMapConfigs[this.contactKey][key as keyof TransactionTemplateMapType])
@@ -58,7 +56,7 @@ export abstract class F1MContact {
 
     // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.
     const candidateIdControl = this.component.form.get(
-      this.component.templateMapConfigs[this.contactKey]['candidate_fec_id']
+      this.component.templateMapConfigs[this.contactKey]['candidate_fec_id'],
     );
     if (candidateIdControl?.invalid) {
       candidateIdControl.markAsTouched();
