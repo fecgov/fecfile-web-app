@@ -152,7 +152,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
     candidateTags.forEach((tag: F1MCandidateTag) => {
-      this.form.get(`${tag}_candidate_id_number`)?.valueChanges.subscribe((value) => {
+      this.form.get(`${tag}_candidate_id_number`)?.valueChanges.subscribe(() => {
         candidateTags
           .filter((t) => t !== tag)
           .forEach((t) => {
