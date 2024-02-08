@@ -5,7 +5,7 @@
             [label]="buttonLabel"
             [rounded]="rounded"
             [severity]="severity"
-            [styleClass]="buttonStyleClass"
+            [styleClass]="(rounded ? 'rounded-text ' : '') + buttonStyleClass"
             data-bs-toggle="dropdown"
             pRipple
     ></p-button>

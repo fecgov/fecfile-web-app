@@ -1,109 +1,115 @@
 <p-toast></p-toast>
 
 <div class="card">
-  <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left"> <h1 class="m-0">Manage Contacts</h1></ng-template>
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left"><h1 class="m-0">Manage Contacts</h1></ng-template>
 
-    <ng-template pTemplate="right">
-      <button
-        id="button-contacts-new"
-        pButton
-        pRipple
-        label="New"
-        icon="pi pi-plus"
-        class="p-button-success mr-2"
-        (click)="addItem()"
-      ></button>
-      <p-fileUpload
-        mode="basic"
-        accept="image/*"
-        [maxFileSize]="1000000"
-        label="Import"
-        chooseLabel="Import"
-        class="mr-2 inline-block"
-      ></p-fileUpload>
-      <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
-    </ng-template>
-  </p-toolbar>
+        <ng-template pTemplate="right">
+            <button
+                    (click)="addItem()"
+                    class="p-button-success mr-2"
+                    icon="pi pi-plus"
+                    id="button-contacts-new"
+                    label="New"
+                    pButton
+                    pRipple
+            ></button>
+            <p-fileUpload
+                    [maxFileSize]="1000000"
+                    accept="image/*"
+                    chooseLabel="Import"
+                    class="mr-2 inline-block"
+                    mode="basic"
+            ></p-fileUpload>
+            <button class="p-button-help" icon="pi pi-upload" label="Export" pButton pRipple></button>
+        </ng-template>
+    </p-toolbar>
 
-  <p-table
-    #dt
-    [value]="items"
-    [lazy]="true"
-    (onLazyLoad)="loadTableItems($event)"
-    responsiveLayout="scroll"
-    dataKey="id"
-    [selection]="selectedItems"
-    (selectionChange)="onSelectionChange($event)"
-    [selectAll]="selectAll"
-    (selectAllChange)="onSelectAllChange($event)"
-    [paginator]="true"
-    [rows]="10"
-    [totalRecords]="totalItems"
-    [loading]="loading"
-    [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} contacts"
-    [showCurrentPageReport]="true"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        <h2 class="m-0">Contacts</h2>
-        <p-button label="Restore deleted contact(s)" styleClass="p-button-link" (click)="onRestoreClick()"></p-button>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="sorticon" let-sortOrder>
-      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr role="row">
-        <th pSortableColumn="sort_name" id="name-column" role="columnheader">
-          Name <p-sortIcon field="sort_name"></p-sortIcon>
-        </th>
-        <th pSortableColumn="type" id="type-column" role="columnheader">Type <p-sortIcon field="type"></p-sortIcon></th>
-        <th pSortableColumn="sort_fec_id" id="fec-id-column" role="columnheader">
-          FEC ID <p-sortIcon field="sort_fec_id"></p-sortIcon>
-        </th>
-        <th pSortableColumn="employer" id="employer-column" role="columnheader">
-          Employer <p-sortIcon field="employer"></p-sortIcon>
-        </th>
-        <th pSortableColumn="occupation" id="occupation-column" role="columnheader">
-          Occupation <p-sortIcon field="occupation"></p-sortIcon>
-        </th>
-        <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr role="row">
-        <td>
-          <a (click)="editItem(item)">{{ displayName(item) }}</a>
-        </td>
-        <td>{{ item.type | label : contactTypeLabels }}</td>
-        <td>{{ item.candidate_id || item.committee_id }}</td>
-        <td>{{ item.employer }}</td>
-        <td>{{ item.occupation }}</td>
-        <td style="text-align: center">
-          <em
-            class="pi pi-trash"
-            [ngClass]="{ disabled: !canDeleteItem(item) }"
-            pTooltip="This contact can not be deleted because it has associated transactions."
-            [tooltipDisabled]="canDeleteItem(item)"
-            (click)="canDeleteItem(item) && deleteItem(item)"
-          ></em>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+    <p-table
+        #dt
+        (onLazyLoad)="loadTableItems($event)"
+        (selectAllChange)="onSelectAllChange($event)"
+        (selectionChange)="onSelectionChange($event)"
+        [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+        [lazy]="true"
+        [loading]="loading"
+        [paginator]="true"
+        [rows]="10"
+        [selectAll]="selectAll"
+        [selection]="selectedItems"
+        [showCurrentPageReport]="true"
+        [totalRecords]="totalItems"
+        [value]="items"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} contacts"
+        dataKey="id"
+        responsiveLayout="scroll"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h2 class="m-0">Contacts</h2>
+                <p-button (click)="onRestoreClick()" label="Restore deleted contact(s)"
+                          styleClass="p-button-link"></p-button>
+            </div>
+        </ng-template>
+        <ng-template let-sortOrder pTemplate="sorticon">
+            <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr role="row">
+                <th id="name-column" pSortableColumn="sort_name" role="columnheader">
+                    Name
+                    <p-sortIcon field="sort_name"></p-sortIcon>
+                </th>
+                <th id="type-column" pSortableColumn="type" role="columnheader">Type
+                    <p-sortIcon field="type"></p-sortIcon>
+                </th>
+                <th id="fec-id-column" pSortableColumn="sort_fec_id" role="columnheader">
+                    FEC ID
+                    <p-sortIcon field="sort_fec_id"></p-sortIcon>
+                </th>
+                <th id="employer-column" pSortableColumn="employer" role="columnheader">
+                    Employer
+                    <p-sortIcon field="employer"></p-sortIcon>
+                </th>
+                <th id="occupation-column" pSortableColumn="occupation" role="columnheader">
+                    Occupation
+                    <p-sortIcon field="occupation"></p-sortIcon>
+                </th>
+                <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
+            </tr>
+        </ng-template>
+        <ng-template let-item pTemplate="body">
+            <tr role="row">
+                <td>
+                    <a (click)="editItem(item)">{{ displayName(item) }}</a>
+                </td>
+                <td>{{ item.type | label : contactTypeLabels }}</td>
+                <td>{{ item.candidate_id || item.committee_id }}</td>
+                <td>{{ item.employer }}</td>
+                <td>{{ item.occupation }}</td>
+                <td style="text-align: center">
+                    <em
+                            (click)="canDeleteItem(item) && deleteItem(item)"
+                            [ngClass]="{ disabled: !canDeleteItem(item) }"
+                            [tooltipDisabled]="canDeleteItem(item)"
+                            class="pi pi-trash"
+                            pTooltip="This contact can not be deleted because it has associated transactions."
+                    ></em>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
 
 <app-contact-dialog
-  [contact]="this.item"
-  [(detailVisible)]="detailVisible"
-  (savedContact)="saveContact($event)"
+        (savedContact)="saveContact($event)"
+        [(detailVisible)]="detailVisible"
+        [contact]="this.item"
 ></app-contact-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
 
 <app-deleted-contact-dialog
-  [(visible)]="restoreDialogIsVisible"
-  (contactsRestored)="refreshTable()"
+        (contactsRestored)="refreshTable()"
+        [(visible)]="restoreDialogIsVisible"
 ></app-deleted-contact-dialog>

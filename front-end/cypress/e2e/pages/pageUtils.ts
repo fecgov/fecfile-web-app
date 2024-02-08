@@ -42,7 +42,7 @@ export class PageUtils {
         cy.get('@calendarElement').find('.p-datepicker-next').click();
       }
     }
-    cy.get('@calendarElement').find('.p-yearpicker-year').contains(year.toString()).click();
+    cy.get('@calendarElement').find('.p-yearpicker-year').contains(year.toString()).click({ force: true });
 
     //    Choose the month
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

@@ -43,7 +43,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
         ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
-    ])
+    ]),
   );
   formSubmitted = false;
 
@@ -60,9 +60,36 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   constructor(
     private fb: FormBuilder,
     private contactService: ContactService,
-    protected confirmationService: ConfirmationService
+    protected confirmationService: ConfirmationService,
   ) {
     super();
+  }
+
+  /**
+   * Pass the CandidateOfficeTypes enum into the template
+   */
+  public get CandidateOfficeTypes() {
+    return CandidateOfficeTypes;
+  }
+
+  get country(): string {
+    return this.form.get('country')?.value;
+  }
+
+  set country(country: string) {
+    this.form.get('country')?.setValue(country);
+  }
+
+  get state(): string {
+    return this.form.get('state')?.value;
+  }
+
+  set state(state: string) {
+    this.form.get('state')?.setValue(state);
+  }
+
+  set type(type: ContactTypes) {
+    this.form.get('type')?.setValue(type);
   }
 
   ngOnInit(): void {
@@ -74,7 +101,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-
     this.form
       ?.get('country')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -84,10 +110,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
             state: 'ZZ',
           });
           // ajv does not un-require zip when country is not USA
-          this.form.patchValue({zip: this.form.get('zip')?.value || ''});
+          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
           this.form.get('state')?.disable();
         } else {
-          this.form.patchValue({zip: this.form.get('zip')?.value || null});
+          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
           this.form.get('state')?.enable();
         }
       });
@@ -138,7 +164,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently so
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
-    this.form.get('type')?.setValue(contactType);
+    this.type = contactType;
 
     const schema = ContactService.getSchemaByType(contactType);
     ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
@@ -162,16 +188,14 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     }
   }
 
-  /**
-   * Pass the CandidateOfficeTypes enum into the template
-   */
-  public get CandidateOfficeTypes() {
-    return CandidateOfficeTypes;
-  }
-
   public openDialog() {
     this.resetForm();
     this.form.patchValue(this.contact);
+    if (this.country === '') {
+      this.country = 'USA';
+      this.state = '';
+    }
+    this.type = this.contact.type;
     if (this.contact.id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
@@ -199,17 +223,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
    */
   public showSearchBox() {
     return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
-  }
-
-  private resetForm() {
-    this.form.reset();
-    this.isNewItem = true;
-    this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
-    if (this.defaultCandidateOffice) {
-      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
-    }
-    this.formSubmitted = false;
   }
 
   updateContact(contact: Contact) {
@@ -259,5 +272,16 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       this.closeDialog();
     }
     this.resetForm();
+  }
+
+  private resetForm() {
+    this.form.reset();
+    this.isNewItem = true;
+    this.contactLookup.contactTypeFormControl.enable();
+    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+    if (this.defaultCandidateOffice) {
+      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
+    }
+    this.formSubmitted = false;
   }
 }

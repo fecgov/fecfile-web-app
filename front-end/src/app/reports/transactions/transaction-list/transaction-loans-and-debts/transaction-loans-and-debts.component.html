@@ -1,89 +1,91 @@
 <div class="card">
-  <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="rowsPerPage"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-      [showCurrentPageReport]="true"
-      sortField="line_label_order_key,created"
-  >
-    <ng-template pTemplate="caption">
-      <div class="grid">
-        <div class="col-9 flex align-items-center justify-content-between">
-          <h5 class="gandhi-bold size-24">Loans and Debts</h5>
-        </div>
-        <div class="col-3 align-right">
-          Results per table:
-          <p-dropdown
-            [options]="paginationPageSizeOptions"
-            [(ngModel)]="rowsPerPage"
-            (onChange)="onRowsPerPageChange()"
-          ></p-dropdown>
-        </div>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="sorticon" let-sortOrder>
-      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr role="row">
-        <th *ngFor="let h of sortableHeaders" [pSortableColumn]="h.field" [id]="h.field+'-column'" role="columnheader">
-          {{h.label}}
-          <p-sortIcon [field]="h.field"></p-sortIcon>
-        </th>
-        <th id="transaction_id" role="columnheader">Transaction ID</th>
-        <th id="back_reference_tran_id_number" role="columnheader">Associated With</th>
-        <th id="buttons" role="columnheader">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr role="row">
-        <td class="no-wrap">
-          {{ item.line_label }}
-        </td>
-        <td>
-          <a [routerLink]="[item?.id]">{{
-              item.transaction_type_identifier | label : scheduleTransactionTypeLabels
-            }}</a>
-          <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
-        </td>
-        <td>
-          {{ item.name }}
-        </td>
-        <td>
-          {{ item[item.transactionType.templateMap.date] | fecDate }}
-        </td>
-        <td>
-          {{ item['debt_incurred_amount'] | currency }}
-        </td>
-        <td>
-          {{ item['balance'] | currency }}
-        </td>
-        <td>
-          {{ formatId(item.transaction_id) }}
-        </td>
-        <td>
-          {{ formatId(item.back_reference_tran_id_number) }}
-        </td>
-        <td>
-          <app-table-actions-button
-            [tableActions]="rowActions"
-            [actionItem]="item"
-            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="p-button-text"
-            buttonAriaLabel="action"
-            dataTest="loans-and-debts-button"
-          ></app-table-actions-button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+    <p-table
+        #dt
+        (onLazyLoad)="loadTableItems($event)"
+        [lazy]="true"
+        [loading]="loading"
+        [paginator]="true"
+        [rows]="rowsPerPage"
+        [showCurrentPageReport]="true"
+        [totalRecords]="totalItems"
+        [value]="items"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+        dataKey="id"
+        responsiveLayout="scroll"
+        sortField="line_label_order_key,created"
+    >
+        <ng-template pTemplate="caption">
+            <div class="grid">
+                <div class="col-9 flex align-items-center justify-content-between">
+                    <h5 class="gandhi-bold size-24">Loans and Debts</h5>
+                </div>
+                <div class="col-3 align-right">
+                    Results per table:
+                    <p-dropdown
+                            (onChange)="onRowsPerPageChange()"
+                            [(ngModel)]="rowsPerPage"
+                            [options]="paginationPageSizeOptions"
+                    ></p-dropdown>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template let-sortOrder pTemplate="sorticon">
+            <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr role="row">
+                <th *ngFor="let h of sortableHeaders" [id]="h.field+'-column'" [pSortableColumn]="h.field"
+                    role="columnheader">
+                    {{ h.label }}
+                    <p-sortIcon [field]="h.field"></p-sortIcon>
+                </th>
+                <th id="transaction_id" role="columnheader">Transaction ID</th>
+                <th id="back_reference_tran_id_number" role="columnheader">Associated With</th>
+                <th id="buttons" role="columnheader">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template let-item pTemplate="body">
+            <tr role="row">
+                <td class="no-wrap">
+                    {{ item.line_label }}
+                </td>
+                <td>
+                    <a [routerLink]="[item?.id]">{{
+                            item.transaction_type_identifier | label : scheduleTransactionTypeLabels
+                        }}</a>
+                    <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
+                </td>
+                <td>
+                    {{ item.name }}
+                </td>
+                <td>
+                    {{ item[item.transactionType.templateMap.date] | fecDate }}
+                </td>
+                <td>
+                    {{ item['debt_incurred_amount'] | currency }}
+                </td>
+                <td>
+                    {{ item['balance'] | currency }}
+                </td>
+                <td>
+                    {{ formatId(item.transaction_id) }}
+                </td>
+                <td>
+                    {{ formatId(item.back_reference_tran_id_number) }}
+                </td>
+                <td>
+                    <app-table-actions-button
+                            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+                            [actionItem]="item"
+                            [rounded]="true"
+                            [tableActions]="rowActions"
+                            buttonAriaLabel="action"
+                            buttonIcon="pi pi-ellipsis-v"
+                            buttonStyleClass="flex justify-content-center rounded-text p-button-text mr-2"
+                            dataTest="loans-and-debts-button"
+                    ></app-table-actions-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

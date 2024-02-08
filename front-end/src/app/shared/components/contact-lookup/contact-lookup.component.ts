@@ -25,29 +25,23 @@ import { DestroyerComponent } from '../app-destroyer.component';
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
-  @Input() showSearchBoxCallback = () => true;
-
   @Input() maxFecCommitteeResults = 5;
   @Input() maxFecfileCommitteeResults = 5;
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
-
   @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactLookupSelect = new EventEmitter<Contact>();
-  @Output() createNewContactSelect = new EventEmitter<void>();
-
+  @Output() createNewContactSelect = new EventEmitter<ContactTypes>();
   contactType = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
   contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
-
   contactTypeFormControl = new FormControl();
   searchBoxFormControl = new FormControl();
-
   searchTerm = '';
 
   constructor(
@@ -56,6 +50,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   ) {
     super();
   }
+
+  @Input() showSearchBoxCallback = () => true;
 
   ngOnInit(): void {
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
@@ -115,7 +111,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   }
 
   onCreateNewContactSelect() {
-    this.createNewContactSelect.emit();
+    this.createNewContactSelect.emit(this.contactTypeFormControl.value);
   }
 
   isContact(value: Contact | FecApiLookupData) {

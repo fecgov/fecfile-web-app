@@ -4861,6 +4861,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-color: #0062cc;
 }
 
+.p-button.p-fileupload-choose input[type=file], .p-fileupload-choose.p-fileupload-choose-selected input[type=file]  {
+  display: none !important;
+}
+
 .p-breadcrumb {
   background: #f1f1f1;
   border: 0 none;
