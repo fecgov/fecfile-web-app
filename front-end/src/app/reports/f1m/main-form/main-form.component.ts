@@ -15,7 +15,9 @@ import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { F1MContactTag, F1MContact, AffiliatedContact, CandidateContact } from './contact';
+import { F1MCandidateTag, F1MContact, AffiliatedContact, CandidateContact } from './contact';
+
+const candidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
 
 @Component({
   selector: 'app-main-form',
@@ -116,7 +118,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     protected override messageService: MessageService,
     protected override router: Router,
     protected override activatedRoute: ActivatedRoute,
-    protected confirmationService: ConfirmationService
+    protected confirmationService: ConfirmationService,
   ) {
     super(store, fb, reportService, messageService, router, activatedRoute);
   }
@@ -146,13 +148,21 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
     this.affiliatedContact = new AffiliatedContact(this);
-    this.candidateContacts = [
-      new CandidateContact('I', this),
-      new CandidateContact('II', this),
-      new CandidateContact('III', this),
-      new CandidateContact('IV', this),
-      new CandidateContact('V', this),
-    ];
+    this.candidateContacts = candidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
+
+    // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
+    candidateTags.forEach((tag: F1MCandidateTag) => {
+      this.form.get(`${tag}_candidate_id_number`)?.valueChanges.subscribe((value) => {
+        candidateTags
+          .filter((t) => t !== tag)
+          .forEach((t) => {
+            const control = this.form.get(`${t}_candidate_id_number`);
+            if (control?.invalid && control.errors && 'fecIdMustBeUnique' in control.errors) {
+              this.form.get(`${t}_candidate_id_number`)?.updateValueAndValidity();
+            }
+          });
+      });
+    });
 
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
       ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
@@ -223,14 +233,14 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
               form,
               this.templateMapConfigs[contactKey],
               contactKey,
-              'By saving this report'
+              'By saving this report',
             );
           }
           const changes = TransactionContactUtils.getContactChanges(
             form,
             contact,
             this.templateMapConfigs[contactKey],
-            config
+            config,
           );
           if (changes.length > 0) {
             return TransactionContactUtils.getContactChangesMessage(contact, changes);
@@ -245,7 +255,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     return from([of(true), ...confirmations$]).pipe(
       concatAll(),
-      reduce((accumulator, confirmed) => accumulator && confirmed)
+      reduce((accumulator, confirmed) => accumulator && confirmed),
     );
   }
 
@@ -257,7 +267,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           form,
           contact,
           this.templateMapConfigs[contactKey],
-          config
+          config,
         );
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
@@ -274,10 +284,10 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
    * @param excludeContactTag - values: I, II, III, IV, or V
    * @returns string[] - list of contact ids currently selected by user for Qualifications
    */
-  getSelectedContactIds(excludeContactTag: F1MContactTag | undefined = undefined) {
-    return this.candidateContacts
-      .filter((c: CandidateContact) => c.tag !== excludeContactTag)
-      .map((c: CandidateContact) => c.candidateId)
+  getSelectedContactIds(excludeContactTag: F1MCandidateTag | undefined = undefined) {
+    return candidateTags
+      .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
+      .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
       .filter((id) => !!id);
   }
 }

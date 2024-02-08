@@ -6,7 +6,7 @@ import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
-export type F1MContactTag = 'I' | 'II' | 'III' | 'IV' | 'V';
+export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 
 /**
  * Angular validation callback function to invalidate contacts with the same contact id.
@@ -14,7 +14,7 @@ export type F1MContactTag = 'I' | 'II' | 'III' | 'IV' | 'V';
  * @param component
  * @returns
  */
-function duplicateCandidateIdValidator(contactTag: F1MContactTag, component: MainFormComponent): ValidatorFn {
+function duplicateCandidateIdValidator(contactTag: F1MCandidateTag, component: MainFormComponent): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
     const isDuplicate = component.getSelectedContactIds(contactTag).includes(value);
@@ -116,7 +116,7 @@ export class AffiliatedContact extends F1MContact {
 }
 
 export class CandidateContact extends F1MContact {
-  tag: F1MContactTag; // Valid values are: I, II, III, IV, V
+  tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   formFields: string[] = [];
 
@@ -128,7 +128,7 @@ export class CandidateContact extends F1MContact {
     return this.component.form.get(`${this.tag}_candidate_id_number`)?.value;
   }
 
-  constructor(tag: F1MContactTag, component: MainFormComponent) {
+  constructor(tag: F1MCandidateTag, component: MainFormComponent) {
     super(`contact_candidate_${tag}` as keyof Form1M, component);
 
     this.tag = tag;
