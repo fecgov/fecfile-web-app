@@ -59,6 +59,15 @@ describe('SelectReportDialogComponent', () => {
     expect(component.transaction).toBeFalsy();
   });
 
+  describe('reattRedes', () => {
+    it("should determine if it's a reattribution of redesignation", () => {
+      component.type = ReattRedesTypes.REATTRIBUTED;
+      expect(component.reattRedes).toBe('reattribute');
+
+      expect(component.reattRedesignation).toBe('reattribution');
+    });
+  });
+
   describe('createReattribution', () => {
     it('should throw error if no base transaction', async () => {
       component.ngOnInit();

@@ -28,7 +28,7 @@ export class SelectReportDialogComponent implements OnInit {
     return ReattRedesUtils.isReattribute(this.type) ? 'reattribute' : 'redesignate';
   }
 
-  private get reattRedesignation(): string {
+  get reattRedesignation(): string {
     return ReattRedesUtils.isReattribute(this.type) ? 'reattribution' : 'redesignation';
   }
 
