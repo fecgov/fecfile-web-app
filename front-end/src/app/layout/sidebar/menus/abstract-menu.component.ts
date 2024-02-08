@@ -51,6 +51,15 @@ export abstract class AbstractMenuComponent extends DestroyerComponent implement
     } as MenuItem;
   }
 
+  editReport(sidebarState: SidebarState, activeReport: Report | undefined): MenuItem {
+    return {
+      label: 'EDIT A REPORT',
+      styleClass: 'edit-report-menu-item',
+      routerLink: [`/reports/${this.reportString}/edit/${activeReport?.id}`],
+      expanded: sidebarState?.section === ReportSidebarSection.CREATE,
+    };
+  }
+
   signAndSubmit(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem {
     return {
       label: 'SIGN & SUBMIT',
