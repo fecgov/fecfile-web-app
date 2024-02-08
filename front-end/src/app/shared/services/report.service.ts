@@ -28,14 +28,17 @@ export function getReportFromJSON(json: any): Report {
 export class ReportService implements TableListService<Report> {
   apiEndpoint = '/reports';
 
-  constructor(protected apiService: ApiService, protected store: Store) {}
+  constructor(
+    protected apiService: ApiService,
+    protected store: Store,
+  ) {}
 
   public getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => getReportFromJSON(item));
         return response;
-      })
+      }),
     );
   }
 
@@ -73,7 +76,7 @@ export class ReportService implements TableListService<Report> {
     return this.get(reportId).pipe(
       tap((report) => {
         return this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
-      })
+      }),
     );
   }
 
