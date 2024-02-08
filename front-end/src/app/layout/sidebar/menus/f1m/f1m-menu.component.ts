@@ -25,7 +25,7 @@ export class F1MMenuComponent extends AbstractMenuComponent implements OnInit {
     reviewReport.items = [this.printPreview(activeReport), this.addReportLevelMenu(activeReport, isEditable)];
 
     return [
-      this.createReport(sidebarState, activeReport),
+      this.editReport(sidebarState, activeReport),
       reviewReport,
       this.signAndSubmit(sidebarState, activeReport, isEditable),
     ];
