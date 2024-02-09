@@ -209,6 +209,7 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
     report_type: 'F3X',
     report_code: 'Q1',
     reportCode: 'Q1',
+    coverage_through_date: '2024-04-20',
   },
 });
 

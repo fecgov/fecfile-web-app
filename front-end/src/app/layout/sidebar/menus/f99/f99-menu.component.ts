@@ -22,7 +22,7 @@ export class F99MenuComponent extends AbstractMenuComponent implements OnInit {
     reviewReport.items = [this.printPreview(activeReport)];
 
     return [
-      this.createReport(sidebarState, activeReport),
+      this.editReport(sidebarState, activeReport),
       reviewReport,
       this.signAndSubmit(sidebarState, activeReport, isEditable),
     ];

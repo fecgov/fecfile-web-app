@@ -41,7 +41,7 @@ export class ReattributionFromUtils {
     Object.assign(transaction.transactionType, {
       accordionTitle: 'AUTO-POPULATED',
       accordionSubText: 'Review contact, receipt, and additional information in the reattribution from section.',
-      title: 'Reattribution from',
+      formTitle: 'Reattribution from',
       contactTitle: 'Contact',
       dateLabel: 'REATTRIBUTION DATE',
       amountLabel: 'REATTRIBUTED AMOUNT',
