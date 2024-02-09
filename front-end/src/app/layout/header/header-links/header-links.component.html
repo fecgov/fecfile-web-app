@@ -27,10 +27,11 @@
         <span [ngStyle]="{ 'font-size': fontSize }">Tools</span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-        <a class="dropdown-item" href="#">Import</a>
-        <a class="dropdown-item" href="#">Export</a>
-        <a class="dropdown-item" href="#">Update cash on hand</a>
-        <a class="dropdown-item" href="#">FECFile Help</a>
+        <!-- Converted <a> tag to <span> for next 4 dead links so page doesn't route away -->
+        <span class="dropdown-item" href="#"><span class="dead-link">Import</span></span>
+        <span class="dropdown-item" href="#"><span class="dead-link">Export</span></span>
+        <span class="dropdown-item" href="#"><span class="dead-link">Update cash on hand</span></span>
+        <span class="dropdown-item" href="#"><span class="dead-link">FECFile Help</span></span>
       </ul>
     </li>
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
@@ -65,8 +66,9 @@
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarProfileDropdownMenuLink">
         <a class="dropdown-item" routerLink="/committee/">Account</a>
         <a class="dropdown-item" routerLink="/committee/members">Users</a>
-        <a class="dropdown-item" href="#"><span class="dead-link">Switch Committees</span></a>
-        <a class="dropdown-item" href="#"><span class="dead-link">User Profile</span></a>
+        <!-- Converted <a> tag to <span> for next 2 dead links so page doesn't route away -->
+        <span class="dropdown-item" href="#"><span class="dead-link">Switch Committees</span></span>
+        <span class="dropdown-item" href="#"><span class="dead-link">User Profile</span></span>
         <a class="dropdown-item" href="#" (click)="loginService.logOut()">Logout</a>
       </ul>
     </li>
