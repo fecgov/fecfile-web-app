@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -23,7 +23,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   userLoginData?: UserLoginData;
 
   form = new FormGroup({
-    'security-consent': new FormControl(false),
+    'security-consent-annual': new FormControl(false),
   });
 
   constructor(
@@ -59,7 +59,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
     };
 
-    if (this.form.get('security-consent-annnual')?.value) {
+    if (this.form.get('security-consent-annual')?.value) {
       this.usersService
         .updateCurrentUser(updatedUserLoginData)
         .pipe(
