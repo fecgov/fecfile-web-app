@@ -16,7 +16,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
-import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
@@ -69,7 +68,7 @@ describe('CreateF3XStep1Component', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
       ],
-      declarations: [CreateF3XStep1Component, LabelPipe, AppSelectButtonComponent],
+      declarations: [CreateF3XStep1Component, LabelPipe],
       providers: [Form3XService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     }).compileComponents();
 
@@ -130,21 +129,21 @@ describe('CreateF3XStep1Component', () => {
     spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.form.patchValue({...f3x});
+    component.form.patchValue({ ...f3x });
     component.save();
     expect(component.form.invalid).toBe(false);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
-    component.form.patchValue({...f3x});
+    component.form.patchValue({ ...f3x });
     component.save('continue');
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 
   it('#save should not save with invalid f3x record', () => {
     spyOn(form3XService, 'create').and.returnValue(of(f3x));
-    component.form.patchValue({...f3x});
-    component.form.patchValue({form_type: 'NO-GOOD'});
+    component.form.patchValue({ ...f3x });
+    component.form.patchValue({ form_type: 'NO-GOOD' });
     component.save();
     expect(component.form.invalid).toBe(true);
   });
@@ -161,7 +160,7 @@ describe('CreateF3XStep1Component', () => {
       controlFromDate: Date,
       controlThroughDate: Date,
       expectedFromMessage: string | null,
-      expectedThroughMessage: string | null
+      expectedThroughMessage: string | null,
     ) => {
       const validator = component.existingCoverageValidator(existingCoverage);
       const group = new FormGroup({
@@ -170,10 +169,10 @@ describe('CreateF3XStep1Component', () => {
       });
       validator(group);
       expect(group.get('coverage_from_date')?.errors).toEqual(
-        expectedFromMessage ? {invaliddate: {msg: expectedFromMessage}} : null
+        expectedFromMessage ? { invaliddate: { msg: expectedFromMessage } } : null,
       );
       expect(group.get('coverage_through_date')?.errors).toEqual(
-        expectedThroughMessage ? {invaliddate: {msg: expectedThroughMessage}} : null
+        expectedThroughMessage ? { invaliddate: { msg: expectedThroughMessage } } : null,
       );
     };
     const hitsQ1Msg =
