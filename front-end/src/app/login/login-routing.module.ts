@@ -14,6 +14,7 @@ const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
+    title: 'FECFile Login',
     data: {
       showUpperFooter: false,
       showCommitteeBanner: false,
@@ -24,6 +25,7 @@ const routes: Routes = [
   {
     path: 'security-notice',
     component: SecurityNoticeComponent,
+    title: 'Security Notice',
     canActivate: [LoginGuard, nameGuard],
     data: {
       showCommitteeBanner: false,
@@ -34,6 +36,7 @@ const routes: Routes = [
   },
   {
     path: 'select-committee',
+    title: 'Select Committee',
     component: SelectCommitteeComponent,
     canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
     data: {
@@ -42,7 +45,8 @@ const routes: Routes = [
     },
   },
   {
-    path: 'current',
+    path: 'create-profile',
+    title: 'Create Profile',
     component: UpdateCurrentUserComponent,
     canActivate: [LoginGuard],
     data: {

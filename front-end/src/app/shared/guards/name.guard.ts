@@ -6,7 +6,7 @@ export const nameGuard: CanActivateFn = () => {
   const router = inject(Router);
   const loginService = inject(LoginService);
   if (!loginService.userHasProfileData()) {
-    router.navigate(['/login/current']);
+    router.navigate(['/login/create-profile']);
     return false;
   }
   return true;
