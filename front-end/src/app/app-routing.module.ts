@@ -13,6 +13,7 @@ import { nameGuard } from './shared/guards/name.guard';
 import { SecurityNoticeComponent } from './login/security-notice/security-notice.component';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { HeaderStyles } from './layout/header/header.component';
+import { RegisterCommitteeComponent } from './committee/register-committee/register-committee.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,22 @@ const routes: Routes = [
       {
         path: '',
         component: SelectCommitteeComponent,
+        resolve: { sidebar: SidebarStateResolver },
+        data: {
+          showUpperFooter: false,
+          headerStyle: HeaderStyles.LOGOUT,
+        },
+      },
+    ],
+  },
+  {
+    path: 'register-committee',
+    component: LayoutComponent,
+    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
+    children: [
+      {
+        path: '',
+        component: RegisterCommitteeComponent,
         resolve: { sidebar: SidebarStateResolver },
         data: {
           showUpperFooter: false,

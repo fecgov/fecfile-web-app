@@ -1,0 +1,29 @@
+
+.register-committee-columns{
+    display: flex;
+    flex-direction: row;
+}
+.go-back {
+    padding-bottom: 25px;
+}
+
+.left-side {
+    flex-direction: column;
+}
+.right-side {
+    flex-direction: column;
+}
+.find-committee-box {
+    display: flex;
+    background-color: #f1f1f1;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+h2 {
+    margin:0;
+}
+h5 {
+    margin-bottom:0;
+}
