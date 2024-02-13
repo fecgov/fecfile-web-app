@@ -2,7 +2,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
 import { of } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
@@ -27,7 +29,7 @@ describe('LoginComponent', () => {
         ]),
         ReactiveFormsModule,
       ],
-      providers: [{ provide: Window, useValue: window }],
+      providers: [{ provide: Window, useValue: window }, provideMockStore(testMockStore)],
       declarations: [LoginComponent, BannerComponent],
     }).compileComponents();
   });
