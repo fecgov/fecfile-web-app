@@ -6,7 +6,7 @@ export const securityNoticeGuard: CanActivateFn = () => {
   const router = inject(Router);
   const loginService = inject(LoginService);
   if (!loginService.userHasRecentSecurityConsentDate()) {
-    router.navigate(['/security-notice']);
+    router.navigate(['/login/security-notice']);
     return false;
   }
   return true;

@@ -11,10 +11,10 @@ export const committeeGuard: CanActivateFn = () => {
     .pipe(
       map((committee) => {
         if (!committee.id) {
-          router.navigateByUrl('/select-committee');
+          router.navigateByUrl('/login/select-committee');
           return false;
         }
         return true;
-      })
+      }),
     );
 };

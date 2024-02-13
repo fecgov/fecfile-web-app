@@ -8,6 +8,7 @@ import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { AbstractMenuComponent } from '../abstract-menu.component';
 import { takeUntil } from 'rxjs';
 import { Form3X } from '../../../../shared/models/form-3x.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-f3x-menu',
@@ -20,8 +21,8 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   coverage_from_date?: Date;
   coverage_through_date?: Date;
 
-  constructor(store: Store, reportService: ReportService) {
-    super(store, reportService);
+  constructor(store: Store, reportService: ReportService, router: Router) {
+    super(store, reportService, router);
     this.reportString = 'f3x';
   }
 

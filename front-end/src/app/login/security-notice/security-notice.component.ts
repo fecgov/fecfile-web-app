@@ -65,13 +65,13 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
         .pipe(
           map(() => {
             this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
-            this.router.navigate(['dashboard']);
+            this.router.navigate(['/dashboard']);
           }),
         )
         .subscribe();
     } else {
       this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['/dashboard']);
     }
   }
 }

@@ -5,6 +5,7 @@ import { Report } from '../../../../shared/models/report.model';
 import { ReportService } from '../../../../shared/services/report.service';
 import { SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-f99-menu',
@@ -12,8 +13,8 @@ import { AbstractMenuComponent } from '../abstract-menu.component';
   styleUrls: ['../menu-report.component.scss'],
 })
 export class F99MenuComponent extends AbstractMenuComponent implements OnInit {
-  constructor(store: Store, reportService: ReportService) {
-    super(store, reportService);
+  constructor(store: Store, reportService: ReportService, router: Router) {
+    super(store, reportService, router);
     this.reportString = 'f99';
   }
 

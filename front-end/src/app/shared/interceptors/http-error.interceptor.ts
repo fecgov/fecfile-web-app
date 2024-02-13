@@ -24,6 +24,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         //pass on error code if allowed
+        console.log('EXODIA THE FORBIDDEN ONE', error);
         if (request.context.get(ALLOW_ERROR_CODES).includes(error.status)) {
           return of(new HttpResponse({ status: error.status }));
         }
@@ -41,7 +42,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }
         console.log(errorMessage);
         return throwError(() => errorMessage);
-      })
+      }),
     );
   }
 }

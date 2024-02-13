@@ -28,7 +28,7 @@ export class DebugLoginComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private store: Store,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {
     this.form = this.fb.group({
       committeeId: ['', Validators.required],
@@ -43,8 +43,6 @@ export class DebugLoginComponent implements OnInit {
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
-    this.loginService.clearUserLoggedInCookies();
-    this.store.dispatch(userLoggedOutAction());
   }
 
   /**
