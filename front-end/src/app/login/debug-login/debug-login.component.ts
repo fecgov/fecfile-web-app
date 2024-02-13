@@ -1,8 +1,6 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { userLoggedOutAction } from 'app/store/login.actions';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
 
@@ -27,8 +25,6 @@ export class DebugLoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private router: Router,
-    private store: Store,
-    private ngZone: NgZone,
   ) {
     this.form = this.fb.group({
       committeeId: ['', Validators.required],
@@ -39,7 +35,6 @@ export class DebugLoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    localStorage.clear();
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
