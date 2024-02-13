@@ -2,6 +2,7 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
+import { DateUtils } from '../date.utils';
 
 export class RedesignationFromUtils {
   private static readOnlyFields = [
@@ -18,6 +19,7 @@ export class RedesignationFromUtils {
     'city',
     'state',
     'zip',
+    'date',
     'amount',
     'purpose_description',
     'committee_fec_id',
@@ -57,6 +59,17 @@ export class RedesignationFromUtils {
     Object.assign(transaction.transactionType, {
       accordionTitle: 'AUTO-POPULATED',
       accordionSubText: 'Review contact, disbursement, and additional information in the redesignation from section.',
+      formTitle: 'Redesignation from',
+      contactTitle: 'Contact',
+      dateLabel: 'REDESIGNATION DATE',
+      amountLabel: 'REDESIGNATED AMOUNT',
+      generatePurposeDescription: (transaction: SchBTransaction): string => {
+        if (!transaction.reatt_redes) return '';
+        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+        if (!expenditureDate) throw new Error('No Expenditure Date!');
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
+      },
+      hideContactLookup: true,
     });
 
     // Remove purpose description and memo code from list of fields to validate on the backend
@@ -72,6 +85,7 @@ export class RedesignationFromUtils {
     // Update purpose description for rules that are independent of the transaction date being in the report.
     purposeDescriptionControl?.clearValidators();
     fromForm.get('memo_code')?.clearValidators();
+    fromForm.get('memo_code')?.setValue(true);
 
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
     toForm.get(templateMap.amount)?.valueChanges.subscribe((amount) => {

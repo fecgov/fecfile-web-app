@@ -16,9 +16,9 @@ import {
   ContactTypes,
 } from '../../models/contact.model';
 import { DestroyerComponent } from '../app-destroyer.component';
-import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { ConfirmationService } from 'primeng/api';
+import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -32,8 +32,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
-
-  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
 
   form: FormGroup = this.fb.group(
     ValidateUtils.getFormGroupFields([
@@ -56,6 +54,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
+
+  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -86,6 +86,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   set state(state: string) {
     this.form.get('state')?.setValue(state);
+  }
+
+  get type(): ContactTypes {
+    return this.form.get('type')?.value;
   }
 
   set type(type: ContactTypes) {
@@ -188,21 +192,26 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     }
   }
 
-  public openDialog() {
-    this.resetForm();
+  public openDialog(contact: Contact | undefined = undefined) {
+    if (contact) {
+      // This might be a local test data issue, but I noticed sometimes the state was set on a committee,
+      // but the country was blank. This caused an issue when trying to autopopulate the data.
+      if (contact.country === '' && contact.state !== '' && contact.state !== 'ZZ') contact.country = 'USA';
+      this.contact = contact;
+    }
     this.form.patchValue(this.contact);
     if (this.country === '') {
       this.country = 'USA';
-      this.state = '';
+      if (this.state === 'ZZ') this.state = '';
     }
-    this.type = this.contact.type;
+    this.type = this.contact.type as ContactTypes;
     if (this.contact.id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
       // component because the Contact Dialog is hidden and not destroyed on close
       // so we need to directly update the lookup "type" form control value
-      this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
-      this.contactLookup.contactTypeFormControl.enable();
+      //   this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
+      //  this.contactLookup.contactTypeFormControl.enable();
     } else if (this.contactTypeOptions.length === 1) {
       this.contactLookup.contactTypeFormControl.enable();
     }
@@ -278,7 +287,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.reset();
     this.isNewItem = true;
     this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+    this.contactLookup.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }

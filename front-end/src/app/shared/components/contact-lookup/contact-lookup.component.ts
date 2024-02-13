@@ -18,7 +18,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
-  selector: 'app-contact-lookup',
+  selector: ' app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
 })
@@ -120,13 +120,13 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
-    if (event?.value) {
-      if (event.value instanceof Contact) {
-        this.onContactSelect(event.value);
-      } else if (event.value instanceof FecApiCandidateLookupData) {
-        this.onFecApiCandidateLookupDataSelect(event.value);
-      } else if (event.value instanceof FecApiCommitteeLookupData) {
-        this.onFecApiCommitteeLookupDataSelect(event.value);
+    if (event?.value?.value) {
+      if (event.value.value instanceof Contact) {
+        this.onContactSelect(event.value.value);
+      } else if (event.value.value instanceof FecApiCandidateLookupData) {
+        this.onFecApiCandidateLookupDataSelect(event.value.value);
+      } else if (event.value.value instanceof FecApiCommitteeLookupData) {
+        this.onFecApiCommitteeLookupDataSelect(event.value.value);
       }
     }
     this.searchBoxFormControl.patchValue('');

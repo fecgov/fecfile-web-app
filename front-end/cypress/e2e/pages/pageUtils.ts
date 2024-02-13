@@ -15,8 +15,9 @@ export class PageUtils {
 
     if (value) {
       cy.get(alias).find(querySelector).first().click();
-      cy.contains('p-dropdownitem', value).should('be.visible');
-      cy.contains('p-dropdownitem', value).click();
+      cy.contains('p-dropdownitem', value)
+        .scrollIntoView({ offset: { top: 0, left: 0 } })
+        .click();
     }
   }
 
@@ -26,7 +27,7 @@ export class PageUtils {
     //
     cy.get(alias).find(calendar).first().as('calendarElement').click();
 
-    cy.get('@calendarElement').find('.p-datepicker-year').first().click();
+    cy.get('@calendarElement').find('.p-datepicker-year').first().scrollIntoView().click();
     //    Choose the year
     const year: number = dateObj.getFullYear();
     const currentYear: number = currentDate.getFullYear();
@@ -34,24 +35,36 @@ export class PageUtils {
     const decadeEnd: number = decadeStart + 9;
     if (year < decadeStart) {
       for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev').click();
+        cy.get('@calendarElement').find('.p-datepicker-prev').scrollIntoView().click();
       }
     }
     if (year > decadeEnd) {
       for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next').click();
+        cy.get('@calendarElement').find('.p-datepicker-next').scrollIntoView().click();
       }
     }
-    cy.get('@calendarElement').find('.p-yearpicker-year').contains(year.toString()).click({ force: true });
+    cy.get('@calendarElement')
+      .find('.p-yearpicker-year')
+      .contains(year.toString())
+      .scrollIntoView()
+      .click({ force: true });
 
     //    Choose the month
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const Month: string = Months[dateObj.getMonth()];
-    cy.get('@calendarElement').find('.p-monthpicker-month').contains(Month).click();
+    cy.get('@calendarElement').find('.p-monthpicker-month').contains(Month).scrollIntoView().click();
 
     //    Choose the day
     const Day: string = dateObj.getDate().toString();
-    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(Day).click();
+    cy.get('@calendarElement')
+      .find('td')
+      .find('span')
+      .not('.p-disabled')
+      .parent()
+      .contains(Day)
+      .scrollIntoView()
+      .click();
+    cy.wait(100);
   }
 
   static randomString(
@@ -60,10 +73,10 @@ export class PageUtils {
     includeCurlyBraces = true,
   ): string {
     // prettier-ignore
-    let symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '|', '~', '`'];
+    let symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '|', '~', '`'];
     if (includeCurlyBraces) symbols = symbols.concat('{', '}');
     // prettier-ignore
-    const alphabet: Array<string> = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',];
+    const alphabet: Array<string> = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     // prettier-ignore
     const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 

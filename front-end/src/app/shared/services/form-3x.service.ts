@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReportService } from './report.service';
-import { F3xCoverageDates } from '../models/form-3x.model';
+import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -12,7 +12,10 @@ import { ApiService } from './api.service';
 export class Form3XService extends ReportService {
   override apiEndpoint = '/reports/form-3x';
 
-  constructor(override apiService: ApiService, override store: Store) {
+  constructor(
+    override apiService: ApiService,
+    override store: Store,
+  ) {
     super(apiService, store);
   }
 
@@ -20,5 +23,11 @@ export class Form3XService extends ReportService {
     return this.apiService
       .get<F3xCoverageDates[]>(`${this.apiEndpoint}/coverage_dates`)
       .pipe(map((response) => response.map((fx3CoverageDate) => F3xCoverageDates.fromJSON(fx3CoverageDate))));
+  }
+
+  public getFutureReports(coverage_through_date: string): Observable<Form3X[]> {
+    return this.apiService
+      .get<Form3X[]>(`${this.apiEndpoint}/future?after=${coverage_through_date}`)
+      .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
   }
 }

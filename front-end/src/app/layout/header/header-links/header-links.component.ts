@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { LoginService } from '../../../shared/services/login.service';
 import { environment } from 'environments/environment';
+import { HeaderStyles } from '../header.component';
 
 @Component({
   selector: 'app-header-links',
@@ -12,7 +13,9 @@ export class HeaderLinksComponent {
   loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   @Input() ratio = 1;
   @Input() full = false;
-  @Input() loginHeader = false;
+  @Input() headerStyle = HeaderStyles.DEFAULT;
+
+  headerStyles = HeaderStyles;
 
   constructor(loginService: LoginService) {
     this.loginService = loginService;

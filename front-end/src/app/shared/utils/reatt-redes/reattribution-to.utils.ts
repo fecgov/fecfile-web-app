@@ -7,7 +7,7 @@ export class ReattributionToUtils {
   public static overlayTransactionProperties(
     transaction: SchATransaction,
     reattributedTransaction?: SchATransaction,
-    activeReportId?: string
+    activeReportId?: string,
   ): SchATransaction {
     if (reattributedTransaction) {
       transaction.reatt_redes_id = reattributedTransaction.id;
@@ -41,7 +41,7 @@ export class ReattributionToUtils {
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
       (field) =>
         field !== transaction.transactionType.templateMap.purpose_description &&
-        field !== transaction.transactionType.templateMap.memo_code
+        field !== transaction.transactionType.templateMap.memo_code,
     );
 
     return transaction;
@@ -56,16 +56,8 @@ export class ReattributionToUtils {
     // Clear normal schema validation from reattribution TO form
     form.get('contribution_purpose_descrip')?.clearValidators();
     form.get('memo_code')?.clearValidators();
-    form.get('memo_code')?.setValue(false);
-
-    // Memo Code required to be X unless original "Reattributed" transaction in current report period
-    // if (transaction.report_id === transaction.reatt_redes?.report_id) {
-    //   form.get('memo_code')?.setValue(false);
-    //   form.get('memo_code')?.enable();
-    // } else {
     form.get('memo_code')?.setValue(true);
     form.get('memo_code')?.disable();
-    // }
 
     return form;
   }

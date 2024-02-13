@@ -1,349 +1,350 @@
 <div
-        [ngClass]="{ 'contact-dialog-not-submitted': !formSubmitted }"
-        [ngStyle]="{ display: dialogVisible ? '' : 'none' }"
+  [ngClass]="{ 'contact-dialog-not-submitted': !formSubmitted }"
+  [ngStyle]="{ display: dialogVisible ? '' : 'none' }"
 >
-    <p-dialog
-            (onHide)="closeDialog()"
-            (onShow)="openDialog()"
-            (visibleChange)="closeDialog($event)"
-            [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
-            [modal]="true"
-            [style]="{ width: '90%' }"
-            [visible]="detailVisible"
-            styleClass="p-fluid"
-    >
-        <ng-template pTemplate="content">
-            <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
-                <div class="grid">
-                    <div class="col-12">
-                        <h3>Contact</h3>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-10">
-                        <div class="field">
-                            <label for="type">CONTACT TYPE</label>
-                            <app-contact-lookup
-                                    (contactLookupSelect)="updateContact($event)"
-                                    (contactTypeSelect)="contactTypeChanged($event)"
-                                    [candidateOffice]="defaultCandidateOffice"
-                                    [contactTypeOptions]="contactTypeOptions"
-                                    [includeFecfileResults]="false"
-                                    [showCreateNewContactButton]="false"
-                                    [showSearchBoxCallback]="showSearchBox"
-                            >
-                            </app-contact-lookup>
-                        </div>
-                    </div>
-                    <div class="col-6"></div>
-                </div>
-                <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
-                    <div class="grid">
-                        <div class="col-6">
-                            <div class="field">
-                                <label for="candidate_id">CANDIDATE ID</label>
-                                <input formControlName="candidate_id" id="candidate_id" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="candidate_id"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                        <div class="col-4"></div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)">
-                    <div class="grid">
-                        <ng-container *ngIf="contactType === ContactTypes.COMMITTEE">
-                            <div class="col-4">
-                                <div class="field">
-                                    <label for="committee_id">COMMITTEE ID</label>
-                                    <input formControlName="committee_id" id="committee_id" pInputText type="text"/>
-                                    <app-error-messages
-                                            [formSubmitted]="formSubmitted"
-                                            [form]="form"
-                                            fieldName="committee_id"
-                                    ></app-error-messages>
-                                </div>
-                            </div>
-                        </ng-container>
-                        <div class="col-8">
-                            <div class="field">
-                                <label for="name">NAME</label>
-                                <input formControlName="name" id="name" pInputText type="text"/>
-                                <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
-                                                    fieldName="name"></app-error-messages>
-                            </div>
-                        </div>
-                        <ng-container *ngIf="contactType === ContactTypes.ORGANIZATION">
-                            <div class="col-4"></div>
-                        </ng-container>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
-                    <div class="grid">
-                        <div class="col-4">
-                            <div class="field">
-                                <label for="last_name">LAST NAME</label>
-                                <input formControlName="last_name" id="last_name" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="last_name"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="field">
-                                <label for="first_name">FIRST NAME</label>
-                                <input formControlName="first_name" id="first_name" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="first_name"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="field">
-                                <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-                                <input formControlName="middle_name" id="middle_name" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="middle_name"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <div class="col-3">
-                            <div class="field">
-                                <label for="prefix">PREFIX (OPTIONAL)</label>
-                                <input formControlName="prefix" id="prefix" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="prefix"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="field">
-                                <label for="suffix">SUFFIX (OPTIONAL)</label>
-                                <input formControlName="suffix" id="suffix" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="suffix"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                        <div class="col-6"></div>
-                    </div>
-                </ng-container>
-                <div class="grid">
-                    <div class="col-12">
-                        <hr/>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12">
-                        <h3>Address</h3>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="country">COUNTRY/REGION</label>
-                            <p-dropdown [options]="countryOptions" formControlName="country"
-                                        inputId="country"></p-dropdown>
-                        </div>
-                    </div>
-                    <div class="col-6"></div>
-                </div>
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="street_1">STREET ADDRESS</label>
-                            <input formControlName="street_1" id="street_1" pInputText type="text"/>
-                            <app-error-messages
-                                    [formSubmitted]="formSubmitted"
-                                    [form]="form"
-                                    fieldName="street_1"
-                            ></app-error-messages>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-                            <input formControlName="street_2" id="street_2" pInputText type="text"/>
-                            <app-error-messages
-                                    [formSubmitted]="formSubmitted"
-                                    [form]="form"
-                                    fieldName="street_2"
-                            ></app-error-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="city">CITY</label>
-                            <input formControlName="city" id="city" pInputText type="text"/>
-                            <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
-                                                fieldName="city"></app-error-messages>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="field">
-                            <label for="state">STATE/PROVINCE</label>
-                            <p-dropdown
-                                    [autoDisplayFirst]="false"
-                                    [options]="stateOptions"
-                                    appendTo="body"
-                                    formControlName="state"
-                                    inputId="state"
-                            ></p-dropdown>
-                            <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
-                                                fieldName="state"></app-error-messages>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="field">
-                            <label for="zip">ZIP/POSTAL CODE</label>
-                            <input formControlName="zip" id="zip" pInputText type="text"/>
-                            <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
-                                                fieldName="zip"></app-error-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="telephone">TELEPHONE (OPTIONAL)</label>
-                            <app-fec-international-phone-input formControlName="telephone" id="telephone">
-                            </app-fec-international-phone-input>
-                            <app-error-messages
-                                    [formSubmitted]="formSubmitted"
-                                    [form]="form"
-                                    fieldName="telephone"
-                                    patternErrorMessage="This field must contain 10 numeric characters."
-                            ></app-error-messages>
-                        </div>
-                    </div>
-                    <div class="col-6"></div>
-                </div>
-                <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
-                    <div class="grid">
-                        <div class="col-12">
-                            <hr/>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <div class="col-12">
-                            <h3>Employer</h3>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <div class="col-6">
-                            <div class="field">
-                                <label for="employer">EMPLOYER (OPTIONAL)</label>
-                                <input formControlName="employer" id="employer" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="employer"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="field">
-                                <label for="occupation">OCCUPATION (OPTIONAL)</label>
-                                <input formControlName="occupation" id="occupation" pInputText type="text"/>
-                                <app-error-messages
-                                        [formSubmitted]="formSubmitted"
-                                        [form]="form"
-                                        fieldName="occupation"
-                                ></app-error-messages>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
-                    <div class="grid">
-                        <div class="col-12">
-                            <hr/>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <div class="col-12">
-                            <h3>Office</h3>
-                        </div>
-                    </div>
-                    <app-candidate-office-input
-                            [formSubmitted]="formSubmitted"
-                            [form]="form"
-                            districtFormControlName="candidate_district"
-                            officeFormControlName="candidate_office"
-                            stateFormControlName="candidate_state"
-                    >
-                    </app-candidate-office-input>
-                </ng-container>
-            </form>
-        </ng-template>
-        <ng-template pTemplate="footer">
-            <div class="grid">
-                <div class="col-1">
-                    <button
-                            (click)="closeDialog()"
-                            class="p-button-secondary"
-                            icon="pi pi-times"
-                            label="Cancel"
-                            pButton
-                            pRipple
-                            type="button"
-                    ></button>
-                </div>
-                <div class="col-11">
-                    <ng-container *ngIf="!headerTitle; else transactionContactLookupButton">
-                        <button
-                                (click)="isNewItem ? saveContact() : confirmPropagation()"
-                                class="p-button-primary"
-                                icon="pi pi-check"
-                                label="Save"
-                                pButton
-                                pRipple
-                                type="button"
-                        ></button>
-                        <button
-                                (click)="saveContact(false)"
-                                *ngIf="isNewItem"
-                                class="p-button-info"
-                                icon="pi pi-check"
-                                label="Save & Add More"
-                                pButton
-                                pRipple
-                                type="button"
-                        ></button>
-                    </ng-container>
-                </div>
+  <p-dialog
+    (onHide)="closeDialog()"
+    (onShow)="openDialog()"
+    (visibleChange)="closeDialog($event)"
+    [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
+    [modal]="true"
+    [style]="{ width: '90%' }"
+    [visible]="detailVisible"
+    styleClass="p-fluid"
+  >
+    <ng-template pTemplate="content">
+      <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+        <div class="grid">
+          <div class="col-12">
+            <h3>Contact</h3>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-10">
+            <div class="field">
+              <label for="type">CONTACT TYPE</label>
+              <app-contact-lookup
+                #contactLookup
+                (contactLookupSelect)="updateContact($event)"
+                (contactTypeSelect)="contactTypeChanged($event)"
+                [candidateOffice]="defaultCandidateOffice"
+                [contactTypeOptions]="contactTypeOptions"
+                [includeFecfileResults]="false"
+                [showCreateNewContactButton]="false"
+                [showSearchBoxCallback]="showSearchBox"
+              >
+              </app-contact-lookup>
             </div>
-        </ng-template>
-    </p-dialog>
-</div>
-
-<ng-template #transactionContactLookupButton>
-    <button
-            (click)="saveContact()"
-            class="p-button-info"
-            icon="pi pi-check"
-            label="Save & continue"
+          </div>
+          <div class="col-6"></div>
+        </div>
+        <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
+          <div class="grid">
+            <div class="col-6">
+              <div class="field">
+                <label for="candidate_id">CANDIDATE ID</label>
+                <input formControlName="candidate_id" id="candidate_id" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="candidate_id"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-4"></div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)">
+          <div class="grid">
+            <ng-container *ngIf="contactType === ContactTypes.COMMITTEE">
+              <div class="col-4">
+                <div class="field">
+                  <label for="committee_id">COMMITTEE ID</label>
+                  <input formControlName="committee_id" id="committee_id" pInputText type="text" />
+                  <app-error-messages
+                    [formSubmitted]="formSubmitted"
+                    [form]="form"
+                    fieldName="committee_id"
+                  ></app-error-messages>
+                </div>
+              </div>
+            </ng-container>
+            <div class="col-8">
+              <div class="field">
+                <label for="name">NAME</label>
+                <input formControlName="name" id="name" pInputText type="text" />
+                <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
+                                    fieldName="name"></app-error-messages>
+              </div>
+            </div>
+            <ng-container *ngIf="contactType === ContactTypes.ORGANIZATION">
+              <div class="col-4"></div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
+          <div class="grid">
+            <div class="col-4">
+              <div class="field">
+                <label for="last_name">LAST NAME</label>
+                <input formControlName="last_name" id="last_name" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="last_name"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="field">
+                <label for="first_name">FIRST NAME</label>
+                <input formControlName="first_name" id="first_name" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="first_name"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="field">
+                <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+                <input formControlName="middle_name" id="middle_name" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="middle_name"
+                ></app-error-messages>
+              </div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-3">
+              <div class="field">
+                <label for="prefix">PREFIX (OPTIONAL)</label>
+                <input formControlName="prefix" id="prefix" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="prefix"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="field">
+                <label for="suffix">SUFFIX (OPTIONAL)</label>
+                <input formControlName="suffix" id="suffix" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="suffix"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-6"></div>
+          </div>
+        </ng-container>
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <h3>Address</h3>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-6">
+            <div class="field">
+              <label for="country">COUNTRY/REGION</label>
+              <p-dropdown [options]="countryOptions" formControlName="country"
+                          inputId="country"></p-dropdown>
+            </div>
+          </div>
+          <div class="col-6"></div>
+        </div>
+        <div class="grid">
+          <div class="col-6">
+            <div class="field">
+              <label for="street_1">STREET ADDRESS</label>
+              <input formControlName="street_1" id="street_1" pInputText type="text" />
+              <app-error-messages
+                [formSubmitted]="formSubmitted"
+                [form]="form"
+                fieldName="street_1"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="field">
+              <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+              <input formControlName="street_2" id="street_2" pInputText type="text" />
+              <app-error-messages
+                [formSubmitted]="formSubmitted"
+                [form]="form"
+                fieldName="street_2"
+              ></app-error-messages>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-6">
+            <div class="field">
+              <label for="city">CITY</label>
+              <input formControlName="city" id="city" pInputText type="text" />
+              <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
+                                  fieldName="city"></app-error-messages>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="field">
+              <label for="state">STATE/PROVINCE</label>
+              <p-dropdown
+                [autoDisplayFirst]="false"
+                [options]="stateOptions"
+                appendTo="body"
+                formControlName="state"
+                inputId="state"
+              ></p-dropdown>
+              <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
+                                  fieldName="state"></app-error-messages>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="field">
+              <label for="zip">ZIP/POSTAL CODE</label>
+              <input formControlName="zip" id="zip" pInputText type="text" />
+              <app-error-messages [formSubmitted]="formSubmitted" [form]="form"
+                                  fieldName="zip"></app-error-messages>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-6">
+            <div class="field">
+              <label for="telephone">TELEPHONE (OPTIONAL)</label>
+              <app-fec-international-phone-input formControlName="telephone" id="telephone">
+              </app-fec-international-phone-input>
+              <app-error-messages
+                [formSubmitted]="formSubmitted"
+                [form]="form"
+                fieldName="telephone"
+                patternErrorMessage="This field must contain 10 numeric characters."
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-6"></div>
+        </div>
+        <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
+          <div class="grid">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12">
+              <h3>Employer</h3>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-6">
+              <div class="field">
+                <label for="employer">EMPLOYER (OPTIONAL)</label>
+                <input formControlName="employer" id="employer" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="employer"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="field">
+                <label for="occupation">OCCUPATION (OPTIONAL)</label>
+                <input formControlName="occupation" id="occupation" pInputText type="text" />
+                <app-error-messages
+                  [formSubmitted]="formSubmitted"
+                  [form]="form"
+                  fieldName="occupation"
+                ></app-error-messages>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
+          <div class="grid">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12">
+              <h3>Office</h3>
+            </div>
+          </div>
+          <app-candidate-office-input
+            [formSubmitted]="formSubmitted"
+            [form]="form"
+            districtFormControlName="candidate_district"
+            officeFormControlName="candidate_office"
+            stateFormControlName="candidate_state"
+          >
+          </app-candidate-office-input>
+        </ng-container>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="grid">
+        <div class="col-1">
+          <button
+            (click)="closeDialog()"
+            class="p-button-secondary"
+            icon="pi pi-times"
+            label="Cancel"
             pButton
             pRipple
             type="button"
-    ></button>
+          ></button>
+        </div>
+        <div class="col-11">
+          <ng-container *ngIf="!headerTitle; else transactionContactLookupButton">
+            <button
+              (click)="isNewItem ? saveContact() : confirmPropagation()"
+              class="p-button-primary"
+              icon="pi pi-check"
+              label="Save"
+              pButton
+              pRipple
+              type="button"
+            ></button>
+            <button
+              (click)="saveContact(false)"
+              *ngIf="isNewItem"
+              class="p-button-info"
+              icon="pi pi-check"
+              label="Save & Add More"
+              pButton
+              pRipple
+              type="button"
+            ></button>
+          </ng-container>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>
+
+<ng-template #transactionContactLookupButton>
+  <button
+    (click)="saveContact()"
+    class="p-button-info"
+    icon="pi pi-check"
+    label="Save & continue"
+    pButton
+    pRipple
+    type="button"
+  ></button>
 </ng-template>
 
 <p-confirmDialog [style]="{ width: '450px' }" key="contactDialogDialog"></p-confirmDialog>

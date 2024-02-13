@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -94,7 +94,7 @@ export class Contact extends BaseModel {
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Contact, json);
+    return plainToInstance(Contact, json);
   }
 
   getNameString(): string {
@@ -315,7 +315,7 @@ export class CandidateLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): CandidateLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(CandidateLookupResponse, json);
+    return plainToInstance(CandidateLookupResponse, json);
   }
 
   toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
@@ -382,7 +382,7 @@ export class CommitteeLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(CommitteeLookupResponse, json);
+    return plainToInstance(CommitteeLookupResponse, json);
   }
 
   toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
@@ -430,7 +430,7 @@ export class IndividualLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(IndividualLookupResponse, json);
+    return plainToInstance(IndividualLookupResponse, json);
   }
 
   toSelectItemGroups(): SelectItemGroup[] {
@@ -466,7 +466,7 @@ export class OrganizationLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): OrganizationLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(OrganizationLookupResponse, json);
+    return plainToInstance(OrganizationLookupResponse, json);
   }
 
   toSelectItemGroups(): SelectItemGroup[] {

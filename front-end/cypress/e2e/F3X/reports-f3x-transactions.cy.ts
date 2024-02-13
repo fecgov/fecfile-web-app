@@ -1,12 +1,9 @@
 import { ContactListPage } from '../pages/contactListPage';
-import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
-import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
-import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
+import { defaultFormData as defaultContactFormData, organizationFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './start-transaction/start-transaction';
@@ -34,7 +31,7 @@ describe('Transactions', () => {
     // Select the contact from the contact lookup
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click();
+    cy.contains(defaultContactFormData['last_name']).click({ force: true });
 
     TransactionDetailPage.enterScheduleFormData(scheduleData);
     PageUtils.clickButton('Save');
@@ -127,7 +124,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(negativeAmountFormData);
   });
 
-  xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
+  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     function checkTable(index: number, type: string, containMemo: boolean, value: string) {
       cy.get('tbody tr').eq(index).as('row');
       cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
@@ -154,7 +151,9 @@ describe('Transactions', () => {
       ...{ purpose_description: '', category_code: '' },
     };
     TransactionDetailPage.enterScheduleFormData(formTransactionData);
-    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
@@ -169,20 +168,22 @@ describe('Transactions', () => {
     };
 
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
-    PageUtils.clickButton('Save');
+    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
     // Create a second memo transaction so we can check the aggregate value
     cy.contains('Transactions in this report').should('exist');
     PageUtils.clickLink('Partnership Receipt');
-    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Attribution');
+    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
     PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
-    PageUtils.clickButton('Save');
+
+    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
 
     // Assert transaction list table is correct
     checkTable(0, 'Partnership Receipt', false, '$200.01');
@@ -292,6 +293,10 @@ describe('Transactions', () => {
     F3XSetup({ organization: true });
     StartTransaction.Disbursements().Federal().CreditCardPayment();
 
+    cy.get('[role="searchbox"]').type(organizationFormData.name.slice(0, 1));
+    cy.contains(organizationFormData.name).should('exist');
+    cy.contains(organizationFormData.name).click();
+
     const transactionFormData = {
       ...formTransactionDataForSchedule,
       ...{
@@ -303,13 +308,11 @@ describe('Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(transactionFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue');
+    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
+    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('contain', defaultContactFormData['name']);
+    cy.get('tr').should('contain', organizationFormData['name']);
     cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
     cy.get('tr').should('contain', '$' + transactionFormData.amount);
 
@@ -317,7 +320,7 @@ describe('Transactions', () => {
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    ContactListPage.assertFormData(defaultContactFormData, true);
+    ContactListPage.assertFormData(organizationFormData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
@@ -399,13 +402,8 @@ describe('Transactions', () => {
   });
 
   it('Create a dual-entry PAC Earmark Receipt transaction', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
-
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('CONTRIBUTIONS FROM REGISTERED FILERS');
-    PageUtils.clickLink('PAC Earmark Receipt');
+    F3XSetup();
+    StartTransaction.Receipts().RegisteredFilers().PAC();
 
     // Enter STEP ONE transaction
     cy.get('p-accordiontab').first().as('stepOneAccordion');
@@ -485,15 +483,11 @@ describe('Transactions', () => {
     );
   });
 
-  xit('Create a Joint Fundraising Transfer transactin with Tier 3 child transactions', () => {
-    ReportListPage.clickCreateButton();
-    F3xCreateReportPage.enterFormData(defaultReportFormData);
-    PageUtils.clickButton('Save and continue');
+  it('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
+    F3XSetup();
 
     // Create a Joint Fundraising Transfer
-    PageUtils.clickSidebarItem('Add a receipt');
-    PageUtils.clickLink('TRANSFERS');
-    PageUtils.clickLink('Joint Fundraising Transfer');
+    StartTransaction.Receipts().Transfers().JointFundraising();
 
     PageUtils.clickLink('Create a new contact');
     const committeeFormContactData = {
@@ -512,7 +506,10 @@ describe('Transactions', () => {
       },
     };
     TransactionDetailPage.enterScheduleFormData(tier1TransactionData);
-    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Receipt');
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Partnership Receipt').click();
+    //PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Receipt');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
@@ -534,7 +531,8 @@ describe('Transactions', () => {
       },
     };
     TransactionDetailPage.enterScheduleFormData(tier2TransactionData);
-    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Individual');
+    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Individual').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
@@ -556,7 +554,7 @@ describe('Transactions', () => {
       },
     };
     TransactionDetailPage.enterScheduleFormData(tier3TransactionData);
-    PageUtils.clickButton('Save');
+    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 

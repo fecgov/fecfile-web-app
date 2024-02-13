@@ -116,7 +116,8 @@ export class TransactionContactLookupComponent implements OnInit {
         value: contact,
       });
     } else {
-      this.contactDialog.openDialog();
+      this.detailVisible = true;
+      this.contactDialog.openDialog(contact);
     }
   }
 

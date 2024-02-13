@@ -33,6 +33,7 @@ export class NavigationControlComponent implements OnInit {
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
+  isVisible = true;
 
   constructor(private store: Store) {}
 
@@ -41,17 +42,15 @@ export class NavigationControlComponent implements OnInit {
       this.controlType = 'dropdown';
       this.dropdownOptions = this.getOptions(
         this.transaction?.transactionType,
-        this.transaction?.parent_transaction?.transactionType
+        this.transaction?.parent_transaction?.transactionType,
       );
     } else {
       this.controlType = 'button';
     }
     this.isGroupedDropdown = !this.dropdownOptions?.find((option: Record<string, unknown>) =>
-      Object.prototype.hasOwnProperty.call(option, 'value')
+      Object.prototype.hasOwnProperty.call(option, 'value'),
     );
   }
-
-  isVisible = true;
 
   isDisabled(): boolean {
     return !!this.navigationControl?.disabledCondition(this.transaction);
@@ -79,7 +78,7 @@ export class NavigationControlComponent implements OnInit {
       this.navigationControl?.navigationAction,
       this.navigationControl?.navigationDestination,
       this.transaction,
-      destinationTransactionType
+      destinationTransactionType,
     );
     this.navigate.emit(navigationEvent);
   }
@@ -116,7 +115,7 @@ export class NavigationControlComponent implements OnInit {
         NavigationAction.SAVE,
         isParentConfig ? NavigationDestination.ANOTHER_CHILD : NavigationDestination.CHILD,
         this.transaction,
-        typeId
+        typeId,
       ),
     };
   };

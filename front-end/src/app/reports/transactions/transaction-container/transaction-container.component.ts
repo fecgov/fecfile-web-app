@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -14,25 +14,30 @@ import { NavigationEvent } from '../../../shared/models/transaction-navigation-c
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
-export class TransactionContainerComponent extends DestroyerComponent {
+export class TransactionContainerComponent extends DestroyerComponent implements OnInit {
   transaction: Transaction | undefined;
-  isEditable = true;
+  isEditableReport = true;
+  isEditableTransaction = true;
   navigationEvent?: NavigationEvent;
 
   constructor(
-    activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private store: Store,
     private titleService: Title,
     private reportService: ReportService,
   ) {
     super();
+  }
+
+  ngOnInit(): void {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        this.isEditable = this.reportService.isEditable(report);
+        this.isEditableReport = this.reportService.isEditable(report);
       });
-    activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.transaction = data['transaction'];
       if (this.transaction) {
         const title: string = this.transaction.transactionType?.title ?? '';
@@ -41,6 +46,8 @@ export class TransactionContainerComponent extends DestroyerComponent {
         throw new Error('Fecfile: No transaction found in TransactionContainerComponent');
       }
     });
+
+    this.isEditableTransaction = !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
   }
 
   transactionCardinality(): number {
