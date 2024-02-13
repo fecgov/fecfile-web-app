@@ -5,7 +5,6 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header.component';
-import { Store } from '@ngrx/store';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;

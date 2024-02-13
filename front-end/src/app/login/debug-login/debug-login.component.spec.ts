@@ -2,10 +2,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
 import { BannerComponent } from 'app/layout/banner/banner.component';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of, throwError } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { DebugLoginComponent } from './debug-login.component';
@@ -28,7 +26,7 @@ describe('DebugLoginComponent', () => {
         ]),
         ReactiveFormsModule,
       ],
-      providers: [{ provide: Window, useValue: window }, provideMockStore(testMockStore)],
+      providers: [{ provide: Window, useValue: window }],
       declarations: [DebugLoginComponent, BannerComponent],
     }).compileComponents();
   });

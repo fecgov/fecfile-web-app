@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { LoginService } from 'app/shared/services/login.service';
-import { Store } from '@ngrx/store';
 
 export enum HeaderStyles {
   'DEFAULT',

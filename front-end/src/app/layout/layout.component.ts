@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
-import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { filter } from 'rxjs';
 import { HeaderStyles } from './header/header.component';
