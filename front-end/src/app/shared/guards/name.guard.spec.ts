@@ -30,7 +30,7 @@ describe('nameGuard', () => {
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
-      expect(safe).toEqual(router.createUrlTree(['/current']));
+      expect(safe).toEqual(router.createUrlTree(['/login/create-profile']));
     });
   });
   it('should return true with notice', () => {
