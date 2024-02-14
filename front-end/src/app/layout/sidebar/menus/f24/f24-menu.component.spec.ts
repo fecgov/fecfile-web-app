@@ -1,32 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F24MenuComponent } from './f24-menu.component';
-import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
-import { selectSidebarState } from 'app/store/sidebar-state.selectors';
-import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('F24MenuComponent', () => {
   let component: F24MenuComponent;
   let fixture: ComponentFixture<F24MenuComponent>;
   let router: Router;
 
-  const mockStore = {
-    initialState: {
-      fecfile_online_sidebarState: initSidebarState,
-    },
-    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarSection.TRANSACTIONS) }],
-  };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [F24MenuComponent],
-      providers: [provideMockStore(mockStore)],
+      providers: [provideMockStore(testMockStore)],
       imports: [
         SharedModule,
         PanelMenuModule,

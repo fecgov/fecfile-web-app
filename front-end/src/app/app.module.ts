@@ -15,7 +15,6 @@ import { AppState } from './store/app-state.model';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
-import { sidebarStateReducer } from './store/sidebar-state.reducer';
 import { singleClickReducer } from './store/single-click.reducer';
 
 // PrimeNG
@@ -93,7 +92,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         singleClickDisabled: singleClickReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
-        sidebarState: sidebarStateReducer,
       },
       { metaReducers },
     ),

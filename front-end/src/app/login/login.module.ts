@@ -9,6 +9,7 @@ import { DividerModule } from 'primeng/divider';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { LoginRoutingModule } from './login-routing.module';
 
 @NgModule({
   declarations: [LoginComponent, DebugLoginComponent, SecurityNoticeComponent],
@@ -17,6 +18,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    LoginRoutingModule,
     NgOptimizedImage,
     DividerModule,
     CardModule,
