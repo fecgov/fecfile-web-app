@@ -76,6 +76,7 @@ const routes: Routes = [
         component: SelectCommitteeComponent,
         resolve: { sidebar: SidebarStateResolver },
         data: {
+          showCommitteeBanner: false,
           showUpperFooter: false,
           headerStyle: HeaderStyles.LOGOUT,
         },
