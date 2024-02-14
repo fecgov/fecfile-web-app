@@ -27,7 +27,7 @@ describe('securityNoticeGuard', () => {
     spyOn(loginService, 'userHasRecentSecurityConsentDate').and.returnValue(Promise.resolve(false));
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
+    return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toBeFalse();
       expect(navigateSpy).toHaveBeenCalled();
     });
@@ -37,7 +37,7 @@ describe('securityNoticeGuard', () => {
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const loginService = TestBed.inject(LoginService);
     spyOn(loginService, 'userHasRecentSecurityConsentDate').and.returnValue(Promise.resolve(true));
-    (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
+    return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toBeTrue();
     });
   });

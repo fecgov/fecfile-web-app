@@ -30,7 +30,7 @@ describe('LoginGuard', () => {
   it('should continue if logged in', () => {
     spyOn(loginService, 'userIsAuthenticated').and.returnValue(Promise.resolve(true));
     const navigateSpy = spyOn(router, 'navigate');
-    (guard.canActivate() as Promise<boolean | UrlTree>).then((safe) => {
+    return (guard.canActivate() as Promise<boolean | UrlTree>).then((safe) => {
       expect(navigateSpy).not.toHaveBeenCalled();
       expect(safe).toEqual(true);
     });
@@ -38,8 +38,8 @@ describe('LoginGuard', () => {
 
   it('should redirect to login if not logged in', () => {
     spyOn(loginService, 'userIsAuthenticated').and.returnValue(Promise.resolve(false));
-    (guard.canActivate() as Promise<boolean | UrlTree>).then((safe) => {
-      expect(safe).toEqual(router.createUrlTree(['/login']));
+    return (guard.canActivate() as Promise<boolean | UrlTree>).then((safe) => {
+      expect(safe).toEqual(router.createUrlTree(['login']));
     });
   });
 });
