@@ -38,7 +38,6 @@ describe('LoginGuard', () => {
 
   it('should redirect to login if not logged in', () => {
     spyOn(loginService, 'userIsAuthenticated').and.returnValue(Promise.resolve(false));
-    const navigateSpy = spyOn(router, 'navigate');
     (guard.canActivate() as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toEqual(router.createUrlTree(['/login']));
     });

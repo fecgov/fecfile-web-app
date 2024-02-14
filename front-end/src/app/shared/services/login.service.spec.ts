@@ -94,8 +94,6 @@ describe('LoginService', () => {
   });
 
   describe('#userHasRecentSecurityConsentDate should work', () => {
-    beforeEach(() => {});
-
     it('current date is valid', () => {
       store.overrideSelector(selectUserLoginData, {
         first_name: '',

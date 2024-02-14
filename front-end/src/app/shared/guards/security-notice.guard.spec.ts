@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, Url
 
 import { testMockStore } from '../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Observable } from 'rxjs';
 import { securityNoticeGuard } from './security-notice.guard';
 import { LoginService } from '../services/login.service';
 import { RouterTestingModule } from '@angular/router/testing';

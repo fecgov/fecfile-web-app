@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, map } from 'rxjs';
 import { LoginService } from '../services/login.service';
 
 @Injectable({
@@ -13,7 +12,7 @@ export class LoginGuard {
     private router: Router,
     private cookieService: CookieService,
   ) {}
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(): Promise<boolean | UrlTree> {
     return this.loginService.userIsAuthenticated().then((userIsAuthenticated) => {
       if (!userIsAuthenticated) {
         this.cookieService.deleteAll();
