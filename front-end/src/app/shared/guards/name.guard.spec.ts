@@ -3,15 +3,18 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, Url
 
 import { testMockStore } from '../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
-import { securityNoticeGuard } from './security-notice.guard';
 import { LoginService } from '../services/login.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { nameGuard } from './name.guard';
 
-describe('securityNoticeGuard', () => {
+describe('nameGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => securityNoticeGuard(...guardParameters));
+    TestBed.runInInjectionContext(() => nameGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [provideMockStore(testMockStore)],
     });
   });
@@ -20,23 +23,22 @@ describe('securityNoticeGuard', () => {
     expect(executeGuard).toBeTruthy();
   });
 
-  xit('should return false without notice', () => {
+  it('should return false without notice', () => {
     const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigateByUrl').and.resolveTo(undefined);
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasRecentSecurityConsentDate').and.returnValue(Promise.resolve(false));
+    spyOn(loginService, 'userHasProfileData').and.returnValue(Promise.resolve(false));
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
-      expect(safe).toBeFalse();
-      expect(navigateSpy).toHaveBeenCalled();
+      expect(safe).toEqual(router.createUrlTree(['/current']));
     });
   });
-  xit('should return true with notice', () => {
+  it('should return true with notice', () => {
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasRecentSecurityConsentDate').and.returnValue(Promise.resolve(true));
+    spyOn(loginService, 'userHasProfileData').and.returnValue(Promise.resolve(true));
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toBeTrue();
     });
