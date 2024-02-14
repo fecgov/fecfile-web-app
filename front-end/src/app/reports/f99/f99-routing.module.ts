@@ -4,7 +4,6 @@ import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.gu
 import { MainFormComponent } from './main-form/main-form.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
 import { Report } from 'app/shared/models/report.model';
@@ -23,12 +22,15 @@ const routes: Routes = [
     path: 'create',
     title: 'Create a report',
     component: MainFormComponent,
+    data: {
+      showSidebar: false,
+    },
   },
   {
     path: 'edit/:reportId',
     title: 'Edit a report',
     component: MainFormComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },
     runGuardsAndResolvers: 'always',
   },
@@ -36,7 +38,7 @@ const routes: Routes = [
     path: 'web-print/:reportId',
     title: 'Print preview',
     component: PrintPreviewComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f99/edit/' + report?.id,
@@ -49,7 +51,7 @@ const routes: Routes = [
     title: 'Confirm information',
     component: SubmitReportStep1Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f99/web-print/' + report?.id,
@@ -62,7 +64,7 @@ const routes: Routes = [
     title: 'Submit report',
     component: SubmitReportStep2Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
@@ -74,7 +76,7 @@ const routes: Routes = [
     path: 'submit/status/:reportId',
     title: 'Report status',
     component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },

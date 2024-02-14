@@ -7,26 +7,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F1MMenuComponent } from './f1m-menu.component';
-import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
-import { initialState as initSidebarState } from 'app/store/sidebar-state.reducer';
-import { selectSidebarState } from 'app/store/sidebar-state.selectors';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 describe('F1MMenuComponent', () => {
   let component: F1MMenuComponent;
   let fixture: ComponentFixture<F1MMenuComponent>;
   let router: Router;
 
-  const mockStore = {
-    initialState: {
-      fecfile_online_sidebarState: initSidebarState,
-    },
-    selectors: [{ selector: selectSidebarState, value: new SidebarState(ReportSidebarSection.REVIEW) }],
-  };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [F1MMenuComponent],
-      providers: [provideMockStore(mockStore)],
+      providers: [provideMockStore(testMockStore)],
       imports: [
         SharedModule,
         PanelMenuModule,

@@ -6,6 +6,7 @@ import { ReportService } from '../../../../shared/services/report.service';
 import { FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.utils';
 import { SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-f1m-menu',
@@ -15,8 +16,8 @@ import { AbstractMenuComponent } from '../abstract-menu.component';
 export class F1MMenuComponent extends AbstractMenuComponent implements OnInit {
   subHeading: string = FORM_TYPES.get(FormTypes.F1M)?.description as string;
 
-  constructor(store: Store, reportService: ReportService) {
-    super(store, reportService);
+  constructor(store: Store, reportService: ReportService, router: Router) {
+    super(store, reportService, router);
     this.reportString = 'f1m';
   }
 

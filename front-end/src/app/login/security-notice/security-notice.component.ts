@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -23,14 +23,14 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   userLoginData?: UserLoginData;
 
   form = new FormGroup({
-    'security-consent': new FormControl(false, [Validators.requiredTrue]),
+    'security-consent-annual': new FormControl(false),
   });
 
   constructor(
     private store: Store,
     private router: Router,
     public loginService: LoginService,
-    private usersService: UsersService
+    private usersService: UsersService,
   ) {
     super();
   }
@@ -58,14 +58,20 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       ...this.userLoginData,
       security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
     };
-    this.usersService
-      .updateCurrentUser(updatedUserLoginData)
-      .pipe(
-        map(() => {
-          this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
-          this.router.navigate(['dashboard']);
-        })
-      )
-      .subscribe();
+
+    if (this.form.get('security-consent-annual')?.value) {
+      this.usersService
+        .updateCurrentUser(updatedUserLoginData)
+        .pipe(
+          map(() => {
+            this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
+            this.router.navigate(['/dashboard']);
+          }),
+        )
+        .subscribe();
+    } else {
+      this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
+      this.router.navigate(['/dashboard']);
+    }
   }
 }

@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import { UserLoginData } from '../models/user.model';
 import { LoginService } from './login.service';
 import { DateUtils } from '../utils/date.utils';
+import { selectUserLoginData } from 'app/store/login.selectors';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -81,53 +82,75 @@ describe('LoginService', () => {
   });
 
   it('userIsAuthenticated should return true', () => {
-    const retval = service.userIsAuthenticated();
-    expect(retval).toBeTrue();
+    service.userIsAuthenticated().then((userIsAuthenticated) => {
+      expect(userIsAuthenticated).toBeTrue();
+    });
   });
 
   it('userHasProfileData should return true', () => {
-    const retval = service.userHasProfileData();
-    expect(retval).toBeTrue();
+    service.userHasProfileData().then((userHasProfileData) => {
+      expect(userHasProfileData).toBeTrue();
+    });
   });
 
   describe('#userHasRecentSecurityConsentDate should work', () => {
-    beforeEach(() => {
-      service.userLoginData = {
+    it('current date is valid', () => {
+      store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: undefined,
-      };
-    });
-
-    it('current date is valid', () => {
-      const testDate = DateUtils.convertDateToFecFormat(new Date()) as string;
-      (service.userLoginData as UserLoginData).security_consent_date = testDate;
-      expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
+        security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
+      });
+      service
+        .userHasRecentSecurityConsentDate()
+        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
     it('recent date is valid', () => {
       const recentDate = new Date();
       recentDate.setMonth(recentDate.getMonth() - 6);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      (service.userLoginData as UserLoginData).security_consent_date = testDate;
-      expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consent_date: testDate,
+      });
+      service
+        .userHasRecentSecurityConsentDate()
+        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
     it('364 days ago is valid', () => {
       const recentDate = new Date();
       recentDate.setDate(recentDate.getDate() - 364);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      (service.userLoginData as UserLoginData).security_consent_date = testDate;
-      expect(service.userHasRecentSecurityConsentDate()).toBeTrue();
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consent_date: testDate,
+      });
+      service
+        .userHasRecentSecurityConsentDate()
+        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
     it('one year ago is invalid', () => {
       const recentDate = new Date();
       recentDate.setFullYear(recentDate.getFullYear() - 1);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      (service.userLoginData as UserLoginData).security_consent_date = testDate;
-      expect(service.userHasRecentSecurityConsentDate()).toBeFalse();
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consent_date: testDate,
+      });
+      service
+        .userHasRecentSecurityConsentDate()
+        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeFalse());
     });
   });
 
