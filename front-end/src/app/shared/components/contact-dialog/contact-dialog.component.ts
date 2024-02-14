@@ -55,7 +55,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   candidateDistrictOptions: PrimeOptions = [];
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
 
-  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
+  @ViewChild(ContactLookupComponent) contactLookup?: ContactLookupComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -213,7 +213,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       //   this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
       //  this.contactLookup.contactTypeFormControl.enable();
     } else if (this.contactTypeOptions.length === 1) {
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup?.contactTypeFormControl.enable();
     }
     this.dialogVisible = true;
   }
@@ -286,8 +286,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   private resetForm() {
     this.form.reset();
     this.isNewItem = true;
-    this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
+    this.contactLookup?.contactTypeFormControl.enable();
+    this.contactLookup?.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }

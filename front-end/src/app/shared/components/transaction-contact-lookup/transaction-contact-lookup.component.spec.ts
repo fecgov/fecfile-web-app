@@ -75,7 +75,7 @@ describe('TransactionContactLookupComponent', () => {
 
   it('selecting create new contact should open the contact dialog', () => {
     component.detailVisible = false;
-    component.createNewContactSelected();
+    component.createNewContactSelected(ContactTypes.INDIVIDUAL);
     expect(component.detailVisible).toBeTrue();
   });
 

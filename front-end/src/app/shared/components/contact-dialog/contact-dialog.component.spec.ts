@@ -5,9 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import {
-  FecInternationalPhoneInputComponent
-} from '../fec-international-phone-input/fec-international-phone-input.component';
+import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -36,7 +34,7 @@ describe('ContactDialogComponent', () => {
     testConfirmationService = TestBed.inject(ConfirmationService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
-    component.contact = {...testContact} as Contact;
+    component.contact = { ...testContact } as Contact;
     component.contactLookup = {
       contactTypeFormControl: new FormControl(),
     } as ContactLookupComponent;
@@ -58,13 +56,13 @@ describe('ContactDialogComponent', () => {
     component.contact.id = '123';
     component.openDialog();
     expect(component.isNewItem).toBeFalse();
-    expect(component.contactLookup.contactTypeFormControl.disabled).toBeFalse();
+    expect(component.contactLookup?.contactTypeFormControl.disabled).toBeFalse();
 
     component.contact.id = undefined;
-    component.contactTypeOptions = [{label: 'org', value: 'ORG'}];
-    component.contactLookup.contactTypeFormControl.enable()
+    component.contactTypeOptions = [{ label: 'org', value: 'ORG' }];
+    component.contactLookup?.contactTypeFormControl.enable();
     component.openDialog();
-    expect(component.contactLookup.contactTypeFormControl.disabled).toBeFalse();
+    expect(component.contactLookup?.contactTypeFormControl.disabled).toBeFalse();
   });
 
   it('should close dialog with flags set', () => {
