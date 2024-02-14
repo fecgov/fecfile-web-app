@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { LoginService } from '../services/login.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginGuard {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private cookieService: CookieService) { }
+    private cookieService: CookieService,
+  ) {}
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (!this.loginService.userIsAuthenticated()) {
-      this.cookieService.deleteAll();
-      this.router.navigate(['login']);
-      return false;
-    } else {
-      return true;
-    }
+    return this.loginService.userIsAuthenticated().then((userIsAuthenticated) => {
+      if (!userIsAuthenticated) {
+        this.cookieService.deleteAll();
+        return this.router.createUrlTree(['login']);
+      } else {
+        return true;
+      }
+    });
   }
-
 }
