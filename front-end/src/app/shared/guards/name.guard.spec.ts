@@ -25,7 +25,6 @@ describe('nameGuard', () => {
 
   it('should return false without notice', () => {
     const router = TestBed.inject(Router);
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.resolveTo(undefined);
     const loginService = TestBed.inject(LoginService);
     spyOn(loginService, 'userHasProfileData').and.returnValue(Promise.resolve(false));
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
