@@ -9,15 +9,27 @@
   <div class="col-6 right-side">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
-      <div class="committee-list">
-        <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
-          <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-          <div class="committee-info">
-            <h3>{{ committee.name }}</h3>
-            <h5 class="font-karla-bold">{{ committee.committee_id }}</h5>
+      <ng-container *ngIf="!committees.length">
+        <div class="committee-empty">
+          <div class="empty-lens-img">
+            <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg"/>
+          </div>
+          <div class="empty-verbiage">
+            <p class="font-karla-bold">Not currently active in any FECFile committee accounts</p>
           </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-container *ngIf="committees.length">
+        <div class="committee-list">
+          <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
+            <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+            <div class="committee-info">
+              <h3>{{ committee.name }}</h3>
+              <h5 class="font-karla-bold">{{ committee.committee_id }}</h5>
+            </div>
+          </div>
+        </div>
+      </ng-container>
       <h5 class="font-karla-bold">LOOKING FOR AN EXISTING FEFILE COMMITTEE ACCOUNT?</h5>
       Contact the administrator for that committee.
     </div>
