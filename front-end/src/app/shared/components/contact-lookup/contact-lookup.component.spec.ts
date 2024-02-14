@@ -20,6 +20,7 @@ import {
   Contact,
   ContactTypeLabels,
   ContactTypes,
+  FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
   FecfileCandidateLookupData,
   FecfileCommitteeLookupData,
@@ -298,9 +299,33 @@ describe('ContactLookupComponent', () => {
     expect(retval).toEqual(expectedRetval);
   });
 
-  it('#onContactLookupSelect should call proper lookup', fakeAsync(() => {
-    const onContactSpy = spyOn(component, 'onContactSelect');
-    component.onContactLookupSelect({ value: { value: testContact } });
-    expect(onContactSpy).toHaveBeenCalledWith(testContact);
-  }));
+  describe('onContactLookupSelect', () => {
+    it('should call proper lookup when contact', fakeAsync(() => {
+      const onContactSpy = spyOn(component, 'onContactSelect');
+      component.onContactLookupSelect({ value: { value: testContact } });
+      expect(onContactSpy).toHaveBeenCalledWith(testContact);
+    }));
+
+    it('should call proper lookup when candidate', fakeAsync(() => {
+      const candidateSpy = spyOn(component, 'onFecApiCandidateLookupDataSelect');
+      const candidate = new FecApiCandidateLookupData({
+        candidate_id: 'test',
+        office: 'test',
+        name: 'test',
+      } as FecApiCandidateLookupData);
+      component.onContactLookupSelect({ value: { value: candidate } });
+      expect(candidateSpy).toHaveBeenCalledWith(candidate);
+    }));
+
+    it('should call proper lookup when committee', fakeAsync(() => {
+      const committeeSpy = spyOn(component, 'onFecApiCommitteeLookupDataSelect');
+      const committee = new FecApiCommitteeLookupData({
+        id: 'test',
+        is_active: true,
+        name: 'test',
+      } as FecApiCommitteeLookupData);
+      component.onContactLookupSelect({ value: { value: committee } });
+      expect(committeeSpy).toHaveBeenCalledWith(committee);
+    }));
+  });
 });

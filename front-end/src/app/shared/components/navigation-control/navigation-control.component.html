@@ -28,7 +28,7 @@
       <div *ngFor="let option of dropdownOptions">
         <div *ngIf="option.items; else noHeader">
           <span class="dropdown-header">{{ option.label }}</span>
-
+          <hr />
           <button
             (click)="onDropdownChange(childOption)"
             (keyup.enter)="onDropdownChange(childOption)"
