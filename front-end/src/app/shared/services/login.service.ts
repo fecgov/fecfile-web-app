@@ -56,9 +56,7 @@ export class LoginService extends DestroyerComponent {
           this.router.navigate(['/login']);
         });
       } else {
-        if (environment.loginDotGovLogoutUrl) {
-          window.location.href = environment.loginDotGovLogoutUrl;
-        }
+        window.location.href = environment.loginDotGovLogoutUrl;
       }
     }
   }
