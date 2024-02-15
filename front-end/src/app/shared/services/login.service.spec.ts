@@ -66,7 +66,8 @@ describe('LoginService', () => {
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
     expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(0);
-    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
+    expect(cookieService.delete).toHaveBeenCalledTimes(6);
+    expect(cookieService.delete).toHaveBeenCalledWith('csrftoken');
   });
 
   //Can't figure out how to override service's userLoginData
