@@ -6,12 +6,11 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { takeUntil } from 'rxjs';
+import { firstValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-print-preview',
@@ -38,7 +37,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     public router: Router,
     public route: ActivatedRoute,
     private webPrintService: WebPrintService,
-    private reportService: ReportService,
     private form3XService: Form3XService,
   ) {
     super();
@@ -119,9 +117,11 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   public async submitPrintJob() {
     if (this.report.id) {
       if (this.report instanceof Form3X) {
-        this.report.qualified_committee =
-          this.form3XService.isQualifiedCommittee(this.committeeAccount);
-        await this.reportService.update(this.report);
+        const payload: Form3X = Form3X.fromJSON({
+          ...this.report,
+          qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount)
+        });
+        await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
       }
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();

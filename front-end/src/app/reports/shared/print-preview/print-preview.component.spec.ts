@@ -28,6 +28,7 @@ describe('PrintPreviewComponent', () => {
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
+    spyOn(reportService, 'update').and.returnValue(of(Form3X.fromJSON({})));
     fixture.detectChanges();
   });
 
