@@ -5,7 +5,6 @@ import { committeeGuard } from './committee.guard';
 import { testMockStore } from '../utils/unit-test.utils';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { Observable } from 'rxjs';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 
 describe('committeeGuard', () => {
