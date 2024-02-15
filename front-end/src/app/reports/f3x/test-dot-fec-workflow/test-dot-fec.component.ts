@@ -1,12 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-test-dot-fec',
@@ -14,8 +19,14 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 })
 export class TestDotFecComponent extends DestroyerComponent implements OnInit {
   report: Report | undefined;
+  committeeAccount?: CommitteeAccount;
   fileIsGenerated = false;
-  constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {
+  constructor(
+    private store: Store,
+    private apiService: ApiService,
+    private http: HttpClient,
+    private reportService: ReportService,
+    private form3XService: Form3XService) {
     super();
   }
 
@@ -24,10 +35,21 @@ export class TestDotFecComponent extends DestroyerComponent implements OnInit {
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        this.committeeAccount = committeeAccount;
+      });
     this.fileIsGenerated = false;
   }
 
-  generate(): void {
+  async generate() {
+    if (this.report instanceof Form3X) {
+      this.report.qualified_committee =
+        this.form3XService.isQualifiedCommittee(this.committeeAccount);
+      await this.reportService.update(this.report);
+    }
     this.apiService.post(`/web-services/dot-fec/`, { report_id: this.report?.id }).subscribe(() => undefined);
     this.fileIsGenerated = true;
   }
