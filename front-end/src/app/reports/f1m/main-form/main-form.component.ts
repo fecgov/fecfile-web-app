@@ -108,6 +108,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   statusByControl: AbstractControl | null = null;
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
   candidateContacts: CandidateContact[] = [];
+  excludeFecIds: string[] = [];
+  excludeIds: string[] = [];
 
   report = new Form1M();
 
