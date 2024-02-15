@@ -12,6 +12,7 @@ import { UserLoginData } from '../models/user.model';
 import { LoginService } from './login.service';
 import { DateUtils } from '../utils/date.utils';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { Router } from '@angular/router';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -30,6 +31,7 @@ describe('LoginService', () => {
     store = TestBed.inject(MockStore);
     apiService = TestBed.inject(ApiService);
     cookieService = TestBed.inject(CookieService);
+    TestBed.inject(Router);
   });
 
   it('should be created', () => {

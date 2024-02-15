@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
+import { Router } from '@angular/router';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -19,6 +20,7 @@ export class LoginService extends DestroyerComponent {
   public userLoginData$: Observable<UserLoginData>;
   constructor(
     private store: Store,
+    private router: Router,
     private apiService: ApiService,
     private cookieService: CookieService,
   ) {
@@ -44,20 +46,23 @@ export class LoginService extends DestroyerComponent {
     });
   }
 
-  public logOut() {
-    return this.userLoginData$.subscribe((userLoginData) => {
-      this.clearUserLoggedInCookies();
-      if (userLoginData && !userLoginData.login_dot_gov) {
-        // Non-login.gov auth
+  public async logOut() {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+
+    this.clearUserLoggedInCookies();
+    if (userLoginData) {
+      if (!userLoginData.login_dot_gov) {
         this.store.dispatch(userLoggedOutAction());
+        this.apiService.get('/auth/logout').subscribe(() => {
+          this.router.navigate(['/login']);
+        });
       } else {
         this.store.dispatch(userLoggedOutForLoginDotGovAction());
         if (environment.loginDotGovLogoutUrl) {
           window.location.href = environment.loginDotGovLogoutUrl;
         }
       }
-      return false;
-    });
+    }
   }
 
   public clearUserFecfileApiCookies() {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
 import { Store } from '@ngrx/store';
-import { userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedOutAction } from 'app/store/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.clearUserLoggedInCookies();
-    this.store.dispatch(userLoggedOutForLoginDotGovAction());
+    this.store.dispatch(userLoggedOutAction());
     this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
     this.checkLocalLoginAvailability();
   }
