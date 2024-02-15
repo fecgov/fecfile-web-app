@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loginService.clearLocalSessionData();
+    this.loginService.clearUserLoggedInCookies();
     this.store.dispatch(userLoggedOutForLoginDotGovAction());
     this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
     this.checkLocalLoginAvailability();

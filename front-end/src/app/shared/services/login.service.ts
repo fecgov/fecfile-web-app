@@ -46,7 +46,7 @@ export class LoginService extends DestroyerComponent {
 
   public logOut() {
     return this.userLoginData$.subscribe((userLoginData) => {
-      this.clearLocalSessionData();
+      this.clearUserLoggedInCookies();
       if (userLoginData && !userLoginData.login_dot_gov) {
         // Non-login.gov auth
         this.store.dispatch(userLoggedOutAction());
@@ -60,17 +60,17 @@ export class LoginService extends DestroyerComponent {
     });
   }
 
-  public clearLocalSessionData() {
-    this.clearUserFecfileApiCookies();
-    this.cookieService.delete('csrftoken');
-  }
-
   public clearUserFecfileApiCookies() {
     this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
     this.cookieService.delete(environment.ffapiFirstNameCookieName);
     this.cookieService.delete(environment.ffapiLastNameCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
     this.cookieService.delete(environment.ffapiSecurityConsentCookieName);
+  }
+
+  public clearUserLoggedInCookies() {
+    this.clearUserFecfileApiCookies();
+    this.cookieService.delete('csrftoken');
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
