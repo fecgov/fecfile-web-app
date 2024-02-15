@@ -11,6 +11,8 @@ import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
 import { CommitteeAccount } from '../models/committee-account.model';
+import { setActiveReportAction } from 'app/store/active-report.actions';
+import { Form3X } from '../models/form-3x.model';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -47,8 +49,8 @@ export class LoginService extends DestroyerComponent {
   }
 
   public logOut() {
-    this.cookieService.delete('csrftoken');
     return this.userLoginData$.subscribe((userLoginData) => {
+      this.clearLocalSessionData();
       if (userLoginData && !userLoginData.login_dot_gov) {
         // Non-login.gov auth
         this.store.dispatch(userLoggedOutAction());
@@ -58,9 +60,13 @@ export class LoginService extends DestroyerComponent {
           window.location.href = environment.loginDotGovLogoutUrl;
         }
       }
-      this.store.dispatch(setCommitteeAccountDetailsAction({ payload: new CommitteeAccount() }));
       return false;
     });
+  }
+
+  public clearLocalSessionData() {
+    this.clearUserFecfileApiCookies();
+    this.cookieService.delete('csrftoken');
   }
 
   public clearUserFecfileApiCookies() {
@@ -69,11 +75,6 @@ export class LoginService extends DestroyerComponent {
     this.cookieService.delete(environment.ffapiLastNameCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
     this.cookieService.delete(environment.ffapiSecurityConsentCookieName);
-  }
-
-  public clearUserLoggedInCookies() {
-    this.clearUserFecfileApiCookies();
-    this.cookieService.delete(environment.sessionIdCookieName);
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
