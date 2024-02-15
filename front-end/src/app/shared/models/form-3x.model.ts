@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToClass, plainToInstance, Transform } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
@@ -36,37 +36,6 @@ export class Form3X extends Report {
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
-
-  override get reportCode(): F3xReportCodes | undefined {
-    return this.report_code;
-  }
-
-  override get coverageDates(): { [date: string]: Date | undefined } {
-    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
-  }
-
-  override getBlocker() {
-    if (!this.L6a_cash_on_hand_jan_1_ytd)
-      return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
-    return;
-  }
-
-  override get canAmend(): boolean {
-    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
-  }
-
-  get formLabel() {
-    return 'FORM 3X';
-  }
-
-  get formSubLabel() {
-    return getReportCodeLabel(this.report_code) ?? '';
-  }
-
-  get versionLabel() {
-    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
-  }
-
   committee_name: string | undefined;
   change_of_address: boolean | undefined;
   street_1: string | undefined;
@@ -189,12 +158,41 @@ export class Form3X extends Report {
   L36_total_federal_operating_expenditures_ytd: number | undefined;
   L37_offsets_to_operating_expenditures_ytd: number | undefined;
   L38_net_operating_expenditures_ytd: number | undefined;
-
   calculation_status: string | undefined;
+
+  override get reportCode(): F3xReportCodes | undefined {
+    return this.report_code;
+  }
+
+  override get coverageDates(): { [date: string]: Date | undefined } {
+    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
+  }
+
+  override get canAmend(): boolean {
+    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
+  }
+
+  get formLabel() {
+    return 'FORM 3X';
+  }
+
+  get formSubLabel() {
+    return getReportCodeLabel(this.report_code) ?? '';
+  }
+
+  get versionLabel() {
+    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+  }
 
   // prettier-ignore
   static fromJSON(json: any): Form3X { // eslint-disable-line @typescript-eslint/no-explicit-any
     // json['form_type'] = F3xFormTypes.F3XT;
-    return plainToClass(Form3X, json);
+    return plainToInstance(Form3X, json);
+  }
+
+  override getBlocker() {
+    if (!this.L6a_cash_on_hand_jan_1_ytd)
+      return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
+    return;
   }
 }

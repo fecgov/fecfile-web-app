@@ -4,7 +4,7 @@ import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAct
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, takeUntil } from 'rxjs';
+import { Observable, takeUntil, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
@@ -18,15 +18,14 @@ type EndpointAvailability = { endpoint_available: boolean };
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
-  public userLoginData: UserLoginData | undefined;
-  constructor(private store: Store, private apiService: ApiService, private cookieService: CookieService) {
+  public userLoginData$: Observable<UserLoginData>;
+  constructor(
+    private store: Store,
+    private apiService: ApiService,
+    private cookieService: CookieService,
+  ) {
     super();
-    this.store
-      .select(selectUserLoginData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((userLoginData: UserLoginData) => {
-        this.userLoginData = userLoginData;
-      });
+    this.userLoginData$ = this.store.select(selectUserLoginData).pipe(takeUntil(this.destroy$));
   }
 
   /**
@@ -49,17 +48,19 @@ export class LoginService extends DestroyerComponent {
 
   public logOut() {
     this.cookieService.delete('csrftoken');
-    if (this.userLoginData && !this.userLoginData.login_dot_gov) {
-      // Non-login.gov auth
-      this.store.dispatch(userLoggedOutAction());
-    } else {
-      this.store.dispatch(userLoggedOutForLoginDotGovAction());
-      if (environment.loginDotGovLogoutUrl) {
-        window.location.href = environment.loginDotGovLogoutUrl;
+    return this.userLoginData$.subscribe((userLoginData) => {
+      if (userLoginData && !userLoginData.login_dot_gov) {
+        // Non-login.gov auth
+        this.store.dispatch(userLoggedOutAction());
+      } else {
+        this.store.dispatch(userLoggedOutForLoginDotGovAction());
+        if (environment.loginDotGovLogoutUrl) {
+          window.location.href = environment.loginDotGovLogoutUrl;
+        }
       }
-    }
-    this.store.dispatch(setCommitteeAccountDetailsAction({ payload: new CommitteeAccount() }));
-    return false;
+      this.store.dispatch(setCommitteeAccountDetailsAction({ payload: new CommitteeAccount() }));
+      return false;
+    });
   }
 
   public clearUserFecfileApiCookies() {
@@ -79,20 +80,23 @@ export class LoginService extends DestroyerComponent {
     return this.apiService.get<EndpointAvailability>('/user/login/authenticate').pipe(
       map((response: EndpointAvailability) => {
         return response.endpoint_available;
-      })
+      }),
     );
   }
 
-  public userIsAuthenticated() {
-    return !!this.userLoginData?.email || this.cookieService.check(environment.ffapiEmailCookieName);
+  public async userIsAuthenticated(): Promise<boolean> {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    return !!userLoginData.email || this.cookieService.check(environment.ffapiEmailCookieName);
   }
 
-  public userHasProfileData() {
-    return !!this.userLoginData?.first_name && !!this.userLoginData.last_name;
+  public async userHasProfileData(): Promise<boolean> {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    return !!userLoginData?.first_name && !!userLoginData.last_name;
   }
 
-  public userHasRecentSecurityConsentDate() {
-    const security_date = this.userLoginData?.security_consent_date;
+  public async userHasRecentSecurityConsentDate(): Promise<boolean> {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    const security_date = userLoginData.security_consent_date;
     const one_year_ago = new Date();
     one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
 

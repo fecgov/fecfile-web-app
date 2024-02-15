@@ -1,41 +1,50 @@
 import { Component, OnInit } from '@angular/core';
 import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
 import { selectActiveReport } from '../../../store/active-report.selectors';
-import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
-import { selectSidebarState } from '../../../store/sidebar-state.selectors';
+import { filter, map, Observable, of, takeUntil } from 'rxjs';
 import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 import { Report } from '../../../shared/models/report.model';
 import { MenuItem } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { ReportService } from '../../../shared/services/report.service';
+import { collectRouteData } from 'app/shared/utils/route.utils';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   template: '',
 })
 export abstract class AbstractMenuComponent extends DestroyerComponent implements OnInit {
   activeReport$?: Observable<Report | undefined>;
+  activeReport: Report | undefined;
   items$: Observable<MenuItem[]> = of([]);
   reportString?: string;
+  sidebarState: SidebarState | undefined;
 
   protected constructor(
     private store: Store,
     private reportService: ReportService,
+    private router: Router,
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.activeReport$ = this.store.select(selectActiveReport);
+    this.sidebarState = new SidebarState(collectRouteData(this.router)['sidebarSection']);
 
-    this.items$ = combineLatest([this.store.select(selectSidebarState), this.activeReport$]).pipe(
+    this.items$ = this.activeReport$.pipe(
       takeUntil(this.destroy$),
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      switchMap(([sidebarState, activeReport]: [SidebarState, Report | undefined]) => {
-        const isEditable = this.reportService.isEditable(activeReport);
-
-        return of(this.getMenuItems(sidebarState, activeReport, isEditable));
+      map((activeReport: Report | undefined) => {
+        this.activeReport = activeReport;
+        return this.updateMenuItems(activeReport);
       }),
     );
+
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      this.sidebarState = new SidebarState(collectRouteData(this.router)['sidebarSection']);
+      this.items$ = of(this.updateMenuItems(this.activeReport));
+    });
   }
 
   createReport(sidebarState: SidebarState, activeReport: Report | undefined): MenuItem {
@@ -49,6 +58,15 @@ export abstract class AbstractMenuComponent extends DestroyerComponent implement
         },
       ],
     } as MenuItem;
+  }
+
+  editReport(sidebarState: SidebarState, activeReport: Report | undefined): MenuItem {
+    return {
+      label: 'EDIT A REPORT',
+      styleClass: 'edit-report-menu-item',
+      routerLink: [`/reports/${this.reportString}/edit/${activeReport?.id}`],
+      expanded: sidebarState?.section === ReportSidebarSection.CREATE,
+    };
   }
 
   signAndSubmit(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem {
@@ -145,6 +163,12 @@ export abstract class AbstractMenuComponent extends DestroyerComponent implement
       this.submitReport(activeReport, isEditable),
       this.reportStatus(activeReport, isEditable),
     ];
+  }
+
+  updateMenuItems(activeReport: Report | undefined) {
+    const isEditable = this.reportService.isEditable(activeReport);
+
+    return this.getMenuItems(this.sidebarState as SidebarState, activeReport, isEditable);
   }
 
   abstract getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[];

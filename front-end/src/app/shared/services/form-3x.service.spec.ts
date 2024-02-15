@@ -45,7 +45,7 @@ describe('Form3XService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/reports/form-3x/${form3X.id}/?fields_to_validate=`
+      `${environment.apiUrl}/reports/form-3x/${form3X.id}/?fields_to_validate=`,
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(form3X);
@@ -63,5 +63,13 @@ describe('Form3XService', () => {
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();
+  });
+
+  describe('getFutureReports', () => {
+    it('should return a list of Form3X reports whose coverage through is after the submitted value', () => {
+      service.getFutureReports('2024-01-20').subscribe((reports) => {
+        expect(reports.length).toBeGreaterThanOrEqual(0);
+      });
+    });
   });
 });

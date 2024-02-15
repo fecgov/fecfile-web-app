@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
-import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -15,10 +14,12 @@ const routes: Routes = [
     title: 'Manage Reports',
     component: ReportListComponent,
     pathMatch: 'full',
+    data: {
+      showSidebar: false,
+    },
   },
   {
     path: 'transactions',
-    resolve: { sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
     loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
     runGuardsAndResolvers: 'always',

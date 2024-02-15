@@ -10,7 +10,7 @@ import { SecurityNoticeComponent } from './security-notice.component';
 import { UsersService } from 'app/shared/services/users.service';
 import { of } from 'rxjs';
 
-describe('LoginComponent', () => {
+describe('SecurityNoticeComponent', () => {
   let component: SecurityNoticeComponent;
   let fixture: ComponentFixture<SecurityNoticeComponent>;
   let usersService: UsersService;
@@ -50,7 +50,7 @@ describe('LoginComponent', () => {
     component.signConsentForm();
     expect(spy).not.toHaveBeenCalled();
 
-    component.form.get('security-consent')?.setValue(true);
+    component.form.get('security-consent-annual')?.setValue(true);
     component.signConsentForm();
     expect(spy).toHaveBeenCalled();
   });

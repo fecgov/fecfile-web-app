@@ -19,7 +19,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
       this.initPrefix(
         this.templateMap.purpose_description,
-        this.transaction?.transactionType?.purposeDescriptionPrefix
+        this.transaction?.transactionType?.purposeDescriptionPrefix,
       );
     }
 
@@ -36,9 +36,6 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   }
 
   initPrefix(field: string, prefix: string) {
-    // Add custom prefix required validation function to form text field
-    this.form.controls[field].addValidators([ValidateUtils.prefixRequiredValidator(prefix)]);
-
     // Watch changes to form text field to make sure prefix is maintained
     this.form
       .get(field)
