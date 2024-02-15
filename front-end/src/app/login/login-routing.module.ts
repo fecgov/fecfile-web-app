@@ -40,6 +40,7 @@ const routes: Routes = [
     component: SelectCommitteeComponent,
     canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
     data: {
+      showCommitteeBanner: false,
       showUpperFooter: false,
       headerStyle: HeaderStyles.LOGOUT,
     },
