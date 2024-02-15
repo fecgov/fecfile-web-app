@@ -48,8 +48,6 @@ export class LoginService extends DestroyerComponent {
 
   public async logOut() {
     const userLoginData = await firstValueFrom(this.userLoginData$);
-    console.log('\n\n\n', userLoginData, '\n\n\n');
-
     this.clearUserLoggedInCookies();
     if (userLoginData) {
       this.store.dispatch(userLoggedOutAction());

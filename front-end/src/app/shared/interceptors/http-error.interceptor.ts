@@ -10,7 +10,6 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedOutAction } from 'app/store/login.actions';
 import { catchError, Observable, throwError, of } from 'rxjs';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { LoginService } from '../services/login.service';
