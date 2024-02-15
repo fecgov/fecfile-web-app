@@ -49,8 +49,8 @@ export class LoginService extends DestroyerComponent {
   public async logOut() {
     const userLoginData = await firstValueFrom(this.userLoginData$);
     this.clearUserLoggedInCookies();
-    if (userLoginData) {
-      this.store.dispatch(userLoggedOutAction());
+    this.store.dispatch(userLoggedOutAction());
+    if (userLoginData.email) {
       if (!userLoginData.login_dot_gov) {
         this.apiService.get('/auth/logout').subscribe(() => {
           this.router.navigate(['/login']);
