@@ -3,13 +3,14 @@
     <h1>Report level memo</h1>
     <div>
       <span class="bold"
-        >{{ report.formLabel }}<ng-container *ngIf="report.formSubLabel">:</ng-container>
+      >{{ report.formLabel }}
+        <ng-container *ngIf="report.formSubLabel">:</ng-container>
         {{ report.formSubLabel }}</span
       >
     </div>
   </div>
 
-  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+  <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
     <div class="grid">
       <div class="col-11">
         <label for="{{ text4kFormProperty }}">
@@ -17,17 +18,17 @@
         </label>
         <div>
           <textarea
-            id="{{ text4kFormProperty }}"
-            [rows]="20"
-            [cols]="30"
-            pInputTextarea
             [autoResize]="true"
+            [cols]="30"
+            [rows]="20"
             formControlName="{{ text4kFormProperty }}"
+            id="{{ text4kFormProperty }}"
+            pInputTextarea
           ></textarea>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="{{ text4kFormProperty }}"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -37,11 +38,11 @@
       <div class="col-4">
         <div>
           <button
+            (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
+            class="p-button-secondary"
+            label="Back"
             pButton
             pRipple
-            label="Back"
-            class="p-button-secondary"
-            (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
           ></button>
         </div>
       </div>
@@ -49,12 +50,12 @@
       <div class="col-4 align-right">
         <div>
           <button
+            (click)="save()"
+            appSingleClick
+            class="p-button-primary"
+            label="Save & continue"
             pButton
             pRipple
-            appSingleClick
-            label="Save & continue"
-            class="p-button-primary"
-            (click)="save()"
           ></button>
         </div>
       </div>

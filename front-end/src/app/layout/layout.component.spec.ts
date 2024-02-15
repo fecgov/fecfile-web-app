@@ -4,11 +4,11 @@ import { MenubarModule } from 'primeng/menubar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LayoutComponent } from './layout.component';
 import { SharedModule } from 'app/shared/shared.module';
-import { selectSidebarState } from "../store/sidebar-state.selectors";
-import { filter } from "rxjs";
-import { Store } from "@ngrx/store";
-import { provideMockStore } from "@ngrx/store/testing";
-import { testMockStore } from "../shared/utils/unit-test.utils";
+import { selectSidebarState } from '../store/sidebar-state.selectors';
+import { filter } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from '../shared/utils/unit-test.utils';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -18,9 +18,7 @@ describe('LayoutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, SharedModule],
-      declarations: [
-        LayoutComponent,
-      ],
+      declarations: [LayoutComponent],
       providers: [LayoutComponent, provideMockStore(testMockStore)],
     }).compileComponents();
 

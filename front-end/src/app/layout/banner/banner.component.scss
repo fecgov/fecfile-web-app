@@ -7,12 +7,12 @@
   flex-wrap: wrap !important;
 }
 
-.usa-banner .grid-row.grid-gap-lg>* {
+.usa-banner .grid-row.grid-gap-lg > * {
   padding-left: .75rem;
   padding-right: .75rem;
 }
 
-@media all and (min-width:40em) {
+@media all and (min-width: 40em) {
   .usa-banner .grid-row .tablet\:grid-col-6 {
     flex: 0 1 auto;
     width: 50%;
@@ -30,14 +30,14 @@
   width: 100%;
 }
 
-@media all and (min-width:64em) {
+@media all and (min-width: 64em) {
   .usa-banner__content {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 }
 
-@media all and (min-width:40em) {
+@media all and (min-width: 40em) {
   .usa-banner__content {
     padding-bottom: .5rem;
     padding-top: .5rem;
@@ -74,7 +74,7 @@
 }
 
 .usa-banner__header-text {
-  font-family: karla,sans-serif;
+  font-family: karla, sans-serif;
   margin-bottom: 0;
   margin-top: 0;
   font-size: .9rem;
@@ -106,7 +106,7 @@
 }
 
 .usa-banner__button[aria-expanded=true]::after {
-  background: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain;
+  background: url(/assets/img/uswds/expand_less.svg) no-repeat center/contain;
 }
 
 .usa-banner__button-text {

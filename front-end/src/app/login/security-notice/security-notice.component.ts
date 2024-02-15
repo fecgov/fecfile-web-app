@@ -30,7 +30,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     private store: Store,
     private router: Router,
     public loginService: LoginService,
-    private usersService: UsersService
+    private usersService: UsersService,
   ) {
     super();
   }
@@ -64,7 +64,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
         map(() => {
           this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
           this.router.navigate(['dashboard']);
-        })
+        }),
       )
       .subscribe();
   }

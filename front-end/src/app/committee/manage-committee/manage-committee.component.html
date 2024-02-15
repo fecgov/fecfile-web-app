@@ -1,85 +1,85 @@
 <p-toast></p-toast>
 <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left">
-        <h1>Manage Users</h1>
-    </ng-template>
-    <ng-template pTemplate="right">
-        <button class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
-    </ng-template>
+  <ng-template pTemplate="left">
+    <h1>Manage Users</h1>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <button class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
+  </ng-template>
 </p-toolbar>
 <p-divider></p-divider>
 <p-card>
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-            <h1>Existing Users</h1>
-        </ng-template>
-    </p-toolbar>
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+      <h1>Existing Users</h1>
+    </ng-template>
+  </p-toolbar>
 
-    <p-table
-        #dt
-        (onLazyLoad)="loadTableItems($event)"
-        (selectAllChange)="onSelectAllChange($event)"
-        (selectionChange)="onSelectionChange($event)"
-        [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-        [lazy]="true"
-        [loading]="loading"
-        [paginator]="true"
-        [rows]="10"
-        [selectAll]="selectAll"
-        [selection]="selectedItems"
-        [showCurrentPageReport]="true"
-        [totalRecords]="totalItems"
-        [value]="items"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
-        dataKey="id"
-        responsiveLayout="scroll"
-    >
-        <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between">
-                <h3 class="m-0">Existing Users</h3>
-            </div>
-        </ng-template>
-        <ng-template let-sortOrder pTemplate="sorticon">
-            <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr role="row">
-                <th id="name-column" pSortableColumn="name" role="columnheader">Name
-                    <p-sortIcon field="name"></p-sortIcon>
-                </th>
-                <th id="email-column" pSortableColumn="email" role="columnheader">
-                    Email
-                    <p-sortIcon field="email"></p-sortIcon>
-                </th>
-                <th id="role-column" pSortableColumn="role" role="columnheader">Role
-                    <p-sortIcon field="role"></p-sortIcon>
-                </th>
-                <th id="active-column" pSortableColumn="is_active" role="columnheader">
-                    Status
-                    <p-sortIcon field="is_active"></p-sortIcon>
-                </th>
-                <th id="buttons" role="columnheader">Actions</th>
-            </tr>
-        </ng-template>
-        <ng-template let-item pTemplate="body">
-            <tr role="row">
-                <td>{{ item.last_name }}, {{ item.first_name }}</td>
-                <td>{{ item.email }}</td>
-                <td>{{ item.getRoleLabel() }}</td>
-                <td>Registered</td>
-                <td>
-                    <app-table-actions-button
-                            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-                            [actionItem]="item"
-                            [rounded]="true"
-                            [tableActions]="rowActions"
-                            buttonIcon="pi pi-ellipsis-v"
-                            buttonStyleClass="flex justify-content-center p-button-text mr-2"
-                    ></app-table-actions-button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+  <p-table
+    #dt
+    (onLazyLoad)="loadTableItems($event)"
+    (selectAllChange)="onSelectAllChange($event)"
+    (selectionChange)="onSelectionChange($event)"
+    [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+    [lazy]="true"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="10"
+    [selectAll]="selectAll"
+    [selection]="selectedItems"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalItems"
+    [value]="items"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+    dataKey="id"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h3 class="m-0">Existing Users</h3>
+      </div>
+    </ng-template>
+    <ng-template let-sortOrder pTemplate="sorticon">
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr role="row">
+        <th id="name-column" pSortableColumn="name" role="columnheader">Name
+          <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th id="email-column" pSortableColumn="email" role="columnheader">
+          Email
+          <p-sortIcon field="email"></p-sortIcon>
+        </th>
+        <th id="role-column" pSortableColumn="role" role="columnheader">Role
+          <p-sortIcon field="role"></p-sortIcon>
+        </th>
+        <th id="active-column" pSortableColumn="is_active" role="columnheader">
+          Status
+          <p-sortIcon field="is_active"></p-sortIcon>
+        </th>
+        <th id="buttons" role="columnheader">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template let-item pTemplate="body">
+      <tr role="row">
+        <td>{{ item.last_name }}, {{ item.first_name }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.getRoleLabel() }}</td>
+        <td>Registered</td>
+        <td>
+          <app-table-actions-button
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+            [actionItem]="item"
+            [rounded]="true"
+            [tableActions]="rowActions"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="flex justify-content-center p-button-text mr-2"
+          ></app-table-actions-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </p-card>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

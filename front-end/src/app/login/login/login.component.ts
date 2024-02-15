@@ -13,7 +13,10 @@ export class LoginComponent implements OnInit {
   public loginDotGovAuthUrl: string | undefined;
   public localLoginAvailable = false;
 
-  constructor(private loginService: LoginService, private store: Store) {}
+  constructor(
+    private loginService: LoginService,
+    private store: Store,
+  ) {}
 
   ngOnInit() {
     localStorage.clear();

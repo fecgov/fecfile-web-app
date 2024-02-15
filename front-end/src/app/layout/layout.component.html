@@ -1,4 +1,4 @@
-<div id="page-container" [ngClass]="[layoutControls.backgroundStyle]">
+<div [ngClass]="[layoutControls.backgroundStyle]" id="page-container">
   <app-banner></app-banner>
 
   <!--  Begin Sidebar section -->
@@ -8,12 +8,12 @@
         <app-sidebar></app-sidebar>
       </div>
       <div class="sidebar-content-container">
-        <div class="header-container" *ngIf="layoutControls.showHeader">
+        <div *ngIf="layoutControls.showHeader" class="header-container">
           <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
         </div>
         <div class="main-content">
           <div class="grid">
-            <div class="col-12" *ngIf="layoutControls.showCommitteeBanner">
+            <div *ngIf="layoutControls.showCommitteeBanner" class="col-12">
               <app-committee-banner></app-committee-banner>
             </div>
           </div>
@@ -35,11 +35,11 @@
   <!-- Begin No Sidebar section -->
   <div *ngIf="!showSidebar" class="content-offset">
     <div class="container">
-      <div class="header-container" *ngIf="layoutControls.showHeader">
+      <div *ngIf="layoutControls.showHeader" class="header-container">
         <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
       </div>
       <div class="col-12 main-content">
-        <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
+        <div *ngIf="layoutControls.showCommitteeBanner" class="grid">
           <div class="col-12">
             <app-committee-banner></app-committee-banner>
           </div>

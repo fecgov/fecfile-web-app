@@ -6,5 +6,5 @@ export const initialState: CommitteeAccount = new CommitteeAccount();
 
 export const committeeAccountReducer = createReducer(
   initialState,
-  on(setCommitteeAccountDetailsAction, (_state, update) => update.payload)
+  on(setCommitteeAccountDetailsAction, (_state, update) => update.payload),
 );

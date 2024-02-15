@@ -1,4 +1,4 @@
-import { FormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
@@ -69,41 +69,6 @@ export class ValidateUtils {
   }
 
   /**
-   * Convert the form input value to the appropriate type.
-   * @param {string} property
-   * @param {FromGroup} form
-   * @param {JsonSchema} jsonSchema - the schema to use in the form element custom validator.
-   * @returns
-   */
-  private static getPropertyValue(property: string, form: FormGroup, jsonSchema?: JsonSchema) {
-    // Undefined and empty strings are set to null.
-    if (
-      form?.get(property)?.value === undefined ||
-      form?.get(property)?.value === '' ||
-      form?.get(property)?.value === null
-    ) {
-      return null;
-    }
-
-    // Convert a string to number if expected in the schema.
-    if (
-      (Array.isArray(jsonSchema?.properties[property].type) &&
-        jsonSchema?.properties[property].type.includes('number')) ||
-      jsonSchema?.properties[property].type === 'number'
-    ) {
-      return Number(form?.get(property)?.value);
-    }
-
-    // Convert date to string
-    if (Object.prototype.toString.call(form?.get(property)?.value) === '[object Date]') {
-      return DateUtils.convertDateToFecFormat(form?.get(property)?.value);
-    }
-
-    // All else are strings so copy straight into value
-    return form?.get(property)?.value;
-  }
-
-  /**
    * This method adds JSON schema validators to a form
    * for the JsonSchema passed in, removing existing
    * validators first (if clearExistingValidators === true).
@@ -117,7 +82,7 @@ export class ValidateUtils {
     form: FormGroup,
     jsonSchema: JsonSchema,
     clearExistingValidators: boolean,
-    transaction?: Transaction
+    transaction?: Transaction,
   ) {
     for (const key in form.controls) {
       if (clearExistingValidators) {
@@ -141,7 +106,7 @@ export class ValidateUtils {
     property: string,
     form: FormGroup,
     jsonSchema: JsonSchema,
-    transaction?: Transaction
+    transaction?: Transaction,
   ): ValidatorFn {
     return (): ValidationErrors | null => {
       const data = {
@@ -223,5 +188,40 @@ export class ValidateUtils {
       const failed = control.value.length <= prefix.length;
       return failed ? { required: true } : null;
     };
+  }
+
+  /**
+   * Convert the form input value to the appropriate type.
+   * @param {string} property
+   * @param {FromGroup} form
+   * @param {JsonSchema} jsonSchema - the schema to use in the form element custom validator.
+   * @returns
+   */
+  private static getPropertyValue(property: string, form: FormGroup, jsonSchema?: JsonSchema) {
+    // Undefined and empty strings are set to null.
+    if (
+      form?.get(property)?.value === undefined ||
+      form?.get(property)?.value === '' ||
+      form?.get(property)?.value === null
+    ) {
+      return null;
+    }
+
+    // Convert a string to number if expected in the schema.
+    if (
+      (Array.isArray(jsonSchema?.properties[property].type) &&
+        jsonSchema?.properties[property].type.includes('number')) ||
+      jsonSchema?.properties[property].type === 'number'
+    ) {
+      return Number(form?.get(property)?.value);
+    }
+
+    // Convert date to string
+    if (Object.prototype.toString.call(form?.get(property)?.value) === '[object Date]') {
+      return DateUtils.convertDateToFecFormat(form?.get(property)?.value);
+    }
+
+    // All else are strings so copy straight into value
+    return form?.get(property)?.value;
   }
 }

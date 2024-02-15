@@ -1,4 +1,4 @@
-import { LabelList, PrimeOptions, LabelUtils, StatesCodeLabels } from './label.utils';
+import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from './label.utils';
 
 describe('LabelUtils', () => {
   it('should create an instance', () => {

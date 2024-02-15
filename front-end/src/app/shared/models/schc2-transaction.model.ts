@@ -1,5 +1,5 @@
 import { plainToClass } from 'class-transformer';
-import { Transaction, AggregationGroups } from './transaction.model';
+import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 

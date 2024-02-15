@@ -4,8 +4,8 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
-  ORGANIZATION_INDIVIDUAL,
   INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_SECONDARY_AND_TERTIARY } from '../contact.model';
 
@@ -17,10 +17,11 @@ export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override hasCandidateCommittee = true;
-  override contact2IsRequired = () => true;
   override contact3IsRequired = true;
   override purposeDescriptionPrefix? = 'In-kind: ';
   override synchronizeOrgComNameValues = false;
+
+  override contact2IsRequired = () => true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

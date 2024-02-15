@@ -11,7 +11,7 @@ export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransac
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT
+    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
   );
   schema = schema;
   override isRefund = true;
@@ -24,6 +24,7 @@ export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransac
       aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });
   }
+
   override generatePurposeDescription(): string {
     return 'Non-contribution Account Refund';
   }

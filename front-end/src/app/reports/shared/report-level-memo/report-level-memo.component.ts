@@ -40,7 +40,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     public router: Router,
     public route: ActivatedRoute,
     public memoTextService: MemoTextService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     super();
     this.form.addControl(this.recTypeFormProperty, new FormControl());

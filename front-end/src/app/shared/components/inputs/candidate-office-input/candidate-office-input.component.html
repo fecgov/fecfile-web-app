@@ -4,16 +4,16 @@
       <div class="field">
         <label for="candidate_office">CANDIDATE OFFICE</label>
         <p-dropdown
-          inputId="candidate_office"
+          [autoDisplayFirst]="false"
           [formControlName]="this.officeFormControlName"
           [options]="candidateOfficeTypeOptions"
-          [autoDisplayFirst]="false"
           appendTo="body"
+          inputId="candidate_office"
         ></p-dropdown>
         <app-error-messages
-          [form]="form"
           [fieldName]="this.officeFormControlName"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -24,19 +24,19 @@
         >CANDIDATE STATE</label
         >
         <p-dropdown
-          inputId="candidate_state"
-          [formControlName]="this.stateFormControlName"
-          [options]="candidateStateOptions"
           [autoDisplayFirst]="false"
+          [formControlName]="this.stateFormControlName"
           [ngClass]="{
             disabled: this.form.get(this.stateFormControlName)?.disabled
           }"
+          [options]="candidateStateOptions"
           appendTo="body"
+          inputId="candidate_state"
         ></p-dropdown>
         <app-error-messages
-          [form]="form"
           [fieldName]="this.stateFormControlName"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -47,19 +47,19 @@
         >CANDIDATE DISTRICT</label
         >
         <p-dropdown
-          inputId="candidate_district"
+          [autoDisplayFirst]="false"
           [formControlName]="this.districtFormControlName"
-          [options]="candidateDistrictOptions"
           [ngClass]="{
             disabled: this.form.get(this.stateFormControlName)?.disabled
           }"
+          [options]="candidateDistrictOptions"
           appendTo="body"
-          [autoDisplayFirst]="false"
+          inputId="candidate_district"
         ></p-dropdown>
         <app-error-messages
-          [form]="form"
           [fieldName]="this.districtFormControlName"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>

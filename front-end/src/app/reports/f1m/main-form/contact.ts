@@ -1,6 +1,6 @@
-import { AbstractControl, FormControl, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
@@ -24,14 +24,10 @@ function duplicateCandidateIdValidator(contactTag: F1MCandidateTag, component: M
 
 export abstract class F1MContact {
   contactKey: keyof Form1M;
-  get contactLookupKey(): string {
-    return `${this.contactKey}_lookup`;
-  }
   abstract contactTypeOptions: PrimeOptions;
   abstract formFields: string[];
   component: MainFormComponent;
   control: AbstractControl | null;
-  abstract enableValidation(): void;
 
   constructor(contactKey: keyof Form1M, component: MainFormComponent) {
     this.contactKey = contactKey;
@@ -39,6 +35,12 @@ export abstract class F1MContact {
     component.form.addControl(this.contactLookupKey, new FormControl(''));
     this.control = component.form.get(this.contactLookupKey);
   }
+
+  get contactLookupKey(): string {
+    return `${this.contactKey}_lookup`;
+  }
+
+  abstract enableValidation(): void;
 
   /**
    * Update the values in the form controls and contact object embedded in the
@@ -120,14 +122,6 @@ export class CandidateContact extends F1MContact {
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   formFields: string[] = [];
 
-  get dateOfContributionField() {
-    return `${this.tag}_date_of_contribution`;
-  }
-
-  get candidateId() {
-    return this.component.form.get(`${this.tag}_candidate_id_number`)?.value;
-  }
-
   constructor(tag: F1MCandidateTag, component: MainFormComponent) {
     super(`contact_candidate_${tag}` as keyof Form1M, component);
 
@@ -169,6 +163,14 @@ export class CandidateContact extends F1MContact {
       candidate_state: `${tag}_candidate_state`,
       candidate_district: `${tag}_candidate_district`,
     } as TransactionTemplateMapType;
+  }
+
+  get dateOfContributionField() {
+    return `${this.tag}_date_of_contribution`;
+  }
+
+  get candidateId() {
+    return this.component.form.get(`${this.tag}_candidate_id_number`)?.value;
   }
 
   enableValidation() {

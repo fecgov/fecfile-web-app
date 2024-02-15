@@ -11,7 +11,9 @@ describe('C1_LOAN_AGREEMENT', () => {
   beforeEach(() => {
     transactionType = new C1_LOAN_AGREEMENT();
     transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
-    transaction.parent_transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction;
+    transaction.parent_transaction = getTestTransactionByType(
+      ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+    ) as SchCTransaction;
   });
 
   it('should create an instance', () => {
@@ -58,5 +60,4 @@ describe('C1_LOAN_AGREEMENT', () => {
     expect(transaction.transactionType.getNavigationControls(transaction)).toBe(STANDARD_CONTROLS);
     expect(transaction.transactionType.getUseParentContact(transaction)).toBeFalse();
   });
-
 });

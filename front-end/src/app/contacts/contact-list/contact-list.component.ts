@@ -29,13 +29,9 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    public override itemService: ContactService
+    public override itemService: ContactService,
   ) {
     super(messageService, confirmationService, elementRef);
-  }
-
-  protected getEmptyItem(): Contact {
-    return new Contact();
   }
 
   public override addItem() {
@@ -105,5 +101,9 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
         });
       });
     }
+  }
+
+  protected getEmptyItem(): Contact {
+    return new Contact();
   }
 }

@@ -4,35 +4,35 @@
       <div class="field">
         <label for="organization_name">{{ entityRole }} NAME</label>
         <input
-          type="text"
-          pInputText
-          id="organization_name"
           [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
+          id="organization_name"
+          pInputText
+          type="text"
         />
         <app-error-messages
-          [form]="form"
           [fieldName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
-    <div class="col-4" *ngIf="includeFecId && (form.get('entity_type')?.value === 'COM' || tertiaryContact)">
+    <div *ngIf="includeFecId && (form.get('entity_type')?.value === 'COM' || tertiaryContact)" class="col-4">
       <div class="field">
         <label for="committee_fec_id">{{ entityRole }} FEC ID</label>
         <input
-          type="text"
-          pInputText
-          id="committee_fec_id"
           [formControlName]="templateMap['committee_fec_id']"
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
+          id="committee_fec_id"
+          pInputText
+          type="text"
         />
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['committee_fec_id']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>

@@ -1,31 +1,12 @@
-import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
-import { ScheduleIds, Transaction, isPulledForwardLoan } from './transaction.model';
-import { TransactionNavigationControls, SAVE_LIST_CONTROL } from './transaction-navigation-controls.model';
+import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
+import { isPulledForwardLoan, ScheduleIds, Transaction } from './transaction.model';
+import { SAVE_LIST_CONTROL, TransactionNavigationControls } from './transaction-navigation-controls.model';
 
 export abstract class SchCTransactionType extends TransactionType {
   scheduleId = ScheduleIds.C;
 
   // Labels
   override amountInputHeader = 'Loan information';
-
-  override getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
-    if (isPulledForwardLoan(transaction) && this.navigationControls) {
-      return new TransactionNavigationControls(
-        this.navigationControls.inlineControls,
-        this.navigationControls.cancelControls,
-        [SAVE_LIST_CONTROL]
-      );
-    }
-    return this.navigationControls;
-  }
-
-  override getFooter(transaction?: Transaction): string | undefined {
-    if (isPulledForwardLoan(transaction)) {
-      return undefined;
-    }
-    return this.footer;
-  }
-
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
     // Form fields
@@ -91,4 +72,22 @@ export abstract class SchCTransactionType extends TransactionType {
     signatory_2_title: '',
     signatory_2_date: '',
   };
+
+  override getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
+    if (isPulledForwardLoan(transaction) && this.navigationControls) {
+      return new TransactionNavigationControls(
+        this.navigationControls.inlineControls,
+        this.navigationControls.cancelControls,
+        [SAVE_LIST_CONTROL],
+      );
+    }
+    return this.navigationControls;
+  }
+
+  override getFooter(transaction?: Transaction): string | undefined {
+    if (isPulledForwardLoan(transaction)) {
+      return undefined;
+    }
+    return this.footer;
+  }
 }

@@ -1,5 +1,5 @@
 <div class="p-fluid">
-  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+  <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
     <div class="grid">
       <div class="col-12">
         <h1>FEC Form 3X</h1>
@@ -8,7 +8,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <hr/>
+        <hr />
       </div>
     </div>
     <ng-container *ngIf="userCanSetFilingFrequency">
@@ -24,20 +24,20 @@
             </div>
             <div class="col-12">
               <p-radioButton
+                formControlName="filing_frequency"
                 inputId="Q"
+                label="QUARTERLY REPORTING"
                 name="filing_frequency"
                 value="Q"
-                label="QUARTERLY REPORTING"
-                formControlName="filing_frequency"
               ></p-radioButton>
             </div>
             <div class="col-12">
               <p-radioButton
+                formControlName="filing_frequency"
                 inputId="M"
+                label="MONTHLY REPORTING"
                 name="filing_frequency"
                 value="M"
-                label="MONTHLY REPORTING"
-                formControlName="filing_frequency"
               ></p-radioButton>
             </div>
           </div>
@@ -46,7 +46,7 @@
     </ng-container>
     <div class="grid">
       <div class="col-12">
-        <hr/>
+        <hr />
       </div>
     </div>
     <div class="grid">
@@ -57,11 +57,11 @@
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
           <app-select-button
-            data-test="report-type-category"
             [options]="getReportTypeCategories()"
+            data-test="report-type-category"
             formControlName="report_type_category"
           ></app-select-button>
-          <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages [formSubmitted]="formSubmitted" fieldName="report_type_category"></app-error-messages>
         </div>
       </div>
       <div class="col-6"></div>
@@ -70,16 +70,16 @@
           <label for="type">(CHOOSE ONE)</label>
           <div *ngFor="let reportCode of getReportCodes()" class="p-field-checkbox col-12">
             <p-radioButton
-              [inputId]="reportCode"
-              name="report_code"
-              [value]="reportCode"
-              label="{{ reportCode | reportCodeLabel }}"
               [class]="
                 usedReportCodes?.includes(reportCode)
                   ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
                   : ''
               "
+              [inputId]="reportCode"
+              [value]="reportCode"
               formControlName="report_code"
+              label="{{ reportCode | reportCodeLabel }}"
+              name="report_code"
             ></p-radioButton>
           </div>
         </div>
@@ -89,21 +89,21 @@
           <div class="col-12">
             <div class="field">
               <label for="date_of_election">ELECTION ON</label>
-              <p-calendar id="date_of_election" name="date_of_election" formControlName="date_of_election"></p-calendar>
-              <app-error-messages fieldName="date_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+              <p-calendar formControlName="date_of_election" id="date_of_election" name="date_of_election"></p-calendar>
+              <app-error-messages [formSubmitted]="formSubmitted" fieldName="date_of_election"></app-error-messages>
             </div>
           </div>
           <div class="col-12">
             <div class="field">
               <label for="state_of_election">IN THE STATE/PROVINCE OF</label>
               <p-dropdown
-                inputId="state_of_election"
-                formControlName="state_of_election"
-                [options]="stateOptions"
                 [autoDisplayFirst]="false"
+                [options]="stateOptions"
                 appendTo="body"
+                formControlName="state_of_election"
+                inputId="state_of_election"
               ></p-dropdown>
-              <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [formSubmitted]="formSubmitted" fieldName="state_of_election"></app-error-messages>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <hr/>
+        <hr />
       </div>
     </div>
     <div class="grid">
@@ -124,14 +124,14 @@
         <div class="field">
           <label for="coverage_from_date">FROM</label>
           <p-calendar
+            formControlName="coverage_from_date"
             inputId="coverage_from_date"
             name="coverage_from_date"
-            formControlName="coverage_from_date"
           ></p-calendar>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="coverage_from_date"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -139,14 +139,14 @@
         <div class="field">
           <label for="coverage_through_date">TO</label>
           <p-calendar
+            formControlName="coverage_through_date"
             inputId="coverage_through_date"
             name="coverage_through_date"
-            formControlName="coverage_through_date"
           ></p-calendar>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="coverage_through_date"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -155,14 +155,14 @@
 </div>
 <div class="grid">
   <div class="col-2">
-    <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
+    <button (click)="goBack()" class="p-button-secondary" label="Back" pButton pRipple></button>
   </div>
   <div class="col-6"></div>
   <div class="col-1">
-    <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
+    <button (click)="save()" appSingleClick class="p-button-primary" label="Save" pButton pRipple></button>
   </div>
   <div class="col-3">
-    <button pButton pRipple appSingleClick label="Save and continue" (click)="save('continue')"
-            class="p-button-info"></button>
+    <button (click)="save('continue')" appSingleClick class="p-button-info" label="Save and continue" pButton
+            pRipple></button>
   </div>
 </div>

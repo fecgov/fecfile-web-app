@@ -20,22 +20,22 @@
     </ng-container>
     <div class="col-12 flex justify-content-center">
       <img
-        class="image-max-width image-centered-horiz"
-        ngSrc="assets/img/image-placeholder.png"
-        draggable="false"
-        alt="Print success image"
         [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' && !report.webprint_submission?.fec_status }"
+        alt="Print success image"
+        class="image-max-width image-centered-horiz"
+        draggable="false"
         height="271"
+        ngSrc="assets/img/image-placeholder.png"
         width="450"
       />
       <ng-container *ngIf="webPrintStage === 'checking' && !report.webprint_submission?.fec_status">
         <div class="fec-loader-div col-12">
           <img
-            class="image-max-width fec-loader-image"
-            ngSrc="assets/img/fec-loading-flag.gif"
-            draggable="false"
             alt="The report's web print status is loading..."
+            class="image-max-width fec-loader-image"
+            draggable="false"
             height="103"
+            ngSrc="assets/img/fec-loading-flag.gif"
             width="114"
           />
           <h1 class="align-center super-header">
@@ -70,12 +70,12 @@
       <div class="col-5"></div>
       <div class="col-2">
         <button
+          (click)="submitPrintJob()"
+          appSingleClick
+          class="p-button-warning button-full-width"
+          label="Compile PDF"
           pButton
           pRipple
-          appSingleClick
-          label="Compile PDF"
-          class="p-button-warning button-full-width"
-          (click)="submitPrintJob()"
         ></button>
       </div>
     </ng-container>
@@ -86,11 +86,11 @@
       <div class="col-3"></div>
       <div class="col-2">
         <button
+          (click)="downloadPDF()"
+          class="p-button-info button-full-width"
+          label="Open PDF"
           pButton
           pRipple
-          label="Open PDF"
-          class="p-button-info button-full-width"
-          (click)="downloadPDF()"
         ></button>
       </div>
       <div class="col-2">
@@ -98,12 +98,12 @@
       </div>
       <div class="col-2">
         <button
+          (click)="submitPrintJob()"
+          appSingleClick
+          class="p-button-warning button-full-width"
+          label="Compile New PDF"
           pButton
           pRipple
-          appSingleClick
-          label="Compile New PDF"
-          class="p-button-warning button-full-width"
-          (click)="submitPrintJob()"
         ></button>
       </div>
     </ng-container>
@@ -113,21 +113,21 @@
   <div class="grid">
     <div class="col-2">
       <button
+        (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
+        class="p-button-secondary p-button-outlined button-full-width"
+        label="Back"
         pButton
         pRipple
-        label="Back"
-        class="p-button-secondary p-button-outlined button-full-width"
-        (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
       ></button>
     </div>
     <div class="col-7"></div>
     <div class="col-3">
       <button
+        (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
+        class="p-button-secondary button-full-width"
+        label="Sign & submit report"
         pButton
         pRipple
-        label="Sign & submit report"
-        class="p-button-secondary button-full-width"
-        (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
       ></button>
     </div>
   </div>

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ManageCommitteeComponent } from './manage-committee/manage-committee.component';
 import { CommitteeInfoComponent } from './committee-info/committee-info.component';
 import { SelectCommitteeComponent } from './select-committee/select-committee.component';

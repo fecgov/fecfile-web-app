@@ -3,11 +3,11 @@
     <div class="col-6">
       <div class="field">
         <label for="date">DATE INCURRED</label>
-        <p-calendar inputId="date_incurred" name="date" [formControlName]="templateMap['date']"></p-calendar>
+        <p-calendar [formControlName]="templateMap['date']" inputId="date_incurred" name="date"></p-calendar>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['date']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -16,16 +16,16 @@
       <div class="field">
         <label for="due_date_setting">DATE DUE</label>
         <p-dropdown
-          inputId="due_date_setting"
+          [autoDisplayFirst]="false"
           [formControlName]="templateMap['due_date_setting']"
           [options]="dueDateSettingOptions"
-          [autoDisplayFirst]="false"
           appendTo="body"
+          inputId="due_date_setting"
         ></p-dropdown>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['due_date_setting']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -33,11 +33,11 @@
       <div class="col-6">
         <div class="field">
           <label for="due_date">DATE DUE (USER DEFINED)</label>
-          <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
+          <input [formControlName]="templateMap['due_date']" inputId="due_date" pInputText type="text" />
           <app-error-messages
-            [form]="form"
             [fieldName]="templateMap['due_date']"
             [formSubmitted]="formSubmitted"
+            [form]="form"
           ></app-error-messages>
         </div>
       </div>
@@ -46,11 +46,11 @@
       <div class="col-6">
         <div class="field">
           <label for="due_date">SPECIFIC DATE</label>
-          <p-calendar inputId="due_date" name="due_date" [formControlName]="templateMap['due_date']"></p-calendar>
+          <p-calendar [formControlName]="templateMap['due_date']" inputId="due_date" name="due_date"></p-calendar>
           <app-error-messages
-            [form]="form"
             [fieldName]="templateMap['due_date']"
             [formSubmitted]="formSubmitted"
+            [form]="form"
           ></app-error-messages>
         </div>
       </div>
@@ -62,16 +62,16 @@
       <div class="field">
         <label for="interest_rate_setting">INTEREST RATE</label>
         <p-dropdown
-          inputId="interest_rate_setting"
+          [autoDisplayFirst]="false"
           [formControlName]="templateMap['interest_rate_setting']"
           [options]="interestRateSettingOptions"
-          [autoDisplayFirst]="false"
           appendTo="body"
+          inputId="interest_rate_setting"
         ></p-dropdown>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['interest_rate_setting']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         >
         </app-error-messages>
       </div>
@@ -80,11 +80,11 @@
       <div class="col-6">
         <div class="field">
           <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
-          <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
+          <input [formControlName]="templateMap['interest_rate']" id="interest_rate" pInputText type="text" />
           <app-error-messages
-            [form]="form"
             [fieldName]="templateMap['interest_rate']"
             [formSubmitted]="formSubmitted"
+            [form]="form"
           ></app-error-messages>
         </div>
       </div>
@@ -97,15 +97,15 @@
           <label for="interest_rate">EXACT PERCENTAGE (%)</label>
           <input
             #interestRatePercentage
-            type="text"
-            pInputText
-            id="interest_rate"
             [formControlName]="templateMap['interest_rate']"
+            id="interest_rate"
+            pInputText
+            type="text"
           />
           <app-error-messages
-            [form]="form"
             [fieldName]="templateMap['interest_rate']"
             [formSubmitted]="formSubmitted"
+            [form]="form"
             patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
           ></app-error-messages>
         </div>

@@ -15,7 +15,12 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 export class TestDotFecComponent extends DestroyerComponent implements OnInit {
   report: Report | undefined;
   fileIsGenerated = false;
-  constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {
+
+  constructor(
+    private store: Store,
+    private apiService: ApiService,
+    private http: HttpClient,
+  ) {
     super();
   }
 
@@ -38,7 +43,7 @@ export class TestDotFecComponent extends DestroyerComponent implements OnInit {
       .get(`${environment.apiUrl}/web-services/dot-fec/${this.report?.id}/`, {
         headers: this.apiService.getHeaders(),
         responseType: 'text',
-        withCredentials: true,
+        withCredentials: true
       })
       .subscribe((dotFEC: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         const newBlob = new Blob([dotFEC], { type: 'application/text' });

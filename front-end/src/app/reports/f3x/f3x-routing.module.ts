@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { CreateF3XStep1Component } from './create-workflow/create-f3x-step1.component';
 import { ReportSummaryComponent } from './report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';

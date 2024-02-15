@@ -44,7 +44,7 @@ export class MainFormComponent extends MainFormBaseComponent {
     protected override reportService: Form99Service,
     protected override messageService: MessageService,
     protected override router: Router,
-    protected override activatedRoute: ActivatedRoute
+    protected override activatedRoute: ActivatedRoute,
   ) {
     super(store, fb, reportService, messageService, router, activatedRoute);
   }

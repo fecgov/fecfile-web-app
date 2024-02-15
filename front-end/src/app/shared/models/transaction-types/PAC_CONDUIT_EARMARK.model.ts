@@ -14,6 +14,7 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     true: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
     false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
+
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
@@ -23,6 +24,7 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     }
     return '';
   }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11C',

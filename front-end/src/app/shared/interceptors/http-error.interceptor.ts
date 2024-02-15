@@ -11,7 +11,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoggedOutAction } from 'app/store/login.actions';
-import { catchError, Observable, throwError, of } from 'rxjs';
+import { catchError, Observable, of, throwError } from 'rxjs';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => []);
@@ -41,7 +41,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }
         console.log(errorMessage);
         return throwError(() => errorMessage);
-      })
+      }),
     );
   }
 }

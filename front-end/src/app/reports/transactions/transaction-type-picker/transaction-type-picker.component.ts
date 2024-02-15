@@ -5,7 +5,7 @@ import { combineLatest, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
-import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
+import { TransactionGroupTypes, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
   ScheduleATransactionTypeLabels,
@@ -17,7 +17,7 @@ import {
   ScheduleBTransactionTypes,
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils, getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
+import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import {
   ScheduleCTransactionGroups,
@@ -55,7 +55,11 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   title: string = this.getCategoryTitle();
   debtId?: string;
 
-  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private titleService: Title,
+  ) {
     super();
   }
 

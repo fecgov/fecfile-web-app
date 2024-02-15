@@ -27,7 +27,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
     protected override fecDatePipe: FecDatePipe,
     protected override store: Store,
     protected override reportService: ReportService,
-    protected override activatedRoute: ActivatedRoute
+    protected override activatedRoute: ActivatedRoute,
   ) {
     super(
       messageService,
@@ -39,7 +39,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
       fecDatePipe,
       store,
       reportService,
-      activatedRoute
+      activatedRoute,
     );
   }
 

@@ -4,19 +4,19 @@ import { SchCTransactionType } from '../schc-transaction-type.model';
 import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import {
   CANCEL_CONTROL,
+  ControlType,
+  NavigationAction,
+  NavigationControl,
+  NavigationDestination,
   SAVE_DOUBLE_ENTRY_LIST_CONTROL,
   TransactionNavigationControls,
-  NavigationControl,
-  NavigationAction,
-  NavigationDestination,
-  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import {
   ADDRESS_FIELDS,
-  COMMITTEE,
   COM_FIELDS_SHORT,
+  COMMITTEE,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
@@ -61,11 +61,11 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
         hasNoContact,
         () => true,
         'pi pi-plus',
-        ControlType.BUTTON
+        ControlType.BUTTON,
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
+    [SAVE_DOUBLE_ENTRY_LIST_CONTROL],
   );
 
   getNewTransaction() {

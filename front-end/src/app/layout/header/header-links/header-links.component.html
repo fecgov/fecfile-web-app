@@ -1,89 +1,89 @@
 <ul class="navbar-nav">
   <ng-container *ngIf="headerStyle === headerStyles.DEFAULT">
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
       <a class="nav-link" routerLink="/dashboard"><span [ngStyle]="{ 'font-size': fontSize }">Dashboard</span></a>
     </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
       <a class="nav-link" routerLink="/reports"><span [ngStyle]="{ 'font-size': fontSize }">Reports</span></a>
     </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
       <a class="nav-link disabled" routerLink="/transactions"
-        ><span [ngStyle]="{ 'font-size': fontSize }">Transactions</span></a
+      ><span [ngStyle]="{ 'font-size': fontSize }">Transactions</span></a
       >
     </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
       <a class="nav-link" routerLink="/contacts"><span [ngStyle]="{ 'font-size': fontSize }">Contacts</span></a>
     </li>
-    <li class="nav-item dropdown" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item dropdown">
       <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        role="button"
-        id="navbarDropdownMenuLink"
-        data-bs-toggle="dropdown"
-        aria-haspopup="true"
         aria-expanded="false"
+        aria-haspopup="true"
+        class="nav-link dropdown-toggle"
+        data-bs-toggle="dropdown"
+        href="#"
+        id="navbarDropdownMenuLink"
+        role="button"
       >
         <span [ngStyle]="{ 'font-size': fontSize }">Tools</span>
       </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+      <ul aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-end">
         <a class="dropdown-item" href="#">Import</a>
         <a class="dropdown-item" href="#">Export</a>
         <a class="dropdown-item" href="#">Update cash on hand</a>
         <a class="dropdown-item" href="#">FECFile Help</a>
       </ul>
     </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
       <a class="nav-link" routerLink="#">
         <img
-          class="header-navbar-icon"
-          ngSrc="assets/img/notification_bell_icon.svg"
-          alt="Notifications"
           [height]="16 * ratio"
           [width]="12 * ratio"
+          alt="Notifications"
+          class="header-navbar-icon"
+          ngSrc="assets/img/notification_bell_icon.svg"
         />
       </a>
     </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
       <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        role="button"
-        id="navbarProfileDropdownMenuLink"
-        data-bs-toggle="dropdown"
-        aria-haspopup="true"
         aria-expanded="false"
+        aria-haspopup="true"
+        class="nav-link dropdown-toggle"
+        data-bs-toggle="dropdown"
+        href="#"
+        id="navbarProfileDropdownMenuLink"
+        role="button"
       >
         <img
-          class="header-navbar-icon"
-          ngSrc="assets/img/profile_icon.svg"
-          alt="Profile"
           [height]="16 * ratio"
           [width]="8 * ratio"
+          alt="Profile"
+          class="header-navbar-icon"
+          ngSrc="assets/img/profile_icon.svg"
         />
       </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarProfileDropdownMenuLink">
+      <ul aria-labelledby="navbarProfileDropdownMenuLink" class="dropdown-menu dropdown-menu-end">
         <a class="dropdown-item" routerLink="/committee/">Account</a>
         <a class="dropdown-item" routerLink="/committee/members">Users</a>
         <a class="dropdown-item" href="#"><span class="dead-link">Switch Committees</span></a>
         <a class="dropdown-item" href="#"><span class="dead-link">User Profile</span></a>
-        <a class="dropdown-item" href="#" (click)="loginService.logOut()">Logout</a>
+        <a (click)="loginService.logOut()" class="dropdown-item" href="#">Logout</a>
       </ul>
     </li>
   </ng-container>
   <ng-container *ngIf="headerStyle === headerStyles.LOGIN">
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" [routerLink]=""><span [ngStyle]="{ 'font-size': fontSize }">Sign Up</span></a>
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
+      <a [routerLink]="" class="nav-link"><span [ngStyle]="{ 'font-size': fontSize }">Sign Up</span></a>
     </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" (click)="navigateToLoginDotGov()">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
+      <a (click)="navigateToLoginDotGov()" class="nav-link">
         <span [ngStyle]="{ 'font-size': fontSize }">Log In</span>
       </a>
     </li>
   </ng-container>
   <ng-container *ngIf="headerStyle === headerStyles.LOGOUT">
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" href="#" (click)="loginService.logOut()">
+    <li [ngClass]="full ? 'full-width' : ''" class="nav-item">
+      <a (click)="loginService.logOut()" class="nav-link" href="#">
         <span [ngStyle]="{ 'font-size': fontSize }">Log Out</span>
       </a>
     </li>

@@ -7,7 +7,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
-import { Form3X, F3xFormTypes } from '../../shared/models/form-3x.model';
+import { F3xFormTypes, Form3X } from '../../shared/models/form-3x.model';
 import { Report, ReportTypes } from '../../shared/models/report.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';

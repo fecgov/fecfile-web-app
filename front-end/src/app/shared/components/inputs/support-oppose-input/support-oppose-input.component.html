@@ -2,31 +2,31 @@
   <div class="grid">
     <div class="col-2">
       <p-radioButton
-        name="support_oppose_code"
-        [value]="'S'"
-        label="SUPPORT"
-        formControlName="support_oppose_code"
-        ariaLabel="support candidate"
         [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+        [value]="'S'"
+        ariaLabel="support candidate"
+        formControlName="support_oppose_code"
+        label="SUPPORT"
+        name="support_oppose_code"
       ></p-radioButton>
     </div>
     <div class="col-2">
       <p-radioButton
-        name="support_oppose_code"
-        [value]="'O'"
-        label="OPPOSE"
-        formControlName="support_oppose_code"
-        ariaLabel="oppose candidate"
         [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+        [value]="'O'"
+        ariaLabel="oppose candidate"
+        formControlName="support_oppose_code"
+        label="OPPOSE"
+        name="support_oppose_code"
       ></p-radioButton>
     </div>
   </div>
   <div class="grid">
     <div class="col-12">
       <app-error-messages
+        [formSubmitted]="formSubmitted"
         [form]="form"
         fieldName="support_oppose_code"
-        [formSubmitted]="formSubmitted"
         patternErrorMessage="An answer is required"
       ></app-error-messages>
     </div>

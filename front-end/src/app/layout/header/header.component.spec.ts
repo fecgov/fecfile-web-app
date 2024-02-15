@@ -5,8 +5,8 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header.component';
-import { toggleSidebarVisibleAction } from "../../store/sidebar-state.actions";
-import { Store } from "@ngrx/store";
+import { toggleSidebarVisibleAction } from '../../store/sidebar-state.actions';
+import { Store } from '@ngrx/store';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -34,8 +34,8 @@ describe('HeaderComponent', () => {
   it('should only toggle the sidebar if on a reports page', async () => {
     const windowStub = {
       location: {
-        href: 'http://localhost:4200/reports'
-      }
+        href: 'http://localhost:4200/reports',
+      },
     } as Window & typeof globalThis;
     component['window'] = windowStub;
     spyOn(store, 'dispatch');
@@ -45,5 +45,5 @@ describe('HeaderComponent', () => {
     windowStub.location.href = 'http://localhost:4200/landing-page';
     component.toggleSideBar();
     expect(store.dispatch).toHaveBeenCalledOnceWith(toggleSidebarVisibleAction());
-  })
+  });
 });

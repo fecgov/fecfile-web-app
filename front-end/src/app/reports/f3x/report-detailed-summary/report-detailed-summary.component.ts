@@ -14,14 +14,14 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
   styleUrls: ['../../styles.scss'],
 })
 export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
-  protected calculationFinished$ = new BehaviorSubject<boolean>(false);
   report: Form3X = new Form3X();
+  protected calculationFinished$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private store: Store,
     public router: Router,
     private apiService: ApiService,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {
     super();
   }

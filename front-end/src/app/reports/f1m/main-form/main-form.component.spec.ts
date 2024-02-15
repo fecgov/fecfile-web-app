@@ -6,7 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { AppSelectButtonComponent } from 'app/shared/components/app-selectbutton.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SelectButtonModule } from 'primeng/selectbutton';

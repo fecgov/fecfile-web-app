@@ -4,16 +4,16 @@
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
         <p-inputNumber
-          inputId="amount"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
           [formControlName]="templateMap['amount']"
+          currency="USD"
+          inputId="amount"
+          locale="en-US"
+          mode="currency"
         ></p-inputNumber>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['amount']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -21,18 +21,18 @@
   <p-divider></p-divider>
   <h3>Terms</h3>
   <app-loan-terms-dates-input
-    [form]="form"
     [formSubmitted]="formSubmitted"
+    [form]="form"
     [templateMap]="templateMap"
     [transaction]="transaction"
   ></app-loan-terms-dates-input>
   <app-yes-no-radio-input
-    [form]="form"
     [formSubmitted]="formSubmitted"
+    [form]="form"
+    ariaLabelNo="This loan has not been restructured"
+    ariaLabelYes="This loan has been restructured"
     controlName="loan_restructured"
     label="Has loan been restructured?"
-    ariaLabelYes="This loan has been restructured"
-    ariaLabelNo="This loan has not been restructured"
   ></app-yes-no-radio-input>
   <ng-container *ngIf="showLoanRestructured">
     <div class="grid">
@@ -40,26 +40,26 @@
         <div class="field">
           <label for="loan_originally_incurred_date">DATE OF ORIGINAL LOAN</label>
           <p-calendar
+            formControlName="loan_originally_incurred_date"
             inputId="loan_originally_incurred_date"
             name="date_signed"
-            formControlName="loan_originally_incurred_date"
           ></p-calendar>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="loan_originally_incurred_date"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
     </div>
   </ng-container>
   <app-yes-no-radio-input
-    [form]="form"
     [formSubmitted]="formSubmitted"
+    [form]="form"
+    ariaLabelNo="There is not a line of credit"
+    ariaLabelYes="There is a line of credit"
     controlName="line_of_credit"
     label="Is there a line of credit? (OPTIONAL)"
-    ariaLabelYes="There is a line of credit"
-    ariaLabelNo="There is not a line of credit"
   ></app-yes-no-radio-input>
   <ng-container *ngIf="showLineOfCredit">
     <div class="grid">
@@ -67,16 +67,16 @@
         <div class="field">
           <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
           <p-inputNumber
-            inputId="credit_amount_this_draw"
-            mode="currency"
             currency="USD"
-            locale="en-US"
             formControlName="credit_amount_this_draw"
+            inputId="credit_amount_this_draw"
+            locale="en-US"
+            mode="currency"
           ></p-inputNumber>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="credit_amount_this_draw"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -84,16 +84,16 @@
         <div class="field">
           <label for="balance">TOTAL BALANCE</label>
           <p-inputNumber
-            inputId="balance"
-            mode="currency"
-            currency="USD"
-            locale="en-US"
             [formControlName]="templateMap['balance']"
+            currency="USD"
+            inputId="balance"
+            locale="en-US"
+            mode="currency"
           ></p-inputNumber>
           <app-error-messages
-            [form]="form"
             [fieldName]="templateMap['balance']"
             [formSubmitted]="formSubmitted"
+            [form]="form"
           ></app-error-messages>
         </div>
       </div>
@@ -102,19 +102,19 @@
   <p-divider></p-divider>
   <h3>Others liable</h3>
   <app-yes-no-radio-input
-    [form]="form"
     [formSubmitted]="formSubmitted"
+    [form]="form"
+    ariaLabelNo="Other parties are not secondarily liable"
+    ariaLabelYes="Other parties are secondarily liable"
     controlName="others_liable"
     label="Are other parties secondarily liable for the debt incurred?"
-    ariaLabelYes="Other parties are secondarily liable"
-    ariaLabelNo="Other parties are not secondarily liable"
   ></app-yes-no-radio-input>
   <ng-container *ngIf="showOthersLiable">
     <div class="grid">
       <div class="col-12">
         <div class="field">
           <span class="bold"
-            >Endorsers and guarantors must be reported on Schedule C - Loan received from bank in STEP ONE</span
+          >Endorsers and guarantors must be reported on Schedule C - Loan received from bank in STEP ONE</span
           >
         </div>
       </div>
@@ -123,12 +123,12 @@
   <p-divider></p-divider>
   <h3>Collateral</h3>
   <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
     [controlName]="templateMap['secured']"
-    label="Are any of the following pledged as collateral for the loan: real estate, personal property, goods, negotiable instruments, certificates of deposit, chattel papers, stocks, accounts receivable, cash on deposit, or other similar traditional collateral?"
-    ariaLabelYes="Collateral has been pledged"
+    [formSubmitted]="formSubmitted"
+    [form]="form"
     ariaLabelNo="Collateral has not been pledged"
+    ariaLabelYes="Collateral has been pledged"
+    label="Are any of the following pledged as collateral for the loan: real estate, personal property, goods, negotiable instruments, certificates of deposit, chattel papers, stocks, accounts receivable, cash on deposit, or other similar traditional collateral?"
   ></app-yes-no-radio-input>
   <ng-container *ngIf="showSecured">
     <div class="grid">
@@ -136,17 +136,17 @@
         <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
         <div>
           <textarea
-            id="desc_collateral"
-            [rows]="5"
-            [cols]="30"
-            pInputTextarea
             [autoResize]="true"
+            [cols]="30"
+            [rows]="5"
             formControlName="desc_collateral"
+            id="desc_collateral"
+            pInputTextarea
           ></textarea>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="desc_collateral"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -156,38 +156,38 @@
         <div class="field">
           <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
           <p-inputNumber
-            inputId="collateral_value_amount"
-            mode="currency"
             currency="USD"
-            locale="en-US"
             formControlName="collateral_value_amount"
+            inputId="collateral_value_amount"
+            locale="en-US"
+            mode="currency"
           ></p-inputNumber>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="collateral_value_amount"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
     </div>
     <app-yes-no-radio-input
-      [form]="form"
       [formSubmitted]="formSubmitted"
+      [form]="form"
+      ariaLabelNo="Lender does not have a perfected security interest"
+      ariaLabelYes="Lender has a perfected security interest"
       controlName="perfected_interest"
       label="Does the lender have a perfected security interest in it? (OPTIONAL)"
-      ariaLabelYes="Lender has a perfected security interest"
-      ariaLabelNo="Lender does not have a perfected security interest"
     ></app-yes-no-radio-input>
   </ng-container>
   <p-divider></p-divider>
   <h3>Future income</h3>
   <app-yes-no-radio-input
-    [form]="form"
     [formSubmitted]="formSubmitted"
+    [form]="form"
+    ariaLabelNo="Future income has not been pledged"
+    ariaLabelYes="Future income has been pledged"
     controlName="future_income"
     label="Are any future contributions or future receipts of interest income, pledged as collateral for the loan?"
-    ariaLabelYes="Future income has been pledged"
-    ariaLabelNo="Future income has not been pledged"
   ></app-yes-no-radio-input>
   <ng-container *ngIf="showFutureIncome">
     <div class="grid">
@@ -195,17 +195,17 @@
         <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
         <div>
           <textarea
-            id="desc_specification_of_the_above"
-            [rows]="5"
-            [cols]="30"
-            pInputTextarea
             [autoResize]="true"
+            [cols]="30"
+            [rows]="5"
             formControlName="desc_specification_of_the_above"
+            id="desc_specification_of_the_above"
+            pInputTextarea
           ></textarea>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="desc_specification_of_the_above"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -215,16 +215,16 @@
         <div class="field">
           <label for="estimated_value">ESTIMATED VALUE</label>
           <p-inputNumber
-            inputId="estimated_value"
-            mode="currency"
             currency="USD"
-            locale="en-US"
             formControlName="estimated_value"
+            inputId="estimated_value"
+            locale="en-US"
+            mode="currency"
           ></p-inputNumber>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="estimated_value"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -232,14 +232,14 @@
         <div class="field">
           <label for="depository_account_established_date">DEPOSITORY ACCOUNT ESTABLISHED</label>
           <p-calendar
+            formControlName="depository_account_established_date"
             inputId="depository_account_established_date"
             name="date_signed"
-            formControlName="depository_account_established_date"
           ></p-calendar>
           <app-error-messages
+            [formSubmitted]="formSubmitted"
             [form]="form"
             fieldName="depository_account_established_date"
-            [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
       </div>
@@ -250,16 +250,16 @@
           <label for="location_of_account">LOCATION OF ACCOUNT</label>
           <span
             class="pi pi-info-circle"
-            style="font-size: 1.5rem; margin-left: 0.5rem"
             pTooltip="{{ locationOfAccountHelpText }}"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
           ></span>
           <app-transaction-contact-lookup
-            contactProperty="contact_2"
-            [transaction]="transaction"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            [contactTypeOptions]="contactTypeOptions"
             (contactSelect)="updateFormWithLocationOfAccountContact($event)"
+            [contactTypeOptions]="contactTypeOptions"
+            [formSubmitted]="formSubmitted"
+            [form]="form"
+            [transaction]="transaction"
+            contactProperty="contact_2"
           ></app-transaction-contact-lookup>
         </div>
       </div>
@@ -269,18 +269,18 @@
         <div class="col-12">
           <div class="field">
             <label for="secondary_name">ORGANIZATION NAME</label>
-            <input type="text" pInputText id="secondary_name" [formControlName]="templateMap['secondary_name']" />
+            <input [formControlName]="templateMap['secondary_name']" id="secondary_name" pInputText type="text" />
             <app-error-messages
-              [form]="form"
               [fieldName]="templateMap['secondary_name']"
               [formSubmitted]="formSubmitted"
+              [form]="form"
             ></app-error-messages>
           </div>
         </div>
       </div>
       <app-address-input
-        [form]="form"
         [formSubmitted]="formSubmitted"
+        [form]="form"
         [templateMap]="templateMap"
         templateMapKeyPrefix="secondary"
       ></app-address-input>
@@ -298,17 +298,17 @@
       <label for="basis_of_loan_description">DESCRIPTION (OPTIONAL)</label>
       <div>
         <textarea
-          id="basis_of_loan_description"
-          [rows]="5"
-          [cols]="30"
-          pInputTextarea
           [autoResize]="true"
+          [cols]="30"
+          [rows]="5"
           formControlName="basis_of_loan_description"
+          id="basis_of_loan_description"
+          pInputTextarea
         ></textarea>
         <app-error-messages
+          [formSubmitted]="formSubmitted"
           [form]="form"
           fieldName="basis_of_loan_description"
-          [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>

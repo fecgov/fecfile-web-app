@@ -12,8 +12,8 @@ export class CommitteeMember {
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeMember { // eslint-disable-line @typescript-eslint/no-explicit-any
-      return plainToClass(CommitteeMember, json);
-    }
+    return plainToClass(CommitteeMember, json);
+  }
 
   public getRoleLabel(): string | undefined {
     return LabelUtils.get(RoleLabels, this.role);

@@ -3,41 +3,41 @@
     <div class="col-12">
       <label [for]="controlName" style="display: inline-block">{{ label }}</label>
       <span *ngIf="tooltipText"
-        class="pi pi-info-circle"
-        style="font-size: 1.5rem; margin-left: 0.5rem"
-        pTooltip="{{ tooltipText }}"
-        [escape]="tooltipEscape"
+            [escape]="tooltipEscape"
+            class="pi pi-info-circle"
+            pTooltip="{{ tooltipText }}"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
       ></span>
     </div>
   </div>
   <div class="grid">
     <div class="col-1">
       <p-radioButton
+        [ariaLabel]="ariaLabelNo"
+        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+        [formControlName]="controlName"
         [name]="controlName"
         [value]="false"
         label="NO"
-        [formControlName]="controlName"
-        [ariaLabel]="ariaLabelNo"
-        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
       ></p-radioButton>
     </div>
     <div class="col-1">
       <p-radioButton
+        [ariaLabel]="ariaLabelYes"
+        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+        [formControlName]="controlName"
         [name]="controlName"
         [value]="true"
         label="YES"
-        [formControlName]="controlName"
-        [ariaLabel]="ariaLabelYes"
-        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
       ></p-radioButton>
     </div>
   </div>
   <div class="grid">
     <div class="col-12">
       <app-error-messages
-        [form]="form"
         [fieldName]="controlName"
         [formSubmitted]="formSubmitted"
+        [form]="form"
         [patternErrorMessage]="errorMessage"
       ></app-error-messages>
     </div>

@@ -1,5 +1,5 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { ScheduleETransactionTypes, SchETransaction } from '../sche-transaction.model';
 import { INDEPENDENT_EXPENDITURE } from './INDEPENDENT_EXPENDITURE.model';
 
 describe('INDEPENDENT_EXPENDITURE', () => {

@@ -11,8 +11,7 @@ describe('HighlightTermsPipe', () => {
     let testValue;
     const testTerm = 'testTerm';
     const testHighlightTermsPipe = new HighlightTermsPipe();
-    const retval = testHighlightTermsPipe.transform(
-      testValue, testTerm);
+    const retval = testHighlightTermsPipe.transform(testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
 
@@ -22,8 +21,7 @@ describe('HighlightTermsPipe', () => {
     const expectedRetval = testValue;
 
     const testHighlightTermsPipe = new HighlightTermsPipe();
-    const retval = testHighlightTermsPipe.transform(
-      testValue, testTerm);
+    const retval = testHighlightTermsPipe.transform(testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
 
@@ -33,24 +31,22 @@ describe('HighlightTermsPipe', () => {
     const expectedRetval = testValue;
 
     const testHighlightTermsPipe = new HighlightTermsPipe();
-    const retval = testHighlightTermsPipe.transform(
-      testValue, testTerm);
+    const retval = testHighlightTermsPipe.transform(testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
 
   it('test happy path', () => {
-    const testValue = 'the TESTterm testValue containing the testTerm ' +
-      'including The TESTTERM four times the testTERM';
+    const testValue =
+      'the TESTterm testValue containing the testTerm ' + 'including The TESTTERM four times the testTERM';
     const testTerm = 'the testTerm';
-    const expectedRetval = '<mark>the</mark> <mark>TESTterm</mark> ' + 
+    const expectedRetval =
+      '<mark>the</mark> <mark>TESTterm</mark> ' +
       'testValue containing <mark>the</mark> <mark>testTerm</mark> ' +
       'including <mark>The</mark> <mark>TESTTERM</mark> four times ' +
       '<mark>the</mark> <mark>testTERM</mark>';
 
     const testHighlightTermsPipe = new HighlightTermsPipe();
-    const retval = testHighlightTermsPipe.transform(
-      testValue, testTerm);
+    const retval = testHighlightTermsPipe.transform(testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
-
 });

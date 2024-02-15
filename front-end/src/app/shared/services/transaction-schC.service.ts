@@ -10,14 +10,18 @@ import { ListRestResponse } from '../models/rest-api.model';
 })
 export class TransactionSchCService extends TransactionService {
   override tableDataEndpoint = '/transactions';
-  constructor(override apiService: ApiService, override datePipe: DatePipe) {
+
+  constructor(
+    override apiService: ApiService,
+    override datePipe: DatePipe,
+  ) {
     super(apiService, datePipe);
   }
 
   override getTableData(
     pageNumber = 1,
     ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
   ): Observable<ListRestResponse> {
     // The table data for the Schedule C loans also includes the Schedule D debts.
     params['schedules'] = 'C,D';

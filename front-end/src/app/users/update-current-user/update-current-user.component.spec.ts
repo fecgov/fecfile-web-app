@@ -29,8 +29,7 @@ describe('UpdateCurrentUserComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [UpdateCurrentUserComponent],
-      providers: [ConfirmationService, MessageService,
-        FormBuilder, provideMockStore(testMockStore), UsersService],
+      providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore), UsersService],
     }).compileComponents();
   });
 

@@ -59,19 +59,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   }
 
   /**
-   * Returns and empty instance of the class model being displayed in the table.
-   */
-  protected abstract getEmptyItem(): T;
-
-  /**
-   * Makes the data service available to the component. Used for getting data from backend.
-   * @param {TableListService<T>} itemService
-   */
-  protected loadItemService(itemService: TableListService<T>) {
-    this.itemService = itemService;
-  }
-
-  /**
    * Method is called when the table data needs to be refreshed.
    * @param {TableLazyLoadEvent} event
    */
@@ -210,13 +197,25 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   public onRowActionClick(action: TableAction, item: T) {
     action.action(item);
   }
+
+  /**
+   * Returns and empty instance of the class model being displayed in the table.
+   */
+  protected abstract getEmptyItem(): T;
+
+  /**
+   * Makes the data service available to the component. Used for getting data from backend.
+   * @param {TableListService<T>} itemService
+   */
+  protected loadItemService(itemService: TableListService<T>) {
+    this.itemService = itemService;
+  }
 }
 
 export class TableAction {
   label: string;
   action: (item?: any) => void | Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
-  isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+
   constructor(
     label: string,
     action: (item?: any) => void | Promise<void>, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -228,4 +227,8 @@ export class TableAction {
     this.isAvailable = isAvailable || this.isAvailable;
     this.isEnabled = isEnabled || this.isEnabled;
   }
+
+  isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
 }

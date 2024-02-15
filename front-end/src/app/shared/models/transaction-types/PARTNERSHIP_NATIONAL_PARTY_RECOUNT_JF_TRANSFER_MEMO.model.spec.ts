@@ -7,7 +7,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
-      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
@@ -20,14 +20,14 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   xit('#factory() should return a SchBTransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     );
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Recount/Legal Proceedings Account JF Memo: Test Org (Partnership attributions do not meet itemiza...'
+      'Recount/Legal Proceedings Account JF Memo: Test Org (Partnership attributions do not meet itemiza...',
     );
   });
 
@@ -36,7 +36,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
       'Super Duper Long Committee Name That Needs to Shrink';
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Recount/Legal Proceedings Account JF Memo: Super Duper Long Committee Name That Needs to Shrink (...'
+      'Recount/Legal Proceedings Account JF Memo: Super Duper Long Committee Name That Needs to Shrink (...',
     );
   });
 });

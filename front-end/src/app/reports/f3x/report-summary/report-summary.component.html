@@ -9,10 +9,10 @@
 
   <div *ngIf="(calculationFinished$ | async) === false">
     <img
-      class="image-max-width fec-loader-image"
-      src="assets/img/fec-loading-flag.gif"
-      draggable="false"
       alt="The report's summary is loading..."
+      class="image-max-width fec-loader-image"
+      draggable="false"
+      src="assets/img/fec-loading-flag.gif"
     />
   </div>
   <div *ngIf="calculationFinished$ | async">
@@ -89,11 +89,11 @@
     <div class="col-4">
       <div>
         <button
+          (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
+          class="p-button-secondary"
+          label="Back"
           pButton
           pRipple
-          label="Back"
-          class="p-button-secondary"
-          (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
         ></button>
       </div>
     </div>
@@ -101,11 +101,11 @@
     <div class="col-4 align-right">
       <div>
         <button
+          (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+          class="p-button-primary"
+          label="Review detailed summary page"
           pButton
           pRipple
-          label="Review detailed summary page"
-          class="p-button-primary"
-          (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
         ></button>
       </div>
     </div>

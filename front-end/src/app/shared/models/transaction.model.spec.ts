@@ -1,7 +1,7 @@
 import { getTestTransactionByType } from '../utils/unit-test.utils';
 import { ContactTypes } from './contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import { Transaction, getTransactionName } from './transaction.model';
+import { getTransactionName, Transaction } from './transaction.model';
 
 describe('Transaction', () => {
   it('should create an instance', () => {
@@ -9,13 +9,14 @@ describe('Transaction', () => {
     class ChildTransaction extends Transaction {
       apiEndpoint = '/sch-x-transactions';
     }
+
     expect(new ChildTransaction()).toBeTruthy();
   });
 
   it('should update child purpose descriptions', () => {
     const testTransaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
-      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT
+      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
     ) as SchATransaction;
 
     const payload = testTransaction.getUpdatedParent();

@@ -19,7 +19,12 @@ type EndpointAvailability = { endpoint_available: boolean };
 })
 export class LoginService extends DestroyerComponent {
   public userLoginData: UserLoginData | undefined;
-  constructor(private store: Store, private apiService: ApiService, private cookieService: CookieService) {
+
+  constructor(
+    private store: Store,
+    private apiService: ApiService,
+    private cookieService: CookieService,
+  ) {
     super();
     this.store
       .select(selectUserLoginData)
@@ -79,7 +84,7 @@ export class LoginService extends DestroyerComponent {
     return this.apiService.get<EndpointAvailability>('/user/login/authenticate').pipe(
       map((response: EndpointAvailability) => {
         return response.endpoint_available;
-      })
+      }),
     );
   }
 

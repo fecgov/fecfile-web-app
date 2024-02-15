@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { MainFormComponent } from './main-form/main-form.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
