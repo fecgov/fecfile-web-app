@@ -5,7 +5,7 @@ import { environment } from 'environments/environment';
 import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
-import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
 import { UserLoginData } from '../models/user.model';
@@ -61,15 +61,17 @@ describe('LoginService', () => {
   it('#logOut non-login.gov happy path', async () => {
     TestBed.resetTestingModule();
 
-    spyOn(store, 'dispatch');
-    spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
-    spyOn(cookieService, 'delete');
+    const dispatchSpy = spyOn(store, 'dispatch');
+    const postSpy = spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
+    const cookieSpy = spyOn(cookieService, 'delete');
 
-    service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
-    expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(0);
-    expect(cookieService.delete).toHaveBeenCalledTimes(6);
-    expect(cookieService.delete).toHaveBeenCalledWith('csrftoken');
+    service.userLoginData$ = of(testUserLoginData);
+    service.logOut().then(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith(userLoggedOutAction());
+      expect(postSpy).toHaveBeenCalledTimes(0);
+      expect(cookieSpy).toHaveBeenCalledTimes(6);
+      expect(cookieSpy).toHaveBeenCalledWith('csrftoken');
+    });
   });
 
   //Can't figure out how to override service's userLoginData
@@ -80,7 +82,7 @@ describe('LoginService', () => {
     spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
+    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 

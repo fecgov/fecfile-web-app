@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
@@ -48,16 +48,16 @@ export class LoginService extends DestroyerComponent {
 
   public async logOut() {
     const userLoginData = await firstValueFrom(this.userLoginData$);
+    console.log('\n\n\n', userLoginData, '\n\n\n');
 
     this.clearUserLoggedInCookies();
     if (userLoginData) {
+      this.store.dispatch(userLoggedOutAction());
       if (!userLoginData.login_dot_gov) {
-        this.store.dispatch(userLoggedOutAction());
         this.apiService.get('/auth/logout').subscribe(() => {
           this.router.navigate(['/login']);
         });
       } else {
-        this.store.dispatch(userLoggedOutForLoginDotGovAction());
         if (environment.loginDotGovLogoutUrl) {
           window.location.href = environment.loginDotGovLogoutUrl;
         }
