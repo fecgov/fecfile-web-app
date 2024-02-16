@@ -5,7 +5,7 @@ import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { SchDTransaction } from '../models/schd-transaction.model';
 import { SchETransaction } from '../models/sche-transaction.model';
-import { ScheduleIds, ScheduleTransaction } from '../models/transaction.model';
+import { ScheduleIds, ScheduleTransaction, Transaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
 import { TransactionType } from '../models/transaction-type.model';
@@ -200,7 +200,7 @@ import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
-                                      // Schedule A /////////////////////////////////////////////////////
+  // Schedule A /////////////////////////////////////////////////////
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   IN_KIND_RECEIPT,
@@ -432,4 +432,19 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
+}
+
+export function setMetaProperties(transaction: Transaction, depth: number) {
+  if (transaction.transaction_type_identifier) {
+    const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+    transaction.setMetaProperties(transactionType);
+  }
+  if (depth > 0 && transaction.parent_transaction) {
+    transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
+  }
+  if (depth > 0 && transaction.children) {
+    transaction.children = transaction.children.map(function (child) {
+      return getFromJSON(child, depth - 1);
+    });
+  }
 }
