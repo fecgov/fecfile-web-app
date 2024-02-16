@@ -24,23 +24,7 @@ describe('ManageCommitteeComponent', () => {
     is_active: true,
   });
 
-  let committeeMembers = [
-    johnSmith,
-    CommitteeMember.fromJSON({
-      first_name: 'Jane',
-      last_name: 'Doe',
-      email: 'JD_Test@test.com',
-      role: 'COMMITTEE_ADMINISTRATOR',
-      is_active: true,
-    }),
-    CommitteeMember.fromJSON({
-      first_name: 'test_first_name',
-      last_name: 'test_last_name',
-      email: 'test_email@testhost.com',
-      role: 'COMMITTEE_ADMINISTRATOR',
-      is_active: true,
-    }),
-  ];
+  let committeeMembers: CommitteeMember[];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -60,6 +44,23 @@ describe('ManageCommitteeComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageCommitteeComponent);
+    committeeMembers = [
+      johnSmith,
+      CommitteeMember.fromJSON({
+        first_name: 'Jane',
+        last_name: 'Doe',
+        email: 'JD_Test@test.com',
+        role: 'COMMITTEE_ADMINISTRATOR',
+        is_active: true,
+      }),
+      CommitteeMember.fromJSON({
+        first_name: 'test_first_name',
+        last_name: 'test_last_name',
+        email: 'test_email@testhost.com',
+        role: 'COMMITTEE_ADMINISTRATOR',
+        is_active: true,
+      }),
+    ];
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
