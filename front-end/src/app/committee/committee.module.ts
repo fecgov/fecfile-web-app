@@ -18,6 +18,7 @@ import { SelectCommitteeComponent } from './select-committee/select-committee.co
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   declarations: [ManageCommitteeComponent, SelectCommitteeComponent, CommitteeInfoComponent],
@@ -34,6 +35,7 @@ import { CardModule } from 'primeng/card';
     ToolbarModule,
     ConfirmDialogModule,
     SharedModule,
+    RippleModule,
   ],
 })
 export class CommitteeModule {}
