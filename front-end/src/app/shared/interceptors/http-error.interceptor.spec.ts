@@ -1,24 +1,26 @@
-import { HttpContext, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpHandler, HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { userLoggedOutAction } from 'app/store/login.actions';
 import { throwError } from 'rxjs';
 import { testMockStore } from '../utils/unit-test.utils';
 
 import { HttpErrorInterceptor } from './http-error.interceptor';
+import { LoginService } from '../services/login.service';
 
 describe('HttpErrorInterceptor', () => {
   let store: Store;
+  let loginService: LoginService;
 
   beforeEach(() =>
     TestBed.configureTestingModule({
-      providers: [HttpErrorInterceptor, provideMockStore(testMockStore)],
-    })
+      providers: [HttpErrorInterceptor, HttpClient, HttpHandler, LoginService, provideMockStore(testMockStore)],
+    }),
   );
 
   beforeEach(() => {
     store = TestBed.inject(Store);
+    loginService = TestBed.inject(LoginService);
   });
 
   it('should be created', () => {
@@ -30,17 +32,17 @@ describe('HttpErrorInterceptor', () => {
     const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
     const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
     const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
-    httpHandlerSpy.handle.and.returnValue(
-      throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden }))
-    );
+    const logOutSpy = spyOn(loginService, 'logOut');
 
-    spyOn(store, 'dispatch');
+    httpHandlerSpy.handle.and.returnValue(
+      throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden })),
+    );
 
     testIterceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe(
       (x) => x,
-      (y) => y
+      (y) => y,
     );
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
+    expect(logOutSpy).toHaveBeenCalled();
   });
 
   it('should handle outgoing error', () => {
@@ -54,15 +56,15 @@ describe('HttpErrorInterceptor', () => {
           new HttpErrorResponse({
             status: HttpStatusCode.BadRequest,
             error: new ErrorEvent(''),
-          })
-      )
+          }),
+      ),
     );
 
     spyOn(store, 'dispatch');
 
     testIterceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe(
       (x) => x,
-      (y) => y
+      (y) => y,
     );
     expect(window.alert).toHaveBeenCalledWith('Outgoing HTTP Error: ');
   });

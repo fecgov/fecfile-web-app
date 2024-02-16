@@ -13,7 +13,6 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
 import { committeeAccountReducer } from './store/committee-account.reducer';
-import { LoginEffects } from './store/login.effects';
 import { loginReducer } from './store/login.reducer';
 import { singleClickReducer } from './store/single-click.reducer';
 
@@ -95,7 +94,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
       },
       { metaReducers },
     ),
-    EffectsModule.forRoot([LoginEffects]),
+    EffectsModule.forRoot([]),
     MenubarModule,
     PanelMenuModule,
     PanelModule,
