@@ -2,7 +2,7 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { getFromJSON } from '../utils/transaction-type.utils';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
@@ -56,7 +56,18 @@ export class SchBTransaction extends Transaction {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchBTransaction {
     let transaction = plainToInstance(SchBTransaction, json);
-    this.setMetaProperties(transaction, depth);
+    if (transaction.transaction_type_identifier) {
+      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      transaction.setMetaProperties(transactionType);
+    }
+    if (depth > 0 && transaction.parent_transaction) {
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
+    }
+    if (depth > 0 && transaction.children) {
+      transaction.children = transaction.children.map(function (child) {
+        return getFromJSON(child, depth - 1);
+      });
+    }
 
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REDESIGNATED: {
