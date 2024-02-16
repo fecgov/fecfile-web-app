@@ -20,6 +20,7 @@ import {
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { ScheduleETransactionGroupsType, ScheduleETransactionTypes, SchETransaction } from './sche-transaction.model';
 import { Report } from './report.model';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -80,6 +81,21 @@ export abstract class Transaction extends BaseModel {
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
   schema_name: string | undefined;
+
+  protected static setMetaProperties(transaction: Transaction, depth: number) {
+    if (transaction.transaction_type_identifier) {
+      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      transaction.setMetaProperties(transactionType);
+    }
+    if (depth > 0 && transaction.parent_transaction) {
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
+    }
+    if (depth > 0 && transaction.children) {
+      transaction.children = transaction.children.map(function (child) {
+        return getFromJSON(child, depth - 1);
+      });
+    }
+  }
 
   getFieldsNotToValidate(): string[] {
     return ['transaction_id', 'filer_committee_id_number'];
