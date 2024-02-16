@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import {isDebtRepayment} from "../../../shared/models/transaction.model";
+import { isDebtRepayment } from '../../../shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-detail',

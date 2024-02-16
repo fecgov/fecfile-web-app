@@ -4,7 +4,7 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { ORGANIZATION_B_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { ORGANIZATION, ORGANIZATION_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class TRIBAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
   formFields = ORGANIZATION_B_FORM_FIELDS;
@@ -21,6 +21,7 @@ export class TRIBAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }
+
   override generatePurposeDescription(): string {
     return 'Pres. Nominating Convention Account: Refund';
   }

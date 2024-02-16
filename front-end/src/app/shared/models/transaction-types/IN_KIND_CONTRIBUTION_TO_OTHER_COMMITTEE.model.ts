@@ -4,8 +4,8 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
-  ORGANIZATION_INDIVIDUAL,
   INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_B_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_TERTIARY } from '../contact.model';
 
@@ -15,7 +15,7 @@ export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType
   override contactConfig = STANDARD_AND_TERTIARY;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE
+    ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

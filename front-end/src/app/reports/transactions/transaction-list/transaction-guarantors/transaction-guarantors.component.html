@@ -1,75 +1,75 @@
 <div class="card">
-    <p-table
-        #dt
-        (onLazyLoad)="loadTableItems($event)"
-        [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
-        [lazy]="true"
-        [paginator]="true"
-        [rows]="rowsPerPage"
-        [showCurrentPageReport]="true"
-        [totalRecords]="totalItems"
-        [value]="items"
-        dataKey="id"
-        responsiveLayout="scroll"
-        sortField="created"
-    >
-        <ng-template pTemplate="caption">
-            <div class="grid">
-                <div class="col-9 flex align-items-center justify-content-between">
-                    <h5 class="gandhi-bold size-24">Guarantors</h5>
-                </div>
-                <div class="col-3 align-right">
-                    Results per table:
-                    <p-dropdown
-                            (onChange)="onRowsPerPageChange()"
-                            [(ngModel)]="rowsPerPage"
-                            [options]="paginationPageSizeOptions"
-                    ></p-dropdown>
-                </div>
-            </div>
-        </ng-template>
-        <ng-template let-sortOrder pTemplate="sorticon">
-            <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr role="row">
-                <th id="name-column" pSortableColumn="name" role="columnheader">
-                    Name
-                    <p-sortIcon field="name"></p-sortIcon>
-                </th>
-                <th id="amount-column" pSortableColumn="amount" role="columnheader">
-                    Guaranteed financial information amount
-                    <p-sortIcon field="amount"></p-sortIcon>
-                </th>
-                <th id="buttons" role="columnheader">Actions</th>
-            </tr>
-        </ng-template>
-        <ng-template let-item pTemplate="body">
-            <tr role="row">
-                <td>
-                    <a (click)="this.editItem(item)">
-                        {{ item.name }}
-                    </a>
-                </td>
-                <td>
+  <p-table
+    #dt
+    (onLazyLoad)="loadTableItems($event)"
+    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalItems"
+    [value]="items"
+    dataKey="id"
+    responsiveLayout="scroll"
+    sortField="created"
+  >
+    <ng-template pTemplate="caption">
+      <div class="grid">
+        <div class="col-9 flex align-items-center justify-content-between">
+          <h5 class="gandhi-bold size-24">Guarantors</h5>
+        </div>
+        <div class="col-3 align-right">
+          Results per table:
+          <p-dropdown
+            (onChange)="onRowsPerPageChange()"
+            [(ngModel)]="rowsPerPage"
+            [options]="paginationPageSizeOptions"
+          ></p-dropdown>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template let-sortOrder pTemplate="sorticon">
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr role="row">
+        <th id="name-column" pSortableColumn="name" role="columnheader">
+          Name
+          <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th id="amount-column" pSortableColumn="amount" role="columnheader">
+          Guaranteed financial information amount
+          <p-sortIcon field="amount"></p-sortIcon>
+        </th>
+        <th id="buttons" role="columnheader">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template let-item pTemplate="body">
+      <tr role="row">
+        <td>
+          <a (click)="this.editItem(item)">
+            {{ item.name }}
+          </a>
+        </td>
+        <td>
           <span class="float-right">
             {{ item.amount | currency }}
           </span>
-                </td>
-                <td>
-                    <app-table-actions-button
-                            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-                            [actionItem]="item"
-                            [rounded]="true"
-                            [tableActions]="rowActions"
-                            buttonAriaLabel="action"
-                            buttonIcon="pi pi-ellipsis-v"
-                            buttonStyleClass="flex justify-content-center rounded-text p-button-text mr-2"
-                    ></app-table-actions-button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+        </td>
+        <td>
+          <app-table-actions-button
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+            [actionItem]="item"
+            [rounded]="true"
+            [tableActions]="rowActions"
+            buttonAriaLabel="action"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="flex justify-content-center rounded-text p-button-text mr-2"
+          ></app-table-actions-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

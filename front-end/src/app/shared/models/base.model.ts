@@ -1,11 +1,7 @@
-import { instanceToPlain, TransformFnParams, TransformationType } from 'class-transformer';
+import { instanceToPlain, TransformationType, TransformFnParams } from 'class-transformer';
 import { DateUtils } from '../utils/date.utils';
 
 export abstract class BaseModel {
-  toJson() {
-    return instanceToPlain(this, { enableCircularCheck: true });
-  }
-
   /**
    * Function handler for transforming the model class properties from Date to 'yyyy-mm-dd' string in
    * model class.
@@ -25,5 +21,9 @@ export abstract class BaseModel {
       return DateUtils.convertDateToFecFormat(params.value);
     }
     return params.value;
+  }
+
+  toJson() {
+    return instanceToPlain(this, { enableCircularCheck: true });
   }
 }

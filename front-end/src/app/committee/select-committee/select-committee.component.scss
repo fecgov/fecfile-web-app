@@ -1,70 +1,79 @@
 
 .committee-card {
-    margin: 20px 3px;
-    padding: 20px 10px;
-    display: flex;
-    flex-direction: row;
-    background-color: #ffffff;
-    box-shadow: 0 0 4px 0px #d1d1d1
+  margin: 20px 3px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px 0px #d1d1d1
 }
-.left-side {
-    flex-direction: column;
-}
-.right-side {
-    flex-direction: column;
-}
-.select-committee-box {
-    display: flex;
-    background-color: #f1f1f1;
-    flex-direction: column;
-    padding: 15px;
-}
-.select-committee-columns{
-    display: flex;
-    flex-direction: row;
-}
-.create-committee-card {
-    background-color: #f1f1f1;
-    margin-top: 20px;
-    font-size: large;
-    display: flex;
-    align-items: center;
 
-    .blue-box{
-        padding: 15px;
-        background-color: #132947;
-    }
-    .plus {
-        background-color: #ffffff;
-        padding: 13px;
-        border-radius: 100px;
-    }
-    .create-text {
-        padding:20px;
-        font-size: medium;
-        text-transform: uppercase;
-    }
+.left-side {
+  flex-direction: column;
+}
+
+.right-side {
+  flex-direction: column;
+}
+
+.select-committee-box {
+  display: flex;
+  background-color: #f1f1f1;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.select-committee-columns {
+  display: flex;
+  flex-direction: row;
+}
+
+.create-committee-card {
+  background-color: #f1f1f1;
+  margin-top: 20px;
+  font-size: large;
+  display: flex;
+  align-items: center;
+
+  .blue-box {
+    padding: 15px;
+    background-color: #132947;
+  }
+
+  .plus {
+    background-color: #ffffff;
+    padding: 13px;
+    border-radius: 100px;
+  }
+
+  .create-text {
+    padding: 20px;
+    font-size: medium;
+    text-transform: uppercase;
+  }
 }
 
 
 .committee-list {
-    max-height: 500px;
-    overflow-y: auto;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .committee-info {
-    padding-left: 10px;
-    h3 {
-        border-bottom: dotted 2px;
-        border-color: #d1d1d1;
-        margin:0;
-        cursor: pointer;
-    }
+  padding-left: 10px;
+
+  h3 {
+    border-bottom: dotted 2px;
+    border-color: #d1d1d1;
+    margin: 0;
+    cursor: pointer;
+  }
 }
 
 h2 {
-    margin:0;
+  margin: 0;
 }
+
 h5 {
-    margin-bottom:0;
+  margin-bottom: 0;
 }

@@ -31,7 +31,7 @@
     line-height: $lineHeight;
   } @else {
     line-height: $input-line-height;
-  } 
+  }
   @if ($paddingY) {
     padding-top: $paddingY;
     padding-bottom: $paddingY;
@@ -62,30 +62,35 @@
     margin: 0 auto;
     width: 80%;
     @include media(tablet) {
-      width: 100%;    
+      width: 100%;
     }
     @include media(mediumDesktop) {
       width: 100%;
-    }         
+    }
     @include media(largeDesktop) {
       width: 100%;
-    }     
+    }
+
     .btn-container-row {
       @include clearfix();
       border-bottom: 1px solid $dustyGray;
       height: 55px;
       margin-bottom: 10px;
       width: 100%;
+
       .btn {
         margin-right: 0;
       }
     }
+
     .btn-left {
       float: left;
     }
+
     .btn-right {
       float: right;
     }
+
     @include clearfix();
   }
 }

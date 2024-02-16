@@ -65,6 +65,7 @@ export class FecFiling extends BaseModel {
   total_receipts: number | undefined;
   treasurer_name: string | undefined;
   update_date: Date | undefined;
+
   // prettier-ignore
   static fromJSON(json: any): FecFiling { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(FecFiling, json);

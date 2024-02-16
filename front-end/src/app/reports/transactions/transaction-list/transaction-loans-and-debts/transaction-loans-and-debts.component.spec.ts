@@ -53,7 +53,7 @@ describe('TransactionReceiptsComponent', () => {
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
                   transactionType: { scheduleId: ScheduleIds.A },
-                })
+                }),
               ),
             getTableData: () => of([]),
             update: () => of([]),

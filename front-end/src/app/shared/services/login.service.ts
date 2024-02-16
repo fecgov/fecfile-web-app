@@ -4,7 +4,7 @@ import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, takeUntil, firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, takeUntil } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
@@ -18,6 +18,7 @@ type EndpointAvailability = { endpoint_available: boolean };
 })
 export class LoginService extends DestroyerComponent {
   public userLoginData$: Observable<UserLoginData>;
+
   constructor(
     private store: Store,
     private router: Router,

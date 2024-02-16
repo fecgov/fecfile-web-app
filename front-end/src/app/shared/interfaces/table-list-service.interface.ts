@@ -5,7 +5,7 @@ export interface TableListService<T> {
   getTableData(
     pageNumber: number,
     ordering?: string,
-    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
+    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
   ): Observable<ListRestResponse>;
 
   delete(item: T): Observable<null>;

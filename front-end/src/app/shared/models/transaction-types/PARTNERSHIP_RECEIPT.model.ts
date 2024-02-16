@@ -4,7 +4,7 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_RECEIPT extends SchATransactionType {
   formFields = ORGANIZATION_FORM_FIELDS;
@@ -15,6 +15,7 @@ export class PARTNERSHIP_RECEIPT extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not meet itemization threshold". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
+
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (transaction.children && transaction.children.length > 0) {
       return 'See Partnership Attribution(s) below';

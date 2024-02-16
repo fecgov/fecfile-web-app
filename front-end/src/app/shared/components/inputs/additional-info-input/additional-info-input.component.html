@@ -1,70 +1,70 @@
 <div [formGroup]="form">
-  <div class="grid" *ngIf="templateMap.purpose_description">
+  <div *ngIf="templateMap.purpose_description" class="grid">
     <div class="col-12">
       <label for="purpose_description">
         {{ transaction?.transactionType?.purposeDescripLabel }}
         {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
       </label>
       <em *ngIf="transaction?.transactionType?.purposeDescriptionLabelNotice">{{
-        transaction?.transactionType?.purposeDescriptionLabelNotice
-      }}</em>
+          transaction?.transactionType?.purposeDescriptionLabelNotice
+        }}</em>
       <div>
         <textarea
-          id="purpose_description"
-          [rows]="4"
-          [cols]="30"
-          pInputTextarea
           [autoResize]="true"
+          [cols]="30"
           [formControlName]="templateMap['purpose_description']"
           [ngClass]="{ readonly: isDescriptionSystemGenerated() }"
           [readonly]="isDescriptionSystemGenerated()"
+          [rows]="4"
+          id="purpose_description"
+          pInputTextarea
         ></textarea>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['purpose_description']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
   </div>
-  <div class="grid" *ngIf="transaction?.transactionType?.hasMemoText()">
+  <div *ngIf="transaction?.transactionType?.hasMemoText()" class="grid">
     <div class="col-12">
       <label for="text4000"
-        >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
+      >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
       >
       <div>
         <textarea
-          id="text4000"
-          [rows]="5"
-          [cols]="30"
-          pInputTextarea
           [autoResize]="true"
+          [cols]="30"
           [formControlName]="templateMap['text4000']"
+          [rows]="5"
+          id="text4000"
+          pInputTextarea
         ></textarea>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['text4000']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>
   </div>
-  <div class="grid" *ngIf="transaction?.transactionType?.hasCategoryCode()">
+  <div *ngIf="transaction?.transactionType?.hasCategoryCode()" class="grid">
     <div class="col-6">
       <div class="field">
         <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
         <p-dropdown
-          inputId="category_code"
+          [autoDisplayFirst]="false"
           [formControlName]="templateMap['category_code']"
           [options]="categoryCodeOptions"
-          [autoDisplayFirst]="false"
-          appendTo="body"
           [showClear]="true"
+          appendTo="body"
+          inputId="category_code"
         ></p-dropdown>
         <app-error-messages
-          [form]="form"
           [fieldName]="templateMap['category_code']"
           [formSubmitted]="formSubmitted"
+          [form]="form"
         ></app-error-messages>
       </div>
     </div>

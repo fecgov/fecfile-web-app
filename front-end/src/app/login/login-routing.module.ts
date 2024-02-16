@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { SecurityNoticeComponent } from './security-notice/security-notice.component';
 import { BackgroundStyles } from 'app/layout/layout.component';

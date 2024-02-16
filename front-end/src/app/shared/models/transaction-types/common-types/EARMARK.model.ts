@@ -1,4 +1,4 @@
-import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL, INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { SchATransactionType } from '../../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,

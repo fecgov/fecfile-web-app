@@ -6,7 +6,7 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { MessageService } from 'primeng/api';
-import { Observable, combineLatest, takeUntil } from 'rxjs';
+import { combineLatest, Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
@@ -20,9 +20,7 @@ import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 export abstract class MainFormBaseComponent extends DestroyerComponent implements OnInit {
   abstract formProperties: string[];
   abstract schema: JsonSchema;
-  abstract getReportPayload(): Report;
   abstract webprintURL: string;
-
   formSubmitted = false;
   form: FormGroup = new FormGroup({});
   reportId?: string;
@@ -33,10 +31,12 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
     protected reportService: ReportService,
     protected messageService: MessageService,
     protected router: Router,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {
     super();
   }
+
+  abstract getReportPayload(): Report;
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];

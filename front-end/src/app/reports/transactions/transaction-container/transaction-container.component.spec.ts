@@ -56,7 +56,7 @@ describe('TransactionContainerComponent', () => {
           useValue: {
             data: of({
               transaction: getTestTransactionByType(
-                ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES
+                ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
               ) as SchATransaction,
             }),
             snapshot: {

@@ -1,9 +1,9 @@
 import { BaseModel } from './base.model';
 import { Contact, ContactTypes } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
+import { SchATransaction, ScheduleATransactionGroupsType, ScheduleATransactionTypes } from './scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionGroupsType, ScheduleBTransactionTypes } from './schb-transaction.model';
+import { SchCTransaction, ScheduleCTransactionGroupsType, ScheduleCTransactionTypes } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
 import { ValidateUtils } from '../utils/validate.utils';
@@ -18,7 +18,7 @@ import {
   ScheduleC2TransactionTypes,
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
-import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
+import { ScheduleETransactionGroupsType, ScheduleETransactionTypes, SchETransaction } from './sche-transaction.model';
 import { Report } from './report.model';
 
 export abstract class Transaction extends BaseModel {
@@ -79,11 +79,11 @@ export abstract class Transaction extends BaseModel {
   loan_agreement_id?: string;
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
+  schema_name: string | undefined;
+
   getFieldsNotToValidate(): string[] {
     return ['transaction_id', 'filer_committee_id_number'];
   }
-
-  schema_name: string | undefined;
 
   /**
    * Some fields, such as ones in the spec but calculated by the backend, are listed
@@ -147,7 +147,7 @@ export abstract class Transaction extends BaseModel {
   getUpdatedParent(childDeleted = false): Transaction {
     if (!this.parent_transaction?.transaction_type_identifier) {
       throw new Error(
-        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`,
       );
     }
 
@@ -192,21 +192,27 @@ export function getTransactionName(transaction: ScheduleTransaction): string {
   ] as string;
   return orgName;
 }
+
 export function isNewTransaction(transaction?: Transaction): boolean {
   return !transaction?.id;
 }
+
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
 }
+
 export function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
+
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
+
 export function isLoanRepayment(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId !== ScheduleIds.C;
 }
+
 export function isDebtRepayment(transaction?: Transaction): boolean {
   return !!transaction?.debt_id && transaction.transactionType.scheduleId !== ScheduleIds.D;
 }

@@ -4,21 +4,19 @@ import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import {
-  ORGANIZATION_FORM_FIELDS,
-  ORGANIZATION,
-  ORG_FIELDS,
   ADDRESS_FIELDS,
+  ORG_FIELDS,
+  ORGANIZATION,
+  ORGANIZATION_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override formFields = ORGANIZATION_FORM_FIELDS;
   override contactTypeOptions = ORGANIZATION;
-  override isDependentChild = () => true;
   override doMemoCodeDateCheck = false;
   schema = schema;
   override useParentContact = true;
   override inheritedFields = [...ORG_FIELDS, ...ADDRESS_FIELDS, 'date', 'amount', 'memo_code'] as TemplateMapKeyType[];
-
   override description =
     'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
   override accordionTitle = 'AUTO-POPULATED';
@@ -26,6 +24,8 @@ export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override footer = undefined;
   title = 'Loan Receipt';
   override contactTitle = 'Lender';
+
+  override isDependentChild = () => true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

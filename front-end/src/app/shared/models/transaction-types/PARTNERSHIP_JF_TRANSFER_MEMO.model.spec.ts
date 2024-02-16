@@ -7,7 +7,7 @@ describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
-      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
@@ -32,7 +32,7 @@ describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
       'Super Duper Long Committee Name That Needs to Shrink';
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'JF Memo: Super Duper Long Committee ... (Partnership attributions do not meet itemization threshold)'
+      'JF Memo: Super Duper Long Committee ... (Partnership attributions do not meet itemization threshold)',
     );
   });
 });

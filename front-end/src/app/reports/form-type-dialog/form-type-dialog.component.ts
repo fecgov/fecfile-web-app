@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form24 } from 'app/shared/models/form-24.model';
-import { Observable, filter, takeUntil } from 'rxjs';
+import { filter, Observable, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -49,8 +49,21 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   ];
   selectedForm24Type: '24' | '48' | undefined;
 
-  constructor(public router: Router, private form24Service: Form24Service, private store: Store) {
+  constructor(
+    public router: Router,
+    private form24Service: Form24Service,
+    private store: Store,
+  ) {
     super();
+  }
+
+  get dropdownButtonText(): string {
+    if (this.selectedType) {
+      const type = this.getFormType(this.selectedType);
+      return `<span class="option"><b>${type?.label}:</b> ${type?.description}</span>`;
+    } else {
+      return '<span></span>';
+    }
   }
 
   ngAfterViewInit() {
@@ -60,7 +73,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(
       takeUntil(this.destroy$),
-      filter((committeeAccount) => !!committeeAccount)
+      filter((committeeAccount) => !!committeeAccount),
     );
   }
 
@@ -81,15 +94,6 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
 
   getFormType(type?: FormTypes): FormType | undefined {
     return type ? FORM_TYPES.get(type) : undefined;
-  }
-
-  get dropdownButtonText(): string {
-    if (this.selectedType) {
-      const type = this.getFormType(this.selectedType);
-      return `<span class="option"><b>${type?.label}:</b> ${type?.description}</span>`;
-    } else {
-      return '<span></span>';
-    }
   }
 
   updateSelected(type: FormTypes) {

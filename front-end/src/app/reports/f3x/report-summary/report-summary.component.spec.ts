@@ -11,7 +11,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { BehaviorSubject, Subject, of } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 
 describe('ReportSummaryComponent', () => {
   let component: ReportSummaryComponent;

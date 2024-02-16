@@ -7,14 +7,15 @@ export abstract class EARMARK_MEMO extends SchATransactionType {
   contactTypeOptions = COMMITTEE_INDIVIDUAL;
 
   override inheritedFields = ['amount' as TemplateMapKeyType];
-  override isDependentChild = () => true;
-
   override description = undefined;
   override accordionTitle = 'STEP TWO';
   override accordionSubText = 'Add earmarked memo and conduit information (REQUIRED FOR EARMARKED RECEIPTS)';
   override formTitle = undefined;
   override footer = undefined;
   override contactTitle = 'Conduit';
+
+  override isDependentChild = () => true;
+
   override generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';
   }

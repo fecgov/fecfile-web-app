@@ -1,4 +1,4 @@
-import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
 
 export abstract class SchC2TransactionType extends TransactionType {

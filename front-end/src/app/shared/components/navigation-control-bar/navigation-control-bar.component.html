@@ -1,22 +1,22 @@
 <div class="grid">
   <div class="grid col-6 cancel-controls">
-    <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('cancel')">
+    <ng-template [ngForOf]="getNavigationControls('cancel')" let-navigationControl ngFor>
       <div class="col-4">
         <app-navigation-control
+          (navigate)="handleNavigate($event)"
           [navigationControl]="navigationControl"
           [transaction]="transaction"
-          (navigate)="handleNavigate($event)"
         ></app-navigation-control>
       </div>
     </ng-template>
   </div>
   <div class="grid col-6 continue-controls">
-    <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('continue')">
+    <ng-template [ngForOf]="getNavigationControls('continue')" let-navigationControl ngFor>
       <div class="col-6 align-right">
         <app-navigation-control
+          (navigate)="handleNavigate($event)"
           [navigationControl]="navigationControl"
           [transaction]="transaction"
-          (navigate)="handleNavigate($event)"
         ></app-navigation-control>
       </div>
     </ng-template>

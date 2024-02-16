@@ -7,6 +7,7 @@
   border-color: $blueZodiac;
   color: $white;
   font-family: $mainFontFamily;
+
   &:hover {
     background-color: darken($blueZodiac, 10%);
     border-color: darken($blueZodiac, 10%);
@@ -18,6 +19,7 @@
   border-color: $pelorous;
   color: $white;
   font-family: $mainFontFamily;
+
   &:hover {
     background-color: darken($pelorous, 10%);
     border-color: darken($pelorous, 10%);
@@ -29,6 +31,7 @@
   border-color: $mercury;
   color: $shuttleGray;
   font-family: $mainFontFamily;
+
   &:hover {
     background-color: darken($mercury, 10%);
     border-color: darken($mercury, 10%);
@@ -39,8 +42,9 @@
   background-color: $shuttleGray;
   border-color: $shuttleGray;
   color: $white;
-  
+
   font-family: $mainFontFamily;
+
   &:hover {
     background-color: darken($mercury, 10%);
     border-color: darken($mercury, 10%);
@@ -67,6 +71,7 @@
   overflow: hidden;
   outline: none;
   padding: 0 0 0 .25em;
+
   &:hover,
   &:active,
   &:focus {
@@ -78,6 +83,7 @@
     overflow: hidden;
     outline: none;
   }
+
   .info-icon {
     color: $blueZodiac;
     outline: none;

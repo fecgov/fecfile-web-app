@@ -16,13 +16,9 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: CommitteeMemberService
+    protected override itemService: CommitteeMemberService,
   ) {
     super(messageService, confirmationService, elementRef);
-  }
-
-  protected getEmptyItem(): CommitteeMember {
-    return new CommitteeMember();
   }
 
   public override addItem() {
@@ -33,5 +29,9 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   public override editItem(item: CommitteeMember) {
     super.editItem(item);
     this.isNewItem = false;
+  }
+
+  protected getEmptyItem(): CommitteeMember {
+    return new CommitteeMember();
   }
 }

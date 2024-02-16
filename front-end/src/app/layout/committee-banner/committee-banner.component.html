@@ -1,11 +1,11 @@
-<div class="grid" *ngIf="committeeID">
+<div *ngIf="committeeID" class="grid">
   <div class="col-12">
     <h1 class="committee-name">{{ committeeName }}</h1>
     <div class="grid">
       <div class="col-12 committee-info">
         <div
-          class="pi pi-circle-on status-circle"
           [ngStyle]="{ color: committeeStatus === 'Active' ? '#4AA564' : '#AEB0B5' }"
+          class="pi pi-circle-on status-circle"
         ></div>
         <div class="sub-banner-item">{{ committeeFrequency }}</div>
         |

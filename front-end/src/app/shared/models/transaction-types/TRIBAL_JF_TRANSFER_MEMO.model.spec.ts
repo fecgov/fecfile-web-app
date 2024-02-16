@@ -7,7 +7,7 @@ describe('TRIBAL_JF_TRANSFER_MEMO', () => {
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
-      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });

@@ -1,13 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-2 py-0">
   <button class="seal-link navbar-brand">
-    <img ngSrc="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" height="48" width="181" />
+    <img alt="FEC Seal" class="seal-and-title mr-2" height="48" ngSrc="assets/img/seal-and-title.svg" width="181" />
   </button>
   <button
-    class="navbar-toggler"
-    type="button"
-    data-bs-toggle="offcanvas"
-    data-bs-target="#offcanvas"
     aria-controls="offcanvas"
+    class="navbar-toggler"
+    data-bs-target="#offcanvas"
+    data-bs-toggle="offcanvas"
+    type="button"
   >
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -17,16 +17,16 @@
   </div>
 </nav>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+<div aria-labelledby="offcanvasLabel" class="offcanvas offcanvas-end" id="offcanvas" tabindex="-1">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvasLabel">
       <a class="seal-link navbar-brand" routerLink="/">
-        <img ngSrc="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" height="48" width="181" />
+        <img alt="FEC Seal" class="seal-and-title mr-2" height="48" ngSrc="assets/img/seal-and-title.svg" width="181" />
       </a>
     </h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button aria-label="Close" class="btn-close text-reset" data-bs-dismiss="offcanvas" type="button"></button>
   </div>
   <div class="offcanvas-body">
-    <app-header-links [ratio]="1.5" [full]="true" [headerStyle]="headerStyle"></app-header-links>
+    <app-header-links [full]="true" [headerStyle]="headerStyle" [ratio]="1.5"></app-header-links>
   </div>
 </div>

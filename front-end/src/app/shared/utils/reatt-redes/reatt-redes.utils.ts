@@ -143,6 +143,21 @@ export class ReattRedesUtils {
     }
   }
 
+  /**
+   * Return true if this transaction is a pulled-forward copy
+   * @param transaction
+   * @returns
+   */
+  static isCopyFromPreviousReport(transaction: Transaction | undefined): boolean {
+    if (
+      ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
+      transaction?.reatt_redes_id
+    )
+      return true;
+
+    return false;
+  }
+
   private static clone(payload: SchATransaction | SchBTransaction): SchATransaction | SchBTransaction {
     if (!payload.reatt_redes?.transaction_type_identifier) {
       throw Error('Fecfile online: originating transaction type not found.');
@@ -169,20 +184,5 @@ export class ReattRedesUtils {
     clone.children = []; // Children of original transaction do not copy over.
 
     return clone;
-  }
-
-  /**
-   * Return true if this transaction is a pulled-forward copy
-   * @param transaction
-   * @returns
-   */
-  static isCopyFromPreviousReport(transaction: Transaction | undefined): boolean {
-    if (
-      ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
-      transaction?.reatt_redes_id
-    )
-      return true;
-
-    return false;
   }
 }

@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
-import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
+import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -43,7 +43,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     private reportService: ReportService,
     private fb: FormBuilder,
     private store: Store,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     super();
   }

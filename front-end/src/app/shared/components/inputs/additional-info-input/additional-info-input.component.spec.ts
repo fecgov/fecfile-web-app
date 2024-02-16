@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -53,14 +53,14 @@ describe('AdditionalInfoInputComponent', () => {
       [testTemplateMap.purpose_description]: 'abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.transaction?.transactionType?.purposeDescriptionPrefix
+      component.transaction?.transactionType?.purposeDescriptionPrefix,
     );
 
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'Prefax: abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc'
+      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc',
     );
   });
 
@@ -77,7 +77,7 @@ describe('AdditionalInfoInputComponent', () => {
     });
     fixture.detectChanges();
     expect(component.form.get(testTemplateMap.text4000)?.value).toBe(
-      component.transaction?.memo_text?.text_prefix + ' '
+      component.transaction?.memo_text?.text_prefix + ' ',
     );
   });
 });

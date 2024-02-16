@@ -4,9 +4,9 @@ import { SchDTransactionType } from '../schd-transaction-type.model';
 import { SchDTransaction, ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
-  ORG_FIELDS,
-  INDIVIDUAL_FIELDS,
   ADDRESS_FIELDS,
+  INDIVIDUAL_FIELDS,
+  ORG_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 

@@ -7,10 +7,9 @@ import { LoginService } from './shared/services/login.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
     this.loginService.dispatchUserLoggedInFromCookies();
   }
 }
-

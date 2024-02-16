@@ -6,7 +6,7 @@
     <h2 class="reduce-vert-spacing">Disbursements</h2>
     <p-divider></p-divider>
     <div class="grid">
-      <div class="col-12" *ngFor="let transactionType of transactionTypes">
+      <div *ngFor="let transactionType of transactionTypes" class="col-12">
         <a [routerLink]="getRouterLink(transactionType)">
           {{ transactionType | label : transactionTypeLabels }}
         </a>

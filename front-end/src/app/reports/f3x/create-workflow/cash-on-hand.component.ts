@@ -27,7 +27,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     private form3XService: Form3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    public store: Store
+    public store: Store,
   ) {
     super();
   }

@@ -57,7 +57,7 @@ describe('ErrorMessagesComponent', () => {
   it('should provide default error messages', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
-      ValidateUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
+      ValidateUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount']),
     );
     ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;

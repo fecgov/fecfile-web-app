@@ -46,10 +46,11 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     private store: Store,
     private fecApiService: FecApiService,
     private fb: FormBuilder,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
   }
+
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {

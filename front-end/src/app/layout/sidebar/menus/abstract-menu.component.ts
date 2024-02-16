@@ -7,7 +7,7 @@ import { Report } from '../../../shared/models/report.model';
 import { MenuItem } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { ReportService } from '../../../shared/services/report.service';
-import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
+import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
