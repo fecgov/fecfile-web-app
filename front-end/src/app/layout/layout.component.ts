@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 import { HeaderStyles } from './header/header.component';
 
 export enum BackgroundStyles {
@@ -26,9 +26,14 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
 
   ngOnInit(): void {
     this.onRouteChange();
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      this.onRouteChange();
-    });
+    this.router.events
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((event) => event instanceof NavigationEnd),
+      )
+      .subscribe(() => {
+        this.onRouteChange();
+      });
   }
 
   onRouteChange(): void {
