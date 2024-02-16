@@ -12,7 +12,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransac
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
   );
   schema = schema;
   override subTransactionConfig = new SubTransactionGroup('JOINT FUNDRAISING TRANSFER - HEADQUARTERS BUILDINGS MEMO', [

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-address-input',

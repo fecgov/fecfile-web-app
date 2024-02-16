@@ -6,7 +6,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
+import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -45,57 +45,9 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     private messageService: MessageService,
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
-    private reportService: ReportService,
+    private reportService: ReportService
   ) {
     super();
-  }
-
-  get saveAndSubmit$(): Observable<boolean> {
-    return this.saveTreasurerName$.pipe(
-      switchMap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Updated',
-          life: 3000,
-        });
-
-        return this.submitReport$;
-      }),
-    );
-  }
-
-  get saveTreasurerName$(): Observable<Report | undefined> {
-    if (!this.report) return of(undefined);
-    this.loading = 1;
-    const payload: Report = getReportFromJSON({
-      ...this.report,
-      ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
-    });
-
-    return this.reportService.update(payload, this.formProperties);
-  }
-
-  get submitReport$(): Observable<boolean> {
-    this.loading = 2;
-
-    const payload = {
-      report_id: this.report?.id,
-      password: this.form?.value['filingPassword'],
-      backdoor_code: this.form?.value['backdoor_code'],
-    };
-    return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
-      switchMap(() => {
-        this.loading = 0;
-        from(this.router.navigateByUrl(this.getContinueUrl?.(this.report) || ''));
-        if (this.report?.id) {
-          this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
-          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));
-        } else {
-          return from(this.router.navigateByUrl('/reports'));
-        }
-      }),
-    );
   }
 
   ngOnInit(): void {
@@ -156,5 +108,53 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
         this.saveAndSubmit$.subscribe();
       },
     });
+  }
+
+  get saveAndSubmit$(): Observable<boolean> {
+    return this.saveTreasurerName$.pipe(
+      switchMap(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Report Updated',
+          life: 3000,
+        });
+
+        return this.submitReport$;
+      })
+    );
+  }
+
+  get saveTreasurerName$(): Observable<Report | undefined> {
+    if (!this.report) return of(undefined);
+    this.loading = 1;
+    const payload: Report = getReportFromJSON({
+      ...this.report,
+      ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
+    });
+
+    return this.reportService.update(payload, this.formProperties);
+  }
+
+  get submitReport$(): Observable<boolean> {
+    this.loading = 2;
+
+    const payload = {
+      report_id: this.report?.id,
+      password: this.form?.value['filingPassword'],
+      backdoor_code: this.form?.value['backdoor_code'],
+    };
+    return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
+      switchMap(() => {
+        this.loading = 0;
+        from(this.router.navigateByUrl(this.getContinueUrl?.(this.report) || ''));
+        if (this.report?.id) {
+          this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
+          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));
+        } else {
+          return from(this.router.navigateByUrl('/reports'));
+        }
+      })
+    );
   }
 }

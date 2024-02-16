@@ -1,84 +1,84 @@
 @import '../../shared/scss/global';
 
 .dashboard-example-img {
-  width: 600px;
-  position: absolute;
-  max-height: calc(100vh - 350px);
-  overflow: hidden;
+	width: 600px;
+	position: absolute;
+	max-height: calc(100vh - 350px);
+	overflow: hidden;
 }
 
 .login-box {
-  margin-top: 80px;
-  margin-left: 20%;
+	margin-top: 80px;
+	margin-left: 20%;
 }
 
 .login-box-header {
-  font-family: "karla-bold", Sans-serif;
-  font-size: 32px;
-  padding: 0px;
+	font-family: "karla-bold", Sans-serif;
+	font-size: 32px;
+	padding:0px;
 }
 
 .header-filers {
-  color: #212121
+	color: #212121
 }
 
 .header-productivity {
-  color: #164F85
+	color: #164F85
 }
 
-.description-text {
-  font-family: "karla", Sans-serif;
-  font-size: 14px;
-  color: #212121;
+.description-text{
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	color: #212121;
 }
 
 .login-button {
-  background-color: #112e51;
-  color: #ffffff;
-  border-radius: 4px;
-  display: inline-block;
-  font-family: "karla", Sans-serif;
-  font-size: 14px;
-  line-height: 1;
-  padding: 8px 20px;
-  text-align: center;
-  vertical-align: middle;
-  margin-right: 20px;
-  margin-bottom: 18px;
+	background-color: #112e51;
+	color: #ffffff;
+	border-radius: 4px;
+	display: inline-block;
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	padding: 8px 20px;
+	text-align: center;
+	vertical-align: middle;
+	margin-right:20px;
+	margin-bottom:18px;
 }
 
 .signup-button {
-  background-color: #367F90;
-  color: #ffffff;
-  border-radius: 4px;
-  display: inline-block;
-  font-family: "karla", Sans-serif;
-  font-size: 14px;
-  line-height: 1;
-  padding: 8px 20px;
-  text-align: center;
-  vertical-align: middle;
-  margin-bottom: 18px;
+	background-color: #367F90;
+	color: #ffffff;
+	border-radius: 4px;
+	display: inline-block;
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	padding: 8px 20px;
+	text-align: center;
+	vertical-align: middle;
+	margin-bottom:18px;
 }
 
 .learn-more-link {
-  margin-left: 10px;
-  font-family: "karla-bold", Sans-serif;
-  font-size: 14px;
-  color: #112e51;
-  border-bottom: 1px dotted #112e51;
-  cursor: pointer;
-  text-decoration: none;
-  transition: color .1s linear;
+	margin-left:10px;
+	font-family: "karla-bold", Sans-serif;
+	font-size: 14px;
+	color: #112e51;
+	border-bottom: 1px dotted #112e51;
+	cursor: pointer;
+	text-decoration: none;
+	transition: color .1s linear;
 }
 
 .debug-login {
-  margin-right: 60px;
+	margin-right: 60px;
 }
 
 .login-page {
-  width: 100%;
-  max-width: 100%;
-  max-height: calc(100vh - 350px);
-  overflow: auto;
+	width: 100%;
+	max-width: 100%;
+	max-height: calc(100vh - 350px);
+	overflow: auto;
 }

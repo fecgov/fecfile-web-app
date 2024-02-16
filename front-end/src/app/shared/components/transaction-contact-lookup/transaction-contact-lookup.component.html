@@ -1,25 +1,25 @@
 <div class="p-fluid">
-  <div [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl?.status === 'INVALID' }">
-    <app-contact-lookup
-      (contactLookupSelect)="contactLookupSelected($event)"
-      (contactTypeSelect)="contactTypeSelected($event)"
-      (createNewContactSelect)="createNewContactSelected($event)"
-      [candidateOffice]="mandatoryCandidateOffice"
-      [contactTypeOptions]="contactTypeOptions"
-    >
-    </app-contact-lookup>
-  </div>
-  <app-contact-dialog
-    (savedContact)="saveContact($event)"
-    [(detailVisible)]="detailVisible"
-    [contactTypeOptions]="dialogContactTypeOptions"
-    [defaultCandidateOffice]="mandatoryCandidateOffice"
-    headerTitle="Create a new contact"
-  ></app-contact-dialog>
+    <div [ngClass]="{ 'transaction-contact-invalid': errorMessageFormControl?.status === 'INVALID' }">
+        <app-contact-lookup
+                (contactLookupSelect)="contactLookupSelected($event)"
+                (contactTypeSelect)="contactTypeSelected($event)"
+                (createNewContactSelect)="createNewContactSelected($event)"
+                [candidateOffice]="mandatoryCandidateOffice"
+                [contactTypeOptions]="contactTypeOptions"
+        >
+        </app-contact-lookup>
+    </div>
+    <app-contact-dialog
+            (savedContact)="saveContact($event)"
+            [(detailVisible)]="detailVisible"
+            [contactTypeOptions]="dialogContactTypeOptions"
+            [defaultCandidateOffice]="mandatoryCandidateOffice"
+            headerTitle="Create a new contact"
+    ></app-contact-dialog>
 </div>
 <app-error-messages
-  *ngIf="errorMessageFormControl"
-  [control]="errorMessageFormControl"
-  [formSubmitted]="formSubmitted"
-  [requiredErrorMessage]="currentContactLabel + ' information is required'"
+        *ngIf="errorMessageFormControl"
+        [control]="errorMessageFormControl"
+        [formSubmitted]="formSubmitted"
+        [requiredErrorMessage]="currentContactLabel + ' information is required'"
 ></app-error-messages>

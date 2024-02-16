@@ -16,10 +16,7 @@ export class SubmitReportStatusComponent extends DestroyerComponent implements O
   reportCode?: F3xReportCodes;
   coverageDates?: { [key: string]: Date | undefined };
 
-  constructor(
-    private store: Store,
-    public router: Router,
-  ) {
+  constructor(private store: Store, public router: Router) {
     super();
   }
 

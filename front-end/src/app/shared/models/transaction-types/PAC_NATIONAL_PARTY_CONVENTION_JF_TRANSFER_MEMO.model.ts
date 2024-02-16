@@ -11,7 +11,7 @@ export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransact
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
   );
   override shortName = 'PAC';
   schema = schema;

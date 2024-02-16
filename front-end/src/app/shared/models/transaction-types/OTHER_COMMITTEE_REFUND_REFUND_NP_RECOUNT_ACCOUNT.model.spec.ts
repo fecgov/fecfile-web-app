@@ -17,7 +17,7 @@ describe('OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
+      ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT
     );
   });
 

@@ -49,7 +49,7 @@ describe('TransactionGuarantorsComponent', () => {
                 SchC2Transaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'LOAN_GUARANTOR',
-                }),
+                })
               ),
             getTableData: () => of([]),
             update: () => of([]),

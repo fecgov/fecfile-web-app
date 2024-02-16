@@ -3,7 +3,7 @@ import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/sc
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -38,7 +38,7 @@ describe('FormUtils', () => {
       transaction.transactionType.templateMap,
       transaction,
       previous_transaction,
-      transaction.contribution_amount as number,
+      transaction.contribution_amount as number
     );
 
     const aggregateFormControl = form.get('contribution_aggregate') as FormControl;
@@ -71,7 +71,7 @@ describe('FormUtils', () => {
       transaction.transactionType.templateMap,
       transaction,
       previous_transaction,
-      transaction.expenditure_amount as number,
+      transaction.expenditure_amount as number
     );
 
     const aggregateFormControl = form.get('aggregate_amount') as FormControl;
@@ -104,7 +104,7 @@ it('should add the amount for calendar YTD', () => {
     transaction.transactionType.templateMap,
     transaction,
     previous_transaction,
-    transaction.expenditure_amount as number,
+    transaction.expenditure_amount as number
   );
 
   const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as FormControl;

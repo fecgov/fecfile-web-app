@@ -32,7 +32,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     private store: Store,
     public router: Router,
     public route: ActivatedRoute,
-    private webPrintService: WebPrintService,
+    private webPrintService: WebPrintService
   ) {
     super();
   }

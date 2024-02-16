@@ -6,5 +6,5 @@ export const initialState: SidebarState | undefined = undefined;
 
 export const sidebarStateReducer = createReducer<SidebarState | undefined, Action>(
   initialState,
-  on(setSidebarStateAction, (_state, update) => update.payload),
+  on(setSidebarStateAction, (_state, update) => update.payload)
 );

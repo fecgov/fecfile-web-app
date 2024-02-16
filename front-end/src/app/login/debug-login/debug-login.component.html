@@ -1,4 +1,4 @@
-<form (ngSubmit)="doSignIn()" [formGroup]="form" class="login-box">
+<form class="login-box" [formGroup]="form" (ngSubmit)="doSignIn()">
   <div class="grid-row">
     <div class="grid-row__col grid-row__col--12">
       <h3>Debug Login Form</h3>
@@ -6,7 +6,7 @@
   </div>
   <div class="grid-row">
     <div class="grid-row__col grid-row__col--12">
-      <div *ngIf="hasFailed" class="text-error">Invalid email, committee id or password.</div>
+      <div class="text-error" *ngIf="hasFailed">Invalid email, committee id or password.</div>
     </div>
   </div>
   <div class="grid-row form-field__info">
@@ -15,20 +15,20 @@
     </div>
     <div class="grid-row__col grid-row__col--8">
       <input
+        type="text"
+        class="login-email-id login-input"
+        id="login-email-id"
+        placeholder="Enter Email"
+        formControlName="emailId"
         (keyup)="updateStatus()"
         [ngClass]="{
           '': (!form.get('emailId')?.invalid && form.get('emailId')?.touched) || !loginEmailInputError,
           'login-input-error': (form.get('emailId')?.invalid && form.get('emailId')?.touched) || loginEmailInputError
         }"
-        class="login-email-id login-input"
-        formControlName="emailId"
-        id="login-email-id"
-        placeholder="Enter Email"
-        type="text"
       />
-      <div *ngIf="(form.get('emailId')?.invalid && form.get('emailId')?.touched) || loginEmailInputError" class="error">
-        <div *ngIf="form.get('emailId')?.hasError('required')" class="error__email-id">Please enter Email ID.</div>
-        <div *ngIf="form.get('emailId')?.hasError('email')" class="error__email-id">Invalid Email Format.</div>
+      <div class="error" *ngIf="(form.get('emailId')?.invalid && form.get('emailId')?.touched) || loginEmailInputError">
+        <div class="error__email-id" *ngIf="form.get('emailId')?.hasError('required')">Please enter Email ID.</div>
+        <div class="error__email-id" *ngIf="form.get('emailId')?.hasError('email')">Invalid Email Format.</div>
       </div>
     </div>
   </div>
@@ -40,23 +40,23 @@
 
     <div class="grid-row__col grid-row__col--8">
       <input
+        type="text"
+        class="login-committee-id login-input"
+        id="login-committee-id"
+        placeholder="Enter Committee ID"
+        formControlName="committeeId"
         (keyup)="updateStatus()"
         [ngClass]="{
           '': (!form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || !committeeIdInputError,
           'login-input-error':
             (form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || committeeIdInputError
         }"
-        class="login-committee-id login-input"
-        formControlName="committeeId"
-        id="login-committee-id"
-        placeholder="Enter Committee ID"
-        type="text"
       />
       <div
-        *ngIf="(form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || committeeIdInputError"
         class="error"
+        *ngIf="(form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || committeeIdInputError"
       >
-        <div *ngIf="form.get('committeeId')?.hasError('required')" class="error__committee-id">
+        <div class="error__committee-id" *ngIf="form.get('committeeId')?.hasError('required')">
           Please enter Committee ID.
         </div>
       </div>
@@ -70,47 +70,47 @@
 
     <div class="grid-row__col grid-row__col--8">
       <input
+        [type]="show ? 'text' : 'password'"
+        class="login-password login-input"
+        id="login-password"
+        placeholder="Enter your Password"
+        formControlName="loginPassword"
         (keyup)="updateStatus()"
         [ngClass]="{
           '': (!form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || !passwordInputError,
           'login-input-error':
             (form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || passwordInputError
         }"
-        [type]="show ? 'text' : 'password'"
         autocomplete
-        class="login-password login-input"
-        formControlName="loginPassword"
-        id="login-password"
-        placeholder="Enter your Password"
       />
 
       <div
-        *ngIf="(form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || passwordInputError"
         class="error"
+        *ngIf="(form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || passwordInputError"
       >
-        <div *ngIf="form.get('loginPassword')?.hasError('required')" class="error__password-error">
+        <div class="error__password-error" *ngIf="form.get('loginPassword')?.hasError('required')">
           Please enter your password.
         </div>
       </div>
     </div>
 
     <div *ngIf="!show" class="grid-row__col grid-row__col--1 text-left">
-      <img (click)="showPassword()" alt="eye icon" class="eye-logo" draggable="false" src="assets/img/eye-icon.svg" />
+      <img class="eye-logo" src="assets/img/eye-icon.svg" draggable="false" alt="eye icon" (click)="showPassword()" />
     </div>
     <div *ngIf="show" class="grid-row__col grid-row__col--1 text-left">
       <img
-        (click)="showPassword()"
-        alt="red eye icon"
         class="eye-logo"
-        draggable="false"
         src="assets/img/eye-icon-red.svg"
+        draggable="false"
+        alt="red eye icon"
+        (click)="showPassword()"
       />
     </div>
   </div>
 
   <div class="grid-row">
     <div class="grid-row__col grid-row__col--8 text-left offset-3">
-      <button [disabled]="isBusy" class="login__btn" type="submit">
+      <button type="submit" class="login__btn" [disabled]="isBusy">
         <ng-template [ngIf]="true">Enter</ng-template>
       </button>
     </div>

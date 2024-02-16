@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
@@ -7,8 +7,8 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import {
   getTestTransactionByType,
   testMockStore,
-  testScheduleATransaction,
   testTemplateMap,
+  testScheduleATransaction,
 } from 'app/shared/utils/unit-test.utils';
 import { MemoCodeInputComponent } from './memo-code.component';
 import { provideMockStore } from '@ngrx/store/testing';

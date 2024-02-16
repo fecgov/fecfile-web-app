@@ -1,66 +1,62 @@
 <p-dialog
-  (onHide)="hide()"
   [(visible)]="visible"
-  [modal]="true"
   [style]="{ width: '90%' }"
   header="Restore deleted contact(s)"
+  [modal]="true"
   styleClass="p-fluid"
+  (onHide)="hide()"
 >
   <ng-template pTemplate="content">
     <p-table
       #dt
-      (onLazyLoad)="loadTableItems($event)"
-      (selectAllChange)="onSelectAllChange($event)"
-      (selectionChange)="onSelectionChange($event)"
-      [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+      [value]="items"
       [lazy]="true"
-      [loading]="loading"
+      (onLazyLoad)="loadTableItems($event)"
+      responsiveLayout="scroll"
+      dataKey="id"
+      [selection]="selectedItems"
+      (selectionChange)="onSelectionChange($event)"
+      [selectAll]="selectAll"
+      (selectAllChange)="onSelectAllChange($event)"
       [paginator]="true"
       [rows]="10"
-      [selectAll]="selectAll"
-      [selection]="selectedItems"
-      [showCurrentPageReport]="true"
       [totalRecords]="totalItems"
-      [value]="items"
+      [loading]="loading"
+      [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
-      dataKey="id"
-      responsiveLayout="scroll"
+      [showCurrentPageReport]="true"
     >
       <ng-template pTemplate="caption">
         <div class="flex align-items-center justify-content-between">
           <h2 class="m-0">Restore deleted contact(s)</h2>
         </div>
       </ng-template>
-      <ng-template let-sortOrder pTemplate="sorticon">
+      <ng-template pTemplate="sorticon" let-sortOrder>
         <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
       </ng-template>
       <ng-template pTemplate="header">
         <tr role="row">
-          <th id="header-checkbox" role="columnheader" style="width: 3rem">
+          <th style="width: 3rem" id="header-checkbox" role="columnheader">
             <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
           </th>
-          <th id="name-column" pSortableColumn="sort_name" role="columnheader">
-            Contact Name
-            <p-sortIcon field="sort_name"></p-sortIcon>
+          <th pSortableColumn="sort_name" id="name-column" role="columnheader">
+            Contact Name <p-sortIcon field="sort_name"></p-sortIcon>
           </th>
-          <th id="type-column" pSortableColumn="type" role="columnheader">
-            Contact Type
-            <p-sortIcon field="type"></p-sortIcon>
+          <th pSortableColumn="type" id="type-column" role="columnheader">
+            Contact Type <p-sortIcon field="type"></p-sortIcon>
           </th>
-          <th id="employer-column" pSortableColumn="employer" role="columnheader">
-            Contact Employer
-            <p-sortIcon field="employer"></p-sortIcon>
+          <th pSortableColumn="employer" id="employer-column" role="columnheader">
+            Contact Employer <p-sortIcon field="employer"></p-sortIcon>
           </th>
-          <th id="occupation-column" pSortableColumn="occupation" role="columnheader">
-            Contact Occupation
-            <p-sortIcon field="occupation"></p-sortIcon>
+          <th pSortableColumn="occupation" id="occupation-column" role="columnheader">
+            Contact Occupation <p-sortIcon field="occupation"></p-sortIcon>
           </th>
         </tr>
       </ng-template>
-      <ng-template let-item pTemplate="body">
+      <ng-template pTemplate="body" let-item>
         <tr role="row">
           <td>
-            <p-tableCheckbox [ariaLabel]="'select ' + displayName(item)" [value]="item"></p-tableCheckbox>
+            <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
           </td>
           <td>{{ displayName(item) }}</td>
           <td>{{ item.type | label : contactTypeLabels }}</td>
@@ -73,19 +69,18 @@
   <ng-template pTemplate="footer">
     <div class="grid">
       <div class="col-1">
-        <button (click)="hide()" [autofocus]="true" class="p-button-secondary" icon="pi pi-times" label="Cancel" pButton
-                pRipple></button>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="hide()" [autofocus]="true"></button>
       </div>
       <div class="col-11">
         <button
-          (click)="restoreSelected()"
-          [disabled]="selectedItems.length <= 0"
-          class="p-button-primary"
-          icon="pi pi-check"
-          id="restoreButton"
-          label="Restore selected"
           pButton
           pRipple
+          id="restoreButton"
+          [disabled]="selectedItems.length <= 0"
+          label="Restore selected"
+          icon="pi pi-check"
+          class="p-button-primary"
+          (click)="restoreSelected()"
         ></button>
       </div>
     </div>

@@ -7,7 +7,7 @@
 <p-divider></p-divider>
 <div class="p-fluid">
   <p-card>
-    <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">
         <div class="col-12">
           <div class="field">
@@ -19,33 +19,33 @@
         <div class="col-4">
           <div class="field">
             <label for="treasurer_last_name"><strong>LAST NAME</strong></label>
-            <input formControlName="treasurer_last_name" id="treasurer_last_name" pInputText type="text" />
+            <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="treasurer_last_name"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
         <div class="col-4">
           <div class="field">
             <label for="treasurer_first_name"><strong>FIRST NAME</strong></label>
-            <input formControlName="treasurer_first_name" id="treasurer_first_name" pInputText type="text" />
+            <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="treasurer_first_name"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
         <div class="col-4">
           <div class="field">
             <label for="treasurer_middle_name"><strong>MIDDLE NAME</strong> (OPTIONAL)</label>
-            <input formControlName="treasurer_middle_name" id="treasurer_middle_name" pInputText type="text" />
+            <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="treasurer_middle_name"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
@@ -54,22 +54,22 @@
         <div class="col-3">
           <div class="field">
             <label for="treasurer_prefix"><strong>PREFIX</strong> (OPTIONAL)</label>
-            <input formControlName="treasurer_prefix" id="treasurer_prefix" pInputText type="text" />
+            <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="treasurer_prefix"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
         <div class="col-3">
           <div class="field">
             <label for="treasurer_suffix"><strong>SUFFIX</strong> (OPTIONAL)</label>
-            <input formControlName="treasurer_suffix" id="treasurer_suffix" pInputText type="text" />
+            <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="treasurer_suffix"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
@@ -84,8 +84,8 @@
             <p>
               If you have any questions on how to enroll, confirming your email, two-factor authentication, or your
               Personel Key please go to the following page:
-              <a href="https://webforms.fec.gov/psa/help.htm" rel="noopener" target="_blank"
-              >FEC Electronic Filing Password Assignment System Help</a
+              <a href="https://webforms.fec.gov/psa/help.htm" target="_blank" rel="noopener"
+                >FEC Electronic Filing Password Assignment System Help</a
               >
             </p>
           </div>
@@ -95,39 +95,39 @@
             <label for="filingPassword">
               <strong>ELECTRONIC FILING PASSWORD </strong>
             </label>
-            <input formControlName="filingPassword" id="filingPassword" pInputText type="text" />
+            <input type="text" pInputText id="filingPassword" formControlName="filingPassword" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="filingPassword"
+              [formSubmitted]="formSubmitted"
               patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
             ></app-error-messages>
           </div>
         </div>
       </div>
-      <div *ngIf="report?.report_version" class="grid">
+      <div class="grid" *ngIf="report?.report_version">
         <div class="col-12">
           <div class="field">
             <app-yes-no-radio-input
-              [formSubmitted]="formSubmitted"
               [form]="form"
-              [tooltipEscape]="false"
-              [tooltipText]="backdoorCodeHelpText"
-              ariaLabelNo="You do not need to use a backdoor code"
-              ariaLabelYes="You need to use a backdoor code"
+              [formSubmitted]="formSubmitted"
               controlName="backdoorYesNo"
               label="Do you need to use a backdoor code? (OPTIONAL)"
+              ariaLabelYes="You need to use a backdoor code"
+              ariaLabelNo="You do not need to use a backdoor code"
+              [tooltipText]="backdoorCodeHelpText"
+              [tooltipEscape]="false"
             ></app-yes-no-radio-input>
             <ng-container *ngIf="showBackdoorCode">
               <div class="grid">
                 <div class="col-4">
                   <div class="field">
                     <label for="backdoor_code">BACKDOOR CODE</label>
-                    <input formControlName="backdoor_code" id="backdoor_code" pInputText type="text" />
+                    <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
                     <app-error-messages
-                      [formSubmitted]="formSubmitted"
                       [form]="form"
                       fieldName="backdoor_code"
+                      [formSubmitted]="formSubmitted"
                     ></app-error-messages>
                   </div>
                 </div>
@@ -142,35 +142,35 @@
             <strong>
               <p-checkbox
                 [binary]="true"
-                [falseValue]="false"
-                [trueValue]="true"
-                formControlName="userCertified"
                 inputId="userCertified"
                 label="I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct, and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing this Statement to the penalties of 52 U.S.C. § 30109."
+                formControlName="userCertified"
+                [trueValue]="true"
+                [falseValue]="false"
               ></p-checkbox>
             </strong>
           </div>
         </div>
       </div>
-      <div *ngIf="!report?.getBlocker()" class="grid">
+      <div class="grid" *ngIf="!report?.getBlocker()">
         <div class="col-4"></div>
         <div class="col-4">
           <button
-            (click)="submitClicked()"
             *ngIf="form.value.userCertified === true"
-            [disabled]="loading > 0"
-            class="p-button"
-            label="Submit"
             pButton
             pRipple
+            [disabled]="loading > 0"
+            label="Submit"
+            class="p-button"
+            (click)="submitClicked()"
           ></button>
           <button
             *ngIf="form.value.userCertified === false"
-            class="p-button"
-            disabled
-            label="Submit"
             pButton
             pRipple
+            label="Submit"
+            class="p-button"
+            disabled
           ></button>
           <p-confirmDialog [style]="{ width: '60vw' }"></p-confirmDialog>
         </div>
@@ -181,7 +181,7 @@
           </div>
         </ng-container>
       </div>
-      <div *ngIf="report?.getBlocker()" class="grid">
+      <div class="grid" *ngIf="report?.getBlocker()">
         <div class="col-12">{{ report?.getBlocker() }}</div>
       </div>
     </form>
@@ -189,11 +189,11 @@
     <div class="grid">
       <div class="col-3">
         <button
-          (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
-          class="p-button-secondary p-button-outlined"
-          label="Back"
           pButton
           pRipple
+          label="Back"
+          class="p-button-secondary p-button-outlined"
+          (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
         ></button>
       </div>
     </div>

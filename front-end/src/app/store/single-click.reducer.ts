@@ -4,5 +4,5 @@ import { singleClickDisableAction, singleClickEnableAction } from './single-clic
 export const singleClickReducer = createReducer(
   false,
   on(singleClickDisableAction, () => true),
-  on(singleClickEnableAction, () => false),
+  on(singleClickEnableAction, () => false)
 );

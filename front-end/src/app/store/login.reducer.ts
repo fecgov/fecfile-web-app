@@ -20,5 +20,5 @@ export const loginReducer = createReducer(
   on(updateUserLoginDataAction, (_state, update) => update.payload),
   on(userLoggedInAction, (_state, update) => update.payload),
   on(userLoggedOutAction, () => initialState),
-  on(userLoggedOutForLoginDotGovAction, () => initialState),
+  on(userLoggedOutForLoginDotGovAction, () => initialState)
 );

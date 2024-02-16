@@ -7,10 +7,10 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () =>
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
-      ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).parent_transaction = getTestTransactionByType(
-      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
     );
     (
       (transaction.parent_transaction as SchATransaction).parent_transaction as SchATransaction
@@ -25,7 +25,7 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () =>
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
     );
   });
 
@@ -40,7 +40,7 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () =>
     ).contributor_organization_name = 'Super Duper Hyper Very Really Long Committee Name That Needs to Shrink';
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Recount/Legal Proceedings Account JF Memo: Super Duper Hyper Very Reall... (Partnership Attribution)',
+      'Recount/Legal Proceedings Account JF Memo: Super Duper Hyper Very Reall... (Partnership Attribution)'
     );
   });
 });

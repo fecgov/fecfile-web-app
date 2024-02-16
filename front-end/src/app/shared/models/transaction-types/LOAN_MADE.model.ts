@@ -1,13 +1,14 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_MADE';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { ADDRESS_FIELDS, COMMITTEE, COMMON_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMON_FIELDS, ADDRESS_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_MADE extends SchBTransactionType {
   override formFields = [...COMMON_FIELDS, ...ADDRESS_FIELDS, 'organization_name', 'committee_fec_id'];
   contactTypeOptions = COMMITTEE;
+  override isDependentChild = () => true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_MADE);
   schema = schema;
   override useParentContact = true;
@@ -26,12 +27,6 @@ export class LOAN_MADE extends SchBTransactionType {
     'amount',
     'memo_code',
   ] as TemplateMapKeyType[];
-  override description =
-    'Only the Purpose of Disbursement and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
-  override accordionTitle = 'AUTO-POPULATED';
-  override accordionSubText =
-    'Review information and enter purpose of disbursement or note/memo text for the loan made';
-  override contactTitle = 'Lendee';
 
   constructor() {
     super();
@@ -41,7 +36,12 @@ export class LOAN_MADE extends SchBTransactionType {
     this.templateMap['category_code'] = '';
   }
 
-  override isDependentChild = () => true;
+  override description =
+    'Only the Purpose of Disbursement and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
+  override accordionTitle = 'AUTO-POPULATED';
+  override accordionSubText =
+    'Review information and enter purpose of disbursement or note/memo text for the loan made';
+  override contactTitle = 'Lendee';
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

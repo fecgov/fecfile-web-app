@@ -31,7 +31,7 @@ describe('DeletedContactDialogComponent', () => {
         next: 'https://next',
         previous: 'https://previous',
         results: [Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })],
-      }),
+      })
     );
     fixture.detectChanges();
   });

@@ -15,6 +15,6 @@ export const committeeGuard: CanActivateFn = () => {
           return false;
         }
         return true;
-      }),
+      })
     );
 };

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
+import { takeUntil, of, from, Observable, concatAll, reduce } from 'rxjs';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
@@ -15,7 +15,7 @@ import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { AffiliatedContact, CandidateContact, F1MCandidateTag, F1MContact } from './contact';
+import { F1MCandidateTag, F1MContact, AffiliatedContact, CandidateContact } from './contact';
 
 const candidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
 
@@ -123,11 +123,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     super(store, fb, reportService, messageService, router, activatedRoute);
   }
 
-  get confirmation$(): Observable<boolean> {
-    if (!this.report) return of(false);
-    return this.confirmWithUser(this.report, this.form);
-  }
-
   override ngOnInit(): void {
     super.ngOnInit();
 
@@ -221,6 +216,11 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       if (confirmed) super.save(jump);
       else this.store.dispatch(singleClickEnableAction());
     });
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.report) return of(false);
+    return this.confirmWithUser(this.report, this.form);
   }
 
   confirmWithUser(report: Form1M, form: FormGroup) {

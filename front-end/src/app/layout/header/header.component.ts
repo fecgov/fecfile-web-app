@@ -16,8 +16,8 @@ export enum HeaderStyles {
 })
 export class HeaderComponent {
   loginService: LoginService;
-  @Input() headerStyle = HeaderStyles.DEFAULT;
   private window = window;
+  @Input() headerStyle = HeaderStyles.DEFAULT;
 
   constructor(
     loginService: LoginService,

@@ -6,10 +6,10 @@ describe('PARTY_JF_TRANSFER_MEMO', () => {
 
   beforeEach(() => {
     transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO
     ).getNewTransaction() as SchATransaction;
     transaction.parent_transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
     ).getNewTransaction() as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });

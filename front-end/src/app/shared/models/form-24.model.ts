@@ -19,21 +19,6 @@ export class Form24 extends Report {
   schema = f24Schema;
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
-  report_type_24_48: '24' | '48' | undefined;
-  @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
-  committee_name: string | undefined;
-  street_1: string | undefined;
-  street_2: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  zip: string | undefined;
-  treasurer_last_name: string | undefined;
-  treasurer_first_name: string | undefined;
-  treasurer_middle_name: string | undefined;
-  treasurer_prefix: string | undefined;
-  treasurer_suffix: string | undefined;
-  @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-
   get formLabel() {
     return 'FORM 24';
   }
@@ -49,6 +34,21 @@ export class Form24 extends Report {
   override get canAmend(): boolean {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
+
+  report_type_24_48: '24' | '48' | undefined;
+  @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
+  committee_name: string | undefined;
+  street_1: string | undefined;
+  street_2: string | undefined;
+  city: string | undefined;
+  state: string | undefined;
+  zip: string | undefined;
+  treasurer_last_name: string | undefined;
+  treasurer_first_name: string | undefined;
+  treasurer_middle_name: string | undefined;
+  treasurer_prefix: string | undefined;
+  treasurer_suffix: string | undefined;
+  @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Form24 { // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -38,7 +38,7 @@ export class F3xReportCode {
     label: string,
     coverageDatesFunction:
       | ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date])
-      | undefined,
+      | undefined
   ) {
     this.code = code;
     this.label = label;
@@ -50,7 +50,7 @@ function createCoverageFunction(
   startMonth: number,
   startDayOfMonth: number,
   endMonth: number,
-  endDayOfMonth: number,
+  endDayOfMonth: number
 ): (year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date] {
   return (year: number) => {
     return [new Date(year, startMonth, startDayOfMonth), new Date(year, endMonth, endDayOfMonth)];

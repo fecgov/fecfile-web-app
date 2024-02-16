@@ -1,19 +1,19 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_PARENTS';
 import { SchETransactionType } from '../sche-transaction-type.model';
-import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes, SchETransaction } from '../sche-transaction.model';
+import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
+  ORG_FIELDS,
   ADDRESS_FIELDS,
+  ELECTION_FIELDS,
+  COMMON_FIELDS,
+  CATEGORY_CODE,
+  SIGNATORY_1_FIELDS,
   AGGREGATE,
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,
-  CATEGORY_CODE,
-  COMMON_FIELDS,
-  ELECTION_FIELDS,
-  ORG_FIELDS,
   ORGANIZATION,
-  SIGNATORY_1_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 import { AggregationGroups, Transaction } from '../transaction.model';
@@ -37,14 +37,13 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(
     ScheduleETransactionTypeLabels,
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override contact2IsRequired = () => true;
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
   override showCalendarYTD = true;
-
-  override contact2IsRequired = () => true;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(transaction: Transaction): string {

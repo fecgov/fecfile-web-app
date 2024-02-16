@@ -25,7 +25,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
     private fb: FormBuilder,
     private router: Router,
     private usersService: UsersService,
-    private loginService: LoginService,
+    private loginService: LoginService
   ) {
     super();
   }
@@ -60,7 +60,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
         map((response) => {
           this.store.dispatch(updateUserLoginDataAction({ payload: response }));
           this.router.navigate(['dashboard']);
-        }),
+        })
       )
       .subscribe();
   }

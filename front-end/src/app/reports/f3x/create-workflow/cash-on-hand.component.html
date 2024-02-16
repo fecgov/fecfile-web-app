@@ -7,22 +7,22 @@
       You will need to enter your cash on hand this first time. In the future, this will be automatically calculated for
       you.
     </h5>
-    <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">
         <div class="col-6">
           <div class="field">
             <label for="L6a_cash_on_hand_jan_1_ytd">BEGINNING CASH ON HAND</label>
             <p-inputNumber
-              currency="USD"
-              formControlName="L6a_cash_on_hand_jan_1_ytd"
               inputId="L6a_cash_on_hand_jan_1_ytd"
-              locale="en-US"
+              formControlName="L6a_cash_on_hand_jan_1_ytd"
               mode="currency"
+              currency="USD"
+              locale="en-US"
             ></p-inputNumber>
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="L6a_cash_on_hand_jan_1_ytd"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
@@ -30,9 +30,9 @@
           <div class="field">
             <label for="cash_on_hand_date">DATE</label>
             <p-calendar
-              formControlName="cash_on_hand_date"
               id="cash_on_hand_date"
               name="cash_on_hand_date"
+              formControlName="cash_on_hand_date"
             ></p-calendar>
             <ng-container
               *ngIf="
@@ -52,31 +52,31 @@
     <div class="grid">
       <div class="col-2">
         <button
-          (click)="router.navigateByUrl('/reports')"
-          class="p-button-secondary"
-          label="Cancel"
           pButton
           pRipple
+          label="Cancel"
+          class="p-button-secondary"
+          (click)="router.navigateByUrl('/reports')"
         ></button>
       </div>
       <div class="col-5"></div>
       <div class="col-2">
         <button
-          (click)="router.navigateByUrl('/reports/transactions/report/' + report?.id + '/list')"
-          class="p-button-primary"
-          label="Skip for now"
           pButton
           pRipple
+          label="Skip for now"
+          class="p-button-primary"
+          (click)="router.navigateByUrl('/reports/transactions/report/' + report?.id + '/list')"
         ></button>
       </div>
       <div class="col-3">
         <button
-          (click)="save()"
-          appSingleClick
-          class="p-button-primary"
-          label="Save & continue"
           pButton
           pRipple
+          appSingleClick
+          label="Save & continue"
+          class="p-button-primary"
+          (click)="save()"
         ></button>
       </div>
     </div>

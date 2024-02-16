@@ -1,5 +1,5 @@
 <div class="p-fluid">
-  <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
         <h1>FEC Form 99</h1>
@@ -18,36 +18,36 @@
       <div class="col-9">
         <label for="committee_name">COMMITTEE NAME</label>
         <input
+          type="text"
+          pInputText
+          id="committee_name"
+          formControlName="committee_name"
           [readonly]="true"
           class="readonly"
-          formControlName="committee_name"
-          id="committee_name"
-          pInputText
-          type="text"
         />
         <app-error-messages
-          [formSubmitted]="formSubmitted"
           [form]="form"
           fieldName="committee_name"
+          [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
       <div class="col-3">
         <label for="filer_committee_id_number">COMMITTEE ID</label>
         <input
+          type="text"
+          pInputText
+          id="filer_committee_id_number"
+          formControlName="filer_committee_id_number"
           [readonly]="true"
           class="readonly"
-          formControlName="filer_committee_id_number"
-          id="filer_committee_id_number"
-          pInputText
-          type="text"
         />
-        <app-error-messages [formSubmitted]="formSubmitted" [form]="form" fieldName="committee_id"></app-error-messages>
+        <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
     <p-divider></p-divider>
 
     <h3>Address</h3>
-    <app-address-input [form]="form" [readonly]="true" [templateMap]="templateMap"></app-address-input>
+    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
     <p-divider></p-divider>
 
     <h3>Text Information</h3>
@@ -55,26 +55,26 @@
       <div class="col-6">
         <label for="text_code">TEXT CODE (OPTIONAL)</label>
         <p-dropdown
-          [autoDisplayFirst]="false"
-          [options]="textCodes"
-          appendTo="body"
-          formControlName="text_code"
           inputId="text_code"
+          formControlName="text_code"
+          [options]="textCodes"
+          [autoDisplayFirst]="false"
+          appendTo="body"
         ></p-dropdown>
-        <app-error-messages [formSubmitted]="formSubmitted" [form]="form" fieldName="text_code"></app-error-messages>
+        <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
       <div class="col-6"></div>
       <div class="col-12">
         <label for="message_text">TEXT MESSAGE</label>
         <textarea
-          [autoResize]="true"
-          [cols]="30"
-          [rows]="4"
-          formControlName="message_text"
           id="message_text"
+          [rows]="4"
+          [cols]="30"
           pInputTextarea
+          [autoResize]="true"
+          formControlName="message_text"
         ></textarea>
-        <app-error-messages [formSubmitted]="formSubmitted" [form]="form" fieldName="message_text"></app-error-messages>
+        <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
     <p-divider></p-divider>
@@ -82,20 +82,20 @@
 </div>
 <div class="grid">
   <div class="col-2">
-    <button (click)="goBack()" class="p-button-secondary" label="Back" pButton pRipple></button>
+    <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
   </div>
   <div class="col-6"></div>
   <div class="col-1">
-    <button (click)="save()" appSingleClick class="p-button-primary" label="Save" pButton pRipple></button>
+    <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
   </div>
   <div class="col-3">
     <button
-      (click)="save('continue')"
-      appSingleClick
-      class="p-button-info"
-      label="Save and continue"
       pButton
       pRipple
+      appSingleClick
+      label="Save and continue"
+      (click)="save('continue')"
+      class="p-button-info"
     ></button>
   </div>
 </div>

@@ -4,18 +4,18 @@
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
         <p-inputNumber
+          inputId="amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
           [formControlName]="templateMap['amount']"
           [inputStyleClass]="readonly ? 'readonly' : ''"
           [readonly]="readonly"
-          currency="USD"
-          inputId="amount"
-          locale="en-US"
-          mode="currency"
         ></p-inputNumber>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['amount']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -23,18 +23,18 @@
       <div class="field">
         <label for="payment_to_date">PAYMENT TO DATE</label>
         <p-inputNumber
-          [formControlName]="templateMap['payment_to_date']"
-          [readonly]="true"
-          currency="USD"
           inputId="payment_to_date"
-          inputStyleClass="readonly"
-          locale="en-US"
           mode="currency"
+          currency="USD"
+          locale="en-US"
+          [formControlName]="templateMap['payment_to_date']"
+          inputStyleClass="readonly"
+          [readonly]="true"
         ></p-inputNumber>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['payment_to_date']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -42,18 +42,18 @@
       <div class="field">
         <label for="balance">BALANCE OUTSTANDING</label>
         <p-inputNumber
-          [formControlName]="templateMap['balance']"
-          [readonly]="true"
-          currency="USD"
           inputId="balance"
-          inputStyleClass="readonly"
-          locale="en-US"
           mode="currency"
+          currency="USD"
+          locale="en-US"
+          [formControlName]="templateMap['balance']"
+          inputStyleClass="readonly"
+          [readonly]="true"
         ></p-inputNumber>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['balance']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -62,10 +62,10 @@
     <div class="col-12">
       <div class="field">
         <app-memo-code
-          [formSubmitted]="formSubmitted"
           [form]="form"
-          [overrideMemoItemHelpText]="memoItemHelpText"
+          [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
+          [overrideMemoItemHelpText]="memoItemHelpText"
           [transaction]="transaction"
           checkboxLabel="MEMO ITEM (OPTIONAL)"
         ></app-memo-code>

@@ -4,7 +4,7 @@ import { NavigationEvent } from 'app/shared/models/transaction-navigation-contro
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType
+  TransactionType,
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -42,13 +42,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel$ = of('');
-
-  override get confirmation$(): Observable<boolean> {
-    if (!this.childTransaction) return of(false);
-    return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
-      reduce((accumulator, confirmed) => accumulator && confirmed),
-    );
-  }
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -145,6 +138,13 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override isInvalid(): boolean {
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
+  }
+
+  override get confirmation$(): Observable<boolean> {
+    if (!this.childTransaction) return of(false);
+    return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
+      reduce((accumulator, confirmed) => accumulator && confirmed),
+    );
   }
 
   override resetForm() {

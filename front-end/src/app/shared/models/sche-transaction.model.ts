@@ -58,6 +58,18 @@ export class SchETransaction extends Transaction {
   memo_text_description: string | undefined;
 
   // calendar_ytd_per_election_office is dynamically calculated on the back-end
+  // and not saved in the database
+  override getFieldsNotToValidate(): string[] {
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      'calendar_ytd_per_election_office',
+      ...super.getFieldsNotToValidate(),
+    ];
+  }
+  override getFieldsNotToSave(): string[] {
+    return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchETransaction {
@@ -75,20 +87,6 @@ export class SchETransaction extends Transaction {
       });
     }
     return transaction;
-  }
-
-  // and not saved in the database
-  override getFieldsNotToValidate(): string[] {
-    return [
-      'back_reference_tran_id_number',
-      'back_reference_sched_name',
-      'calendar_ytd_per_election_office',
-      ...super.getFieldsNotToValidate(),
-    ];
-  }
-
-  override getFieldsNotToSave(): string[] {
-    return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
   }
 }
 

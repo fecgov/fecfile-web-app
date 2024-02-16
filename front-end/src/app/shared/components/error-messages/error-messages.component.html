@@ -1,23 +1,24 @@
 <ng-container *ngIf="formSubmitted || (control?.invalid && (control?.dirty || control?.touched))">
-  <small *ngIf="control?.hasError('required')" class="p-error">{{ requiredErrorMessage }}</small>
-  <small *ngIf="control?.hasError('fecIdMustBeUnique')" class="p-error">{{ uniqueFecIdMessage }}</small>
-  <small *ngIf="control?.hasError('requiredTrue')" class="p-error">{{ requiredTrueErrorMessage }}</small>
-  <small *ngIf="control?.hasError('minlength')" class="p-error">{{ minLengthErrorMessage }}</small>
-  <small *ngIf="!control?.hasError('max') && control?.hasError('maxlength')" class="p-error">{{
-      maxLengthErrorMessage
-    }}</small>
-  <small *ngIf="control?.hasError('min')" class="p-error">{{ minErrorMessage }}</small>
-  <small *ngIf="control?.hasError('max')" class="p-error">{{ maxErrorMessage }}</small>
-  <small *ngIf="control?.hasError('exclusiveMax')" class="p-error">{{ exclusiveMaxErrorMessage }}</small>
-  <small *ngIf="control?.hasError('exclusiveMin')" class="p-error">{{ exclusiveMinErrorMessage }}</small>
-  <small *ngIf="control?.hasError('invaliddate')" class="p-error">{{ invalidDateErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('required')">{{ requiredErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('fecIdMustBeUnique')">{{ uniqueFecIdMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('requiredTrue')">{{ requiredTrueErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
+  <small class="p-error" *ngIf="!control?.hasError('max') && control?.hasError('maxlength')">{{
+    maxLengthErrorMessage
+  }}</small>
+  <small class="p-error" *ngIf="control?.hasError('min')">{{ minErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('max')">{{ maxErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('exclusiveMax')">{{ exclusiveMaxErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('exclusiveMin')">{{ exclusiveMinErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('invaliddate')">{{ invalidDateErrorMessage }}</small>
   <small
-    *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"
     class="p-error"
-  >{{ emailErrorMessage }}</small
+    *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"
+    >{{ emailErrorMessage }}</small
   >
-  <small *ngIf="control?.hasError('isAfter')" class="p-error">{{ isAfterMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('isAfter')">{{ isAfterMessage }}</small>
   <small
+    class="p-error"
     *ngIf="
       !control?.hasError('required') &&
       !control?.hasError('minlength') &&
@@ -30,7 +31,6 @@
       !control?.hasError('isAfter') &&
       control?.hasError('pattern')
     "
-    class="p-error"
-  >{{ patternErrorMessage }}</small
+    >{{ patternErrorMessage }}</small
   >
 </ng-container>

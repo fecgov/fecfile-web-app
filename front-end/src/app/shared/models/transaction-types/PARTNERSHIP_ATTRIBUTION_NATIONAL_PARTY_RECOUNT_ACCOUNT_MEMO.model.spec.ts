@@ -7,7 +7,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO', () => {
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
@@ -20,7 +20,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO
     );
   });
 

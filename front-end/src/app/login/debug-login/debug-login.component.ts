@@ -28,7 +28,7 @@ export class DebugLoginComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private store: Store,
-    private ngZone: NgZone,
+    private ngZone: NgZone
   ) {
     this.form = this.fb.group({
       committeeId: ['', Validators.required],

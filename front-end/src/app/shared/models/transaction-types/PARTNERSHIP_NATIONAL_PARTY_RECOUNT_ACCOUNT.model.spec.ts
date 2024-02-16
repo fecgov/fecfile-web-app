@@ -24,17 +24,13 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   it('#generatePurposeDescription() should generate expected retval', () => {
     const txn = transactionType.getNewTransaction();
     const descrip = transactionType.generatePurposeDescription(txn);
-    expect(descrip).toBe(
-      'Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)',
-    );
+    expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)');
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
     const txn = transactionType.getNewTransaction();
     let descrip = transactionType.generatePurposeDescription(txn);
-    expect(descrip).toBe(
-      'Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)',
-    );
+    expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)');
 
     txn.children = [transactionType.getNewTransaction()];
     descrip = transactionType.generatePurposeDescription(txn);

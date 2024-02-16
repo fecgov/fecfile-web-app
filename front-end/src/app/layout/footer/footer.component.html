@@ -1,5 +1,5 @@
 <footer [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
-  <div *ngIf="showUpperFooter" id="footer-upper">
+  <div id="footer-upper" *ngIf="showUpperFooter">
     <div class="grid">
       <div class="col-6">
         <p class="footer-upper-text font-karla-bold">Need help? Contact us</p>
@@ -12,30 +12,30 @@
       </div>
     </div>
   </div>
-  <div class="grid" id="footer-lower">
+  <div id="footer-lower" class="grid">
     <div class="col-6">
       <img alt="The seal of the Federal Election Commission" id="fec-seal" src="assets/img/fec-seal-inverse.svg" />
       <p id="fec-title">Federal Election Commission</p>
-      <p class="font-karla" id="fec-address">1050 First Street, NE Washington, DC 20463</p>
+      <p id="fec-address" class="font-karla">1050 First Street, NE Washington, DC 20463</p>
     </div>
     <div class="col-3">
       <div class="grid">
         <div class="col-12 footer-item font-karla font-karla">
-          <a href="https://www.fec.gov/about/privacy-and-security-policy/" rel="noopener" target="_blank">
+          <a href="https://www.fec.gov/about/privacy-and-security-policy/" target="_blank" rel="noopener">
             Privacy and security policy
           </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/about/plain-language/" rel="noopener" target="_blank">Plain language</a>
+          <a href="https://www.fec.gov/about/plain-language/" target="_blank" rel="noopener">Plain language</a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/about/no-fear-act/" rel="noopener" target="_blank">No FEAR Act</a>
+          <a href="https://www.fec.gov/about/no-fear-act/" target="_blank" rel="noopener">No FEAR Act</a>
         </div>
         <div class="col-12 footer-item font-karla">
           <a
             href="https://www.fec.gov/about/reports-about-fec/strategy-budget-and-performance/"
-            rel="noopener"
             target="_blank"
+            rel="noopener"
           >
             Strategy, budget, and performance
           </a>
@@ -45,26 +45,26 @@
     <div class="col-3">
       <div class="grid">
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/about/open/" rel="noopener" target="_blank">Open government</a>
+          <a href="https://www.fec.gov/about/open/" target="_blank" rel="noopener">Open government</a>
         </div>
         <div class="col-12 footer-item font-karla">
           <a
             href="https://www.fbi.gov/investigate/counterintelligence/foreign-influence/protected-voices"
             rel="noopener"
-            rel="noopener"
             target="_blank"
+            rel="noopener"
           >
             Protected Voices
           </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.usa.gov/" rel="noopener" target="_blank">USA.gov</a>
+          <a href="https://www.usa.gov/" target="_blank" rel="noopener">USA.gov</a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/office-inspector-general/" rel="noopener" target="_blank">Inspector General</a>
+          <a href="https://www.fec.gov/office-inspector-general/" target="_blank" rel="noopener">Inspector General</a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/freedom-information-act/" rel="noopener" target="_blank">FOIA</a>
+          <a href="https://www.fec.gov/freedom-information-act/" target="_blank" rel="noopener">FOIA</a>
         </div>
       </div>
     </div>

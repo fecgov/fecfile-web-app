@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { AggregationGroups, Transaction } from './transaction.model';
+import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -46,6 +46,13 @@ export class SchCTransaction extends Transaction {
   aggregation_group: AggregationGroups | undefined;
 
   // loan_payment_to_date and loan_balance are dynamically calculated on the back-end
+  // and not saved in the database
+  override getFieldsNotToValidate(): string[] {
+    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToValidate()];
+  }
+  override getFieldsNotToSave(): string[] {
+    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToSave()];
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchCTransaction {
@@ -63,15 +70,6 @@ export class SchCTransaction extends Transaction {
       });
     }
     return transaction;
-  }
-
-  // and not saved in the database
-  override getFieldsNotToValidate(): string[] {
-    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToValidate()];
-  }
-
-  override getFieldsNotToSave(): string[] {
-    return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToSave()];
   }
 }
 

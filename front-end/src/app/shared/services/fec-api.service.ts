@@ -13,10 +13,7 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
   providedIn: 'root',
 })
 export class FecApiService {
-  constructor(
-    private http: HttpClient,
-    private apiService: ApiService,
-  ) {}
+  constructor(private http: HttpClient, private apiService: ApiService) {}
 
   getHeaders() {
     return {

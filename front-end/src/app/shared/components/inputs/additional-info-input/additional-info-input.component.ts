@@ -19,7 +19,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
       this.initPrefix(
         this.templateMap.purpose_description,
-        this.transaction?.transactionType?.purposeDescriptionPrefix,
+        this.transaction?.transactionType?.purposeDescriptionPrefix
       );
     }
 

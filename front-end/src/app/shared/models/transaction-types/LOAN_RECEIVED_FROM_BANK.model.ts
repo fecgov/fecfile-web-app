@@ -4,22 +4,22 @@ import { SchCTransactionType } from '../schc-transaction-type.model';
 import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import {
   CANCEL_CONTROL,
-  ControlType,
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
   SAVE_TRIPLE_ENTRY_LIST_CONTROL,
   TransactionNavigationControls,
+  NavigationControl,
+  NavigationAction,
+  NavigationDestination,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
-  ADDRESS_FIELDS,
   COMMON_FIELDS,
-  LOAN_FINANCE_FIELDS,
-  LOAN_TERMS_FIELDS,
+  ADDRESS_FIELDS,
   ORG_FIELDS,
   ORGANIZATION,
+  LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 import { ScheduleC2TransactionTypes } from '../schc2-transaction.model';
@@ -63,11 +63,11 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
         hasNoContact,
         () => true,
         'pi pi-plus',
-        ControlType.BUTTON,
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_TRIPLE_ENTRY_LIST_CONTROL],
+    [SAVE_TRIPLE_ENTRY_LIST_CONTROL]
   );
 
   getNewTransaction() {

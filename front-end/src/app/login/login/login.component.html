@@ -9,17 +9,17 @@
           Filing Office is available to answer filers' questions about the system.
         </p>
         <div class="col-12">
-          <button (click)="navigateToLoginDotGov()" class="login-button" type="button">
+          <button type="button" (click)="navigateToLoginDotGov()" class="login-button">
             <ng-template [ngIf]="true">Log into FECFile</ng-template>
           </button>
-          <button class="signup-button" type="button">
+          <button type="button" class="signup-button">
             <ng-template [ngIf]="true">Sign up with Login.gov</ng-template>
           </button>
         </div>
         <div class="col-12">
-          <a class="learn-more-link" href="https://www.login.gov/what-is-login/">Learn more about Login.gov</a>
+          <a href="https://www.login.gov/what-is-login/" class="learn-more-link">Learn more about Login.gov</a>
         </div>
-        <div *ngIf="this.localLoginAvailable" class="grid">
+        <div class="grid" *ngIf="this.localLoginAvailable">
           <div class="col-12 debug-login">
             <app-debug-login></app-debug-login>
           </div>
@@ -29,11 +29,11 @@
   </div>
   <div class="col-6">
     <img
-      alt="An example of the FECFile dashboard"
+      ngSrc="assets/img/dashboard-example.svg"
       class="dashboard-example-img"
       height="600"
-      ngSrc="assets/img/dashboard-example.svg"
       width="600"
+      alt="An example of the FECFile dashboard"
     />
   </div>
 </div>

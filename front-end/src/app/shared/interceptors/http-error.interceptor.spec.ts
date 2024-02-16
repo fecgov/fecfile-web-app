@@ -14,7 +14,7 @@ describe('HttpErrorInterceptor', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       providers: [HttpErrorInterceptor, provideMockStore(testMockStore)],
-    }),
+    })
   );
 
   beforeEach(() => {
@@ -31,14 +31,14 @@ describe('HttpErrorInterceptor', () => {
     const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
     const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
     httpHandlerSpy.handle.and.returnValue(
-      throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden })),
+      throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden }))
     );
 
     spyOn(store, 'dispatch');
 
     testIterceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe(
       (x) => x,
-      (y) => y,
+      (y) => y
     );
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
   });
@@ -54,15 +54,15 @@ describe('HttpErrorInterceptor', () => {
           new HttpErrorResponse({
             status: HttpStatusCode.BadRequest,
             error: new ErrorEvent(''),
-          }),
-      ),
+          })
+      )
     );
 
     spyOn(store, 'dispatch');
 
     testIterceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe(
       (x) => x,
-      (y) => y,
+      (y) => y
     );
     expect(window.alert).toHaveBeenCalledWith('Outgoing HTTP Error: ');
   });

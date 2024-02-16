@@ -34,7 +34,7 @@ describe('Form99', () => {
         id: '999',
         form_type: F99FormTypes.F99,
         committee_name: 'foo',
-        text_code: undefined,
+        text_code: undefined
       };
       const form = Form99.fromJSON(data);
       expect(form.formSubLabel).toEqual('');
@@ -45,7 +45,7 @@ describe('Form99', () => {
         id: '999',
         form_type: F99FormTypes.F99,
         committee_name: 'foo',
-        text_code: 'MSI',
+        text_code: 'MSI'
       };
       const form = Form99.fromJSON(data);
       expect(form.formSubLabel).toEqual('Disavowal Response');
@@ -58,7 +58,7 @@ describe('Form99', () => {
         id: '999',
         form_type: F99FormTypes.F99,
         committee_name: 'foo',
-        report_version: undefined,
+        report_version: undefined
       };
       const form = Form99.fromJSON(data);
       expect(form.versionLabel).toEqual('Original');
@@ -69,7 +69,7 @@ describe('Form99', () => {
         id: '999',
         form_type: F99FormTypes.F99,
         committee_name: 'foo',
-        report_version: '1',
+        report_version: '1'
       };
       const form = Form99.fromJSON(data);
       expect(form.versionLabel).toEqual('Original 1');

@@ -200,7 +200,7 @@ import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
-                                      // Schedule A /////////////////////////////////////////////////////
+  // Schedule A /////////////////////////////////////////////////////
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   IN_KIND_RECEIPT,
@@ -390,8 +390,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
   INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
   INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
-  MULTISTATE_INDEPENDENT_EXPENDITURE
-};
+  MULTISTATE_INDEPENDENT_EXPENDITURE,
+}
 
 export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {

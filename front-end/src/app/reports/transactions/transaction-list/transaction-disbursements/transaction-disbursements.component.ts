@@ -26,7 +26,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     protected override router: Router,
     protected override itemService: TransactionSchBService,
     protected override store: Store,
-    protected override reportService: ReportService,
+    protected override reportService: ReportService
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
     this.caption =

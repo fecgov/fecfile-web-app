@@ -4,14 +4,14 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { ORGANIZATION, ORGANIZATION_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ORGANIZATION_B_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_UNREGISTERED_CONTRIBUTION_VOID extends SchBTransactionType {
   formFields = ORGANIZATION_B_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
+    ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID
   );
   schema = schema;
   override negativeAmountValueOnly = true;

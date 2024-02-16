@@ -189,6 +189,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     action.action(report);
   }
 
+  protected getEmptyItem(): Transaction {
+    return {} as Transaction;
+  }
+
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
     return { report_id: reportId, page_size: this.rowsPerPage };
@@ -309,9 +313,5 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       return id.substring(0, 8).toUpperCase();
     }
     return '';
-  }
-
-  protected getEmptyItem(): Transaction {
-    return {} as Transaction;
   }
 }

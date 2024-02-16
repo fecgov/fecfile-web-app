@@ -8,7 +8,7 @@ describe('SupportOpposeInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SupportOpposeInputComponent],
+      declarations: [SupportOpposeInputComponent]
     });
     fixture = TestBed.createComponent(SupportOpposeInputComponent);
     component = fixture.componentInstance;

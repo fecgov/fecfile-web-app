@@ -5,14 +5,13 @@
       <div class="report-type">{{ formLabel }}</div>
       <div class="sub-heading">{{ report_code | reportCodeLabel }}</div>
       <div class="sub-heading">
-        {{ coverage_from_date | fecDate }} —
-        <wbr />
+        {{ coverage_from_date | fecDate }} — <wbr />
         {{ coverage_through_date | fecDate }}
       </div>
     </div>
   </div>
   <div class="grid">
-    <div *ngIf="items$ | async" class="col-12">
+    <div class="col-12" *ngIf="items$ | async">
       <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
     </div>
   </div>

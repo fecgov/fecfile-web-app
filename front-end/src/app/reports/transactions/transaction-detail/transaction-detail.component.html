@@ -6,21 +6,21 @@
     {{ transactionType?.title }}
   </h1>
   <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
-  <h4 *ngIf="!isEditable" class="read-only-tag subtitle">READ ONLY</h4>
-  <h4 *ngIf="isDebtRepayment(transaction)" class="read-only-tag subtitle">DEBT REPAYMENT</h4>
+  <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
+  <h4 class="read-only-tag subtitle" *ngIf="isDebtRepayment(transaction)">DEBT REPAYMENT</h4>
   <h2>{{ transactionType?.contactTitle || 'Contact' }}</h2>
-  <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <app-transaction-input
-      (candidateContactSelect)="updateFormWithCandidateContact($event)"
+      [isEditable]="isEditable"
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [transaction]="transaction"
+      [contactTypeOptions]="contactTypeOptions"
+      [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
       (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+      (candidateContactSelect)="updateFormWithCandidateContact($event)"
       (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
       (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-      [contactTypeOptions]="contactTypeOptions"
-      [formSubmitted]="formSubmitted"
-      [form]="form"
-      [isEditable]="isEditable"
-      [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-      [transaction]="transaction"
     >
     </app-transaction-input>
   </form>

@@ -8,10 +8,10 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', ()
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).parent_transaction = getTestTransactionByType(
-      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT
     );
     (
       (transaction.parent_transaction as SchATransaction).parent_transaction as SchATransaction
@@ -26,7 +26,7 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', ()
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
     );
   });
 
@@ -42,7 +42,7 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', ()
     transaction.children = [{} as SchATransaction];
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Pres. Nominating Convention Account JF Memo: Super Duper Extra Super Lo... (Partnership Attribution)',
+      'Pres. Nominating Convention Account JF Memo: Super Duper Extra Super Lo... (Partnership Attribution)'
     );
   });
 });

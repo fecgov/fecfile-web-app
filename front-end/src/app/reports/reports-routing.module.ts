@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';

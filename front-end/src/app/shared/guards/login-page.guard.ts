@@ -5,15 +5,13 @@ import { Observable } from 'rxjs';
 import { LoginService } from '../services/login.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class LoginGuard {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private cookieService: CookieService,
-  ) {}
-
+    private cookieService: CookieService) { }
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (!this.loginService.userIsAuthenticated()) {
       this.cookieService.deleteAll();
@@ -23,4 +21,5 @@ export class LoginGuard {
       return true;
     }
   }
+
 }

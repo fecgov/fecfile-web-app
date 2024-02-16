@@ -19,6 +19,19 @@ export class Form99 extends Report {
   form_type = F99FormTypes.F99;
   override submitAlertText =
     'Are you sure you want to submit this form electronically? Please note that you cannot undo this action.';
+
+  get formLabel() {
+    return 'FORM 99';
+  }
+
+  get formSubLabel() {
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
+  }
+
+  get versionLabel() {
+    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+  }
+
   committee_name: string | undefined;
   street_1: string | undefined;
   street_2: string | undefined;
@@ -33,18 +46,6 @@ export class Form99 extends Report {
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   text_code: string | undefined;
   message_text: string | undefined;
-
-  get formLabel() {
-    return 'FORM 99';
-  }
-
-  get formSubLabel() {
-    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
-  }
-
-  get versionLabel() {
-    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
-  }
 
   // prettier-ignore
   static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any

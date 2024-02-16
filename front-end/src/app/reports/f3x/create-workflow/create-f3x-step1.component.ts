@@ -70,7 +70,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     private messageService: MessageService,
     protected router: Router,
     private activatedRoute: ActivatedRoute,
-    private reportService: ReportService,
+    private reportService: ReportService
   ) {
     super();
   }
@@ -129,7 +129,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
       this.form.controls['filing_frequency'].valueChanges.pipe(startWith(this.form.controls['filing_frequency'].value)),
       this.form.controls['report_type_category'].valueChanges.pipe(
-        startWith(this.form.controls['report_type_category'].value),
+        startWith(this.form.controls['report_type_category'].value)
       ),
     ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
       const coverageDatesFunction = F3X_REPORT_CODE_MAP.get(reportCode)?.coverageDatesFunction;
@@ -138,7 +138,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         const [coverage_from_date, coverage_through_date] = coverageDatesFunction(
           this.thisYear,
           isElectionYear,
-          filingFrequency,
+          filingFrequency
         );
         this.form.patchValue({ coverage_from_date, coverage_through_date });
       }
@@ -167,7 +167,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   validateDateWithinCoverage(
     existingCoverage: F3xCoverageDates[],
-    control: AbstractControl | null,
+    control: AbstractControl | null
   ): ValidationErrors | null {
     return existingCoverage.reduce((error: ValidationErrors | null, coverage) => {
       if (error) return error;

@@ -30,13 +30,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
-  protected readonly isLoanRepayment = isLoanRepayment;
-  protected readonly isDebtRepayment = isDebtRepayment;
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private store: Store,
-  ) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
   }
 
@@ -112,4 +107,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       }
     }
   }
+
+  protected readonly isLoanRepayment = isLoanRepayment;
+  protected readonly isDebtRepayment = isDebtRepayment;
 }

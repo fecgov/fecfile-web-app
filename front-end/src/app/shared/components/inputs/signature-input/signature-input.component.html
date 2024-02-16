@@ -1,30 +1,30 @@
 <div [formGroup]="form">
   <app-name-input
-    [formSubmitted]="formSubmitted"
     [form]="form"
-    [templateMapKeyPrefix]="templateMapKeyPrefix"
+    [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
+    [templateMapKeyPrefix]="templateMapKeyPrefix"
   ></app-name-input>
   <div class="grid">
-    <div *ngIf="titleFieldName" class="col-4">
+    <div class="col-4" *ngIf="titleFieldName">
       <div class="field">
         <label for="title">TITLE</label>
-        <input [formControlName]="titleFieldName" id="title" pInputText type="text" />
+        <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
         <app-error-messages
+          [form]="form"
           [fieldName]="titleFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="date_signed">DATE SIGNED</label>
-        <p-calendar [formControlName]="dateSignedFieldName" inputId="date_signed" name="date_signed"></p-calendar>
+        <p-calendar inputId="date_signed" name="date_signed" [formControlName]="dateSignedFieldName"></p-calendar>
         <app-error-messages
+          [form]="form"
           [fieldName]="dateSignedFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>

@@ -35,14 +35,14 @@
           </h3>
           <br />
         </div>
-        <div *ngIf="reportCode" class="col-12">
+        <div class="col-12" *ngIf="reportCode">
           <h5 class="no-vert-margins">YOUR REPORT TYPE:</h5>
           <h3 class="no-vert-margins">
             {{ reportCode | reportCodeLabel }}
           </h3>
           <br />
         </div>
-        <div *ngIf="coverageDates" class="col-12">
+        <div class="col-12" *ngIf="coverageDates">
           <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
           <h3 class="no-vert-margins no-wrap">
             {{ coverageDates['coverage_from_date'] || null | longDate }} —
@@ -71,11 +71,11 @@
     </div>
     <div class="col-8">
       <img
-        alt="Form submitted success image"
         class="image-max-width"
-        draggable="false"
-        height="271"
         ngSrc="assets/img/image-placeholder.png"
+        draggable="false"
+        alt="Form submitted success image"
+        height="271"
         width="450"
       />
     </div>
@@ -98,11 +98,11 @@
     <div class="col-4"></div>
     <div class="col-4">
       <button
-        (click)="backToReports()"
-        class="p-button-primary button-full-width"
-        label="Close & return to manage reports"
         pButton
         pRipple
+        label="Close & return to manage reports"
+        class="p-button-primary button-full-width"
+        (click)="backToReports()"
       ></button>
     </div>
   </div>

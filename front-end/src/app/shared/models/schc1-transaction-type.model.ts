@@ -7,6 +7,19 @@ export abstract class SchC1TransactionType extends TransactionType {
 
   // Labels
   override amountInputHeader = 'Loan information';
+
+  override getInheritedFields = (transaction: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.inheritedFields;
+
+  override getNavigationControls = (transaction: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? STANDARD_CONTROLS : this.navigationControls;
+
+  override getFooter = (transaction?: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.footer;
+
+  override getUseParentContact = (transaction?: Transaction) =>
+    isPulledForwardLoan(transaction?.parent_transaction) ? false : this.useParentContact;
+
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
     // Form fields
@@ -72,16 +85,4 @@ export abstract class SchC1TransactionType extends TransactionType {
     signatory_2_title: 'authorized_title',
     signatory_2_date: 'authorized_date_signed',
   };
-
-  override getInheritedFields = (transaction: Transaction) =>
-    isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.inheritedFields;
-
-  override getNavigationControls = (transaction: Transaction) =>
-    isPulledForwardLoan(transaction?.parent_transaction) ? STANDARD_CONTROLS : this.navigationControls;
-
-  override getFooter = (transaction?: Transaction) =>
-    isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.footer;
-
-  override getUseParentContact = (transaction?: Transaction) =>
-    isPulledForwardLoan(transaction?.parent_transaction) ? false : this.useParentContact;
 }

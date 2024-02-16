@@ -6,7 +6,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
 
   beforeEach(() => {
     transaction = getTestTransactionByType(
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
     ) as SchATransaction;
   });
 
@@ -18,7 +18,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
     );
   });
 

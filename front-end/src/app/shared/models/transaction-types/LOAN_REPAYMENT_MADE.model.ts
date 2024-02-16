@@ -4,10 +4,10 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
+  ORG_FIELDS,
   ADDRESS_FIELDS,
   COMMON_FIELDS,
   INDIVIDUAL_FIELDS,
-  ORG_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 import { TemplateMapKeyType } from '../transaction-type.model';

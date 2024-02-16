@@ -5,8 +5,8 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import {
-  INDIVIDUAL_ORGANIZATION_COMMITTEE,
   INDIVIDUAL_ORGANIZATION_ELECTION_B_FORM_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
@@ -14,7 +14,7 @@ export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO extends SchBTrans
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO
   );
   schema = schema;
   override navigationControls = CHILD_CONTROLS;

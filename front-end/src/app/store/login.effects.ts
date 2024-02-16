@@ -7,6 +7,8 @@ import { ApiService } from 'app/shared/services/api.service';
 
 @Injectable()
 export class LoginEffects {
+  constructor(private actions$: Actions, private router: Router, private apiService: ApiService) {}
+
   userLoggedOut$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -15,14 +17,8 @@ export class LoginEffects {
           this.apiService.get('/auth/logout').subscribe(() => {
             this.router.navigate(['/login']);
           });
-        }),
+        })
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
-
-  constructor(
-    private actions$: Actions,
-    private router: Router,
-    private apiService: ApiService,
-  ) {}
 }

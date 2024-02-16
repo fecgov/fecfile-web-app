@@ -94,7 +94,7 @@ describe('AmountInputComponent', () => {
       [transaction.transactionType.templateMap.date]: invalidDate,
     });
     expect(dateFormControl?.invalid).toBeTrue();
-
+    
     const msg = dateFormControl?.errors?.['invaliddate'].msg;
     expect(msg).toEqual('Date must fall within the report date range.');
   });

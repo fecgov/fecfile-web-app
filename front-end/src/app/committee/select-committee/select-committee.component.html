@@ -4,13 +4,13 @@
     <h5 class="font-karla-bold">LET'S FILE YOUR FEC REPORT WITH FECFILE...</h5>
     <p-divider></p-divider>
 
-    <img alt="Person filing image" draggable="false" src="assets/img/person-filing.jpg" />
+    <img src="assets/img/person-filing.jpg" draggable="false" alt="Person filing image" />
   </div>
   <div class="col-6 right-side">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
       <div class="committee-list">
-        <div (click)="activateCommittee(committee)" *ngFor="let committee of committees" class="committee-card">
+        <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
           <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
           <div class="committee-info">
             <h3>{{ committee.name }}</h3>

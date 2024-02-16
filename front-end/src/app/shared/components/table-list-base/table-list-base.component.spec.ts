@@ -6,12 +6,12 @@ import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListBaseComponent } from './table-list-base.component';
 
 class TestTableListBaseComponent extends TableListBaseComponent<string> {
-  public override loadItemService(itemService: TableListService<string>) {
-    this.itemService = itemService;
-  }
-
   protected getEmptyItem(): string {
     return '';
+  }
+
+  public override loadItemService(itemService: TableListService<string>) {
+    this.itemService = itemService;
   }
 }
 
@@ -27,15 +27,12 @@ class TestTableListService implements TableListService<string> {
       results: this.tableResults,
     });
   }
-
   create(item: string): Observable<string> {
     return of(item);
   }
-
   update(item: string): Observable<string> {
     return of(item);
   }
-
   delete(): Observable<null> {
     return of(null);
   }

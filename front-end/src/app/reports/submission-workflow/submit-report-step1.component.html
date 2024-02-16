@@ -7,7 +7,7 @@
 <p-divider></p-divider>
 <div class="p-fluid">
   <p-card>
-    <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">
         <div class="col-12">
           <div class="field">
@@ -19,22 +19,22 @@
         <div class="col-12">
           <div class="field">
             <label for="confirmation_email_1"><strong>Email #1</strong></label>
-            <input formControlName="confirmation_email_1" id="confirmation_email_1" pInputText type="text" />
+            <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="confirmation_email_1"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
         <div class="col-12">
           <div class="field">
             <label for="confirmation_email_2"><strong>Email #2</strong> (Optional)</label>
-            <input formControlName="confirmation_email_2" id="confirmation_email_2" pInputText type="text" />
+            <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
             <app-error-messages
-              [formSubmitted]="formSubmitted"
               [form]="form"
               fieldName="confirmation_email_2"
+              [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
         </div>
@@ -55,17 +55,17 @@
             <div class="field">
               <div class="radio-button-spacer">
                 <p-radioButton
-                  [value]="true"
-                  ariaLabel="Address has changed in the last 10 days"
-                  formControlName="change_of_address"
-                  label="YES"
                   name="change_of_address"
+                  [value]="true"
+                  label="YES"
+                  formControlName="change_of_address"
+                  ariaLabel="Address has changed in the last 10 days"
                 ></p-radioButton>
               </div>
               <app-error-messages
-                [formSubmitted]="formSubmitted"
                 [form]="form"
                 fieldName="change_of_address"
+                [formSubmitted]="formSubmitted"
                 patternErrorMessage="Please select 'Yes' or 'No'"
               ></app-error-messages>
             </div>
@@ -74,11 +74,11 @@
             <div class="field">
               <div class="radio-button-spacer">
                 <p-radioButton
-                  [value]="false"
-                  ariaLabel="Address has not changed in the last 10 days"
-                  formControlName="change_of_address"
-                  label="NO"
                   name="change_of_address"
+                  [value]="false"
+                  label="NO"
+                  formControlName="change_of_address"
+                  ariaLabel="Address has not changed in the last 10 days"
                 ></p-radioButton>
               </div>
             </div>
@@ -104,22 +104,22 @@
           <div class="col-6">
             <div class="field">
               <label for="street_1">STREET ADDRESS</label>
-              <input formControlName="street_1" id="street_1" pInputText type="text" />
+              <input type="text" pInputText id="street_1" formControlName="street_1" />
               <app-error-messages
-                [formSubmitted]="formSubmitted"
                 [form]="form"
                 fieldName="street_1"
+                [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
           <div class="col-6">
             <div class="field">
               <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input formControlName="street_2" id="street_2" pInputText type="text" />
+              <input type="text" pInputText id="street_2" formControlName="street_2" />
               <app-error-messages
-                [formSubmitted]="formSubmitted"
                 [form]="form"
                 fieldName="street_2"
+                [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
@@ -128,28 +128,28 @@
           <div class="col-6">
             <div class="field">
               <label for="city">CITY</label>
-              <input formControlName="city" id="city" pInputText type="text" />
-              <app-error-messages [formSubmitted]="formSubmitted" [form]="form" fieldName="city"></app-error-messages>
+              <input type="text" pInputText id="city" formControlName="city" />
+              <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="state">STATE/PROVINCE</label>
               <p-dropdown
-                [autoDisplayFirst]="false"
-                [options]="stateOptions"
-                appendTo="body"
-                formControlName="state"
                 inputId="state"
+                formControlName="state"
+                [options]="stateOptions"
+                [autoDisplayFirst]="false"
+                appendTo="body"
               ></p-dropdown>
-              <app-error-messages [formSubmitted]="formSubmitted" [form]="form" fieldName="state"></app-error-messages>
+              <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="zip">ZIP/POSTAL CODE</label>
-              <input formControlName="zip" id="zip" pInputText type="text" />
-              <app-error-messages [formSubmitted]="formSubmitted" [form]="form" fieldName="zip"></app-error-messages>
+              <input type="text" pInputText id="zip" formControlName="zip" />
+              <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         </div>
@@ -158,22 +158,22 @@
       <div class="grid">
         <div class="col-2">
           <button
-            (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
-            class="p-button-secondary"
-            label="Back"
             pButton
             pRipple
+            label="Back"
+            class="p-button-secondary"
+            (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
           ></button>
         </div>
         <div class="col-6"></div>
         <div class="col-4">
           <button
-            (click)="continue()"
-            appSingleClick
-            class="p-button-primary"
-            label="Confirm information"
             pButton
             pRipple
+            appSingleClick
+            label="Confirm information"
+            class="p-button-primary"
+            (click)="continue()"
           ></button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARKS';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { INDIVIDUAL, INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
 
 export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {

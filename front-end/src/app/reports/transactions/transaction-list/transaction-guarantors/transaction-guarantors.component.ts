@@ -19,26 +19,6 @@ import { TableLazyLoadEvent } from 'primeng/table';
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent implements OnInit {
   scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
   @Input() loan?: Transaction;
-  override rowActions: TableAction[] = [
-    new TableAction(
-      'View',
-      this.editItem.bind(this),
-      () => !this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      () => this.reportIsEditable,
-      () => true,
-    ),
-  ];
 
   constructor(
     protected override messageService: MessageService,
@@ -48,7 +28,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     protected override router: Router,
     protected override itemService: TransactionSchC2Service,
     protected override store: Store,
-    protected override reportService: ReportService,
+    protected override reportService: ReportService
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
@@ -59,7 +39,6 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     }
     return super.getGetParams();
   }
-
   override loadTableItems(event: TableLazyLoadEvent): void {
     if (!this.loan?.id) {
       this.items = [];
@@ -68,4 +47,25 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
       super.loadTableItems(event);
     }
   }
+
+  override rowActions: TableAction[] = [
+    new TableAction(
+      'View',
+      this.editItem.bind(this),
+      () => !this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Edit',
+      this.editItem.bind(this),
+      () => this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
+      'Delete',
+      this.deleteItem.bind(this),
+      () => this.reportIsEditable,
+      () => true
+    ),
+  ];
 }
