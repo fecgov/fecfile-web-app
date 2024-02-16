@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
 import { Report } from 'app/shared/models/report.model';
@@ -24,7 +23,7 @@ const routes: Routes = [
     path: 'report/:reportId/transactions/select/independent-expenditures',
     component: TransactionIndependentExpenditurePickerComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },
@@ -33,7 +32,7 @@ const routes: Routes = [
     path: 'web-print/:reportId',
     title: 'Print preview',
     component: PrintPreviewComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => `/reports/f24/transactions/${report?.id}/list`,
@@ -46,7 +45,7 @@ const routes: Routes = [
     title: 'Confirm information',
     component: SubmitReportStep1Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f24/web-print/' + report?.id,
@@ -59,7 +58,7 @@ const routes: Routes = [
     title: 'Submit report',
     component: SubmitReportStep2Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f24/submit/step1/' + report?.id,
@@ -71,7 +70,7 @@ const routes: Routes = [
     path: 'submit/status/:reportId',
     title: 'Report status',
     component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },
@@ -80,7 +79,7 @@ const routes: Routes = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getNextUrl: (report?: Report) => `/reports/transactions/report/${report?.id}/list`,

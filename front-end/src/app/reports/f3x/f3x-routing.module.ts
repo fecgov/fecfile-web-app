@@ -11,7 +11,6 @@ import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
-import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
 import { Report } from 'app/shared/models/report.model';
 import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
@@ -30,7 +29,6 @@ const routes: Routes = [
     title: 'Cash on hand',
     component: CashOnHandComponent,
     canActivate: [ReportIsEditableGuard, CashOnHandGuard],
-    resolve: { sidebar: SidebarStateResolver },
     data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
     runGuardsAndResolvers: 'always',
   },
@@ -39,6 +37,9 @@ const routes: Routes = [
     title: 'Create a report',
     component: CreateF3XStep1Component,
     runGuardsAndResolvers: 'always',
+    data: {
+      showSidebar: false,
+    },
   },
   {
     path: 'create/step1/:reportId',
@@ -51,7 +52,7 @@ const routes: Routes = [
     path: 'summary/:reportId',
     title: 'View summary page',
     component: ReportSummaryComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
@@ -59,7 +60,7 @@ const routes: Routes = [
     path: 'detailed-summary/:reportId',
     title: 'View detailed summary page',
     component: ReportDetailedSummaryComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
@@ -67,7 +68,7 @@ const routes: Routes = [
     path: 'web-print/:reportId',
     title: 'Print preview',
     component: PrintPreviewComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f3x/detailed-summary/' + report?.id,
@@ -80,7 +81,7 @@ const routes: Routes = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getNextUrl: (report?: Report) => '/reports/f3x/submit/step1/' + report?.id,
@@ -92,7 +93,7 @@ const routes: Routes = [
     title: 'Confirm information',
     component: SubmitReportStep1Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
@@ -105,7 +106,7 @@ const routes: Routes = [
     title: 'Submit report',
     component: SubmitReportStep2Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f3x/submit/step1/' + report?.id,
@@ -117,14 +118,14 @@ const routes: Routes = [
     path: 'submit/status/:reportId',
     title: 'Report status',
     component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'test-dot-fec/:reportId',
     component: TestDotFecComponent,
-    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
+    resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
