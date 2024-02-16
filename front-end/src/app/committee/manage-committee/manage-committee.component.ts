@@ -11,12 +11,14 @@ import { CommitteeMemberService } from 'app/shared/services/committee-account.se
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
   override item: CommitteeMember = this.getEmptyItem();
   public rowActions: TableAction[] = [];
+  override rowsPerPage = 10;
+  paginationPageSizeOptions = [5, 10, 15, 20];
 
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: CommitteeMemberService
+    protected override itemService: CommitteeMemberService,
   ) {
     super(messageService, confirmationService, elementRef);
   }

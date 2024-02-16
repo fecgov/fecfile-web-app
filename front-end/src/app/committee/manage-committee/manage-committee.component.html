@@ -33,6 +33,7 @@
     [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
     [showCurrentPageReport]="true"
+    sortField="created"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -57,10 +58,10 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td>{{ item.last_name }}, {{ item.first_name }}</td>
+        <td>{{ item.name }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.getRoleLabel() }}</td>
-        <td>Registered</td>
+        <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
         <td>
           <app-table-actions-button
             [tableActions]="rowActions"
