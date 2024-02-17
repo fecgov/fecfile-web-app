@@ -7,6 +7,24 @@
     background-color: #ffffff;
     box-shadow: 0 0 4px 0px #d1d1d1
 }
+.empty-card {
+    height: 200px;
+    flex-direction: column;
+}
+.empty-lens-img {
+    height: 95px;
+    display: flex;
+}
+.empty-verbiage {
+    width: 65%;
+    align-self: center;
+    margin-top: 10px;
+}
+.empty-verbiage p {
+    text-align: center;
+    font-size: x-large; 
+    line-height: normal;
+}
 .left-side {
     flex-direction: column;
 }

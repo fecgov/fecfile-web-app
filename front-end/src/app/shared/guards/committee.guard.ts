@@ -2,19 +2,17 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
-export const committeeGuard: CanActivateFn = () => {
+export const committeeGuard: CanActivateFn = async () => {
   const router = inject(Router);
-  return inject(Store)
-    .select(selectCommitteeAccount)
-    .pipe(
-      map((committee) => {
-        if (!committee.id) {
-          router.navigateByUrl('/login/select-committee');
-          return false;
-        }
-        return true;
-      }),
-    );
+  const store = inject(Store);
+
+  const committeeAccount = await firstValueFrom(store.select(selectCommitteeAccount));
+
+  if (!committeeAccount.id) {
+    return router.createUrlTree(['/login/select-committee']);
+  } else {
+    return true;
+  }
 };

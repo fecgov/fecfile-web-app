@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
@@ -9,8 +9,7 @@ import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
-import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
-import { CommitteeAccount } from '../models/committee-account.model';
+import { Router } from '@angular/router';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -21,6 +20,7 @@ export class LoginService extends DestroyerComponent {
   public userLoginData$: Observable<UserLoginData>;
   constructor(
     private store: Store,
+    private router: Router,
     private apiService: ApiService,
     private cookieService: CookieService,
   ) {
@@ -46,21 +46,19 @@ export class LoginService extends DestroyerComponent {
     });
   }
 
-  public logOut() {
-    this.cookieService.delete('csrftoken');
-    return this.userLoginData$.subscribe((userLoginData) => {
-      if (userLoginData && !userLoginData.login_dot_gov) {
-        // Non-login.gov auth
-        this.store.dispatch(userLoggedOutAction());
+  public async logOut() {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    this.clearUserLoggedInCookies();
+    this.store.dispatch(userLoggedOutAction());
+    if (userLoginData.email) {
+      if (!userLoginData.login_dot_gov) {
+        this.apiService.get('/auth/logout').subscribe(() => {
+          this.router.navigate(['/login']);
+        });
       } else {
-        this.store.dispatch(userLoggedOutForLoginDotGovAction());
-        if (environment.loginDotGovLogoutUrl) {
-          window.location.href = environment.loginDotGovLogoutUrl;
-        }
+        window.location.href = environment.loginDotGovLogoutUrl;
       }
-      this.store.dispatch(setCommitteeAccountDetailsAction({ payload: new CommitteeAccount() }));
-      return false;
-    });
+    }
   }
 
   public clearUserFecfileApiCookies() {
@@ -73,7 +71,7 @@ export class LoginService extends DestroyerComponent {
 
   public clearUserLoggedInCookies() {
     this.clearUserFecfileApiCookies();
-    this.cookieService.delete(environment.sessionIdCookieName);
+    this.cookieService.delete('csrftoken');
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
