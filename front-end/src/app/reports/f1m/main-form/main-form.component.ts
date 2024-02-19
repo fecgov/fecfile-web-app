@@ -143,6 +143,22 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           } else {
             this.form.get('statusBy')?.setValue('qualification');
           }
+
+          // If this is an edit, update the lookup ids to exclude
+          if (this.report.id) {
+            if (this.report.affiliated_committee_name) {
+              if (this.report?.contact_affiliated?.committee_id)
+                this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
+              if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
+            } else {
+              candidateTags.forEach((tag: F1MCandidateTag) => {
+                if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
+                  this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
+                if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
+                  this.excludeIds.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
+              });
+            }
+          }
         }
       });
 
