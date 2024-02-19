@@ -53,6 +53,14 @@ export abstract class F1MContact {
     if (currentId) {
       this.component.excludeIds.push(currentId);
     }
+    if (this.component.report[this.contactKey]?.committee_id) {
+      this.component.excludeFecIds = this.component.excludeFecIds.filter(
+        (id: string) => id !== this.component.report[this.contactKey].committee_id,
+      );
+    }
+    if ($event.value.committee_id) {
+      this.component.excludeFecIds.push($event.value.committee_id);
+    }
     if (this.component.report[this.contactKey]?.candidate_id) {
       this.component.excludeFecIds = this.component.excludeFecIds.filter(
         (id: string) => id !== this.component.report[this.contactKey].candidate_id,

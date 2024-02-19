@@ -6,7 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { AppSelectButtonComponent } from 'app/shared/components/app-selectbutton.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -175,5 +175,51 @@ describe('MainFormComponent', () => {
     expect(control?.valid).toBeFalse();
     control?.setValue('P00000002');
     expect(control?.valid).toBeTrue();
+  });
+
+  it('Update a contact from the contact lookup', () => {
+    fixture.detectChanges();
+    const committee = Contact.fromJSON({
+      id: '11111-2222222-333333-444444444',
+      committee_id: 'C000000001',
+      name: 'Organization Name',
+      type: 'ORG',
+    });
+    component.report.contact_affiliated = Contact.fromJSON({
+      id: '00000-00000-00000-00000',
+      committee_id: 'X000000000',
+    });
+    component.report.contact_affiliated_id = '00000-00000-00000-00000';
+    component.excludeIds = ['00000-00000-00000-00000'];
+    component.excludeFecIds = ['X000000000'];
+    component.affiliatedContact.update({ value: committee } as SelectItem);
+    expect(component.report.contact_affiliated_id).toEqual('11111-2222222-333333-444444444');
+    expect(component.form.get('affiliated_committee_fec_id')?.value).toEqual('C000000001');
+    expect(component.form.get('affiliated_committee_name')?.value).toEqual('Organization Name');
+    expect(component.excludeIds[0]).toEqual('11111-2222222-333333-444444444');
+    expect(component.excludeFecIds[0]).toEqual('C000000001');
+
+    const candidate = Contact.fromJSON({
+      id: '11111-2222222-333333-444444444',
+      candidate_id: 'C000000002',
+      last_name: 'Smith',
+      type: 'CAN',
+    });
+    component.report.contact_candidate_I = Contact.fromJSON({
+      id: '00000-00000-00000-00000',
+      candidate_id: 'X000000000',
+    });
+    component.report.contact_candidate_I_id = '00000-00000-00000-00000';
+    component.excludeIds = ['00000-00000-00000-00000'];
+    component.excludeFecIds = ['X000000000'];
+    component.candidateContacts[0].update({ value: candidate } as SelectItem);
+    expect(component.report.contact_candidate_I?.id).toEqual('11111-2222222-333333-444444444');
+    expect(component.form.get('I_candidate_id_number')?.value).toEqual('C000000002');
+    expect(component.form.get('I_candidate_last_name')?.value).toEqual('Smith');
+    expect(component.excludeIds[0]).toEqual('11111-2222222-333333-444444444');
+    expect(component.excludeFecIds[0]).toEqual('C000000002');
+
+    expect(component.candidateContacts[0].dateOfContributionField).toEqual('I_date_of_contribution');
+    expect(component.candidateContacts[0].candidateId).toEqual('C000000002');
   });
 });
