@@ -24,7 +24,15 @@ import { Form1M } from 'app/shared/models/form-1m.model';
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
   let fixture: ComponentFixture<MainFormComponent>;
-  const testActiveReport: Form1M = Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' });
+  const testActiveReport: Form1M = Form1M.fromJSON({
+    id: '11111-11111-111111-1111111',
+    affiliated_committee_name: 'committee name',
+    contact_affiliated: {
+      id: '22222-22222-22222-2222222',
+      committee_id: 'C000000005',
+    },
+    contact_affiliated_id: '22222-22222-22222-2222222',
+  });
   const testMockStore = {
     initialState: {
       fecfile_online_activeReport: initActiveReport,
@@ -221,5 +229,12 @@ describe('MainFormComponent', () => {
 
     expect(component.candidateContacts[0].dateOfContributionField).toEqual('I_date_of_contribution');
     expect(component.candidateContacts[0].candidateId).toEqual('C000000002');
+  });
+
+  it('Exclude ids should prepopulate when editing a F1M', () => {
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(component.excludeFecIds[0]).toEqual('C000000005');
+    expect(component.excludeIds[0]).toEqual('22222-22222-22222-2222222');
   });
 });
