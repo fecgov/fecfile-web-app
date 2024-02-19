@@ -138,9 +138,7 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public create(transaction: Transaction): Observable<Transaction> {
-    console.log(transaction.transactionType.apiEndpoint);
     const payload = this.preparePayload(transaction);
-    console.log(transaction.transactionType.apiEndpoint);
     return this.apiService
       .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
