@@ -19,6 +19,7 @@ export enum BackgroundStyles {
 })
 export class LayoutComponent extends DestroyerComponent implements OnInit {
   layoutControls = new LayoutControls();
+  protected readonly BackgroundStyles = BackgroundStyles;
 
   constructor(private router: Router) {
     super();

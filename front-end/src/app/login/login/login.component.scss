@@ -2,7 +2,6 @@
 
 .dashboard-example-img {
   width: 600px;
-  position: absolute;
   max-height: calc(100vh - 350px);
   overflow: hidden;
 }
@@ -15,7 +14,7 @@
 .login-box-header {
   font-family: "karla-bold", Sans-serif;
   font-size: 32px;
-  padding: 0px;
+  padding: 0;
 }
 
 .header-filers {

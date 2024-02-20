@@ -33,7 +33,8 @@
   <!--  End Sidebar section -->
 
   <!-- Begin No Sidebar section -->
-  <div *ngIf="!layoutControls.showSidebar" class="content-offset">
+  <div *ngIf="!layoutControls.showSidebar"
+       [ngClass]="layoutControls.backgroundStyle === BackgroundStyles.LOGIN ? '' : 'content-offset'">
     <div class="container">
       <div *ngIf="layoutControls.showHeader" class="header-container">
         <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
