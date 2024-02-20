@@ -62,6 +62,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override hasAdditionalInfo = false;
   override signatoryOneHeader = 'Committee treasurer';
   override signatoryTwoHeader = 'Authorized representative';
+  override populateSignatoryOneWithTreasurer = true;
   override showParentTransactionTitle = true;
 
   override inheritedFields = [

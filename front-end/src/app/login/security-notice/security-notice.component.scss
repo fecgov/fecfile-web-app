@@ -1,0 +1,55 @@
+@import '../../shared/scss/global';
+
+#fec-seal-and-title {
+  min-height: 64px;
+  max-height: 5%;
+  position: absolute;
+  left: 5px;
+  top: 40px;
+}
+
+.security-notice {
+  width: 100%;
+  height: 100%;
+  margin-top: 64px;
+
+}
+
+.notice-header {
+  padding-left: 20px;
+  padding-top: 16px;
+}
+
+#security-consent-label {
+  width: 50%;
+}
+
+:host ::ng-deep .p-card {
+  box-shadow: none;
+  margin-top: 0px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-color: #000000;
+  border-style: solid;
+}
+
+.logout-button {
+  position: absolute;
+  top: 64px;
+  right: 32px;
+  font-size: 18px;
+  font-family: "karla-bold", sans-serif;
+  text-transform: uppercase;
+  text-shadow: #000000 1px 0 10px;
+  color: white !important;
+}
+
+.security-notice-button {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+}
+
+ul li {
+  list-style-type: disc;
+  margin-left: 32px;
+}

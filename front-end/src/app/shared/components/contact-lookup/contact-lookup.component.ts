@@ -2,18 +2,18 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import {
+  CandidateOfficeType,
+  CandidateOfficeTypeLabels,
   Contact,
   ContactTypeLabels,
   ContactTypes,
-  FecApiLookupData,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
-  CandidateOfficeType,
-  CandidateOfficeTypeLabels,
+  FecApiLookupData,
 } from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
-import { LabelList, PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
+import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
 
@@ -50,7 +50,10 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   searchTerm = '';
 
-  constructor(private contactService: ContactService, private fecApiService: FecApiService) {
+  constructor(
+    private contactService: ContactService,
+    private fecApiService: FecApiService,
+  ) {
     super();
   }
 
@@ -80,7 +83,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
               searchTerm,
               this.maxFecCommitteeResults,
               this.maxFecfileCommitteeResults,
-              this.candidateOffice
+              this.candidateOffice,
             )
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
@@ -163,7 +166,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             candidate_office: candidate.office,
             candidate_state: candidate.state === 'US' ? '' : candidate.state,
             candidate_district: candidate.district === '00' ? '' : candidate.district,
-          })
+          }),
         );
       });
     }
@@ -187,7 +190,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             state: committeeAccount.state,
             zip: committeeAccount.zip,
             telephone: phone,
-          })
+          }),
         );
       });
     }

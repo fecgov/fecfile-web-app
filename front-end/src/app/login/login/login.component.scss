@@ -1,195 +1,84 @@
 @import '../../shared/scss/global';
 
-.login {
-  background: #ece8e8 url('../../../assets/img/fec-logo-5opac.png') no-repeat center;
-  height: 100%;
-  padding-top: 15px;
-  //padding-left: 500px;
-  //padding: 25px;
-  background-size: 50% auto;
-  //background-size: 100% 100%; //130% auto;
-  //background-position: 1% 1%;
-  header {
-    .logo {
-      margin-bottom: 10px;
-      text-align: center;
-    }
-  }
-  .title-front {
-    color: #112e51;
-    font-family: 'Lato-Black', Sans-serif;
-    font-weight: 900;
-    font-size: 100px;
-    letter-spacing: -7.8px;
-  }
-  .title-rear {
-    color: #ca1a0f;
-    font-family: 'Lato-Black', Sans-serif;
-    font-weight: 900;
-    font-size: 100px;
-    letter-spacing: -7.8px;
-  }
-  .or-padding {
-    //padding-left: 5px;
-    //padding-right: 5px;
-    color: #c80505;
-  }
-  .padding-left {
-    margin-left: -40px;
-  }
-  .eye-logo {
-    width: 30px;
-    height: 30px;
-    //color: #112E51;
-    //margin-top: 2px;
-    margin-bottom: 30px;
-    cursor: pointer;
-  }
-  .fec-title {
-    height: 50%;
-    width: 50%;
-    margin-bottom: 50px;
-  }
-  .link-text {
-    //text-align: right;
-    color: #5c1b17; //#C80505;
-    height: 40px;
-    margin-bottom: 15px;
-    margin-top: 30px;
-  }
-  .title-name {
-    margin-top: 10px;
-  }
-  .login-box {
-    //background-color: $alto;
-    //min-height: 375px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 15px;
-    padding-top: 120px;
-    text-align: center;
-    //width: 300px;
+.dashboard-example-img {
+	width: 600px;
+	position: absolute;
+	max-height: calc(100vh - 350px);
+	overflow: hidden;
+}
 
-    //@include make-text-input(265px);
-    @include media(tablet) {
-      width: 500px;
-    }
-    @include media(mediumDesktop) {
-      width: 500px;
-    }
-    @include media(largeDesktop) {
-      width: 800px;
-    }
+.login-box {
+	margin-top: 80px;
+	margin-left: 20%;
+}
 
-    .grid-row {
-      margin: 0;
-      &.form-field__info {
-        height: 50px;
-        //width: 800px; //350px;
-        //font-size: 20px;
-        margin-top: 30px;
-        margin-bottom: 25px; //10px;
-      }
-      &.form-field {
-        margin-bottom: 25px;
-      }
-      .grid-row__col {
-        padding: 0;
+.login-box-header {
+	font-family: "karla-bold", Sans-serif;
+	font-size: 32px;
+	padding:0px;
+}
 
-        label {
-          font-family: 'Lato-Reg', Sans-serif;
-          font-size: 20px;
-          color: #112e51;
-        }
-        .link {
-          font-family: 'Lato-Reg', Sans-serif;
-          color: #ca1a0f; //#C80505;
-          top: 150px;
-          text-align: right;
-        }
-        .login-input {
-          /*     
-          @include make-text-input(265px, 1.5em, 1em, 1em);
-          @include media(tablet) {
-            @include make-text-input(450px, 1.5em, 1em, 1em);
-          }
-          @include media(mediumDesktop) {
-            @include make-text-input(450px, 1.5em, 1em, 1em);
-          }
-          @include media(largeDesktop) {
-            @include make-text-input(650px, 1.5em, 1em, 1em);
-          }
-          */
-          @include make-text-input(90px);
-          @include media(tablet) {
-            width: 230px;
-          }
-          @include media(mediumDesktop) {
-            width: 250px;
-          }
-          @include media(largeDesktop) {
-            width: 450px;
-          }
+.header-filers {
+	color: #212121
+}
 
-          font-family: 'Lato-Reg', Sans-serif;
-          font-size: 20px;
-          //width: 450px;
-          height: 25px;
-          margin-left: auto;
-          margin-right: auto;
-          //margin-bottom: 25px;
-          border: none;
-          border-radius: 0px;
-          border-bottom: 1px solid #164f85;
-          background: transparent;
-        }
-        .left-text {
-          padding-left: 15px;
-        }
-        .right-text {
-          padding-right: 15px;
-        }
-        .error__committee-id,
-        .error__password-error,
-        .error__email-id {
-          @extend .text-error;
-        }
-        .login__btn {
-          //@include button-variant($primaryBlue, $primaryBlue);
-          //@include button-size($input-btn-padding-y, $input-btn-padding-x, 1.5em, $input-btn-line-height, $btn-border-radius);
-          cursor: pointer;
-          //font-family: $mainFontFamily;
-          width: 140px;
-          height: 40px;
-          margin-bottom: 40px;
-          margin-top: 30px;
-          margin-left: 30px;
-          color: #ffffff;
-          background-color: #164f85;
-          font-family: 'Lato-Bold', Sans-serif;
-          font-size: 20px;
-          font-weight: 700;
-          border-radius: 5px;
-          border-style: solid;
-        }
-        .login__btn:hover {
-          background-color: #c80505;
-        }
-        .login-dot-gov-button {
-          @extend .login__btn;
-          width: 240px;
-          margin-left: 0px;
-        }
-        .logged-out-msg {
-          font-size: 1em;
-          font-weight: bold;
-          margin-bottom: 20px;
-          margin-top: 10px;
-        }
-        .forgot-password-link {
-          margin-left: 30px;
-        }
-      }
-    }
-  }
+.header-productivity {
+	color: #164F85
+}
+
+.description-text{
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	color: #212121;
+}
+
+.login-button {
+	background-color: #112e51;
+	color: #ffffff;
+	border-radius: 4px;
+	display: inline-block;
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	padding: 8px 20px;
+	text-align: center;
+	vertical-align: middle;
+	margin-right:20px;
+	margin-bottom:18px;
+}
+
+.signup-button {
+	background-color: #367F90;
+	color: #ffffff;
+	border-radius: 4px;
+	display: inline-block;
+	font-family: "karla", Sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	padding: 8px 20px;
+	text-align: center;
+	vertical-align: middle;
+	margin-bottom:18px;
+}
+
+.learn-more-link {
+	margin-left:10px;
+	font-family: "karla-bold", Sans-serif;
+	font-size: 14px;
+	color: #112e51;
+	border-bottom: 1px dotted #112e51;
+	cursor: pointer;
+	text-decoration: none;
+	transition: color .1s linear;
+}
+
+.debug-login {
+	margin-right: 60px;
+}
+
+.login-page {
+	width: 100%;
+	max-width: 100%;
+	max-height: calc(100vh - 350px);
+	overflow: auto;
 }

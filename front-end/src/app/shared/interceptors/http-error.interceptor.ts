@@ -12,6 +12,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoggedOutAction } from 'app/store/login.actions';
 import { catchError, Observable, throwError, of } from 'rxjs';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => []);
 
@@ -30,13 +31,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Outgoing HTTP Error: ${error.error.message}`;
         } else {
-          errorMessage = `Incoming HTTP Error - [Error Code]: ${error.status},  [Message]: ${
-            error.message
-          }, [Server Message]: ${JSON.stringify(error.error)}`;
+          errorMessage = `Incoming HTTP Error - [Error Code]: ${error.status} ${error.statusText}`;
         }
         if (error && error.status === HttpStatusCode.Forbidden) {
           this.store.dispatch(userLoggedOutAction());
         } else {
+          this.store.dispatch(singleClickEnableAction());
           alert(errorMessage);
         }
         console.log(errorMessage);

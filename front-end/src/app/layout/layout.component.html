@@ -1,17 +1,19 @@
-<app-banner></app-banner>
-<div [ngClass]="showSidebar ? '' : 'container'">
-  <div class="row">
-    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-5 fec-background-gradient" *ngIf="showSidebar">
-      <app-sidebar></app-sidebar>
-    </div>
-    <div [ngClass]="showSidebar ? 'col-xxl-10 col-xl-9 col-lg-8 col-md-7 col-sm-7  ' : 'col-12'">
-      <div class="col-12 header-container">
-        <app-header></app-header>
+<div id="page-container" [ngClass]="[layoutControls.backgroundStyle]">
+  <app-banner></app-banner>
+
+  <!--  Begin Sidebar section -->
+  <div *ngIf="showSidebar">
+    <div class="inline-flex w-100">
+      <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
+        <app-sidebar></app-sidebar>
       </div>
-      <div class="col no-padding">
+      <div class="sidebar-content-container">
+        <div class="header-container" *ngIf="layoutControls.showHeader">
+          <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
+        </div>
         <div class="main-content">
           <div class="grid">
-            <div class="col-12">
+            <div class="col-12" *ngIf="layoutControls.showCommitteeBanner">
               <app-committee-banner></app-committee-banner>
             </div>
           </div>
@@ -21,12 +23,35 @@
             </div>
           </div>
         </div>
+        <div class="flex-grow-1 d-flex flex-column">
+          <div class="flex-grow-1"></div>
+          <app-footer [showSidebar]="true"></app-footer>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  End Sidebar section -->
+
+  <!-- Begin No Sidebar section -->
+  <div *ngIf="!showSidebar" class="content-offset">
+    <div class="container">
+      <div class="header-container" *ngIf="layoutControls.showHeader">
+        <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
+      </div>
+      <div class="col-12 main-content">
+        <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
+          <div class="col-12">
+            <app-committee-banner></app-committee-banner>
+          </div>
+        </div>
         <div class="grid">
-          <div class="col-12 no-padding">
-            <app-footer></app-footer>
+          <div class="col-12 router-outlet">
+            <router-outlet></router-outlet>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <app-footer *ngIf="!showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
+  <!-- End No Sidebar section -->
 </div>

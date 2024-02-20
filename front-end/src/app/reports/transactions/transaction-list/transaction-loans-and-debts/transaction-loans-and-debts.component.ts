@@ -29,7 +29,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     {field: "transaction_type_identifier", label: "Type"},
     {field: "name", label: "Name"},
     {field: "date", label: "Date incurred"},
-    {field: "amount", label: "Amount"},
+    {field: "debt_incurred_amount", label: "Amount"},
     {field: "balance", label: "Balance"}
   ];
 
@@ -46,4 +46,6 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
     this.caption = "Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.";
   }
+
+  
 }

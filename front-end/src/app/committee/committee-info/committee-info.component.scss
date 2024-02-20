@@ -1,0 +1,35 @@
+.committee-info-footer > .col-12 {
+  display: flex;
+  justify-content: center;
+}
+
+// for long words that would not nicely wrap with overflowss
+.long-word-value {
+  word-wrap: break-word;
+}
+
+input {
+  font-family: karla-bold, serif;
+  font-size: 14px;
+  color: #212121;
+}
+
+:host ::ng-deep {
+  .p-dropdown {
+    height: 42px;
+  }
+
+  .p-dropdown > .p-inputtext {
+    font-family: karla-bold, serif;
+    font-size: 14px;
+    color: #212121;
+  }
+
+  #treasurer_phone, #treasurer_phone input {
+    height: 42px;
+    font-family: karla-bold, serif;
+    font-size: 14px;
+    color: #212121;
+  }
+}
+

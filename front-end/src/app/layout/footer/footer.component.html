@@ -1,5 +1,5 @@
-<footer>
-  <div id="footer-upper">
+<footer [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
+  <div id="footer-upper" *ngIf="showUpperFooter">
     <div class="grid">
       <div class="col-6">
         <p class="footer-upper-text font-karla-bold">Need help? Contact us</p>

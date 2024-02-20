@@ -7,8 +7,7 @@
         </div>
         <div class="col-12">
           <span class="subtitle"
-            ><strong>{{ report?.formLabel }}</strong
-            >{{ report?.formSubLabel }}</span
+            ><strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}</span
           >
         </div>
       </div>
@@ -16,10 +15,9 @@
 
     <ng-template pTemplate="right">
       <app-table-actions-button
-        *ngIf="report?.report_status === 'In progress'"
+        *ngIf="report?.report_status === reportStatus.IN_PROGRESS"
         [tableActions]="tableActions"
         [actionItem]="report"
-        [isAbsolute]="false"
         (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-plus"
         buttonLabel="Add new transaction"
@@ -28,9 +26,9 @@
       ></app-table-actions-button>
     </ng-template>
   </p-toolbar>
-  <app-transaction-receipts></app-transaction-receipts>
+  <app-transaction-receipts *ngIf="report?.report_type !== reportTypes.F24"></app-transaction-receipts>
   <app-transaction-disbursements></app-transaction-disbursements>
-  <app-transaction-loans-and-debts></app-transaction-loans-and-debts>
+  <app-transaction-loans-and-debts *ngIf="report?.report_type !== reportTypes.F24"></app-transaction-loans-and-debts>
 </div>
 
 <p-confirmDialog #cd [style]="{ width: '450px' }">
@@ -41,3 +39,5 @@
     </span>
   </ng-template>
 </p-confirmDialog>
+
+<app-select-report-dialog></app-select-report-dialog>

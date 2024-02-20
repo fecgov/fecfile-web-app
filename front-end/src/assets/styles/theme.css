@@ -1594,6 +1594,9 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 .p-radiobutton-label {
   margin-left: 0.5rem;
 }
+.p-radiobutton-label.p-disabled {
+  border: none;
+}
 
 .p-highlight .p-radiobutton .p-radiobutton-box {
   border-color: #ffffff;

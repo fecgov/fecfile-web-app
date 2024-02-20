@@ -1,13 +1,14 @@
 import { Report, ReportTypes } from './report.model';
-import { Transform, plainToClass } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { CandidateOfficeType } from './contact.model';
+import { CandidateOfficeType, Contact } from './contact.model';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
   OTHER = 'N',
 }
+
 export enum F1MFormTypes {
   F1MN = 'F1MN',
   F1MA = 'F1MA',
@@ -21,23 +22,34 @@ export const F1MFormVersionLabels: { [key in F1MFormTypes]: string } = {
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
-  override schema = f1mSchema;
-  override report_type = ReportTypes.F1M;
-  override form_type = F1MFormTypes.F1MN;
+  schema = f1mSchema;
+  report_type = ReportTypes.F1M;
+  form_type = F1MFormTypes.F1MN;
+  override submitAlertText =
+    'Are you sure you want to submit this form electronically? Please note that you cannot undo this action.';
+
   get formLabel() {
     return 'FORM 1M';
   }
+
   get formSubLabel() {
-    return '';
-  }
-  get versionLabel() {
-    return F1MFormVersionLabels[this.form_type] ?? '';
+    return 'NOTIFICATION OF MULTICANDIDATE STATUS';
   }
 
+  get versionLabel() {
+    return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
+  }
+
+  committee_name?: string;
+  street_1?: string;
+  street_2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
-  @Transform(BaseModel.dateTransform) affiliated_date_committee_fec_id?: Date;
+  affiliated_committee_fec_id?: string;
   affiliated_committee_name?: string;
 
   I_candidate_id_number?: string;
@@ -95,8 +107,31 @@ export class Form1M extends Report {
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;
 
+  @Transform(BaseModel.dateTransform) date_of_original_registration?: Date;
+  @Transform(BaseModel.dateTransform) date_of_51st_contributor?: Date;
+  @Transform(BaseModel.dateTransform) date_committee_met_requirements?: Date;
+  treasurer_last_name?: string;
+  treasurer_first_name?: string;
+  treasurer_middle_name?: string;
+  treasurer_prefix?: string;
+  treasurer_suffix?: string;
+  @Transform(BaseModel.dateTransform) date_signed?: Date;
+
+  @Type(() => Contact) contact_affiliated?: Contact;
+  contact_affiliated_id?: string | null;
+  @Type(() => Contact) contact_candidate_I?: Contact;
+  contact_candidate_I_id?: string | null;
+  @Type(() => Contact) contact_candidate_II?: Contact;
+  contact_candidate_II_id?: string | null;
+  @Type(() => Contact) contact_candidate_III?: Contact;
+  contact_candidate_III_id?: string | null;
+  @Type(() => Contact) contact_candidate_IV?: Contact;
+  contact_candidate_IV_id?: string | null;
+  @Type(() => Contact) contact_candidate_V?: Contact;
+  contact_candidate_V_id?: string | null;
+
   // prettier-ignore
   static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Form1M, json);
+    return plainToInstance(Form1M, json);
   }
 }

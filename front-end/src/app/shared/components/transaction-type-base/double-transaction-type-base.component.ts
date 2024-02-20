@@ -17,16 +17,13 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
  * user needs to fill out and submit to the back end.
  *
- * The primany transaction code is inherited from the TransactionTypeBaseComponent. This
+ * The primary transaction code is inherited from the TransactionTypeBaseComponent. This
  * abstract component class adds a child transaction that is defined in the parent
  * transaction's TransactionType class.
  */
@@ -84,23 +81,9 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactIdMap,
-      this.contactService
+      this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
-
-    // If the parent is a reattribution/redesignation transaction, initialize
-    // its specialized validation rules and form element behavior.
-    if (ReattRedesUtils.isReattRedes(this.transaction)) {
-      ReattRedesUtils.overlayForms(
-        this.form,
-        this.transaction as SchATransaction | SchBTransaction,
-        this.childForm,
-        this.childTransaction as SchATransaction | SchBTransaction
-      );
-      this.childUpdateFormWithPrimaryContact({
-        value: this.transaction?.reatt_redes?.contact_1,
-      } as SelectItem);
-    }
   }
 
   override ngOnDestroy(): void {
@@ -142,7 +125,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
-      this.formProperties
+      this.formProperties,
     );
 
     payload.children = [
@@ -150,15 +133,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     ];
     payload.children[0].report_id = payload.report_id;
 
-    if (ReattRedesUtils.isReattRedes(payload)) {
-      const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload);
-      this.transactionService.multisave(payloads).subscribe((response) => {
-        navigationEvent.transaction = response[0];
-        this.navigateTo(navigationEvent);
-      });
-    } else {
-      this.processPayload(payload, navigationEvent);
-    }
+    this.processPayload(payload, navigationEvent);
   }
 
   override isInvalid(): boolean {
@@ -168,13 +143,18 @@ export abstract class DoubleTransactionTypeBaseComponent
   override get confirmation$(): Observable<boolean> {
     if (!this.childTransaction) return of(false);
     return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
-      reduce((accumulator, confirmed) => accumulator && confirmed)
+      reduce((accumulator, confirmed) => accumulator && confirmed),
     );
   }
 
   override resetForm() {
     super.resetForm();
-    TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
+    TransactionFormUtils.resetForm(
+      this.childForm,
+      this.childTransaction,
+      this.childContactTypeOptions,
+      this.committeeAccount,
+    );
   }
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
@@ -193,7 +173,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_1']
+      this.childContactIdMap['contact_1'],
     );
 
     if (this.childTransaction) {
@@ -203,10 +183,10 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
-  protected updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
-    // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
+  updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
+    // Some inherited fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
-    // Afterwards, inheritted fields are updated to match parent values.
+    // Afterwards, inherited fields are updated to match parent values.
 
     childTransaction.transactionType?.getInheritedFields(childTransaction)?.forEach((inherittedField) => {
       if (childTransaction.transactionType) {
@@ -229,7 +209,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2']
+      this.childContactIdMap['contact_2'],
     );
   }
 
@@ -238,7 +218,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2']
+      this.childContactIdMap['contact_2'],
     );
   }
 
@@ -247,7 +227,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       selectItem,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_3']
+      this.childContactIdMap['contact_3'],
     );
   }
 }

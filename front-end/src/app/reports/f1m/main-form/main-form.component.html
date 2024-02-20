@@ -1,1 +1,442 @@
-<p>main-form works!</p>
+<div class="p-fluid">
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <div class="grid">
+      <div class="col-12">
+        <h1>FORM 1M</h1>
+        <h5>NOTIFICATION OF MULTICANDIDATE STATUS</h5>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h2>Committee</h2>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-9">
+        <div class="field">
+          <label for="committee_name">COMMITTEE NAME</label>
+          <input
+            class="readonly"
+            type="text"
+            pInputText
+            id="committee_name"
+            [readonly]="true"
+            formControlName="committee_name"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="committee_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="filer_committee_id_number">COMMITTEE ID</label>
+          <input
+            class="readonly"
+            type="text"
+            [readonly]="true"
+            pInputText
+            id="filer_committee_id_number"
+            formControlName="filer_committee_id_number"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="committee_id"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="committee_type">TYPE OF COMMITTEE</label>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <p-radioButton
+          inputId="X"
+          name="committee_type"
+          value="X"
+          label="STATE PARTY"
+          formControlName="committee_type"
+          [class]="
+            committeeTypeControl?.invalid &&
+            (formSubmitted || committeeTypeControl?.dirty || committeeTypeControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        ></p-radioButton>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <p-radioButton
+          inputId="N"
+          name="committee_type"
+          value="N"
+          label="OTHER"
+          formControlName="committee_type"
+          [class]="
+            committeeTypeControl?.invalid &&
+            (formSubmitted || committeeTypeControl?.dirty || committeeTypeControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        ></p-radioButton>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <app-error-messages
+          [form]="form"
+          fieldName="committee_type"
+          [formSubmitted]="formSubmitted"
+          requiredErrorMessage="An answer is required."
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h2>Address</h2>
+      </div>
+    </div>
+    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <p>I certify that one of the following situations is correct:</p>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <label for="statusBy">STATUS BY</label>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <p-radioButton
+          inputId="affiliation"
+          name="statusBy"
+          value="affiliation"
+          label="AFFILIATION"
+          formControlName="statusBy"
+          [class]="
+            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        ></p-radioButton>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <p-radioButton
+          inputId="qualification"
+          name="statusBy"
+          value="qualification"
+          label="QUALIFICATION"
+          formControlName="statusBy"
+          [class]="
+            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        ></p-radioButton>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <app-error-messages
+          [form]="form"
+          fieldName="statusBy"
+          [formSubmitted]="formSubmitted"
+          requiredErrorMessage="An answer is required."
+        ></app-error-messages>
+      </div>
+    </div>
+    <ng-container *ngIf="statusByControl?.value === 'affiliation'">
+      <div class="grid">
+        <div class="col-12">
+          <h2>Affiliation</h2>
+          <p>
+            The committee submitted its Statement of Organization (FORM 1) and simultaneously qualified as a
+            multicandidate committee through its affiliation with:
+          </p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <div
+            class="field"
+            [ngClass]="{
+              'transaction-contact-invalid': affiliatedContact.control?.status === 'INVALID'
+            }"
+          >
+            <label for="entity_type">LOOKUP</label>
+            <app-transaction-contact-lookup
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [contactTypeOptions]="affiliatedContact.contactTypeOptions"
+              (contactSelect)="affiliatedContact.update($event)"
+            >
+            </app-transaction-contact-lookup>
+            <app-error-messages
+              [form]="form"
+              [fieldName]="affiliatedContact.contactLookupKey"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="report.contact_affiliated">
+        <div class="grid">
+          <div class="col-9">
+            <div class="field">
+              <label for="affiliated_committee_name">AFFILIATED COMMITTEE NAME</label>
+              <input
+                type="text"
+                pInputText
+                id="affiliated_committee_name"
+                formControlName="affiliated_committee_name"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="affiliated_committee_name"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="field">
+              <label for="affiliated_committee_fec_id">AFFILIATED COMMITTEE ID</label>
+              <input
+                type="text"
+                pInputText
+                id="affiliated_committee_fec_id"
+                formControlName="affiliated_committee_fec_id"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="affiliated_committee_fec_id"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-3">
+            <div class="field">
+              <label for="name">AFFILIATED DATE</label>
+              <p-calendar
+                inputId="affiliated_date_form_f1_filed"
+                name="affiliated_date_form_f1_filed"
+                formControlName="affiliated_date_form_f1_filed"
+              ></p-calendar>
+              <app-error-messages
+                [form]="form"
+                fieldName="affiliated_date_form_f1_filed"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="statusByControl?.value === 'qualification'">
+      <div class="grid">
+        <div class="col-12">
+          <h2>Qualification</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-4">
+          <div class="field">
+            <label for="date_of_51st_contributor">DATE OF 51<sup>st</sup> CONTRIBUTION</label>
+            <p-calendar
+              inputId="date_of_51st_contributor"
+              name="date_of_51st_contributor"
+              formControlName="date_of_51st_contributor"
+            ></p-calendar>
+            <app-error-messages
+              [form]="form"
+              fieldName="date_of_51st_contributor"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="field">
+            <label for="date_of_original_registration">DATE OF ORIGINAL REGISTRATION</label>
+            <p-calendar
+              inputId="date_of_original_registration"
+              name="date_of_original_registration"
+              formControlName="date_of_original_registration"
+            ></p-calendar>
+            <app-error-messages
+              [form]="form"
+              fieldName="date_of_original_registration"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="field">
+            <label for="date_committee_met_requirements">DATE COMMITTEE MET REQUIREMENTS</label>
+            <p-calendar
+              inputId="date_committee_met_requirements"
+              name="date_committee_met_requirements"
+              formControlName="date_committee_met_requirements"
+            ></p-calendar>
+            <app-error-messages
+              [form]="form"
+              fieldName="date_committee_met_requirements"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <p>The committee has made contributions to the five (5) federal candidates listed below:</p>
+        </div>
+      </div>
+      <ng-container *ngFor="let candidateContact of candidateContacts; index as i">
+        <div class="grid">
+          <div class="col-12">
+            <h4>Candidate #{{ i + 1 }}</h4>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <div
+              class="field"
+              [ngClass]="{
+                'transaction-contact-invalid': candidateContact.control?.status === 'INVALID'
+              }"
+            >
+              <label for="entity_type">LOOKUP</label>
+              <app-transaction-contact-lookup
+                [form]="form"
+                [formSubmitted]="formSubmitted"
+                [contactTypeOptions]="candidateContact.contactTypeOptions"
+                (contactSelect)="candidateContact.update($event)"
+              >
+              </app-transaction-contact-lookup>
+              <app-error-messages
+                [form]="form"
+                [fieldName]="candidateContact.contactLookupKey"
+                [formSubmitted]="formSubmitted"
+                requiredErrorMessage="Candidate information is required"
+              ></app-error-messages>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="report[candidateContact.contactKey]">
+          <app-name-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMapConfigs[candidateContact.contactKey]"
+            templateMapKeyPrefix="candidate"
+            labelPrefix="CANDIDATE"
+          ></app-name-input>
+          <div class="grid">
+            <div class="col-3">
+              <div class="field">
+                <label [for]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']">CANDIDATE ID</label>
+                <input
+                  type="text"
+                  pInputText
+                  [id]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                  [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                />
+                <app-error-messages
+                  [form]="form"
+                  [fieldName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                  [formSubmitted]="formSubmitted"
+                  uniqueFecIdMessage="Candidate already entered in form."
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-9" style="margin-top: -9px">
+              <app-candidate-office-input
+                [form]="form"
+                [formSubmitted]="formSubmitted"
+                [officeFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_office']"
+                [stateFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_state']"
+                [districtFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_district']"
+              >
+              </app-candidate-office-input>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-3">
+              <div class="field">
+                <label for="name">DATE OF CONTRIBUTION</label>
+                <p-calendar
+                  [inputId]="candidateContact.dateOfContributionField"
+                  [name]="candidateContact.dateOfContributionField"
+                  [formControlName]="candidateContact.dateOfContributionField"
+                ></p-calendar>
+                <app-error-messages
+                  [form]="form"
+                  [fieldName]="candidateContact.dateOfContributionField"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </form>
+  <div class="grid">
+    <div class="col-2">
+      <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
+    </div>
+    <div class="col-5"></div>
+    <div class="col-2 align-right">
+      <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
+    </div>
+    <div class="col-3 align-right">
+      <button
+        pButton
+        pRipple
+        appSingleClick
+        label="Save and continue"
+        (click)="save('continue')"
+        class="p-button-info"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>

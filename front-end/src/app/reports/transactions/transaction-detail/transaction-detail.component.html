@@ -1,5 +1,3 @@
-<p-toast></p-toast>
-
 <div class="p-fluid">
   <h1 *ngIf="transactionType?.showParentTransactionTitle">
     {{ transaction?.parent_transaction?.transactionType?.title }}
@@ -27,14 +25,3 @@
     </app-transaction-input>
   </form>
 </div>
-
-<app-transaction-children-list-container [transaction]="transaction"></app-transaction-children-list-container>
-
-<app-transaction-navigation
-
-  [isEditable]="isEditable"
-  [transaction]="transaction"
-  (navigate)="handleNavigate($event)"
-></app-transaction-navigation>
-
-<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>

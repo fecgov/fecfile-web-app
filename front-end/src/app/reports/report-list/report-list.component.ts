@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report, ReportTypes } from '../../shared/models/report.model';
+import { Report, ReportTypes, ReportStatus } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
@@ -12,17 +12,18 @@ import { Router } from '@angular/router';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
+  dialogVisible = false;
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
-      (report: Report) => report.report_status === 'In progress'
+      (report: Report) => report.report_status === ReportStatus.IN_PROGRESS
     ),
     new TableAction('Amend', this.amendReport.bind(this), (report: Report) => report.canAmend),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
-      (report: Report) => report.report_status !== 'In progress'
+      (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
@@ -54,14 +55,23 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       return;
     }
 
-    if (item.report_type === ReportTypes.F3X) {
-      if (item.is_first) {
-        this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-      } else {
+    switch (item.report_type) {
+      case ReportTypes.F3X:
+        if (item.is_first) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
+        } else {
+          this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+        }
+        break;
+      case ReportTypes.F99:
+        this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
+        break;
+      case ReportTypes.F24:
         this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-      }
-    } else if (item.report_type === ReportTypes.F99) {
-      this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
+        break;
+      case ReportTypes.F1M:
+        this.router.navigateByUrl(`/reports/f1m/edit/${item.id}`);
+        break;
     }
   }
 
@@ -78,10 +88,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.router.navigateByUrl(`/reports/f3x/test-dot-fec/${item.id}`);
   }
 
-  public onRowActionClick(action: TableAction, report: Report) {
-    action.action(report);
-  }
-
   /**
    * Get the display name for the contact to show in the table column.
    * @param item
@@ -94,5 +100,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   public noCashOnHand(): boolean {
     const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
     return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
+  }
+
+  public showDialog(): void {
+    this.dialogVisible = true;
   }
 }

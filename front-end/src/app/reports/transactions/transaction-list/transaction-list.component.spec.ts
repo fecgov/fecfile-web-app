@@ -15,6 +15,7 @@ import { MemoCodePipe, TransactionListComponent } from './transaction-list.compo
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
+import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -108,10 +109,23 @@ describe('TransactionListComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/other-transactions`);
   });
   it('should show the correct table actions', () => {
-    expect(component.tableActions[0].isAvailable({ report_status: 'In progress' })).toEqual(true);
-    expect(component.tableActions[1].isAvailable({ report_status: 'In progress' })).toEqual(true);
-    expect(component.tableActions[2].isAvailable({ report_status: 'In progress' })).toEqual(true);
-    expect(component.tableActions[3].isAvailable({ report_status: 'In progress' })).toEqual(true);
+    const f3x_params = {
+      report_status: ReportStatus.IN_PROGRESS,
+      report_type: ReportTypes.F3X,
+    };
+    const f24_params = {
+      report_status: ReportStatus.IN_PROGRESS,
+      report_type: ReportTypes.F24,
+    };
+    expect(component.tableActions[0].isAvailable(f3x_params)).toEqual(true);
+    expect(component.tableActions[1].isAvailable(f3x_params)).toEqual(true);
+    expect(component.tableActions[2].isAvailable(f3x_params)).toEqual(true);
+    expect(component.tableActions[3].isAvailable(f3x_params)).toEqual(true);
+    expect(component.tableActions[0].isAvailable(f24_params)).toEqual(false);
+    expect(component.tableActions[1].isAvailable(f24_params)).toEqual(false);
+    expect(component.tableActions[2].isAvailable(f24_params)).toEqual(false);
+    expect(component.tableActions[3].isAvailable(f24_params)).toEqual(false);
+    expect(component.tableActions[4].isAvailable(f24_params)).toEqual(true);
     expect(component.tableActions[0].isEnabled({})).toEqual(true);
     expect(component.tableActions[1].isEnabled({})).toEqual(true);
     expect(component.tableActions[2].isEnabled({})).toEqual(true);

@@ -2,6 +2,7 @@ import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 
 export class CommitteeAccount extends BaseModel {
+  id: string | undefined;
   custodian_city: string | undefined;
   zip: string | undefined;
   treasurer_phone: string | undefined;

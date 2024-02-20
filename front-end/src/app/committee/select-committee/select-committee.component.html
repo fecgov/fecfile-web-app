@@ -1,0 +1,34 @@
+<div class="flex select-committee-columns">
+  <div class="col-6 left-side">
+    <h1>Get started now</h1>
+    <h5 class="font-karla-bold">LET'S FILE YOUR FEC REPORT WITH FECFILE...</h5>
+    <p-divider></p-divider>
+
+    <img src="assets/img/person-filing.jpg" draggable="false" alt="Person filing image" />
+  </div>
+  <div class="col-6 right-side">
+    <div class="select-committee-box">
+      <h2>Select a committee account</h2>
+      <div class="committee-list">
+        <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
+          <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+          <div class="committee-info">
+            <h3>{{ committee.name }}</h3>
+            <h5 class="font-karla-bold">{{ committee.committee_id }}</h5>
+          </div>
+        </div>
+      </div>
+      <h5 class="font-karla-bold">LOOKING FOR AN EXISTING FEFILE COMMITTEE ACCOUNT?</h5>
+      Contact the administrator for that committee.
+    </div>
+    <div class="create-committee-card font-karla-bold">
+      <div class="blue-box">
+        <div class="plus">
+          <img src="assets/img/blue-plus.png" />
+        </div>
+      </div>
+
+      <div class="font-karla-bold create-text">create a new committee</div>
+    </div>
+  </div>
+</div>

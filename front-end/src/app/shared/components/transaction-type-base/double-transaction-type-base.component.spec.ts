@@ -11,10 +11,8 @@ import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.mo
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
-import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -22,6 +20,8 @@ import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-t
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { TransactionType } from '../../models/transaction-type.model';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [
@@ -92,6 +92,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         provideMockStore(testMockStore),
         FecDatePipe,
         ReportService,
+        TransactionService,
       ],
     }).compileComponents();
   });
@@ -110,6 +111,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       if (confirmation.accept) return confirmation?.accept();
     });
     transactionService = TestBed.inject(TransactionService);
+
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -121,16 +123,31 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should catch exception if there is no templateMap', () => {
-    const earmarkReceipt = new EARMARK_RECEIPT();
-    component.transaction = earmarkReceipt.getNewTransaction();
-    const earmarkMemo = new EARMARK_MEMO();
-    component.childTransaction = earmarkMemo.getNewTransaction();
-    // component.childTransaction.transactionType = undefined;
-    component.transaction.children = [component.childTransaction];
-    expect(() => component.ngOnInit()).toThrow(
-      new Error('Fecfile: Template map not found for double transaction component')
-    );
+  describe('init', () => {
+    it('should fail to initialize if no transaction', () => {
+      component.transaction = undefined;
+      expect(function () {
+        component.ngOnInit();
+      }).toThrow(new Error('Fecfile: Template map not found for transaction component'));
+    });
+
+    it('should throw error if no child transaction', () => {
+      spyOn(component, 'getChildTransaction').and.callFake(() => undefined);
+      expect(function () {
+        component.ngOnInit();
+      }).toThrow(new Error('Fecfile: Child transaction not found for double-entry transaction form'));
+    });
+
+    it('should throw error if child transaction is missing template map', () => {
+      spyOn(component, 'getChildTransaction').and.callFake(() => {
+        const t = testTransaction.children?.[0] as SchATransaction;
+        t.transactionType = undefined as unknown as TransactionType;
+        return t;
+      });
+      expect(function () {
+        component.ngOnInit();
+      }).toThrow(new Error('Fecfile: Template map not found for double transaction double-entry transaction form'));
+    });
   });
 
   it("should set the child transaction's contact when its shared with the parent", () => {
@@ -163,7 +180,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.form.get(component.templateMap.last_name)?.setValue('Last');
 
     expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
-      'Earmarked from First Last (Individual)'
+      'Earmarked from First Last (Individual)',
     );
   });
 
@@ -171,8 +188,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
 
-    expect(component.childTransaction.transactionType?.getInheritedFields(
-      component.childTransaction)).toContain('amount');
+    expect(component.childTransaction.transactionType?.getInheritedFields(component.childTransaction)).toContain(
+      'amount',
+    );
     component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
     component.form.get(component.templateMap.amount)?.setValue(250);
     expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
@@ -212,7 +230,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: '',
       text4000: '',
     });
-    Object.keys(component.form.controls).forEach(key => {
+    Object.keys(component.form.controls).forEach((key) => {
       component.form.get(key)?.updateValueAndValidity();
     });
     component.childForm.patchValue({
@@ -237,7 +255,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_code: true,
       text4000: '',
     });
-    Object.keys(component.childForm.controls).forEach(key => {
+    Object.keys(component.childForm.controls).forEach((key) => {
       component.childForm.get(key)?.updateValueAndValidity();
     });
 
@@ -251,6 +269,36 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       expect(function () {
         component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
       }).toThrow(new Error('Fecfile: No transactions submitted for double-entry transaction form.'));
+    });
+  });
+
+  describe('confirmation$', () => {
+    it('should return false if not child transaction', () => {
+      component.childTransaction = undefined;
+      component.confirmation$.subscribe((v) => expect(v).toBeFalse());
+    });
+  });
+
+  describe('childUpdateFormWithPrimaryContact', () => {
+    it('should throw an error if no child transaction', () => {
+      spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').and.callFake(() => {
+        return;
+      });
+      const contact = new Contact();
+      component.childTransaction = undefined;
+      expect(function () {
+        component.childUpdateFormWithPrimaryContact({ value: contact });
+      }).toThrow(new Error('Fecfile: Missing child transaction.'));
+    });
+
+    it('should call updateInheritedFields', () => {
+      const updateInheritedFieldsSpy = spyOn(component, 'updateInheritedFields');
+      spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').and.callFake(() => {
+        return;
+      });
+      const contact = new Contact();
+      component.childUpdateFormWithPrimaryContact({ value: contact });
+      expect(updateInheritedFieldsSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  RADAnalyst = 'John Doe';
-  RADPhone = '(888) 888-8888';
+  @Input() showSidebar = false;
+  @Input() showUpperFooter = true;
 }

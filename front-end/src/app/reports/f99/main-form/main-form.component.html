@@ -23,7 +23,7 @@
           id="committee_name"
           formControlName="committee_name"
           [readonly]="true"
-          ngClass="readonly"
+          class="readonly"
         />
         <app-error-messages
           [form]="form"
@@ -39,7 +39,7 @@
           id="filer_committee_id_number"
           formControlName="filer_committee_id_number"
           [readonly]="true"
-          ngClass="readonly"
+          class="readonly"
         />
         <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
@@ -47,7 +47,7 @@
     <p-divider></p-divider>
 
     <h3>Address</h3>
-    <app-address-input [readonly]="true" [templateMap]="this.templateMap" [form]="this.form"></app-address-input>
+    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
     <p-divider></p-divider>
 
     <h3>Text Information</h3>

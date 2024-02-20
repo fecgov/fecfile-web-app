@@ -14,13 +14,9 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      if (querySelector.includes('due_date_setting') || querySelector.includes('interest_rate_setting')) {
-        cy.get(alias).find(querySelector).first().click();
-      } else {
-        cy.get(alias).find(querySelector).click();
-      }
+      cy.get(alias).find(querySelector).first().click();
       cy.contains('p-dropdownitem', value).should('be.visible');
-      cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
+      cy.contains('p-dropdownitem', value).click();
     }
   }
 
@@ -28,13 +24,9 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
     const currentDate: Date = new Date();
     //
-    if (calendar.includes('date_incurred') || calendar.includes('due_date') || calendar.includes('date_signed')) {
-      cy.get(alias).find(calendar).first().as('calendarElement').click();
-    } else {
-      cy.get(alias).find(calendar).as('calendarElement').click();
-    }
+    cy.get(alias).find(calendar).first().as('calendarElement').click();
 
-    cy.get('@calendarElement').find('.p-datepicker-year').click();
+    cy.get('@calendarElement').find('.p-datepicker-year').first().click();
     //    Choose the year
     const year: number = dateObj.getFullYear();
     const currentYear: number = currentDate.getFullYear();
@@ -65,13 +57,13 @@ export class PageUtils {
   static randomString(
     strLength: number,
     charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' | 'symbols' = 'alphanumeric',
-    includeCurlyBraces = true
+    includeCurlyBraces = true,
   ): string {
     // prettier-ignore
     let symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '|', '~', '`'];
     if (includeCurlyBraces) symbols = symbols.concat('{', '}');
     // prettier-ignore
-    const alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',];
+    const alphabet: Array<string> = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',];
     // prettier-ignore
     const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -107,7 +99,7 @@ export class PageUtils {
 
   static clickSidebarSection(section: string) {
     cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click({ force: true });
+    cy.get('@section').click();
   }
 
   static clickSidebarItem(menuItem: string) {
@@ -172,5 +164,26 @@ export class PageUtils {
 
   static containedOnPage(selector: string) {
     cy.contains(selector).should('exist');
+  }
+
+  /**
+   * Important note, the identifier must be unique. If there are multiple rows with the same info
+   * it will fail.
+   * Also, the identifier must be directly under the <td>.
+   * Example: <td>text</td> is good, but <td><div>text</div></td> won't work
+   * @param identifier string to identify which Row the kabob is in.
+   */
+  static getKabob(identifier: string) {
+    const alias = PageUtils.getAlias('');
+    cy.get(alias)
+      .contains(identifier)
+      .closest('td')
+      .siblings()
+      .last()
+      .find('app-table-actions-button')
+      .children()
+      .last()
+      .as('kabob');
+    return cy.get('@kabob');
   }
 }

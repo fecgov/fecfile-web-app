@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -84,10 +84,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
             state: 'ZZ',
           });
           // ajv does not un-require zip when country is not USA
-          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
+          this.form.patchValue({zip: this.form.get('zip')?.value || ''});
           this.form.get('state')?.disable();
         } else {
-          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
+          this.form.patchValue({zip: this.form.get('zip')?.value || null});
           this.form.get('state')?.enable();
         }
       });
@@ -178,9 +178,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       // component because the Contact Dialog is hidden and not destroyed on close
       // so we need to directly update the lookup "type" form control value
       this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
-      this.contactLookup.contactTypeReadOnly = true;
+      this.contactLookup.contactTypeFormControl.enable();
     } else if (this.contactTypeOptions.length === 1) {
-      this.contactLookup.contactTypeReadOnly = true;
+      this.contactLookup.contactTypeFormControl.enable();
     }
     this.dialogVisible = true;
   }
@@ -204,7 +204,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   private resetForm() {
     this.form.reset();
     this.isNewItem = true;
-    this.contactLookup.contactTypeReadOnly = false;
+    this.contactLookup.contactTypeFormControl.enable();
     this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
