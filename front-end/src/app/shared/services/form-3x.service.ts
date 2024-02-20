@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReportService } from './report.service';
-import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { F3xCoverageDates, F3xQualifiedCommitteeTypeCodes, Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
+import { ReportService } from './report.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,10 @@ export class Form3XService extends ReportService {
     return this.apiService
       .get<Form3X[]>(`${this.apiEndpoint}/future?after=${coverage_through_date}`)
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
+  }
+
+  public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
+    return !!committeeAccount?.committee_type &&
+      F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type);
   }
 }

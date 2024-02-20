@@ -4,8 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
+
+import { Form3XService } from 'app/shared/services/form-3x.service';
+
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -36,6 +40,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   showBackdoorCode = false;
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
+  committeeAccount?: CommitteeAccount;
 
   constructor(
     public router: Router,
@@ -46,6 +51,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
     private reportService: ReportService,
+    private form3XService: Form3XService,
   ) {
     super();
   }
@@ -72,6 +78,9 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       ...this.report,
       ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });
+    if (payload instanceof Form3X) {
+      payload.qualified_committee = this.form3XService.isQualifiedCommittee(this.committeeAccount);
+    }
 
     return this.reportService.update(payload, this.formProperties);
   }
@@ -103,6 +112,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
+      this.committeeAccount = committeeAccount;
       ValidateUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
       this.initializeFormWithReport(this.report, committeeAccount);
     });

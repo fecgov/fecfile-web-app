@@ -5,8 +5,48 @@
   display: flex;
   flex-direction: row;
   background-color: #ffffff;
-  box-shadow: 0 0 4px 0px #d1d1d1
+  box-shadow: 0 0 4px 0 #d1d1d1
 }
+.empty-card {
+    height: 200px;
+    flex-direction: column;
+}
+.empty-lens-img {
+    height: 95px;
+    display: flex;
+}
+.empty-verbiage {
+    width: 65%;
+    align-self: center;
+    margin-top: 10px;
+}
+.empty-verbiage p {
+    text-align: center;
+    font-size: x-large; 
+    line-height: normal;
+}
+.left-side {
+    flex-direction: column;
+}
+.right-side {
+    flex-direction: column;
+}
+.select-committee-box {
+    display: flex;
+    background-color: #f1f1f1;
+    flex-direction: column;
+    padding: 15px;
+}
+.select-committee-columns{
+    display: flex;
+    flex-direction: row;
+}
+.create-committee-card {
+    background-color: #f1f1f1;
+    margin-top: 20px;
+    font-size: large;
+    display: flex;
+    align-items: center;
 
 .left-side {
   flex-direction: column;
