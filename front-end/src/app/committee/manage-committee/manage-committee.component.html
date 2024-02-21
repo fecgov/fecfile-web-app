@@ -4,7 +4,7 @@
     <h1>Manage Users</h1>
   </ng-template>
   <ng-template pTemplate="right">
-    <button pButton pRipple label="Add User" icon="pi pi-plus" class="p-button"></button>
+    <button pButton pRipple label="Add User" icon="pi pi-plus" class="p-button" (click)="addItem()"></button>
   </ng-template>
 </p-toolbar>
 <p-divider></p-divider>
@@ -75,5 +75,10 @@
     </ng-template>
   </p-table>
 </p-card>
+
+<app-committee-member-dialog
+  [(detailVisible)]="detailVisible"
+  (saveMembership)="saveMembership($event)"
+></app-committee-member-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
