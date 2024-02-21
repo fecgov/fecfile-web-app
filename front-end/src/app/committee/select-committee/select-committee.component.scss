@@ -1,11 +1,10 @@
-
 .committee-card {
   margin: 20px 3px;
   padding: 20px 10px;
   display: flex;
   flex-direction: row;
   background-color: #ffffff;
-  box-shadow: 0 0 4px 0px #d1d1d1
+  box-shadow: 0 0 4px 0px #d1d1d1;
 }
 
 .left-side {
@@ -52,7 +51,6 @@
     text-transform: uppercase;
   }
 }
-
 
 .committee-list {
   max-height: 500px;

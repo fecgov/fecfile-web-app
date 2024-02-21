@@ -1,15 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { SharedModule } from 'app/shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { PrintPreviewComponent } from './print-preview.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { of } from 'rxjs';
 import { WebPrintService } from 'app/shared/services/web-print.service';
+import { SharedModule } from 'app/shared/shared.module';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { DividerModule } from 'primeng/divider';
+import { of } from 'rxjs';
+import { PrintPreviewComponent } from './print-preview.component';
 
 describe('PrintPreviewComponent', () => {
   let component: PrintPreviewComponent;
@@ -28,6 +28,7 @@ describe('PrintPreviewComponent', () => {
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
+    spyOn(reportService, 'update').and.returnValue(of(Form3X.fromJSON({})));
     fixture.detectChanges();
   });
 
@@ -92,11 +93,11 @@ describe('PrintPreviewComponent', () => {
     const submit = spyOn(webPrintService, 'submitPrintJob');
     const refresh = spyOn(component, 'refreshReportStatus');
     component.submitPrintJob();
-    expect(submit).toHaveBeenCalled();
     tick(5001);
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       expect(refresh).toHaveBeenCalled();
+      expect(submit).toHaveBeenCalled();
     });
   }));
 });

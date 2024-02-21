@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { WebPrintService } from 'app/shared/services/web-print.service';
-import { Report } from 'app/shared/models/report.model';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { Report } from 'app/shared/models/report.model';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { WebPrintService } from 'app/shared/services/web-print.service';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { firstValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-print-preview',
@@ -16,6 +19,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   report: Report = new Form3X() as unknown as Report;
+  committeeAccount?: CommitteeAccount;
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
@@ -33,6 +37,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     public router: Router,
     public route: ActivatedRoute,
     private webPrintService: WebPrintService,
+    private form3XService: Form3XService,
   ) {
     super();
   }
@@ -46,6 +51,13 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
           this.report = report;
           this.updatePrintStatus(report);
         }
+      });
+
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        this.committeeAccount = committeeAccount;
       });
 
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
@@ -102,8 +114,15 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     }
   }
 
-  public submitPrintJob() {
+  public async submitPrintJob() {
     if (this.report.id) {
+      if (this.report instanceof Form3X) {
+        const payload: Form3X = Form3X.fromJSON({
+          ...this.report,
+          qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount),
+        });
+        await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
+      }
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }
