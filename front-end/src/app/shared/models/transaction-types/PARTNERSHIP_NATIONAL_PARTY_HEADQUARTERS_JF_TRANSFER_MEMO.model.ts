@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_NA
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 
@@ -12,7 +12,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
   schema = schema;
   override shortName = 'Partnership Receipt';
@@ -20,10 +20,8 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
 
   override subTransactionConfig = new SubTransactionGroup(
     'PARTNERSHIP RECEIPT HEADQUARTERS BUILDINGS ACCOUNT JF TRANSFER MEMO',
-    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO],
+    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO]
   );
-  override purposeDescriptionLabelNotice =
-    'If transaction has no associated Partnership memos, reads "Headquarters Buildings Account JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "Headquarters Buildings Account JF Memo: XX (See Partnership Attribution(s) below)"';
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
@@ -48,4 +46,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
     }
     return purposeDescription;
   }
+
+  override purposeDescriptionLabelNotice =
+    'If transaction has no associated Partnership memos, reads "Headquarters Buildings Account JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "Headquarters Buildings Account JF Memo: XX (See Partnership Attribution(s) below)"';
 }

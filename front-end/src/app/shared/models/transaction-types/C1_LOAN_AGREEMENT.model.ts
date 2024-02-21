@@ -2,8 +2,8 @@ import { FormGroup } from '@angular/forms';
 import {
   ADDRESS_FIELDS,
   LOAN_TERMS_FIELDS,
-  ORG_FIELDS,
   ORGANIZATION,
+  ORG_FIELDS,
   SECONDARY_ADDRESS_FIELDS,
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
@@ -13,7 +13,7 @@ import { STANDARD_AND_SECONDARY } from '../contact.model';
 import { SchC1TransactionType } from '../schc1-transaction-type.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { isPulledForwardLoan, Transaction } from '../transaction.model';
+import { Transaction, isPulledForwardLoan } from '../transaction.model';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [
@@ -52,6 +52,8 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   ];
   override contactConfig = STANDARD_AND_SECONDARY;
   override contactTypeOptions = ORGANIZATION;
+  override contact2IsRequired = (form: FormGroup) => form.get('future_income')?.value;
+  override isDependentChild = (transaction: Transaction) => !isPulledForwardLoan(transaction.parent_transaction);
   override doMemoCodeDateCheck = false;
   schema = schema;
   override useParentContact = true;
@@ -62,6 +64,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   override signatoryTwoHeader = 'Authorized representative';
   override populateSignatoryOneWithTreasurer = true;
   override showParentTransactionTitle = true;
+
   override inheritedFields = [
     ...ORG_FIELDS,
     'street_1',
@@ -76,21 +79,17 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'interest_rate',
     'interest_rate_setting',
   ] as TemplateMapKeyType[];
+
+  // override description =
   //   'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
   override accordionTitle = 'STEP TWO';
   override accordionSubText =
     'Enter contact, loan, terms, collateral, and future income information for the loan agreeement';
-
-  // override description =
   override formTitle = 'Receipt';
   override footer =
     'The information in this loan  will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and "Save transactions."';
   title = 'Loan agreement';
   override contactTitle = 'Lender';
-
-  override contact2IsRequired = (form: FormGroup) => form.get('future_income')?.value;
-
-  override isDependentChild = (transaction: Transaction) => !isPulledForwardLoan(transaction.parent_transaction);
 
   getNewTransaction() {
     return SchC1Transaction.fromJSON({

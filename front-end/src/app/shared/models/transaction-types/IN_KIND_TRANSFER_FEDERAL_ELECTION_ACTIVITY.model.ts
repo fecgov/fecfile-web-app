@@ -8,7 +8,7 @@ import { IN_KIND } from './common-types/IN_KIND.model';
 export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends IN_KIND {
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+    ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY
   );
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT];

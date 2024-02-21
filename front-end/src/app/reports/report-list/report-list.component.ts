@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
+import { Report, ReportTypes, ReportStatus } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
@@ -17,13 +17,13 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction(
       'Edit report',
       this.editItem.bind(this),
-      (report: Report) => report.report_status === ReportStatus.IN_PROGRESS,
+      (report: Report) => report.report_status === ReportStatus.IN_PROGRESS
     ),
     new TableAction('Amend', this.amendReport.bind(this), (report: Report) => report.canAmend),
     new TableAction(
       'Review report',
       this.editItem.bind(this),
-      (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
+      (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
@@ -33,7 +33,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected override itemService: ReportService,
-    public router: Router,
+    public router: Router
   ) {
     super(messageService, confirmationService, elementRef);
     this.caption =
@@ -43,6 +43,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
+  }
+
+  protected getEmptyItem(): Report {
+    return new Form3X();
   }
 
   public override editItem(item: Report): void {
@@ -100,9 +104,5 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   public showDialog(): void {
     this.dialogVisible = true;
-  }
-
-  protected getEmptyItem(): Report {
-    return new Form3X();
   }
 }

@@ -1,6 +1,6 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
-<h4 *ngIf="!isEditable" class="read-only-tag subtitle">READ ONLY</h4>
+<h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
 <p class="group-description">{{ transactionType?.description }}</p>
 <p-accordion [activeIndex]="accordionActiveIndex">
   <p-accordionTab>
@@ -15,18 +15,18 @@
         {{ transactionType?.formTitle }}
       </h2>
       <h3>{{ transactionType?.contactTitle }}</h3>
-      <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
+      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <app-transaction-input
-          (candidateContactSelect)="updateFormWithCandidateContact($event)"
+          [isEditable]="isEditable"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [transaction]="transaction"
+          [contactTypeOptions]="contactTypeOptions"
+          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+          (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
           (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-          [contactTypeOptions]="contactTypeOptions"
-          [formSubmitted]="formSubmitted"
-          [form]="form"
-          [isEditable]="isEditable"
-          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-          [transaction]="transaction"
         >
         </app-transaction-input>
       </form>
@@ -46,20 +46,20 @@
         <em [innerHtml]="childTransactionType?.description"></em>
       </p>
       <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }" id="childForm">
+      <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <app-transaction-input
-          (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
+          [isEditable]="isEditable"
+          [form]="childForm"
+          [formSubmitted]="formSubmitted"
+          [transaction]="childTransaction"
+          [contactTypeOptions]="childContactTypeOptions"
+          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
+          [contributionAmountReadOnly]="true"
+          candidateInfoPosition="high"
           (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
+          (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
           (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
           (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
-          [contactTypeOptions]="childContactTypeOptions"
-          [contributionAmountReadOnly]="true"
-          [formSubmitted]="formSubmitted"
-          [form]="childForm"
-          [isEditable]="isEditable"
-          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
-          [transaction]="childTransaction"
-          candidateInfoPosition="high"
         >
         </app-transaction-input>
       </form>

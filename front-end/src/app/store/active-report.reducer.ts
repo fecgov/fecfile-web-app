@@ -1,4 +1,4 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on, Action } from '@ngrx/store';
 import { setActiveReportAction } from './active-report.actions';
 import { Report } from '../shared/models/report.model';
 import { userLoggedOutAction } from './login.actions';

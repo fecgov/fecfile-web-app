@@ -4,10 +4,10 @@ import { SchDTransactionType } from '../schd-transaction-type.model';
 import { SchDTransaction, ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
-  ADDRESS_FIELDS,
   COMMITTEE_ORGANIZATION_INDIVIDUAL,
-  INDIVIDUAL_FIELDS,
   ORG_FIELDS,
+  INDIVIDUAL_FIELDS,
+  ADDRESS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class DEBT_OWED_TO_COMMITTEE extends SchDTransactionType {

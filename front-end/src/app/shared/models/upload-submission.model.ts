@@ -20,6 +20,10 @@ export class UploadSubmission {
     return plainToClass(UploadSubmission, json);
   }
 
+  toString(): string {
+    return '[object UploadSubmission]';
+  }
+
   /**
    *
    * @param {TransformFnParams} params
@@ -30,9 +34,5 @@ export class UploadSubmission {
       return UploadSubmission.fromJSON(params.value);
     }
     return params.value;
-  }
-
-  toString(): string {
-    return '[object UploadSubmission]';
   }
 }

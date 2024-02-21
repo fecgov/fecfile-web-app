@@ -3,33 +3,33 @@
     <div class="col-4">
       <div class="field">
         <label for="last_name">{{ labelPrefix }} LAST NAME</label>
-        <input [formControlName]="lastNameFieldName" id="last_name" pInputText type="text" />
+        <input type="text" pInputText id="last_name" [formControlName]="lastNameFieldName" />
         <app-error-messages
+          [form]="form"
           [fieldName]="lastNameFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="first_name">{{ labelPrefix }} FIRST NAME</label>
-        <input [formControlName]="firstNameFieldName" id="first_name" pInputText type="text" />
+        <input type="text" pInputText id="first_name" [formControlName]="firstNameFieldName" />
         <app-error-messages
+          [form]="form"
           [fieldName]="firstNameFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="middle_name">{{ labelPrefix }} MIDDLE NAME (OPTIONAL)</label>
-        <input [formControlName]="middleNameFieldName" id="middle_name" pInputText type="text" />
+        <input type="text" pInputText id="middle_name" [formControlName]="middleNameFieldName" />
         <app-error-messages
+          [form]="form"
           [fieldName]="middleNameFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -38,22 +38,22 @@
     <div class="col-3">
       <div class="field">
         <label for="prefix">{{ labelPrefix }} PREFIX (OPTIONAL)</label>
-        <input [formControlName]="prefixFieldName" id="prefix" pInputText type="text" />
+        <input type="text" pInputText id="prefix" [formControlName]="prefixFieldName" />
         <app-error-messages
+          [form]="form"
           [fieldName]="prefixFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
         <label for="suffix">{{ labelPrefix }} SUFFIX (OPTIONAL)</label>
-        <input [formControlName]="suffixFieldName" id="suffix" pInputText type="text" />
+        <input type="text" pInputText id="suffix" [formControlName]="suffixFieldName" />
         <app-error-messages
+          [form]="form"
           [fieldName]="suffixFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>

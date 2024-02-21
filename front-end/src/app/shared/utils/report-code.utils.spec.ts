@@ -1,4 +1,4 @@
-import { F3X_REPORT_CODE_MAP, F3xReportCode, F3xReportCodes, getReportCodeLabel } from './report-code.utils';
+import { F3xReportCode, F3xReportCodes, F3X_REPORT_CODE_MAP, getReportCodeLabel } from './report-code.utils';
 
 describe('ReportCodeUtils', () => {
   describe('F3xReportCode', () => {

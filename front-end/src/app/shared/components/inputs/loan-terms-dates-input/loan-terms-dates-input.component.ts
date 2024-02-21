@@ -22,7 +22,7 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
 
     if (!DateUtils.isWithin(date, coverage_from_date, coverage_through_date)) {
       const message = `This date must fall within the coverage dates of ${DateUtils.convertDateToSlashFormat(
-        coverage_from_date,
+        coverage_from_date
       )} - ${DateUtils.convertDateToSlashFormat(coverage_through_date)} for this report.`;
       return { invaliddate: { msg: message } };
     }
@@ -37,20 +37,23 @@ function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
+  constructor(private store: Store) {
+    super();
+  }
+
   termFieldSettings = LoanTermsFieldSettings;
+
   dueDateSettingOptions = LabelUtils.getPrimeOptions([
     [LoanTermsFieldSettings.SPECIFIC_DATE, 'Enter a specific date'],
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
+
   interestRateSettingOptions = LabelUtils.getPrimeOptions([
     [LoanTermsFieldSettings.EXACT_PERCENTAGE, 'Enter an exact percentage'],
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
-  percentageValidator?: ValidatorFn;
 
-  constructor(private store: Store) {
-    super();
-  }
+  percentageValidator?: ValidatorFn;
 
   ngOnInit(): void {
     // Add the date range validation check to the DATE INCURRED input
@@ -62,7 +65,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           this.form
             .get(this.templateMap.date)
             ?.addValidators(
-              dateWithinReportRange((report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date),
+              dateWithinReportRange((report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date)
             );
         });
     }
@@ -150,7 +153,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
           textInput?.setSelectionRange(
             initialSelectionStart - lengthDifference,
-            initialSelectionEnd - lengthDifference,
+            initialSelectionEnd - lengthDifference
           );
         }
 

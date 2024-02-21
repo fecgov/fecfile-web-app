@@ -25,7 +25,7 @@ describe('Transaction Type Model', () => {
       'An absurdly long response' +
         'Just the biggest; no corners cut.' +
         'It needs to be at least 100 chars.' +
-        'This should probably get it done.',
+        'This should probably get it done.'
     );
 
     const originalDescrip = transaction.transactionType?.generatePurposeDescription?.(transaction);

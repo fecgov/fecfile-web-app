@@ -4,20 +4,20 @@
       <div class="field">
         <label for="balance">BEGINNING BALANCE</label>
         <p-inputNumber
-          [formControlName]="templateMap['balance']"
-          [readonly]="true"
-          currency="USD"
           inputId="balance"
-          inputStyleClass="readonly"
-          locale="en-US"
+          [formControlName]="templateMap['balance']"
           mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="true"
+          inputStyleClass="readonly"
         ></p-inputNumber>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['balance']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
-          maxLengthErrorMessage="The beginning balance can be 12 digits max"
           patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The beginning balance can be 12 digits max"
         ></app-error-messages>
       </div>
     </div>
@@ -25,18 +25,18 @@
       <div class="field">
         <label for="amount">INCURRED AMOUNT</label>
         <p-inputNumber
-          [formControlName]="templateMap['amount']"
-          currency="USD"
           inputId="amount"
-          locale="en-US"
+          [formControlName]="templateMap['amount']"
           mode="currency"
+          currency="USD"
+          locale="en-US"
         ></p-inputNumber>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['amount']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
-          maxLengthErrorMessage="The incurred amount can be 12 digits max"
           patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The incurred amount can be 12 digits max"
         ></app-error-messages>
       </div>
     </div>
@@ -46,20 +46,20 @@
       <div class="field">
         <label for="payment_amount">PAYMENT AMOUNT</label>
         <p-inputNumber
-          [readonly]="true"
-          currency="USD"
-          formControlName="payment_amount"
           inputId="payment_amount"
-          inputStyleClass="readonly"
-          locale="en-US"
+          formControlName="payment_amount"
           mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="true"
+          inputStyleClass="readonly"
         ></p-inputNumber>
         <app-error-messages
-          [formSubmitted]="formSubmitted"
           [form]="form"
           fieldName="payment_amount"
-          maxLengthErrorMessage="The payment amount can be 12 digits max"
+          [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The payment amount can be 12 digits max"
         ></app-error-messages>
       </div>
     </div>
@@ -67,20 +67,20 @@
       <div class="field">
         <label for="balance_at_close">BALANCE AT CLOSE</label>
         <p-inputNumber
-          [readonly]="true"
-          currency="USD"
-          formControlName="balance_at_close"
           inputId="balance_at_close"
-          inputStyleClass="readonly"
-          locale="en-US"
+          formControlName="balance_at_close"
           mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="true"
+          inputStyleClass="readonly"
         ></p-inputNumber>
         <app-error-messages
-          [formSubmitted]="formSubmitted"
           [form]="form"
           fieldName="balance_at_close"
-          maxLengthErrorMessage="The balance at close can be 12 digits max"
+          [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The balance at close can be 12 digits max"
         ></app-error-messages>
       </div>
     </div>

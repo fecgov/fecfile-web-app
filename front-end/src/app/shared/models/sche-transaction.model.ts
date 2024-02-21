@@ -58,14 +58,6 @@ export class SchETransaction extends Transaction {
   memo_text_description: string | undefined;
 
   // calendar_ytd_per_election_office is dynamically calculated on the back-end
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchETransaction {
-    const transaction = plainToInstance(SchETransaction, json);
-    setMetaProperties(transaction, depth);
-    return transaction;
-  }
-
   // and not saved in the database
   override getFieldsNotToValidate(): string[] {
     return [
@@ -75,9 +67,15 @@ export class SchETransaction extends Transaction {
       ...super.getFieldsNotToValidate(),
     ];
   }
-
   override getFieldsNotToSave(): string[] {
     return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, depth = 2): SchETransaction {
+    const transaction = plainToInstance(SchETransaction, json);
+    setMetaProperties(transaction, depth);
+    return transaction;
   }
 }
 

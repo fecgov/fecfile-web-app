@@ -1,7 +1,7 @@
 <!-- prettier-ignore -->
-<img alt="FECFile Seal and Title" id="fec-seal-and-title" src="/assets/img/seal-and-title-white.svg" />
+<img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
 
-<a (click)="loginService.logOut()" class="logout-button" href="#">
+<a class="logout-button" href="#" (click)="loginService.logOut()">
   <span>Log Out</span>
 </a>
 
@@ -53,31 +53,31 @@
 
       <ng-template pTemplate="footer">
         <p-divider></p-divider>
-        <form [formGroup]="form" class="flex align-items-center gap-1">
+        <form class="flex align-items-center gap-1" [formGroup]="form">
           <div class="field">
             <p-checkbox
-              [binary]="true"
-              ariaLabel="You consent to the security notification for one year"
               formControlName="security-consent-annual"
+              [binary]="true"
               inputId="security-consent-annual"
               label="You consent to the security notification for one year"
+              ariaLabel="You consent to the security notification for one year"
             ></p-checkbox>
             <div class="col-12">
               <app-error-messages
-                [formSubmitted]="formSubmitted"
                 [form]="form"
                 fieldName="security-consent-annual"
+                [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
         </form>
         <div class="align-center">
-          <p-button (click)="loginService.logOut()" class="security-notice-button" label="Decline and exit"></p-button>
+          <p-button class="security-notice-button" label="Decline and exit" (click)="loginService.logOut()"></p-button>
           <p-button
-            (click)="signConsentForm()"
             class="security-notice-button"
             label="Consent"
             styleClass="p-button-secondary"
+            (click)="signConsentForm()"
           ></p-button>
         </div>
       </ng-template>

@@ -1,4 +1,4 @@
-import { FORM_TYPES, FormType, FormTypes } from './form-type.utils';
+import { FormType, FormTypes, FORM_TYPES } from './form-type.utils';
 
 describe('FormTypeUtils', () => {
   describe('FormType', () => {

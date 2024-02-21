@@ -8,7 +8,7 @@ import {
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { INDIVIDUAL, INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 
 export class IN_KIND_RECEIPT extends IN_KIND {
   override formFields = INDIVIDUAL_FORM_FIELDS;

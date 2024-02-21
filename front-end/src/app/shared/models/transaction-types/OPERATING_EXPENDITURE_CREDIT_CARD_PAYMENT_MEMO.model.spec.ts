@@ -17,7 +17,7 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB21B');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+      ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO
     );
   });
 

@@ -12,7 +12,6 @@ export class LoginGuard {
     private router: Router,
     private cookieService: CookieService,
   ) {}
-
   canActivate(): Promise<boolean | UrlTree> {
     return this.loginService.userIsAuthenticated().then((userIsAuthenticated) => {
       if (!userIsAuthenticated) {

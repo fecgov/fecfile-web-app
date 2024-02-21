@@ -1,25 +1,25 @@
 <dialog #dialog>
-  <div aria-hidden="true" aria-labelledby="dialog-title" tabindex="-1">
+  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="dialog-content">
       <div class="dialog-header">
         <h1 class="dialog-title" id="dialog-title">Create a new report</h1>
-        <button (click)="dialog.close()" aria-label="Cancel" class="btn-close" type="button"></button>
+        <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
       </div>
       <div class="dialog-body">
         <div class="dropdown">
-          <label for="typeDropdown" id="type-label">FORM TYPE</label>
+          <label id="type-label" for="typeDropdown">FORM TYPE</label>
           <button
-            [autofocus]="true"
-            [innerHTML]="dropdownButtonText"
-            aria-expanded="false"
             class="btn dropdown-toggle"
-            data-bs-toggle="dropdown"
-            id="typeDropdown"
             type="button"
+            id="typeDropdown"
+            [autofocus]="true"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            [innerHTML]="dropdownButtonText"
           ></button>
-          <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li *ngFor="let type of formTypeOptions">
-              <button (click)="updateSelected(type)" (select)="updateSelected(type)" class="dropdown-item">
+              <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
                 <span class="option">
                   <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
                 >
@@ -27,25 +27,25 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="selectedType === formTypes.F24" class="modal-item-margin">
+        <div class="modal-item-margin" *ngIf="selectedType === formTypes.F24">
           <label for="form24Options">REPORT TYPE</label>
           <p-selectButton
-            [(ngModel)]="selectedForm24Type"
-            [options]="form24Options"
             id="form24Options"
+            [options]="form24Options"
+            [(ngModel)]="selectedForm24Type"
           ></p-selectButton>
         </div>
       </div>
       <div class="dialog-footer">
         <button
-          (click)="goToReportForm()"
+          pButton
+          pRipple
           [disabled]="
             !getFormType(selectedType)?.createRoute && (!(selectedType === formTypes.F24) || !selectedForm24Type)
           "
-          class="p-button-primary"
           label="Start building report"
-          pButton
-          pRipple
+          class="p-button-primary"
+          (click)="goToReportForm()"
         ></button>
       </div>
     </div>

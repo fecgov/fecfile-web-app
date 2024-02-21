@@ -6,8 +6,8 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
-import { ReportService } from '../../../shared/services/report.service';
-import { Transaction } from '../../../shared/models/transaction.model';
+import { ReportService } from "../../../shared/services/report.service";
+import { Transaction } from "../../../shared/models/transaction.model";
 
 @Component({
   selector: 'app-transaction-list',
@@ -27,7 +27,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => true,
+      () => true
     ),
     new TableAction(
       'Add a disbursement',
@@ -35,7 +35,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => true,
+      () => true
     ),
     new TableAction(
       'Add loans and debts',
@@ -43,7 +43,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => true,
+      () => true
     ),
     new TableAction(
       'Add other transactions',
@@ -51,7 +51,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => false,
+      () => false
     ),
     new TableAction(
       'Add an independent expenditure',
@@ -59,16 +59,12 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F24;
       },
-      () => true,
+      () => true
     ),
   ];
   transaction?: Transaction;
 
-  constructor(
-    private router: Router,
-    private store: Store,
-    private reportService: ReportService,
-  ) {
+  constructor(private router: Router, private store: Store, private reportService: ReportService) {
     super();
   }
 
@@ -78,6 +74,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
   }
+
 
   async createTransactions(transactionCategory: string, report?: Report): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
@@ -92,7 +89,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   }
 }
 
-@Pipe({ name: 'memoCode' })
+@Pipe({name: 'memoCode'})
 export class MemoCodePipe implements PipeTransform {
   transform(value: boolean) {
     return value ? 'Y' : '-';

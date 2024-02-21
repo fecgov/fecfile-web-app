@@ -11,7 +11,7 @@ export class PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

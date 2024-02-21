@@ -5,15 +5,17 @@
  *
  */
 @mixin media($type) {
-  @if $type == tablet { /* Small devices (tablets, >= 768px and <= 991px) */
+  @if $type == tablet {/* Small devices (tablets, >= 768px and <= 991px) */
     @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
       @content;
     }
-  } @else if $type == mediumDesktop { /* Medium devices (desktops, >= 992px and <= 1199px) */
+  }
+  @else if $type == mediumDesktop {/* Medium devices (desktops, >= 992px and <= 1199px) */
     @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
       @content;
     }
-  } @else if $type == largeDesktop { /* Large devices (large desktops, 1200px and up) */
+  }
+  @else if $type == largeDesktop {/* Large devices (large desktops, 1200px and up) */
     @media (min-width: $screen-lg-min) {
       @content;
     }
@@ -25,8 +27,8 @@
  *
  */
 @mixin webkitBrowser() {
-  @media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @content;
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+     @content;
   }
 }
 
@@ -35,7 +37,7 @@
  *
  */
 @mixin safariOnly() {
-  @media not all and (min-resolution: .001dpcm) {
+  @media not all and (min-resolution:.001dpcm) {
     @content;
   }
 }
@@ -47,5 +49,5 @@
 @mixin firefoxOnly() {
   @-moz-document url-prefix() {
     @content;
-  }
+  }  
 }

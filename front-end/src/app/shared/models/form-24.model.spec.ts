@@ -44,7 +44,7 @@ describe('Form24', () => {
         id: '999',
         form_type: F24FormTypes.F24N,
         committee_name: 'foo',
-        report_version: undefined,
+        report_version: undefined
       };
       const form = Form24.fromJSON(data);
       expect(form.versionLabel).toEqual('Original');
@@ -55,7 +55,7 @@ describe('Form24', () => {
         id: '999',
         form_type: F24FormTypes.F24N,
         committee_name: 'foo',
-        report_version: '1',
+        report_version: '1'
       };
       const form = Form24.fromJSON(data);
       expect(form.versionLabel).toEqual('Original 1');

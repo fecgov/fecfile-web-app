@@ -336,7 +336,7 @@ export class TransactionFormUtils {
         text4000: text,
         text_prefix: transaction.memo_text?.text_prefix,
         report_id: transaction?.report_id,
-        rec_type: 'TEXT'
+        rec_type: 'TEXT',
       });
 
       if (transaction?.id) {

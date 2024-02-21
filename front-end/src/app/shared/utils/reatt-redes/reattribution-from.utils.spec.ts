@@ -9,7 +9,7 @@ describe('Reattribution From', () => {
       const fromTransaction = ReattributionFromUtils.overlayTransactionProperties(
         getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
         testScheduleATransaction,
-        '3cd741da-aa57-4cc3-8530-667e8b7bad78',
+        '3cd741da-aa57-4cc3-8530-667e8b7bad78'
       );
       expect(fromTransaction.transactionType.accordionTitle).toBe('AUTO-POPULATED');
       expect(fromTransaction.fields_to_validate?.includes('memo_code')).toBeFalse();
@@ -19,7 +19,7 @@ describe('Reattribution From', () => {
 
   describe('overlayForm', () => {
     it('should update validators and watch for value changes', () => {
-      const transaction = { ...testScheduleATransaction } as SchATransaction;
+      const transaction = {...testScheduleATransaction} as SchATransaction;
       transaction.parent_transaction = {
         id: '888',
         reatt_redes: {
@@ -47,4 +47,5 @@ describe('Reattribution From', () => {
       expect(fromForm.get('contribution_amount')?.value).toBe(-5 as never);
     });
   });
+
 });

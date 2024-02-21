@@ -7,7 +7,7 @@
         </div>
         <div class="col-12">
           <span class="subtitle"
-          ><strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}</span
+            ><strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}</span
           >
         </div>
       </div>
@@ -15,14 +15,14 @@
 
     <ng-template pTemplate="right">
       <app-table-actions-button
-        (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
         *ngIf="report?.report_status === reportStatus.IN_PROGRESS"
-        [actionItem]="report"
         [tableActions]="tableActions"
-        buttonAriaLabel="Add a Transaction"
+        [actionItem]="report"
+        (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-plus"
         buttonLabel="Add new transaction"
         buttonStyleClass="mr-2 add-button"
+        buttonAriaLabel="Add a Transaction"
       ></app-table-actions-button>
     </ng-template>
   </p-toolbar>
@@ -34,8 +34,8 @@
 <p-confirmDialog #cd [style]="{ width: '450px' }">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">
-      <button (click)="cd.reject()" class="p-button-secondary" label="Cancel" pButton type="button"></button>
-      <button (click)="cd.accept()" label="Confirm" pButton type="button"></button>
+      <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
+      <button type="button" pButton label="Confirm" (click)="cd.accept()"></button>
     </span>
   </ng-template>
 </p-confirmDialog>

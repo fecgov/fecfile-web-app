@@ -9,10 +9,7 @@ import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(
-    private http: HttpClient,
-    private cookieService: CookieService,
-  ) {}
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -24,24 +21,24 @@ export class ApiService {
   }
 
   getQueryParams(
-    queryParams: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] } = {},
+    queryParams: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] } = {}
   ) {
     return new HttpParams({ fromObject: queryParams });
   }
 
   public get<T>(
     endpoint: string,
-    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
+    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
   ): Observable<T>;
   public get<T>(
     endpoint: string,
     params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-    allowedErrorCodes?: number[],
+    allowedErrorCodes?: number[]
   ): Observable<HttpResponse<T>>;
   public get<T>(
     endpoint: string,
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-    allowedErrorCodes?: number[],
+    allowedErrorCodes?: number[]
   ): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     if (allowedErrorCodes) {
@@ -65,11 +62,7 @@ export class ApiService {
   public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
-      headers: headers,
-      params: params,
-      withCredentials: true
-    });
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
   // prettier-ignore
@@ -83,11 +76,7 @@ export class ApiService {
   public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
-      headers: headers,
-      params: params,
-      withCredentials: true
-    });
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
   public delete<T>(endpoint: string): Observable<T> {

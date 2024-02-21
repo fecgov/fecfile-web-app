@@ -14,7 +14,7 @@ export class FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO extends SchBTran
   contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO,
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO
   );
   schema = schema;
   override navigationControls = CHILD_CONTROLS;

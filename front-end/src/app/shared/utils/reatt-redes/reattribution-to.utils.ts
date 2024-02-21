@@ -1,6 +1,6 @@
-import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesUtils, ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import { getTransactionName, TransactionTypes } from '../../models/transaction.model';
+import { TransactionTypes, getTransactionName } from '../../models/transaction.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 
 export class ReattributionToUtils {

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { TransactionResolver } from 'app/shared/resolvers/transaction.resolver';
 import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guard';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';

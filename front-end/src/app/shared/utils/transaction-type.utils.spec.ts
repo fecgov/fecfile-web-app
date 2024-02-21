@@ -1,4 +1,4 @@
-import { getFromJSON, TransactionTypeUtils } from './transaction-type.utils';
+import { TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
 
 describe('LabelUtils', () => {
   it('should create an instance', () => {

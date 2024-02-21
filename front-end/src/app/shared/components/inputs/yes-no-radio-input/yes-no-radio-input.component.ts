@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { AbstractControl } from '@angular/forms';
 

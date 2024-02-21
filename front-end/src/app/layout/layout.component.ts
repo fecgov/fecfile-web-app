@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NavigationEnd, Router } from '@angular/router';
-import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
+import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { filter, takeUntil } from 'rxjs';
 import { HeaderStyles } from './header/header.component';

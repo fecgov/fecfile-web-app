@@ -4,19 +4,19 @@ import { SchCTransactionType } from '../schc-transaction-type.model';
 import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import {
   CANCEL_CONTROL,
-  ControlType,
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
   SAVE_DOUBLE_ENTRY_LIST_CONTROL,
   TransactionNavigationControls,
+  NavigationControl,
+  NavigationAction,
+  NavigationDestination,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
-  ADDRESS_FIELDS,
   COM_FIELDS,
   COMMON_FIELDS,
+  ADDRESS_FIELDS,
   INDIVIDUAL_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
   LOAN_FINANCE_FIELDS,
@@ -60,11 +60,11 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
         hasNoContact,
         () => true,
         'pi pi-plus',
-        ControlType.BUTTON,
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_DOUBLE_ENTRY_LIST_CONTROL],
+    [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
   );
 
   getNewTransaction() {

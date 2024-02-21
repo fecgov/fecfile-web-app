@@ -17,7 +17,7 @@ export class TransactionChildFormUtils {
   static childOnInit(
     component: DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
     childForm: FormGroup,
-    childTransaction: Transaction,
+    childTransaction: Transaction
   ) {
     // Determine if amount should always be negative and then force it to be so if needed
     if (
@@ -73,20 +73,21 @@ export class TransactionChildFormUtils {
     });
 
     // Inheritted fields must match parent values
-    childTransaction.transactionType?.getInheritedFields(childTransaction)?.forEach((inherittedField) => {
-      if (childTransaction.transactionType) {
-        component.form
-          .get(component.templateMap[inherittedField])
-          ?.valueChanges.pipe(takeUntil(component.destroy$))
-          .subscribe((value) => {
-            if (childTransaction.transactionType) {
-              childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.setValue(value);
-            }
-          });
-        childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.disable();
-      } else {
-        throw new Error('Fecfile: Template map not found for transaction component');
-      }
-    });
+    childTransaction.transactionType?.getInheritedFields(
+      childTransaction)?.forEach((inherittedField) => {
+        if (childTransaction.transactionType) {
+          component.form
+            .get(component.templateMap[inherittedField])
+            ?.valueChanges.pipe(takeUntil(component.destroy$))
+            .subscribe((value) => {
+              if (childTransaction.transactionType) {
+                childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.setValue(value);
+              }
+            });
+          childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.disable();
+        } else {
+          throw new Error('Fecfile: Template map not found for transaction component');
+        }
+      });
   }
 }

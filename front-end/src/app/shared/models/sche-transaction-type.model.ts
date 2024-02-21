@@ -13,6 +13,11 @@ export abstract class SchETransactionType extends TransactionType {
   override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
   override signatoryOneHeader = 'Committee treasurer';
   override committeeCandidateHeader = 'Candidate information';
+
+  override hasCandidateInformation(form?: FormGroup): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS) && !!form?.get('support_oppose_code')?.value;
+  }
+
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
     // Form fields
@@ -78,8 +83,4 @@ export abstract class SchETransactionType extends TransactionType {
     signatory_2_title: '',
     signatory_2_date: '',
   };
-
-  override hasCandidateInformation(form?: FormGroup): boolean {
-    return hasFields(this.formFields, CANDIDATE_FIELDS) && !!form?.get('support_oppose_code')?.value;
-  }
 }

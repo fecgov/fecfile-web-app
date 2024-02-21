@@ -6,7 +6,7 @@
     </div>
   </div>
   <div class="grid">
-    <div *ngIf="items$ | async" class="col-12">
+    <div class="col-12" *ngIf="items$ | async">
       <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
     </div>
   </div>

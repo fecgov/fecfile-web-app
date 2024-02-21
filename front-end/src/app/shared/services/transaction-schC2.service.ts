@@ -13,18 +13,15 @@ export class TransactionSchC2Service extends TransactionService {
   override tableDataEndpoint = '/transactions';
   public transaction?: SchCTransaction;
 
-  constructor(
-    override apiService: ApiService,
-    override datePipe: DatePipe,
-  ) {
-    super(apiService, datePipe);
-  }
-
   override getTableData(
     pageNumber?: number,
     ordering?: string,
-    params?: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] },
+    params?: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] }
   ): Observable<ListRestResponse> {
     return super.getTableData(pageNumber, ordering, { ...params, schedules: 'C2' });
+  }
+
+  constructor(override apiService: ApiService, override datePipe: DatePipe) {
+    super(apiService, datePipe);
   }
 }

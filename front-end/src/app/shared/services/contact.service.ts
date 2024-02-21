@@ -26,25 +26,6 @@ import { ApiService } from './api.service';
 export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
-  /**
-   * Given the type of contact given, return the appropriate JSON schema doc
-   * @param {ContactTypes} type
-   * @returns {JsonSchema} schema
-   */
-  public static getSchemaByType(type: ContactTypes): JsonSchema {
-    let schema: JsonSchema = contactIndividualSchema;
-    if (type === ContactTypes.CANDIDATE) {
-      schema = contactCandidateSchema;
-    }
-    if (type === ContactTypes.COMMITTEE) {
-      schema = contactCommitteeSchema;
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      schema = contactOrganizationSchema;
-    }
-    return schema;
-  }
-
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
@@ -53,7 +34,7 @@ export class ContactService implements TableListService<Contact> {
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => Contact.fromJSON(item));
         return response;
-      }),
+      })
     );
   }
 
@@ -81,7 +62,7 @@ export class ContactService implements TableListService<Contact> {
     search: string,
     maxFecResults: number,
     maxFecfileResults: number,
-    office?: CandidateOfficeType,
+    office?: CandidateOfficeType
   ): Observable<CandidateLookupResponse> {
     return this.apiService
       .get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
@@ -96,7 +77,7 @@ export class ContactService implements TableListService<Contact> {
   public committeeLookup(
     search: string,
     maxFecResults: number,
-    maxFecfileResults: number,
+    maxFecfileResults: number
   ): Observable<CommitteeLookupResponse> {
     return this.apiService
       .get<CommitteeLookupResponse>('/contacts/committee_lookup/', {
@@ -123,9 +104,9 @@ export class ContactService implements TableListService<Contact> {
           this.checkFecIdForUniqness(fecId, contactId).pipe(
             map((isUnique: boolean) => {
               return isUnique ? null : { fecIdMustBeUnique: true };
-            }),
-          ),
-        ),
+            })
+          )
+        )
       );
     };
   };
@@ -147,6 +128,25 @@ export class ContactService implements TableListService<Contact> {
       })
       .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
   }
+
+  /**
+   * Given the type of contact given, return the appropriate JSON schema doc
+   * @param {ContactTypes} type
+   * @returns {JsonSchema} schema
+   */
+  public static getSchemaByType(type: ContactTypes): JsonSchema {
+    let schema: JsonSchema = contactIndividualSchema;
+    if (type === ContactTypes.CANDIDATE) {
+      schema = contactCandidateSchema;
+    }
+    if (type === ContactTypes.COMMITTEE) {
+      schema = contactCommitteeSchema;
+    }
+    if (type === ContactTypes.ORGANIZATION) {
+      schema = contactOrganizationSchema;
+    }
+    return schema;
+  }
 }
 
 @Injectable({
@@ -163,7 +163,7 @@ export class DeletedContactService implements TableListService<Contact> {
       map((response: ListRestResponse) => {
         response.results = response.results.map(Contact.fromJSON);
         return response;
-      }),
+      })
     );
   }
 
@@ -171,7 +171,6 @@ export class DeletedContactService implements TableListService<Contact> {
     const contactIds = contacts.map((contact) => contact.id);
     return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public delete(_: Contact): Observable<null> {
     return of(null);

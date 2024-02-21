@@ -1,16 +1,16 @@
 <div [formGroup]="form">
   <app-loan-terms-dates-input
-    [formSubmitted]="formSubmitted"
     [form]="form"
+    [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [transaction]="transaction"
   ></app-loan-terms-dates-input>
   <app-yes-no-radio-input
-    [controlName]="templateMap['secured']"
-    [formSubmitted]="formSubmitted"
     [form]="form"
-    ariaLabelNo="This loan is not secured"
-    ariaLabelYes="This loan is secured"
+    [formSubmitted]="formSubmitted"
+    [controlName]="templateMap['secured']"
     label="Is this loan secured?"
+    ariaLabelYes="This loan is secured"
+    ariaLabelNo="This loan is not secured"
   ></app-yes-no-radio-input>
 </div>

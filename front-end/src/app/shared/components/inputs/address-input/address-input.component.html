@@ -4,17 +4,17 @@
       <div class="field">
         <label for="street_1">STREET ADDRESS</label>
         <input
-          [formControlName]="streetOneFieldName"
-          [ngClass]="{ readonly: this.readonly }"
-          [readonly]="readonly"
-          id="street_1"
-          pInputText
           type="text"
+          pInputText
+          id="street_1"
+          [formControlName]="streetOneFieldName"
+          [readonly]="readonly"
+          [ngClass]="{ readonly: this.readonly }"
         />
         <app-error-messages
+          [form]="form"
           [fieldName]="streetOneFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -22,17 +22,17 @@
       <div class="field">
         <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
         <input
-          [formControlName]="streetTwoFieldName"
-          [ngClass]="{ readonly: this.readonly }"
-          [readonly]="readonly"
-          id="street_2"
-          pInputText
           type="text"
+          pInputText
+          id="street_2"
+          [formControlName]="streetTwoFieldName"
+          [readonly]="readonly"
+          [ngClass]="{ readonly: this.readonly }"
         />
         <app-error-messages
+          [form]="form"
           [fieldName]="streetTwoFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -42,17 +42,17 @@
       <div class="field">
         <label for="city">CITY</label>
         <input
-          [formControlName]="cityFieldName"
-          [ngClass]="{ readonly: this.readonly }"
-          [readonly]="readonly"
-          id="city"
-          pInputText
           type="text"
+          pInputText
+          id="city"
+          [formControlName]="cityFieldName"
+          [readonly]="readonly"
+          [ngClass]="{ readonly: this.readonly }"
         />
         <app-error-messages
+          [form]="form"
           [fieldName]="cityFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -60,19 +60,19 @@
       <div class="field">
         <label for="state">STATE/PROVINCE</label>
         <p-dropdown
-          [autoDisplayFirst]="false"
-          [disabled]="this.readonly"
+          inputId="state"
           [formControlName]="stateFieldName"
           [options]="stateOptions"
-          [readonly]="readonly"
+          [autoDisplayFirst]="false"
           appendTo="body"
-          inputId="state"
+          [disabled]="this.readonly"
+          [readonly]="readonly"
           styleClass="{{ this.readonly ? 'readonly' : '' }}"
         ></p-dropdown>
         <app-error-messages
+          [form]="form"
           [fieldName]="stateFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
@@ -80,17 +80,17 @@
       <div class="field">
         <label for="zip">ZIP/POSTAL CODE</label>
         <input
-          [formControlName]="zipFieldName"
-          [ngClass]="{ readonly: this.readonly }"
-          [readonly]="readonly"
-          id="zip"
-          pInputText
           type="text"
+          pInputText
+          id="zip"
+          [formControlName]="zipFieldName"
+          [readonly]="readonly"
+          [ngClass]="{ readonly: this.readonly }"
         />
         <app-error-messages
+          [form]="form"
           [fieldName]="zipFieldName"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>

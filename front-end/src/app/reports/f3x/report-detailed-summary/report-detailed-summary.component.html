@@ -8,10 +8,10 @@
   </div>
   <div *ngIf="(calculationFinished$ | async) === false">
     <img
-      alt="The report's detailed summary is loading..."
       class="image-max-width fec-loader-image"
-      draggable="false"
       src="assets/img/fec-loading-flag.gif"
+      draggable="false"
+      alt="The report's detailed summary is loading..."
     />
   </div>
   <div *ngIf="calculationFinished$ | async">
@@ -55,8 +55,7 @@
         <td class="right-border">(a)(iii)</td>
         <td class="justify-left right-border indent-2 cell-with-overlay">
           <em>Total contributions from individuals/persons other than political committees</em
-          >
-          <app-calculation-overlay>Lines 11(a)(i) <b>+</b> 11(a)(ii) <b>=</b> Line 11(a)(iii)</app-calculation-overlay>
+          ><app-calculation-overlay>Lines 11(a)(i) <b>+</b> 11(a)(ii) <b>=</b> Line 11(a)(iii)</app-calculation-overlay>
         </td>
         <td class="right-border">{{ report.L11aiii_total_period | defaultZero | currency }}</td>
         <td>{{ report.L11aiii_total_ytd | defaultZero | currency }}</td>
@@ -79,8 +78,7 @@
           Total contributions
           <app-calculation-overlay>
             Lines 11(a)(iii) + 11(b) + 11(c) = Line 11(d)<br />(This total will also appear on Line
-            33).
-          </app-calculation-overlay
+            33).</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L11d_total_contributions_period | defaultZero | currency }}</td>
@@ -173,9 +171,8 @@
         <td class="justify-left right-border bold cell-with-overlay">
           TOTAL RECEIPTS
           <app-calculation-overlay
-          >Lines 11(d) <b>+</b> 12 <b>+</b> 13 <b>+</b> 14 <b>+</b> 15 <b>+</b> 16 <b>+</b> 17 <b>+</b> 18(c)
-            <b>=</b> Line 19
-          </app-calculation-overlay
+            >Lines 11(d) <b>+</b> 12 <b>+</b> 13 <b>+</b> 14 <b>+</b> 15 <b>+</b> 16 <b>+</b> 17 <b>+</b> 18(c)
+            <b>=</b> Line 19</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
@@ -243,8 +240,7 @@
         <td class="justify-left right-border indent-1 cell-with-overlay">
           Total operating expenditures
           <app-calculation-overlay
-          >Lines 21(a)(i) <b>+</b> 21(a)(ii) <b>+</b> 21(b) <b>=</b> Line 21(c)
-          </app-calculation-overlay
+            >Lines 21(a)(i) <b>+</b> 21(a)(ii) <b>+</b> 21(b) <b>=</b> Line 21(c)</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L21c_total_operating_expenditures_period | defaultZero | currency }}</td>
@@ -327,8 +323,7 @@
         <td class="justify-left right-border indent-1 cell-with-overlay">
           Total Contribution Refunds
           <app-calculation-overlay
-          >Lines 28(a) <b>+</b> 28(b) <b>+</b> 28(c) <b>=</b> Line 28(d)
-          </app-calculation-overlay
+            >Lines 28(a) <b>+</b> 28(b) <b>+</b> 28(c) <b>=</b> Line 28(d)</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L28d_total_contributions_refunds_period | defaultZero | currency }}</td>
@@ -383,7 +378,7 @@
         <td class="justify-left right-border indent-1 cell-with-overlay">
           Total Federal Election Activity
           <app-calculation-overlay
-          >Lines 30(a)(i) <b>+</b> 30(a)(ii) <b>+</b> 30(b) <b>=</b> Line 30(c)
+            >Lines 30(a)(i) <b>+</b> 30(a)(ii) <b>+</b> 30(b) <b>=</b> Line 30(c)
           </app-calculation-overlay>
         </td>
         <td class="right-border">{{ report.L30c_total_federal_election_activity_period | defaultZero | currency }}</td>
@@ -406,8 +401,7 @@
         <td class="justify-left right-border bold cell-with-overlay">
           TOTAL FEDERAL DISBURSEMENTS
           <app-calculation-overlay
-          >Lines 31 <b>-</b> 21(a)(ii) <b>+</b> 30(a)(ii) <b>=</b> Line 32
-          </app-calculation-overlay
+            >Lines 31 <b>-</b> 21(a)(ii) <b>+</b> 30(a)(ii) <b>=</b> Line 32</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L32_total_federal_disbursements_period | defaultZero | currency }}</td>
@@ -439,8 +433,7 @@
       <tr class="gray">
         <td class="right-border bold">34</td>
         <td class="justify-left right-border bold cell-with-overlay">
-          TOTAL CONTRIBUTION REFUNDS
-          <app-calculation-overlay>Carried from Line 28(d).</app-calculation-overlay>
+          TOTAL CONTRIBUTION REFUNDS <app-calculation-overlay>Carried from Line 28(d).</app-calculation-overlay>
         </td>
         <td class="right-border">{{ report.L34_total_contribution_refunds_period | defaultZero | currency }}</td>
         <td>{{ report.L34_total_contribution_refunds_ytd | defaultZero | currency }}</td>
@@ -448,10 +441,8 @@
       <tr class="gray">
         <td class="right-border bold">35</td>
         <td class="justify-left right-border bold cell-with-overlay">
-          NET CONTRIBUTIONS (OTHER THAN LOANS)
-          <app-calculation-overlay
-          >Line 33 <b>-</b> 34 <b>=</b> Line 35
-          </app-calculation-overlay
+          NET CONTRIBUTIONS (OTHER THAN LOANS)<app-calculation-overlay
+            >Line 33 <b>-</b> 34 <b>=</b> Line 35</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L35_net_contributions_period | defaultZero | currency }}</td>
@@ -471,8 +462,7 @@
       <tr class="gray">
         <td class="right-border bold">37</td>
         <td class="justify-left right-border bold cell-with-overlay">
-          OFFSETS TO OPERATING EXPENDITURES
-          <app-calculation-overlay>Carried from Line 15.</app-calculation-overlay>
+          OFFSETS TO OPERATING EXPENDITURES <app-calculation-overlay>Carried from Line 15.</app-calculation-overlay>
         </td>
         <td class="right-border">{{ report.L37_offsets_to_operating_expenditures_period | defaultZero | currency }}</td>
         <td>{{ report.L37_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
@@ -492,11 +482,11 @@
     <div class="col-4">
       <div>
         <button
-          (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
-          class="p-button-secondary"
-          label="Back"
           pButton
           pRipple
+          label="Back"
+          class="p-button-secondary"
+          (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
         ></button>
       </div>
     </div>
@@ -504,11 +494,11 @@
     <div class="col-4 align-right">
       <div>
         <button
-          (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
-          class="p-button-primary"
-          label="See print preview"
           pButton
           pRipple
+          label="See print preview"
+          class="p-button-primary"
+          (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
         ></button>
       </div>
     </div>

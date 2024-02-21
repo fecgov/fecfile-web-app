@@ -3,12 +3,12 @@
     <ng-content></ng-content>
   </p-overlayPanel>
   <img
-    (click)="op.toggle($event)"
-    (keyup.enter)="op.toggle($event)"
+    src="/assets/img/calculation-icon.svg"
+    role="img"
     alt=""
     aria-hidden="true"
-    role="img"
-    src="/assets/img/calculation-icon.svg"
+    (click)="op.toggle($event)"
+    (keyup.enter)="op.toggle($event)"
     tabindex="0"
   />
 </div>

@@ -58,11 +58,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
-  get confirmation$(): Observable<boolean> {
-    if (!this.transaction) return of(false);
-    return this.confirmWithUser(this.transaction, this.form);
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['navigationEvent'] && this.navigationEvent) {
       this.handleNavigate(this.navigationEvent);
@@ -205,6 +200,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
 
   isInvalid(): boolean {
     return this.form.invalid || !this.transaction;
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.transaction) return of(false);
+    return this.confirmWithUser(this.transaction, this.form);
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {

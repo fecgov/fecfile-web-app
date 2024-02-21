@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { LoanTermsInputComponent } from './loan-terms-input.component';
 import { SharedModule } from 'app/shared/shared.module';
 import { provideMockStore } from '@ngrx/store/testing';

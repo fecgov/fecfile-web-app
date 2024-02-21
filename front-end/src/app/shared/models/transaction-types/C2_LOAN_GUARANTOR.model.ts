@@ -7,20 +7,20 @@ import {
 import { SchC2TransactionType } from '../schc2-transaction-type.model';
 import {
   ADDRESS_FIELDS,
+  INDIVIDUAL_FIELDS,
   EMPLOYEE_INFO_FIELDS,
   INDIVIDUAL,
-  INDIVIDUAL_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_SINGLE_CONTACT } from '../contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
-  CANCEL_CONTROL,
-  ControlType,
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
-  SAVE_LIST_CONTROL,
   TransactionNavigationControls,
+  NavigationControl,
+  NavigationAction,
+  NavigationDestination,
+  CANCEL_CONTROL,
+  SAVE_LIST_CONTROL,
+  ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
 
@@ -38,11 +38,11 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
         hasNoContact,
         () => true,
         'pi pi-plus',
-        ControlType.BUTTON,
+        ControlType.BUTTON
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL],
+    [SAVE_LIST_CONTROL]
   );
   contactTypeOptions = INDIVIDUAL;
   schema = schema;

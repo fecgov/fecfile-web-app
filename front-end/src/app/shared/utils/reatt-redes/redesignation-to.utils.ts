@@ -6,40 +6,10 @@ import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 
 export class RedesignationToUtils {
-  private static readOnlyFields = [
-    'organization_name',
-    'last_name',
-    'first_name',
-    'middle_name',
-    'prefix',
-    'suffix',
-    'employer',
-    'occupation',
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
-    'purpose_description',
-    'committee_fec_id',
-    'committee_name',
-    'category_code',
-    'candidate_fec_id',
-    'candidate_last_name',
-    'candidate_first_name',
-    'candidate_middle_name',
-    'candidate_prefix',
-    'candidate_suffix',
-    'candidate_office',
-    'candidate_state',
-    'candidate_district',
-    'memo_code',
-  ];
-
   public static overlayTransactionProperties(
     transaction: SchBTransaction,
     redesignatedTransaction?: SchBTransaction,
-    activeReportId?: string,
+    activeReportId?: string
   ): SchBTransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
@@ -77,11 +47,41 @@ export class RedesignationToUtils {
 
     // Remove purpose description and memo code from list of fields to validate on the backend
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code',
+      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code'
     );
 
     return transaction;
   }
+
+  private static readOnlyFields = [
+    'organization_name',
+    'last_name',
+    'first_name',
+    'middle_name',
+    'prefix',
+    'suffix',
+    'employer',
+    'occupation',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    'purpose_description',
+    'committee_fec_id',
+    'committee_name',
+    'category_code',
+    'candidate_fec_id',
+    'candidate_last_name',
+    'candidate_first_name',
+    'candidate_middle_name',
+    'candidate_prefix',
+    'candidate_suffix',
+    'candidate_office',
+    'candidate_state',
+    'candidate_district',
+    'memo_code',
+  ];
 
   public static overlayForm(form: FormGroup, toTransaction: SchBTransaction): FormGroup {
     // Add additional amount validation
@@ -95,7 +95,7 @@ export class RedesignationToUtils {
     form.get('memo_code')?.setValue(true);
 
     RedesignationToUtils.readOnlyFields.forEach((field) =>
-      form.get(toTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
+      form.get(toTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
     );
     return form;
   }

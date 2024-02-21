@@ -7,10 +7,7 @@ import { singleClickDisableAction, singleClickEnableAction } from '../../store/s
   selector: '[appSingleClick]',
 })
 export class SingleClickDirective implements OnDestroy {
-  constructor(
-    private el: ElementRef,
-    private store: Store,
-  ) {
+  constructor(private el: ElementRef, private store: Store) {
     this.store.select(selectSingleClickDisabled).subscribe((disabled) => {
       if (disabled) this.el.nativeElement.setAttribute('disabled', 'true');
       else this.el.nativeElement.removeAttribute('disabled');

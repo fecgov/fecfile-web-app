@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { SharedModule } from 'app/shared/shared.module';
 import { YesNoRadioInputComponent } from './yes-no-radio-input.component';
 

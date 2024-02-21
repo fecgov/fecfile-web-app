@@ -1,70 +1,70 @@
 <div [formGroup]="form">
-  <div *ngIf="templateMap.purpose_description" class="grid">
+  <div class="grid" *ngIf="templateMap.purpose_description">
     <div class="col-12">
       <label for="purpose_description">
         {{ transaction?.transactionType?.purposeDescripLabel }}
         {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
       </label>
       <em *ngIf="transaction?.transactionType?.purposeDescriptionLabelNotice">{{
-          transaction?.transactionType?.purposeDescriptionLabelNotice
-        }}</em>
+        transaction?.transactionType?.purposeDescriptionLabelNotice
+      }}</em>
       <div>
         <textarea
-          [autoResize]="true"
+          id="purpose_description"
+          [rows]="4"
           [cols]="30"
+          pInputTextarea
+          [autoResize]="true"
           [formControlName]="templateMap['purpose_description']"
           [ngClass]="{ readonly: isDescriptionSystemGenerated() }"
           [readonly]="isDescriptionSystemGenerated()"
-          [rows]="4"
-          id="purpose_description"
-          pInputTextarea
         ></textarea>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['purpose_description']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
   </div>
-  <div *ngIf="transaction?.transactionType?.hasMemoText()" class="grid">
+  <div class="grid" *ngIf="transaction?.transactionType?.hasMemoText()">
     <div class="col-12">
       <label for="text4000"
-      >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
+        >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
       >
       <div>
         <textarea
-          [autoResize]="true"
-          [cols]="30"
-          [formControlName]="templateMap['text4000']"
-          [rows]="5"
           id="text4000"
+          [rows]="5"
+          [cols]="30"
           pInputTextarea
+          [autoResize]="true"
+          [formControlName]="templateMap['text4000']"
         ></textarea>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['text4000']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>
   </div>
-  <div *ngIf="transaction?.transactionType?.hasCategoryCode()" class="grid">
+  <div class="grid" *ngIf="transaction?.transactionType?.hasCategoryCode()">
     <div class="col-6">
       <div class="field">
         <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
         <p-dropdown
-          [autoDisplayFirst]="false"
+          inputId="category_code"
           [formControlName]="templateMap['category_code']"
           [options]="categoryCodeOptions"
-          [showClear]="true"
+          [autoDisplayFirst]="false"
           appendTo="body"
-          inputId="category_code"
+          [showClear]="true"
         ></p-dropdown>
         <app-error-messages
+          [form]="form"
           [fieldName]="templateMap['category_code']"
           [formSubmitted]="formSubmitted"
-          [form]="form"
         ></app-error-messages>
       </div>
     </div>

@@ -30,7 +30,6 @@ export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
     }
     return '';
   }
-
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB23',

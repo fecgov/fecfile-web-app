@@ -17,7 +17,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
+      ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO
     );
   });
 
