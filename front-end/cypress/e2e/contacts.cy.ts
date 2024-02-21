@@ -1,11 +1,13 @@
 import { ContactListPage } from './pages/contactListPage';
-import { Initialize } from './pages/loginPage';
+import { LoginPage } from './pages/loginPage';
 import { PageUtils } from './pages/pageUtils';
 import { defaultFormData as contactFormData } from './models/ContactFormModel';
 
 describe('Manage contacts', () => {
   beforeEach(() => {
-    Initialize();
+    LoginPage.login();
+    ContactListPage.deleteAllContacts();
+    ContactListPage.goToPage();
   });
 
   it('Create an Individual contact', () => {

@@ -3,7 +3,6 @@ import { TableAction } from '../table-list-base/table-list-base.component';
 
 @Component({
   selector: 'app-table-actions-button',
-  styleUrls: ['./table-actions-button.component.scss'],
   templateUrl: './table-actions-button.component.html',
 })
 export class TableActionsButtonComponent {

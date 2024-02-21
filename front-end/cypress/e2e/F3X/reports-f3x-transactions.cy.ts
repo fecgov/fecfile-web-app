@@ -509,7 +509,6 @@ describe('Transactions', () => {
     const alias = PageUtils.getAlias('');
     cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
     cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Partnership Receipt').click();
-    //PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Receipt');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 

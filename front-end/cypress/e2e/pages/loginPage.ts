@@ -86,8 +86,6 @@ function legacyLogin() {
   cy.get(fieldPassword).type(testPassword).type('{enter}');
 
   const alias = PageUtils.getAlias('');
-  // cy.get(alias).find('p-checkbox[inputid="security-consent"]').children().first().click();
-  // cy.get(alias).find("p-button[label='Consent']").click();
   cy.wait('@GetCommitteeAccount');
   cy.get(alias).find('.committee-list').click();
 }
