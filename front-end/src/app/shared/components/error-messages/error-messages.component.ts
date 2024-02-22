@@ -33,7 +33,7 @@ export class ErrorMessagesComponent implements OnInit {
     }
 
     switch (this.control?.errors?.['email']) {
-      case 'identical':
+      case 'not-unique':
         return 'Confirmation emails cannot be identical';
       case 'invalid':
         return 'This email is invalid';

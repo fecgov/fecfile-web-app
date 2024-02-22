@@ -9,7 +9,7 @@ import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -126,7 +126,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
         });
 
         return this.submitReport$;
-      })
+      }),
     );
   }
 
@@ -162,7 +162,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
         } else {
           return from(this.router.navigateByUrl('/reports'));
         }
-      })
+      }),
     );
   }
 }

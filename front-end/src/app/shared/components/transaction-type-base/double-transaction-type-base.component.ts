@@ -9,7 +9,7 @@ import {
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { SelectItem } from 'primeng/api';
 import { concat, Observable, of, reduce } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';

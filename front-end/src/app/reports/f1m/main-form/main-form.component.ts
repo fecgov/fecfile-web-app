@@ -3,7 +3,7 @@ import { FormBuilder, AbstractControl, Validators, FormGroup } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntil, of, from, Observable, concatAll, reduce } from 'rxjs';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
@@ -15,9 +15,7 @@ import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { F1MCandidateTag, F1MContact, AffiliatedContact, CandidateContact } from './contact';
-
-const candidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
+import { F1MCandidateTag, F1MContact, f1mCandidateTags, AffiliatedContact, CandidateContact } from './contact';
 
 @Component({
   selector: 'app-main-form',
@@ -148,12 +146,12 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
     this.affiliatedContact = new AffiliatedContact(this);
-    this.candidateContacts = candidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
+    this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
 
     // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
-    candidateTags.forEach((tag: F1MCandidateTag) => {
+    f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
       this.form.get(`${tag}_candidate_id_number`)?.valueChanges.subscribe(() => {
-        candidateTags
+        f1mCandidateTags
           .filter((t) => t !== tag)
           .forEach((t) => {
             const control = this.form.get(`${t}_candidate_id_number`);
@@ -286,7 +284,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
    * @returns string[] - list of contact ids currently selected by user for Qualifications
    */
   getSelectedContactIds(excludeContactTag: F1MCandidateTag | undefined = undefined) {
-    return candidateTags
+    return f1mCandidateTags
       .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
       .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
       .filter((id) => !!id);

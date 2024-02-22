@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
@@ -43,7 +43,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
         ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
-    ])
+    ]),
   );
   formSubmitted = false;
 
@@ -60,7 +60,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   constructor(
     private fb: FormBuilder,
     private contactService: ContactService,
-    protected confirmationService: ConfirmationService
+    protected confirmationService: ConfirmationService,
   ) {
     super();
   }
@@ -84,10 +84,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
             state: 'ZZ',
           });
           // ajv does not un-require zip when country is not USA
-          this.form.patchValue({zip: this.form.get('zip')?.value || ''});
+          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
           this.form.get('state')?.disable();
         } else {
-          this.form.patchValue({zip: this.form.get('zip')?.value || null});
+          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
           this.form.get('state')?.enable();
         }
       });

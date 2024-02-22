@@ -6,7 +6,7 @@ import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsT
 import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
-import { ValidateUtils } from '../utils/validate.utils';
+import { ValidateUtils } from '../validators/schema.validators';
 import {
   SchC1Transaction,
   ScheduleC1TransactionGroupsType,
@@ -147,7 +147,7 @@ export abstract class Transaction extends BaseModel {
   getUpdatedParent(childDeleted = false): Transaction {
     if (!this.parent_transaction?.transaction_type_identifier) {
       throw new Error(
-        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`,
       );
     }
 

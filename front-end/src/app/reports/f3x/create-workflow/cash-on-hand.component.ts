@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -27,7 +27,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
     private form3XService: Form3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    public store: Store
+    public store: Store,
   ) {
     super();
   }

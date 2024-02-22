@@ -4,12 +4,12 @@ import { NavigationEvent } from 'app/shared/models/transaction-navigation-contro
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
-  TransactionType
+  TransactionType,
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { SelectItem } from 'primeng/api';
 import { concat, Observable, of, reduce } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
@@ -33,7 +33,8 @@ import { TransactionFormUtils } from './transaction-form.utils';
 })
 export abstract class TripleTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties_2: string[] = [];
   childTransactionType_2?: TransactionType;
   childTransaction_2?: Transaction;
@@ -75,7 +76,7 @@ export abstract class TripleTransactionTypeBaseComponent
     } else {
       this.childMemoCodeCheckboxLabel_2$ = this.getMemoCodeCheckboxLabel$(
         this.childForm_2,
-        this.childTransactionType_2
+        this.childTransactionType_2,
       );
     }
 
@@ -84,7 +85,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childForm_2,
       this.childTransaction_2,
       this.childContactIdMap_2,
-      this.contactService
+      this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
   }
@@ -102,7 +103,7 @@ export abstract class TripleTransactionTypeBaseComponent
       TransactionContactUtils.updateContactsWithForm(
         this.childTransaction_2,
         this.childTemplateMap_2,
-        this.childForm_2
+        this.childForm_2,
       );
     } else {
       this.store.dispatch(singleClickEnableAction());
@@ -112,7 +113,7 @@ export abstract class TripleTransactionTypeBaseComponent
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
-      this.formProperties
+      this.formProperties,
     );
 
     payload.children = [
@@ -133,14 +134,18 @@ export abstract class TripleTransactionTypeBaseComponent
     if (!this.childTransaction_2) return of(false);
     return concat(
       super.confirmation$,
-      this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2')
+      this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2'),
     ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
   }
 
   override resetForm() {
     super.resetForm();
-    TransactionFormUtils.resetForm(this.childForm_2, this.childTransaction_2,
-      this.childContactTypeOptions_2, this.committeeAccount);
+    TransactionFormUtils.resetForm(
+      this.childForm_2,
+      this.childTransaction_2,
+      this.childContactTypeOptions_2,
+      this.committeeAccount,
+    );
   }
 
   override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
@@ -159,7 +164,7 @@ export abstract class TripleTransactionTypeBaseComponent
       selectItem,
       this.childForm_2,
       this.childTransaction_2,
-      this.childContactIdMap_2['contact_1']
+      this.childContactIdMap_2['contact_1'],
     );
 
     if (this.childTransaction_2) {
@@ -174,7 +179,7 @@ export abstract class TripleTransactionTypeBaseComponent
       selectItem,
       this.childForm_2,
       this.childTransaction_2,
-      this.childContactIdMap_2['contact_2']
+      this.childContactIdMap_2['contact_2'],
     );
   }
 
@@ -183,7 +188,7 @@ export abstract class TripleTransactionTypeBaseComponent
       selectItem,
       this.childForm_2,
       this.childTransaction_2,
-      this.childContactIdMap_2['contact_2']
+      this.childContactIdMap_2['contact_2'],
     );
   }
 
@@ -192,7 +197,7 @@ export abstract class TripleTransactionTypeBaseComponent
       selectItem,
       this.childForm_2,
       this.childTransaction_2,
-      this.childContactIdMap_2['contact_3']
+      this.childContactIdMap_2['contact_3'],
     );
   }
 }

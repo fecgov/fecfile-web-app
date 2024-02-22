@@ -1,13 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
@@ -19,13 +11,12 @@ import {
   electionReportCodes,
   F3X_REPORT_CODE_MAP,
   F3xReportCodes,
-  getReportCodeLabel,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
 } from 'app/shared/utils/report-code.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
@@ -36,6 +27,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
+import { dateIsAfterValidator, existingCoverageValidator } from 'app/shared/validators/shared.validators';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -64,13 +56,11 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   constructor(
     private store: Store,
-    private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
     private form3XService: Form3XService,
     private messageService: MessageService,
     protected router: Router,
     private activatedRoute: ActivatedRoute,
-    private reportService: ReportService
   ) {
     super();
   }
@@ -113,13 +103,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           });
 
         this.existingCoverage = existingCoverage;
-        this.form.addValidators(this.existingCoverageValidator(existingCoverage));
+        this.form.addValidators(existingCoverageValidator(existingCoverage));
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
-      DateUtils.isAfter(this.form.controls['coverage_from_date']),
+      dateIsAfterValidator(this.form.controls['coverage_from_date']),
     ]);
     this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
@@ -129,7 +119,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
       this.form.controls['filing_frequency'].valueChanges.pipe(startWith(this.form.controls['filing_frequency'].value)),
       this.form.controls['report_type_category'].valueChanges.pipe(
-        startWith(this.form.controls['report_type_category'].value)
+        startWith(this.form.controls['report_type_category'].value),
       ),
     ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
       const coverageDatesFunction = F3X_REPORT_CODE_MAP.get(reportCode)?.coverageDatesFunction;
@@ -138,65 +128,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         const [coverage_from_date, coverage_through_date] = coverageDatesFunction(
           this.thisYear,
           isElectionYear,
-          filingFrequency
+          filingFrequency,
         );
         this.form.patchValue({ coverage_from_date, coverage_through_date });
       }
     });
 
     ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
-  }
-
-  existingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const fromControl = control.get('coverage_from_date');
-      const throughControl = control.get('coverage_through_date');
-      const surrounding = this.findSurrounding(fromControl?.value, throughControl?.value, existingCoverage);
-      let fromError = this.validateDateWithinCoverage(existingCoverage, fromControl);
-      let throughError = this.validateDateWithinCoverage(existingCoverage, throughControl);
-      if (surrounding) {
-        fromError = throughError = this.getCoverageOverlapError(surrounding);
-      }
-      fromControl?.setErrors(this.getErrors(fromControl.errors, fromError));
-      throughControl?.setErrors(this.getErrors(throughControl.errors, throughError));
-      fromControl?.markAsTouched();
-      throughControl?.markAsTouched();
-      return null;
-    };
-  }
-
-  validateDateWithinCoverage(
-    existingCoverage: F3xCoverageDates[],
-    control: AbstractControl | null
-  ): ValidationErrors | null {
-    return existingCoverage.reduce((error: ValidationErrors | null, coverage) => {
-      if (error) return error;
-      return DateUtils.isWithin(control?.value, coverage.coverage_from_date, coverage.coverage_through_date)
-        ? this.getCoverageOverlapError(coverage)
-        : null;
-    }, null);
-  }
-
-  getErrors(errors: ValidationErrors | null, newError: ValidationErrors | null): ValidationErrors | null {
-    const otherErrors = !_.isEmpty(_.omit(errors, 'invaliddate')) ? _.omit(errors, 'invaliddate') : null;
-    return otherErrors || newError ? { ...otherErrors, ...newError } : null;
-  }
-
-  findSurrounding(from: Date, through: Date, existingCoverage: F3xCoverageDates[]): F3xCoverageDates | undefined {
-    return existingCoverage.find((coverage) => {
-      const coverageFrom = coverage.coverage_from_date;
-      const coverageThrough = coverage.coverage_through_date;
-      return coverageFrom && coverageThrough && from <= coverageFrom && through >= coverageThrough;
-    });
-  }
-
-  getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors {
-    const message =
-      `You have entered coverage dates that overlap ` +
-      `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
-      ` ${this.fecDatePipe.transform(collision.coverage_from_date)} -` +
-      ` ${this.fecDatePipe.transform(collision.coverage_through_date)}`;
-    return { invaliddate: { msg: message } };
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {

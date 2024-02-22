@@ -6,7 +6,7 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { SelectItem } from 'primeng/api';
 import { NavigationEvent } from '../../models/transaction-navigation-controls.model';
 import { getContactTypeOptions } from '../../utils/transaction-type-properties';
-import { ValidateUtils } from '../../utils/validate.utils';
+import { ValidateUtils } from '../../validators/schema.validators';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { PrimeOptions } from '../../utils/label.utils';
 import { FormGroup } from '@angular/forms';

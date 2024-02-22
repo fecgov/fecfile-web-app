@@ -2,7 +2,7 @@ import { FormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControl }
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
-import { DateUtils } from './date.utils';
+import { DateUtils } from '../utils/date.utils';
 
 export class ValidateUtils {
   /**
@@ -117,7 +117,7 @@ export class ValidateUtils {
     form: FormGroup,
     jsonSchema: JsonSchema,
     clearExistingValidators: boolean,
-    transaction?: Transaction
+    transaction?: Transaction,
   ) {
     for (const key in form.controls) {
       if (clearExistingValidators) {
@@ -141,7 +141,7 @@ export class ValidateUtils {
     property: string,
     form: FormGroup,
     jsonSchema: JsonSchema,
-    transaction?: Transaction
+    transaction?: Transaction,
   ): ValidatorFn {
     return (): ValidationErrors | null => {
       const data = {

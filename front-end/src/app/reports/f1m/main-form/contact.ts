@@ -1,26 +1,14 @@
-import { AbstractControl, FormControl, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { buildGuaranteeUniqueValuesValidator } from 'app/shared/validators/shared.validators';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
-
-/**
- * Angular validation callback function to invalidate contacts with the same contact id.
- * @param contactTag
- * @param component
- * @returns
- */
-function duplicateCandidateIdValidator(contactTag: F1MCandidateTag, component: MainFormComponent): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-    const isDuplicate = component.getSelectedContactIds(contactTag).includes(value);
-    return isDuplicate ? { fecIdMustBeUnique: true } : null;
-  };
-}
+export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
 
 export abstract class F1MContact {
   contactKey: keyof Form1M;
@@ -177,9 +165,25 @@ export class CandidateContact extends F1MContact {
       this.control?.addValidators(Validators.required);
     }
 
+    const otherCandidateIdFields = f1mCandidateTags
+      .filter((tag) => tag !== this.tag)
+      .map((tag) => {
+        return `${tag}_candidate_id_number`;
+      });
+
+    const candidateIdField = `${this.tag}_candidate_id_number`;
+
     this.component.form
       .get(`${this.tag}_candidate_id_number`)
-      ?.addValidators([Validators.required, duplicateCandidateIdValidator(this.tag, this.component)]);
+      ?.addValidators([
+        Validators.required,
+        buildGuaranteeUniqueValuesValidator(
+          this.component.form,
+          candidateIdField,
+          otherCandidateIdFields,
+          'fecIdMustBeUnique',
+        ),
+      ]);
     this.component.form.get(`${this.tag}_candidate_last_name`)?.addValidators(Validators.required);
     this.component.form.get(`${this.tag}_candidate_first_name`)?.addValidators(Validators.required);
     this.component.form.get(`${this.tag}_candidate_office`)?.addValidators(Validators.required);

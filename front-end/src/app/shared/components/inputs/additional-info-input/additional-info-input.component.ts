@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';

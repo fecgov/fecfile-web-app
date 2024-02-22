@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -7,7 +7,8 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { buildEmailValidator, buildGuaranteeUniqueValuesValidator } from 'app/shared/validators/shared.validators';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -43,7 +44,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     private reportService: ReportService,
     private fb: FormBuilder,
     private store: Store,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     super();
   }
@@ -63,11 +64,13 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     this.form.controls['confirmation_email_1'].addValidators([
       Validators.required,
       Validators.maxLength(44),
-      this.buildEmailValidator('confirmation_email_1'),
+      buildEmailValidator(),
+      buildGuaranteeUniqueValuesValidator(this.form, 'confirmation_email_1', ['confirmation_email_2'], 'email'),
     ]);
     this.form.controls['confirmation_email_2'].addValidators([
       Validators.maxLength(44),
-      this.buildEmailValidator('confirmation_email_2'),
+      buildEmailValidator(),
+      buildGuaranteeUniqueValuesValidator(this.form, 'confirmation_email_2', ['confirmation_email_1'], 'email'),
     ]);
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
       this.getBackUrl = getBackUrl;
@@ -85,36 +88,6 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     if (report && report['confirmation_email_1']) {
       this.form.patchValue(report);
     }
-  }
-
-  public buildEmailValidator(valueFormControlName: string): ValidatorFn {
-    return (): ValidationErrors | null => {
-      const email: string = this.form?.get(valueFormControlName)?.value;
-
-      if (this.checkInvalidEmail(email)) {
-        return { email: 'invalid' };
-      }
-
-      if (this.checkIdenticalEmails()) {
-        return { email: 'identical' };
-      }
-
-      return null;
-    };
-  }
-
-  public checkInvalidEmail(email: string): boolean {
-    const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
-    if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
-
-    return matches === null || matches.length == 0;
-  }
-
-  public checkIdenticalEmails(): boolean {
-    const email_1 = this.form?.get('confirmation_email_1')?.value;
-    const email_2 = this.form?.get('confirmation_email_2')?.value;
-
-    return !!email_1 && email_1 === email_2;
   }
 
   public continue(): void {

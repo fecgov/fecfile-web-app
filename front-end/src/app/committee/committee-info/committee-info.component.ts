@@ -5,7 +5,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { ValidateUtils } from 'app/shared/validators/schema.validators';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -46,7 +46,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     private store: Store,
     private fecApiService: FecApiService,
     private fb: FormBuilder,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
   }

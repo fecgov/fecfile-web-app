@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
@@ -9,26 +9,12 @@ import { InputText } from 'primeng/inputtext';
 import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
+import { dateWithinReportRange, percentageValidator } from 'app/shared/validators/shared.validators';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
   USER_DEFINED = 'user-defined',
   EXACT_PERCENTAGE = 'exact-percentage',
-}
-
-function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const date = control.value;
-
-    if (!DateUtils.isWithin(date, coverage_from_date, coverage_through_date)) {
-      const message = `This date must fall within the coverage dates of ${DateUtils.convertDateToSlashFormat(
-        coverage_from_date
-      )} - ${DateUtils.convertDateToSlashFormat(coverage_through_date)} for this report.`;
-      return { invaliddate: { msg: message } };
-    }
-
-    return null;
-  };
 }
 
 @Component({
@@ -53,8 +39,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
-  percentageValidator?: ValidatorFn;
-
   ngOnInit(): void {
     // Add the date range validation check to the DATE INCURRED input
     if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
@@ -65,12 +49,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           this.form
             .get(this.templateMap.date)
             ?.addValidators(
-              dateWithinReportRange((report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date)
+              dateWithinReportRange((report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date),
             );
         });
     }
-
-    this.percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
     this.form.get(this.templateMap.interest_rate_setting)?.addValidators([Validators.required]);
     this.form.get(this.templateMap.due_date_setting)?.addValidators([Validators.required]);
@@ -84,9 +66,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       const interestRateField = this.form.get(this.templateMap['interest_rate']);
       if (interestRateField) {
         if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-          interestRateField.addValidators(this.percentageValidator as ValidatorFn);
+          interestRateField.addValidators(percentageValidator);
         } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-          interestRateField.removeValidators(this.percentageValidator as ValidatorFn);
+          interestRateField.removeValidators(percentageValidator);
         }
       }
       this.onInterestRateInput(interestRateSetting);
@@ -153,7 +135,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
           textInput?.setSelectionRange(
             initialSelectionStart - lengthDifference,
-            initialSelectionEnd - lengthDifference
+            initialSelectionEnd - lengthDifference,
           );
         }
 
