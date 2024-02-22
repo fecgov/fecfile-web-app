@@ -38,7 +38,7 @@ export class ErrorMessagesComponent implements OnInit {
       case 'invalid':
         return 'This email is invalid';
       case 'taken-in-committee':
-        return 'This user email already exists in this committee account';
+        return 'This user email already exists in this committee account.';
     }
     return 'Email Error';
   }
