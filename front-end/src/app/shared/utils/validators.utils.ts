@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { Injectable } from '@angular/core';
-import { CommitteeMemberService } from '../services/committee-account.service';
+import { CommitteeMemberService } from '../services/committee-member.service';
 
 export function checkInvalidEmail(email: string): boolean {
   const matches = email?.match(/^\S+@\S+\.\S{2,}/g);

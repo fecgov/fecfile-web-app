@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
-import { CommitteeMemberService } from 'app/shared/services/committee-account.service';
+import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils';
 
 @Component({

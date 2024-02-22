@@ -2,7 +2,7 @@ import { Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
-import { CommitteeMemberService } from 'app/shared/services/committee-account.service';
+import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
