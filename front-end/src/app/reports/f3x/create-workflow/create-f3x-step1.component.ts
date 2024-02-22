@@ -3,9 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
@@ -23,8 +21,6 @@ import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { combineLatest, startWith, takeUntil } from 'rxjs';
-import { ReportService } from '../../../shared/services/report.service';
-import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';

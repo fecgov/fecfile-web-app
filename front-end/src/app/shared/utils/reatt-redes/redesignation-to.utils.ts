@@ -1,4 +1,4 @@
-import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TransactionTypes } from '../../models/transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
