@@ -4,7 +4,7 @@ import { TransactionTypes } from '../../models/transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
-import { reattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(
@@ -88,7 +88,7 @@ export class RedesignationToUtils {
     // Add additional amount validation
     form
       .get(toTransaction.transactionType.templateMap.amount)
-      ?.addValidators([reattRedesTransactionValidator(toTransaction)]);
+      ?.addValidators([buildReattRedesTransactionValidator(toTransaction)]);
 
     // Clear normal schema validation from redesignation TO form
     form.get(toTransaction.transactionType.templateMap.purpose_description)?.clearValidators();

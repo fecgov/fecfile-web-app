@@ -27,7 +27,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { dateIsAfterValidator, existingCoverageValidator } from 'app/shared/utils/validators.utils';
+import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -103,13 +103,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           });
 
         this.existingCoverage = existingCoverage;
-        this.form.addValidators(existingCoverageValidator(existingCoverage));
+        this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
-      dateIsAfterValidator(this.form.controls['coverage_from_date']),
+      buildAfterDateValidator(this.form.controls['coverage_from_date']),
     ]);
     this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();

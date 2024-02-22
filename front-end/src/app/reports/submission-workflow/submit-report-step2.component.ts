@@ -68,7 +68,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     this.form.addControl('backdoorYesNo', new FormControl());
 
     // Initialize validation tracking of current JSON schema and form data
-    this.form.controls['filingPassword'].addValidators(passwordValidator());
+    this.form.controls['filingPassword'].addValidators(passwordValidator);
     this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form
       .get('backdoorYesNo')

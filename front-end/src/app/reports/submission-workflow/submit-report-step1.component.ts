@@ -8,7 +8,7 @@ import { Report } from 'app/shared/models/report.model';
 import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { buildEmailValidator, buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
+import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -64,12 +64,12 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     this.form.controls['confirmation_email_1'].addValidators([
       Validators.required,
       Validators.maxLength(44),
-      buildEmailValidator(),
+      emailValidator,
       buildGuaranteeUniqueValuesValidator(this.form, 'confirmation_email_1', ['confirmation_email_2'], 'email'),
     ]);
     this.form.controls['confirmation_email_2'].addValidators([
       Validators.maxLength(44),
-      buildEmailValidator(),
+      emailValidator,
       buildGuaranteeUniqueValuesValidator(this.form, 'confirmation_email_2', ['confirmation_email_1'], 'email'),
     ]);
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {

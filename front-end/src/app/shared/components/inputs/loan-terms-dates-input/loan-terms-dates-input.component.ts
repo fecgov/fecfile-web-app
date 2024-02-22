@@ -9,7 +9,7 @@ import { InputText } from 'primeng/inputtext';
 import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { dateWithinReportRange, percentageValidator } from 'app/shared/utils/validators.utils';
+import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -49,7 +49,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           this.form
             .get(this.templateMap.date)
             ?.addValidators(
-              dateWithinReportRange((report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date),
+              buildWithinReportDatesValidator(
+                (report as Form3X).coverage_from_date,
+                (report as Form3X).coverage_through_date,
+              ),
             );
         });
     }

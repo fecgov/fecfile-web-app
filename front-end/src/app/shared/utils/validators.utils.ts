@@ -9,14 +9,19 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { Injectable } from '@angular/core';
 import { CommitteeMemberService } from '../services/committee-account.service';
 
-export function buildEmailValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    return checkInvalidEmail(control?.value)
-      ? {
-          email: 'invalid',
-        }
-      : null;
-  };
+export function checkInvalidEmail(email: string): boolean {
+  const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
+  if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
+
+  return matches === null || matches.length == 0;
+}
+
+export function emailValidator(control: AbstractControl): ValidationErrors | null {
+  return checkInvalidEmail(control?.value)
+    ? {
+        email: 'invalid',
+      }
+    : null;
 }
 
 /**
@@ -52,14 +57,7 @@ export function buildGuaranteeUniqueValuesValidator(
   };
 }
 
-export function checkInvalidEmail(email: string): boolean {
-  const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
-  if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
-
-  return matches === null || matches.length == 0;
-}
-
-export function existingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
+export function buildNonOverlappingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const fromControl = control.get('coverage_from_date');
     const throughControl = control.get('coverage_through_date');
@@ -116,7 +114,7 @@ function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors 
   return { invaliddate: { msg: message } };
 }
 
-export function dateWithinReportRange(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {
+export function buildWithinReportDatesValidator(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const date = control.value;
 
@@ -133,7 +131,7 @@ export function dateWithinReportRange(coverage_from_date?: Date, coverage_throug
 
 export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$') as ValidatorFn;
 
-export function dateIsAfterValidator(otherDateControl: AbstractControl<Date | null>): ValidatorFn {
+export function buildAfterDateValidator(otherDateControl: AbstractControl<Date | null>): ValidatorFn {
   return (control: AbstractControl<Date | null>): ValidationErrors | null => {
     const controlDate = control.value;
     const otherDate = otherDateControl.value;
@@ -146,21 +144,17 @@ export function dateIsAfterValidator(otherDateControl: AbstractControl<Date | nu
   };
 }
 
-export function passwordValidator(): ValidatorFn | ValidatorFn[] {
-  const v = Validators.compose([
-    Validators.required,
-    Validators.minLength(8),
-    Validators.maxLength(16),
-    Validators.pattern('.*[A-Z].*'),
-    Validators.pattern('.*[a-z].*'),
-    Validators.pattern('.*[0-9].*'),
-    Validators.pattern('.*[!@#$%&*()].*'),
-  ]);
+export const passwordValidator = Validators.compose([
+  Validators.required,
+  Validators.minLength(8),
+  Validators.maxLength(16),
+  Validators.pattern('.*[A-Z].*'),
+  Validators.pattern('.*[a-z].*'),
+  Validators.pattern('.*[0-9].*'),
+  Validators.pattern('.*[!@#$%&*()].*'),
+]) as ValidatorFn;
 
-  return v ? v : [];
-}
-
-export function prefixRequiredValidator(prefix: string): ValidatorFn {
+export function buildPrefixRequiredValidator(prefix: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const failed = control.value.length <= prefix.length;
     return failed ? { required: true } : null;
@@ -174,7 +168,7 @@ export function prefixRequiredValidator(prefix: string): ValidatorFn {
  * @param mustBeNegative
  * @returns
  */
-export function reattRedesTransactionValidator(
+export function buildReattRedesTransactionValidator(
   transaction: SchATransaction | SchBTransaction,
   mustBeNegative = false,
 ): ValidatorFn {

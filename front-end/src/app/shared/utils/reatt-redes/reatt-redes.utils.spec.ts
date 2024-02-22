@@ -6,7 +6,7 @@ import { RedesignatedUtils } from './redesignated.utils';
 import _ from 'lodash';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
-import { reattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -119,7 +119,7 @@ describe('ReattRedesUtils', () => {
     });
 
     it('should limit max value to negative when mustBeNegative is true', () => {
-      const validatorFunction = reattRedesTransactionValidator(txn, true);
+      const validatorFunction = buildReattRedesTransactionValidator(txn, true);
       control.setValue(50);
       let validatorResult = validatorFunction(control);
       expect(validatorResult && validatorResult['exclusiveMax']['exclusiveMax']).toBe(0);
@@ -134,7 +134,7 @@ describe('ReattRedesUtils', () => {
     });
 
     it('should limit max value to positive when mustBeNegative is false', () => {
-      const validatorFunction = reattRedesTransactionValidator(txn);
+      const validatorFunction = buildReattRedesTransactionValidator(txn);
       control.setValue(25);
       let validatorResult = validatorFunction(control);
       expect(validatorResult).toBeNull();
