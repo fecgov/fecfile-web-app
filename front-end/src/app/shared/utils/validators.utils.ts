@@ -9,15 +9,11 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { Injectable } from '@angular/core';
 import { CommitteeMemberService } from '../services/committee-member.service';
 
-export function checkInvalidEmail(email: string): boolean {
-  const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
-  if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
-
-  return matches === null || matches.length == 0;
-}
-
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
-  return checkInvalidEmail(control?.value)
+  const email = control.value;
+  const matches = email?.match(/^\S+@\S+\.\S{2,}$/g);
+
+  return !!email && !matches
     ? {
         email: 'invalid',
       }
