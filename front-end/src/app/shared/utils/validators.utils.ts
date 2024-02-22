@@ -24,6 +24,18 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
     : null;
 }
 
+export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$') as ValidatorFn;
+
+export const passwordValidator = Validators.compose([
+  Validators.required,
+  Validators.minLength(8),
+  Validators.maxLength(16),
+  Validators.pattern('.*[A-Z].*'),
+  Validators.pattern('.*[a-z].*'),
+  Validators.pattern('.*[0-9].*'),
+  Validators.pattern('.*[!@#$%&*()].*'),
+]) as ValidatorFn;
+
 /**
  * buildGuaranteeUniqueValuesValidator
  *
@@ -129,8 +141,6 @@ export function buildWithinReportDatesValidator(coverage_from_date?: Date, cover
   };
 }
 
-export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$') as ValidatorFn;
-
 export function buildAfterDateValidator(otherDateControl: AbstractControl<Date | null>): ValidatorFn {
   return (control: AbstractControl<Date | null>): ValidationErrors | null => {
     const controlDate = control.value;
@@ -143,16 +153,6 @@ export function buildAfterDateValidator(otherDateControl: AbstractControl<Date |
       : null;
   };
 }
-
-export const passwordValidator = Validators.compose([
-  Validators.required,
-  Validators.minLength(8),
-  Validators.maxLength(16),
-  Validators.pattern('.*[A-Z].*'),
-  Validators.pattern('.*[a-z].*'),
-  Validators.pattern('.*[0-9].*'),
-  Validators.pattern('.*[!@#$%&*()].*'),
-]) as ValidatorFn;
 
 export function buildPrefixRequiredValidator(prefix: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
