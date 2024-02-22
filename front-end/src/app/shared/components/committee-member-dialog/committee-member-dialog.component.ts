@@ -4,7 +4,7 @@ import { DestroyerComponent } from '../app-destroyer.component';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils';
+import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 
 @Component({
   selector: 'app-committee-member-dialog',
@@ -40,7 +40,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
     this.form.addControl(
       'email',
       new FormControl('', {
-        validators: [Validators.required],
+        validators: [Validators.required, emailValidator],
         asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
         updateOn: 'blur',
       }),
@@ -75,6 +75,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
         email,
         role,
       });
+      this.closeDialog();
     }
   }
 }
