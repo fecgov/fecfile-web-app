@@ -9,7 +9,7 @@ import {
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
 import { concat, Observable, of, reduce } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
@@ -64,7 +64,7 @@ export abstract class TripleTransactionTypeBaseComponent
     this.childTemplateMap_2 = this.childTransactionType_2.templateMap;
     this.childContactTypeOptions_2 = getContactTypeOptions(this.childTransactionType_2.contactTypeOptions ?? []);
     this.childFormProperties_2 = this.childTransactionType_2.getFormControlNames();
-    this.childForm_2 = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties_2));
+    this.childForm_2 = this.fb.group(SchemaUtils.getFormGroupFields(this.childFormProperties_2));
 
     if (
       this.childTransactionType_2

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
@@ -31,12 +31,12 @@ export class TransactionContactLookupComponent implements OnInit {
   detailVisible = false;
   dialogContactTypeOptions: PrimeOptions = [];
   createContactForm: FormGroup = this.formBuilder.group(
-    ValidateUtils.getFormGroupFields([
+    SchemaUtils.getFormGroupFields([
       ...new Set([
-        ...ValidateUtils.getSchemaProperties(contactIndividualSchema),
-        ...ValidateUtils.getSchemaProperties(contactCandidateSchema),
-        ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
-        ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
+        ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
+        ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
+        ...SchemaUtils.getSchemaProperties(contactCommitteeSchema),
+        ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
   );

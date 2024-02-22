@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 import { ErrorMessagesComponent } from './error-messages.component';
 
@@ -57,9 +57,9 @@ describe('ErrorMessagesComponent', () => {
   it('should provide default error messages', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
-      ValidateUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount']),
+      SchemaUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount']),
     );
-    ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
+    SchemaUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'in_between';
     component.ngOnInit();
@@ -89,8 +89,8 @@ describe('ErrorMessagesComponent', () => {
   it('should present a unique error message when a negative contribution amount is required', () => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
     const fb: FormBuilder = new FormBuilder();
-    const formValidatorForm = fb.group(ValidateUtils.getFormGroupFields(['exclusive_negative_amount']));
-    ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
+    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(['exclusive_negative_amount']));
+    SchemaUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
     component.ngOnInit();

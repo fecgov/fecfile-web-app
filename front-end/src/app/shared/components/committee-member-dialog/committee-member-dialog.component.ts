@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Injectable, Input, Output } from '@angular/core';
-import { AbstractControl, AsyncValidator, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { CommitteeMemberService } from 'app/shared/services/committee-account.service';
+import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils';
 
 @Component({
   selector: 'app-committee-member-dialog',
@@ -32,7 +33,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
   constructor(
     protected confirmationService: ConfirmationService,
     protected committeeMemberService: CommitteeMemberService,
-    protected uniqueEmailValidator: UniqueEmailValidator,
+    protected uniqueEmailValidator: CommitteeMemberEmailValidator,
   ) {
     super();
     this.form.addControl('role', new FormControl());
@@ -75,26 +76,5 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
         role,
       });
     }
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class UniqueEmailValidator implements AsyncValidator {
-  constructor(protected committeeMemberService: CommitteeMemberService) {}
-
-  async validate(control: AbstractControl): Promise<ValidationErrors | null> {
-    if (control.value) {
-      const existing_members = await this.committeeMemberService.getMembers();
-      const emails = existing_members.map((member) => {
-        return member.email;
-      });
-
-      if (emails.includes(control.value)) {
-        return {
-          email: 'taken-in-committee',
-        };
-      }
-    }
-    return null;
   }
 }

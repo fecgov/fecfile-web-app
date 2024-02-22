@@ -5,7 +5,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/cont
 import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { buildGuaranteeUniqueValuesValidator } from 'app/shared/validators/shared.validators';
+import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];

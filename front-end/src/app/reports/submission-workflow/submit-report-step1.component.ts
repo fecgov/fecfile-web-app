@@ -7,8 +7,8 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
-import { buildEmailValidator, buildGuaranteeUniqueValuesValidator } from 'app/shared/validators/shared.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { buildEmailValidator, buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -34,7 +34,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
 
@@ -56,7 +56,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
-      ValidateUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
+      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
       this.initializeFormWithReport(this.report, committeeAccount);
     });
 
@@ -99,7 +99,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     let addressFields = {};
     if (this.form.value.change_of_address) {
       addressFields = {
-        ...ValidateUtils.getFormValues(this.form, this.report?.schema, this.formProperties),
+        ...SchemaUtils.getFormValues(this.form, this.report?.schema, this.formProperties),
       };
     }
 

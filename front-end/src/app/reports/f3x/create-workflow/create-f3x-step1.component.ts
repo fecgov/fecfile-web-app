@@ -16,7 +16,7 @@ import {
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
 } from 'app/shared/utils/report-code.utils';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
@@ -27,7 +27,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import * as _ from 'lodash';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { dateIsAfterValidator, existingCoverageValidator } from 'app/shared/validators/shared.validators';
+import { dateIsAfterValidator, existingCoverageValidator } from 'app/shared/utils/validators.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -47,7 +47,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;
@@ -134,7 +134,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       }
     });
 
-    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
@@ -184,7 +184,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       return;
     }
 
-    const summary: Form3X = Form3X.fromJSON(ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties));
+    const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === F3xReportCodes.TER) {

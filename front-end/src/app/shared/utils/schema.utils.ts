@@ -1,10 +1,10 @@
-import { FormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
-import { DateUtils } from '../utils/date.utils';
+import { DateUtils } from './date.utils';
 
-export class ValidateUtils {
+export class SchemaUtils {
   /**
    * Returns an array of the property fields for a given JSON schema.
    * @param {JsonSchema} schema
@@ -43,11 +43,11 @@ export class ValidateUtils {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     if (jsonSchema) {
-      ValidateUtils.getSchemaProperties(jsonSchema).forEach((property: string) => {
+      SchemaUtils.getSchemaProperties(jsonSchema).forEach((property: string) => {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }
-        formValues[property] = ValidateUtils.getPropertyValue(property, form, jsonSchema);
+        formValues[property] = SchemaUtils.getPropertyValue(property, form, jsonSchema);
       });
     }
 
@@ -123,7 +123,7 @@ export class ValidateUtils {
       if (clearExistingValidators) {
         form.get(key)?.clearValidators();
       }
-      form.get(key)?.addValidators(ValidateUtils.jsonSchemaValidator(key, form, jsonSchema, transaction));
+      form.get(key)?.addValidators(SchemaUtils.jsonSchemaValidator(key, form, jsonSchema, transaction));
     }
     form.updateValueAndValidity();
   }
@@ -145,8 +145,8 @@ export class ValidateUtils {
   ): ValidatorFn {
     return (): ValidationErrors | null => {
       const data = {
-        ...ValidateUtils.getFormValues(form, jsonSchema),
-        ...ValidateUtils.getNonFormValues(transaction),
+        ...SchemaUtils.getFormValues(form, jsonSchema),
+        ...SchemaUtils.getNonFormValues(transaction),
       };
       const errors: ValidationError[] = validate(jsonSchema, data, [property]);
 
@@ -201,27 +201,6 @@ export class ValidateUtils {
       }
 
       return null;
-    };
-  }
-
-  static passwordValidator(): ValidatorFn | ValidatorFn[] {
-    const v = Validators.compose([
-      Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(16),
-      Validators.pattern('.*[A-Z].*'),
-      Validators.pattern('.*[a-z].*'),
-      Validators.pattern('.*[0-9].*'),
-      Validators.pattern('.*[!@#$%&*()].*'),
-    ]);
-
-    return v ? v : [];
-  }
-
-  static prefixRequiredValidator(prefix: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const failed = control.value.length <= prefix.length;
-      return failed ? { required: true } : null;
     };
   }
 }

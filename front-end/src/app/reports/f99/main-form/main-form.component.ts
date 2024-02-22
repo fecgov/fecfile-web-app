@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { MessageService } from 'primeng/api';
 import { Form99, textCodes } from 'app/shared/models/form-99.model';
@@ -50,6 +50,6 @@ export class MainFormComponent extends MainFormBaseComponent {
   }
 
   getReportPayload(): Report {
-    return Form99.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
+    return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
 }

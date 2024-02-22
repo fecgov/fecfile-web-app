@@ -1,9 +1,13 @@
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { F3xCoverageDates } from '../models/form-3x.model';
-import { DateUtils } from '../utils/date.utils';
-import { getReportCodeLabel } from '../utils/report-code.utils';
+import { DateUtils } from './date.utils';
+import { getReportCodeLabel } from './report-code.utils';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import * as _ from 'lodash';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
+import { Injectable } from '@angular/core';
+import { CommitteeMemberService } from '../services/committee-account.service';
 
 export function buildEmailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -140,4 +144,90 @@ export function dateIsAfterValidator(otherDateControl: AbstractControl<Date | nu
       ? { isAfter: `${controlDate} must be after ${otherDate}` }
       : null;
   };
+}
+
+export function passwordValidator(): ValidatorFn | ValidatorFn[] {
+  const v = Validators.compose([
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(16),
+    Validators.pattern('.*[A-Z].*'),
+    Validators.pattern('.*[a-z].*'),
+    Validators.pattern('.*[0-9].*'),
+    Validators.pattern('.*[!@#$%&*()].*'),
+  ]);
+
+  return v ? v : [];
+}
+
+export function prefixRequiredValidator(prefix: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const failed = control.value.length <= prefix.length;
+    return failed ? { required: true } : null;
+  };
+}
+
+/**
+ * New validation rules for the transaction amount of reattribution from and redesignation from transactions.
+ * These rules supplant the original rules for a given transaction.
+ * @param transaction
+ * @param mustBeNegative
+ * @returns
+ */
+export function reattRedesTransactionValidator(
+  transaction: SchATransaction | SchBTransaction,
+  mustBeNegative = false,
+): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const amount = control.value;
+
+    if (amount !== null) {
+      if (mustBeNegative && amount >= 0) {
+        return { exclusiveMax: { exclusiveMax: 0 } };
+      }
+      if (!mustBeNegative && amount < 0) {
+        return { exclusiveMin: { exclusiveMin: 0 } };
+      }
+
+      const amountKey = transaction.transactionType.templateMap.amount;
+      const originalAmount =
+        ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
+          amountKey as keyof (SchATransaction | SchBTransaction)
+        ] as number) ?? 0;
+      const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
+      let limit = originalAmount - reattRedesTotal;
+      if (transaction.id) limit += +(transaction[amountKey as keyof (SchATransaction | SchBTransaction)] as number); // If editing, add value back into limit restriction.
+      if (Math.abs(amount) > Math.abs(limit)) {
+        return {
+          max: {
+            max: limit,
+            msgPrefix: 'The absolute value of the amount must be less than or equal to',
+          },
+        };
+      }
+    }
+
+    return null;
+  };
+}
+
+@Injectable({ providedIn: 'root' })
+export class CommitteeMemberEmailValidator implements AsyncValidator {
+  constructor(protected committeeMemberService: CommitteeMemberService) {}
+
+  async validate(control: AbstractControl): Promise<ValidationErrors | null> {
+    if (control.value) {
+      const existing_members = await this.committeeMemberService.getMembers();
+      const emails = existing_members.map((member) => {
+        return member.email;
+      });
+
+      if (emails.includes(control.value)) {
+        return {
+          email: 'taken-in-committee',
+        };
+      }
+    }
+    return null;
+  }
 }

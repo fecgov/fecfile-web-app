@@ -9,7 +9,7 @@ import { InputText } from 'primeng/inputtext';
 import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { dateWithinReportRange, percentageValidator } from 'app/shared/validators/shared.validators';
+import { dateWithinReportRange, percentageValidator } from 'app/shared/utils/validators.utils';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',

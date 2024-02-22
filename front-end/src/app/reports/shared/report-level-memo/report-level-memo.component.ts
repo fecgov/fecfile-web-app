@@ -6,7 +6,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
@@ -48,7 +48,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
-    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
 
     this.store
       .select(selectCommitteeAccount)
@@ -73,7 +73,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
         });
       });
 
-    ValidateUtils.addJsonSchemaValidators(this.form, textSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
   save() {
@@ -82,7 +82,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
-      ...ValidateUtils.getFormValues(this.form, textSchema, this.formProperties),
+      ...SchemaUtils.getFormValues(this.form, textSchema, this.formProperties),
     });
     payload.report_id = this.report.id;
 

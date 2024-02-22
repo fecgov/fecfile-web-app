@@ -6,7 +6,7 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { SelectItem } from 'primeng/api';
 import { NavigationEvent } from '../../models/transaction-navigation-controls.model';
 import { getContactTypeOptions } from '../../utils/transaction-type-properties';
-import { ValidateUtils } from '../../validators/schema.validators';
+import { SchemaUtils } from '../../utils/schema.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { PrimeOptions } from '../../utils/label.utils';
 import { FormGroup } from '@angular/forms';
@@ -104,7 +104,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       reatRedes.transactionType.contactTypeOptions ?? [],
     );
 
-    this.reattributedData.form = this.fb.group(ValidateUtils.getFormGroupFields(this.reattributedData.formProperties));
+    this.reattributedData.form = this.fb.group(SchemaUtils.getFormGroupFields(this.reattributedData.formProperties));
     this.reattributedData.contactIdMap = {};
     this.reattributedData.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
       this.reattributedData.form,

@@ -6,7 +6,7 @@ import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsT
 import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
-import { ValidateUtils } from '../validators/schema.validators';
+import { SchemaUtils } from '../utils/schema.utils';
 import {
   SchC1Transaction,
   ScheduleC1TransactionGroupsType,
@@ -108,7 +108,7 @@ export abstract class Transaction extends BaseModel {
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
     if (!this.fields_to_validate) {
-      const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
+      const fieldsToValidate: string[] = SchemaUtils.getSchemaProperties(transactionType.schema);
       const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
       this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
     }

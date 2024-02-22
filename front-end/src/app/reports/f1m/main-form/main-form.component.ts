@@ -3,7 +3,7 @@ import { FormBuilder, AbstractControl, Validators, FormGroup } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntil, of, from, Observable, concatAll, reduce } from 'rxjs';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
@@ -163,7 +163,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     });
 
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
-      ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
+      SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
       if (value === 'affiliation') {
         this.enableValidation([this.affiliatedContact]);
         this.disableValidation(this.candidateContacts);
@@ -196,7 +196,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   }
 
   getReportPayload(): Report {
-    const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
+    const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
     this.updateContactsWithForm(this.report, this.form);
     return Object.assign(this.report, formValues);
   }

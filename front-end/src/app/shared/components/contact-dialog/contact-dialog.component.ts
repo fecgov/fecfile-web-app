@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/validators/schema.validators';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
@@ -36,12 +36,12 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
 
   form: FormGroup = this.fb.group(
-    ValidateUtils.getFormGroupFields([
+    SchemaUtils.getFormGroupFields([
       ...new Set([
-        ...ValidateUtils.getSchemaProperties(contactIndividualSchema),
-        ...ValidateUtils.getSchemaProperties(contactCandidateSchema),
-        ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
-        ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
+        ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
+        ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
+        ...SchemaUtils.getSchemaProperties(contactCommitteeSchema),
+        ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
   );
@@ -141,13 +141,13 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.get('type')?.setValue(contactType);
 
     const schema = ContactService.getSchemaByType(contactType);
-    ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
+    SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
     this.refreshFecIdValidator('candidate_id', this.contact.id, contactType === ContactTypes.CANDIDATE);
     this.refreshFecIdValidator('committee_id', this.contact.id, contactType === ContactTypes.COMMITTEE);
 
     // Clear out non-schema form values
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const schemaProperties: string[] = ValidateUtils.getSchemaProperties(schema);
+    const schemaProperties: string[] = SchemaUtils.getSchemaProperties(schema);
     Object.keys(this.form.controls).forEach((property: string) => {
       if (!schemaProperties.includes(property)) {
         formValues[property] = null;
@@ -250,7 +250,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
     const contact: Contact = Contact.fromJSON({
       ...this.contact,
-      ...ValidateUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
+      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
     });
     contact.type = this.contactType;
     this.savedContact.emit(contact);
