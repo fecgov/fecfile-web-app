@@ -124,7 +124,7 @@ describe('CommitteeMemberService', () => {
     service.getTableData().subscribe((response: ListRestResponse) => {
       expect(response).toEqual(mockResponse);
     });
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/123/members/?page=1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/committee-members/?page=1`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();

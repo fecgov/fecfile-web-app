@@ -44,7 +44,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     if (ordering?.length > 0) {
       parameter_string += `&ordering=${ordering}`;
     }
-    return this.apiService.get<ListRestResponse>(`/committee-members/?page=${pageNumber}&ordering=${ordering}`).pipe(
+    return this.apiService.get<ListRestResponse>(`/committee-members/${parameter_string}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => CommitteeMember.fromJSON(item));
         return response;
