@@ -48,7 +48,6 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
       }),
     );
 
-    console.log(this.roleOptions);
     this.form.get('role')?.setValue(this.roleOptions[0]);
   }
 
