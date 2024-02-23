@@ -20,7 +20,7 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
     : null;
 }
 
-export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$') as ValidatorFn;
+export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
 export const passwordValidator = Validators.compose([
   Validators.required,
