@@ -79,6 +79,7 @@
 <app-committee-member-dialog
   [(detailVisible)]="detailVisible"
   (saveMembership)="saveMembership($event)"
+  (detailClose)="detailVisible = false"
 ></app-committee-member-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ConfirmationService } from 'primeng/api';
@@ -9,14 +9,16 @@ import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/
 @Component({
   selector: 'app-committee-member-dialog',
   templateUrl: './committee-member-dialog.component.html',
+  styleUrls: ['./committee-member-dialog.component.scss'],
 })
-export class CommitteeMemberDialogComponent extends DestroyerComponent {
+export class CommitteeMemberDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit {
   @Input() detailVisible = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() saveMembership: EventEmitter<{ email: string; role: typeof CommitteeMemberRoles }> = new EventEmitter<{
     email: string;
     role: typeof CommitteeMemberRoles;
   }>();
+  @Output() detailClose = new EventEmitter<undefined>();
 
   roleOptions = Object.keys(CommitteeMemberRoles).map((key) => {
     return {
@@ -28,7 +30,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
   form: FormGroup = new FormGroup({});
   formSubmitted = false;
 
-  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
+  @ViewChild('dialog') dialog?: ElementRef;
 
   constructor(
     protected confirmationService: ConfirmationService,
@@ -47,6 +49,17 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
     );
   }
 
+  ngOnChanges(): void {
+    if (this.detailVisible) {
+      this.resetForm();
+      this.dialog?.nativeElement.showModal();
+    }
+  }
+
+  ngAfterViewInit() {
+    this.dialog?.nativeElement.addEventListener('close', () => this.detailClose.emit());
+  }
+
   private resetForm() {
     this.form.reset();
     this.formSubmitted = false;
@@ -54,14 +67,13 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
 
   public openDialog() {
     this.resetForm();
-    this.dialogVisible = true;
+    this.detailVisible = true;
   }
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
       this.detailVisibleChange.emit(false);
       this.detailVisible = false;
-      this.dialogVisible = false;
     }
   }
 
@@ -75,7 +87,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent {
         email,
         role,
       });
-      this.closeDialog();
+      this.dialog?.nativeElement.close();
     }
   }
 }

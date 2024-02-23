@@ -27,18 +27,12 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     this.members = this.itemService.getMembers();
   }
 
-  protected getEmptyItem(): CommitteeMember {
-    return new CommitteeMember();
-  }
-
   public override addItem() {
     super.addItem();
-    this.isNewItem = true;
   }
 
-  public override editItem(item: CommitteeMember) {
-    super.editItem(item);
-    this.isNewItem = false;
+  protected getEmptyItem(): CommitteeMember {
+    return new CommitteeMember();
   }
 
   public async saveMembership(payload: { email: string; role: typeof CommitteeMemberRoles }) {
