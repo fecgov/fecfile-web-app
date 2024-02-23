@@ -44,7 +44,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
       new FormControl('', {
         validators: [Validators.required, emailValidator],
         asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
-        updateOn: 'blur',
+        updateOn: 'change',
       }),
     );
 
