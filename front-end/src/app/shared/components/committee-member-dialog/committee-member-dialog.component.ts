@@ -51,31 +51,15 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
     this.form.get('role')?.setValue(this.roleOptions[0]);
   }
 
-  ngOnChanges(): void {
-    if (this.detailVisible) {
-      this.resetForm();
-      this.dialog?.nativeElement.showModal();
-    }
-  }
-
   ngAfterViewInit() {
     this.dialog?.nativeElement.addEventListener('close', () => this.detailClose.emit());
   }
 
-  private resetForm() {
-    this.form.reset();
-    this.formSubmitted = false;
-  }
-
-  public openDialog() {
-    this.resetForm();
-    this.detailVisible = true;
-  }
-
-  public closeDialog(visibleChangeFlag = false) {
-    if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.detailVisible = false;
+  ngOnChanges(): void {
+    if (this.detailVisible) {
+      this.form.reset();
+      this.formSubmitted = false;
+      this.dialog?.nativeElement.showModal();
     }
   }
 
