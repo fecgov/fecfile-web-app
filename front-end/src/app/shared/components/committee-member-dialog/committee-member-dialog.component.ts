@@ -86,7 +86,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
 
   public async addUser() {
     const email = this.form.get('email')?.value as string;
-    const role = this.form.get('role')?.value.value;
+    const role = this.form.get('role')?.value;
 
     this.form.updateValueAndValidity();
     if (this.form.valid) {
