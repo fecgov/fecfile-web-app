@@ -47,6 +47,9 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
         updateOn: 'blur',
       }),
     );
+
+    console.log(this.roleOptions);
+    this.form.get('role')?.setValue(this.roleOptions[0]);
   }
 
   ngOnChanges(): void {
@@ -77,9 +80,13 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
     }
   }
 
+  updateSelected(roleOption: (typeof this.roleOptions)[0]) {
+    this.form.get('role')?.setValue(roleOption);
+  }
+
   public async addUser() {
     const email = this.form.get('email')?.value as string;
-    const role = this.form.get('role')?.value;
+    const role = this.form.get('role')?.value.value;
 
     this.form.updateValueAndValidity();
     if (this.form.valid) {

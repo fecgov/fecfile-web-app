@@ -46,21 +46,6 @@ label {
   text-transform: uppercase;
 }
 
-.dropdown,
-.dropdown-toggle {
-  width: 400px !important;
-}
-
-.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  border: 2px solid #aeb0b5;
-  font-size: 14px;
-  border-radius: 4px;
-}
-
 .dialog-footer {
   border-top: 0;
   padding-top: 0;
@@ -83,6 +68,16 @@ label {
   border: 0;
   border-radius: 0.25rem;
   opacity: 0.5;
+}
+
+// Both of these are necessary to keep the dropdowns displaying consistently
+:host ::ng-deep p-dropdown > div > p-overlay > div { // The first time a dropdown is displayed
+  top: 45px !important;
+  left: 0px !important;
+}
+:host ::ng-deep p-dropdown > div > .p-overlay { // All subsequent times that dropdown is displayed
+  top: 45px !important;
+  left: 0px !important;
 }
 
 .float-right {

@@ -21,13 +21,15 @@
             </div>
             <div class="col-12">
               <div class="field">
-                <label for="role">ROLE</label>
+                <label id="role-label" for="role">ROLE</label>
                 <p-dropdown
                   inputId="role"
                   formControlName="role"
                   [options]="roleOptions"
                   [autoDisplayFirst]="true"
-                  appendTo="body"
+                  appendTo="dialog"
+                  autoWidth="false"
+                  [style]="{ minWidth: '100%' }"
                 ></p-dropdown>
                 <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
               </div>
