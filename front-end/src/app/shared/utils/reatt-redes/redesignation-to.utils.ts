@@ -1,15 +1,16 @@
-import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TransactionTypes } from '../../models/transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
+import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(
     transaction: SchBTransaction,
     redesignatedTransaction?: SchBTransaction,
-    activeReportId?: string
+    activeReportId?: string,
   ): SchBTransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
@@ -47,7 +48,7 @@ export class RedesignationToUtils {
 
     // Remove purpose description and memo code from list of fields to validate on the backend
     transaction.fields_to_validate = transaction.fields_to_validate?.filter(
-      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code'
+      (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code',
     );
 
     return transaction;
@@ -87,7 +88,7 @@ export class RedesignationToUtils {
     // Add additional amount validation
     form
       .get(toTransaction.transactionType.templateMap.amount)
-      ?.addValidators([ReattRedesUtils.amountValidator(toTransaction)]);
+      ?.addValidators([buildReattRedesTransactionValidator(toTransaction)]);
 
     // Clear normal schema validation from redesignation TO form
     form.get(toTransaction.transactionType.templateMap.purpose_description)?.clearValidators();
@@ -95,7 +96,7 @@ export class RedesignationToUtils {
     form.get('memo_code')?.setValue(true);
 
     RedesignationToUtils.readOnlyFields.forEach((field) =>
-      form.get(toTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable()
+      form.get(toTransaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
     );
     return form;
   }

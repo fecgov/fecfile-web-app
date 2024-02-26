@@ -91,6 +91,7 @@ export class Contact extends BaseModel {
   updated: string | undefined;
   deleted: string | undefined;
   transaction_count: number | undefined;
+  report_count: number | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any

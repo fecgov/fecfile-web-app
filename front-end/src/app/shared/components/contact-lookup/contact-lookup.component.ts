@@ -33,6 +33,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() maxFecfileOrganizationResults = 10;
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
+  @Input() excludeFecIds: string[] = [];
+  @Input() excludeIds: string[] = [];
 
   @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactLookupSelect = new EventEmitter<Contact>();
@@ -84,6 +86,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
               this.maxFecCommitteeResults,
               this.maxFecfileCommitteeResults,
               this.candidateOffice,
+              this.excludeFecIds,
+              this.excludeIds,
             )
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
@@ -91,19 +95,27 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
           break;
         case ContactTypes.COMMITTEE:
           this.contactService
-            .committeeLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
+            .committeeLookup(
+              searchTerm,
+              this.maxFecCommitteeResults,
+              this.maxFecfileCommitteeResults,
+              this.excludeFecIds,
+              this.excludeIds,
+            )
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
             });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm, this.maxFecfileIndividualResults).subscribe((response) => {
-            this.contactLookupList = response && response.toSelectItemGroups();
-          });
+          this.contactService
+            .individualLookup(searchTerm, this.maxFecfileIndividualResults, this.excludeIds)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups();
+            });
           break;
         case ContactTypes.ORGANIZATION:
           this.contactService
-            .organizationLookup(searchTerm, this.maxFecfileOrganizationResults)
+            .organizationLookup(searchTerm, this.maxFecfileOrganizationResults, this.excludeIds)
             .subscribe((response) => {
               this.contactLookupList = response && response.toSelectItemGroups();
             });

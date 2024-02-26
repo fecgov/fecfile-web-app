@@ -44,6 +44,7 @@ import { DialogModule } from 'primeng/dialog';
     ConfirmDialogModule,
     DialogModule,
     SharedModule,
+    DialogModule,
   ],
 })
 export class CommitteeModule {}

@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -20,14 +20,14 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
   report: Form3X | undefined;
   formSubmitted = false;
-  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
 
   constructor(
     public router: Router,
     private form3XService: Form3XService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    public store: Store
+    public store: Store,
   ) {
     super();
   }
@@ -55,7 +55,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
     const payload: Form3X = Form3X.fromJSON({
       ...this.report,
-      ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
+      ...SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       ...{
         calculation_status: null,
         cash_on_hand_date: this.form.controls['cash_on_hand_date'].value,
