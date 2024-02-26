@@ -196,7 +196,6 @@ export class TransactionService implements TableListService<Transaction> {
    * @param transaction
    */
   private preparePayload(transaction: Transaction) {
-    if (typeof transaction === 'string') return transaction;
     const payload = transaction.toJson();
 
     // Add flags to the payload used for API processing
@@ -209,11 +208,20 @@ export class TransactionService implements TableListService<Transaction> {
 
     delete payload['transactionType'];
     delete payload['report'];
+    delete payload['contact_1'];
 
-    if (transaction.children) {
+    this.clearEmptyKeys(payload);
+
+    if (payload['children']) {
       payload['children'] = transaction.children.map((transaction) => this.preparePayload(transaction));
     }
 
     return payload;
+  }
+
+  private clearEmptyKeys(obj: Record<string, any>) {
+    for (const key of Object.keys(obj)) {
+      if (!obj[key] || (typeof obj[key] === 'object' && Object.keys(obj[key]).length === 0)) delete obj[key];
+    }
   }
 }
