@@ -10,7 +10,7 @@ import {
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
@@ -174,7 +174,7 @@ export class TransactionFormUtils {
 
     const schema = transaction.transactionType?.schema;
     if (schema) {
-      ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
+      SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
     }
 
     Object.entries(contactIdMap).forEach(([contact, id$]) => {
@@ -230,7 +230,7 @@ export class TransactionFormUtils {
       });
     }
 
-    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    let formValues = SchemaUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionFormUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);

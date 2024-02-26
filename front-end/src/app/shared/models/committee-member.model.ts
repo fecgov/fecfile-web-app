@@ -19,3 +19,7 @@ export class CommitteeMember {
     return LabelUtils.get(RoleLabels, this.role);
   }
 }
+
+export const CommitteeMemberRoles = {
+  COMMITTEE_ADMINISTRATOR: 'Committee administrator',
+};
