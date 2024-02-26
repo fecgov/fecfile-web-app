@@ -12,6 +12,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
 import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { of } from 'rxjs';
 
 describe('ManageCommitteeComponent', () => {
   let component: ManageCommitteeComponent;
@@ -22,6 +23,7 @@ describe('ManageCommitteeComponent', () => {
     email: 'JS_Test@test.com',
     role: 'COMMITTEE_ADMINISTRATOR',
     is_active: true,
+    id: 'TEST',
   });
 
   let committeeMembers: CommitteeMember[];
@@ -99,33 +101,35 @@ describe('ManageCommitteeComponent', () => {
   });
 
   describe('deleteItem', () => {
-    it('should throw error if missing committee', () => {
-      const messageSpy = spyOn(component.messageService, 'add');
-      component.activeCommitteeIndex = undefined;
-      component.deleteItem(committeeMembers[0]);
-      expect(messageSpy).toHaveBeenCalledWith({
-        severity: 'error',
-        summary: 'Failed to delete',
-        detail: 'Unable to determine active committee',
-        life: 3000,
-      });
-    });
-
     it('should delete member', fakeAsync(async () => {
       const messageSpy = spyOn(component.messageService, 'add');
-      const deleteSpy = spyOn(component.itemService, 'deleteFromCommittee').and.callFake(async (member) => {
+      const deleteSpy = spyOn(component.itemService, 'delete').and.callFake((member) => {
         committeeMembers = committeeMembers.filter((m) => m.email !== member.email);
-        return 'Deleted';
+        return of(null);
       });
-
-      component.activeCommitteeIndex = 'C00601211';
       await component.deleteItem(committeeMembers[0]);
 
-      expect(deleteSpy).toHaveBeenCalledWith(johnSmith, 'C00601211');
+      expect(deleteSpy).toHaveBeenCalledWith(johnSmith);
       expect(messageSpy).toHaveBeenCalledWith({
         severity: 'success',
         summary: 'Success',
         detail: 'Successfully removed user from committee',
+        life: 3000,
+      });
+    }));
+
+    it('should show error on fail', fakeAsync(async () => {
+      const messageSpy = spyOn(component.messageService, 'add');
+      const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(() => {
+        throw new Error('Failed');
+      });
+      await component.deleteItem(committeeMembers[0]);
+
+      expect(deleteSpy).toHaveBeenCalledWith(johnSmith);
+      expect(messageSpy).toHaveBeenCalledWith({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error removing the user from the committee',
         life: 3000,
       });
     }));

@@ -16,7 +16,6 @@
   </p-toolbar>
 
   <p-table
-    #dt
     (onLazyLoad)="loadTableItems($event)"
     (selectAllChange)="onSelectAllChange($event)"
     (selectionChange)="onSelectionChange($event)"
@@ -28,6 +27,11 @@
     [selectAll]="selectAll"
     [selection]="selectedItems"
     [showCurrentPageReport]="true"
+    [totalRecords]="totalItems"
+    [value]="items"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+    dataKey="id"
+    responsiveLayout="scroll"
     sortField="created"
   >
     <ng-template pTemplate="caption">
@@ -77,7 +81,6 @@
   </p-table>
 </p-card>
 
-<<<<<<< HEAD
 <p-confirmDialog #cd [style]="{ width: '450px' }">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">

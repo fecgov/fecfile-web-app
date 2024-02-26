@@ -38,7 +38,8 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     );
   }
 
+  //prettier-ignore
   public delete(member: CommitteeMember): Observable<null> {
-    return this.apiService.delete<null>(`/committees/member/${member.email}`);
+    return this.apiService.delete<null>(`/committee-members/${member.id}/remove-member/`);
   }
 }

@@ -6,7 +6,6 @@ import { CommitteeMember, CommitteeMemberRoles } from 'app/shared/models/committ
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/login.selectors';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
 
 @Component({
@@ -22,7 +21,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   currentUserEmail?: string;
 
   override rowsPerPage = 10;
-  paginationPageSizeOptions = [5, 10, 15, 20];
 
   public members: Promise<CommitteeMember[]>;
 
@@ -31,7 +29,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     private store: Store,
-    protected override itemService: CommitteeMemberService,
+    override itemService: CommitteeMemberService,
   ) {
     super(messageService, confirmationService, elementRef);
     this.members = this.itemService.getMembers();
@@ -43,11 +41,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   override async ngOnInit() {
     super.ngOnInit();
-    const [loginData, committee] = await Promise.all([
-      firstValueFrom(this.store.select(selectUserLoginData)),
-      firstValueFrom(this.store.select(selectCommitteeAccount)),
-    ]);
-    this.currentUserEmail = loginData.email;
+    this.currentUserEmail = (await firstValueFrom(this.store.select(selectUserLoginData))).email;
   }
 
   public async saveMembership(payload: { email: string; role: typeof CommitteeMemberRoles }) {
@@ -90,6 +84,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
         detail: 'Successfully removed user from committee',
         life: 3000,
       });
+      this.confirmationService.close();
     } catch (error) {
       this.messageService.add({
         severity: 'error',
