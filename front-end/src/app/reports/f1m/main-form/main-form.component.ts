@@ -149,7 +149,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
                 this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
               if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
             } else {
-              candidateTags.forEach((tag: F1MCandidateTag) => {
+              f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
                 if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
                   this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
                 if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
