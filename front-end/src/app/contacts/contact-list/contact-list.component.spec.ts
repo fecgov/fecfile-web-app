@@ -30,7 +30,10 @@ describe('ContactListComponent', () => {
     pageNumber: 1,
     next: 'https://next',
     previous: 'https://previous',
-    results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
+    results: [
+      Contact.fromJSON({ id: 1, transaction_count: 0, report_count: 0 }),
+      Contact.fromJSON({ id: 2, transaction_count: 5, report_count: 0 }),
+    ],
   };
 
   beforeEach(async () => {
@@ -88,6 +91,7 @@ describe('ContactListComponent', () => {
   it('#canDeleteItem returns boolean status', () => {
     const item: Contact = Contact.fromJSON({
       transaction_count: 0,
+      report_count: 0,
     });
     let status: boolean = component.canDeleteItem(item);
     expect(status).toBeTrue();
@@ -97,6 +101,11 @@ describe('ContactListComponent', () => {
     expect(status).toBeFalse();
 
     item.transaction_count = undefined;
+    status = component.canDeleteItem(item);
+    expect(status).toBeFalse();
+
+    item.transaction_count = 0;
+    item.report_count = 1;
     status = component.canDeleteItem(item);
     expect(status).toBeFalse();
   });

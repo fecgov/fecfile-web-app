@@ -18,6 +18,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { CalculationOverlayComponent } from './components/calculation-overlay/calculation-overlay.component';
+import { CommitteeMemberDialogComponent } from './components/committee-member-dialog/committee-member-dialog.component';
 import { ContactDialogComponent } from './components/contact-dialog/contact-dialog.component';
 import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
@@ -93,6 +94,7 @@ import { CardModule } from 'primeng/card';
     NavigationControlBarComponent,
     ContactLookupComponent,
     TransactionContactLookupComponent,
+    CommitteeMemberDialogComponent,
     ContactDialogComponent,
     AddressInputComponent,
     NameInputComponent,
@@ -133,6 +135,7 @@ import { CardModule } from 'primeng/card';
     ContactLookupComponent,
     TransactionContactLookupComponent,
     ContactDialogComponent,
+    CommitteeMemberDialogComponent,
     AddressInputComponent,
     NameInputComponent,
     CandidateInputComponent,

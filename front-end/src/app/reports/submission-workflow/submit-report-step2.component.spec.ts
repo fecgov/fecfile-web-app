@@ -5,16 +5,16 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
+import { ApiService } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { of } from 'rxjs';
-import { SubmitReportStep2Component } from './submit-report-step2.component';
-import { ReportService } from 'app/shared/services/report.service';
-import { ApiService } from 'app/shared/services/api.service';
 import { ReportsModule } from '../reports.module';
+import { SubmitReportStep2Component } from './submit-report-step2.component';
 
 describe('SubmitReportStep2Component', () => {
   let component: SubmitReportStep2Component;

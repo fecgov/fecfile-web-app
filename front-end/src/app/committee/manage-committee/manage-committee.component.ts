@@ -1,12 +1,13 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { CommitteeMember } from 'app/shared/models/committee-member.model';
-import { CommitteeMemberService } from 'app/shared/services/committee-account.service';
+
+import { CommitteeMember, CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/login.selectors';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
+import { CommitteeMemberService } from '../../shared/services/committee-member.service';
 
 @Component({
   selector: 'app-manage-committee',
@@ -14,20 +15,30 @@ import { selectCommitteeAccount } from '../../store/committee-account.selectors'
 })
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements OnInit {
   override item: CommitteeMember = this.getEmptyItem();
+
   public rowActions: TableAction[] = [
     new TableAction('Delete', this.confirmDelete.bind(this), this.isNotCurrentUser.bind(this)),
   ];
-  activeCommitteeIndex?: string;
   currentUserEmail?: string;
+
+  override rowsPerPage = 10;
+  paginationPageSizeOptions = [5, 10, 15, 20];
+
+  public members: Promise<CommitteeMember[]>;
 
   constructor(
     override messageService: MessageService,
     override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    override itemService: CommitteeMemberService,
     private store: Store,
+    protected override itemService: CommitteeMemberService,
   ) {
     super(messageService, confirmationService, elementRef);
+    this.members = this.itemService.getMembers();
+  }
+
+  public override addItem() {
+    super.addItem();
   }
 
   override async ngOnInit() {
@@ -37,17 +48,24 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
       firstValueFrom(this.store.select(selectCommitteeAccount)),
     ]);
     this.currentUserEmail = loginData.email;
-    this.activeCommitteeIndex = committee.committee_id;
   }
 
-  public override addItem() {
-    super.addItem();
-    this.isNewItem = true;
-  }
+  public async saveMembership(payload: { email: string; role: typeof CommitteeMemberRoles }) {
+    try {
+      const new_user = await firstValueFrom(this.itemService.addMember(payload.email, payload.role));
 
-  public override editItem(item: CommitteeMember) {
-    super.editItem(item);
-    this.isNewItem = false;
+      if (new_user.email) {
+        this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Membership Created',
+          life: 3000,
+        });
+      }
+    } catch (error) {
+      return;
+    }
   }
 
   public confirmDelete(member: CommitteeMember) {
@@ -63,17 +81,8 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   override async deleteItem(member: CommitteeMember) {
-    if (!this.activeCommitteeIndex) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Failed to delete',
-        detail: 'Unable to determine active committee',
-        life: 3000,
-      });
-      return;
-    }
     try {
-      await this.itemService.deleteFromCommittee(member, this.activeCommitteeIndex);
+      await lastValueFrom(this.itemService.delete(member));
       this.refreshTable();
       this.messageService.add({
         severity: 'success',

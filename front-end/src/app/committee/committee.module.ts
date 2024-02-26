@@ -19,6 +19,7 @@ import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { RippleModule } from 'primeng/ripple';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [ManageCommitteeComponent, SelectCommitteeComponent, CommitteeInfoComponent],
@@ -36,6 +37,7 @@ import { RippleModule } from 'primeng/ripple';
     ConfirmDialogModule,
     SharedModule,
     RippleModule,
+    DialogModule,
   ],
 })
 export class CommitteeModule {}

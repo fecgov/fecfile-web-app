@@ -4,7 +4,7 @@
     <h1>Manage Users</h1>
   </ng-template>
   <ng-template pTemplate="right">
-    <button class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
+    <button (click)="addItem()" class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
   </ng-template>
 </p-toolbar>
 <p-divider></p-divider>
@@ -28,11 +28,7 @@
     [selectAll]="selectAll"
     [selection]="selectedItems"
     [showCurrentPageReport]="true"
-    [totalRecords]="totalItems"
-    [value]="items"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
-    dataKey="id"
-    responsiveLayout="scroll"
+    sortField="created"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -63,10 +59,10 @@
     </ng-template>
     <ng-template let-item pTemplate="body">
       <tr role="row">
-        <td>{{ item.last_name }}, {{ item.first_name }}</td>
+        <td>{{ item.name }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.getRoleLabel() }}</td>
-        <td>Registered</td>
+        <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
         <td>
           <app-table-actions-button
             (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
@@ -81,6 +77,7 @@
   </p-table>
 </p-card>
 
+<<<<<<< HEAD
 <p-confirmDialog #cd [style]="{ width: '450px' }">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">
@@ -89,3 +86,12 @@
     </span>
   </ng-template>
 </p-confirmDialog>
+
+<app-committee-member-dialog
+  (detailClose)="detailVisible = false"
+  (saveMembership)="saveMembership($event)"
+  [(detailVisible)]="detailVisible"
+></app-committee-member-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+

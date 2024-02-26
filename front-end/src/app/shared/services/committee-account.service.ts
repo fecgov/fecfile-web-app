@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { lastValueFrom, map, mergeMap, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiService } from './fec-api.service';
 import { Store } from '@ngrx/store';
 import { ApiService } from './api.service';
 import { ListRestResponse } from '../models/rest-api.model';
-import { TableListService } from '../interfaces/table-list-service.interface';
-import { CommitteeMember } from '../models/committee-member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,40 +28,5 @@ export class CommitteeAccountService {
 
   public getActiveCommittee(): Observable<CommitteeAccount> {
     return this.apiService.get(`/committees/active/`);
-  }
-}
-
-@Injectable({
-  providedIn: 'root',
-})
-export class CommitteeMemberService implements TableListService<CommitteeMember> {
-  constructor(
-    private apiService: ApiService,
-    private committeeAccountService: CommitteeAccountService,
-  ) {}
-
-  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
-    let parameter_string = `?page=${pageNumber}`;
-    if (ordering?.length > 0) {
-      parameter_string += `&ordering=${ordering}`;
-    }
-    return this.committeeAccountService.getCommittees().pipe(
-      mergeMap((committees) =>
-        this.apiService.get<ListRestResponse>(`/committees/${committees[0].id}/members/${parameter_string}`),
-      ),
-      map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => CommitteeMember.fromJSON(item));
-        return response;
-      }),
-    );
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public delete(member: CommitteeMember): Observable<null> {
-    return of(null);
-  }
-
-  public deleteFromCommittee(member: CommitteeMember, committeeIndex: string): Promise<string> {
-    return lastValueFrom(this.apiService.delete<string>(`/committees/${committeeIndex}/member/${member.email}`));
   }
 }

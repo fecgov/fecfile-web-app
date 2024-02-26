@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -14,7 +14,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {
-    ValidateUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
 
     if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
       this.initPrefix(

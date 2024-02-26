@@ -4,10 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -29,13 +32,14 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   ];
   report?: Report;
   formSubmitted = false;
-  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
   loading: 0 | 1 | 2 = 0;
   backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
   showBackdoorCode = false;
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
+  committeeAccount?: CommitteeAccount;
 
   constructor(
     public router: Router,
@@ -45,7 +49,8 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     private messageService: MessageService,
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private form3XService: Form3XService,
   ) {
     super();
   }
@@ -55,14 +60,15 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
-      ValidateUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
+      this.committeeAccount = committeeAccount;
+      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
       this.initializeFormWithReport(this.report, committeeAccount);
     });
 
     this.form.addControl('backdoorYesNo', new FormControl());
 
     // Initialize validation tracking of current JSON schema and form data
-    this.form.controls['filingPassword'].addValidators(ValidateUtils.passwordValidator());
+    this.form.controls['filingPassword'].addValidators(passwordValidator);
     this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form
       .get('backdoorYesNo')
@@ -121,7 +127,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
         });
 
         return this.submitReport$;
-      })
+      }),
     );
   }
 
@@ -130,8 +136,11 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     this.loading = 1;
     const payload: Report = getReportFromJSON({
       ...this.report,
-      ...ValidateUtils.getFormValues(this.form, this.report.schema, this.formProperties),
+      ...SchemaUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });
+    if (payload instanceof Form3X) {
+      payload.qualified_committee = this.form3XService.isQualifiedCommittee(this.committeeAccount);
+    }
 
     return this.reportService.update(payload, this.formProperties);
   }
@@ -154,7 +163,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
         } else {
           return from(this.router.navigateByUrl('/reports'));
         }
-      })
+      }),
     );
   }
 }
