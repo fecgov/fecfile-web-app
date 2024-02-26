@@ -20,6 +20,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { RegisterCommitteeComponent } from './register-committee/register-committee.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
@@ -44,6 +45,7 @@ import { DialogModule } from 'primeng/dialog';
     ConfirmDialogModule,
     DialogModule,
     SharedModule,
+    RippleModule,
     DialogModule,
   ],
 })
