@@ -9,6 +9,7 @@ import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
 import { SelectCommitteeComponent } from 'app/committee/select-committee/select-committee.component';
 import { HeaderStyles } from 'app/layout/header/header.component';
 import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update-current-user.component';
+import { RegisterCommitteeComponent } from 'app/committee/register-committee/register-committee.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,17 @@ const routes: Routes = [
     path: 'select-committee',
     title: 'Select Committee',
     component: SelectCommitteeComponent,
+    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
+    data: {
+      showCommitteeBanner: false,
+      showUpperFooter: false,
+      headerStyle: HeaderStyles.LOGOUT,
+    },
+  },
+  {
+    path: 'register-committee',
+    title: 'Register Committee',
+    component: RegisterCommitteeComponent,
     canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,

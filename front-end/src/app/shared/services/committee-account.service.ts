@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiService } from './fec-api.service';
 import { Store } from '@ngrx/store';
@@ -28,5 +28,11 @@ export class CommitteeAccountService {
 
   public getActiveCommittee(): Observable<CommitteeAccount> {
     return this.apiService.get(`/committees/active/`);
+  }
+
+  public registerCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
+    return firstValueFrom(
+      this.apiService.post<CommitteeAccount>('/committees/register/', { committee_id: committeeId }),
+    );
   }
 }

@@ -12,7 +12,7 @@
       <ng-container *ngIf="!committees.length">
         <div class="committee-card empty-card">
           <div class="empty-lens-img">
-            <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg"/>
+            <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg" />
           </div>
           <div class="empty-verbiage">
             <p class="font-karla-bold">Not currently active in any FECFile committee accounts</p>
@@ -33,7 +33,7 @@
       <h5 class="font-karla-bold">LOOKING FOR AN EXISTING FEFILE COMMITTEE ACCOUNT?</h5>
       Contact the administrator for that committee.
     </div>
-    <div class="create-committee-card font-karla-bold">
+    <div class="create-committee-card font-karla-bold" routerLink="/login/register-committee">
       <div class="blue-box">
         <div class="plus">
           <img src="assets/img/blue-plus.png" />
