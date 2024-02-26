@@ -11,7 +11,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   templateUrl: './register-committee.component.html',
   styleUrls: ['./register-committee.component.scss'],
 })
-export class RegisterCommitteeComponent extends DestroyerComponent implements OnInit {
+export class RegisterCommitteeComponent extends DestroyerComponent {
   query?: string;
   suggestions?: FecFiling[];
   selectedCommittee?: CommitteeAccount;
@@ -25,8 +25,8 @@ export class RegisterCommitteeComponent extends DestroyerComponent implements On
   ) {
     super();
   }
-  ngOnInit(): void {}
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   search(event: any) {
     this.query = event.query;
     this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
