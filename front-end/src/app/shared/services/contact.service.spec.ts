@@ -122,10 +122,19 @@ describe('ContactService', () => {
       max_fec_results: testMaxFecResults,
       max_fecfile_results: testMaxFecfileResults,
       office: '',
+      exclude_fec_ids: 'C000000001,C000000002',
+      exclude_ids: '',
     };
 
     service
-      .candidateLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
+      .candidateLookup(
+        testSearch,
+        testMaxFecResults,
+        testMaxFecfileResults,
+        undefined,
+        ['C000000001', 'C000000002'],
+        [],
+      )
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -140,6 +149,8 @@ describe('ContactService', () => {
         q: testSearch,
         max_fec_results: testMaxFecResults,
         max_fecfile_results: testMaxFecfileResults,
+        exclude_fec_ids: '',
+        exclude_ids: '',
       })
       .and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -148,10 +159,12 @@ describe('ContactService', () => {
       q: testSearch,
       max_fec_results: testMaxFecResults,
       max_fecfile_results: testMaxFecfileResults,
+      exclude_fec_ids: '',
+      exclude_ids: '',
     };
 
     service
-      .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
+      .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults, [], [])
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -166,10 +179,11 @@ describe('ContactService', () => {
     const expectedParams = {
       q: testSearch,
       max_fecfile_results: testMaxFecfileResults,
+      exclude_ids: '',
     };
 
     service
-      .individualLookup(testSearch, testMaxFecfileResults)
+      .individualLookup(testSearch, testMaxFecfileResults, [])
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -184,10 +198,11 @@ describe('ContactService', () => {
     const expectedParams = {
       q: testSearch,
       max_fecfile_results: testMaxFecfileResults,
+      exclude_ids: '',
     };
 
     service
-      .organizationLookup(testSearch, testMaxFecfileResults)
+      .organizationLookup(testSearch, testMaxFecfileResults, [])
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
