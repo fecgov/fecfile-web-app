@@ -2,7 +2,7 @@
   <app-banner></app-banner>
 
   <!--  Begin Sidebar section -->
-  <div *ngIf="showSidebar">
+  <div *ngIf="layoutControls.showSidebar">
     <div class="inline-flex w-100">
       <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
         <app-sidebar></app-sidebar>
@@ -33,7 +33,7 @@
   <!--  End Sidebar section -->
 
   <!-- Begin No Sidebar section -->
-  <div *ngIf="!showSidebar" class="content-offset">
+  <div *ngIf="!layoutControls.showSidebar" class="content-offset">
     <div class="container">
       <div class="header-container" *ngIf="layoutControls.showHeader">
         <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
@@ -52,6 +52,6 @@
       </div>
     </div>
   </div>
-  <app-footer *ngIf="!showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
+  <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
   <!-- End No Sidebar section -->
 </div>

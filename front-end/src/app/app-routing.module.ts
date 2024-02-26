@@ -1,121 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { BackgroundStyles, LayoutComponent } from './layout/layout.component';
-import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
+import { LayoutComponent } from './layout/layout.component';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeGuard } from './shared/guards/committee.guard';
-import { SelectCommitteeComponent } from './committee/select-committee/select-committee.component';
-import { LoginComponent } from './login/login/login.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
-import { UpdateCurrentUserComponent } from './users/update-current-user/update-current-user.component';
 import { nameGuard } from './shared/guards/name.guard';
-import { SecurityNoticeComponent } from './login/security-notice/security-notice.component';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
-import { HeaderStyles } from './layout/header/header.component';
-import { RegisterCommitteeComponent } from './committee/register-committee/register-committee.component';
 
 const routes: Routes = [
   {
-    path: 'login',
-    component: LayoutComponent,
-    children: [
-      {
-        path: '',
-        component: LoginComponent,
-        resolve: { sidebar: SidebarStateResolver },
-        data: {
-          showUpperFooter: false,
-          showCommitteeBanner: false,
-          headerStyle: HeaderStyles.LOGIN,
-          backgroundStyle: BackgroundStyles.LOGIN,
-        },
-      },
-    ],
-  },
-  {
-    path: 'current',
-    component: LayoutComponent,
-    canActivate: [LoginGuard],
-    children: [
-      {
-        path: '',
-        component: UpdateCurrentUserComponent,
-        data: {
-          showCommitteeBanner: false,
-          showHeader: false,
-          showUpperFooter: false,
-        },
-      },
-    ],
-  },
-  {
-    path: 'security-notice',
-    title: 'Security Notice',
-    canActivate: [LoginGuard, nameGuard],
-    component: LayoutComponent,
-    children: [
-      {
-        path: '',
-        component: SecurityNoticeComponent,
-        data: {
-          showCommitteeBanner: false,
-          showUpperFooter: false,
-          showHeader: false,
-          backgroundStyle: BackgroundStyles.SECURITY_NOTICE,
-        },
-      },
-    ],
-  },
-  {
-    path: 'select-committee',
-    component: LayoutComponent,
-    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
-    children: [
-      {
-        path: '',
-        component: SelectCommitteeComponent,
-        resolve: { sidebar: SidebarStateResolver },
-        data: {
-          showUpperFooter: false,
-          headerStyle: HeaderStyles.LOGOUT,
-        },
-      },
-    ],
-  },
-  {
-    path: 'register-committee',
-    component: LayoutComponent,
-    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
-    children: [
-      {
-        path: '',
-        component: RegisterCommitteeComponent,
-        resolve: { sidebar: SidebarStateResolver },
-        data: {
-          showUpperFooter: false,
-          headerStyle: HeaderStyles.LOGOUT,
-        },
-      },
-    ],
-  },
-  {
     path: '',
     component: LayoutComponent,
-    resolve: { sidebar: SidebarStateResolver, singleClick: SingleClickResolver },
-    canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+    resolve: { singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
       { path: 'committee', loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule) },
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'login',
+        redirectTo: 'dashboard',
       },
       {
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
+        canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'login',
@@ -124,22 +34,30 @@ const routes: Routes = [
       {
         path: 'reports',
         loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule),
+        data: {
+          showSidebar: true,
+        },
+        canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'contacts',
         loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule),
+        canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'tools',
         loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule),
+        canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'help',
         loadChildren: () => import('./help/help.module').then((m) => m.HelpModule),
+        canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
+        canActivate: [LoginGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
     ],
   },
