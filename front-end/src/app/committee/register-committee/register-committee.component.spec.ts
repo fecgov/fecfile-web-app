@@ -33,7 +33,7 @@ describe('RegisterCommitteeComponent', () => {
 
   it('should search filings', () => {
     const testFecApiService = TestBed.inject(FecApiService);
-    const spy = spyOn(testFecApiService, 'queryFilings').and.callFake((q, f) =>
+    const spy = spyOn(testFecApiService, 'queryFilings').and.callFake(() =>
       Promise.resolve([new FecFiling()] as FecFiling[]),
     );
     component.search({ query: 'query' });
@@ -51,7 +51,7 @@ describe('RegisterCommitteeComponent', () => {
   });
   it('should register committee', () => {
     const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-    const spy = spyOn(testCommitteeAccountService, 'registerCommitteeAccount').and.callFake((committee_id) =>
+    const spy = spyOn(testCommitteeAccountService, 'registerCommitteeAccount').and.callFake(() =>
       Promise.resolve(new CommitteeAccount()),
     );
     const filing = new FecFiling();
