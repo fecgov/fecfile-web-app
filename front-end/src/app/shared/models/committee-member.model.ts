@@ -1,8 +1,9 @@
 import { RoleLabels } from './role.model';
 import { LabelUtils } from '../utils/label.utils';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 export class CommitteeMember {
+  id = '';
   email = '';
   username = '';
   first_name = '';
@@ -12,8 +13,8 @@ export class CommitteeMember {
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeMember { // eslint-disable-line @typescript-eslint/no-explicit-any
-      return plainToClass(CommitteeMember, json);
-    }
+    return plainToInstance(CommitteeMember, json);
+  }
 
   public getRoleLabel(): string | undefined {
     return LabelUtils.get(RoleLabels, this.role);

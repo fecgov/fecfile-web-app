@@ -3,7 +3,7 @@ import { CommitteeMember, CommitteeMemberRoles } from '../models/committee-membe
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService } from './api.service';
 import { ListRestResponse } from '../models/rest-api.model';
-import { Observable, firstValueFrom, map, of } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +39,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   }
 
   //prettier-ignore
-  public delete(_: CommitteeMember): Observable<null> {// eslint-disable-line @typescript-eslint/no-unused-vars
-    return of(null);
+  public delete(member: CommitteeMember): Observable<null> {
+    return this.apiService.delete<null>(`/committee-members/${member.id}/remove-member/`);
   }
 }
