@@ -226,7 +226,6 @@ button {
   border: none;
   border-radius: 0;
   cursor: pointer;
-  display: inline-block;
   font-family: karla, sans-serif;
   line-height: 1;
   text-decoration: none;

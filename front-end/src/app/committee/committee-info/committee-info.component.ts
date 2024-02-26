@@ -46,7 +46,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     private store: Store,
     private fecApiService: FecApiService,
     private fb: FormBuilder,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
   }
@@ -54,7 +54,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
       this.fecApiService
-        .getCommitteeRecentFiling(committee.committee_id)
+        .getCommitteeRecentF1Filing(committee.committee_id)
         .subscribe((mostRecentFiling: FecFiling | undefined) => {
           this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
         });

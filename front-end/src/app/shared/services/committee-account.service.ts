@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, mergeMap, Observable, of } from 'rxjs';
+import { firstValueFrom, map, mergeMap, Observable, of } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiService } from './fec-api.service';
 import { Store } from '@ngrx/store';
@@ -12,7 +12,11 @@ import { CommitteeMember } from '../models/committee-member.model';
   providedIn: 'root',
 })
 export class CommitteeAccountService {
-  constructor(private fecApiService: FecApiService, private store: Store, private apiService: ApiService) {}
+  constructor(
+    private fecApiService: FecApiService,
+    private store: Store,
+    private apiService: ApiService,
+  ) {}
 
   public getCommittees(): Observable<CommitteeAccount[]> {
     return this.apiService
@@ -27,13 +31,22 @@ export class CommitteeAccountService {
   public getActiveCommittee(): Observable<CommitteeAccount> {
     return this.apiService.get(`/committees/active/`);
   }
+
+  public registerCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
+    return firstValueFrom(
+      this.apiService.post<CommitteeAccount>('/committees/register/', { committee_id: committeeId }),
+    );
+  }
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommitteeMemberService implements TableListService<CommitteeMember> {
-  constructor(private apiService: ApiService, private committeeAccountService: CommitteeAccountService) {}
+  constructor(
+    private apiService: ApiService,
+    private committeeAccountService: CommitteeAccountService,
+  ) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     let parameter_string = `?page=${pageNumber}`;
@@ -42,12 +55,12 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     }
     return this.committeeAccountService.getCommittees().pipe(
       mergeMap((committees) =>
-        this.apiService.get<ListRestResponse>(`/committees/${committees[0].id}/members/${parameter_string}`)
+        this.apiService.get<ListRestResponse>(`/committees/${committees[0].id}/members/${parameter_string}`),
       ),
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => CommitteeMember.fromJSON(item));
         return response;
-      })
+      }),
     );
   }
 
