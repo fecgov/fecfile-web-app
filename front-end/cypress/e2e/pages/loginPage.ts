@@ -63,7 +63,7 @@ function legacyLogin() {
   const fieldPassword = '#loginPassword';
 
   cy.fixture('FEC_Get_Committee_Account').then(() => {
-    cy.intercept('POST', `http://localhost:8080/api/v1/user/login/authenticate`).as('GetLoggedIn');
+    cy.intercept('POST', 'http://localhost:8080/api/v1/user/login/authenticate').as('GetLoggedIn');
     cy.intercept('GET', 'http://localhost:8080/api/v1/openfec/C00601211/committee').as('GetCommitteeAccounts');
   });
 
