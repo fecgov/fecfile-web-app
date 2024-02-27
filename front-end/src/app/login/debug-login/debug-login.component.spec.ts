@@ -9,11 +9,19 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of, throwError } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { DebugLoginComponent } from './debug-login.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 describe('DebugLoginComponent', () => {
   let component: DebugLoginComponent;
   let fixture: ComponentFixture<DebugLoginComponent>;
   let loginService: LoginService;
+
+  const validForm = {
+    committeeId: 'C00000009',
+    loginPassword: 'foo',
+    emailId: 'aaa@aaa.com',
+  };
 
   beforeEach(async () => {
     window.onbeforeunload = jasmine.createSpy();
@@ -27,6 +35,8 @@ describe('DebugLoginComponent', () => {
           },
         ]),
         ReactiveFormsModule,
+        InputTextModule,
+        PasswordModule,
       ],
       providers: [{ provide: Window, useValue: window }, provideMockStore(testMockStore)],
       declarations: [DebugLoginComponent, BannerComponent],
@@ -44,56 +54,24 @@ describe('DebugLoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('updateStatus should set flags', () => {
-    component.committeeIdInputError = true;
-    component.passwordInputError = true;
-    component.loginEmailInputError = true;
-    component.updateStatus();
-    expect(component.committeeIdInputError).toBeTrue();
-    expect(component.passwordInputError).toBeTrue();
-    expect(component.loginEmailInputError).toBeTrue();
-    component.form.patchValue({
-      committeeId: 'C0000009',
-      loginPassword: 'foo',
-      emailId: 'aaa@aaa.com',
-    });
-    component.updateStatus();
-    expect(component.committeeIdInputError).toBeFalse();
-    expect(component.passwordInputError).toBeFalse();
-    expect(component.loginEmailInputError).toBeFalse();
+  it('form should validate properly', () => {
+    component.form.updateValueAndValidity();
+    expect(component.form.valid).toBeFalse();
+
+    component.form.patchValue(validForm);
+
+    component.form.updateValueAndValidity();
+    expect(component.form.valid).toBeTrue();
   });
 
-  it('should doSignIn success', () => {
-    spyOn(loginService, 'logIn').and.returnValue(of());
-    component.hasFailed = true;
-    component.doSignIn();
-    expect(component.isBusy).toBeFalse();
-    expect(component.hasFailed).toBeTrue();
-    component.form.patchValue({
-      committeeId: 'C0000009',
-      loginPassword: 'foo',
-      emailId: 'aaa@aaa.com',
-    });
-    component.doSignIn();
-    expect(component.isBusy).toBeTrue();
-    expect(component.hasFailed).toBeFalse();
-  });
+  it('should sign in only with a valid form', () => {
+    const loginSpy = spyOn(loginService, 'logIn').and.returnValue(of());
 
-  it('should doSignIn fail', () => {
-    spyOn(loginService, 'logIn').and.returnValue(throwError(() => new Error('test')));
-    component.form.patchValue({
-      committeeId: 'C0000009',
-      loginPassword: 'foo',
-      emailId: 'aaa@aaa.com',
-    });
     component.doSignIn();
-    expect(component.isBusy).toBeFalse();
-    expect(component.hasFailed).toBeTrue();
-  });
+    expect(loginSpy).toHaveBeenCalledTimes(0);
 
-  it('should toggle show flag', () => {
-    expect(component.show).toBeFalse();
-    component.showPassword();
-    expect(component.show).toBeTrue();
+    component.form.patchValue(validForm);
+    component.doSignIn();
+    expect(loginSpy).toHaveBeenCalled();
   });
 });
