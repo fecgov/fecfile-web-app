@@ -6,7 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
 import { BannerComponent } from 'app/layout/banner/banner.component';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { DebugLoginComponent } from './debug-login.component';
 import { InputTextModule } from 'primeng/inputtext';
