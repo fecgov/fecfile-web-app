@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
+import { committeeIdValidator, emailValidator } from 'app/shared/utils/validators.utils';
 
 @Component({
   selector: 'app-debug-login',
@@ -27,9 +28,9 @@ export class DebugLoginComponent implements OnInit {
     private router: Router,
   ) {
     this.form = this.fb.group({
-      committeeId: ['', Validators.required],
+      emailId: ['', [Validators.required, emailValidator]],
+      committeeId: ['', [Validators.required, committeeIdValidator]],
       loginPassword: ['', Validators.required],
-      emailId: ['', [Validators.required, Validators.email]],
     });
     this.show = false;
   }
