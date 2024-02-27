@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { LoanTermsDatesInputComponent } from './loan-terms-dates-input.component';
 import { SharedModule } from 'app/shared/shared.module';
+import { percentageValidator } from 'app/shared/utils/validators.utils';
 
 describe('LoanTermsDatesInputComponent', () => {
   let component: LoanTermsDatesInputComponent;
@@ -91,9 +92,9 @@ describe('LoanTermsDatesInputComponent', () => {
     const settingField = component.form.get(component.templateMap.interest_rate_setting);
     const rateField = component.form.get(component.templateMap.interest_rate);
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    expect(rateField?.hasValidator(component.percentageValidator as ValidatorFn)).toBeFalse();
+    expect(rateField?.hasValidator(percentageValidator)).toBeFalse();
     settingField?.setValue(component.termFieldSettings.EXACT_PERCENTAGE);
-    expect(rateField?.hasValidator(component.percentageValidator as ValidatorFn)).toBeTrue();
+    expect(rateField?.hasValidator(percentageValidator)).toBeTrue();
   });
 
   it('should handle due_date inputs correctly', () => {

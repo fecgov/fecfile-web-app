@@ -1,0 +1,98 @@
+<div class="flex register-committee-columns">
+  <div class="col-6 left-side">
+    <h1>Create an account</h1>
+    <p-divider></p-divider>
+
+    <img src="assets/img/person-sending-email.png" draggable="false" alt="Person sending email image" />
+  </div>
+  <div class="col-6 right-side">
+    <div class="go-back">
+      <a routerLink="/select-committee"><i class="pi pi-angle-left"></i> GO BACK</a>
+    </div>
+    <div class="right-side-box">
+      <h2>Find your committee</h2>
+      <div class="search-label">
+        <h5 class="font-karla-bold">COMMITTEE NAME OR ID</h5>
+        <i class="pi pi-question" (click)="showExplanation()"></i>
+      </div>
+
+      <p-autoComplete
+        class="committee-search p-fluid"
+        id="searchBox"
+        field="label"
+        dropdownMode="current"
+        dropdownIcon="pi pi-search"
+        [suggestions]="suggestions ?? []"
+        [forceSelection]="true"
+        (completeMethod)="search($event)"
+        (onSelect)="select($event)"
+      >
+        <ng-template pTemplate="header">
+          <div class="search-header">Select a committee</div>
+        </ng-template>
+        <ng-template let-committee pTemplate="item">
+          <div [innerHTML]="committee.committee_name | highlightTerms: query" class="search-result">
+            {{ committee.committee_name }}
+          </div>
+          <div class="second-row">
+            &lpar;
+            <div [innerHTML]="committee.committee_id | highlightTerms: query">
+              {{ committee.committee_id }}
+            </div>
+            &rpar;
+          </div>
+        </ng-template>
+      </p-autoComplete>
+      Examples: Obama for America; C00431445; Bush for President Inc.; C00343509
+    </div>
+    <div class="right-side-box" *ngIf="selectedCommittee">
+      <h2>Results</h2>
+      <div class="committee-card">
+        <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+        <div class="committee-info">
+          <h3>{{ selectedCommittee.name }}</h3>
+          <h5 class="font-karla-bold">{{ selectedCommittee.committee_id }}</h5>
+
+          <p-button
+            class="register-button"
+            label="Create account"
+            styleClass="p-button-primary"
+            (click)="createAccount()"
+            icon="pi pi-angle-right"
+            iconPos="right"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-toast></p-toast>
+
+<p-dialog
+  header="Header"
+  [(visible)]="explanationVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [closeOnEscape]="true"
+  [style]="{ width: '40%' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <span class="explanation-header">What am I searching?</span>
+  </ng-template>
+  <p>
+    The committee name and ID lookup searches FEC's global lookup of all committees registered with the Federal Election
+    Commission.
+  </p>
+  <p>This lookup is not searching FECFile's database of committees with a FECFile account.</p>
+  <p>
+    If the system cannot find the committee ID entered, please doublecheck that the ID was entered correctly. Also, if
+    the committee was just created and the Form 1 was recently submitted, please wait 24 hours for the database to
+    update. For all other questions, don't hesitate to get in touch with FECFile technical support for assistance.
+  </p>
+  <ng-template pTemplate="footer">
+    <p-button (click)="explanationVisible = false" label="Close" pAutoFocus [autofocus]="true"></p-button>
+  </ng-template>
+</p-dialog>

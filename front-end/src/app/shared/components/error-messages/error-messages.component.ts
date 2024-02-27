@@ -33,10 +33,12 @@ export class ErrorMessagesComponent implements OnInit {
     }
 
     switch (this.control?.errors?.['email']) {
-      case 'identical':
+      case 'not-unique':
         return 'Confirmation emails cannot be identical';
       case 'invalid':
         return 'This email is invalid';
+      case 'taken-in-committee':
+        return 'This user email already exists in this committee account.';
     }
     return 'Email Error';
   }
@@ -77,7 +79,7 @@ export class ErrorMessagesComponent implements OnInit {
     return `This field must be greater than or equal to ${formatCurrency(
       this.control?.errors?.['min']?.min,
       this.localeId,
-      '$'
+      '$',
     )}.`;
   }
 
@@ -93,7 +95,7 @@ export class ErrorMessagesComponent implements OnInit {
     return `This field must be greater than ${formatCurrency(
       this.control?.errors?.['exclusiveMin']?.exclusiveMin,
       this.localeId,
-      '$'
+      '$',
     )}.`;
   }
 
@@ -127,7 +129,7 @@ export class ErrorMessagesComponent implements OnInit {
     return `This field must be less than ${formatCurrency(
       this.control?.errors?.['exclusiveMax']?.exclusiveMax,
       this.localeId,
-      '$'
+      '$',
     )}.`;
   }
 

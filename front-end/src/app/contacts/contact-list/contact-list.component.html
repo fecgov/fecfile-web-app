@@ -77,7 +77,7 @@
         <td>
           <a (click)="editItem(item)">{{ displayName(item) }}</a>
         </td>
-        <td>{{ item.type | label : contactTypeLabels }}</td>
+        <td>{{ item.type | label: contactTypeLabels }}</td>
         <td>{{ item.candidate_id || item.committee_id }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
@@ -85,7 +85,7 @@
           <em
             class="pi pi-trash"
             [ngClass]="{ disabled: !canDeleteItem(item) }"
-            pTooltip="This contact can not be deleted because it has associated transactions."
+            pTooltip="This contact can not be deleted because it has associated transactions or reports."
             [tooltipDisabled]="canDeleteItem(item)"
             (click)="canDeleteItem(item) && deleteItem(item)"
           ></em>

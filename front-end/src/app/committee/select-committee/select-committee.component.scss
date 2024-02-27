@@ -36,21 +36,25 @@
     background-color: #f1f1f1;
     flex-direction: column;
     padding: 15px;
+    border-radius: 5px;
 }
 .select-committee-columns{
     display: flex;
     flex-direction: row;
 }
 .create-committee-card {
+    border-radius: 5px;
     background-color: #f1f1f1;
     margin-top: 20px;
     font-size: large;
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     .blue-box{
         padding: 15px;
         background-color: #132947;
+        border-radius: 5px 0px 0px 5px;
     }
     .plus {
         background-color: #ffffff;

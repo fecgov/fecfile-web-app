@@ -3,11 +3,9 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
-import { CommitteeAccountService, CommitteeMemberService } from './committee-account.service';
+import { CommitteeAccountService } from './committee-account.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { of } from 'rxjs';
-import { CommitteeMember } from '../models/committee-member.model';
 
 describe('CommitteeAccountService', () => {
   let service: CommitteeAccountService;
@@ -74,64 +72,16 @@ describe('CommitteeAccountService', () => {
     request.flush({ id: committeeId });
     httpTestingController.verify();
   }));
-});
 
-describe('CommitteeMemberService', () => {
-  let service: CommitteeMemberService;
-  let httpTestingController: HttpTestingController;
-  let committeeAccountService: CommitteeAccountService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CommitteeMemberService, provideMockStore(testMockStore), CommitteeAccountService],
+  it('should calle api to register committee', waitForAsync(() => {
+    const committeeId = '123';
+    service.registerCommitteeAccount(committeeId).then((committee) => {
+      expect(committee.committee_id).toBe(committeeId);
     });
-    httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(CommitteeMemberService);
-
-    committeeAccountService = TestBed.inject(CommitteeAccountService);
-    spyOn(committeeAccountService, 'getCommittees').and.callFake(() => of([{ id: '123' }] as CommitteeAccount[]));
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  it('#getTableData() should return a list of members', () => {
-    const mockResponse: ListRestResponse = {
-      count: 2,
-      next: 'https://next-page',
-      previous: 'https://previous-page',
-      pageNumber: 1,
-      results: [
-        CommitteeMember.fromJSON({
-          first_name: 'John',
-          last_name: 'Smith',
-          email: 'john_smith@test.com',
-          role: 'COMMITTEE_ADMINISTRATOR',
-          is_active: true,
-        }),
-        CommitteeMember.fromJSON({
-          first_name: 'Jane',
-          last_name: 'Smith',
-          email: 'jane_smith@test.com',
-          role: 'REVIEWER',
-          is_active: true,
-        }),
-      ],
-    };
-
-    service.getTableData().subscribe((response: ListRestResponse) => {
-      expect(response).toEqual(mockResponse);
-    });
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/123/members/?page=1`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(mockResponse);
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/register/`);
+    expect(request.request.method).toEqual('POST');
+    expect(request.request.body).toEqual({ committee_id: '123' });
+    request.flush({ id: 1, committee_id: committeeId });
     httpTestingController.verify();
-  });
-
-  it('should have stubbed out "Delete" methods', () => {
-    const member = new CommitteeMember();
-    expect(service.delete(member)).toBeTruthy();
-  });
+  }));
 });

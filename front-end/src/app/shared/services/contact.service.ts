@@ -82,6 +82,8 @@ export class ContactService implements TableListService<Contact> {
     maxFecResults: number,
     maxFecfileResults: number,
     office?: CandidateOfficeType,
+    excludeFecIds?: string[],
+    excludeIds?: string[],
   ): Observable<CandidateLookupResponse> {
     return this.apiService
       .get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
@@ -89,6 +91,8 @@ export class ContactService implements TableListService<Contact> {
         max_fec_results: maxFecResults,
         max_fecfile_results: maxFecfileResults,
         office: office ?? '',
+        exclude_fec_ids: excludeFecIds?.join(',') as string,
+        exclude_ids: excludeIds?.join(',') as string,
       })
       .pipe(map((response) => CandidateLookupResponse.fromJSON(response)));
   }
@@ -97,12 +101,16 @@ export class ContactService implements TableListService<Contact> {
     search: string,
     maxFecResults: number,
     maxFecfileResults: number,
+    excludeFecIds?: string[],
+    excludeIds?: string[],
   ): Observable<CommitteeLookupResponse> {
     return this.apiService
       .get<CommitteeLookupResponse>('/contacts/committee_lookup/', {
         q: search,
         max_fec_results: maxFecResults,
         max_fecfile_results: maxFecfileResults,
+        exclude_fec_ids: excludeFecIds?.join(',') as string,
+        exclude_ids: excludeIds?.join(',') as string,
       })
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
@@ -130,20 +138,30 @@ export class ContactService implements TableListService<Contact> {
     };
   };
 
-  public individualLookup(search: string, maxFecfileResults: number): Observable<IndividualLookupResponse> {
+  public individualLookup(
+    search: string,
+    maxFecfileResults: number,
+    excludeIds?: string[],
+  ): Observable<IndividualLookupResponse> {
     return this.apiService
       .get<IndividualLookupResponse>('/contacts/individual_lookup/', {
         q: search,
         max_fecfile_results: maxFecfileResults,
+        exclude_ids: excludeIds?.join(',') as string,
       })
       .pipe(map((response) => IndividualLookupResponse.fromJSON(response)));
   }
 
-  public organizationLookup(search: string, maxFecfileResults: number): Observable<OrganizationLookupResponse> {
+  public organizationLookup(
+    search: string,
+    maxFecfileResults: number,
+    excludeIds?: string[],
+  ): Observable<OrganizationLookupResponse> {
     return this.apiService
       .get<OrganizationLookupResponse>('/contacts/organization_lookup/', {
         q: search,
         max_fecfile_results: maxFecfileResults,
+        exclude_ids: excludeIds?.join(',') as string,
       })
       .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
   }

@@ -1,0 +1,67 @@
+<dialog #dialog>
+  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h1 class="dialog-title" id="dialog-title">Add new user</h1>
+        <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
+      </div>
+      <div class="dialog-body">
+        <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+          <div class="grid">
+            <div class="col-12">
+              <div class="field">
+                <label for="email">ENTER EMAIL</label>
+                <input type="text" pInputText id="email" formControlName="email" />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="email"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="field">
+                <label id="role-label" for="role">ROLE</label>
+                <p-dropdown
+                  inputId="role"
+                  formControlName="role"
+                  [options]="roleOptions"
+                  [autoDisplayFirst]="true"
+                  appendTo="dialog"
+                  autoWidth="false"
+                  [style]="{ minWidth: '100%' }"
+                ></p-dropdown>
+                <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="dialog-footer">
+        <p-divider></p-divider>
+        <div class="grid">
+          <div class="col-1">
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Cancel"
+              class="p-button-secondary"
+              (click)="dialog.close()"
+            ></button>
+          </div>
+          <div class="col-11">
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Add"
+              class="p-button-primary float-right"
+              (click)="addUser()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</dialog>

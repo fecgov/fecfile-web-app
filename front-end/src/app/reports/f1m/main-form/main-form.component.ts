@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, AbstractControl, Validators, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { takeUntil, of, from, Observable, concatAll, reduce } from 'rxjs';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
@@ -15,9 +15,7 @@ import { Contact } from 'app/shared/models/contact.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { F1MCandidateTag, F1MContact, AffiliatedContact, CandidateContact } from './contact';
-
-const candidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
+import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
 
 @Component({
   selector: 'app-main-form',
@@ -108,6 +106,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   statusByControl: AbstractControl | null = null;
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
   candidateContacts: CandidateContact[] = [];
+  excludeFecIds: string[] = [];
+  excludeIds: string[] = [];
 
   report = new Form1M();
 
@@ -121,6 +121,11 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     protected confirmationService: ConfirmationService,
   ) {
     super(store, fb, reportService, messageService, router, activatedRoute);
+  }
+
+  get confirmation$(): Observable<boolean> {
+    if (!this.report) return of(false);
+    return this.confirmWithUser(this.report, this.form);
   }
 
   override ngOnInit(): void {
@@ -141,6 +146,22 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
           } else {
             this.form.get('statusBy')?.setValue('qualification');
           }
+
+          // If this is an edit, update the lookup ids to exclude
+          if (this.report.id) {
+            if (this.report.affiliated_committee_name) {
+              if (this.report?.contact_affiliated?.committee_id)
+                this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
+              if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
+            } else {
+              f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+                if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
+                  this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
+                if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
+                  this.excludeIds.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
+              });
+            }
+          }
         }
       });
 
@@ -148,12 +169,12 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
     this.affiliatedContact = new AffiliatedContact(this);
-    this.candidateContacts = candidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
+    this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
 
     // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
-    candidateTags.forEach((tag: F1MCandidateTag) => {
+    f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
       this.form.get(`${tag}_candidate_id_number`)?.valueChanges.subscribe(() => {
-        candidateTags
+        f1mCandidateTags
           .filter((t) => t !== tag)
           .forEach((t) => {
             const control = this.form.get(`${t}_candidate_id_number`);
@@ -165,7 +186,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     });
 
     this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
-      ValidateUtils.addJsonSchemaValidators(this.form, this.schema, true);
+      SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
       if (value === 'affiliation') {
         this.enableValidation([this.affiliatedContact]);
         this.disableValidation(this.candidateContacts);
@@ -198,7 +219,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   }
 
   getReportPayload(): Report {
-    const formValues = Form1M.fromJSON(ValidateUtils.getFormValues(this.form, this.schema, this.formProperties));
+    const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
     this.updateContactsWithForm(this.report, this.form);
     return Object.assign(this.report, formValues);
   }
@@ -216,11 +237,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       if (confirmed) super.save(jump);
       else this.store.dispatch(singleClickEnableAction());
     });
-  }
-
-  get confirmation$(): Observable<boolean> {
-    if (!this.report) return of(false);
-    return this.confirmWithUser(this.report, this.form);
   }
 
   confirmWithUser(report: Form1M, form: FormGroup) {
@@ -286,7 +302,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
    * @returns string[] - list of contact ids currently selected by user for Qualifications
    */
   getSelectedContactIds(excludeContactTag: F1MCandidateTag | undefined = undefined) {
-    return candidateTags
+    return f1mCandidateTags
       .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
       .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
       .filter((id) => !!id);
