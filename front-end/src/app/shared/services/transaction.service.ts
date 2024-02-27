@@ -3,7 +3,7 @@ import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { TableListService } from '../interfaces/table-list-service.interface';
+import { clearEmptyKeys, TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
@@ -208,20 +208,13 @@ export class TransactionService implements TableListService<Transaction> {
 
     delete payload['transactionType'];
     delete payload['report'];
-    delete payload['contact_1'];
 
-    this.clearEmptyKeys(payload);
+    clearEmptyKeys(payload);
 
     if (payload['children']) {
       payload['children'] = transaction.children.map((transaction) => this.preparePayload(transaction));
     }
 
     return payload;
-  }
-
-  private clearEmptyKeys(obj: Record<string, any>) {
-    for (const key of Object.keys(obj)) {
-      if (!obj[key] || (typeof obj[key] === 'object' && Object.keys(obj[key]).length === 0)) delete obj[key];
-    }
   }
 }

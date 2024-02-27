@@ -3,7 +3,7 @@ import { map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
-import { TableListService } from '../interfaces/table-list-service.interface';
+import { clearEmptyKeys, TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { Form3X } from '../models/form-3x.model';
@@ -49,14 +49,14 @@ export class ReportService implements TableListService<Report> {
   }
 
   public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
-    const payload = report.toJson();
+    const payload = this.preparePayload(report);
     return this.apiService
       .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
-    const payload = report.toJson();
+    const payload = this.preparePayload(report);
     return this.apiService
       .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => getReportFromJSON(response)));
@@ -94,5 +94,12 @@ export class ReportService implements TableListService<Report> {
 
   public startAmendment(report: Report): Observable<string> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
+  }
+
+  preparePayload(item: Report): Record<string, unknown> {
+    const payload = item.toJson();
+    delete payload['schema'];
+    clearEmptyKeys(payload);
+    return payload;
   }
 }
