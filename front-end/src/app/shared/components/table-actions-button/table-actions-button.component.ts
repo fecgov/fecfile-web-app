@@ -12,6 +12,7 @@ export class TableActionsButtonComponent {
   @Input() buttonLabel = '';
   @Input() buttonStyleClass = '';
   @Input() buttonAriaLabel = '';
+  @Input() rounded = true;
   @Output() tableActionClick = new EventEmitter<{ action: TableAction; actionItem: any }>(); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   get filteredActions(): TableAction[] {

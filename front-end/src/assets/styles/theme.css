@@ -6446,3 +6446,16 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 /* Customizations to the designer theme should be defined here */
+.rounded-text {
+  background: transparent;
+  color: black;
+  border: none;
+  border-radius: 50%;
+}
+
+.rounded-text:hover {
+  background-color: #164f85;
+  border-color: #164f85;
+  color: white;
+  border-width: 2px;
+}

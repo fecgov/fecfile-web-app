@@ -21,6 +21,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ContactsRoutingModule } from './contacts-routing.module';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { DeletedContactDialogComponent } from './deleted-contact-dialog/deleted-contact-dialog.component';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   declarations: [ContactListComponent, DeletedContactDialogComponent],
@@ -41,6 +42,7 @@ import { DeletedContactDialogComponent } from './deleted-contact-dialog/deleted-
     InputTextModule,
     SharedModule,
     TooltipModule,
+    RippleModule,
   ],
 })
 export class ContactsModule {}
