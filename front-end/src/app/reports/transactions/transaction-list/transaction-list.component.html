@@ -27,7 +27,7 @@
     </ng-template>
   </p-toolbar>
   <app-transaction-receipts *ngIf="report?.report_type !== reportTypes.F24"></app-transaction-receipts>
-  <app-transaction-disbursements></app-transaction-disbursements>
+  <app-transaction-disbursements [report]="report"></app-transaction-disbursements>
   <app-transaction-loans-and-debts *ngIf="report?.report_type !== reportTypes.F24"></app-transaction-loans-and-debts>
 </div>
 
