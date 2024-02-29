@@ -55,6 +55,7 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
 import { SingleClickDirective } from './directives/single-click.directive';
 import { RippleModule } from 'primeng/ripple';
 import { CardModule } from 'primeng/card';
+import { LinkedReportInputComponent } from './components/inputs/linked-report-input/linked-report-input.component';
 
 @NgModule({
   imports: [
@@ -103,6 +104,7 @@ import { CardModule } from 'primeng/card';
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
+    LinkedReportInputComponent,
     MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,
@@ -143,6 +145,7 @@ import { CardModule } from 'primeng/card';
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
+    LinkedReportInputComponent,
     MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,

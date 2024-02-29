@@ -42,6 +42,15 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
+  public getAllReports(): Observable<ListRestResponse> {
+    return this.apiService.get<ListRestResponse>(this.apiEndpoint + '/').pipe(
+      map((response: ListRestResponse) => {
+        response.results = response.results.map((item) => getReportFromJSON(item));
+        return response;
+      }),
+    );
+  }
+
   public get(reportId: string): Observable<Report> {
     return this.apiService
       .get<Report>(`${this.apiEndpoint}/${reportId}`)

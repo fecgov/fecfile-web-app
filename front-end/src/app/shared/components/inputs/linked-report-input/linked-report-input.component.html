@@ -1,0 +1,7 @@
+<ng-container *ngIf="this.activeReport?.report_type === form24ReportType">
+  <div class="field">
+    <label for="linkedReport">Linked report</label>
+    <input pInputText inputId="linkedReport" name="linkedReport" [disabled]="true" [(ngModel)]="this.linkedReport" />
+    <app-error-messages></app-error-messages>
+  </div>
+</ng-container>

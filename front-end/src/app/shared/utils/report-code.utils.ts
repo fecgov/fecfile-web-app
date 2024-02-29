@@ -38,7 +38,7 @@ export class F3xReportCode {
     label: string,
     coverageDatesFunction:
       | ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date])
-      | undefined
+      | undefined,
   ) {
     this.code = code;
     this.label = label;
@@ -50,7 +50,7 @@ function createCoverageFunction(
   startMonth: number,
   startDayOfMonth: number,
   endMonth: number,
-  endDayOfMonth: number
+  endDayOfMonth: number,
 ): (year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date] {
   return (year: number) => {
     return [new Date(year, startMonth, startDayOfMonth), new Date(year, endMonth, endDayOfMonth)];
@@ -81,7 +81,7 @@ export const F3X_REPORT_CODE_MAP = new Map<F3xReportCodes, F3xReportCode>([
   ],
   [
     F3xReportCodes.Q3,
-    new F3xReportCode(F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT(Q3)', createCoverageFunction(6, 1, 8, 30)),
+    new F3xReportCode(F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT (Q3)', createCoverageFunction(6, 1, 8, 30)),
   ],
   [F3xReportCodes.YE, new F3xReportCode(F3xReportCodes.YE, 'JANUARY 31 YEAR-END (YE)', getYearEndCoverageDates)],
   [F3xReportCodes.TER, new F3xReportCode(F3xReportCodes.TER, 'TERMINATION REPORT (TER)', undefined)],
