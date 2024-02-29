@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
