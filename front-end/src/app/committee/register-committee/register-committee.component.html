@@ -65,6 +65,18 @@
         </div>
       </div>
     </div>
+    <div class="right-side-box" *ngIf="unableToCreateAccount">
+      <h2>Committee account</h2>
+      <div class="committee-card unable-card">
+        <div class="unable-excl-img">
+          <img alt="Exclamation mark" src="assets/img/magnifying_lens.svg" />
+        </div>
+        <div class="unable-verbiage">
+          <p class="unable-verbiage-p1">Unable to create account</p>
+          <p class="unable-verbiage-p2">CONTACT FECFILE TECHNICAL SUPPORT FOR HELP</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <p-toast></p-toast>

@@ -14,7 +14,7 @@ export class CommitteeAccountService {
     private fecApiService: FecApiService,
     private store: Store,
     private apiService: ApiService,
-  ) {}
+  ) { }
 
   public getCommittees(): Observable<CommitteeAccount[]> {
     return this.apiService
@@ -32,7 +32,8 @@ export class CommitteeAccountService {
 
   public registerCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
     return firstValueFrom(
-      this.apiService.post<CommitteeAccount>('/committees/register/', { committee_id: committeeId }),
+      this.apiService.post<CommitteeAccount>('/committees/register/',
+        { committee_id: committeeId }, {}, [200, 400]),
     );
   }
 }
