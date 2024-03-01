@@ -8,33 +8,51 @@
     [class]="navigationControl?.ngClass || ''"
     (click)="click()"
     [disabled]="isDisabled()"
+    data-test="navigation-control-button"
     appSingleClick
   ></button>
-  <p-dropdown
-    *ngIf="controlType === 'dropdown'"
-    data-test="navigation-control-dropdown"
-    [formControl]="dropdownControl"
-    [options]="dropdownOptions"
-    pRipple
-    [placeholder]="navigationControl?.label || ''"
-    [dropdownIcon]="navigationControl?.icon || ''"
-    styleClass="navigation-dropdown"
-    panelStyleClass="navigation-dropdown-panel"
-    (onChange)="onDropdownChange($event)"
-    [disabled]="isDisabled()"
-    appSingleClick
-    [group]="isGroupedDropdown"
-  >
-    <ng-template let-group pTemplate="group">
-      <div class="bold navigation-dropdown-group">
-        <span class="group-label">{{ group.label }}</span>
-        <p-divider></p-divider>
+  <div *ngIf="controlType === 'dropdown'" class="dropdown" data-test="navigation-control-dropdown">
+    <button
+      [disabled]="isDisabled()"
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="btn dd-button"
+      data-bs-toggle="dropdown"
+      id="dropdownMenuLink"
+      role="button"
+    >
+      <i [ngClass]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
+    </button>
+    <div aria-labelledby="dropdownMenuLink" class="dropdown-menu">
+      <div *ngFor="let option of dropdownOptions">
+        <div *ngIf="option.items; else noHeader">
+          <span class="dropdown-header">{{ option.label }}</span>
+          <hr />
+          <button
+            (click)="onDropdownChange(childOption)"
+            (keyup.enter)="onDropdownChange(childOption)"
+            (keyup.space)="onDropdownChange(childOption)"
+            *ngFor="let childOption of option.items"
+            [disabled]="!childOption.value"
+            class="dropdown-item"
+            data-test="navigation-control-dropdown-option"
+          >
+            {{ childOption.label }}
+          </button>
+        </div>
+        <ng-template #noHeader>
+          <button
+            (click)="onDropdownChange(option)"
+            (keyup.enter)="onDropdownChange(option)"
+            (keyup.space)="onDropdownChange(option)"
+            [disabled]="!option.value"
+            class="dropdown-item"
+            data-test="navigation-control-dropdown-option"
+          >
+            {{ option.label }}
+          </button>
+        </ng-template>
       </div>
-    </ng-template>
-    <ng-template let-transactiontype pTemplate="item">
-      <div class="flex align-items-center gap-2" [ngClass]="{ 'p-disabled': !transactiontype.value }">
-        <div>{{ transactiontype.label }}</div>
-      </div>
-    </ng-template>
-  </p-dropdown>
+    </div>
+  </div>
 </div>
