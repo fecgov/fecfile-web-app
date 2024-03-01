@@ -205,7 +205,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.reset();
     this.isNewItem = true;
     this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }

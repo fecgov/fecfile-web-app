@@ -26,7 +26,7 @@
       placeholder="Search for a contact"
       [forceSelection]="true"
       (completeMethod)="onDropdownSearch($event)"
-      (onSelect)="onContactLookupSelect($event)"
+      (onSelect)="onContactLookupSelect($event.value)"
     >
       <ng-template let-group pTemplate="group">
         <div>{{ group.label }}</div>
@@ -35,7 +35,7 @@
         </div>
       </ng-template>
       <ng-template let-contact pTemplate="item">
-        <span [innerHTML]="contact.label | highlightTerms : searchTerm" class="contact-label"> </span>
+        <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
         <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
       </ng-template>
     </p-autoComplete>
