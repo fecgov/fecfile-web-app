@@ -2,7 +2,7 @@
 
 <div class="card">
   <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left"> <h1 class="m-0">Manage Contacts</h1></ng-template>
+    <ng-template pTemplate="left"><h1 class="m-0">Manage Contacts</h1></ng-template>
 
     <ng-template pTemplate="right">
       <button
@@ -57,17 +57,23 @@
     <ng-template pTemplate="header">
       <tr role="row">
         <th pSortableColumn="sort_name" id="name-column" role="columnheader">
-          Name <p-sortIcon field="sort_name"></p-sortIcon>
+          Name
+          <p-sortIcon field="sort_name"></p-sortIcon>
         </th>
-        <th pSortableColumn="type" id="type-column" role="columnheader">Type <p-sortIcon field="type"></p-sortIcon></th>
+        <th pSortableColumn="type" id="type-column" role="columnheader">Type
+          <p-sortIcon field="type"></p-sortIcon>
+        </th>
         <th pSortableColumn="sort_fec_id" id="fec-id-column" role="columnheader">
-          FEC ID <p-sortIcon field="sort_fec_id"></p-sortIcon>
+          FEC ID
+          <p-sortIcon field="sort_fec_id"></p-sortIcon>
         </th>
         <th pSortableColumn="employer" id="employer-column" role="columnheader">
-          Employer <p-sortIcon field="employer"></p-sortIcon>
+          Employer
+          <p-sortIcon field="employer"></p-sortIcon>
         </th>
         <th pSortableColumn="occupation" id="occupation-column" role="columnheader">
-          Occupation <p-sortIcon field="occupation"></p-sortIcon>
+          Occupation
+          <p-sortIcon field="occupation"></p-sortIcon>
         </th>
         <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
       </tr>
@@ -98,6 +104,7 @@
 <app-contact-dialog
   [contact]="this.item"
   [(detailVisible)]="detailVisible"
+  [showHistory]="true"
   (savedContact)="saveContact($event)"
 ></app-contact-dialog>
 

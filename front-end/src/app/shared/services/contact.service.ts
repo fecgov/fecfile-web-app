@@ -4,7 +4,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { Observable, of } from 'rxjs';
+import { lastValueFrom, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
@@ -19,6 +19,7 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
+import { Transaction } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -147,6 +148,10 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
   }
 
+  public getTransactionForContact(contact: Contact): Promise<Transaction[]> {
+    return lastValueFrom(this.apiService.get<Transaction[]>(`/contacts/${contact.id}/transactions/`));
+  }
+
   /**
    * Given the type of contact given, return the appropriate JSON schema doc
    * @param {ContactTypes} type
@@ -189,6 +194,7 @@ export class DeletedContactService implements TableListService<Contact> {
     const contactIds = contacts.map((contact) => contact.id);
     return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public delete(_: Contact): Observable<null> {
     return of(null);

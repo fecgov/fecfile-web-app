@@ -287,6 +287,43 @@
           </app-candidate-office-input>
         </ng-container>
       </form>
+
+      <div *ngIf="showHistory">
+        <p-table [value]="transactions"
+                 responsiveLayout="scroll"
+                 dataKey="id"
+                 [paginator]="true"
+                 [rows]="10"
+                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+                 [showCurrentPageReport]="true">
+          <ng-template pTemplate="caption">
+            <h2 class="m-0">Transaction history</h2>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th scope="col">Transaction type</th>
+              <th scope="col">Form type</th>
+              <th scope="col">Report type</th>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-transaction>
+            <tr>
+              <td>
+                <a (click)="openTransaction(transaction)">
+                  {{ transaction.transaction_type_identifier | label : scheduleTransactionTypeLabels }}
+                </a>
+              </td>
+              <td>{{ transaction.form_type }}</td>
+              <td>{{ transaction.report?.report_type }}</td>
+              <td>{{ getTransactionDate(transaction) }}</td>
+              <td>{{ getTransactionAmount(transaction) | currency }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
     </ng-template>
     <ng-template pTemplate="footer">
       <div class="grid">
