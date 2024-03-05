@@ -56,6 +56,7 @@ import { SingleClickDirective } from './directives/single-click.directive';
 import { RippleModule } from 'primeng/ripple';
 import { CardModule } from 'primeng/card';
 import { LinkedReportInputComponent } from './components/inputs/linked-report-input/linked-report-input.component';
+import { IndependentExpenditureCreateF3xInputComponent } from './components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 
 @NgModule({
   imports: [
@@ -105,6 +106,7 @@ import { LinkedReportInputComponent } from './components/inputs/linked-report-in
     CommitteeInputComponent,
     AmountInputComponent,
     LinkedReportInputComponent,
+    IndependentExpenditureCreateF3xInputComponent,
     MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,
@@ -146,6 +148,7 @@ import { LinkedReportInputComponent } from './components/inputs/linked-report-in
     CommitteeInputComponent,
     AmountInputComponent,
     LinkedReportInputComponent,
+    IndependentExpenditureCreateF3xInputComponent,
     MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,

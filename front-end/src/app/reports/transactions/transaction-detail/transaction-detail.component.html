@@ -6,6 +6,7 @@
     {{ transactionType?.title }}
   </h1>
   <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
+  <app-independent-expenditure-create-f3x-input></app-independent-expenditure-create-f3x-input>
   <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
   <h4 class="read-only-tag subtitle" *ngIf="isDebtRepayment(transaction)">DEBT REPAYMENT</h4>
   <h2>{{ transactionType?.contactTitle || 'Contact' }}</h2>
