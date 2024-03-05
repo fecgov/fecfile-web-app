@@ -31,10 +31,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private store: Store,
-  ) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
   }
 
