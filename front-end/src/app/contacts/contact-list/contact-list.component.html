@@ -96,6 +96,7 @@
 </div>
 
 <app-contact-dialog
+  [contactTypeOptions]="dialogContactTypeOptions"
   [contact]="this.item"
   [(detailVisible)]="detailVisible"
   (savedContact)="saveContact($event)"

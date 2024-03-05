@@ -25,7 +25,7 @@
         [suggestions]="suggestions ?? []"
         [forceSelection]="true"
         (completeMethod)="search($event)"
-        (onSelect)="select($event)"
+        (onSelect)="select($event.value)"
       >
         <ng-template pTemplate="header">
           <div class="search-header">Select a committee</div>
