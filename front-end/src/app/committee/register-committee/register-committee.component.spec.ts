@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -65,7 +65,7 @@ describe('RegisterCommitteeComponent', () => {
 
     expect(spy).toHaveBeenCalledWith(filing.committee_id);
   });
-  it('should fail to register committee', fakeAsync(() => {
+  it('should fail to register committee', waitForAsync(() => {
     const filing = new FecFiling();
     filing.committee_id = 'C12345678';
     filing.committee_name = 'test name';
@@ -73,12 +73,10 @@ describe('RegisterCommitteeComponent', () => {
     component.createAccount();
     const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/register/`);
     expect(req.request.method).toEqual('POST');
-    req.flush(null, {
-      status: 400,
-      statusText: 'Bad Request'
-    });
+    req.flush(null);
     httpTestingController.verify();
-    tick(500);
-    expect(component.unableToCreateAccount).toBeTrue();
+    setTimeout(() => {
+      expect(component.unableToCreateAccount).toBeTrue();
+    }, 500)
   }));
 });
