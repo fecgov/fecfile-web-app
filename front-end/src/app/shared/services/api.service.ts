@@ -58,35 +58,23 @@ export class ApiService {
     });
   }
 
-  // prettier-ignore
-  public post<T>(
-    endpoint: string,
-    payload: any,
-    queryParams?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-  ): Observable<T>;
-  public post<T>(
-    endpoint: string,
-    payload: any,
-    queryParams: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-    allowedErrorCodes?: number[]
-  ): Observable<T> | Observable<HttpResponse<T>> {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
+  public post<T>(endpoint: string, payload: any, queryParams?: any): Observable<T>;
+  public post<T>(endpoint: string, payload: any, queryParams?: any, allowedErrorCodes?: number[]): Observable<HttpResponse<T>>;
+  public post<T>(endpoint: string, payload: any, queryParams: any = {}, allowedErrorCodes?: number[]): Observable<T> | Observable<HttpResponse<T>> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
-      return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { 
-        headers: headers, 
-        params: params, 
+      return this.http.post<T>(
+        `${environment.apiUrl}${endpoint}`, payload, {
+        headers: headers,
+        params: params,
         withCredentials: true,
         observe: 'response',
-        responseType: 'json',
         context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
       });
     }
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { 
-      headers: headers, 
-      params: params, 
-      withCredentials: true 
-    });
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
   // prettier-ignore
