@@ -4,11 +4,12 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { firstValueFrom, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
-import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { FormControl } from '@angular/forms';
+import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
 
 @Component({
   selector: 'app-linked-report-input',
@@ -16,64 +17,68 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
   activeReport?: Report;
-  committeeF3xReports: Promise<ListRestResponse>;
+  committeeF3xReports: Promise<Report[]>;
   form24ReportType = ReportTypes.F24;
-  linkedReport?: Report;
+  linkedF3x?: Form3X;
+  linkedF3xLabel?: string;
 
   constructor(
     private store: Store,
     private reportService: ReportService,
+    private datePipe: FecDatePipe,
   ) {
     super();
-    this.committeeF3xReports = firstValueFrom(this.reportService.getAllReports());
+    this.committeeF3xReports = this.reportService.getAllReports();
   }
 
   ngOnInit(): void {
+    this.form.addControl('linkedF3x', new FormControl());
+    const dateControl = this.form.get(this.templateMap['date']);
+    const date2Control = this.form.get(this.templateMap['date2']);
+    if (dateControl && date2Control) {
+      this.form.get('linkedF3x')?.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
+    }
+
     firstValueFrom(this.store.select(selectActiveReport)).then((report) => {
       this.activeReport = report;
     });
 
     this.committeeF3xReports.then(() => {
-      this.setLinkedReport();
+      this.setLinkedForm3X();
     });
 
     this.form
       .get(this.templateMap['date'])
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.setLinkedReport();
+        this.setLinkedForm3X();
       });
     this.form
       .get(this.templateMap['date2'])
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.setLinkedReport();
+        this.setLinkedForm3X();
       });
   }
 
-  setLinkedReport(): void {
-    this.getLinkedReport().then((report) => {
-      this.linkedReport = report;
-      if (this.linkedReport) {
-        this.linkedReport.toString = this.getForm3XLabel;
-      }
+  setLinkedForm3X(): void {
+    this.getLinkedForm3X().then((report) => {
+      this.linkedF3x = report;
+      this.form.get('linkedF3x')?.setValue(this.getForm3XLabel(this.linkedF3x));
+      this.form.get('linkedF3x')?.markAsTouched();
     });
   }
 
-  async getLinkedReport(): Promise<Form3X | undefined> {
+  async getLinkedForm3X(): Promise<Form3X | undefined> {
     const disseminationDate = this.form.get(this.templateMap['date2'])?.value as Date | undefined;
     const disbursementDate = this.form.get(this.templateMap['date'])?.value as Date | undefined;
 
     const date = disbursementDate ?? disseminationDate;
     if (date) {
-      const reports = await this.committeeF3xReports.then((response) => {
-        return response.results
-          .map((item) => {
-            return getReportFromJSON(item);
-          })
-          .filter((report) => {
-            return report.report_type === ReportTypes.F3X;
-          }) as Form3X[];
+      const reports = await this.committeeF3xReports.then((reports) => {
+        return reports.filter((report) => {
+          return report.report_type === ReportTypes.F3X;
+        }) as Form3X[];
       });
 
       for (const report of reports) {
@@ -88,9 +93,8 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     return undefined;
   }
 
-  getForm3XLabel(): string {
-    const report = this as unknown as Form3X;
-    const datePipe = new FecDatePipe();
+  getForm3XLabel(report: Form3X | undefined): string {
+    if (!report) return '';
 
     let label = getReportCodeLabel(report.report_code);
     const stringsToRemove = [' MID-YEAR-REPORT', ' YEAR-END', ' QUARTERLY REPORT', ' MONTHLY REPORT'];
@@ -98,6 +102,8 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       label = label?.replaceAll(string, '');
     }
 
-    return `${label}: ${datePipe.transform(report.coverage_from_date)} - ${datePipe.transform(report.coverage_through_date)}`;
+    return `${label}: ${this.datePipe.transform(report.coverage_from_date)} - ${this.datePipe.transform(
+      report.coverage_through_date,
+    )}`;
   }
 }

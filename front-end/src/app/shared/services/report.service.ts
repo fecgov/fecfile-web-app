@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { firstValueFrom, map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
@@ -42,13 +42,10 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
-  public getAllReports(): Observable<ListRestResponse> {
-    return this.apiService.get<ListRestResponse>(this.apiEndpoint + '/').pipe(
-      map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => getReportFromJSON(item));
-        return response;
-      }),
-    );
+  public getAllReports(): Promise<Report[]> {
+    return firstValueFrom(this.apiService.get<Report[]>(this.apiEndpoint + '/')).then((rawReports) => {
+      return rawReports.map((item) => getReportFromJSON(item));
+    });
   }
 
   public get(reportId: string): Observable<Report> {

@@ -124,6 +124,25 @@ function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors 
   return { invaliddate: { msg: message } };
 }
 
+export function buildCorrespondingForm3XValidator(
+  dateControl: AbstractControl,
+  date2Control: AbstractControl,
+): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!dateControl.value && !date2Control.value) {
+      return {
+        noDateProvided: true,
+      };
+    } else if (!control.value) {
+      return {
+        noCorrespondingForm3X: true,
+      };
+    }
+
+    return null;
+  };
+}
+
 export function buildWithinReportDatesValidator(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const date = control.value;
