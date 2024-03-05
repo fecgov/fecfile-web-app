@@ -58,10 +58,10 @@ export class ApiService {
     });
   }
 
-  // eslint-disable-line @typescript-eslint/no-explicit-any
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   public post<T>(endpoint: string, payload: any, queryParams?: any): Observable<T>;
   public post<T>(endpoint: string, payload: any, queryParams?: any, allowedErrorCodes?: number[]): Observable<HttpResponse<T>>;
-  public post<T>(endpoint: string, payload: any, queryParams: any = {}, allowedErrorCodes?: number[]): Observable<T> | Observable<HttpResponse<T>> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public post<T>(endpoint: string, payload: any, queryParams: any = {}, allowedErrorCodes?: number[]): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
@@ -76,6 +76,7 @@ export class ApiService {
     }
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   // prettier-ignore
   public postAbsoluteUrl<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
