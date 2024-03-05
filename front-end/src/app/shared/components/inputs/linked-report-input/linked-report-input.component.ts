@@ -23,10 +23,10 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   linkedF3xLabel?: string;
 
   tooltipText =
-    'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. \
-   To determine coverage dates, calculations rely on an IE’s date of disbursement. If date of disbursement is not\
-   available, date of dissemination will be used. Before saving this transaction, create a Form 3X with \
-   corresponding coverage dates.';
+    'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
+    'To determine coverage dates, calculations rely on an IE’s date of disbursement. If date of disbursement is not ' +
+    'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
+    'corresponding coverage dates.';
 
   constructor(
     private store: Store,
