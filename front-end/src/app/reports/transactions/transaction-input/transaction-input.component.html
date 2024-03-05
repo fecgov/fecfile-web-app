@@ -1,6 +1,8 @@
 <div
   class="grid"
-  *ngIf="isEditable && !transactionType?.getUseParentContact(transaction) && !transactionType?.hideContactLookup"
+  *ngIf="
+    isEditable && !transactionType?.getUseParentContact(transaction) && !transactionType?.hideContactLookup
+  "
 >
   <div class="col-12">
     <div class="field">
@@ -186,12 +188,14 @@
     <ng-container *ngIf="transaction?.transactionType?.hasSupportOpposeCode()">
       <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted"></app-support-oppose-input>
     </ng-container>
-    <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation(form)">
-      <ng-container *ngIf="!transactionType?.hideContactLookup">
+    <ng-container
+      *ngIf="transaction?.transactionType?.hasCandidateInformation(form) ">
+      <ng-container *ngIf=" !transactionType?.hideContactLookup">
         <label for="contact_2"
-          >LOOKUP
-          <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container>
-        </label>
+        >LOOKUP
+          <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form) ">(OPTIONAL)</ng-container>
+        </label
+        >
         <app-transaction-contact-lookup
           contactProperty="contact_2"
           [transaction]="transaction"
