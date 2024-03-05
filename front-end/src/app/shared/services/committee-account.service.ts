@@ -1,19 +1,15 @@
 import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { FecApiService } from './fec-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommitteeAccountService {
   constructor(
-    private fecApiService: FecApiService,
-    private store: Store,
     private apiService: ApiService,
   ) { }
 
