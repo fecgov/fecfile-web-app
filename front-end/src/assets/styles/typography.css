@@ -104,6 +104,9 @@ label,
 select {
   display: block;
 }
+input[type=file] {
+  display:none!important;
+}
 label {
   margin: 0;
   font-family: karla-bold, sans-serif;
