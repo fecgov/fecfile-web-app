@@ -42,8 +42,8 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
 
     dateControl.valueChanges
       .pipe(
-        startWith(undefined),
-        combineLatestWith(date2Control.valueChanges.pipe(startWith(undefined))),
+        startWith(dateControl.value),
+        combineLatestWith(date2Control.valueChanges.pipe(startWith(date2Control.value))),
         takeUntil(this.destroy$),
       )
       .subscribe(this.setLinkedForm3X.bind(this));
