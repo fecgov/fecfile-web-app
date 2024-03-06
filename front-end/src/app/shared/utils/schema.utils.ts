@@ -71,7 +71,7 @@ export class SchemaUtils {
   /**
    * Convert the form input value to the appropriate type.
    * @param {string} property
-   * @param {FromGroup} form
+   * @param {FormGroup} form
    * @param {JsonSchema} jsonSchema - the schema to use in the form element custom validator.
    * @returns
    */

@@ -7,7 +7,7 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
-import { clearEmptyKeys, TableListService } from '../interfaces/table-list-service.interface';
+import { TableListService } from '../interfaces/table-list-service.interface';
 import {
   CandidateLookupResponse,
   CandidateOfficeType,
@@ -66,10 +66,9 @@ export class ContactService implements TableListService<Contact> {
     return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));
   }
 
-  public update(contact: Contact): Observable<Contact> {
-    const payload = this.preparePayload(contact);
+  public update(updated: Contact): Observable<Contact> {
     return this.apiService
-      .put<Contact>(`/contacts/${contact.id}/`, payload)
+      .put<Contact>(`/contacts/${updated.id}/`, updated)
       .pipe(map((response) => Contact.fromJSON(response)));
   }
 
@@ -115,7 +114,7 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
 
-  public checkFecIdForUniqness(fecId: string, contactId?: string): Observable<boolean> {
+  public checkFecIdForUniqueness(fecId: string, contactId?: string): Observable<boolean> {
     if (fecId) {
       return this.apiService
         .get<string>(`/contacts/get_contact_id/`, { fec_id: fecId })
@@ -128,7 +127,7 @@ export class ContactService implements TableListService<Contact> {
     return (control: AbstractControl) => {
       return of(control.value).pipe(
         switchMap((fecId) =>
-          this.checkFecIdForUniqness(fecId, contactId).pipe(
+          this.checkFecIdForUniqueness(fecId, contactId).pipe(
             map((isUnique: boolean) => {
               return isUnique ? null : { fecIdMustBeUnique: true };
             }),
@@ -167,9 +166,7 @@ export class ContactService implements TableListService<Contact> {
   }
 
   private preparePayload(contact: Contact): Record<string, unknown> {
-    const payload = contact.toJson();
-    clearEmptyKeys(payload);
-    return payload;
+    return contact.toJson();
   }
 }
 

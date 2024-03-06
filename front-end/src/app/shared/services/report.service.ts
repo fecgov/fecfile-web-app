@@ -3,7 +3,7 @@ import { map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
-import { clearEmptyKeys, TableListService } from '../interfaces/table-list-service.interface';
+import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { Form3X } from '../models/form-3x.model';
@@ -99,7 +99,6 @@ export class ReportService implements TableListService<Report> {
   preparePayload(item: Report): Record<string, unknown> {
     const payload = item.toJson();
     delete payload['schema'];
-    clearEmptyKeys(payload);
     return payload;
   }
 }

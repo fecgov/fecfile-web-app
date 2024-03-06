@@ -12,10 +12,3 @@ export interface TableListService<T> {
 
   update?(item: T, fieldsToValidate?: string[]): Observable<T>;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function clearEmptyKeys(obj: Record<string, any>) {
-  for (const key of Object.keys(obj)) {
-    if (!obj[key] || (typeof obj[key] === 'object' && Object.keys(obj[key]).length === 0)) delete obj[key];
-  }
-}
