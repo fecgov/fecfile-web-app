@@ -4,7 +4,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { Observable, of } from 'rxjs';
+import { lastValueFrom, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
@@ -58,24 +58,25 @@ export class ContactService implements TableListService<Contact> {
     return this.apiService.delete<null>(`/contacts/${contact.id}`);
   }
 
-  public candidateLookup(
+  public async candidateLookup(
     search: string,
     maxFecResults: number,
     maxFecfileResults: number,
     office?: CandidateOfficeType,
     excludeFecIds?: string[],
     excludeIds?: string[],
-  ): Observable<CandidateLookupResponse> {
-    return this.apiService
-      .get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
+  ): Promise<CandidateLookupResponse> {
+    const response = await lastValueFrom(
+      this.apiService.get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
         q: search,
         max_fec_results: maxFecResults,
         max_fecfile_results: maxFecfileResults,
         office: office ?? '',
         exclude_fec_ids: excludeFecIds?.join(',') as string,
         exclude_ids: excludeIds?.join(',') as string,
-      })
-      .pipe(map((response) => CandidateLookupResponse.fromJSON(response)));
+      }),
+    );
+    return CandidateLookupResponse.fromJSON(response);
   }
 
   public committeeLookup(
@@ -189,6 +190,7 @@ export class DeletedContactService implements TableListService<Contact> {
     const contactIds = contacts.map((contact) => contact.id);
     return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public delete(_: Contact): Observable<null> {
     return of(null);

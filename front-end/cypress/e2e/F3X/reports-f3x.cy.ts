@@ -1,6 +1,5 @@
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
-import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 import { F3xReportLevelMemoPage } from '../pages/f3xReportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
@@ -8,21 +7,15 @@ import { defaultFormData } from '../models/ReportFormModel';
 
 describe('Manage reports', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ReportListPage.goToPage();
+    Initialize();
   });
 
   it('Create a Quarterly Election Year report', () => {
     cy.runLighthouse('reports', 'list');
 
-    ReportListPage.clickCreateButton();
-
+    ReportListPage.createF3X();
+    ReportListPage.goToPage();
     cy.runLighthouse('reports', 'create-report');
-
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
 
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'GENERAL (12G)');
@@ -30,7 +23,6 @@ describe('Manage reports', () => {
   });
 
   it('Create a Monthly Election Year report', () => {
-    ReportListPage.clickCreateButton();
     const formData = {
       ...defaultFormData,
       ...{
@@ -38,15 +30,13 @@ describe('Manage reports', () => {
         report_code: 'M10',
       },
     };
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-
+    ReportListPage.createF3X(formData);
+    ReportListPage.goToPage();
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'OCTOBER 20 (M10)');
   });
 
   it('Create a Quarterly Non-Election Year report', () => {
-    ReportListPage.clickCreateButton();
     const formData = {
       ...defaultFormData,
       ...{
@@ -54,15 +44,13 @@ describe('Manage reports', () => {
         report_code: '30R',
       },
     };
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-
+    ReportListPage.createF3X(formData);
+    ReportListPage.goToPage();
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'RUNOFF (30R)');
   });
 
   it('Create a Monthly Non-Election Year report', () => {
-    ReportListPage.clickCreateButton();
     const formData = {
       ...defaultFormData,
       ...{
@@ -71,9 +59,8 @@ describe('Manage reports', () => {
         report_code: 'YE',
       },
     };
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-
+    ReportListPage.createF3X(formData);
+    ReportListPage.goToPage();
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'JANUARY 31 (YE)');
     cy.get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
@@ -81,23 +68,19 @@ describe('Manage reports', () => {
 
   it('Create a report error for overlapping coverage dates', () => {
     // Create report #1
-    ReportListPage.clickCreateButton();
-    const formData1 = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData1);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
     F3xCashOnHandPage.enterFormData(cohFormData);
     PageUtils.clickButton('Save & continue');
     ReportListPage.goToPage();
 
     // Create report #2
-    ReportListPage.clickCreateButton();
-    const formData2 = {
+    const formData = {
       ...defaultFormData,
       ...{
         report_code: '30G',
       },
     };
-    F3xCreateReportPage.enterFormData(formData2);
+    ReportListPage.createF3X(formData);
 
     // Check for error messages caused by the overlapping dates
     const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
@@ -107,21 +90,15 @@ describe('Manage reports', () => {
 
   xit('Create report with previous existing report types disabled', () => {
     // Create report #1
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-
+    ReportListPage.createF3X();
+    ReportListPage.goToPage();
     // Start second report and check to see if report code disabled
     ReportListPage.clickCreateButton();
     cy.get('label[for="12G"]').should('have.class', 'p-disabled');
   });
 
   it('Create report and save cash on hand', () => {
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
 
     F3xCashOnHandPage.enterFormData(cohFormData);
     PageUtils.clickButton('Save & continue');
@@ -131,24 +108,15 @@ describe('Manage reports', () => {
   });
 
   xit('Check values on the Summary Page', () => {
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
   });
 
   xit('Check values on the Detail Summary Page', () => {
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
   });
 
   it('Create a report level memo', () => {
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
 
     // Enter the memo text
     PageUtils.clickSidebarSection('REVIEW A REPORT');
@@ -166,16 +134,10 @@ describe('Manage reports', () => {
   });
 
   xit('Confirm report information', () => {
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
   });
 
   xit('Submit a report', () => {
-    ReportListPage.clickCreateButton();
-    const formData = {...defaultFormData};
-    F3xCreateReportPage.enterFormData(formData);
-    PageUtils.clickButton('Save and continue');
+    ReportListPage.createF3X();
   });
 });

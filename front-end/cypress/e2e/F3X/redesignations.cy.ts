@@ -1,5 +1,4 @@
-import { ContactListPage } from '../pages/contactListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -35,7 +34,7 @@ function CreateContribution() {
 
   StartTransaction.Disbursements().Contributions().ToCandidate();
 
-  cy.get('[role="searchbox"]').type(committeeFormData.name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(committeeFormData.name.slice(0, 1));
   cy.contains(committeeFormData.name).should('exist');
   cy.contains(committeeFormData.name).click();
 
@@ -65,9 +64,7 @@ function Redesignate(old = false) {
 
 describe('Redesignations', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
+    Initialize();
   });
 
   it('should test redesignating a Schedule E contribution in the current report', () => {
