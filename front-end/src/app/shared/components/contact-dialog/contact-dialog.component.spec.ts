@@ -124,7 +124,7 @@ describe('ContactDialogComponent', () => {
     });
 
     it('should handle pagination', () => {
-      const spy = spyOn(transactionService, 'getTableData').and.returnValue(
+      spyOn(transactionService, 'getTableData').and.returnValue(
         of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
       );
       component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
