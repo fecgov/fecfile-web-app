@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { firstValueFrom, takeUntil } from 'rxjs';
+import { combineLatestWith, firstValueFrom, startWith, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
@@ -19,8 +19,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   activeReport?: Report;
   committeeF3xReports: Promise<Report[]>;
   form24ReportType = ReportTypes.F24;
-  linkedF3x?: Form3X;
-  linkedF3xLabel?: string;
+  linkedF3xControl = new FormControl();
 
   constructor(
     private store: Store,
@@ -32,47 +31,32 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   }
 
   ngOnInit(): void {
-    this.form.addControl('linkedF3x', new FormControl());
-    const dateControl = this.form.get(this.templateMap['date']);
-    const date2Control = this.form.get(this.templateMap['date2']);
-    if (dateControl && date2Control) {
-      this.form.get('linkedF3x')?.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
-    }
+    this.form.addControl('linkedF3x', this.linkedF3xControl);
+    const dateControl = this.form.get(this.templateMap['date']) ?? new FormControl();
+    const date2Control = this.form.get(this.templateMap['date2']) ?? new FormControl();
+    this.linkedF3xControl.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
 
     firstValueFrom(this.store.select(selectActiveReport)).then((report) => {
       this.activeReport = report;
     });
 
-    this.committeeF3xReports.then(() => {
-      this.setLinkedForm3X();
-    });
-
-    this.form
-      .get(this.templateMap['date'])
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.setLinkedForm3X();
-      });
-    this.form
-      .get(this.templateMap['date2'])
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.setLinkedForm3X();
-      });
+    dateControl.valueChanges
+      .pipe(
+        startWith(undefined),
+        combineLatestWith(date2Control.valueChanges.pipe(startWith(undefined))),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(this.setLinkedForm3X);
   }
 
-  setLinkedForm3X(): void {
-    this.getLinkedForm3X().then((report) => {
-      this.linkedF3x = report;
-      this.form.get('linkedF3x')?.setValue(this.getForm3XLabel(this.linkedF3x));
+  setLinkedForm3X([disbursementDate, disseminationDate]: (Date | undefined)[]): void {
+    this.getLinkedForm3X(disbursementDate, disseminationDate).then((report) => {
+      this.form.get('linkedF3x')?.setValue(this.getForm3XLabel(report));
       this.form.get('linkedF3x')?.markAsTouched();
     });
   }
 
-  async getLinkedForm3X(): Promise<Form3X | undefined> {
-    const disseminationDate = this.form.get(this.templateMap['date2'])?.value as Date | undefined;
-    const disbursementDate = this.form.get(this.templateMap['date'])?.value as Date | undefined;
-
+  async getLinkedForm3X(disbursementDate?: Date, disseminationDate?: Date): Promise<Form3X | undefined> {
     const date = disbursementDate ?? disseminationDate;
     if (date) {
       const reports = await this.committeeF3xReports.then((reports) => {
