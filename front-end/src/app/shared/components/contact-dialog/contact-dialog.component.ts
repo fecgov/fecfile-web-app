@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -100,7 +100,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     const first: number = event.first ?? 0;
     const rows: number = event.rows ?? this.rowsPerPage;
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = { contact: this.contact.id! };
+    const params = { contact: this.contact.id! }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
     // Determine query sort ordering
     let ordering: string | string[] = event.sortField ? event.sortField : '';
