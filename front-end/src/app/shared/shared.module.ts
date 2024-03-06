@@ -55,6 +55,8 @@ import { SupportOpposeInputComponent } from './components/inputs/support-oppose-
 import { SingleClickDirective } from './directives/single-click.directive';
 import { RippleModule } from 'primeng/ripple';
 import { CardModule } from 'primeng/card';
+import { RouterLink } from '@angular/router';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -80,6 +82,8 @@ import { CardModule } from 'primeng/card';
     OverlayPanelModule,
     ReactiveFormsModule,
     RippleModule,
+    RouterLink,
+    TableModule,
   ],
   declarations: [
     LabelPipe,

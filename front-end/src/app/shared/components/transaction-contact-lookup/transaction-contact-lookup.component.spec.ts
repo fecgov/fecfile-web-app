@@ -15,6 +15,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { ConfirmationService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -31,7 +32,14 @@ describe('TransactionContactLookupComponent', () => {
         DropdownModule,
         AutoCompleteModule,
       ],
-      providers: [ConfirmationService, FormBuilder, FecApiService, EventEmitter, provideMockStore(testMockStore)],
+      providers: [
+        ConfirmationService,
+        FormBuilder,
+        FecApiService,
+        EventEmitter,
+        provideMockStore(testMockStore),
+        DatePipe,
+      ],
     }).compileComponents();
   });
 
