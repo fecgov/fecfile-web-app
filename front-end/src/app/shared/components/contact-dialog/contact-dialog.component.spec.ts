@@ -13,6 +13,7 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { DatePipe } from '@angular/common';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -29,7 +30,7 @@ describe('ContactDialogComponent', () => {
         ContactLookupComponent,
         LabelPipe,
       ],
-      providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore), DatePipe],
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);

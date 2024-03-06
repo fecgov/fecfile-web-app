@@ -4,7 +4,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { lastValueFrom, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
@@ -19,7 +19,6 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { Transaction } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -146,10 +145,6 @@ export class ContactService implements TableListService<Contact> {
         exclude_ids: excludeIds?.join(',') as string,
       })
       .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
-  }
-
-  public getTransactionForContact(contact: Contact): Promise<Transaction[]> {
-    return lastValueFrom(this.apiService.get<Transaction[]>(`/contacts/${contact.id}/transactions/`));
   }
 
   /**

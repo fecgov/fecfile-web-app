@@ -7,7 +7,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { takeUntil } from 'rxjs';
+import { lastValueFrom, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
@@ -28,6 +28,7 @@ import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.mo
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { Router } from '@angular/router';
+import { TransactionService } from '../../services/transaction.service';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -81,6 +82,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   constructor(
     private fb: FormBuilder,
     private contactService: ContactService,
+    private transactionService: TransactionService,
     protected confirmationService: ConfirmationService,
     public router: Router,
   ) {
@@ -89,7 +91,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     if (changes['contact']) {
-      if (this.contact.id) this.transactions = await this.contactService.getTransactionForContact(this.contact);
+      if (this.contact.id)
+        this.transactions = (
+          await lastValueFrom(this.transactionService.getTableData(1, '', { contact: this.contact.id }))
+        ).results;
       else this.transactions = [];
     }
   }
