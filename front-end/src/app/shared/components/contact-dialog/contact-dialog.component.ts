@@ -29,13 +29,14 @@ import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.mo
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { Router } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-contact-dialog',
   templateUrl: './contact-dialog.component.html',
   styleUrls: ['./contact-dialog.component.scss'],
 })
-export class ContactDialogComponent extends DestroyerComponent implements OnInit, OnChanges {
+export class ContactDialogComponent extends DestroyerComponent implements OnInit {
   @Input() contact: Contact = new Contact();
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
@@ -46,6 +47,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
 
   transactions: Transaction[] = [];
+  tableLoading = true;
+  totalTransactions = 0;
+  rowsPerPage = 5;
   scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
     ScheduleCTransactionTypeLabels,
@@ -89,14 +93,27 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     super();
   }
 
-  async ngOnChanges(changes: SimpleChanges): Promise<void> {
-    if (changes['contact']) {
-      if (this.contact.id)
-        this.transactions = (
-          await lastValueFrom(this.transactionService.getTableData(1, '', { contact: this.contact.id }))
-        ).results;
-      else this.transactions = [];
+  async loadTransactions(event: TableLazyLoadEvent) {
+    this.tableLoading = true;
+
+    // Calculate the record page number to retrieve from the API.
+    const first: number = event.first ?? 0;
+    const rows: number = event.rows ?? this.rowsPerPage;
+    const pageNumber: number = Math.floor(first / rows) + 1;
+    const params = { contact: this.contact.id! };
+
+    // Determine query sort ordering
+    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    if (ordering && event.sortOrder === -1) {
+      ordering = `-${ordering}`;
+    } else {
+      ordering = `${ordering}`;
     }
+    lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params)).then((transactionsPage) => {
+      this.transactions = transactionsPage.results;
+      this.totalTransactions = transactionsPage.count;
+      this.tableLoading = false;
+    });
   }
 
   ngOnInit(): void {
