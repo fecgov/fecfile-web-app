@@ -28,8 +28,6 @@ import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.mo
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { Router } from '@angular/router';
-import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
-import { DateUtils } from '../../utils/date.utils';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -134,7 +132,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         }
       });
 
-    // If there is a defualt candidate office (e.g. 'P') set, then make the
+    // If there is a default candidate office (e.g. 'P') set, then make the
     // candidate office select read-only disabled.
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.disable();
@@ -167,7 +165,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.contactType = contactType;
 
     // The type form control is not displayed on the form page because we are
-    // displaying the contact lookup component which operates independently so
+    // displaying the contact lookup component which operates independently, so
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
     this.form.get('type')?.setValue(contactType);
 
@@ -206,7 +204,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     if (this.contact.id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
-      // component because the Contact Dialog is hidden and not destroyed on close
+      // component because the Contact Dialog is hidden and not destroyed on close,
       // so we need to directly update the lookup "type" form control value
       this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
       this.contactLookup.contactTypeFormControl.enable();
@@ -294,26 +292,5 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   async openTransaction(transaction: Transaction) {
     await this.router.navigate([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
-  }
-
-  getTransactionDate(transaction: Transaction): string {
-    if (!transaction.transaction_type_identifier) return '';
-    const templateMap = TransactionTypeUtils.factory(transaction.transaction_type_identifier).templateMap;
-    const dateField = templateMap.date;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const date: Date | string = transaction[dateField];
-    if (typeof date === 'string') return date;
-    return DateUtils.convertDateToFecFormat(date as Date) || '';
-  }
-
-  getTransactionAmount(transaction: Transaction): string {
-    if (!transaction.transaction_type_identifier) return '';
-    const templateMap = TransactionTypeUtils.factory(transaction.transaction_type_identifier).templateMap;
-    const amountField = templateMap.amount;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const amount: string | number = transaction[amountField];
-    return '' + amount;
   }
 }

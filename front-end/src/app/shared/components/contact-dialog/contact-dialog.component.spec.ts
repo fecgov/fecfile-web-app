@@ -13,7 +13,6 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
-import { DateUtils } from '../../utils/date.utils';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -115,37 +114,6 @@ describe('ContactDialogComponent', () => {
       const spy = spyOn(component.router, 'navigate');
       component.openTransaction(transaction);
       expect(spy).toHaveBeenCalledWith([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
-    });
-
-    describe('getTransactionDate', () => {
-      it('should return empty if no transaction type', () => {
-        transaction.transaction_type_identifier = undefined;
-        transaction.contribution_date = new Date('2024-03-01');
-        const date = component.getTransactionDate(transaction);
-        expect(date).toBe('');
-      });
-
-      it('should get Transaction Date', () => {
-        transaction.contribution_date = new Date('2024-03-01');
-        const date = component.getTransactionDate(transaction);
-        const date2 = DateUtils.convertDateToFecFormat(new Date('2024-03-01'));
-        if (date2) expect(date).toBe(date2);
-      });
-    });
-
-    describe('getTransactionAmount', () => {
-      it('should return empty if no transaction type', () => {
-        transaction.transaction_type_identifier = undefined;
-        transaction.contribution_amount = 2;
-        const amount = component.getTransactionAmount(transaction);
-        expect(amount).toBe('');
-      });
-
-      it('should get Transaction amount', () => {
-        transaction.contribution_amount = 2;
-        const amount = component.getTransactionAmount(transaction);
-        expect(amount).toBe('2');
-      });
     });
   });
 });
