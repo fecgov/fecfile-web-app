@@ -14,11 +14,16 @@ import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { DatePipe } from '@angular/common';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { of } from 'rxjs';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { ListRestResponse } from 'app/shared/models/rest-api.model';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
   let fixture: ComponentFixture<ContactDialogComponent>;
   let testConfirmationService: ConfirmationService;
+  let transactionService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -34,6 +39,7 @@ describe('ContactDialogComponent', () => {
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
+    transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
     component.contact = { ...testContact } as Contact;
@@ -115,6 +121,14 @@ describe('ContactDialogComponent', () => {
       const spy = spyOn(component.router, 'navigate');
       component.openTransaction(transaction);
       expect(spy).toHaveBeenCalledWith([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
+    });
+
+    it('should handle pagination', () => {
+      const spy = spyOn(transactionService, 'getTableData').and.returnValue(
+        of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
+      );
+      component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
+      expect(component.transactions).toEqual([]);
     });
   });
 });
