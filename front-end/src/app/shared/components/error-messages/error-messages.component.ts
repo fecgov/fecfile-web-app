@@ -145,6 +145,30 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
+  private _noDateProvidedErrorMessage = '';
+  @Input() set noDateProvidedErrorMessage(value: string) {
+    this._noDateProvidedErrorMessage = value;
+  }
+
+  get noDateProvidedErrorMessage(): string {
+    if (this._noDateProvidedErrorMessage) {
+      return this._noDateProvidedErrorMessage;
+    }
+    return 'A disbursement or dissemination date is required to provide a linked report.';
+  }
+
+  private _noCorrespondingForm3XErrorMessage = '';
+  @Input() set noCorrespondingForm3XErrorMessage(value: string) {
+    this._noCorrespondingForm3XErrorMessage = value;
+  }
+
+  get noCorrespondingForm3XErrorMessage(): string {
+    if (this._noCorrespondingForm3XErrorMessage) {
+      return this._noCorrespondingForm3XErrorMessage;
+    }
+    return 'There is no Form 3X with corresponding coverage dates currently in progress. Create a new Form 3X to save this transaction.';
+  }
+
   constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
