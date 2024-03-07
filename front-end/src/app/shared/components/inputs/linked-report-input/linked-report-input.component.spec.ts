@@ -33,6 +33,7 @@ describe('LinkedReportInputComponent', () => {
     component.form = new FormGroup({});
     component.form.addControl('other_date', new FormControl());
     component.form.addControl(testTemplateMap['date'], new FormControl());
+    component.ngOnInit();
     fixture.detectChanges();
   });
 
@@ -40,12 +41,15 @@ describe('LinkedReportInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should try to determine the linked F3X report when the dates change', () => {
-    const spy = spyOn(component, 'setLinkedForm3X');
+  it('should try to determine the linked F3X report when the dates change', async () => {
+    const spy = spyOn(component, 'getLinkedForm3X').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
 
     component.form.get('other_date')?.setValue('2025-02-12');
     component.form.get(testTemplateMap['date'])?.setValue('2025-02-12');
-    expect(spy).toHaveBeenCalledTimes(2);
+
+    fixture.detectChanges();
+
+    expect(spy).toHaveBeenCalledTimes(4);
   });
 
   it('should determine the correct label', () => {
@@ -58,13 +62,13 @@ describe('LinkedReportInputComponent', () => {
     component.committeeF3xReports = firstValueFrom(of([testF3X]));
 
     component.form.get('other_date')?.setValue(new Date('2020-02-21'));
-    component.getLinkedForm3X().then((report) => {
+    component.getLinkedForm3X(undefined, new Date('2020-02-21')).then((report) => {
       expect(report).toEqual(testF3X);
       expect(component.getForm3XLabel(report)).toEqual('APRIL 15 (Q1): 01/15/2020 - 04/29/2020');
     });
 
     component.form.get('other_date')?.setValue(new Date('2022-06-22'));
-    component.getLinkedForm3X().then((report) => {
+    component.getLinkedForm3X(undefined, new Date('2022-06-22')).then((report) => {
       expect(report).toEqual(undefined);
       expect(component.getForm3XLabel(report)).toEqual('');
     });
