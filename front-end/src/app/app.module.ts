@@ -13,7 +13,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
 import { committeeAccountReducer } from './store/committee-account.reducer';
-import { loginReducer } from './store/login.reducer';
+import { loginReducer } from './store/user-login-data.reducer';
 import { singleClickReducer } from './store/single-click.reducer';
 
 // PrimeNG

@@ -4,7 +4,7 @@ import { TableAction, TableListBaseComponent } from 'app/shared/components/table
 
 import { CommitteeMember, CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { Store } from '@ngrx/store';
-import { selectUserLoginData } from '../../store/login.selectors';
+import { selectUserLoginData } from '../../store/user-login-data.selectors';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
 

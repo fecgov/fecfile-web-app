@@ -5,9 +5,9 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
-import { updateUserLoginDataAction } from 'app/store/login.actions';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { map, takeUntil } from 'rxjs';
 import { UserLoginData } from '../../shared/models/user.model';
 
@@ -58,7 +58,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
       .updateCurrentUser(updatedUserLoginData)
       .pipe(
         map((response) => {
-          this.store.dispatch(updateUserLoginDataAction({ payload: response }));
+          this.store.dispatch(userLoginDataUpdatedAction({ payload: response }));
           this.router.navigate(['dashboard']);
         }),
       )

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../../shared/services/login.service';
 import { committeeIdValidator, emailValidator } from 'app/shared/utils/validators.utils';
+import { LoginService } from '../../shared/services/login.service';
 
 @Component({
   selector: 'app-debug-login',
@@ -39,7 +39,6 @@ export class DebugLoginComponent {
 
     this.loginService.logIn(email, committeeId, password).subscribe({
       next: () => {
-        this.loginService.dispatchUserLoggedInFromCookies();
         this.router.navigate(['dashboard']);
       },
     });

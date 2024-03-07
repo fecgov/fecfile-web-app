@@ -78,13 +78,12 @@ export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON(
   zip: '33310',
 });
 
-export const testUserLoginData: UserLoginData = {
+export const testUserLoginData: UserLoginData = UserLoginData.fromJSON({
   first_name: 'test_first_name',
   last_name: 'test_last_name',
   email: 'test_email@testhost.com',
   security_consent_date: '2022-05-01',
-  login_dot_gov: false,
-};
+});
 
 export const testActiveReport: Form3X = Form3X.fromJSON({
   id: '999',

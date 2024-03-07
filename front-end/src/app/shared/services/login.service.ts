@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, takeUntil, firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, takeUntil } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
+import { UsersService } from '../services/users.service';
 import { ApiService } from './api.service';
-import { Router } from '@angular/router';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -17,12 +18,13 @@ type EndpointAvailability = { endpoint_available: boolean };
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
-  public userLoginData$: Observable<UserLoginData>;
+  private userLoginData$: Observable<UserLoginData>;
   constructor(
     private store: Store,
     private router: Router,
     private apiService: ApiService,
     private cookieService: CookieService,
+    private usersService: UsersService,
   ) {
     super();
     this.userLoginData$ = this.store.select(selectUserLoginData).pipe(takeUntil(this.destroy$));
@@ -46,32 +48,35 @@ export class LoginService extends DestroyerComponent {
     });
   }
 
-  public async logOut() {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    this.clearUserLoggedInCookies();
-    this.store.dispatch(userLoggedOutAction());
-    if (userLoginData.email) {
-      if (!userLoginData.login_dot_gov) {
-        this.apiService.get('/auth/logout').subscribe(() => {
-          this.router.navigate(['/login']);
-        });
-      } else {
-        window.location.href = environment.loginDotGovLogoutUrl;
-      }
+  public logOut() {
+    this.store.dispatch(userLoginDataDiscardedAction());
+    if (!this.isLoggedInWithLoginDotGov()) {
+      this.apiService.get('/auth/logout').subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+    } else {
+      window.location.href = environment.loginDotGovLogoutUrl;
     }
   }
 
-  public clearUserFecfileApiCookies() {
-    this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
-    this.cookieService.delete(environment.ffapiFirstNameCookieName);
-    this.cookieService.delete(environment.ffapiLastNameCookieName);
-    this.cookieService.delete(environment.ffapiEmailCookieName);
-    this.cookieService.delete(environment.ffapiSecurityConsentCookieName);
+  public async hasUserLoginData(): Promise<boolean> {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    return !!userLoginData.email;
   }
 
-  public clearUserLoggedInCookies() {
-    this.clearUserFecfileApiCookies();
-    this.cookieService.delete('csrftoken');
+  public async retrieveUserLoginData(): Promise<void> {
+    return this.usersService.getCurrentUser().then(userLoginData => {
+      this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
+    });
+  }
+
+  public async updateUserLoginData(): Promise<boolean> {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    return !!userLoginData.email;
+  }
+
+  public isLoggedInWithLoginDotGov() {
+    return this.cookieService.check('oidc_state');
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
@@ -80,11 +85,6 @@ export class LoginService extends DestroyerComponent {
         return response.endpoint_available;
       }),
     );
-  }
-
-  public async userIsAuthenticated(): Promise<boolean> {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    return !!userLoginData.email || this.cookieService.check(environment.ffapiEmailCookieName);
   }
 
   public async userHasProfileData(): Promise<boolean> {
@@ -99,19 +99,5 @@ export class LoginService extends DestroyerComponent {
     one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
 
     return !!security_date && new Date(security_date) > one_year_ago;
-  }
-
-  public dispatchUserLoggedInFromCookies() {
-    if (this.cookieService.check(environment.ffapiEmailCookieName)) {
-      const userLoginData: UserLoginData = {
-        first_name: this.cookieService.get(environment.ffapiFirstNameCookieName),
-        last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
-        email: this.cookieService.get(environment.ffapiEmailCookieName),
-        login_dot_gov: this.cookieService.get(environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
-        security_consent_date: this.cookieService.get(environment.ffapiSecurityConsentCookieName),
-      };
-      this.clearUserFecfileApiCookies();
-      this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
-    }
   }
 }

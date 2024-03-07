@@ -170,7 +170,6 @@ describe('LoginService', () => {
       first_name: testFirstName,
       last_name: testLastName,
       email: testEmail,
-      login_dot_gov: testLoginDotGov,
       security_consent_date: testSecurityConsentDate,
     };
     spyOn(cookieService, 'check').and.returnValue(true);
