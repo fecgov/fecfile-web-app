@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
@@ -9,6 +9,7 @@ import { TransactionListTableBaseComponent } from '../transaction-list-table-bas
 import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -16,6 +17,9 @@ import { DateUtils } from 'app/shared/utils/date.utils';
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
+  @Input() report?: Report;
+  form24ReportType = ReportTypes.F24;
+
   scheduleTransactionTypeLabels: LabelList = [...ScheduleBTransactionTypeLabels, ...ScheduleETransactionTypeLabels];
 
   constructor(
@@ -26,7 +30,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     protected override router: Router,
     protected override itemService: TransactionSchBService,
     protected override store: Store,
-    protected override reportService: ReportService
+    protected override reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
     this.caption =
