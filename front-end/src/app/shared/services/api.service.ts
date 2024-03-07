@@ -73,7 +73,6 @@ export class ApiService {
   }
 
   public postAbsoluteUrl<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     return this.http.post<T>(`${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
