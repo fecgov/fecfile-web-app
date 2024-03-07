@@ -62,7 +62,6 @@ export class ApiService {
   }
 
   public post<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
@@ -79,7 +78,6 @@ export class ApiService {
   }
 
   public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
