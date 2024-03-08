@@ -20,6 +20,7 @@
         class="committee-search p-fluid"
         id="searchBox"
         field="label"
+        [(ngModel)]="query"
         dropdownMode="current"
         dropdownIcon="pi pi-search"
         [suggestions]="suggestions ?? []"
@@ -45,9 +46,9 @@
       </p-autoComplete>
       Examples: Obama for America; C00431445; Bush for President Inc.; C00343509
     </div>
-    <div class="right-side-box" *ngIf="selectedCommittee">
+    <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
       <h2>Results</h2>
-      <div class="committee-card">
+      <div class="committee-card" *ngIf="selectedCommittee">
         <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
         <div class="committee-info">
           <h3>{{ selectedCommittee.name }}</h3>
@@ -64,10 +65,7 @@
           </p-button>
         </div>
       </div>
-    </div>
-    <div class="right-side-box" *ngIf="unableToCreateAccount">
-      <h2>Committee account</h2>
-      <div class="committee-card unable-card">
+      <div class="committee-card unable-card" *ngIf="unableToCreateAccount">
         <div class="unable-excl-img">
           <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
         </div>
