@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ManageCommitteeComponent } from './manage-committee/manage-committee.component';
 import { CommitteeInfoComponent } from './committee-info/committee-info.component';
 import { SelectCommitteeComponent } from './select-committee/select-committee.component';
 
-const routes: Routes = [
+const COMMITTEE_ROUTES: Routes = [
   {
     path: 'members',
     component: ManageCommitteeComponent,
@@ -27,7 +27,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(COMMITTEE_ROUTES)],
   exports: [RouterModule],
 })
 export class CommitteeRoutingModule {}

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { MainFormComponent } from './main-form/main-form.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
@@ -17,74 +17,74 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
-const routes: Routes = [
-  {
-    path: 'create',
-    title: 'Create a report',
-    component: MainFormComponent,
-    data: {
-      showSidebar: false,
-    },
-  },
-  {
-    path: 'edit/:reportId',
-    title: 'Edit a report',
-    component: MainFormComponent,
-    resolve: { report: ReportResolver },
-    data: { sidebarSection: ReportSidebarSection.CREATE },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'web-print/:reportId',
-    title: 'Print preview',
-    component: PrintPreviewComponent,
-    resolve: { report: ReportResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.REVIEW,
-      getBackUrl: (report?: Report) => '/reports/f99/edit/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/step1/:reportId',
-    title: 'Confirm information',
-    component: SubmitReportStep1Component,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.SUBMISSION,
-      getBackUrl: (report?: Report) => '/reports/f99/web-print/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f99/submit/step2/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/step2/:reportId',
-    title: 'Submit report',
-    component: SubmitReportStep2Component,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.SUBMISSION,
-      getBackUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f99/submit/status/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/status/:reportId',
-    title: 'Report status',
-    component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver },
-    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
-    runGuardsAndResolvers: 'always',
-  },
-  { path: '**', redirectTo: '' },
-];
-
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [
+    RouterModule.forChild([
+      {
+        path: 'create',
+        title: 'Create a report',
+        component: MainFormComponent,
+        data: {
+          showSidebar: false,
+        },
+      },
+      {
+        path: 'edit/:reportId',
+        title: 'Edit a report',
+        component: MainFormComponent,
+        resolve: { report: ReportResolver },
+        data: { sidebarSection: ReportSidebarSection.CREATE },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'web-print/:reportId',
+        title: 'Print preview',
+        component: PrintPreviewComponent,
+        resolve: { report: ReportResolver },
+        data: {
+          sidebarSection: ReportSidebarSection.REVIEW,
+          getBackUrl: (report?: Report) => '/reports/f99/edit/' + report?.id,
+          getContinueUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'submit/step1/:reportId',
+        title: 'Confirm information',
+        component: SubmitReportStep1Component,
+        canActivate: [ReportIsEditableGuard],
+        resolve: { report: ReportResolver },
+        data: {
+          sidebarSection: ReportSidebarSection.SUBMISSION,
+          getBackUrl: (report?: Report) => '/reports/f99/web-print/' + report?.id,
+          getContinueUrl: (report?: Report) => '/reports/f99/submit/step2/' + report?.id,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'submit/step2/:reportId',
+        title: 'Submit report',
+        component: SubmitReportStep2Component,
+        canActivate: [ReportIsEditableGuard],
+        resolve: { report: ReportResolver },
+        data: {
+          sidebarSection: ReportSidebarSection.SUBMISSION,
+          getBackUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
+          getContinueUrl: (report?: Report) => '/reports/f99/submit/status/' + report?.id,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'submit/status/:reportId',
+        title: 'Report status',
+        component: SubmitReportStatusComponent,
+        resolve: { report: ReportResolver },
+        data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+        runGuardsAndResolvers: 'always',
+      },
+      { path: '**', redirectTo: '' },
+    ]),
+  ],
   exports: [RouterModule],
 })
 export class F99RoutingModule {}
