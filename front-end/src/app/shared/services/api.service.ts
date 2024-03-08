@@ -61,16 +61,16 @@ export class ApiService {
     });
   }
 
-  public post<T>(endpoint: string, payload: any, queryParams?: QueryParams): Observable<T>;
+  public post<T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Observable<T>;
   public post<T>(
     endpoint: string,
-    payload: any,
+    payload: unknown,
     queryParams?: QueryParams,
     allowedErrorCodes?: number[],
   ): Observable<HttpResponse<T>>;
   public post<T>(
     endpoint: string,
-    payload: any,
+    payload: unknown,
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
   ): Observable<T> | Observable<HttpResponse<T>> {
