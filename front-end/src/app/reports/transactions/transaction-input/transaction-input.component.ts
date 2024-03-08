@@ -6,6 +6,9 @@ import { Contact, ContactTypes, ContactTypeLabels } from 'app/shared/models/cont
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { Report } from 'app/shared/models/report.model';
+import { ReportService } from 'app/shared/services/report.service';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 
 @Component({
   selector: 'app-transaction-input',
@@ -14,8 +17,9 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([]);
   @Input() formSubmitted = false;
-  @Input() isEditable = true;
+  @Input() activeReport$?: Observable<Report>;
   @Input() transaction?: Transaction;
+  @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
@@ -32,6 +36,8 @@ export class TransactionInputComponent implements OnInit {
   candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
+  constructor(public reportService: ReportService) {}
+
   ngOnInit(): void {
     if (this.transaction) {
       this.transactionType = this.transaction.transactionType;
@@ -45,6 +51,11 @@ export class TransactionInputComponent implements OnInit {
       this.form.get(field)?.setValue(this.transaction.transactionType.mandatoryFormValues[field]);
       this.form.get(field)?.disable();
     }
+
+    this.activeReport$?.subscribe((report) => {
+      this.isEditable =
+        this.reportService.isEditable(report) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
+    });
   }
 
   contactTypeSelected(contactType: ContactTypes) {

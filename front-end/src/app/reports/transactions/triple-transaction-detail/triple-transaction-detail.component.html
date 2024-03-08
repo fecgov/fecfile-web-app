@@ -20,7 +20,7 @@
       <h3>{{ transactionType?.contactTitle }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <app-transaction-input
-          [isEditable]="isEditable"
+          [activeReport$]="activeReport$"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [transaction]="transaction"

@@ -17,6 +17,7 @@
       <h3>{{ transactionType?.contactTitle }}</h3>
       <form [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }" id="form">
         <app-transaction-input
+          [activeReport$]="activeReport$"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
@@ -87,7 +88,7 @@
           [contactTypeOptions]="reattributedData.contactTypeOptions"
           [formSubmitted]="formSubmitted"
           [form]="reattributedData.form"
-          [isEditable]="false"
+          [activeReport$]="activeReport$"
           [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
           [transaction]="transaction?.reatt_redes"
         >
