@@ -26,6 +26,25 @@ import { ApiService } from './api.service';
 export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
+  /**
+   * Given the type of contact given, return the appropriate JSON schema doc
+   * @param {ContactTypes} type
+   * @returns {JsonSchema} schema
+   */
+  public static getSchemaByType(type: ContactTypes): JsonSchema {
+    let schema: JsonSchema = contactIndividualSchema;
+    if (type === ContactTypes.CANDIDATE) {
+      schema = contactCandidateSchema;
+    }
+    if (type === ContactTypes.COMMITTEE) {
+      schema = contactCommitteeSchema;
+    }
+    if (type === ContactTypes.ORGANIZATION) {
+      schema = contactOrganizationSchema;
+    }
+    return schema;
+  }
+
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
@@ -43,14 +62,13 @@ export class ContactService implements TableListService<Contact> {
   }
 
   public create(contact: Contact): Observable<Contact> {
-    const payload = contact.toJson();
+    const payload = this.preparePayload(contact);
     return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));
   }
 
-  public update(contact: Contact): Observable<Contact> {
-    const payload = contact.toJson();
+  public update(updated: Contact): Observable<Contact> {
     return this.apiService
-      .put<Contact>(`/contacts/${contact.id}/`, payload)
+      .put<Contact>(`/contacts/${updated.id}/`, updated)
       .pipe(map((response) => Contact.fromJSON(response)));
   }
 
@@ -96,7 +114,7 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
 
-  public checkFecIdForUniqness(fecId: string, contactId?: string): Observable<boolean> {
+  public checkFecIdForUniqueness(fecId: string, contactId?: string): Observable<boolean> {
     if (fecId) {
       return this.apiService
         .get<string>(`/contacts/get_contact_id/`, { fec_id: fecId })
@@ -109,7 +127,7 @@ export class ContactService implements TableListService<Contact> {
     return (control: AbstractControl) => {
       return of(control.value).pipe(
         switchMap((fecId) =>
-          this.checkFecIdForUniqness(fecId, contactId).pipe(
+          this.checkFecIdForUniqueness(fecId, contactId).pipe(
             map((isUnique: boolean) => {
               return isUnique ? null : { fecIdMustBeUnique: true };
             }),
@@ -147,23 +165,8 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
   }
 
-  /**
-   * Given the type of contact given, return the appropriate JSON schema doc
-   * @param {ContactTypes} type
-   * @returns {JsonSchema} schema
-   */
-  public static getSchemaByType(type: ContactTypes): JsonSchema {
-    let schema: JsonSchema = contactIndividualSchema;
-    if (type === ContactTypes.CANDIDATE) {
-      schema = contactCandidateSchema;
-    }
-    if (type === ContactTypes.COMMITTEE) {
-      schema = contactCommitteeSchema;
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      schema = contactOrganizationSchema;
-    }
-    return schema;
+  private preparePayload(contact: Contact): Record<string, unknown> {
+    return contact.toJson();
   }
 }
 
