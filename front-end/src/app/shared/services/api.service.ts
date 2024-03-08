@@ -9,7 +9,7 @@ import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient, private cookieService: CookieService) { }
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -58,12 +58,25 @@ export class ApiService {
     });
   }
 
-  // prettier-ignore
-  public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  public post<T>(endpoint: string, payload: any, queryParams?: any): Observable<T>;
+  public post<T>(endpoint: string, payload: any, queryParams?: any, allowedErrorCodes?: number[]): Observable<HttpResponse<T>>;
+  public post<T>(endpoint: string, payload: any, queryParams: any = {}, allowedErrorCodes?: number[]): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
+    if (allowedErrorCodes) {
+      return this.http.post<T>(
+        `${environment.apiUrl}${endpoint}`, payload, {
+        headers: headers,
+        params: params,
+        withCredentials: true,
+        observe: 'response',
+        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+      });
+    }
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   // prettier-ignore
   public postAbsoluteUrl<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any

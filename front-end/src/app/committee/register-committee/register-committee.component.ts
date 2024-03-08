@@ -16,6 +16,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   suggestions?: FecFiling[];
   selectedCommittee?: CommitteeAccount;
   explanationVisible = false;
+  unableToCreateAccount = false;
 
   constructor(
     protected fecApiService: FecApiService,
@@ -34,21 +35,27 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     });
   }
   select(committee: FecFiling) {
+    this.query = undefined;
     this.selectedCommittee = new CommitteeAccount();
     this.selectedCommittee.name = committee.committee_name;
     this.selectedCommittee.committee_id = committee.committee_id;
   }
   createAccount() {
-    this.committeeAccountService
-      .registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '')
-      .then((committeeAccount) => {
+    this.unableToCreateAccount = false;
+    this.committeeAccountService.registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
+      (committeeAccount) => {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
           detail: `Committee Account ${committeeAccount.committee_id} Created`,
           life: 3000,
         });
-      });
+      },
+      () => {
+        this.unableToCreateAccount = true;
+        this.selectedCommittee = undefined;
+      },
+    );
   }
   showExplanation() {
     this.explanationVisible = true;
