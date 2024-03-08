@@ -6,10 +6,11 @@ import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
-import { takeUntil } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -30,9 +31,15 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
+  activeReport$: Observable<Report>;
+  reportTypes = ReportTypes;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private store: Store,
+  ) {
     super();
+    this.activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
   }
 
   ngOnInit(): void {
@@ -74,22 +81,19 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
 
     if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
-      this.store
-        .select(selectActiveReport)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((report) => {
-          this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
-            const date = control.value;
-            if (
-              date &&
-              !DateUtils.isWithin(date, (report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date)
-            ) {
-              const message = 'Date must fall within the report date range.';
-              return { invaliddate: { msg: message } };
-            }
-            return null;
-          });
+      this.activeReport$.subscribe((report) => {
+        this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
+          const date = control.value;
+          if (
+            date &&
+            !DateUtils.isWithin(date, (report as Form3X).coverage_from_date, (report as Form3X).coverage_through_date)
+          ) {
+            const message = 'Date must fall within the report date range.';
+            return { invaliddate: { msg: message } };
+          }
+          return null;
         });
+      });
     }
   }
 
