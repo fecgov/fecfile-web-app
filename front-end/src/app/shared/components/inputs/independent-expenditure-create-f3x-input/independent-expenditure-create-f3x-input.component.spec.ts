@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Form24 } from 'app/shared/models/form-24.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { IndependentExpenditureCreateF3xInputComponent } from './independent-expenditure-create-f3x-input.component';
@@ -20,7 +19,6 @@ describe('IndependentExpenditureCreateF3xInputComponent', () => {
 
     fixture = TestBed.createComponent(IndependentExpenditureCreateF3xInputComponent);
     component = fixture.componentInstance;
-    component.activeReport = Form24.fromJSON({});
     fixture.detectChanges();
   });
 
