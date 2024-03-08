@@ -189,6 +189,7 @@ export class DeletedContactService implements TableListService<Contact> {
     const contactIds = contacts.map((contact) => contact.id);
     return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public delete(_: Contact): Observable<null> {
     return of(null);

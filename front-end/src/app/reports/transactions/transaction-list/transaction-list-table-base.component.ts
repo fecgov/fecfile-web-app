@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -44,6 +45,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         !!transaction.force_unaggregated &&
         this.reportIsEditable &&
+        transaction.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
@@ -55,6 +57,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         !transaction.force_unaggregated &&
         this.reportIsEditable &&
+        transaction.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
@@ -66,6 +69,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.itemized === false &&
         this.reportIsEditable &&
+        transaction.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
@@ -77,6 +81,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.itemized === true &&
         this.reportIsEditable &&
+        transaction.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
