@@ -51,11 +51,6 @@ export class TransactionInputComponent implements OnInit {
       this.form.get(field)?.setValue(this.transaction.transactionType.mandatoryFormValues[field]);
       this.form.get(field)?.disable();
     }
-
-    this.activeReport$?.subscribe((report) => {
-      this.isEditable =
-        this.reportService.isEditable(report) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
-    });
   }
 
   contactTypeSelected(contactType: ContactTypes) {

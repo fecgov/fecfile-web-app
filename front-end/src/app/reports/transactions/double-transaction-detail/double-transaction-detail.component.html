@@ -21,6 +21,7 @@
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <app-transaction-input
           [activeReport$]="activeReport$"
+          [isEditable]="isEditable"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [transaction]="transaction"
