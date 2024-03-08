@@ -7,8 +7,6 @@ import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Report } from 'app/shared/models/report.model';
-import { ReportService } from 'app/shared/services/report.service';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 
 @Component({
   selector: 'app-transaction-input',
@@ -35,8 +33,6 @@ export class TransactionInputComponent implements OnInit {
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
-
-  constructor(public reportService: ReportService) {}
 
   ngOnInit(): void {
     if (this.transaction) {
