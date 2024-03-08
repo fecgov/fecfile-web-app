@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
@@ -13,16 +13,19 @@ import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
   let fixture: ComponentFixture<AmountInputComponent>;
+  let store;
 
   beforeEach(async () => {
+    store = provideMockStore(testMockStore);
     await TestBed.configureTestingModule({
       declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe, Dialog, Tooltip],
       imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule, TooltipModule],
-      providers: [provideMockStore(testMockStore), ConfirmationService],
+      providers: [store, ConfirmationService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AmountInputComponent);
@@ -80,6 +83,8 @@ describe('AmountInputComponent', () => {
     transaction.loan_id = 'test';
     component.transaction = transaction;
     component.templateMap = transaction.transactionType.templateMap;
+    const store = TestBed.inject(MockStore);
+    component.activeReport$ = store.select(selectActiveReport);
     component.ngOnInit();
     const dateFormControl = component.form.get(component.templateMap.date);
 
@@ -94,7 +99,7 @@ describe('AmountInputComponent', () => {
       [transaction.transactionType.templateMap.date]: invalidDate,
     });
     expect(dateFormControl?.invalid).toBeTrue();
-    
+
     const msg = dateFormControl?.errors?.['invaliddate'].msg;
     expect(msg).toEqual('Date must fall within the report date range.');
   });

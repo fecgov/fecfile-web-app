@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumber } from 'primeng/inputnumber';
 import { Observable, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -22,6 +21,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
   @Input() showCalendarYTD = false;
+  @Input() activeReport$?: Observable<Report>;
 
   @Input() memoCodeCheckboxLabel = '';
   @Input() memoItemHelpText: string | undefined;
@@ -31,7 +31,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
-  activeReport$: Observable<Report>;
   reportTypes = ReportTypes;
 
   constructor(
@@ -39,7 +38,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     private store: Store,
   ) {
     super();
-    this.activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
   }
 
   ngOnInit(): void {
@@ -81,7 +79,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
 
     if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
-      this.activeReport$.subscribe((report) => {
+      this.activeReport$?.subscribe((report) => {
         this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
           const date = control.value;
           if (
