@@ -14,6 +14,7 @@ import { TableSelectAllChangeEvent } from 'primeng/table';
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
+  dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
   searchTerm = '';
@@ -38,11 +39,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public override addItem() {
+    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
     this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {
+    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
     super.editItem(item);
     this.isNewItem = false;
   }

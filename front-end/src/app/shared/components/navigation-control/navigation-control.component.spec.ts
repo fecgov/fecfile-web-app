@@ -12,8 +12,8 @@ import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { testMockStore } from "../../utils/unit-test.utils";
-import { provideMockStore } from "@ngrx/store/testing";
+import { testMockStore } from '../../utils/unit-test.utils';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -23,7 +23,7 @@ describe('NavigationControlComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ButtonModule, DropdownModule, ReactiveFormsModule],
       declarations: [NavigationControlComponent, Dropdown],
-      providers: [FormBuilder, provideMockStore(testMockStore)]
+      providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationControlComponent);
@@ -61,14 +61,14 @@ describe('NavigationControlComponent', () => {
         () => false,
         () => true,
         'pi pi-plus',
-        ControlType.DROPDOWN
+        ControlType.DROPDOWN,
       );
       fixture.detectChanges();
     });
 
     it('should be dropdown', () => {
       const nativeElement = fixture.nativeElement;
-      const button = nativeElement.querySelector('p-dropdown');
+      const button = nativeElement.querySelector('[data-bs-toggle="dropdown"]');
       expect(button).toBeTruthy();
     });
   });

@@ -4,7 +4,7 @@
     pRipple
     [icon]="buttonIcon"
     [label]="buttonLabel"
-    [styleClass]="buttonStyleClass"
+    [styleClass]="(rounded ? 'rounded-text ' : '') + buttonStyleClass"
     [ariaLabel]="buttonAriaLabel"
   ></p-button>
   <ul class="dropdown-menu ">

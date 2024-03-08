@@ -86,7 +86,7 @@ export class Contact extends BaseModel {
   candidate_state: string | undefined;
   candidate_district: string | undefined;
   telephone: string | undefined;
-  country = '';
+  country = 'USA';
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;

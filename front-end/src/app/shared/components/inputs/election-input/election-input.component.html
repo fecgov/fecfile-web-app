@@ -11,12 +11,12 @@
           formControlName="electionType"
         >
           <ng-template let-electionCode pTemplate="selectedItem">
-            <span class="bold">{{ electionCode.label.split(' ')[0] }}</span>
-            {{ electionCode.label.split(' ')[1] }}
+            <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>
+            {{ electionCode?.label.split(' ')[1] }}
           </ng-template>
           <ng-template let-electionCode pTemplate="item">
-            <span class="bold">{{ electionCode.label.split(' ')[0] }}</span>
-            {{ electionCode.label.split(' ')[1] }}
+            <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>
+            {{ electionCode?.label.split(' ')[1] }}
           </ng-template>
         </p-dropdown>
         <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted"></app-error-messages>
@@ -42,7 +42,7 @@
     <div class="col-6">
       <div class="field">
         <label for="election_other_description"
-          >{{ labelPrefix }} ELECTION DESCRIPTION <span class="label-note">(REQUIRED IF OTHER)</span></label
+        >{{ labelPrefix }} ELECTION DESCRIPTION <span class="label-note">(REQUIRED IF OTHER)</span></label
         >
         <input
           type="text"

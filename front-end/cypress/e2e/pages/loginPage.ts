@@ -10,7 +10,7 @@ export class LoginPage {
       },
       {
         cacheAcrossSpecs: true,
-      }
+      },
     );
 
     //Retrieve the AUTH TOKEN from the created/restored session
@@ -58,29 +58,25 @@ function legacyLogin() {
   const testPassword = Cypress.env('PASSWORD');
 
   //login page form-fields' id's (or classes where elements have no id's)
-  const fieldEmail = '#login-email-id';
-  const fieldCommittee = '#login-committee-id';
-  const fieldPassword = '#login-password';
+  const fieldEmail = '#emailId';
+  const fieldCommittee = '#committeeId';
+  const fieldPassword = '#loginPassword';
 
-  cy.fixture('FEC_Get_Committee_Account').then((response_body) => {
-    response_body.results[0].committee_id = committeeID; 
-    const response = {
-      body: response_body,
-      statusCode: 200,
-    };
-
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/openfec/${response_body.results[0].committee_id}/committee/`,
-      response
-    ).as('GetCommitteeAccount');
+  cy.fixture('FEC_Get_Committee_Account').then(() => {
+    cy.intercept('POST', 'http://localhost:8080/api/v1/user/login/authenticate').as('GetLoggedIn');
+    cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee`).as('GetCommitteeAccounts');
+    cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
   });
 
   cy.visit('/');
   cy.get(fieldEmail).type(email);
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');
-  cy.wait('@GetCommitteeAccount');
+  cy.wait('@GetLoggedIn');
+  cy.get('button').contains('Consent').click();
+  cy.wait('@GetCommitteeAccounts');
+  cy.get('.committee-list .committee-info').first().click();
+  cy.wait('@ActivateCommittee');
 }
 
 function retrieveAuthToken() {

@@ -61,15 +61,37 @@ export class ApiService {
     });
   }
 
-  public post<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
+  public post<T>(endpoint: string, payload: any, queryParams?: QueryParams): Observable<T>;
+  public post<T>(
+    endpoint: string,
+    payload: any,
+    queryParams?: QueryParams,
+    allowedErrorCodes?: number[],
+  ): Observable<HttpResponse<T>>;
+  public post<T>(
+    endpoint: string,
+    payload: any,
+    queryParams: QueryParams = {},
+    allowedErrorCodes?: number[],
+  ): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
+    if (allowedErrorCodes) {
+      return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+        headers: headers,
+        params: params,
+        withCredentials: true,
+        observe: 'response',
+        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+      });
+    }
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
-      headers,
-      params,
+      headers: headers,
+      params: params,
       withCredentials: true,
     });
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   public postAbsoluteUrl<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
     const headers = this.getHeaders();

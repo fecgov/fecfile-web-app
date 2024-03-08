@@ -20,6 +20,8 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
     : null;
 }
 
+export const committeeIdValidator = Validators.pattern('^[Cc]\\d{8}$');
+
 export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
 export const passwordValidator = Validators.compose([
@@ -120,6 +122,25 @@ function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors 
     ` ${fecDatePipe.transform(collision.coverage_from_date)} -` +
     ` ${fecDatePipe.transform(collision.coverage_through_date)}`;
   return { invaliddate: { msg: message } };
+}
+
+export function buildCorrespondingForm3XValidator(
+  dateControl: AbstractControl,
+  date2Control: AbstractControl,
+): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!dateControl.value && !date2Control.value) {
+      return {
+        noDateProvided: true,
+      };
+    } else if (!control.value) {
+      return {
+        noCorrespondingForm3X: true,
+      };
+    }
+
+    return null;
+  };
 }
 
 export function buildWithinReportDatesValidator(coverage_from_date?: Date, coverage_through_date?: Date): ValidatorFn {

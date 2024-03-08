@@ -20,12 +20,13 @@
         class="committee-search p-fluid"
         id="searchBox"
         field="label"
+        [(ngModel)]="query"
         dropdownMode="current"
         dropdownIcon="pi pi-search"
         [suggestions]="suggestions ?? []"
         [forceSelection]="true"
         (completeMethod)="search($event)"
-        (onSelect)="select($event)"
+        (onSelect)="select($event.value)"
       >
         <ng-template pTemplate="header">
           <div class="search-header">Select a committee</div>
@@ -45,9 +46,9 @@
       </p-autoComplete>
       Examples: Obama for America; C00431445; Bush for President Inc.; C00343509
     </div>
-    <div class="right-side-box" *ngIf="selectedCommittee">
+    <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
       <h2>Results</h2>
-      <div class="committee-card">
+      <div class="committee-card" *ngIf="selectedCommittee">
         <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
         <div class="committee-info">
           <h3>{{ selectedCommittee.name }}</h3>
@@ -62,6 +63,15 @@
             iconPos="right"
           >
           </p-button>
+        </div>
+      </div>
+      <div class="committee-card unable-card" *ngIf="unableToCreateAccount">
+        <div class="unable-excl-img">
+          <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
+        </div>
+        <div class="unable-verbiage">
+          <p class="unable-verbiage-p1">Unable to create account</p>
+          <p class="unable-verbiage-p2">CONTACT FECFILE TECHNICAL SUPPORT FOR HELP</p>
         </div>
       </div>
     </div>
