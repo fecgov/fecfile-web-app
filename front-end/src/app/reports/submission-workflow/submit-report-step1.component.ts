@@ -104,13 +104,11 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     }
 
     const payload: Report = getReportFromJSON({
-      json: {
-        ...this.report,
-        ...addressFields,
-        change_of_address: this.form.value.change_of_address,
-        confirmation_email_1: this.form.value.confirmation_email_1,
-        confirmation_email_2: this.form.value.confirmation_email_2,
-      },
+      ...this.report,
+      ...addressFields,
+      change_of_address: this.form.value.change_of_address,
+      confirmation_email_1: this.form.value.confirmation_email_1,
+      confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
     this.reportService.update(payload, this.formProperties).subscribe(() => {
