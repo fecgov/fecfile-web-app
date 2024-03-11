@@ -88,51 +88,58 @@ describe('LoginService', () => {
   });
 
   describe('#userHasRecentSecurityConsentDate should work', () => {
-    it('current date is valid', () => {
+
+    const one_year_ahead = new Date();
+    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
+
+    it('expiration one day ahead is recent', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
       store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
+        security_consent_exp_date: DateUtils.convertDateToFecFormat(one_day_ahead) as string,
       });
       service
         .userHasRecentSecurityConsentDate()
         .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
-    it('recent date is valid', () => {
+    it('expiration six months ahead is recent', () => {
       const recentDate = new Date();
-      recentDate.setMonth(recentDate.getMonth() - 6);
+      recentDate.setMonth(recentDate.getMonth() + 6);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
 
       store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: testDate,
+        security_consent_exp_date: testDate,
       });
       service
         .userHasRecentSecurityConsentDate()
         .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
-    it('364 days ago is valid', () => {
+    it('expiration 364 days ahead is recent', () => {
       const recentDate = new Date();
-      recentDate.setDate(recentDate.getDate() - 364);
+      recentDate.setDate(recentDate.getDate() + 364);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
 
       store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: testDate,
+        security_consent_exp_date: testDate,
       });
       service
         .userHasRecentSecurityConsentDate()
         .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
-    it('one year ago is invalid', () => {
+    it('expiration one year ago is not recent', () => {
       const recentDate = new Date();
       recentDate.setFullYear(recentDate.getFullYear() - 1);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
@@ -140,7 +147,7 @@ describe('LoginService', () => {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: testDate,
+        security_consent_exp_date: testDate,
       });
       service
         .userHasRecentSecurityConsentDate()

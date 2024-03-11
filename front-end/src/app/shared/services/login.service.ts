@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { UsersService } from '../services/users.service';
+import { DateUtils } from '../utils/date.utils';
 import { ApiService } from './api.service';
 
 type EndpointAvailability = { endpoint_available: boolean };
@@ -94,10 +95,11 @@ export class LoginService extends DestroyerComponent {
 
   public async userHasRecentSecurityConsentDate(): Promise<boolean> {
     const userLoginData = await firstValueFrom(this.userLoginData$);
-    const security_date = userLoginData.security_consent_date;
-    const one_year_ago = new Date();
-    one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
-
-    return !!security_date && new Date(security_date) > one_year_ago;
+    if (!userLoginData.security_consent_exp_date) {
+      return false;
+    }
+    const security_date_exp = DateUtils.convertFecFormatToDate(
+      userLoginData.security_consent_exp_date);
+    return !!security_date_exp && new Date() < security_date_exp;
   }
 }

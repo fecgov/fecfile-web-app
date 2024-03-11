@@ -54,24 +54,25 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       return;
     }
 
+    const one_day_ahead = new Date();
+    one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+    const one_year_ahead = new Date();
+    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
     const updatedUserLoginData: UserLoginData = {
       ...this.userLoginData,
-      security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
+      security_consent_exp_date: DateUtils.convertDateToFecFormat(
+        this.form.get('security-consent-annual')?.value ? one_year_ahead : one_day_ahead
+      ) as string,
     };
 
-    if (this.form.get('security-consent-annual')?.value) {
-      this.usersService
-        .updateCurrentUser(updatedUserLoginData)
-        .pipe(
-          map(() => {
-            this.store.dispatch(userLoginDataUpdatedAction({ payload: updatedUserLoginData }));
-            this.router.navigate(['/dashboard']);
-          }),
-        )
-        .subscribe();
-    } else {
-      this.store.dispatch(userLoginDataUpdatedAction({ payload: updatedUserLoginData }));
-      this.router.navigate(['/dashboard']);
-    }
+    this.usersService
+      .updateCurrentUser(updatedUserLoginData)
+      .pipe(
+        map(() => {
+          this.store.dispatch(userLoginDataUpdatedAction({ payload: updatedUserLoginData }));
+          this.router.navigate(['/dashboard']);
+        }),
+      )
+      .subscribe();
   }
 }
