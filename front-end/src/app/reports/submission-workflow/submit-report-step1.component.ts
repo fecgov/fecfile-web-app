@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
-import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
+import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -90,7 +90,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     }
   }
 
-  public continue(): void {
+  public async continue(): Promise<void> {
     this.formSubmitted = true;
     if (this.form.invalid || this.report == undefined) {
       this.store.dispatch(singleClickEnableAction());
@@ -104,11 +104,13 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     }
 
     const payload: Report = getReportFromJSON({
-      ...this.report,
-      ...addressFields,
-      change_of_address: this.form.value.change_of_address,
-      confirmation_email_1: this.form.value.confirmation_email_1,
-      confirmation_email_2: this.form.value.confirmation_email_2,
+      json: {
+        ...this.report,
+        ...addressFields,
+        change_of_address: this.form.value.change_of_address,
+        confirmation_email_1: this.form.value.confirmation_email_1,
+        confirmation_email_2: this.form.value.confirmation_email_2,
+      },
     });
 
     this.reportService.update(payload, this.formProperties).subscribe(() => {

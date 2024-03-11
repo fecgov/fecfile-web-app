@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToInstance, Transform } from 'class-transformer';
 import { Report, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
@@ -28,6 +28,10 @@ export class Form99 extends Report {
     return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
   }
 
+  get reportLabel(): string {
+    return '';
+  }
+
   get versionLabel() {
     return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
@@ -47,9 +51,8 @@ export class Form99 extends Report {
   text_code: string | undefined;
   message_text: string | undefined;
 
-  // prettier-ignore
-  static fromJSON(json: any): Form99 { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Form99, json);
+  static fromJSON(json: unknown): Form99 {
+    return plainToInstance(Form99, json);
   }
 }
 
