@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { combineLatestWith, firstValueFrom, startWith, takeUntil } from 'rxjs';
+import { combineLatestWith, startWith, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
@@ -16,9 +14,7 @@ import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.u
   templateUrl: './linked-report-input.component.html',
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
-  activeReport?: Report;
   committeeF3xReports: Promise<Report[]>;
-  form24ReportType = ReportTypes.F24;
   linkedF3xControl = new FormControl();
 
   tooltipText =
@@ -28,7 +24,6 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     'corresponding coverage dates.';
 
   constructor(
-    private store: Store,
     private reportService: ReportService,
     private datePipe: FecDatePipe,
   ) {
@@ -41,10 +36,6 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     const dateControl = this.form.get(this.templateMap['date']) ?? new FormControl();
     const date2Control = this.form.get(this.templateMap['date2']) ?? new FormControl();
     this.linkedF3xControl.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
-
-    firstValueFrom(this.store.select(selectActiveReport)).then((report) => {
-      this.activeReport = report;
-    });
 
     dateControl.valueChanges
       .pipe(

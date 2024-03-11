@@ -5,7 +5,6 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { LinkedReportInputComponent } from './linked-report-input.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { Form24 } from 'app/shared/models/form-24.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -29,7 +28,6 @@ describe('LinkedReportInputComponent', () => {
     component.templateMap = Object.assign(testTemplateMap, {
       date2: 'other_date',
     });
-    component.activeReport = Form24.fromJSON({});
     component.form = new FormGroup({});
     component.form.addControl('other_date', new FormControl());
     component.form.addControl(testTemplateMap['date'], new FormControl());
