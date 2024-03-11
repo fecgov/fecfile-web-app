@@ -44,7 +44,7 @@ describe('FecApiService', () => {
       });
 
       const req = httpTestingController.expectOne(
-        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678'
+        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678',
       );
 
       expect(req.request.method).toEqual('GET');
@@ -77,30 +77,34 @@ describe('FecApiService', () => {
     });
   });
 
-  describe('#getCommitteeRecentFiling()', () => {
-    it('should return most recent filing from realtime endpoint', () => {
-      const f1Filing: FecFiling = FecFiling.fromJSON({form_type: 'F1N', pdf_url: 'go here'});
+  describe('#getCommitteeRecentF1Filing()', () => {
+    it('should call api with request for most recent f1 filing', () => {
+      const f1Filing: FecFiling = FecFiling.fromJSON({ form_type: 'F1N', pdf_url: 'go here' });
 
-      service.getCommitteeRecentFiling('C00601211').subscribe((mostRecentFiling) => {
+      service.getCommitteeRecentF1Filing('C00601211').subscribe((mostRecentFiling) => {
         expect(mostRecentFiling).toEqual(f1Filing);
       });
 
-      const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/filings/`);
+      const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/f1_filing/`);
 
       expect(req.request.method).toEqual('GET');
       req.flush(f1Filing);
     });
   });
+  describe('#queryFilings()', () => {
+    it('should call api with query for f1 filings', () => {
+      const f1Filings = [FecFiling.fromJSON({ form_type: 'F1N', pdf_url: 'go here' })];
 
-  it('should return most recent filing from nightly endpoint', () => {
-    const f2Filing: FecFiling = FecFiling.fromJSON({form_type: 'F2', pdf_url: 'dont go here'});
+      service.queryFilings('foo', 'F1').then((filings) => {
+        expect(filings[0]).toEqual(f1Filings[0]);
+      });
 
-    service.getCommitteeRecentFiling('C00601211').subscribe((mostRecentFiling) => {
-      expect(mostRecentFiling).toEqual(f2Filing);
+      const req = httpTestingController.expectOne(
+        `https://localhost/api/v1/openfec/query_filings/?query=foo&form_type=F1`,
+      );
+
+      expect(req.request.method).toEqual('GET');
+      req.flush({ results: f1Filings });
     });
-
-    const realtimeReq = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/filings/`);
-    expect(realtimeReq.request.method).toEqual('GET');
-    realtimeReq.flush(f2Filing);
   });
 });

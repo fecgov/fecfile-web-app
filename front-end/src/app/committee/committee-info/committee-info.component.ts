@@ -5,7 +5,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -46,7 +46,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     private store: Store,
     private fecApiService: FecApiService,
     private fb: FormBuilder,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
   }
@@ -54,7 +54,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
       this.fecApiService
-        .getCommitteeRecentFiling(committee.committee_id)
+        .getCommitteeRecentF1Filing(committee.committee_id)
         .subscribe((mostRecentFiling: FecFiling | undefined) => {
           this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
         });
@@ -72,7 +72,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   }
 

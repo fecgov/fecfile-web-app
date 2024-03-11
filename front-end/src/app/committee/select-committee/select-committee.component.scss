@@ -7,6 +7,24 @@
     background-color: #ffffff;
     box-shadow: 0 0 4px 0px #d1d1d1
 }
+.empty-card {
+    height: 200px;
+    flex-direction: column;
+}
+.empty-lens-img {
+    height: 95px;
+    display: flex;
+}
+.empty-verbiage {
+    width: 65%;
+    align-self: center;
+    margin-top: 10px;
+}
+.empty-verbiage p {
+    text-align: center;
+    font-size: x-large; 
+    line-height: normal;
+}
 .left-side {
     flex-direction: column;
 }
@@ -18,21 +36,25 @@
     background-color: #f1f1f1;
     flex-direction: column;
     padding: 15px;
+    border-radius: 5px;
 }
 .select-committee-columns{
     display: flex;
     flex-direction: row;
 }
 .create-committee-card {
+    border-radius: 5px;
     background-color: #f1f1f1;
     margin-top: 20px;
     font-size: large;
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     .blue-box{
         padding: 15px;
         background-color: #132947;
+        border-radius: 5px 0px 0px 5px;
     }
     .plus {
         background-color: #ffffff;

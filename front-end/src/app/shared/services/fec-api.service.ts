@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { Candidate } from '../models/candidate.model';
@@ -13,7 +13,10 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
   providedIn: 'root',
 })
 export class FecApiService {
-  constructor(private http: HttpClient, private apiService: ApiService) {}
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService,
+  ) {}
 
   getHeaders() {
     return {
@@ -62,13 +65,19 @@ export class FecApiService {
    *
    * @return     {Observable<FecFiling | undefined>}  Most recent F1 filing.
    */
-  public getCommitteeRecentFiling(committeeId: string | undefined): Observable<FecFiling | undefined> {
+  public getCommitteeRecentF1Filing(committeeId: string | undefined): Observable<FecFiling | undefined> {
     if (!committeeId) {
-      throw new Error('Fecfile: No Committee Id provided in getCommitteeRecentFiling()');
+      throw new Error('Fecfile: No Committee Id provided in getCommitteeRecentF1Filing()');
     }
 
     return this.apiService
-      .get<FecFiling>(`/openfec/${committeeId}/filings/`)
+      .get<FecFiling>(`/openfec/${committeeId}/f1_filing/`)
       .pipe(map((response) => FecFiling.fromJSON(response)));
+  }
+
+  public queryFilings(query: string, formType: string): Promise<FecFiling[]> {
+    return firstValueFrom(
+      this.apiService.get<FecApiPaginatedResponse>(`/openfec/query_filings/`, { query, form_type: formType }),
+    ).then((pagingatedFilings: FecApiPaginatedResponse) => pagingatedFilings['results'] as FecFiling[]);
   }
 }

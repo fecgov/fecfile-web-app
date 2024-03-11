@@ -1,7 +1,7 @@
 <!-- prettier-ignore -->
 <img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
 
-<a class="logout-button" href="#" (click)="loginService.logOut()">
+<a class="logout-button" (click)="loginService.logOut()">
   <span>Log Out</span>
 </a>
 
@@ -56,16 +56,16 @@
         <form class="flex align-items-center gap-1" [formGroup]="form">
           <div class="field">
             <p-checkbox
-              formControlName="security-consent"
+              formControlName="security-consent-annual"
               [binary]="true"
-              inputId="security-consent"
+              inputId="security-consent-annual"
               label="You consent to the security notification for one year"
               ariaLabel="You consent to the security notification for one year"
             ></p-checkbox>
             <div class="col-12">
               <app-error-messages
                 [form]="form"
-                fieldName="security-consent"
+                fieldName="security-consent-annual"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>

@@ -1,7 +1,8 @@
-import { ReattRedesUtils, ReattRedesTypes } from './reatt-redes.utils';
+import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TransactionTypes, getTransactionName } from '../../models/transaction.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
+import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 
 export class ReattributionToUtils {
   public static overlayTransactionProperties(
@@ -51,7 +52,7 @@ export class ReattributionToUtils {
     // Add additional amount validation
     form
       .get(transaction.transactionType.templateMap.amount)
-      ?.addValidators([ReattRedesUtils.amountValidator(transaction)]);
+      ?.addValidators([buildReattRedesTransactionValidator(transaction)]);
 
     // Clear normal schema validation from reattribution TO form
     form.get('contribution_purpose_descrip')?.clearValidators();

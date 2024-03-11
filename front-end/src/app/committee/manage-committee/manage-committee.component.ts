@@ -1,37 +1,101 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { CommitteeMember } from 'app/shared/models/committee-member.model';
-import { CommitteeMemberService } from 'app/shared/services/committee-account.service';
+
+import { CommitteeMember, CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
+import { Store } from '@ngrx/store';
+import { selectUserLoginData } from '../../store/login.selectors';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { CommitteeMemberService } from '../../shared/services/committee-member.service';
 
 @Component({
   selector: 'app-manage-committee',
   templateUrl: './manage-committee.component.html',
 })
-export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
+export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements OnInit {
   override item: CommitteeMember = this.getEmptyItem();
-  public rowActions: TableAction[] = [];
+
+  public rowActions: TableAction[] = [
+    new TableAction('Delete', this.confirmDelete.bind(this), this.isNotCurrentUser.bind(this)),
+  ];
+  currentUserEmail?: string;
+
+  override rowsPerPage = 10;
+
+  public members: Promise<CommitteeMember[]>;
 
   constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
+    override messageService: MessageService,
+    override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: CommitteeMemberService
+    private store: Store,
+    override itemService: CommitteeMemberService,
   ) {
     super(messageService, confirmationService, elementRef);
-  }
-
-  protected getEmptyItem(): CommitteeMember {
-    return new CommitteeMember();
+    this.members = this.itemService.getMembers();
   }
 
   public override addItem() {
     super.addItem();
-    this.isNewItem = true;
   }
 
-  public override editItem(item: CommitteeMember) {
-    super.editItem(item);
-    this.isNewItem = false;
+  override async ngOnInit() {
+    super.ngOnInit();
+    this.currentUserEmail = (await firstValueFrom(this.store.select(selectUserLoginData))).email;
+  }
+
+  public async saveMembership(payload: { email: string; role: typeof CommitteeMemberRoles }) {
+    try {
+      const new_user = await firstValueFrom(this.itemService.addMember(payload.email, payload.role));
+
+      if (new_user.email) {
+        this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Membership Created',
+          life: 3000,
+        });
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
+  public confirmDelete(member: CommitteeMember) {
+    this.confirmationService.confirm({
+      message: 'Please note that you cannot undo this action.',
+      header: 'Are you sure?',
+      accept: () => this.deleteItem(member),
+    });
+  }
+
+  isNotCurrentUser(member: CommitteeMember): boolean {
+    return member.email !== this.currentUserEmail;
+  }
+
+  override async deleteItem(member: CommitteeMember) {
+    try {
+      await lastValueFrom(this.itemService.delete(member));
+      this.refreshTable();
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Successfully removed user from committee',
+        life: 3000,
+      });
+      this.confirmationService.close();
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error removing the user from the committee',
+        life: 3000,
+      });
+    }
+  }
+
+  protected getEmptyItem(): CommitteeMember {
+    return new CommitteeMember();
   }
 }

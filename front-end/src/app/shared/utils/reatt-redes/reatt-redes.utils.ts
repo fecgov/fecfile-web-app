@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Transaction } from '../../models/transaction.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
@@ -66,47 +66,6 @@ export class ReattRedesUtils {
       RedesignationToUtils.overlayForm(toForm, toTransaction as SchBTransaction);
       RedesignationFromUtils.overlayForm(fromForm, fromTransaction as SchBTransaction, toForm);
     }
-  }
-
-  /**
-   * New validation rules for the transaction amount of reattribution from and redesignation from transactions.
-   * These rules supplant the original rules for a given transaction.
-   * @param transaction
-   * @param mustBeNegative
-   * @returns
-   */
-  public static amountValidator(transaction: SchATransaction | SchBTransaction, mustBeNegative = false): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const amount = control.value;
-
-      if (amount !== null) {
-        if (mustBeNegative && amount >= 0) {
-          return { exclusiveMax: { exclusiveMax: 0 } };
-        }
-        if (!mustBeNegative && amount < 0) {
-          return { exclusiveMin: { exclusiveMin: 0 } };
-        }
-
-        const amountKey = transaction.transactionType.templateMap.amount;
-        const originalAmount =
-          ((transaction.reatt_redes as SchATransaction | SchBTransaction)[
-            amountKey as keyof (SchATransaction | SchBTransaction)
-          ] as number) ?? 0;
-        const reattRedesTotal = (transaction.reatt_redes as SchATransaction | SchBTransaction)?.reatt_redes_total ?? 0;
-        let limit = originalAmount - reattRedesTotal;
-        if (transaction.id) limit += +(transaction[amountKey as keyof (SchATransaction | SchBTransaction)] as number); // If editing, add value back into limit restriction.
-        if (Math.abs(amount) > Math.abs(limit)) {
-          return {
-            max: {
-              max: limit,
-              msgPrefix: 'The absolute value of the amount must be less than or equal to',
-            },
-          };
-        }
-      }
-
-      return null;
-    };
   }
 
   public static getPayloads(

@@ -1,39 +1,49 @@
 import { Component, OnInit } from '@angular/core';
 import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
 import { selectActiveReport } from '../../../store/active-report.selectors';
-import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
-import { selectSidebarState } from '../../../store/sidebar-state.selectors';
+import { combineLatest, filter, map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 import { Report } from '../../../shared/models/report.model';
 import { MenuItem } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { ReportService } from '../../../shared/services/report.service';
+import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   template: '',
 })
 export abstract class AbstractMenuComponent extends DestroyerComponent implements OnInit {
-  activeReport$?: Observable<Report | undefined>;
+  activeReport$: Observable<Report>;
   items$: Observable<MenuItem[]> = of([]);
   reportString?: string;
+  sidebarState: SidebarState | undefined;
 
   protected constructor(
     private store: Store,
     private reportService: ReportService,
+    private router: Router,
   ) {
     super();
+    this.activeReport$ = this.store.select(selectActiveReport);
   }
 
   ngOnInit(): void {
-    this.activeReport$ = this.store.select(selectActiveReport);
-
-    this.items$ = combineLatest([this.store.select(selectSidebarState), this.activeReport$]).pipe(
+    const routeData$ = this.router.events.pipe(
       takeUntil(this.destroy$),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      switchMap(([sidebarState, activeReport]: [SidebarState, Report | undefined]) => {
-        const isEditable = this.reportService.isEditable(activeReport);
+      filter((event) => event instanceof NavigationEnd),
+      map(() => {
+        return collectRouteData(this.router);
+      }),
+      startWith(collectRouteData(this.router)),
+    );
 
-        return of(this.getMenuItems(sidebarState, activeReport, isEditable));
+    this.items$ = combineLatest([routeData$, this.activeReport$]).pipe(
+      takeUntil(this.destroy$),
+      map(([routeData, activeReport]: [RouteData, Report]) => {
+        const sidebarState = new SidebarState(routeData['sidebarSection']);
+        const isEditable = this.reportService.isEditable(activeReport);
+        return this.getMenuItems(sidebarState, activeReport, isEditable);
       }),
     );
   }

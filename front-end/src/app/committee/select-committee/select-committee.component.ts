@@ -6,7 +6,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
-import { concatMap, forkJoin, map } from 'rxjs';
+import { concatMap, forkJoin, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-select-committee',
@@ -14,7 +14,7 @@ import { concatMap, forkJoin, map } from 'rxjs';
   styleUrls: ['./select-committee.component.scss'],
 })
 export class SelectCommitteeComponent extends DestroyerComponent implements OnInit {
-  committees: CommitteeAccount[] = [];
+  committees?: CommitteeAccount[];
   constructor(
     protected committeeAccountService: CommitteeAccountService,
     protected fecApiService: FecApiService,
@@ -36,7 +36,7 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
               })
             );
           });
-          return forkJoin(augmented);
+          return augmented.length ? forkJoin(augmented) : of([]);
         })
       )
       .subscribe((committees) => (this.committees = committees));
