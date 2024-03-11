@@ -73,7 +73,8 @@ describe('Redesignations', () => {
     Redesignate();
   });
 
-  it('should test redesignating a Schedule E contribution from a submitted report', () => {
+  // Test disabled until a mock is set up for submitting a report.
+  xit('should test redesignating a Schedule E contribution from a submitted report', () => {
     // Create an individual contact to be used with contact lookup
     CreateContribution();
     ReportListPage.createF3X(reportFormDataJuly);

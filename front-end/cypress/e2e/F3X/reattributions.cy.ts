@@ -88,7 +88,8 @@ describe('Reattributions', () => {
     Reattribute();
   });
 
-  it('should test reattributing a Schedule A in a submitted report', () => {
+  // Test disabled until a mock is set up for submitting a report.
+  xit('should test reattributing a Schedule A in a submitted report', () => {
     // Create an individual contact to be used with contact lookup
     ContactListPage.createIndividual(assignee);
     CreateReceipt();
