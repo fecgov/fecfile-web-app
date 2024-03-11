@@ -27,7 +27,7 @@ describe('loginGuard', () => {
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'hasUserLoginData').and.returnValue(true);
+    spyOn(loginService, 'hasUserLoginData').and.returnValue(Promise.resolve(true));
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toBeTrue();
     });
@@ -36,7 +36,7 @@ describe('loginGuard', () => {
   it('should retrieve if does not have hasUserLoginData', () => {
     const loginService = TestBed.inject(LoginService);
     const usersService = TestBed.inject(UsersService);
-    spyOn(loginService, 'hasUserLoginData').and.returnValue(false);
+    spyOn(loginService, 'hasUserLoginData').and.returnValue(Promise.resolve(false));
     spyOn(usersService, 'getCurrentUser').and.returnValue(Promise.resolve({}));
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any

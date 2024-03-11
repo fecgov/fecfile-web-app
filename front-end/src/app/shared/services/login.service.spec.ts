@@ -5,14 +5,13 @@ import { environment } from 'environments/environment';
 import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
-import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
+import { Router } from '@angular/router';
+import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
-import { UserLoginData } from '../models/user.model';
-import { LoginService } from './login.service';
 import { DateUtils } from '../utils/date.utils';
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -24,7 +23,7 @@ describe('LoginService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ApiService, LoginService, CookieService, provideMockStore(testMockStore)],
+      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(LoginService);
@@ -63,15 +62,11 @@ describe('LoginService', () => {
 
     const dispatchSpy = spyOn(store, 'dispatch');
     const postSpy = spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
-    const cookieSpy = spyOn(cookieService, 'delete');
 
     service.userLoginData$ = of(testUserLoginData);
-    service.logOut().then(() => {
-      expect(dispatchSpy).toHaveBeenCalledWith(userLoggedOutAction());
-      expect(postSpy).toHaveBeenCalledTimes(0);
-      expect(cookieSpy).toHaveBeenCalledTimes(6);
-      expect(cookieSpy).toHaveBeenCalledWith('csrftoken');
-    });
+    service.logOut();
+    expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    expect(postSpy).toHaveBeenCalledTimes(0);
   });
 
   //Can't figure out how to override service's userLoginData
@@ -82,14 +77,8 @@ describe('LoginService', () => {
     spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
+    expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
-  });
-
-  it('userIsAuthenticated should return true', () => {
-    service.userIsAuthenticated().then((userIsAuthenticated) => {
-      expect(userIsAuthenticated).toBeTrue();
-    });
   });
 
   it('userHasProfileData should return true', () => {
@@ -159,41 +148,4 @@ describe('LoginService', () => {
     });
   });
 
-  it('#dispatchUserLoggedInFromCookies happy path', () => {
-    const testFirstName = 'testFirstName';
-    const testLastName = 'testLastName';
-    const testEmail = 'testEmail';
-    const testLoginDotGov = false;
-    const testSecurityConsentDate = DateUtils.convertDateToFecFormat(new Date()) as string;
-
-    const expectedUserLoginData: UserLoginData = {
-      first_name: testFirstName,
-      last_name: testLastName,
-      email: testEmail,
-      security_consent_date: testSecurityConsentDate,
-    };
-    spyOn(cookieService, 'check').and.returnValue(true);
-    spyOn(cookieService, 'get').and.callFake((name: string) => {
-      if (name === environment.ffapiFirstNameCookieName) {
-        return testFirstName;
-      }
-      if (name === environment.ffapiLastNameCookieName) {
-        return testLastName;
-      }
-      if (name === environment.ffapiEmailCookieName) {
-        return testEmail;
-      }
-      if (name === environment.ffapiLoginDotGovCookieName) {
-        return testLoginDotGov.toString();
-      }
-      if (name === environment.ffapiSecurityConsentCookieName) {
-        return testSecurityConsentDate;
-      }
-      throw Error('fail!');
-    });
-    spyOn(store, 'dispatch');
-
-    service.dispatchUserLoggedInFromCookies();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedInAction({ payload: expectedUserLoginData }));
-  });
 });

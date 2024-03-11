@@ -2,8 +2,8 @@ import { initialState as initActiveReport } from 'app/store/active-report.reduce
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { initialState as initUserLoginData } from 'app/store/login.reducer';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { Form3X } from '../models/form-3x.model';
@@ -78,12 +78,12 @@ export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON(
   zip: '33310',
 });
 
-export const testUserLoginData: UserLoginData = UserLoginData.fromJSON({
+export const testUserLoginData: UserLoginData = {
   first_name: 'test_first_name',
   last_name: 'test_last_name',
   email: 'test_email@testhost.com',
   security_consent_date: '2022-05-01',
-});
+};
 
 export const testActiveReport: Form3X = Form3X.fromJSON({
   id: '999',

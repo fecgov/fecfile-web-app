@@ -18,7 +18,7 @@ type EndpointAvailability = { endpoint_available: boolean };
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
-  private userLoginData$: Observable<UserLoginData>;
+  public userLoginData$: Observable<UserLoginData>;
   constructor(
     private store: Store,
     private router: Router,
