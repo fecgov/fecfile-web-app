@@ -19,7 +19,6 @@ import { DestroyerComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { ConfirmationService } from 'primeng/api';
-import { Transaction } from '../../models/transaction.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
@@ -30,6 +29,30 @@ import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.mo
 import { Router } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { getReportFromJSON } from '../../services/report.service';
+
+export class TransactionData {
+  id: string;
+  report_id: string;
+  formType: string;
+  reportType: string;
+  transaction_type_identifier: string;
+  date: string;
+  amount: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(transaction: any) {
+    this.id = transaction.id;
+    this.report_id = transaction.report_id;
+    this.date = transaction.date;
+    this.amount = transaction.amount;
+    this.transaction_type_identifier = transaction.transaction_type_identifier;
+
+    const report = getReportFromJSON(transaction.report);
+    this.formType = report.formLabel;
+    this.reportType = report.reportLabel;
+  }
+}
 
 @Component({
   selector: 'app-contact-dialog',
@@ -46,7 +69,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
 
-  transactions: Transaction[] = [];
+  transactions: TransactionData[] = [];
   tableLoading = true;
   totalTransactions = 0;
   rowsPerPage = 5;
@@ -110,7 +133,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       ordering = `${ordering}`;
     }
     lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params)).then((transactionsPage) => {
-      this.transactions = transactionsPage.results;
+      this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
       this.totalTransactions = transactionsPage.count;
       this.tableLoading = false;
     });
@@ -312,7 +335,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.resetForm();
   }
 
-  async openTransaction(transaction: Transaction) {
+  async openTransaction(transaction: TransactionData) {
     await this.router.navigate([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
   }
 }

@@ -1,7 +1,7 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
 <app-independent-expenditure-create-f3x-input
-  *ngIf="(activeReport$ | async)?.report_type == reportTypes.F24"
+  *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24"
 ></app-independent-expenditure-create-f3x-input>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
 <p class="group-description">{{ transactionType?.description }}</p>
