@@ -81,11 +81,18 @@ describe('LoginService', () => {
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 
+  it('hasUserLoginData should return true', () => {
+    service.hasUserLoginData().then((userHasProfileData) => {
+      expect(userHasProfileData).toBeTrue();
+    });
+  });
+
   it('userHasProfileData should return true', () => {
     service.userHasProfileData().then((userHasProfileData) => {
       expect(userHasProfileData).toBeTrue();
     });
   });
+
 
   describe('#userHasRecentSecurityConsentDate should work', () => {
 
@@ -148,6 +155,21 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
         security_consent_exp_date: testDate,
+      });
+      service
+        .userHasRecentSecurityConsentDate()
+        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeFalse());
+    });
+
+    it('testundefined security_consent_exp_date', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consent_exp_date: undefined,
       });
       service
         .userHasRecentSecurityConsentDate()

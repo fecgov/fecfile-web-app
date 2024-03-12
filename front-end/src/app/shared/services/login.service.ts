@@ -71,11 +71,6 @@ export class LoginService extends DestroyerComponent {
     });
   }
 
-  public async updateUserLoginData(): Promise<boolean> {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    return !!userLoginData.email;
-  }
-
   public isLoggedInWithLoginDotGov() {
     return this.cookieService.check('oidc_state');
   }
