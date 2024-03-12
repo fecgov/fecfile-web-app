@@ -38,7 +38,7 @@ describe('LoginService', () => {
   });
 
   it('#signIn should authenticate in the back end', () => {
-    service.logIn('email@fec.gov', 'C00000000', 'test').subscribe(() => {
+    service.logIn('email@fec.gov', 'C00000000', 'test').then(() => {
       expect(true).toBeTrue();
     });
 

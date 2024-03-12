@@ -1,6 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from 'environments/environment';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
@@ -12,8 +12,6 @@ import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let store: MockStore;
-  let apiService: ApiService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -23,8 +21,6 @@ describe('UsersService', () => {
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(UsersService);
-    store = TestBed.inject(MockStore);
-    apiService = TestBed.inject(ApiService);
     TestBed.inject(Router);
   });
 

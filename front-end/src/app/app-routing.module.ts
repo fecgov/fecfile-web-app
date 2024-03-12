@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { committeeGuard } from './shared/guards/committee.guard';
-import { loginGuard } from './shared/guards/login.guard';
 import { nameGuard } from './shared/guards/name.guard';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
@@ -25,7 +24,7 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
-        canActivate: [loginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'login',
@@ -37,27 +36,27 @@ const routes: Routes = [
         data: {
           showSidebar: true,
         },
-        canActivate: [loginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'contacts',
         loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule),
-        canActivate: [loginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'tools',
         loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule),
-        canActivate: [loginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'help',
         loadChildren: () => import('./help/help.module').then((m) => m.HelpModule),
-        canActivate: [loginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
-        canActivate: [loginGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [nameGuard, securityNoticeGuard, committeeGuard],
       },
     ],
   },

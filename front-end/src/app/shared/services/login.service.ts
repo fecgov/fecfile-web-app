@@ -37,15 +37,19 @@ export class LoginService extends DestroyerComponent {
    * @param      {String}  username  The username
    * @param      {String}  password  The password
    *
-   * @return     {Observable}  The JSON response.
+   * @return     {Promise}  The JSON response.
    */
-  public logIn(email: string, cmteId: string, password: string): Observable<null> {
+  public logIn(email: string, cmteId: string, password: string): Promise<null> {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
-    return this.apiService.post<null>('/user/login/authenticate', {
+    return firstValueFrom(this.apiService.post<null>('/user/login/authenticate', {
       username,
       password,
+    })).then(() => {
+      return this.retrieveUserLoginData().then(() => {
+        return Promise.resolve(null);
+      });
     });
   }
 

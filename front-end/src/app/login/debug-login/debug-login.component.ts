@@ -37,10 +37,8 @@ export class DebugLoginComponent {
     const password: string = this.form.get('loginPassword')?.value;
     const email: string = this.form.get('emailId')?.value;
 
-    this.loginService.logIn(email, committeeId, password).subscribe({
-      next: () => {
-        this.router.navigate(['dashboard']);
-      },
+    this.loginService.logIn(email, committeeId, password).then(() => {
+      this.router.navigate(['dashboard']);
     });
   }
 }

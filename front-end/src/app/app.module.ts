@@ -1,6 +1,6 @@
 // Anguluar
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,8 +13,8 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { activeReportReducer } from './store/active-report.reducer';
 import { AppState } from './store/app-state.model';
 import { committeeAccountReducer } from './store/committee-account.reducer';
-import { loginReducer } from './store/user-login-data.reducer';
 import { singleClickReducer } from './store/single-click.reducer';
+import { loginReducer } from './store/user-login-data.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -28,25 +28,26 @@ import { CookieService } from 'ngx-cookie-service';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 // App
+import { NgOptimizedImage } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BannerComponent } from './layout/banner/banner.component';
 import { CommitteeBannerComponent } from './layout/committee-banner/committee-banner.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { LayoutComponent } from './layout/layout.component';
-import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
+import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
 import { F24MenuComponent } from './layout/sidebar/menus/f24/f24-menu.component';
+import { F3XMenuComponent } from './layout/sidebar/menus/f3x/f3x-menu.component';
+import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
+import { LoginService } from './shared/services/login.service';
 import { SharedModule } from './shared/shared.module';
-import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
-import { NgOptimizedImage } from '@angular/common';
-import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
-import { F1MMenuComponent } from './layout/sidebar/menus/f1m/f1m-menu.component';
-import { F99MenuComponent } from './layout/sidebar/menus/f99/f99-menu.component';
 import { UsersModule } from './users/users.module';
 
 // Save ngrx store to localStorage dynamically
@@ -56,6 +57,12 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
+}
+
+function initializeAppFactory(loginService: LoginService): () => Promise<void> {
+  return () => {
+    return loginService.retrieveUserLoginData().catch(e => e);
+  };
 }
 
 const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncReducer];
@@ -109,7 +116,13 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAppFactory,
+      deps: [LoginService],
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
