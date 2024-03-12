@@ -50,7 +50,7 @@ describe('ReportDetailedSummaryComponent', () => {
     fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(apiService, 'post').and.returnValue(of(true));
+    spyOn(apiService, 'post').and.returnValue(of());
   });
 
   it('should create', () => {

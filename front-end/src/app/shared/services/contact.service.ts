@@ -4,7 +4,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { Observable, of } from 'rxjs';
+import { lastValueFrom, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
@@ -26,6 +26,25 @@ import { ApiService } from './api.service';
 export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
+  /**
+   * Given the type of contact given, return the appropriate JSON schema doc
+   * @param {ContactTypes} type
+   * @returns {JsonSchema} schema
+   */
+  public static getSchemaByType(type: ContactTypes): JsonSchema {
+    let schema: JsonSchema = contactIndividualSchema;
+    if (type === ContactTypes.CANDIDATE) {
+      schema = contactCandidateSchema;
+    }
+    if (type === ContactTypes.COMMITTEE) {
+      schema = contactCommitteeSchema;
+    }
+    if (type === ContactTypes.ORGANIZATION) {
+      schema = contactOrganizationSchema;
+    }
+    return schema;
+  }
+
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
@@ -43,14 +62,13 @@ export class ContactService implements TableListService<Contact> {
   }
 
   public create(contact: Contact): Observable<Contact> {
-    const payload = contact.toJson();
+    const payload = this.preparePayload(contact);
     return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));
   }
 
-  public update(contact: Contact): Observable<Contact> {
-    const payload = contact.toJson();
+  public update(updated: Contact): Observable<Contact> {
     return this.apiService
-      .put<Contact>(`/contacts/${contact.id}/`, payload)
+      .put<Contact>(`/contacts/${updated.id}/`, updated)
       .pipe(map((response) => Contact.fromJSON(response)));
   }
 
@@ -58,24 +76,25 @@ export class ContactService implements TableListService<Contact> {
     return this.apiService.delete<null>(`/contacts/${contact.id}`);
   }
 
-  public candidateLookup(
+  public async candidateLookup(
     search: string,
     maxFecResults: number,
     maxFecfileResults: number,
     office?: CandidateOfficeType,
     excludeFecIds?: string[],
     excludeIds?: string[],
-  ): Observable<CandidateLookupResponse> {
-    return this.apiService
-      .get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
+  ): Promise<CandidateLookupResponse> {
+    const response = await lastValueFrom(
+      this.apiService.get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
         q: search,
         max_fec_results: maxFecResults,
         max_fecfile_results: maxFecfileResults,
         office: office ?? '',
         exclude_fec_ids: excludeFecIds?.join(',') as string,
         exclude_ids: excludeIds?.join(',') as string,
-      })
-      .pipe(map((response) => CandidateLookupResponse.fromJSON(response)));
+      }),
+    );
+    return CandidateLookupResponse.fromJSON(response);
   }
 
   public committeeLookup(
@@ -96,7 +115,7 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
 
-  public checkFecIdForUniqness(fecId: string, contactId?: string): Observable<boolean> {
+  public checkFecIdForUniqueness(fecId: string, contactId?: string): Observable<boolean> {
     if (fecId) {
       return this.apiService
         .get<string>(`/contacts/get_contact_id/`, { fec_id: fecId })
@@ -109,7 +128,7 @@ export class ContactService implements TableListService<Contact> {
     return (control: AbstractControl) => {
       return of(control.value).pipe(
         switchMap((fecId) =>
-          this.checkFecIdForUniqness(fecId, contactId).pipe(
+          this.checkFecIdForUniqueness(fecId, contactId).pipe(
             map((isUnique: boolean) => {
               return isUnique ? null : { fecIdMustBeUnique: true };
             }),
@@ -147,23 +166,8 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
   }
 
-  /**
-   * Given the type of contact given, return the appropriate JSON schema doc
-   * @param {ContactTypes} type
-   * @returns {JsonSchema} schema
-   */
-  public static getSchemaByType(type: ContactTypes): JsonSchema {
-    let schema: JsonSchema = contactIndividualSchema;
-    if (type === ContactTypes.CANDIDATE) {
-      schema = contactCandidateSchema;
-    }
-    if (type === ContactTypes.COMMITTEE) {
-      schema = contactCommitteeSchema;
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      schema = contactOrganizationSchema;
-    }
-    return schema;
+  private preparePayload(contact: Contact): Record<string, unknown> {
+    return contact.toJson();
   }
 }
 

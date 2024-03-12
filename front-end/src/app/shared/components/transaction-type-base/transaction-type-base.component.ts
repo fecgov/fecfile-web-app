@@ -26,6 +26,7 @@ import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   template: '',
@@ -44,6 +45,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   isEditable = true;
   memoCodeCheckboxLabel$ = of('');
   committeeAccount?: CommitteeAccount;
+  activeReport$: Observable<Report>;
+  reportTypes = ReportTypes;
 
   constructor(
     protected messageService: MessageService,
@@ -56,7 +59,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     protected store: Store,
     protected reportService: ReportService,
     protected activatedRoute: ActivatedRoute,
-  ) {}
+  ) {
+    this.activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['navigationEvent'] && this.navigationEvent) {
@@ -104,14 +109,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
       this.initInheritedFieldsFromParent();
     }
 
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.isEditable =
-          this.reportService.isEditable(report) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
-        if (!this.isEditable) this.form.disable();
-      });
+    this.activeReport$.subscribe((report) => {
+      this.isEditable =
+        this.reportService.isEditable(report) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
+      if (!this.isEditable) this.form.disable();
+    });
   }
 
   ngOnDestroy(): void {

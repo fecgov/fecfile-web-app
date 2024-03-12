@@ -9,7 +9,7 @@
   <div class="col-6 right-side">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
-      <ng-container *ngIf="!committees.length">
+      <ng-container *ngIf="committees?.length === 0">
         <div class="committee-card empty-card">
           <div class="empty-lens-img">
             <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg" />
@@ -19,7 +19,7 @@
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="committees.length">
+      <ng-container *ngIf="committees?.length">
         <div class="committee-list">
           <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
             <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
@@ -30,7 +30,7 @@
           </div>
         </div>
       </ng-container>
-      <h5 class="font-karla-bold">LOOKING FOR AN EXISTING FEFILE COMMITTEE ACCOUNT?</h5>
+      <h5 class="font-karla-bold">LOOKING FOR AN EXISTING FECFILE COMMITTEE ACCOUNT?</h5>
       Contact the administrator for that committee.
     </div>
     <div class="create-committee-card font-karla-bold" routerLink="/login/register-committee">

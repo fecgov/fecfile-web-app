@@ -86,16 +86,17 @@ describe('ContactLookupComponent', () => {
         last_na2me: 'testLastName',
       } as unknown as FecfileCandidateLookupData,
     ];
-    spyOn(testContactService, 'candidateLookup').and.returnValue(of(testCandidateLookupResponse));
+    spyOn(testContactService, 'candidateLookup').and.returnValue(Promise.resolve(testCandidateLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue('CAN');
     component.onDropdownSearch(testEvent);
+    tick(500);
     expect(component.contactLookupList[1].items.length === 0).toBeTrue();
   }));
 
   it('#onDropdownSearch CAN undefined fecfile_candidates', fakeAsync(() => {
     const testCandidateLookupResponse = new CandidateLookupResponse();
-    spyOn(testContactService, 'candidateLookup').and.returnValue(of(testCandidateLookupResponse));
+    spyOn(testContactService, 'candidateLookup').and.returnValue(Promise.resolve(testCandidateLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue('CAN');
     component.onDropdownSearch(testEvent);
@@ -113,20 +114,20 @@ describe('ContactLookupComponent', () => {
         type: ContactTypes.CANDIDATE,
       } as unknown as FecfileCandidateLookupData),
     ];
-    spyOn(testContactService, 'candidateLookup').and.returnValue(of(testCandidateLookupResponse));
+    spyOn(testContactService, 'candidateLookup').and.returnValue(Promise.resolve(testCandidateLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue('CAN');
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-        JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true))
+        JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true)),
     ).toBeTrue();
     expect(
       JSON.stringify([
         { label: 'There are no matching candidates', items: [] },
         { label: 'There are no matching registered candidates', items: [] },
-      ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true))
+      ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true)),
     ).toBeTrue();
   }));
 
@@ -182,13 +183,13 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     expect(
       JSON.stringify(component.contactLookupList) ===
-        JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true))
+        JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
     ).toBeTrue();
     expect(
       JSON.stringify([
         { label: 'There are no matching committees', items: [] },
         { label: 'There are no matching registered committees', items: [] },
-      ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true))
+      ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true)),
     ).toBeTrue();
   }));
 
@@ -218,7 +219,7 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(
-      JSON.stringify(component.contactLookupList) === JSON.stringify(testIndividualLookupResponse.toSelectItemGroups())
+      JSON.stringify(component.contactLookupList) === JSON.stringify(testIndividualLookupResponse.toSelectItemGroups()),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -226,7 +227,7 @@ describe('ContactLookupComponent', () => {
           label: 'There are no matching individuals',
           items: [],
         },
-      ]) === JSON.stringify(new IndividualLookupResponse().toSelectItemGroups())
+      ]) === JSON.stringify(new IndividualLookupResponse().toSelectItemGroups()),
     ).toBeTrue();
   }));
 
@@ -256,7 +257,7 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-        JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups())
+        JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups()),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -264,7 +265,7 @@ describe('ContactLookupComponent', () => {
           label: 'There are no matching organizations',
           items: [],
         },
-      ]) === JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups())
+      ]) === JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups()),
     ).toBeTrue();
   }));
 

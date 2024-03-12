@@ -1,7 +1,7 @@
-<ng-container *ngIf="this.activeReport?.report_type === form24ReportType">
+<div>
   <form id="form" [formGroup]="form" class="p-fluid">
     <div class="field">
-      <label for="linkedF3x">Linked report</label>
+      <label for="linkedF3x">LINKED REPORT</label>
       <span
         class="pi pi-info-circle"
         style="font-size: 1.5rem; margin-left: 0.5rem"
@@ -10,8 +10,8 @@
           tooltipPosition: 'top'
         }"
       ></span>
-      <input type="text" class="p-disabled" pInputText id="linkedF3x" formControlName="linkedF3x" />
+      <input type="text" [readonly]="true" class="readonly" pInputText id="linkedF3x" formControlName="linkedF3x" />
       <app-error-messages [form]="form" fieldName="linkedF3x" [formSubmitted]="formSubmitted"></app-error-messages>
     </div>
   </form>
-</ng-container>
+</div>

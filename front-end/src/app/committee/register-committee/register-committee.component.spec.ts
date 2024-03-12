@@ -1,20 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { RegisterCommitteeComponent } from './register-committee.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ToastModule } from 'primeng/toast';
-import { DialogModule } from 'primeng/dialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { FecApiService } from 'app/shared/services/fec-api.service';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { FecApiService } from 'app/shared/services/fec-api.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { environment } from 'environments/environment';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
+import { RegisterCommitteeComponent } from './register-committee.component';
 
 describe('RegisterCommitteeComponent', () => {
   let component: RegisterCommitteeComponent;
   let fixture: ComponentFixture<RegisterCommitteeComponent>;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,6 +26,7 @@ describe('RegisterCommitteeComponent', () => {
     });
     fixture = TestBed.createComponent(RegisterCommitteeComponent);
     component = fixture.componentInstance;
+    httpTestingController = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });
 
@@ -62,4 +65,18 @@ describe('RegisterCommitteeComponent', () => {
 
     expect(spy).toHaveBeenCalledWith(filing.committee_id);
   });
+  it('should fail to register committee', waitForAsync(() => {
+    const filing = new FecFiling();
+    filing.committee_id = 'C12345678';
+    filing.committee_name = 'test name';
+    component.select(filing);
+    component.createAccount();
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/register/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush(null);
+    httpTestingController.verify();
+    setTimeout(() => {
+      expect(component.unableToCreateAccount).toBeTrue();
+    }, 500)
+  }));
 });
