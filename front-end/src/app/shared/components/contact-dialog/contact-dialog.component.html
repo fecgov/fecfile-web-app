@@ -293,7 +293,7 @@
         </ng-container>
       </form>
 
-      <div *ngIf="showHistory">
+      <div *ngIf="showHistory && !isNewItem">
         <p-table
           [value]="transactions"
           responsiveLayout="scroll"
