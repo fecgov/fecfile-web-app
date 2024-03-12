@@ -30,7 +30,7 @@ export class ReportListPage {
           'x-csrftoken': cookie?.value,
         },
       }).then((resp) => {
-        const reports = resp.body.results;
+        const reports = resp.body;
         for (const report of reports) {
           ReportListPage.deleteReport(report.id);
         }
@@ -72,7 +72,7 @@ export class ReportListPage {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickSidebarItem('Submit report');
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('#filingPassword').type('Test123!');
+    cy.get(alias).find('#filingPassword').type(''); // Insert password from env variable
     cy.get(alias).find('.p-checkbox').click();
     PageUtils.clickButton('Submit');
     PageUtils.clickButton('Yes');

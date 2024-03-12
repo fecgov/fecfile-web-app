@@ -109,7 +109,7 @@ describe('ContactService', () => {
     httpTestingController.verify();
   });
 
-  it('#candidateLookup() happy path', () => {
+  it('#candidateLookup() happy path', async () => {
     const expectedRetval = new CandidateLookupResponse();
     const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
@@ -126,16 +126,15 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    service
-      .candidateLookup(
-        testSearch,
-        testMaxFecResults,
-        testMaxFecfileResults,
-        undefined,
-        ['C000000001', 'C000000002'],
-        [],
-      )
-      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    const value = await service.candidateLookup(
+      testSearch,
+      testMaxFecResults,
+      testMaxFecfileResults,
+      undefined,
+      ['C000000001', 'C000000002'],
+      [],
+    );
+    expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 

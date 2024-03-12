@@ -59,6 +59,7 @@
           <p-selectButton
             data-test="report-type-category"
             [options]="getReportTypeCategories()"
+            [allowEmpty]="false"
             formControlName="report_type_category"
           ></p-selectButton>
           <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
