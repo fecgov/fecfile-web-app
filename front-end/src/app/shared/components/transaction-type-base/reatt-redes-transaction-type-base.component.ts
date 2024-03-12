@@ -96,7 +96,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     const reportId = this.activatedRoute.snapshot.params['reportId'];
     const reatRedes = this.transaction?.reatt_redes;
     if (!reatRedes) return;
-    this.pullForward = reatRedes.report_id !== reportId;
+    this.pullForward = reatRedes.report_ids?.includes(reportId) === false;
     if (!this.pullForward) return;
 
     this.reattributedData.formProperties = reatRedes.transactionType.getFormControlNames();

@@ -313,6 +313,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   async openTransaction(transaction: Transaction) {
-    await this.router.navigate([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
+    await this.router.navigate([`reports/transactions/report/${transaction.report_ids?.[0]}/list/${transaction.id}`]);
   }
 }

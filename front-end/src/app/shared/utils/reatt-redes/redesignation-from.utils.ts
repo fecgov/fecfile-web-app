@@ -53,7 +53,7 @@ export class RedesignationFromUtils {
       transaction.election_code = redesignatedTransaction.election_code;
       transaction.election_other_description = redesignatedTransaction.election_other_description;
     }
-    if (activeReportId) transaction.report_id = activeReportId;
+    if (activeReportId) transaction.report_ids?.push(activeReportId);
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
 
     Object.assign(transaction.transactionType, {

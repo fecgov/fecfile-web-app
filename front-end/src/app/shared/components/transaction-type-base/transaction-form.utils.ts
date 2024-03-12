@@ -335,7 +335,7 @@ export class TransactionFormUtils {
       const memo_text = MemoText.fromJSON({
         text4000: text,
         text_prefix: transaction.memo_text?.text_prefix,
-        report_id: transaction?.report_id,
+        report_id: transaction?.report_ids?.[0],
         rec_type: 'TEXT',
       });
 

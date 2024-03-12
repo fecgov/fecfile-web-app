@@ -120,7 +120,9 @@ describe('ContactDialogComponent', () => {
     it('should route to transaction', () => {
       const spy = spyOn(component.router, 'navigate');
       component.openTransaction(transaction);
-      expect(spy).toHaveBeenCalledWith([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
+      expect(spy).toHaveBeenCalledWith([
+        `reports/transactions/report/${transaction.report_ids?.[0]}/list/${transaction.id}`,
+      ]);
     });
 
     it('should handle pagination', () => {

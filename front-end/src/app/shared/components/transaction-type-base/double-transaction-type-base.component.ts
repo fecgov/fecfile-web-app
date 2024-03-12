@@ -131,7 +131,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
     ];
-    payload.children[0].report_id = payload.report_id;
+    payload.children[0].reports = payload.reports;
 
     this.processPayload(payload, navigationEvent);
   }

@@ -20,7 +20,7 @@ export class RedesignationToUtils {
       transaction.contact_2_id = redesignatedTransaction.contact_2_id;
       transaction.contact_2 = redesignatedTransaction.contact_2;
     }
-    if (activeReportId) transaction.report_id = activeReportId;
+    if (activeReportId) transaction.report_ids?.push(activeReportId);
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
 
     Object.assign(transaction.transactionType, {

@@ -120,8 +120,8 @@ export abstract class TripleTransactionTypeBaseComponent
       TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
       TransactionFormUtils.getPayloadTransaction(this.childTransaction_2, this.childForm_2, this.childFormProperties_2),
     ];
-    payload.children[0].report_id = payload.report_id;
-    payload.children[1].report_id = payload.report_id;
+    payload.children[0].report_ids = payload.report_ids;
+    payload.children[1].report_ids = payload.report_ids;
 
     this.processPayload(payload, navigationEvent);
   }

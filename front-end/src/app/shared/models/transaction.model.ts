@@ -56,8 +56,8 @@ export abstract class Transaction extends BaseModel {
   updated: string | undefined;
   deleted: string | undefined;
 
-  report_id: string | undefined; // Foreign key to the parent report db record
-  report: Report | undefined; // Report object from backend
+  reports: Report[] | undefined;
+  report_ids: string[] | undefined;
 
   @Type(() => Contact)
   contact_1: Contact | undefined;
