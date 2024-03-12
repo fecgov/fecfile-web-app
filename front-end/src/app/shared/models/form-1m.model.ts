@@ -36,6 +36,10 @@ export class Form1M extends Report {
     return 'NOTIFICATION OF MULTICANDIDATE STATUS';
   }
 
+  get reportLabel(): string {
+    return '';
+  }
+
   get versionLabel() {
     return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
@@ -130,8 +134,7 @@ export class Form1M extends Report {
   @Type(() => Contact) contact_candidate_V?: Contact;
   contact_candidate_V_id?: string | null;
 
-  // prettier-ignore
-  static fromJSON(json: any): Form1M { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: unknown): Form1M {
     return plainToInstance(Form1M, json);
   }
 }

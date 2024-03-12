@@ -39,6 +39,8 @@ export abstract class Report extends BaseModel {
 
   abstract get versionLabel(): string;
 
+  abstract get reportLabel(): string;
+
   get reportCode(): F3xReportCodes | undefined {
     return;
   }
