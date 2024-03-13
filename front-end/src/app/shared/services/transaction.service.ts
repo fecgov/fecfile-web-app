@@ -208,11 +208,11 @@ export class TransactionService implements TableListService<Transaction> {
     delete payload['report'];
 
     if (payload['children']) {
-      payload['children'] = transaction.children.map((child) => {
-        if (typeof child.toJson !== 'function') {
-          return child;
+      payload['children'] = transaction.children.map((child: Transaction | string) => {
+        if (child instanceof Transaction) {
+          return this.preparePayload(child);
         }
-        return this.preparePayload(child);
+        return child;
       });
     }
 
