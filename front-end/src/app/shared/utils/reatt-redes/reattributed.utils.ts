@@ -1,7 +1,6 @@
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { getReportCodeLabel } from '../report-code.utils';
-import { Form3X } from '../../models/form-3x.model';
 
 export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes, Report } from 'app/shared/models/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -16,7 +16,6 @@ import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/r
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
-import { Report } from 'app/shared/models/report.model';
 
 @Component({
   template: '',

@@ -3,7 +3,6 @@ import { Report } from '../../../../shared/models/report.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
 import { Transaction } from '../../../../shared/models/transaction.model';
-import { Form3X } from '../../../../shared/models/form-3x.model';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
 
 @Component({

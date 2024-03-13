@@ -1,7 +1,6 @@
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { getReportCodeLabel } from '../report-code.utils';
-import { Form3X } from 'app/shared/models/form-3x.model';
 
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {

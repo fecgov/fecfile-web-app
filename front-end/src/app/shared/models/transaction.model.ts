@@ -177,7 +177,7 @@ export abstract class Transaction extends BaseModel {
     return payload;
   }
 
-  getReport(reportType?: ReportTypes): Report | undefined {
+  getReport(reportType?: ReportTypes): Report | void {
     if (this.reports) {
       for (const report of this.reports) {
         if (report.report_type === reportType) {
@@ -185,8 +185,6 @@ export abstract class Transaction extends BaseModel {
         }
       }
     }
-
-    return;
   }
 
   getForm3X(): Form3X | undefined {

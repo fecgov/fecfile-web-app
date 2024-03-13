@@ -35,7 +35,7 @@ export class ReattributionFromUtils {
       transaction.reatt_redes_id = reattributedTransaction.id;
       transaction.reatt_redes = reattributedTransaction;
     }
-    if (activeReportId) transaction.report_ids?.includes(activeReportId as string);
+    if (activeReportId) transaction.report_ids?.includes(activeReportId);
     transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
 
     Object.assign(transaction.transactionType, {
