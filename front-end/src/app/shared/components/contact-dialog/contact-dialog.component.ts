@@ -27,7 +27,7 @@ import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
 import { TableLazyLoadEvent } from 'primeng/table';
 
@@ -87,6 +87,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     private fb: FormBuilder,
     private contactService: ContactService,
     private transactionService: TransactionService,
+    private activatedRoute: ActivatedRoute,
     protected confirmationService: ConfirmationService,
     public router: Router,
   ) {
@@ -313,6 +314,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   async openTransaction(transaction: Transaction) {
-    await this.router.navigate([`reports/transactions/report/${transaction.report_ids?.[0]}/list/${transaction.id}`]);
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
   }
 }

@@ -228,7 +228,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   }
 
   navigateTo(event: NavigationEvent) {
-    const reportPath = `/reports/transactions/report/${event.transaction?.report_ids?.[0]}`;
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    const reportPath = `/reports/transactions/report/${reportId}`;
     if (
       event.destination === NavigationDestination.ANOTHER ||
       event.destination === NavigationDestination.ANOTHER_CHILD

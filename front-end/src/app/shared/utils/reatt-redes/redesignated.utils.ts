@@ -13,7 +13,7 @@ export class RedesignatedUtils {
       if (transaction.report_ids?.includes(activeReportId as string)) {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
-        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel((transaction.reports?.[0] as Form3X)?.report_code)}.) See redesignation below.`;
+        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel(transaction.getForm3X()?.report_code)}.) See redesignation below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }
