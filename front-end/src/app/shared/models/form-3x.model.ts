@@ -25,8 +25,8 @@ export class F3xCoverageDates {
 
   // prettier-ignore
   static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(F3xCoverageDates, json);
-  }
+        return plainToClass(F3xCoverageDates, json);
+    }
 }
 
 export const F3xQualifiedCommitteeTypeCodes = ['Q', 'W', 'Y'];
@@ -180,12 +180,15 @@ export class Form3X extends Report {
     return getReportCodeLabel(this.report_code) ?? '';
   }
 
+  get reportLabel(): string {
+    return getReportCodeLabel(this.reportCode) ?? '';
+  }
+
   get versionLabel() {
     return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  // prettier-ignore
-  static fromJSON(json: any): Form3X { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: unknown): Form3X {
     // json['form_type'] = F3xFormTypes.F3XT;
     return plainToInstance(Form3X, json);
   }

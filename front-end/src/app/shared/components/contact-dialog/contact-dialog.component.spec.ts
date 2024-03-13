@@ -6,7 +6,7 @@ import { getTestTransactionByType, testContact, testMockStore } from 'app/shared
 import { DropdownModule } from 'primeng/dropdown';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
-import { ContactDialogComponent } from './contact-dialog.component';
+import { ContactDialogComponent, TransactionData } from './contact-dialog.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
@@ -131,8 +131,8 @@ describe('ContactDialogComponent', () => {
 
     it('should route to transaction', () => {
       const spy = spyOn(component.router, 'navigate');
-      component.openTransaction(transaction);
-      expect(spy).toHaveBeenCalledWith([`reports/transactions/report/99/list/${transaction.id}`]);
+      component.openTransaction(new TransactionData(transaction));
+      expect(spy).toHaveBeenCalledWith([`reports/transactions/report/999/list/${transaction.id}`]);
     });
 
     it('should handle pagination', () => {

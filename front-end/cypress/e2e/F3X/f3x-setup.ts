@@ -1,11 +1,11 @@
 import {
   defaultFormData as reportFormData,
   defaultFormData as defaultReportFormData,
-  F3xCreateReportFormData
-} from "../models/ReportFormModel";
-import { ContactListPage } from "../pages/contactListPage";
-import { ReportListPage } from "../pages/reportListPage";
-import { currentYear } from "../pages/pageUtils";
+  F3xCreateReportFormData,
+} from '../models/ReportFormModel';
+import { ContactListPage } from '../pages/contactListPage';
+import { ReportListPage } from '../pages/reportListPage';
+import { currentYear } from '../pages/pageUtils';
 
 export interface Setup {
   organization?: boolean;
@@ -22,7 +22,6 @@ export function F3XSetup(setup: Setup = {}) {
   if (setup.committee) ContactListPage.createCommittee();
   ReportListPage.createF3X(setup.report ?? defaultReportFormData);
 }
-
 
 export const reportFormDataApril: F3xCreateReportFormData = {
   ...reportFormData,

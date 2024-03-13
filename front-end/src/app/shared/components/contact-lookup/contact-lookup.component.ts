@@ -74,14 +74,14 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onDropdownSearch(event: any) {
+  async onDropdownSearch(event: any) {
     const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.CANDIDATE:
-          this.contactService
-            .candidateLookup(
+          this.contactLookupList = (
+            await this.contactService.candidateLookup(
               searchTerm,
               this.maxFecCommitteeResults,
               this.maxFecfileCommitteeResults,
@@ -89,9 +89,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
               this.excludeFecIds,
               this.excludeIds,
             )
-            .subscribe((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
-            });
+          ).toSelectItemGroups(this.includeFecfileResults);
           break;
         case ContactTypes.COMMITTEE:
           this.contactService

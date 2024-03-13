@@ -1,5 +1,4 @@
-import { ContactListPage } from '../pages/contactListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -35,7 +34,7 @@ function CreateContribution() {
 
   StartTransaction.Disbursements().Contributions().ToCandidate();
 
-  cy.get('[role="searchbox"]').type(committeeFormData.name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(committeeFormData.name.slice(0, 1));
   cy.contains(committeeFormData.name).should('exist');
   cy.contains(committeeFormData.name).click();
 
@@ -65,9 +64,7 @@ function Redesignate(old = false) {
 
 describe('Redesignations', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
+    Initialize();
   });
 
   it('should test redesignating a Schedule E contribution in the current report', () => {
@@ -76,7 +73,8 @@ describe('Redesignations', () => {
     Redesignate();
   });
 
-  it('should test redesignating a Schedule E contribution from a submitted report', () => {
+  // Test disabled until a mock is set up for submitting a report.
+  xit('should test redesignating a Schedule E contribution from a submitted report', () => {
     // Create an individual contact to be used with contact lookup
     CreateContribution();
     ReportListPage.createF3X(reportFormDataJuly);

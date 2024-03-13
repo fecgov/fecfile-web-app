@@ -1,5 +1,5 @@
 import { ContactListPage } from '../pages/contactListPage';
-import { LoginPage } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -46,7 +46,7 @@ function CreateReceipt() {
   F3XSetup({ individual: true, candidate: true, report: reportFormDataApril });
   StartTransaction.Receipts().Individual().IndividualReceipt();
 
-  cy.get('[role="searchbox"]').type(individualContactFormData.last_name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
   cy.contains(individualContactFormData.last_name).should('exist');
   cy.contains(individualContactFormData.last_name).click();
   TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData));
@@ -66,7 +66,7 @@ function Reattribute(old = false) {
   }
   cy.wait(500);
 
-  cy.get('[role="searchbox"]').type(assignee.last_name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(assignee.last_name.slice(0, 1));
   cy.contains(assignee.last_name).should('exist');
   cy.contains(assignee.last_name).click();
   TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(reattributeData));
@@ -78,9 +78,7 @@ function Reattribute(old = false) {
 
 describe('Reattributions', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ReportListPage.deleteAllReports();
-    ContactListPage.deleteAllContacts();
+    Initialize();
   });
 
   it('should test reattributing a Schedule A in the current report', () => {
@@ -90,7 +88,8 @@ describe('Reattributions', () => {
     Reattribute();
   });
 
-  it('should test reattributing a Schedule A in a submitted report', () => {
+  // Test disabled until a mock is set up for submitting a report.
+  xit('should test reattributing a Schedule A in a submitted report', () => {
     // Create an individual contact to be used with contact lookup
     ContactListPage.createIndividual(assignee);
     CreateReceipt();

@@ -69,10 +69,11 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>{{ item.formLabel }}</td>
-        <td>{{ item.report_code_label }}</td>
+        <td>{{ item.reportLabel }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
-            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
+          >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+          </ng-container
           >
         </td>
         <td>{{ item.report_status }}</td>
