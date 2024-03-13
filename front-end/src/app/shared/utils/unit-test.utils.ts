@@ -205,12 +205,14 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   aggregation_group: AggregationGroups.GENERAL,
   memo_code: true,
   donor_committee_fec_id: 'C00000000',
-  report: {
-    report_type: 'F3X',
-    report_code: 'Q1',
-    reportCode: 'Q1',
-    coverage_through_date: '2024-04-20',
-  },
+  reports: [
+    {
+      report_type: 'F3X',
+      report_code: 'Q1',
+      reportCode: 'Q1',
+      coverage_through_date: '2024-04-20',
+    },
+  ],
 });
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
@@ -228,11 +230,13 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
   contribution_amount: 1,
   contribution_aggregate: 2,
   aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-  report: {
-    report_type: 'F3X',
-    report_code: 'Q1',
-    reportCode: 'Q1',
-  },
+  reports: [
+    {
+      report_type: 'F3X',
+      report_code: 'Q1',
+      reportCode: 'Q1',
+    },
+  ],
 });
 
 export function getTestTransactionByType(

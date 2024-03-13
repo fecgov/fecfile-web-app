@@ -23,8 +23,8 @@ describe('Reattributed Utils', () => {
         payload.reatt_redes,
         'not-the-same-report-as-orig',
       );
-      expect(overlay.report).toBeTruthy();
-      if (!overlay.report) throw new Error('');
+      expect(overlay.reports).toBeTruthy();
+      if (!overlay.reports) throw new Error('');
       expect(overlay.contribution_purpose_descrip).toBe(
         `(Originally disclosed on APRIL 15 QUARTERLY REPORT (Q1).) See reattribution below.`,
       );
