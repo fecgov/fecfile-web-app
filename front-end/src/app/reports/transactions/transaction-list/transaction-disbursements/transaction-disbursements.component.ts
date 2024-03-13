@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
@@ -9,7 +9,7 @@ import { TransactionListTableBaseComponent } from '../transaction-list-table-bas
 import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { Report, ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -17,7 +17,6 @@ import { Report, ReportTypes } from 'app/shared/models/report.model';
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
-  @Input() report?: Report;
   form24ReportType = ReportTypes.F24;
 
   scheduleTransactionTypeLabels: LabelList = [...ScheduleBTransactionTypeLabels, ...ScheduleETransactionTypeLabels];

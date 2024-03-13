@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -16,11 +16,13 @@ import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/r
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
+import { Report } from 'app/shared/models/report.model';
 
 @Component({
   template: '',
 })
 export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
+  @Input() report?: Report;
   abstract scheduleTransactionTypeLabels: LabelList;
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
@@ -45,7 +47,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         !!transaction.force_unaggregated &&
         this.reportIsEditable &&
-        transaction.reports?.[0].report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
@@ -57,7 +59,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         !transaction.force_unaggregated &&
         this.reportIsEditable &&
-        transaction.reports?.[0].report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
@@ -69,7 +71,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.itemized === false &&
         this.reportIsEditable &&
-        transaction.reports?.[0].report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
@@ -81,7 +83,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.itemized === true &&
         this.reportIsEditable &&
-        transaction.reports?.[0].report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
