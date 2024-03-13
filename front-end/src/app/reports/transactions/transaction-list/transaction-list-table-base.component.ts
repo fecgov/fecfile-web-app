@@ -27,6 +27,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
   reportIsEditable = false;
+  reportId: string;
 
   public rowActions: TableAction[] = [
     new TableAction(
@@ -180,6 +181,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     protected reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef);
+    this.reportId = this.activatedRoute.snapshot.params['reportId'];
   }
 
   override ngOnInit(): void {
@@ -201,8 +203,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return { report_id: reportId, page_size: this.rowsPerPage };
+    return { report_id: this.reportId, page_size: this.rowsPerPage };
   }
 
   onRowsPerPageChange() {
@@ -213,8 +214,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override async editItem(item: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
-    await this.router.navigateByUrl(`/reports/transactions/report/${reportId}/list/${item.id}`);
+    await this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
   }
 
   public async editLoanAgreement(transaction: Transaction): Promise<void> {
@@ -223,9 +223,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public async createLoanAgreement(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${reportId}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
+      `/reports/transactions/report/${this.reportId}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
     );
   }
 
@@ -263,36 +262,33 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public async createLoanRepaymentReceived(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${reportId}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`,
     );
   }
 
   public async createDebtRepaymentReceived(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
-    await this.router.navigateByUrl(`/reports/transactions/report/${reportId}/select/receipt?debt=${transaction.id}`);
+    await this.router.navigateByUrl(
+      `/reports/transactions/report/${this.reportId}/select/receipt?debt=${transaction.id}`,
+    );
   }
 
   public async createLoanRepaymentMade(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${reportId}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`,
     );
   }
 
   public async createDebtRepaymentMade(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${reportId}/select/disbursement?debt=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/select/disbursement?debt=${transaction.id}`,
     );
   }
 
   public async createReattribution(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
     if (this.reportIsEditable) {
       await this.router.navigateByUrl(
-        `/reports/transactions/report/${reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
+        `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
       );
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
@@ -300,10 +296,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public async createRedesignation(transaction: Transaction): Promise<void> {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
     if (this.reportIsEditable) {
       await this.router.navigateByUrl(
-        `/reports/transactions/report/${reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
+        `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
       );
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
