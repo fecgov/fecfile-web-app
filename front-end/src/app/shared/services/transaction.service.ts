@@ -208,7 +208,12 @@ export class TransactionService implements TableListService<Transaction> {
     delete payload['report'];
 
     if (payload['children']) {
-      payload['children'] = transaction.children.map((transaction) => this.preparePayload(transaction));
+      payload['children'] = transaction.children.map((child) => {
+        if (typeof child.toJson !== 'function') {
+          return child;
+        }
+        return this.preparePayload(child);
+      });
     }
 
     return payload;
