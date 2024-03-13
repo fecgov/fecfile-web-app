@@ -44,7 +44,7 @@ describe('ContactDialogComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { params: { reportId: '99' } },
+            snapshot: { params: { report_id: '999' } },
           },
         },
       ],
