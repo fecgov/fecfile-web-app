@@ -4,11 +4,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
+import { UsersService } from 'app/shared/services/users.service';
+import { DateUtils } from 'app/shared/utils/date.utils';
 import { testMockStore, testUserLoginData } from 'app/shared/utils/unit-test.utils';
+import { of } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { SecurityNoticeComponent } from './security-notice.component';
-import { UsersService } from 'app/shared/services/users.service';
-import { of } from 'rxjs';
 
 describe('SecurityNoticeComponent', () => {
   let component: SecurityNoticeComponent;
@@ -48,10 +49,18 @@ describe('SecurityNoticeComponent', () => {
   it('should submit', () => {
     const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(of(testUserLoginData));
     component.signConsentForm();
-    expect(spy).not.toHaveBeenCalled();
+    const expectedRetval = testUserLoginData;
 
+    const one_day_ahead = new Date();
+    one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+    expectedRetval.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_day_ahead) as string;
+    expect(spy).toHaveBeenCalledOnceWith(expectedRetval);
+
+    const one_year_ahead = new Date();
+    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
+    expectedRetval.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_year_ahead) as string;
     component.form.get('security-consent-annual')?.setValue(true);
     component.signConsentForm();
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(expectedRetval);
   });
 });
