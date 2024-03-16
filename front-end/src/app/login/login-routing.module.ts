@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { SecurityNoticeComponent } from './security-notice/security-notice.component';
-import { BackgroundStyles } from 'app/layout/layout.component';
-import { LoginGuard } from 'app/shared/guards/login-page.guard';
-import { nameGuard } from 'app/shared/guards/name.guard';
-import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
+import { RouterModule, Routes } from '@angular/router';
+import { RegisterCommitteeComponent } from 'app/committee/register-committee/register-committee.component';
 import { SelectCommitteeComponent } from 'app/committee/select-committee/select-committee.component';
 import { HeaderStyles } from 'app/layout/header/header.component';
+import { BackgroundStyles } from 'app/layout/layout.component';
+import { nameGuard } from 'app/shared/guards/name.guard';
+import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
 import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update-current-user.component';
-import { RegisterCommitteeComponent } from 'app/committee/register-committee/register-committee.component';
+import { LoginComponent } from './login/login.component';
+import { SecurityNoticeComponent } from './security-notice/security-notice.component';
 
 const routes: Routes = [
   {
@@ -27,7 +26,7 @@ const routes: Routes = [
     path: 'security-notice',
     component: SecurityNoticeComponent,
     title: 'Security Notice',
-    canActivate: [LoginGuard, nameGuard],
+    canActivate: [nameGuard],
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
@@ -39,7 +38,7 @@ const routes: Routes = [
     path: 'select-committee',
     title: 'Select Committee',
     component: SelectCommitteeComponent,
-    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
+    canActivate: [nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
@@ -50,7 +49,7 @@ const routes: Routes = [
     path: 'register-committee',
     title: 'Register Committee',
     component: RegisterCommitteeComponent,
-    canActivate: [LoginGuard, nameGuard, securityNoticeGuard],
+    canActivate: [nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
@@ -61,7 +60,7 @@ const routes: Routes = [
     path: 'create-profile',
     title: 'Create Profile',
     component: UpdateCurrentUserComponent,
-    canActivate: [LoginGuard],
+    canActivate: [],
     data: {
       showCommitteeBanner: false,
       showHeader: false,
@@ -75,4 +74,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class LoginRoutingModule {}
+export class LoginRoutingModule { }

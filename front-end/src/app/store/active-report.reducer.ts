@@ -1,12 +1,13 @@
-import { createReducer, on, Action } from '@ngrx/store';
-import { setActiveReportAction } from './active-report.actions';
+import { Action, createReducer, on } from '@ngrx/store';
 import { Report } from '../shared/models/report.model';
-import { userLoggedOutAction } from './login.actions';
+import { setActiveReportAction } from './active-report.actions';
+import { userLoginDataDiscardedAction } from './user-login-data.actions';
+
 
 export const initialState: Report | undefined = undefined;
 
 export const activeReportReducer = createReducer<Report | undefined, Action>(
   initialState,
   on(setActiveReportAction, (_state, update) => update.payload),
-  on(userLoggedOutAction, () => initialState),
+  on(userLoginDataDiscardedAction, () => initialState),
 );

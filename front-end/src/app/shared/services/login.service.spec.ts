@@ -5,14 +5,13 @@ import { environment } from 'environments/environment';
 import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
-import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
+import { Router } from '@angular/router';
+import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
-import { UserLoginData } from '../models/user.model';
-import { LoginService } from './login.service';
 import { DateUtils } from '../utils/date.utils';
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -24,7 +23,7 @@ describe('LoginService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ApiService, LoginService, CookieService, provideMockStore(testMockStore)],
+      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(LoginService);
@@ -39,7 +38,7 @@ describe('LoginService', () => {
   });
 
   it('#signIn should authenticate in the back end', () => {
-    service.logIn('email@fec.gov', 'C00000000', 'test').subscribe(() => {
+    service.logIn('email@fec.gov', 'C00000000', 'test').then(() => {
       expect(true).toBeTrue();
     });
 
@@ -63,15 +62,11 @@ describe('LoginService', () => {
 
     const dispatchSpy = spyOn(store, 'dispatch');
     const postSpy = spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
-    const cookieSpy = spyOn(cookieService, 'delete');
 
     service.userLoginData$ = of(testUserLoginData);
-    service.logOut().then(() => {
-      expect(dispatchSpy).toHaveBeenCalledWith(userLoggedOutAction());
-      expect(postSpy).toHaveBeenCalledTimes(0);
-      expect(cookieSpy).toHaveBeenCalledTimes(6);
-      expect(cookieSpy).toHaveBeenCalledWith('csrftoken');
-    });
+    service.logOut();
+    expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    expect(postSpy).toHaveBeenCalledTimes(0);
   });
 
   //Can't figure out how to override service's userLoginData
@@ -82,13 +77,13 @@ describe('LoginService', () => {
     spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
+    expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 
-  it('userIsAuthenticated should return true', () => {
-    service.userIsAuthenticated().then((userIsAuthenticated) => {
-      expect(userIsAuthenticated).toBeTrue();
+  it('hasUserLoginData should return true', () => {
+    service.hasUserLoginData().then((userHasProfileData) => {
+      expect(userHasProfileData).toBeTrue();
     });
   });
 
@@ -98,52 +93,60 @@ describe('LoginService', () => {
     });
   });
 
+
   describe('#userHasRecentSecurityConsentDate should work', () => {
-    it('current date is valid', () => {
+
+    const one_year_ahead = new Date();
+    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
+
+    it('expiration one day ahead is recent', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
       store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
+        security_consent_exp_date: DateUtils.convertDateToFecFormat(one_day_ahead) as string,
       });
       service
         .userHasRecentSecurityConsentDate()
         .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
-    it('recent date is valid', () => {
+    it('expiration six months ahead is recent', () => {
       const recentDate = new Date();
-      recentDate.setMonth(recentDate.getMonth() - 6);
+      recentDate.setMonth(recentDate.getMonth() + 6);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
 
       store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: testDate,
+        security_consent_exp_date: testDate,
       });
       service
         .userHasRecentSecurityConsentDate()
         .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
-    it('364 days ago is valid', () => {
+    it('expiration 364 days ahead is recent', () => {
       const recentDate = new Date();
-      recentDate.setDate(recentDate.getDate() - 364);
+      recentDate.setDate(recentDate.getDate() + 364);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
 
       store.overrideSelector(selectUserLoginData, {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: testDate,
+        security_consent_exp_date: testDate,
       });
       service
         .userHasRecentSecurityConsentDate()
         .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
     });
 
-    it('one year ago is invalid', () => {
+    it('expiration one year ago is not recent', () => {
       const recentDate = new Date();
       recentDate.setFullYear(recentDate.getFullYear() - 1);
       const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
@@ -151,7 +154,22 @@ describe('LoginService', () => {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_date: testDate,
+        security_consent_exp_date: testDate,
+      });
+      service
+        .userHasRecentSecurityConsentDate()
+        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeFalse());
+    });
+
+    it('testundefined security_consent_exp_date', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consent_exp_date: undefined,
       });
       service
         .userHasRecentSecurityConsentDate()
@@ -159,42 +177,4 @@ describe('LoginService', () => {
     });
   });
 
-  it('#dispatchUserLoggedInFromCookies happy path', () => {
-    const testFirstName = 'testFirstName';
-    const testLastName = 'testLastName';
-    const testEmail = 'testEmail';
-    const testLoginDotGov = false;
-    const testSecurityConsentDate = DateUtils.convertDateToFecFormat(new Date()) as string;
-
-    const expectedUserLoginData: UserLoginData = {
-      first_name: testFirstName,
-      last_name: testLastName,
-      email: testEmail,
-      login_dot_gov: testLoginDotGov,
-      security_consent_date: testSecurityConsentDate,
-    };
-    spyOn(cookieService, 'check').and.returnValue(true);
-    spyOn(cookieService, 'get').and.callFake((name: string) => {
-      if (name === environment.ffapiFirstNameCookieName) {
-        return testFirstName;
-      }
-      if (name === environment.ffapiLastNameCookieName) {
-        return testLastName;
-      }
-      if (name === environment.ffapiEmailCookieName) {
-        return testEmail;
-      }
-      if (name === environment.ffapiLoginDotGovCookieName) {
-        return testLoginDotGov.toString();
-      }
-      if (name === environment.ffapiSecurityConsentCookieName) {
-        return testSecurityConsentDate;
-      }
-      throw Error('fail!');
-    });
-    spyOn(store, 'dispatch');
-
-    service.dispatchUserLoggedInFromCookies();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedInAction({ payload: expectedUserLoginData }));
-  });
 });
