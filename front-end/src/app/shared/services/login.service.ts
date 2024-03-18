@@ -76,7 +76,7 @@ export class LoginService extends DestroyerComponent {
   }
 
   public isLoggedInWithLoginDotGov() {
-    return this.cookieService.check('oidc_state');
+    return this.cookieService.get(environment.ffapiLoginDotGovCookieName) === 'true';
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {

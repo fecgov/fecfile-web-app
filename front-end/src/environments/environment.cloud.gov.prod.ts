@@ -12,6 +12,7 @@ export const environment = {
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: 'https://fecfile-web-api-prod.app.cloud.gov/oidc/authenticate',
   loginDotGovLogoutUrl: 'https://fecfile-web-api-prod.app.cloud.gov/oidc/logout',
+  ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
 };
 
