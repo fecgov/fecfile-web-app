@@ -185,12 +185,16 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override ngOnInit(): void {
     this.loading = true;
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.reportIsEditable = this.reportService.isEditable(report);
-      });
+    if (this.report) {
+      this.reportIsEditable = this.reportService.isEditable(this.report);
+    } else {
+      this.store
+        .select(selectActiveReport)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((report) => {
+          this.reportIsEditable = this.reportService.isEditable(report);
+        });
+    }
   }
 
   public onTableActionClick(action: TableAction, report?: Form3X) {

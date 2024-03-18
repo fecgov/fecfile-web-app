@@ -205,7 +205,7 @@ export class TransactionService implements TableListService<Transaction> {
     }
 
     delete payload['transactionType'];
-    delete payload['report'];
+    delete payload['reports'];
 
     if (payload['children']) {
       payload['children'] = transaction.children.map((child: Transaction | string) => {
