@@ -87,6 +87,29 @@ export class ReportService implements TableListService<Report> {
   }
 
   /**
+   * Returns the first report whose coverage dates fall on either side of a given date.
+   * @param date
+   * @returns report | undefined
+   */
+  async getCoveringF3x(date: Date): Promise<Form3X | undefined> {
+    const reports = await this.getAllReports().then((reports) => {
+      return reports.filter((report) => {
+        return report.report_type === ReportTypes.F3X;
+      }) as Form3X[];
+    });
+
+    for (const report of reports) {
+      if (report.coverage_from_date && report.coverage_through_date) {
+        if (date >= report.coverage_from_date && date <= report.coverage_through_date) {
+          return report;
+        }
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
    * Returns true if the report is in "edit" mode
    * @param report
    * @returns boolean
