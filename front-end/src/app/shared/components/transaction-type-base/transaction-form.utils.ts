@@ -239,6 +239,12 @@ export class TransactionFormUtils {
       ...transaction,
       ...formValues,
     });
+
+    const secondaryReportId = form.get('linkedF3xId')?.value;
+    if (secondaryReportId) {
+      payload['report_ids']?.push(secondaryReportId);
+    }
+
     if (payload.children) {
       payload.children = payload.updateChildren();
     }

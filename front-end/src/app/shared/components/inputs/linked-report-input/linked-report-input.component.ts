@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatestWith, startWith, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
@@ -33,6 +33,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
 
   ngOnInit(): void {
     this.form.addControl('linkedF3x', this.linkedF3xControl);
+    this.form.addControl('linkedF3xId', new FormControl());
     const dateControl = this.form.get(this.templateMap['date']) ?? new FormControl();
     const date2Control = this.form.get(this.templateMap['date2']) ?? new FormControl();
     this.linkedF3xControl.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
@@ -49,6 +50,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   setLinkedForm3X([disbursementDate, disseminationDate]: (Date | undefined)[]): void {
     this.getLinkedForm3X(disbursementDate, disseminationDate).then((report) => {
       this.form.get('linkedF3x')?.setValue(this.getForm3XLabel(report));
+      this.form.get('linkedF3xId')?.setValue(report?.id);
       this.form.get('linkedF3x')?.markAsTouched();
     });
   }
