@@ -46,6 +46,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   memoCodeCheckboxLabel$ = of('');
   committeeAccount?: CommitteeAccount;
   activeReport$: Observable<Report>;
+  activeReportId: string;
   reportTypes = ReportTypes;
 
   constructor(
@@ -61,6 +62,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     protected activatedRoute: ActivatedRoute,
   ) {
     this.activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+    this.activeReportId = this.activatedRoute.snapshot.params['reportId'] ?? '';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -141,6 +143,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
+      this.activeReportId,
       this.form,
       this.formProperties,
     );

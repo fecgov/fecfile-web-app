@@ -152,6 +152,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should set processing to false if no transaction type identifier on payload', () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -162,6 +163,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should update data and then set processing to false', () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -169,12 +171,27 @@ describe('TransactionTypeBaseComponent', () => {
       expect(transactionServiceSpy.update).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
     });
+
+    it('should set processing to false if no transaction type identifier on payload', () => {
+      component.form.addControl('linkedF3xId', new FormControl());
+      component.form.get('linkedF3xId')?.setValue('321');
+
+      const payload = TransactionFormUtils.getPayloadTransaction(
+        component.transaction,
+        '999',
+        component.form,
+        component.formProperties,
+      );
+      expect(payload.report_ids?.length).toEqual(2);
+      expect(payload.report_ids?.includes('321')).toBeTrue();
+    });
   });
 
   describe('confirmWithUser', () => {
     it('should throw an error if no template map', () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -189,6 +206,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.transaction.transactionType.useParentContact = true;
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -205,6 +223,7 @@ describe('TransactionTypeBaseComponent', () => {
       (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
