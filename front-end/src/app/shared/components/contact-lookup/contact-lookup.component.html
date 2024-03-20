@@ -2,7 +2,7 @@
   <em>{{ candidateOfficeLabel }} candidates only</em>
 </div>
 <div class="grid contact-lookup-container">
-  <div class="col-3 pl-0 pr-0">
+  <div class="col-3 pl-0 pr-0" [ngClass]="showSearchBoxCallback() ? 'dropdown-with-search' : ''">
     <p-dropdown
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
