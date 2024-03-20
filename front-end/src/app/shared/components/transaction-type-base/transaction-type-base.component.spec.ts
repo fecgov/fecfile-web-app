@@ -169,6 +169,19 @@ describe('TransactionTypeBaseComponent', () => {
       expect(transactionServiceSpy.update).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
     });
+
+    it('should set processing to false if no transaction type identifier on payload', () => {
+      component.form.addControl('linkedF3xId', new FormControl());
+      component.form.get('linkedF3xId')?.setValue('321');
+
+      const payload = TransactionFormUtils.getPayloadTransaction(
+        component.transaction,
+        component.form,
+        component.formProperties,
+      );
+      expect(payload.report_ids?.length).toEqual(2);
+      expect(payload.report_ids?.includes('321')).toBeTrue();
+    });
   });
 
   describe('confirmWithUser', () => {

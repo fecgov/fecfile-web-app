@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { combineLatestWith, startWith, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';

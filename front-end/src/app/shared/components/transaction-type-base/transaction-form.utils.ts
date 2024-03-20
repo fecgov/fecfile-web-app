@@ -240,6 +240,8 @@ export class TransactionFormUtils {
       ...formValues,
     });
 
+    // The linkedF3xId form control is only present on the linked report input component
+    // If this is present, we add its value as an ID to the payload's report ids
     const secondaryReportId = form.get('linkedF3xId')?.value;
     if (secondaryReportId) {
       payload['report_ids']?.push(secondaryReportId);
