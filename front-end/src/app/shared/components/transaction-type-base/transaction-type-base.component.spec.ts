@@ -152,6 +152,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should set processing to false if no transaction type identifier on payload', () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -162,6 +163,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should update data and then set processing to false', () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -176,6 +178,7 @@ describe('TransactionTypeBaseComponent', () => {
 
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -188,6 +191,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should throw an error if no template map', () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -202,6 +206,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.transaction.transactionType.useParentContact = true;
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );
@@ -218,6 +223,7 @@ describe('TransactionTypeBaseComponent', () => {
       (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
+        '999',
         component.form,
         component.formProperties,
       );

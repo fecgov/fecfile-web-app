@@ -214,6 +214,7 @@ export class TransactionFormUtils {
 
   static getPayloadTransaction(
     transaction: Transaction | undefined,
+    activeReportId: string,
     form: FormGroup,
     formProperties: string[],
   ): Transaction {
@@ -244,7 +245,7 @@ export class TransactionFormUtils {
     // If this is present, we add its value as an ID to the payload's report ids
     const secondaryReportId = form.get('linkedF3xId')?.value;
     if (secondaryReportId) {
-      payload['report_ids']?.push(secondaryReportId);
+      payload['report_ids'] = [activeReportId, secondaryReportId];
     }
 
     if (payload.children) {
