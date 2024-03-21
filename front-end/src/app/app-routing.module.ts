@@ -14,11 +14,14 @@ const routes: Routes = [
     resolve: { singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
-      { path: 'committee', loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule) },
+      {
+        path: 'committee',
+        loadChildren: () => import('./committee/committee.module').then((m) => m.CommitteeModule),
+      },
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'reports',
       },
       {
         path: 'dashboard',
@@ -74,4 +77,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
