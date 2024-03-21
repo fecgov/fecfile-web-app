@@ -1,8 +1,8 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { Contact, ContactTypes, ContactTypeLabels } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -11,6 +11,7 @@ import { Report } from 'app/shared/models/report.model';
 @Component({
   selector: 'app-transaction-input',
   templateUrl: './transaction-input.component.html',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([]);
@@ -22,6 +23,7 @@ export class TransactionInputComponent implements OnInit {
   @Input() memoCodeCheckboxLabel$?: Observable<string>;
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
+  @Input() isSingle = false;
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
