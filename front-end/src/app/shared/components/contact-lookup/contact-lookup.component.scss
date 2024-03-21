@@ -1,18 +1,24 @@
 :host ::ng-deep {
-  .p-autocomplete-dropdown {
-    color: black;
-    background-color: white;
-    border: 1px solid hsl(210, 14%, 83%);
-    border-left: 0px;
-  }
 
   .dropdown-with-search .p-dropdown {
     border-radius: 4px 0 0 4px;
+    border-color: #AEB0B5;
   }
 
   .p-autocomplete-input {
     border-radius: 0 4px 4px 0;
     border-left: 0px;
+    border-color: #AEB0B5;
+  }
+
+  .p-button-icon-only {
+    background-color: transparent;
+    pointer-events: none;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    min-width: 15px;
+    border: none;
   }
 }
 

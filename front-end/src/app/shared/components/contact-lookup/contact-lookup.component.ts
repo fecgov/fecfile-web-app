@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { takeUntil } from 'rxjs';
 import {
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
@@ -9,12 +8,14 @@ import {
   ContactTypes,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
-  FecApiLookupData,
+  FecApiLookupData
 } from 'app/shared/models/contact.model';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ContactService } from 'app/shared/services/contact.service';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
+import { AutoComplete } from 'primeng/autocomplete';
+import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
@@ -39,6 +40,15 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() contactLookupSelect = new EventEmitter<Contact>();
   @Output() createNewContactSelect = new EventEmitter<void>();
+
+  @ViewChild(AutoComplete)
+  set autoComplete(ac: AutoComplete) {
+    setTimeout(() => {
+      if (ac.dropdownButton) {
+        ac.dropdownButton.nativeElement.tabIndex = -1;
+      }
+    }, 0);
+  }
 
   contactType = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;

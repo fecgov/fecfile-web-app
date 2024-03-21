@@ -20,8 +20,7 @@
       [formControl]="searchBoxFormControl"
       [group]="true"
       field="label"
-      dropdownMode="current"
-      dropdownIcon="pi pi-search"
+      [dropdown]="true"
       [suggestions]="contactLookupList"
       placeholder="Search for a contact"
       [forceSelection]="true"
@@ -38,12 +37,17 @@
         <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
         <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
       </ng-template>
+      <ng-template pTemplate="dropdownicon">
+          <img alt="Magnifying lens" src="assets/img/contact_lookup_magnifying_glass.svg" height="70%" width="70%"/>
+      </ng-template>
+      <ng-template pTemplate="loadingicon">
+      </ng-template>
     </p-autoComplete>
   </div>
   <div *ngIf="showCreateNewContactButton" class="col">
     <div class="add-contact-container">
       or
-      <span class="pi pi-plus-circle"></span>
+      <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg"/></span>
       <a (click)="onCreateNewContactSelect()">Create a new contact</a>
     </div>
   </div>

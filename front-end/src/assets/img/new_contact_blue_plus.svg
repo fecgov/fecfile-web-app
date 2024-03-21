@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <g id="Group_575" data-name="Group 575" transform="translate(-622.969 -120.824)">
+    <path id="i-accordion-closed--primary-path" d="M6.033,5.938V9.063a.953.953,0,0,1-1.905,0V5.938H.953a.938.938,0,1,1,0-1.875H4.128V.938a.953.953,0,0,1,1.905,0V4.063H9.208a.938.938,0,1,1,0,1.875Z" transform="translate(628.969 126.824)" fill="#184572"/>
+    <circle id="Oval" cx="10" cy="10" r="10" transform="translate(623.969 121.824)" fill="none" stroke="#184572" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>
