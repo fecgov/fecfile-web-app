@@ -17,7 +17,7 @@ import { MessageService } from 'primeng/api';
 export class SecondaryReportSelectionDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit {
   @Input() transaction: Transaction | undefined;
   @Input() dialogVisible = false;
-  @Input() onCreate = () => {
+  @Input() createEventMethod = () => {
     return;
   };
   @Output() dialogClose = new EventEmitter<undefined>();
@@ -118,7 +118,7 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
   public linkToSelectedReport() {
     if (this.selectedReport && this.transaction) {
       this.transactionService.addToReport(this.transaction, this.selectedReport).then((response) => {
-        this.onCreate();
+        this.createEventMethod();
         this.dialog?.nativeElement.close();
         if (response.status === 200) {
           this.messageService.add({

@@ -3,9 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { FormTypeDialogComponent } from './secondary-report-selection-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { Form24Service } from 'app/shared/services/form-24.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -13,12 +11,18 @@ import { of } from 'rxjs';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportTypes } from 'app/shared/models/report.model';
+import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
+import { ReportService } from 'app/shared/services/report.service';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { DatePipe } from '@angular/common';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { MessageService, SharedModule } from 'primeng/api';
 
-describe('FormTypeDialogComponent', () => {
-  let component: FormTypeDialogComponent;
-  let fixture: ComponentFixture<FormTypeDialogComponent>;
+describe('SecondaryReportSelectionDialogComponent', () => {
+  let component: SecondaryReportSelectionDialogComponent;
+  let fixture: ComponentFixture<SecondaryReportSelectionDialogComponent>;
   let router: Router;
-  let form24Service: Form24Service;
+  let transactionService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -32,9 +36,12 @@ describe('FormTypeDialogComponent', () => {
         DialogModule,
         HttpClientTestingModule,
       ],
-      declarations: [Dialog, FormTypeDialogComponent],
+      declarations: [Dialog, SecondaryReportSelectionDialogComponent, LabelPipe],
       providers: [
-        Form24Service,
+        ReportService,
+        TransactionService,
+        MessageService,
+        DatePipe,
         provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
@@ -54,9 +61,9 @@ describe('FormTypeDialogComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FormTypeDialogComponent);
+    fixture = TestBed.createComponent(SecondaryReportSelectionDialogComponent);
     router = TestBed.inject(Router);
-    form24Service = TestBed.inject(Form24Service);
+    transactionService = TestBed.inject(TransactionService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -65,16 +72,7 @@ describe('FormTypeDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('goToReportForm', () => {
-    it('should route properly', () => {
-      const navigateSpy = spyOn(router, 'navigateByUrl');
-      component.selectedType = FormTypes.F3X;
-      component.goToReportForm();
-      expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
-    });
-  });
-
-  describe('dropdownButtonText', () => {
+  /*describe('dropdownButtonText', () => {
     it('should return an empty span if there is no selected type', () => {
       expect(component.dropdownButtonText).toEqual('<span></span>');
     });
@@ -109,5 +107,5 @@ describe('FormTypeDialogComponent', () => {
 
     component.goToReportForm();
     expect(create).toHaveBeenCalled();
-  });
+  });*/
 });

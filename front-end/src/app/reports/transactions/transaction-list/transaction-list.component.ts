@@ -23,7 +23,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   reportSelectDialogVisible = false;
   reportSelectFormType: ReportTypes | undefined;
   reportSelectionTransaction: Transaction | undefined;
-  reportSelectionOnCreate = () => {
+  reportSelectionCreateMethod = () => {
     return;
   };
   openReportSelectDialog = this.openSecondaryReportSelectionDialog.bind(this);
@@ -96,11 +96,11 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     await this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
   }
 
-  public openSecondaryReportSelectionDialog(transaction: Transaction, formType: ReportTypes, onCreate: () => void) {
+  public openSecondaryReportSelectionDialog(transaction: Transaction, formType: ReportTypes, createMethod: () => void) {
     this.reportSelectDialogVisible = true;
     this.reportSelectFormType = formType;
     this.reportSelectionTransaction = transaction;
-    this.reportSelectionOnCreate = onCreate;
+    this.reportSelectionCreateMethod = createMethod;
   }
 
   public onTableActionClick(action: TableAction, report?: Report) {
