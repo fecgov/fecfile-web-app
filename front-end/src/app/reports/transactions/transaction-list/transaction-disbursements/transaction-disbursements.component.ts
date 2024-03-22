@@ -20,10 +20,12 @@ import { Transaction } from 'app/shared/models/transaction.model';
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
   @Input() openReportSelectionDialog = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _transaction: Transaction,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _formType: ReportTypes,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _onCreate: () => void,
+    _createMethod: () => void,
   ) => {
     return;
   };
