@@ -18,6 +18,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { of } from 'rxjs';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -35,7 +36,18 @@ describe('ContactDialogComponent', () => {
         ContactLookupComponent,
         LabelPipe,
       ],
-      providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore), DatePipe],
+      providers: [
+        ConfirmationService,
+        FormBuilder,
+        provideMockStore(testMockStore),
+        DatePipe,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: { report_id: '999' } },
+          },
+        },
+      ],
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
@@ -120,7 +132,7 @@ describe('ContactDialogComponent', () => {
     it('should route to transaction', () => {
       const spy = spyOn(component.router, 'navigate');
       component.openTransaction(new TransactionData(transaction));
-      expect(spy).toHaveBeenCalledWith([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
+      expect(spy).toHaveBeenCalledWith([`reports/transactions/report/999/list/${transaction.id}`]);
     });
 
     it('should handle pagination', () => {

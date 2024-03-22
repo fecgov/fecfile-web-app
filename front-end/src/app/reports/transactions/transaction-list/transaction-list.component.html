@@ -7,7 +7,7 @@
         </div>
         <div class="col-12">
           <span class="subtitle"
-          ><strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}</span
+            ><strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}</span
           >
         </div>
       </div>
@@ -27,9 +27,15 @@
       ></app-table-actions-button>
     </ng-template>
   </p-toolbar>
-  <app-transaction-receipts *ngIf="report?.report_type !== reportTypes.F24"></app-transaction-receipts>
+  <app-transaction-receipts
+    [report]="report"
+    *ngIf="report?.report_type !== reportTypes.F24"
+  ></app-transaction-receipts>
   <app-transaction-disbursements [report]="report"></app-transaction-disbursements>
-  <app-transaction-loans-and-debts *ngIf="report?.report_type !== reportTypes.F24"></app-transaction-loans-and-debts>
+  <app-transaction-loans-and-debts
+    [report]="report"
+    *ngIf="report?.report_type !== reportTypes.F24"
+  ></app-transaction-loans-and-debts>
 </div>
 
 <p-confirmDialog #cd [style]="{ width: '450px' }">

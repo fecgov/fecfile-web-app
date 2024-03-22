@@ -19,7 +19,9 @@ import {
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
-import { Report } from './report.model';
+import { Report, ReportTypes } from './report.model';
+import { Form3X } from './form-3x.model';
+import { Form24 } from './form-24.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -56,8 +58,8 @@ export abstract class Transaction extends BaseModel {
   updated: string | undefined;
   deleted: string | undefined;
 
-  report_id: string | undefined; // Foreign key to the parent report db record
-  report: Report | undefined; // Report object from backend
+  reports: Report[] | undefined;
+  report_ids: string[] | undefined;
 
   @Type(() => Contact)
   contact_1: Contact | undefined;
@@ -173,6 +175,24 @@ export abstract class Transaction extends BaseModel {
     }
 
     return payload;
+  }
+
+  getReport(reportType?: ReportTypes): Report | void {
+    if (this.reports) {
+      for (const report of this.reports) {
+        if (report.report_type === reportType) {
+          return report;
+        }
+      }
+    }
+  }
+
+  getForm3X(): Form3X | undefined {
+    return (this.getReport(ReportTypes.F3X) as Form3X) ?? undefined;
+  }
+
+  getForm24(): Form24 | undefined {
+    return (this.getReport(ReportTypes.F24) as Form24) ?? undefined;
   }
 }
 
