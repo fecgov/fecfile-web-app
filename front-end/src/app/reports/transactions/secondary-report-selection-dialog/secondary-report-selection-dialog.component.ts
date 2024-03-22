@@ -1,60 +1,42 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
-import { Form24Service } from 'app/shared/services/form-24.service';
-import { Form24 } from 'app/shared/models/form-24.model';
-import { Observable, filter, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Report, ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/report.model';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { ReportService } from 'app/shared/services/report.service';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { LabelList } from 'app/shared/utils/label.utils';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',
   templateUrl: './secondary-report-selection-dialog.component.html',
   styleUrls: ['./secondary-report-selection-dialog.component.scss'],
 })
-export class SecondaryReportSelectionDialogComponent
-  extends DestroyerComponent
-  implements OnChanges, AfterViewInit, OnInit
-{
-  formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
-  formTypes = FormTypes;
-  selectedType?: FormTypes;
-  committeeAccount$?: Observable<CommitteeAccount>;
-  street = undefined;
+export class SecondaryReportSelectionDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit {
+  @Input() transaction: Transaction | undefined;
   @Input() dialogVisible = false;
+  @Input() onCreate = () => {
+    return;
+  };
   @Output() dialogClose = new EventEmitter<undefined>();
   @ViewChild('dialog') dialog?: ElementRef;
 
-  @Output() refreshReports = new EventEmitter();
+  reports: Report[] = [];
+  reportLabels: LabelList = [];
 
-  form24Options = [
-    {
-      value: '24',
-      label: '24 Hour',
-    },
-    {
-      value: '48',
-      label: '48 Hour',
-    },
-  ];
-  selectedForm24Type: '24' | '48' | undefined;
+  _reportType: ReportTypes | undefined;
+  reportTypeLabels = reportLabelList;
+
+  selectedReport: Report | undefined;
+  dropDownFieldText = 'Loading Reports...';
 
   constructor(
     public router: Router,
-    private form24Service: Form24Service,
-    private store: Store,
+    private reportService: ReportService,
+    private transactionService: TransactionService,
+    private messageService: MessageService,
   ) {
     super();
   }
@@ -63,64 +45,93 @@ export class SecondaryReportSelectionDialogComponent
     this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());
   }
 
-  ngOnInit(): void {
-    this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(
-      takeUntil(this.destroy$),
-      filter((committeeAccount) => !!committeeAccount),
-    );
-  }
-
   ngOnChanges(): void {
     if (this.dialogVisible) {
       this.dialog?.nativeElement.showModal();
     }
   }
 
-  goToReportForm(): void {
-    this.dialog?.nativeElement.close();
-    if (this.getFormType(this.selectedType)?.createRoute) {
-      this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
-    } else if (this.selectedType === FormTypes.F24) {
-      this.createForm24();
-    }
-  }
-
-  getFormType(type?: FormTypes): FormType | undefined {
-    return type ? FORM_TYPES.get(type) : undefined;
-  }
-
-  get dropdownButtonText(): string {
-    if (this.selectedType) {
-      const type = this.getFormType(this.selectedType);
-      return `<span class="option"><b>${type?.label}:</b> ${type?.description}</span>`;
-    } else {
-      return '<span></span>';
-    }
-  }
-
-  updateSelected(type: FormTypes) {
-    this.selectedType = type;
-  }
-
-  createForm24() {
-    this.committeeAccount$?.subscribe((committeeAccount) => {
-      const form24 = Form24.fromJSON({
-        report_type_24_48: this.selectedForm24Type,
-        street_1: committeeAccount.street_1,
-        street_2: committeeAccount.street_2,
-        city: committeeAccount.city,
-        state: committeeAccount.state,
-        zip: committeeAccount.zip,
-        filer_committee_id_number: committeeAccount.committee_id,
-        committee_name: committeeAccount.name,
+  @Input() set reportType(reportType: ReportTypes | undefined) {
+    this._reportType = reportType;
+    this.reportService.getAllReports().then((reports) => {
+      this.reports = reports.filter((report) => {
+        return report.report_type === this.reportType && report.report_status === ReportStatus.IN_PROGRESS;
       });
-      const create$ = this.form24Service.create(form24, ['report_type_24_48']);
-
-      create$.subscribe((report) => {
-        this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-      });
-
-      this.selectedType = undefined;
+      this.reportLabels = this.getReportLabels(this.reports);
+      this.dropDownFieldText = this.getDropdownText();
     });
+  }
+  get reportType(): ReportTypes | undefined {
+    return this._reportType;
+  }
+
+  public updateSelectedReport(report: Report) {
+    this.selectedReport = report;
+    this.dropDownFieldText = this.getDropdownText();
+  }
+
+  public getReportLabels(reports: Report[] | undefined): LabelList {
+    if (!reports) return [];
+
+    const sortedReports = reports.sort((a, b) => {
+      const aTime = a.created?.getTime() ?? 0;
+      const bTime = b.created?.getTime() ?? 0;
+      return aTime - bTime;
+    });
+
+    const labels: LabelList = [];
+    let year = 0;
+    let inYearCount = 0;
+    for (const report of sortedReports) {
+      const newYear = report.created?.getFullYear();
+      if (newYear && newYear !== year) {
+        year = newYear;
+        inYearCount = 1;
+      } else {
+        inYearCount++;
+      }
+
+      labels.push([report.id as string, `${report.getLongLabel()} [${year}] #${inYearCount}`]);
+    }
+
+    return labels;
+  }
+
+  public getDropdownText(): string {
+    if (!this.reports) {
+      return `No In-Progress ${this.reportType} Reports are available`;
+    }
+
+    if (!this.selectedReport) {
+      return `Select a ${this.reportType} Report`;
+    } else {
+      return new LabelPipe().transform(this.selectedReport.id, this.reportLabels);
+    }
+  }
+
+  public linkToSelectedReport() {
+    if (this.selectedReport && this.transaction) {
+      this.transactionService.addToReport(this.transaction, this.selectedReport).then((response) => {
+        this.onCreate();
+        this.dialog?.nativeElement.close();
+        if (response.status === 200) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: `Transaction added to ${this.reportType} Report`,
+            key: 'reportLinkToast',
+            life: 3000,
+          });
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Transaction was not added to ${this.reportType} Report`,
+            key: 'reportLinkToast',
+            life: 3000,
+          });
+        }
+      });
+    }
   }
 }

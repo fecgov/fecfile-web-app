@@ -6,6 +6,7 @@
         <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
       </div>
       <div class="dialog-body">
+        <p>This independent expenditure will be added to the following {{ reportType | label: reportTypeLabels }}</p>
         <div class="dropdown">
           <label id="type-label" for="typeDropdown">FORM TYPE</label>
           <button
@@ -15,39 +16,34 @@
             [autofocus]="true"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            [innerHTML]="dropdownButtonText"
+            [innerHTML]="dropDownFieldText"
           ></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li *ngFor="let type of formTypeOptions">
-              <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
+            <li *ngFor="let report of reports">
+              <button
+                class="dropdown-item"
+                (click)="updateSelectedReport(report)"
+                (select)="updateSelectedReport(report)"
+              >
                 <span class="option">
-                  <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
+                  <b>{{ report.id | label: reportLabels }}</b></span
                 >
               </button>
             </li>
           </ul>
-        </div>
-        <div class="modal-item-margin" *ngIf="selectedType === formTypes.F24">
-          <label for="form24Options">REPORT TYPE</label>
-          <p-selectButton
-            id="form24Options"
-            [options]="form24Options"
-            [(ngModel)]="selectedForm24Type"
-          ></p-selectButton>
         </div>
       </div>
       <div class="dialog-footer">
         <button
           pButton
           pRipple
-          [disabled]="
-            !getFormType(selectedType)?.createRoute && (!(selectedType === formTypes.F24) || !selectedForm24Type)
-          "
-          label="Start building report"
+          [disabled]="!selectedReport"
+          label="Confirm"
           class="p-button-primary"
-          (click)="goToReportForm()"
+          (click)="linkToSelectedReport()"
         ></button>
       </div>
     </div>
   </div>
 </dialog>
+<p-toast key="reportLinkToast"></p-toast>

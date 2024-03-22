@@ -1,4 +1,4 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -15,10 +15,18 @@ import { Transaction } from '../../../shared/models/transaction.model';
   styleUrls: ['../transaction.scss'],
 })
 export class TransactionListComponent extends DestroyerComponent implements OnInit {
+  @ViewChild('reportSelectDialog') reportSelectDialog?: ElementRef;
   report: Report | undefined;
   reportTypes = ReportTypes;
   reportStatus = ReportStatus;
-  dialogVisible = false;
+
+  reportSelectDialogVisible = false;
+  reportSelectFormType: ReportTypes | undefined;
+  reportSelectionTransaction: Transaction | undefined;
+  reportSelectionOnCreate = () => {
+    return;
+  };
+  openReportSelectDialog = this.openSecondaryReportSelectionDialog.bind(this);
 
   availableReports: Report[] = [];
   public tableActions: TableAction[] = [
@@ -62,14 +70,6 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       },
       () => true,
     ),
-    new TableAction(
-      'Open the select secondary report dialog for testing',
-      this.openSecondaryReportSelectionDialog.bind(this),
-      (report: Report) => {
-        return report.report_type === ReportTypes.F3X;
-      },
-      () => true,
-    ),
   ];
   transaction?: Transaction;
 
@@ -96,8 +96,11 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     await this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
   }
 
-  public openSecondaryReportSelectionDialog() {
-    this.dialogVisible = true;
+  public openSecondaryReportSelectionDialog(transaction: Transaction, formType: ReportTypes, onCreate: () => void) {
+    this.reportSelectDialogVisible = true;
+    this.reportSelectFormType = formType;
+    this.reportSelectionTransaction = transaction;
+    this.reportSelectionOnCreate = onCreate;
   }
 
   public onTableActionClick(action: TableAction, report?: Report) {
