@@ -32,9 +32,19 @@ dialog {
 }
 
 .dialog-body {
-  padding: 64px 16px;
+  padding: 16px 16px;
   margin-left: 25px;
   margin-right: 25px;
+}
+
+.dialog-text {
+  margin-bottom: 16px;
+  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  color: #212121;
+}
+
+.dialog-note {
+  font-size: 12px;
 }
 
 label {
@@ -46,9 +56,12 @@ label {
   text-transform: uppercase;
 }
 
-.dropdown,
-.dropdown-toggle {
-  width: 400px !important;
+.dropdown {
+  margin-bottom: 8px;
+}
+
+:host ::ng-deep .dropdown-toggle, .dropdown > ul {
+  width: 100% !important;
 }
 
 .dropdown-toggle {
@@ -63,10 +76,19 @@ label {
 
 .dialog-footer {
   display: flex;
-  justify-content: center;
   border-top: 0;
   padding-top: 0;
   padding-bottom: 16px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.hover {
+  cursor: pointer
 }
 
 .option {

@@ -32,6 +32,8 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
   selectedReport: Report | undefined;
   dropDownFieldText = 'Loading Reports...';
 
+  reportTypes = ReportTypes;
+
   constructor(
     public router: Router,
     private reportService: ReportService,
@@ -91,7 +93,11 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
         inYearCount++;
       }
 
-      labels.push([report.id as string, `${report.getLongLabel()} [${year}] #${inYearCount}`]);
+      let label = `${report.getLongLabel()} [${year}] #${inYearCount}`;
+      if (report.form_type.endsWith('A')) {
+        label += ' (Amendment)';
+      }
+      labels.push([report.id as string, label]);
     }
 
     return labels;
