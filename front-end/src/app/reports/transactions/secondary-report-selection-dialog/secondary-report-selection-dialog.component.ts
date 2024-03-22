@@ -108,7 +108,7 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
   }
 
   public getDropdownText(): string {
-    if (!this.reports) {
+    if (this.reports.length === 0) {
       return `No In-Progress ${this.reportType} Reports are available`;
     }
 
