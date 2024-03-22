@@ -1,28 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { of } from 'rxjs';
-import { Form24 } from 'app/shared/models/form-24.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
+import { firstValueFrom, of } from 'rxjs';
+import { F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { MessageService, SharedModule } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { HttpResponse } from '@angular/common/http';
 
 describe('SecondaryReportSelectionDialogComponent', () => {
   let component: SecondaryReportSelectionDialogComponent;
   let fixture: ComponentFixture<SecondaryReportSelectionDialogComponent>;
-  let router: Router;
   let transactionService: TransactionService;
+  let reportService: ReportService;
+  const testReports = [
+    Form3X.fromJSON({ id: '1', created: '2022-12-01' }),
+    Form3X.fromJSON({ id: '2', created: '2022-12-31' }),
+    Form3X.fromJSON({ id: '3', created: '2023-01-15', form_type: F3xFormTypes.F3XA }),
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,8 +66,8 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(SecondaryReportSelectionDialogComponent);
-    router = TestBed.inject(Router);
     transactionService = TestBed.inject(TransactionService);
+    reportService = TestBed.inject(ReportService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -72,40 +76,69 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /*describe('dropdownButtonText', () => {
-    it('should return an empty span if there is no selected type', () => {
-      expect(component.dropdownButtonText).toEqual('<span></span>');
-    });
-    it('should return a correctly formatted string if there is a selected type', () => {
-      component.selectedType = FormTypes.F3X;
-      expect(component.dropdownButtonText).toEqual(
-        '<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>',
-      );
-    });
+  it('should retrieve reports when reportType is set', () => {
+    const spy = spyOn(reportService, 'getAllReports').and.returnValue(firstValueFrom(of([])));
+    component.reportType = ReportTypes.F3X;
+    expect(spy).toHaveBeenCalled();
   });
 
-  describe('updateSelected', () => {
-    it('should set the selectedType to the provided type', () => {
-      component.updateSelected(FormTypes.F3X);
-      expect(component.selectedType).toEqual(FormTypes.F3X);
-    });
+  it('should set related values when reports are retrieved', () => {
+    const fieldSpy = spyOn(component, 'getDropdownText');
+    const labelSpy = spyOn(component, 'getReportLabels');
+    component.setReports(testReports);
+
+    expect(fieldSpy).toHaveBeenCalled();
+    expect(labelSpy).toHaveBeenCalled();
   });
 
-  it('should create Form24', () => {
-    component.updateSelected(FormTypes.F24);
-    expect(component.selectedType).toEqual(FormTypes.F24);
+  it('should set the dropdown text correctly', () => {
+    component.reports = testReports;
+    component._reportType = ReportTypes.F3X;
+    expect(component.getDropdownText()).toEqual(`Select a ${ReportTypes.F3X} Report`);
+  });
 
-    component.selectedForm24Type = '48';
+  it('should generate report labels correctly', () => {
+    component.reports = testReports;
+    component._reportType = ReportTypes.F3X;
+    component.reportLabels = component.getReportLabels();
+    expect(component.reportLabels.length).toEqual(3);
+    expect(component.reportLabels[0][1].endsWith('#1')).toBeTrue();
+    expect(component.reportLabels[0][1].includes('2022')).toBeTrue();
+    expect(component.reportLabels[1][1].endsWith('#2')).toBeTrue();
+    expect(component.reportLabels[2][1].includes('#1')).toBeTrue();
+    expect(component.reportLabels[2][1].endsWith('(Amendment)')).toBeTrue();
+    expect(component.reportLabels[2][1].includes('2023')).toBeTrue();
+  });
 
-    const create = spyOn(form24Service, 'create').and.returnValue(
-      of(
-        Form24.fromJSON({
-          id: 2401,
-        }),
+  it('should set the dropdown text when choosing a report', () => {
+    component.reports = testReports;
+    component._reportType = ReportTypes.F3X;
+    component.reportLabels = component.getReportLabels();
+    component.updateSelectedReport(component.reports[1]);
+
+    expect(component.selectedReport).toEqual(component.reports[1]);
+    expect(component.dropDownFieldText).toEqual(`${component.reports[1]?.getLongLabel()} [2022] #2`);
+
+    component.updateSelectedReport(component.reports[2]);
+    expect(component.dropDownFieldText).toEqual(`${component.reports[2]?.getLongLabel()} [2023] #1 (Amendment)`);
+  });
+
+  it('should add a transaction to a report', () => {
+    component.reports = testReports;
+    component.transaction = testScheduleATransaction;
+    component._reportType = ReportTypes.F3X;
+    component.reportLabels = component.getReportLabels();
+    component.updateSelectedReport(component.reports[1]);
+
+    const transactionSpy = spyOn(transactionService, 'addToReport').and.returnValue(
+      firstValueFrom(
+        of({
+          status: 200,
+        } as HttpResponse<string>),
       ),
     );
+    component.linkToSelectedReport();
 
-    component.goToReportForm();
-    expect(create).toHaveBeenCalled();
-  });*/
+    expect(transactionSpy).toHaveBeenCalledOnceWith(testScheduleATransaction, component.reports[1]);
+  });
 });

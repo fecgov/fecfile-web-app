@@ -56,15 +56,19 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
   @Input() set reportType(reportType: ReportTypes | undefined) {
     this._reportType = reportType;
     this.reportService.getAllReports().then((reports) => {
-      this.reports = reports.filter((report) => {
-        return report.report_type === this.reportType && report.report_status === ReportStatus.IN_PROGRESS;
-      });
-      this.reportLabels = this.getReportLabels(this.reports);
-      this.dropDownFieldText = this.getDropdownText();
+      this.setReports(reports);
     });
   }
   get reportType(): ReportTypes | undefined {
     return this._reportType;
+  }
+
+  public setReports(reports: Report[]) {
+    this.reports = reports.filter((report) => {
+      return report.report_type === this.reportType && report.report_status === ReportStatus.IN_PROGRESS;
+    });
+    this.reportLabels = this.getReportLabels();
+    this.dropDownFieldText = this.getDropdownText();
   }
 
   public updateSelectedReport(report: Report) {
@@ -72,10 +76,10 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     this.dropDownFieldText = this.getDropdownText();
   }
 
-  public getReportLabels(reports: Report[] | undefined): LabelList {
-    if (!reports) return [];
+  public getReportLabels(): LabelList {
+    if (!this.reports) return [];
 
-    const sortedReports = reports.sort((a, b) => {
+    const sortedReports = this.reports.sort((a, b) => {
       const aTime = a.created?.getTime() ?? 0;
       const bTime = b.created?.getTime() ?? 0;
       return aTime - bTime;
