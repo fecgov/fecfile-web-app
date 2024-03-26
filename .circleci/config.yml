@@ -300,7 +300,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /release\/sprint-\d+|main/
+              only: /release\/sprint-[\.\d]+|main/
       - deploy:
           requires:
             - test
