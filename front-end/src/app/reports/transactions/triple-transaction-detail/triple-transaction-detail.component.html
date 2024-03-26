@@ -1,5 +1,8 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
+<app-independent-expenditure-create-f3x-input
+  *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24"
+></app-independent-expenditure-create-f3x-input>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
 <p class="group-description">{{ transactionType?.description }}</p>
 <p-accordion [activeIndex]="accordionActiveIndex">
@@ -17,6 +20,7 @@
       <h3>{{ transactionType?.contactTitle }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <app-transaction-input
+          [activeReport$]="activeReport$"
           [isEditable]="isEditable"
           [form]="form"
           [formSubmitted]="formSubmitted"

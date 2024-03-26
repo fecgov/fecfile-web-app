@@ -194,7 +194,6 @@ export class TransactionService implements TableListService<Transaction> {
    * @param transaction
    */
   private preparePayload(transaction: Transaction) {
-    if (typeof transaction === 'string') return transaction;
     const payload = transaction.toJson();
 
     // Add flags to the payload used for API processing
@@ -208,7 +207,7 @@ export class TransactionService implements TableListService<Transaction> {
     delete payload['transactionType'];
     delete payload['report'];
 
-    if (transaction.children) {
+    if (payload['children']) {
       payload['children'] = transaction.children.map((transaction) => this.preparePayload(transaction));
     }
 

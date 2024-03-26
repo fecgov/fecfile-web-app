@@ -30,6 +30,9 @@
           ></app-error-messages>
         </div>
       </div>
+      <div class="col-4" *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24">
+        <app-linked-report-input [form]="this.form" [templateMap]="this.templateMap"></app-linked-report-input>
+      </div>
     </div>
   </ng-container>
 

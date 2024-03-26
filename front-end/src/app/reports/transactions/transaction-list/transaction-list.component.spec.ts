@@ -46,7 +46,7 @@ describe('TransactionListComponent', () => {
                 SchATransaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
-                })
+                }),
               ),
             getTableData: () => of([]),
             update: () => of([]),

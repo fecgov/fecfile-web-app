@@ -5,11 +5,23 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
+export interface QueryParams {
+  [param: string]:
+    | string
+    | number
+    | boolean
+    | ReadonlyArray<string | number | boolean>
+    | readonly (string | number | boolean)[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService,
+  ) {}
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -20,31 +32,22 @@ export class ApiService {
     return { ...baseHeaders, ...headersToAdd };
   }
 
-  getQueryParams(
-    queryParams: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] } = {}
-  ) {
+  getQueryParams(queryParams: QueryParams = {}) {
     return new HttpParams({ fromObject: queryParams });
   }
 
+  public get<T>(endpoint: string, params?: QueryParams): Observable<T>;
+  public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Observable<HttpResponse<T>>;
   public get<T>(
     endpoint: string,
-    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
-  ): Observable<T>;
-  public get<T>(
-    endpoint: string,
-    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-    allowedErrorCodes?: number[]
-  ): Observable<HttpResponse<T>>;
-  public get<T>(
-    endpoint: string,
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-    allowedErrorCodes?: number[]
+    params: QueryParams = {},
+    allowedErrorCodes?: number[],
   ): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     if (allowedErrorCodes) {
       return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
-        headers: headers,
-        params: params,
+        headers,
+        params,
         withCredentials: true,
         observe: 'response',
         responseType: 'json',
@@ -58,29 +61,56 @@ export class ApiService {
     });
   }
 
-  // prettier-ignore
-  public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public post<T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Observable<T>;
+  public post<T>(
+    endpoint: string,
+    payload: unknown,
+    queryParams?: QueryParams,
+    allowedErrorCodes?: number[],
+  ): Observable<HttpResponse<T>>;
+  public post<T>(
+    endpoint: string,
+    payload: unknown,
+    queryParams: QueryParams = {},
+    allowedErrorCodes?: number[],
+  ): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
+    if (allowedErrorCodes) {
+      return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+        headers: headers,
+        params: params,
+        withCredentials: true,
+        observe: 'response',
+        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+      });
+    }
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+      headers: headers,
+      params: params,
+      withCredentials: true,
+    });
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  // prettier-ignore
-  public postAbsoluteUrl<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public postAbsoluteUrl<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     return this.http.post<T>(`${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
   }
 
-  // prettier-ignore
-  public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers, params: params, withCredentials: true });
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
+      headers,
+      params,
+      withCredentials: true,
+    });
   }
 
   public delete<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
+    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers, withCredentials: true });
   }
 }

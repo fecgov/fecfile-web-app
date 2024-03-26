@@ -11,6 +11,10 @@
   <small class="p-error" *ngIf="control?.hasError('exclusiveMax')">{{ exclusiveMaxErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('exclusiveMin')">{{ exclusiveMinErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('invaliddate')">{{ invalidDateErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('noDateProvided')">{{ noDateProvidedErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('noCorrespondingForm3X')">{{
+    noCorrespondingForm3XErrorMessage
+  }}</small>
   <small
     class="p-error"
     *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"

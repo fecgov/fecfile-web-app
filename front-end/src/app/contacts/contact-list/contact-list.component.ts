@@ -1,7 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
@@ -15,6 +14,7 @@ import { TableSelectAllChangeEvent } from 'primeng/table';
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
+  dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
   searchTerm = '';
@@ -39,11 +39,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public override addItem() {
+    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
     this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {
+    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
     super.editItem(item);
     this.isNewItem = false;
   }

@@ -1,20 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { TransactionInputComponent } from './transaction-input.component';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ContactTypes } from 'app/shared/models/contact.model';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ReportService } from 'app/shared/services/report.service';
 
 describe('TransactionInputComponent', () => {
   let component: TransactionInputComponent;
   let fixture: ComponentFixture<TransactionInputComponent>;
+  let store;
 
   const selectItem = {
     value: testContact,
   };
 
   beforeEach(() => {
+    store = provideMockStore(testMockStore);
     TestBed.configureTestingModule({
       declarations: [TransactionInputComponent],
+      providers: [store, ReportService],
     });
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;

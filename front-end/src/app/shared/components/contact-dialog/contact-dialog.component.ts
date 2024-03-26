@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
-import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { takeUntil } from 'rxjs';
+import { lastValueFrom, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
@@ -19,19 +19,68 @@ import { DestroyerComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { ConfirmationService } from 'primeng/api';
+import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
+import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
+import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
+import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.model';
+import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
+import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
+import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
+import { Router } from '@angular/router';
+import { TransactionService } from '../../services/transaction.service';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { getReportFromJSON } from '../../services/report.service';
+
+export class TransactionData {
+  id: string;
+  report_id: string;
+  formType: string;
+  reportType: string;
+  transaction_type_identifier: string;
+  date: string;
+  amount: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(transaction: any) {
+    this.id = transaction.id;
+    this.report_id = transaction.report_id;
+    this.date = transaction.date;
+    this.amount = transaction.amount;
+    this.transaction_type_identifier = transaction.transaction_type_identifier;
+
+    const report = getReportFromJSON(transaction.report);
+    this.formType = report.formLabel;
+    this.reportType = report.reportLabel;
+  }
+}
 
 @Component({
   selector: 'app-contact-dialog',
   templateUrl: './contact-dialog.component.html',
+  styleUrls: ['./contact-dialog.component.scss'],
 })
 export class ContactDialogComponent extends DestroyerComponent implements OnInit {
   @Input() contact: Contact = new Contact();
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
+  @Input() showHistory = false;
   @Input() headerTitle?: string;
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
+
+  transactions: TransactionData[] = [];
+  tableLoading = true;
+  totalTransactions = 0;
+  rowsPerPage = 5;
+  scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
+    ScheduleBTransactionTypeLabels,
+    ScheduleCTransactionTypeLabels,
+    ScheduleC1TransactionTypeLabels,
+    ScheduleC2TransactionTypeLabels,
+    ScheduleDTransactionTypeLabels,
+    ScheduleETransactionTypeLabels,
+  );
 
   @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
 
@@ -60,9 +109,34 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   constructor(
     private fb: FormBuilder,
     private contactService: ContactService,
+    private transactionService: TransactionService,
     protected confirmationService: ConfirmationService,
+    public router: Router,
   ) {
     super();
+  }
+
+  async loadTransactions(event: TableLazyLoadEvent) {
+    this.tableLoading = true;
+
+    // Calculate the record page number to retrieve from the API.
+    const first: number = event.first ?? 0;
+    const rows: number = event.rows ?? this.rowsPerPage;
+    const pageNumber: number = Math.floor(first / rows) + 1;
+    const params = { contact: this.contact.id! }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+
+    // Determine query sort ordering
+    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    if (ordering && event.sortOrder === -1) {
+      ordering = `-${ordering}`;
+    } else {
+      ordering = `${ordering}`;
+    }
+    lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params)).then((transactionsPage) => {
+      this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
+      this.totalTransactions = transactionsPage.count;
+      this.tableLoading = false;
+    });
   }
 
   ngOnInit(): void {
@@ -103,7 +177,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         }
       });
 
-    // If there is a defualt candidate office (e.g. 'P') set, then make the
+    // If there is a default candidate office (e.g. 'P') set, then make the
     // candidate office select read-only disabled.
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.disable();
@@ -136,7 +210,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.contactType = contactType;
 
     // The type form control is not displayed on the form page because we are
-    // displaying the contact lookup component which operates independently so
+    // displaying the contact lookup component which operates independently, so
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
     this.form.get('type')?.setValue(contactType);
 
@@ -175,7 +249,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     if (this.contact.id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
-      // component because the Contact Dialog is hidden and not destroyed on close
+      // component because the Contact Dialog is hidden and not destroyed on close,
       // so we need to directly update the lookup "type" form control value
       this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
       this.contactLookup.contactTypeFormControl.enable();
@@ -205,7 +279,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.reset();
     this.isNewItem = true;
     this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
@@ -259,5 +333,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       this.closeDialog();
     }
     this.resetForm();
+  }
+
+  async openTransaction(transaction: TransactionData) {
+    await this.router.navigate([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
   }
 }

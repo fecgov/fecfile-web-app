@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -86,7 +86,7 @@ export class Contact extends BaseModel {
   candidate_state: string | undefined;
   candidate_district: string | undefined;
   telephone: string | undefined;
-  country = '';
+  country = 'USA';
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;
@@ -95,7 +95,7 @@ export class Contact extends BaseModel {
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Contact, json);
+    return plainToInstance(Contact, json);
   }
 
   getNameString(): string {

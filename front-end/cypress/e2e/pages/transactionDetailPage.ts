@@ -13,45 +13,6 @@ export class TransactionDetailPage {
     PageUtils.calendarSetValue(dateFieldName, dateFieldValue, alias);
   }
 
-  private static enterMemo(formData: ScheduleFormData, alias: string) {
-    if (formData.memo_code) {
-      cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
-    }
-    if (formData.memo_text !== '') {
-      cy.get(alias).find('#text4000').first().type(formData.memo_text);
-    }
-  }
-
-  private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
-    if (formData.category_code) {
-      PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
-    }
-  }
-
-  private static enterElection(formData: ScheduleFormData, alias: string) {
-    if (formData.electionType) {
-      PageUtils.dropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
-    }
-    if (formData.electionYear) {
-      cy.get(alias).find('#electionYear').safeType(formData.electionYear);
-    }
-    if (formData.election_other_description) {
-      cy.get(alias).find('#election_other_description').safeType(formData.election_other_description);
-    }
-  }
-
-  private static enterPurpose(formData: ScheduleFormData, alias: string) {
-    if (formData.purpose_description) {
-      cy.get(alias).find('textarea#purpose_description').first().safeType(formData.purpose_description);
-    }
-  }
-
-  private static enterCommon(formData: ScheduleFormData, alias: string) {
-    this.enterMemo(formData, alias);
-    this.enterPurpose(formData, alias);
-    this.enterCategoryCode(formData, alias);
-  }
-
   static enterScheduleFormDataForContribution(formData: ContributionFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
 
@@ -60,7 +21,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.candidate) {
-      cy.get('.contact-lookup-container').last().get('[role="searchbox"]').last().type(formData.candidate);
+      cy.get('.contact-lookup-container').last().get('[id="searchBox"]').last().type(formData.candidate);
       cy.contains(formData.candidate).should('exist');
       cy.contains(formData.candidate).click();
     }
@@ -90,7 +51,7 @@ export class TransactionDetailPage {
     if (formData.supportOpposeCode) {
       cy.get("p-radiobutton[FormControlName='support_oppose_code']").contains(formData.supportOpposeCode).click();
       cy.get('#entity_type_dropdown').last().type(contactData.contact_type);
-      cy.get('[role="searchbox"]').last().type(contactData.last_name.slice(0, 1));
+      cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 1));
       cy.contains(contactData.last_name).should('exist');
       cy.contains(contactData.last_name).click();
     }
@@ -131,23 +92,19 @@ export class TransactionDetailPage {
     this.enterLoanFormDataStepTwo(formData);
   }
 
-  static enterScheduleFormData(formData: ScheduleFormData, readOnlyAmount = false, alias = '') {
+  static enterScheduleFormData(formData: ScheduleFormData, readOnlyAmount = false, alias = '', includeMemo = true) {
     alias = PageUtils.getAlias(alias);
 
     if (formData.date_received) {
       this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
     }
 
-    this.enterCommon(formData, alias);
+    this.enterCommon(formData, alias, includeMemo);
     if (!readOnlyAmount) {
       cy.get(alias).find('#amount').safeType(formData['amount']);
     }
     this.enterElection(formData, alias);
   }
-
-  /*
-  
-  */
 
   static enterLoanFormData(formData: LoanFormData, readOnlyAmount = false, alias = '') {
     alias = PageUtils.getAlias(alias);
@@ -275,5 +232,48 @@ export class TransactionDetailPage {
     if (formData.category_code != '') {
       cy.get(alias).find('[inputid="category_code"]').should('contain', formData.category_code);
     }
+  }
+
+  private static enterMemo(formData: ScheduleFormData, alias: string) {
+    if (formData.memo_code) {
+      cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
+    }
+    if (formData.memo_text !== '') {
+      cy.get(alias).find('#text4000').first().type(formData.memo_text);
+    }
+  }
+
+  private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
+    if (formData.category_code) {
+      PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
+    }
+  }
+
+  /*
+  
+  */
+
+  private static enterElection(formData: ScheduleFormData, alias: string) {
+    if (formData.electionType) {
+      PageUtils.dropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
+    }
+    if (formData.electionYear) {
+      cy.get(alias).find('#electionYear').safeType(formData.electionYear);
+    }
+    if (formData.election_other_description) {
+      cy.get(alias).find('#election_other_description').safeType(formData.election_other_description);
+    }
+  }
+
+  private static enterPurpose(formData: ScheduleFormData, alias: string) {
+    if (formData.purpose_description) {
+      cy.get(alias).find('textarea#purpose_description').first().safeType(formData.purpose_description);
+    }
+  }
+
+  private static enterCommon(formData: ScheduleFormData, alias: string, includeMemo = true) {
+    if (includeMemo) this.enterMemo(formData, alias);
+    this.enterPurpose(formData, alias);
+    this.enterCategoryCode(formData, alias);
   }
 }

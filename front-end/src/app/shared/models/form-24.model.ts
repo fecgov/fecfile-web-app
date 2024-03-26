@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToInstance, Transform } from 'class-transformer';
 import { Report, ReportStatus, ReportTypes } from './report.model';
 import { BaseModel } from './base.model';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
@@ -19,12 +19,17 @@ export class Form24 extends Report {
   schema = f24Schema;
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
+
   get formLabel() {
     return 'FORM 24';
   }
 
   get formSubLabel() {
     return '';
+  }
+
+  get reportLabel(): string {
+    return `${this.report_type_24_48} HOUR`;
   }
 
   get versionLabel() {
@@ -50,8 +55,7 @@ export class Form24 extends Report {
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
 
-  // prettier-ignore
-  static fromJSON(json: any): Form24 { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(Form24, json);
+  static fromJSON(json: unknown): Form24 {
+    return plainToInstance(Form24, json);
   }
 }

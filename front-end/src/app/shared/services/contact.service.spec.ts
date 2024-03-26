@@ -109,7 +109,7 @@ describe('ContactService', () => {
     httpTestingController.verify();
   });
 
-  it('#candidateLookup() happy path', () => {
+  it('#candidateLookup() happy path', async () => {
     const expectedRetval = new CandidateLookupResponse();
     const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
@@ -126,16 +126,15 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    service
-      .candidateLookup(
-        testSearch,
-        testMaxFecResults,
-        testMaxFecfileResults,
-        undefined,
-        ['C000000001', 'C000000002'],
-        [],
-      )
-      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    const value = await service.candidateLookup(
+      testSearch,
+      testMaxFecResults,
+      testMaxFecfileResults,
+      undefined,
+      ['C000000001', 'C000000002'],
+      [],
+    );
+    expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
@@ -256,7 +255,7 @@ describe('ContactService', () => {
     httpTestingController.verify();
   });
 
-  it('#checkFecIdForUniqness should return true if contact matches', () => {
+  it('#checkFecIdForUniqueness should return true if contact matches', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
     spyOn(testApiService, 'get')
@@ -265,11 +264,11 @@ describe('ContactService', () => {
       })
       .and.returnValue(of('contactId' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-    service.checkFecIdForUniqness(fecId, contactId).subscribe((isUnique) => {
+    service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
       expect(isUnique).toBeTrue();
     });
   });
-  it('#checkFecIdForUniqness should return false if server comes back with differnt contact id', () => {
+  it('#checkFecIdForUniqueness should return false if server comes back with differnt contact id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
     spyOn(testApiService, 'get')
@@ -277,11 +276,11 @@ describe('ContactService', () => {
         fec_id: fecId,
       })
       .and.returnValue(of('different id' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
-    service.checkFecIdForUniqness(fecId, contactId).subscribe((isUnique) => {
+    service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
       expect(isUnique).toBeFalse();
     });
   });
-  it('#checkFecIdForUniqness should return true if server comes back no id', () => {
+  it('#checkFecIdForUniqueness should return true if server comes back no id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
     spyOn(testApiService, 'get')
@@ -289,7 +288,7 @@ describe('ContactService', () => {
         fec_id: fecId,
       })
       .and.returnValue(of('' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
-    service.checkFecIdForUniqness(fecId, contactId).subscribe((isUnique) => {
+    service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
       expect(isUnique).toBeTrue();
     });
   });

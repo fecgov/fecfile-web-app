@@ -8,7 +8,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <hr/>
+        <hr />
       </div>
     </div>
     <ng-container *ngIf="userCanSetFilingFrequency">
@@ -46,7 +46,7 @@
     </ng-container>
     <div class="grid">
       <div class="col-12">
-        <hr/>
+        <hr />
       </div>
     </div>
     <div class="grid">
@@ -56,11 +56,12 @@
       <div class="col-6">
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
-          <app-select-button
+          <p-selectButton
             data-test="report-type-category"
             [options]="getReportTypeCategories()"
+            [allowEmpty]="false"
             formControlName="report_type_category"
-          ></app-select-button>
+          ></p-selectButton>
           <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
@@ -111,7 +112,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <hr/>
+        <hr />
       </div>
     </div>
     <div class="grid">

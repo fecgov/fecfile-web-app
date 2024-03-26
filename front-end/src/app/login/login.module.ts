@@ -10,6 +10,8 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { LoginRoutingModule } from './login-routing.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
   declarations: [LoginComponent, DebugLoginComponent, SecurityNoticeComponent],
@@ -24,6 +26,8 @@ import { LoginRoutingModule } from './login-routing.module';
     CardModule,
     ButtonModule,
     CheckboxModule,
+    InputTextModule,
+    PasswordModule,
   ],
 })
 export class LoginModule {}

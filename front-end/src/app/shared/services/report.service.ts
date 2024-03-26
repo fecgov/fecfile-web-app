@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { firstValueFrom, map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
@@ -42,6 +42,12 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
+  public getAllReports(): Promise<Report[]> {
+    return firstValueFrom(this.apiService.get<Report[]>(this.apiEndpoint + '/')).then((rawReports) => {
+      return rawReports.map((item) => getReportFromJSON(item));
+    });
+  }
+
   public get(reportId: string): Observable<Report> {
     return this.apiService
       .get<Report>(`${this.apiEndpoint}/${reportId}`)
@@ -49,14 +55,14 @@ export class ReportService implements TableListService<Report> {
   }
 
   public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
-    const payload = report.toJson();
+    const payload = this.preparePayload(report);
     return this.apiService
       .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
   public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
-    const payload = report.toJson();
+    const payload = this.preparePayload(report);
     return this.apiService
       .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
       .pipe(map((response) => getReportFromJSON(response)));
@@ -94,5 +100,11 @@ export class ReportService implements TableListService<Report> {
 
   public startAmendment(report: Report): Observable<string> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
+  }
+
+  preparePayload(item: Report): Record<string, unknown> {
+    const payload = item.toJson();
+    delete payload['schema'];
+    return payload;
   }
 }

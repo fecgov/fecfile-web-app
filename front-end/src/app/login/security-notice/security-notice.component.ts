@@ -7,9 +7,9 @@ import { UserLoginData } from 'app/shared/models/user.model';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { updateUserLoginDataAction } from 'app/store/login.actions';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { map, takeUntil } from 'rxjs';
 
 @Component({
@@ -54,24 +54,25 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       return;
     }
 
+    const one_day_ahead = new Date();
+    one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+    const one_year_ahead = new Date();
+    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
     const updatedUserLoginData: UserLoginData = {
       ...this.userLoginData,
-      security_consent_date: DateUtils.convertDateToFecFormat(new Date()) as string,
+      security_consent_exp_date: DateUtils.convertDateToFecFormat(
+        this.form.get('security-consent-annual')?.value ? one_year_ahead : one_day_ahead
+      ) as string,
     };
 
-    if (this.form.get('security-consent-annual')?.value) {
-      this.usersService
-        .updateCurrentUser(updatedUserLoginData)
-        .pipe(
-          map(() => {
-            this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
-            this.router.navigate(['/dashboard']);
-          }),
-        )
-        .subscribe();
-    } else {
-      this.store.dispatch(updateUserLoginDataAction({ payload: updatedUserLoginData }));
-      this.router.navigate(['/dashboard']);
-    }
+    this.usersService
+      .updateCurrentUser(updatedUserLoginData)
+      .pipe(
+        map(() => {
+          this.store.dispatch(userLoginDataUpdatedAction({ payload: updatedUserLoginData }));
+          this.router.navigate(['/dashboard']);
+        }),
+      )
+      .subscribe();
   }
 }

@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, takeUntil, firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, takeUntil } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
+import { UsersService } from '../services/users.service';
+import { DateUtils } from '../utils/date.utils';
 import { ApiService } from './api.service';
-import { Router } from '@angular/router';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -23,6 +25,7 @@ export class LoginService extends DestroyerComponent {
     private router: Router,
     private apiService: ApiService,
     private cookieService: CookieService,
+    private usersService: UsersService,
   ) {
     super();
     this.userLoginData$ = this.store.select(selectUserLoginData).pipe(takeUntil(this.destroy$));
@@ -34,44 +37,46 @@ export class LoginService extends DestroyerComponent {
    * @param      {String}  username  The username
    * @param      {String}  password  The password
    *
-   * @return     {Observable}  The JSON response.
+   * @return     {Promise}  The JSON response.
    */
-  public logIn(email: string, cmteId: string, password: string): Observable<null> {
+  public logIn(email: string, cmteId: string, password: string): Promise<null> {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
-    return this.apiService.post<null>('/user/login/authenticate', {
+    return firstValueFrom(this.apiService.post<null>('/user/login/authenticate', {
       username,
       password,
+    })).then(() => {
+      return this.retrieveUserLoginData().then(() => {
+        return Promise.resolve(null);
+      });
     });
   }
 
-  public async logOut() {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    this.clearUserLoggedInCookies();
-    this.store.dispatch(userLoggedOutAction());
-    if (userLoginData.email) {
-      if (!userLoginData.login_dot_gov) {
-        this.apiService.get('/auth/logout').subscribe(() => {
-          this.router.navigate(['/login']);
-        });
-      } else {
-        window.location.href = environment.loginDotGovLogoutUrl;
-      }
+  public logOut() {
+    this.store.dispatch(userLoginDataDiscardedAction());
+    if (!this.isLoggedInWithLoginDotGov()) {
+      this.apiService.get('/auth/logout').subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+    } else {
+      window.location.href = environment.loginDotGovLogoutUrl;
     }
   }
 
-  public clearUserFecfileApiCookies() {
-    this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
-    this.cookieService.delete(environment.ffapiFirstNameCookieName);
-    this.cookieService.delete(environment.ffapiLastNameCookieName);
-    this.cookieService.delete(environment.ffapiEmailCookieName);
-    this.cookieService.delete(environment.ffapiSecurityConsentCookieName);
+  public async hasUserLoginData(): Promise<boolean> {
+    const userLoginData = await firstValueFrom(this.userLoginData$);
+    return !!userLoginData.email;
   }
 
-  public clearUserLoggedInCookies() {
-    this.clearUserFecfileApiCookies();
-    this.cookieService.delete('csrftoken');
+  public async retrieveUserLoginData(): Promise<void> {
+    return this.usersService.getCurrentUser().then(userLoginData => {
+      this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
+    });
+  }
+
+  public isLoggedInWithLoginDotGov() {
+    return this.cookieService.get(environment.ffapiLoginDotGovCookieName) === 'true';
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
@@ -82,11 +87,6 @@ export class LoginService extends DestroyerComponent {
     );
   }
 
-  public async userIsAuthenticated(): Promise<boolean> {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    return !!userLoginData.email || this.cookieService.check(environment.ffapiEmailCookieName);
-  }
-
   public async userHasProfileData(): Promise<boolean> {
     const userLoginData = await firstValueFrom(this.userLoginData$);
     return !!userLoginData?.first_name && !!userLoginData.last_name;
@@ -94,24 +94,11 @@ export class LoginService extends DestroyerComponent {
 
   public async userHasRecentSecurityConsentDate(): Promise<boolean> {
     const userLoginData = await firstValueFrom(this.userLoginData$);
-    const security_date = userLoginData.security_consent_date;
-    const one_year_ago = new Date();
-    one_year_ago.setFullYear(one_year_ago.getFullYear() - 1);
-
-    return !!security_date && new Date(security_date) > one_year_ago;
-  }
-
-  public dispatchUserLoggedInFromCookies() {
-    if (this.cookieService.check(environment.ffapiEmailCookieName)) {
-      const userLoginData: UserLoginData = {
-        first_name: this.cookieService.get(environment.ffapiFirstNameCookieName),
-        last_name: this.cookieService.get(environment.ffapiLastNameCookieName),
-        email: this.cookieService.get(environment.ffapiEmailCookieName),
-        login_dot_gov: this.cookieService.get(environment.ffapiLoginDotGovCookieName).toLowerCase() === 'true',
-        security_consent_date: this.cookieService.get(environment.ffapiSecurityConsentCookieName),
-      };
-      this.clearUserFecfileApiCookies();
-      this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
+    if (!userLoginData.security_consent_exp_date) {
+      return false;
     }
+    const security_date_exp = DateUtils.convertFecFormatToDate(
+      userLoginData.security_consent_exp_date);
+    return !!security_date_exp && new Date() < security_date_exp;
   }
 }

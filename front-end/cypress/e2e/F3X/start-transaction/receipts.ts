@@ -15,6 +15,11 @@ export class Receipts {
     PageUtils.clickLink('REFUNDS');
     return Refunds;
   }
+
+  static Transfers() {
+    PageUtils.clickLink('TRANSFERS');
+    return Transfers;
+  }
 }
 
 export class Individual {
@@ -41,10 +46,20 @@ export class RegisteredFilers {
   static Party() {
     PageUtils.clickLink('Party Receipt');
   }
+
+  static PAC() {
+    PageUtils.clickLink('PAC Earmark Receipt');
+  }
 }
 
 export class Refunds {
   static ContributionToOtherPoliticalCommittee() {
     PageUtils.clickLink('Refund of Contribution to Other Political Committee');
+  }
+}
+
+export class Transfers {
+  static JointFundraising() {
+    PageUtils.clickLink('Joint Fundraising Transfer');
   }
 }

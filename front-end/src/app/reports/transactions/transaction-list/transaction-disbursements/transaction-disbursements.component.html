@@ -1,18 +1,18 @@
 <div class="card">
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="rowsPerPage"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-      [showCurrentPageReport]="true"
-      sortField="line_label_order_key,created"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+    [showCurrentPageReport]="true"
+    sortField="line_label_order_key,created"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
@@ -42,10 +42,12 @@
           Type
           <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
-        <th pSortableColumn="name" id="name-column" role="columnheader">Name
+        <th pSortableColumn="name" id="name-column" role="columnheader">
+          Name
           <p-sortIcon field="name"></p-sortIcon>
         </th>
-        <th pSortableColumn="date" id="date-column" role="columnheader">Date
+        <th pSortableColumn="date" id="date-column" role="columnheader">
+          Date
           <p-sortIcon field="date"></p-sortIcon>
         </th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
@@ -67,11 +69,9 @@
           {{ item.line_label }}
         </td>
         <td>
-          <a [routerLink]="[item?.id]">{{
-              item.transaction_type_identifier | label : scheduleTransactionTypeLabels
-            }}</a>
+          <a [routerLink]="[item?.id]">{{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}</a>
           <div *ngIf="item?.force_unaggregated"><strong>Unaggregated</strong></div>
-          <div *ngIf="!item?.itemized"><strong>Unitemized</strong></div>
+          <div *ngIf="!item?.itemized && report?.report_type !== form24ReportType"><strong>Unitemized</strong></div>
         </td>
         <td>
           {{ item.name }}

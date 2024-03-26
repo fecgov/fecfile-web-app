@@ -4,7 +4,6 @@ import { MainFormComponent } from './main-form.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { AppSelectButtonComponent } from 'app/shared/components/app-selectbutton.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -40,7 +39,7 @@ describe('MainFormComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
       ],
-      declarations: [MainFormComponent, LabelPipe, AppSelectButtonComponent],
+      declarations: [MainFormComponent, LabelPipe],
       providers: [Form99Service, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     });
     router = TestBed.inject(Router);
