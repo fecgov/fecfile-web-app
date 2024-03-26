@@ -40,6 +40,10 @@ export class Form24 extends Report {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
 
+  override getLongLabel(): string {
+    return `${this.report_type_24_48}-Hour Report`;
+  }
+
   report_type_24_48: '24' | '48' | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   committee_name: string | undefined;

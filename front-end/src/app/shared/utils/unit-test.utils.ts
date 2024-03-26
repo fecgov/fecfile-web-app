@@ -154,7 +154,7 @@ export function getTestIndividualReceipt(): SchATransaction {
   return SchATransaction.fromJSON({
     id: '123',
     transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-    report_id: '999',
+    report_ids: ['999'],
     contribution_amount: '202.2',
     contribution_date: '2022-02-02',
     entity_type: ContactTypes.INDIVIDUAL,
@@ -188,7 +188,7 @@ export function getTestIndividualReceipt(): SchATransaction {
 
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
-  report_id: '3cd741da-aa57-4cc3-8530-667e8b7bad78',
+  report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
   transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.COMMITTEE,
@@ -204,17 +204,19 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   aggregation_group: AggregationGroups.GENERAL,
   memo_code: true,
   donor_committee_fec_id: 'C00000000',
-  report: {
-    report_type: 'F3X',
-    report_code: 'Q1',
-    reportCode: 'Q1',
-    coverage_through_date: '2024-04-20',
-  },
+  reports: [
+    {
+      report_type: 'F3X',
+      report_code: 'Q1',
+      reportCode: 'Q1',
+      coverage_through_date: '2024-04-20',
+    },
+  ],
 });
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
   form_type: 'SB21b',
-  report_id: '3cd741da-aa57-4cc3-8530-667e8b7bad78',
+  report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
   transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.ORGANIZATION,
@@ -227,11 +229,13 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
   contribution_amount: 1,
   contribution_aggregate: 2,
   aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-  report: {
-    report_type: 'F3X',
-    report_code: 'Q1',
-    reportCode: 'Q1',
-  },
+  reports: [
+    {
+      report_type: 'F3X',
+      report_code: 'Q1',
+      reportCode: 'Q1',
+    },
+  ],
 });
 
 export function getTestTransactionByType(

@@ -53,7 +53,7 @@ describe('TransactionReceiptsComponent', () => {
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
                   transactionType: { scheduleId: ScheduleIds.A },
-                })
+                }),
               ),
             getTableData: () => of([]),
             update: () => of([]),
@@ -76,14 +76,14 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test editItem', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
-    const testTransaction: Transaction = { id: 'testId', report_id: '1' } as unknown as Transaction;
+    const testTransaction: Transaction = { id: 'testId', report_ids: ['1'] } as unknown as Transaction;
     component.editItem(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
 
   it('test createLoanRepaymentReceived', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
-    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    const testTransaction: Transaction = { id: '123', report_ids: ['123'] } as unknown as Transaction;
     component.createLoanRepaymentReceived(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
@@ -119,7 +119,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test createLoanAgreement', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
-    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    const testTransaction: Transaction = { id: '123', report_ids: ['123'] } as unknown as Transaction;
     component.createLoanAgreement(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
@@ -134,7 +134,7 @@ describe('TransactionReceiptsComponent', () => {
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
-    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    const testTransaction: Transaction = { id: '123', report_ids: ['123'] } as unknown as Transaction;
     component.createDebtRepaymentMade(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
@@ -149,7 +149,7 @@ describe('TransactionReceiptsComponent', () => {
     expect(tableAction.isEnabled(transaction)).toBeTrue();
 
     const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
-    const testTransaction: Transaction = { id: '123', report_id: '123' } as unknown as Transaction;
+    const testTransaction: Transaction = { id: '123', report_ids: ['123'] } as unknown as Transaction;
     component.createDebtRepaymentReceived(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
