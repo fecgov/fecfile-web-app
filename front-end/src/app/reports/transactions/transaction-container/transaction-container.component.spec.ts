@@ -56,12 +56,15 @@ describe('TransactionContainerComponent', () => {
           useValue: {
             data: of({
               transaction: getTestTransactionByType(
-                ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES
+                ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
               ) as SchATransaction,
             }),
             snapshot: {
               queryParamMap: {
                 get: () => 'b49f0957-4404-4237-95ec-0df053083b19',
+              },
+              params: {
+                reportId: '999',
               },
             },
           },

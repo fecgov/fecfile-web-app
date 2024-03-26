@@ -12,6 +12,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
+import { Form3X } from '../models/form-3x.model';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -254,6 +255,28 @@ describe('TransactionService', () => {
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/reattribution/`);
       expect(req.request.method).toEqual('PUT');
       req.flush(transactions);
+      httpTestingController.verify();
+    }));
+  });
+
+  describe('addToReport', () => {
+    it('should add a transaction to a report', fakeAsync(() => {
+      const transaction: SchATransaction = SchATransaction.fromJSON({
+        id: '1',
+        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      });
+
+      const report: Form3X = Form3X.fromJSON({
+        id: '2',
+      });
+
+      service.addToReport(transaction, report).then((response) => {
+        expect(response.ok).toBeTrue();
+      });
+      tick(100);
+      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/add-to-report/`);
+      expect(req.request.method).toEqual('POST');
+      req.flush(transaction);
       httpTestingController.verify();
     }));
   });

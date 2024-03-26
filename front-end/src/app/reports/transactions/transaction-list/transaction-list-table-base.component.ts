@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes, Report } from 'app/shared/models/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -21,10 +21,12 @@ import { take, takeUntil } from 'rxjs';
   template: '',
 })
 export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
+  @Input() report?: Report;
   abstract scheduleTransactionTypeLabels: LabelList;
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
   reportIsEditable = false;
+  reportId: string;
 
   public rowActions: TableAction[] = [
     new TableAction(
@@ -45,7 +47,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         !!transaction.force_unaggregated &&
         this.reportIsEditable &&
-        transaction.report?.report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
@@ -57,7 +59,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         !transaction.force_unaggregated &&
         this.reportIsEditable &&
-        transaction.report?.report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
@@ -69,7 +71,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.itemized === false &&
         this.reportIsEditable &&
-        transaction.report?.report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
@@ -81,7 +83,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.itemized === true &&
         this.reportIsEditable &&
-        transaction.report?.report_type !== ReportTypes.F24 &&
+        this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
@@ -178,16 +180,21 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     protected reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef);
+    this.reportId = this.activatedRoute.snapshot.params['reportId'];
   }
 
   override ngOnInit(): void {
     this.loading = true;
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.reportIsEditable = this.reportService.isEditable(report);
-      });
+    if (this.report) {
+      this.reportIsEditable = this.reportService.isEditable(this.report);
+    } else {
+      this.store
+        .select(selectActiveReport)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((report) => {
+          this.reportIsEditable = this.reportService.isEditable(report);
+        });
+    }
   }
 
   public onTableActionClick(action: TableAction, report?: Form3X) {
@@ -199,8 +206,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return { report_id: reportId, page_size: this.rowsPerPage };
+    return { report_id: this.reportId, page_size: this.rowsPerPage };
   }
 
   onRowsPerPageChange() {
@@ -211,7 +217,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override async editItem(item: Transaction): Promise<void> {
-    await this.router.navigateByUrl(`/reports/transactions/report/${item.report_id}/list/${item.id}`);
+    await this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
   }
 
   public async editLoanAgreement(transaction: Transaction): Promise<void> {
@@ -221,7 +227,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public async createLoanAgreement(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
+      `/reports/transactions/report/${this.reportId}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
     );
   }
 
@@ -260,32 +266,32 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public async createLoanRepaymentReceived(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`,
     );
   }
 
   public async createDebtRepaymentReceived(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/select/receipt?debt=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/select/receipt?debt=${transaction.id}`,
     );
   }
 
   public async createLoanRepaymentMade(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`,
     );
   }
 
   public async createDebtRepaymentMade(transaction: Transaction): Promise<void> {
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${transaction.report_id}/select/disbursement?debt=${transaction.id}`,
+      `/reports/transactions/report/${this.reportId}/select/disbursement?debt=${transaction.id}`,
     );
   }
 
   public async createReattribution(transaction: Transaction): Promise<void> {
     if (this.reportIsEditable) {
       await this.router.navigateByUrl(
-        `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
+        `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
       );
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
@@ -295,7 +301,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public async createRedesignation(transaction: Transaction): Promise<void> {
     if (this.reportIsEditable) {
       await this.router.navigateByUrl(
-        `/reports/transactions/report/${transaction.report_id}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
+        `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
       );
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);

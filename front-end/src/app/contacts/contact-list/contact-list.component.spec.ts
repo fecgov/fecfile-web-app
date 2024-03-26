@@ -16,6 +16,7 @@ import { ContactDialogComponent } from '../../shared/components/contact-dialog/c
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { ContactListComponent } from './contact-list.component';
 import { of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -49,7 +50,18 @@ describe('ContactListComponent', () => {
         SharedModule,
       ],
       declarations: [ContactListComponent, ContactDialogComponent, DeletedContactDialogComponent],
-      providers: [ConfirmationService, FormBuilder, MessageService, provideMockStore(testMockStore)],
+      providers: [
+        ConfirmationService,
+        FormBuilder,
+        MessageService,
+        provideMockStore(testMockStore),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: { reportId: '99' } },
+          },
+        },
+      ],
     }).compileComponents();
   });
 

@@ -58,8 +58,8 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   beforeEach(() => {
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    testTransaction.report = testActiveReport;
-    testTransaction.report_id = '999';
+    testTransaction.reports = [testActiveReport];
+    testTransaction.report_ids = ['999'];
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
@@ -77,7 +77,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
     component.transaction = testTransaction;
     component.childTransaction = testTransaction;
     let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    reattRedes.report = testActiveReport;
+    reattRedes.reports = [testActiveReport];
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
     component.transaction.reatt_redes = reattRedes;
     fixture.detectChanges();
@@ -131,7 +131,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
         payee_organization_name: 'foo',
         expenditure_date: undefined,
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
-        report_id: '1',
+        report_ids: ['1'],
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
         election_code: 'A',
         election_other_description: 'A',

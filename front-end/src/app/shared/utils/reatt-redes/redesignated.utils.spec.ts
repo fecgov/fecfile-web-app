@@ -20,7 +20,7 @@ describe('Redesignated Utils', () => {
     let data;
     it('should handle a different report', () => {
       if (!payload.reatt_redes || !(payload.reatt_redes instanceof SchBTransaction)) throw new Error('Bad test setup');
-      expect(payload.reatt_redes.report?.reportCode).toBe(F3xReportCodes.Q1);
+      expect(payload.reatt_redes.getForm3X()?.reportCode).toBe(F3xReportCodes.Q1);
       const overlay = RedesignatedUtils.overlayTransactionProperties(
         payload.reatt_redes,
         'not-the-same-report-as-orig',
@@ -52,7 +52,7 @@ describe('Redesignated Utils', () => {
         payee_organization_name: 'foo',
         expenditure_date: undefined,
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
-        report_id: '1',
+        report_ids: ['1'],
       };
       payload = SchBTransaction.fromJSON(data);
       payload = RedesignatedUtils.overlayTransactionProperties(payload, '2');
@@ -65,7 +65,7 @@ describe('Redesignated Utils', () => {
         payee_organization_name: 'foo',
         expenditure_date: undefined,
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
-        report_id: '1',
+        report_ids: ['1'],
       };
       payload = SchBTransaction.fromJSON(data);
       payload = RedesignatedUtils.overlayTransactionProperties(payload, '1');
@@ -81,7 +81,7 @@ describe('Redesignated Utils', () => {
         payee_organization_name: 'foo',
         expenditure_date: undefined,
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
-        report_id: '1',
+        report_ids: ['1'],
         expenditure_purpose_descrip: 'PURPOSE',
         text4000: 'MEMO',
       };

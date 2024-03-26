@@ -112,16 +112,27 @@ export abstract class TripleTransactionTypeBaseComponent
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
+      this.activeReportId,
       this.form,
       this.formProperties,
     );
 
     payload.children = [
-      TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
-      TransactionFormUtils.getPayloadTransaction(this.childTransaction_2, this.childForm_2, this.childFormProperties_2),
+      TransactionFormUtils.getPayloadTransaction(
+        this.childTransaction,
+        this.activeReportId,
+        this.childForm,
+        this.childFormProperties,
+      ),
+      TransactionFormUtils.getPayloadTransaction(
+        this.childTransaction_2,
+        this.activeReportId,
+        this.childForm_2,
+        this.childFormProperties_2,
+      ),
     ];
-    payload.children[0].report_id = payload.report_id;
-    payload.children[1].report_id = payload.report_id;
+    payload.children[0].report_ids = payload.report_ids;
+    payload.children[1].report_ids = payload.report_ids;
 
     this.processPayload(payload, navigationEvent);
   }

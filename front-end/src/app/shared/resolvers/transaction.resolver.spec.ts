@@ -121,7 +121,7 @@ describe('TransactionResolver', () => {
         of(
           SchATransaction.fromJSON({
             id: 1,
-            report_id: 1,
+            report_ids: [1],
             transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
             contact_id: '123',

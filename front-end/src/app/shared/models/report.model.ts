@@ -4,6 +4,7 @@ import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { F3xReportCodes } from '../utils/report-code.utils';
+import { LabelList } from '../utils/label.utils';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -56,6 +57,10 @@ export abstract class Report extends BaseModel {
   getBlocker(): string | undefined {
     return;
   }
+
+  getLongLabel(): string {
+    return this.form_type;
+  }
 }
 
 export enum ReportTypes {
@@ -64,6 +69,13 @@ export enum ReportTypes {
   F99 = 'F99',
   F1M = 'F1M',
 }
+
+export const reportLabelList: LabelList = [
+  [ReportTypes.F3X, 'Form 3X'],
+  [ReportTypes.F24, 'Form 24'],
+  [ReportTypes.F99, 'Form 99'],
+  [ReportTypes.F1M, 'Form 1M'],
+];
 
 export enum ReportStatus {
   IN_PROGRESS = 'In progress',

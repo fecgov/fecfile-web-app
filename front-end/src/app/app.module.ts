@@ -53,7 +53,7 @@ import { UsersModule } from './users/users.module';
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport', 'sidebarState'],
+    keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -61,7 +61,7 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
 
 function initializeAppFactory(loginService: LoginService): () => Promise<void> {
   return () => {
-    return loginService.retrieveUserLoginData().catch(e => e);
+    return loginService.retrieveUserLoginData().catch((e) => e);
   };
 }
 
@@ -121,8 +121,8 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
       useFactory: initializeAppFactory,
       deps: [LoginService],
       multi: true,
-    }
+    },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -95,7 +95,7 @@ export class ReattRedesUtils {
     } else {
       transaction.memo_text = MemoText.fromJSON({
         rec_type: 'TEXT',
-        report_id: transaction?.report_id,
+        report_id: transaction?.report_ids?.[0],
         text_prefix: prefix,
         text4000: prefix,
       });
@@ -113,16 +113,16 @@ export class ReattRedesUtils {
         : (cloneDeep(payload.reatt_redes) as SchBTransaction);
     if (clone.memo_text) {
       clone.memo_text.id = undefined;
-      clone.memo_text.report_id = payload.report_id;
+      clone.memo_text.report_id = payload.report_ids?.[0];
       clone.memo_text.transaction_id_number = undefined;
       clone.memo_text.transaction_uuid = undefined;
       clone.memo_text_id = undefined;
     }
 
     clone.reatt_redes_id = payload.reatt_redes.id;
-    clone.report_id = payload.report_id;
+    clone.report_ids = payload.report_ids;
     clone.id = undefined;
-    clone.report = undefined;
+    clone.reports = undefined;
     clone.memo_code = true;
     clone.force_unaggregated = true;
     clone.children = []; // Children of original transaction do not copy over.

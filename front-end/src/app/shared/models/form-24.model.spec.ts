@@ -78,4 +78,21 @@ describe('Form24', () => {
       expect(form.reportLabel).toBe('48 HOUR');
     });
   });
+
+  describe('getLongLabel', () => {
+    it('should return 24 or 48 depending upon 24_48 prop', () => {
+      const data = {
+        id: '999',
+        form_type: F24FormTypes.F24N,
+        committee_name: 'foo',
+        report_version: undefined,
+        report_type_24_48: '24',
+      };
+      const form = Form24.fromJSON(data);
+      expect(form.getLongLabel()).toBe('24-Hour Report');
+
+      form.report_type_24_48 = '48';
+      expect(form.getLongLabel()).toBe('48-Hour Report');
+    });
+  });
 });
