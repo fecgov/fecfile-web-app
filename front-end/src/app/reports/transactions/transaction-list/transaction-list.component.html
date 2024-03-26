@@ -31,7 +31,10 @@
     [report]="report"
     *ngIf="report?.report_type !== reportTypes.F24"
   ></app-transaction-receipts>
-  <app-transaction-disbursements [report]="report"></app-transaction-disbursements>
+  <app-transaction-disbursements
+    [report]="report"
+    [openReportSelectionDialog]="openReportSelectDialog"
+  ></app-transaction-disbursements>
   <app-transaction-loans-and-debts
     [report]="report"
     *ngIf="report?.report_type !== reportTypes.F24"
@@ -48,3 +51,11 @@
 </p-confirmDialog>
 
 <app-select-report-dialog></app-select-report-dialog>
+
+<app-secondary-report-selection-dialog
+  (dialogClose)="reportSelectDialogVisible = false"
+  [dialogVisible]="reportSelectDialogVisible"
+  [reportType]="reportSelectFormType"
+  [transaction]="reportSelectionTransaction"
+  [createEventMethod]="reportSelectionCreateMethod"
+></app-secondary-report-selection-dialog>

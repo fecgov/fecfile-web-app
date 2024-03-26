@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, firstValueFrom, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -9,6 +9,7 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
+import { Report } from '../models/report.model';
 
 @Injectable({
   providedIn: 'root',
@@ -181,6 +182,20 @@ export class TransactionService implements TableListService<Transaction> {
       `${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`,
       payload,
       {},
+    );
+  }
+
+  public addToReport(transaction: Transaction, report: Report): Promise<HttpResponse<string>> {
+    const payload = {
+      report_id: report.id,
+      transaction_id: transaction.id,
+    };
+    return firstValueFrom(
+      this.apiService.post<string>(`${transaction.transactionType?.apiEndpoint}/add-to-report/`, payload, {}, [
+        HttpStatusCode.Accepted,
+        HttpStatusCode.NotFound,
+        HttpStatusCode.BadRequest,
+      ]),
     );
   }
 
