@@ -24,6 +24,11 @@
     min-width: 15px;
     border: none;
   }
+
+  .readonly {
+    pointer-events: none;
+  }
+
 }
 
 .ng-submitted .transaction-contact-invalid :host ::ng-deep .p-autocomplete-input {
