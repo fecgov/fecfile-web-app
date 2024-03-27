@@ -54,3 +54,10 @@ app-footer {
   background-size: cover, cover;
   background-position-x: 0px, 90%;
 }
+
+.feedback-button {
+  position: fixed;
+  bottom: 0;
+  right: 1rem;
+  z-index: 99;
+}

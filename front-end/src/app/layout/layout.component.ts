@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NavigationEnd, Router } from '@angular/router';
-import { RouteData, collectRouteData } from 'app/shared/utils/route.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { filter, takeUntil } from 'rxjs';
 import { HeaderStyles } from './header/header.component';
 
@@ -18,6 +18,7 @@ export enum BackgroundStyles {
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent extends DestroyerComponent implements OnInit {
+  feedbackDialogVisible = false;
   layoutControls = new LayoutControls();
 
   constructor(private router: Router) {
@@ -42,6 +43,10 @@ export class LayoutComponent extends DestroyerComponent implements OnInit {
     // Create a new LayoutControls instance so as to reset the controls to their default values
     this.layoutControls = new LayoutControls(data);
   }
+
+  feedbackClicked(): void {
+    this.feedbackDialogVisible = true;
+  }
 }
 
 export class LayoutControls {
@@ -51,6 +56,7 @@ export class LayoutControls {
   showSidebar = false;
   headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
+  showFeedbackButton = true;
   backgroundStyle = BackgroundStyles.DEFAULT;
 
   constructor(data?: RouteData) {
@@ -58,6 +64,7 @@ export class LayoutControls {
       // If a key is present in the data, use its value; otherwise, use the default
       this.showUpperFooter = data['showUpperFooter'] ?? this.showUpperFooter;
       this.showCommitteeBanner = data['showCommitteeBanner'] ?? this.showCommitteeBanner;
+      this.showFeedbackButton = data['showFeedbackButton'] ?? this.showFeedbackButton;
       this.showHeader = data['showHeader'] ?? this.showHeader;
       this.showSidebar = data['showSidebar'] ?? this.showSidebar;
       this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;

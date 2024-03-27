@@ -54,4 +54,12 @@
   </div>
   <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
   <!-- End No Sidebar section -->
+  <button type="button" 
+    *ngIf="layoutControls.showFeedbackButton"
+    pButton
+    pRipple
+    label="Feedback"
+    class="p-button-info feedback-button"
+    (click)="feedbackClicked()"
+  ></button>
 </div>
