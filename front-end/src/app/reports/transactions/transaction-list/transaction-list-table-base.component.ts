@@ -15,7 +15,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { lastValueFrom, take, takeUntil } from 'rxjs';
+import { firstValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
@@ -231,35 +231,35 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     );
   }
 
-  public forceAggregate(transaction: Transaction): void {
-    this.forceUnaggregation(transaction, false);
+  public async forceAggregate(transaction: Transaction): Promise<void> {
+    await this.forceUnaggregation(transaction, false);
   }
 
-  public forceUnaggregate(transaction: Transaction): void {
-    this.forceUnaggregation(transaction, true);
+  public async forceUnaggregate(transaction: Transaction): Promise<void> {
+    await this.forceUnaggregation(transaction, true);
   }
 
-  public forceUnaggregation(transaction: Transaction, unaggregated: boolean) {
+  public async forceUnaggregation(transaction: Transaction, unaggregated: boolean): Promise<void> {
     transaction.force_unaggregated = unaggregated;
-    this.updateItem(transaction);
+    await this.updateItem(transaction);
   }
 
-  public forceItemize(transaction: Transaction): void {
-    this.forceItemization(transaction, true);
+  public async forceItemize(transaction: Transaction): Promise<void> {
+    await this.forceItemization(transaction, true);
   }
 
-  public forceUnitemize(transaction: Transaction): void {
-    this.forceItemization(transaction, false);
+  public async forceUnitemize(transaction: Transaction): Promise<void> {
+    await this.forceItemization(transaction, false);
   }
 
-  public forceItemization(transaction: Transaction, itemized: boolean) {
+  public async forceItemization(transaction: Transaction, itemized: boolean) {
     this.confirmationService.confirm({
       message:
         'Changing the itemization status of this transaction will affect its associated transactions (such as memos).',
       header: 'Heads up!',
-      accept: () => {
+      accept: async () => {
         transaction.force_itemized = itemized;
-        this.updateItem(transaction);
+        await this.updateItem(transaction);
       },
     });
   }
@@ -308,9 +308,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
   }
 
-  public async updateItem(item: Transaction) {
+  public async updateItem(item: Transaction): Promise<void> {
     if (this.itemService.update) {
-      await lastValueFrom(this.itemService.update(item).pipe(take(1), takeUntil(this.destroy$)));
+      await firstValueFrom(this.itemService.update(item));
       await this.loadTableItems({});
     }
   }

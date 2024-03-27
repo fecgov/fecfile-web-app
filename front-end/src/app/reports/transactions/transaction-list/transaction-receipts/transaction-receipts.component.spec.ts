@@ -81,7 +81,10 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(true);
     expect(component.rowActions[1].isAvailable()).toEqual(false);
     expect(
-      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
+      component.rowActions[2].isAvailable({
+        force_unaggregated: true,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
     ).toEqual(false);
     expect(
       component.rowActions[3].isAvailable({
@@ -95,7 +98,10 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
     expect(
-      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
+      component.rowActions[2].isAvailable({
+        force_unaggregated: true,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
     ).toEqual(true);
     expect(
       component.rowActions[3].isAvailable({
@@ -121,35 +127,32 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[12].isEnabled({})).toEqual(true);
   });
 
-  it('test forceAggregate', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
+  it('test forceAggregate', fakeAsync(async () => {
     const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
-    component.forceAggregate(testTransaction);
+    spyOn(testItemService, 'update').and.returnValue(of(testTransaction));
+    await component.forceAggregate(testTransaction);
     tick(500);
     expect(testTransaction.force_unaggregated).toBe(false);
   }));
 
-  it('test forceUnaggregate', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
+  it('test forceUnaggregate', fakeAsync(async () => {
     const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
-    component.forceUnaggregate(testTransaction);
-    tick(500);
+    spyOn(testItemService, 'update').and.returnValue(of(testTransaction));
+    await component.forceUnaggregate(testTransaction);
     expect(testTransaction.force_unaggregated).toBe(true);
   }));
 
-  it('test forceItemize', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
+  it('test forceItemize', fakeAsync(async () => {
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceItemize(testTransaction);
-    tick(500);
+    spyOn(testItemService, 'update').and.returnValue(of(testTransaction));
+    await component.forceItemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(true);
   }));
 
-  it('test forceUnitemize', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
+  it('test forceUnitemize', fakeAsync(async () => {
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceUnitemize(testTransaction);
-    tick(500);
+    spyOn(testItemService, 'update').and.returnValue(of(testTransaction));
+    await component.forceUnitemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(false);
   }));
 

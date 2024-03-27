@@ -94,7 +94,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     }
 
     const response = await lastValueFrom(this.itemService.getTableData(pageNumber, ordering, params));
-    this.items = [...response.results];
+    this.items = response.results;
     this.totalItems = response.count;
     this.loading = false;
   }
