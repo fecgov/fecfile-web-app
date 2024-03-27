@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { take, takeUntil } from 'rxjs';
+import { lastValueFrom, take, takeUntil } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-report-list',
@@ -25,8 +26,11 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       this.editItem.bind(this),
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
+    new TableAction('Delete', this.deleteReport.bind(this), (report: Report) => !!this.canDeleteMap.get(report)),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
+
+  canDeleteMap: Map<Report, boolean> = new Map();
 
   constructor(
     protected override messageService: MessageService,
@@ -43,6 +47,11 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
+  }
+
+  override async loadTableItems(event: TableLazyLoadEvent) {
+    await super.loadTableItems(event);
+    this.items.forEach((item) => this.canDelete(item));
   }
 
   protected getEmptyItem(): Report {
@@ -75,13 +84,38 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     }
   }
 
-  public amendReport(report: Report): void {
-    this.itemService
-      .startAmendment(report)
-      .pipe(take(1), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.loadTableItems({});
-      });
+  public async amendReport(report: Report): Promise<void> {
+    await lastValueFrom(this.itemService.startAmendment(report).pipe(take(1), takeUntil(this.destroy$)));
+    await this.loadTableItems({});
+  }
+
+  public async canDelete(report: Report) {
+    this.canDeleteMap.set(
+      report,
+      report.report_status == ReportStatus.IN_PROGRESS && (await this.itemService.canDelete(report)),
+    );
+  }
+
+  public deleteReport(report: Report): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this report? This action cannot be undone',
+      header: 'Hang on...',
+      rejectLabel: 'Cancel',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-secondary',
+      acceptLabel: 'Confirm',
+      acceptIcon: 'none',
+      accept: async () => {
+        await lastValueFrom(this.itemService.delete(report));
+        this.refreshTable();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Report Deleted',
+          life: 3000,
+        });
+      },
+    });
   }
 
   public async goToTest(item: Report): Promise<void> {

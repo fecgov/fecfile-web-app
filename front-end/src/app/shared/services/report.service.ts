@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom, map, Observable, tap } from 'rxjs';
+import { firstValueFrom, lastValueFrom, map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
@@ -42,10 +42,9 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
-  public getAllReports(): Promise<Report[]> {
-    return firstValueFrom(this.apiService.get<Report[]>(this.apiEndpoint + '/')).then((rawReports) => {
-      return rawReports.map((item) => getReportFromJSON(item));
-    });
+  public async getAllReports(): Promise<Report[]> {
+    const rawReports = await firstValueFrom(this.apiService.get<Report[]>(this.apiEndpoint + '/'));
+    return rawReports.map((item) => getReportFromJSON(item));
   }
 
   public get(reportId: string): Observable<Report> {
@@ -106,5 +105,15 @@ export class ReportService implements TableListService<Report> {
     const payload = item.toJson();
     delete payload['schema'];
     return payload;
+  }
+
+  async canDelete(item: Report): Promise<boolean> {
+    if (!item.id) return false;
+    const result = await lastValueFrom(
+      this.apiService.get<{
+        result: boolean;
+      }>(`${this.apiEndpoint}/can_delete`, { report_id: item.id }),
+    );
+    return result.result;
   }
 }

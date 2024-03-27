@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, lastValueFrom, Observable } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 
@@ -62,7 +62,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    * Method is called when the table data needs to be refreshed.
    * @param {TableLazyLoadEvent} event
    */
-  public loadTableItems(event: TableLazyLoadEvent) {
+  public async loadTableItems(event: TableLazyLoadEvent) {
     this.loading = true;
 
     // event is undefined when triggered from the detail page because
@@ -93,11 +93,10 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       ordering = `${ordering}`;
     }
 
-    this.itemService.getTableData(pageNumber, ordering, params).subscribe((response: ListRestResponse) => {
-      this.items = [...response.results];
-      this.totalItems = response.count;
-      this.loading = false;
-    });
+    const response = await lastValueFrom(this.itemService.getTableData(pageNumber, ordering, params));
+    this.items = [...response.results];
+    this.totalItems = response.count;
+    this.loading = false;
   }
 
   /**
@@ -148,7 +147,12 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
           this.refreshTable();
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Item Deleted',
+            life: 3000,
+          });
         });
       },
     });

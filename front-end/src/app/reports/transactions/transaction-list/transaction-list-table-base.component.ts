@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes, Report } from 'app/shared/models/report.model';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -15,7 +15,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { take, takeUntil } from 'rxjs';
+import { lastValueFrom, take, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
@@ -209,8 +209,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return { report_id: this.reportId, page_size: this.rowsPerPage };
   }
 
-  onRowsPerPageChange() {
-    this.loadTableItems({
+  async onRowsPerPageChange() {
+    await this.loadTableItems({
       first: 0,
       rows: this.rowsPerPage,
     });
@@ -308,14 +308,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
   }
 
-  public updateItem(item: Transaction) {
+  public async updateItem(item: Transaction) {
     if (this.itemService.update) {
-      this.itemService
-        .update(item)
-        .pipe(take(1), takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.loadTableItems({});
-        });
+      await lastValueFrom(this.itemService.update(item).pipe(take(1), takeUntil(this.destroy$)));
+      await this.loadTableItems({});
     }
   }
 
