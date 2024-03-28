@@ -49,6 +49,8 @@ import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { LoginService } from './shared/services/login.service';
 import { SharedModule } from './shared/shared.module';
 import { UsersModule } from './users/users.module';
+import { FeedbackDialogComponent } from './layout/feedback-dialog/feedback-dialog.component';
+import { DialogModule } from 'primeng/dialog';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -82,6 +84,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     F1MMenuComponent,
     F99MenuComponent,
     F24MenuComponent,
+    FeedbackDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,6 +111,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ButtonModule,
     SharedModule,
     NgOptimizedImage,
+    DialogModule,
   ],
   providers: [
     CookieService,

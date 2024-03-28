@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -12,7 +13,15 @@ export class FeedbackService {
 
   public submitFeedback(feedback: Feedback): Promise<void> {
     return firstValueFrom(
-      this.apiService.post<void>(`/feedback/submit/`, feedback).pipe(map((response) => response))
+      this.apiService.post<void>(`/feedback/submit/`,
+        feedback, {}, [
+        HttpStatusCode.BadRequest,
+        HttpStatusCode.InternalServerError
+      ]).pipe(map((response) => {
+        if (!response.body) {
+          throw new Error();
+        }
+      }))
     );
   }
 }

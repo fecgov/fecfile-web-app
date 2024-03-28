@@ -62,4 +62,7 @@
     class="p-button-info feedback-button"
     (click)="feedbackClicked()"
   ></button>
+  <app-feedback-dialog
+    [(visible)]="feedbackDialogVisible"
+  ></app-feedback-dialog>
 </div>
