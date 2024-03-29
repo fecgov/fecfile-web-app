@@ -1,7 +1,7 @@
 import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
-import { F3xReportLevelMemoPage } from '../pages/f3xReportLevelMemoPage';
+import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { defaultFormData } from '../models/ReportFormModel';
 import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
@@ -126,7 +126,7 @@ describe('Manage reports', () => {
     PageUtils.clickSidebarSection('REVIEW A REPORT');
     PageUtils.clickSidebarItem('Add a report level memo');
     const memoText = faker.lorem.sentence({ min: 1, max: 4 });
-    F3xReportLevelMemoPage.enterFormData(memoText);
+    ReportLevelMemoPage.enterFormData(memoText);
     PageUtils.clickButton('Save & continue');
 
     // Verify it is still there when we go back to the page

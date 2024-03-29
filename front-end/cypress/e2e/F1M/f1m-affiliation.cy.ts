@@ -3,6 +3,8 @@ import { ContactListPage } from '../pages/contactListPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ContactType, committeeFormData, createContact } from '../models/ContactFormModel';
+import { faker } from '@faker-js/faker';
+import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 
 describe('Manage reports', () => {
   beforeEach(() => {
@@ -49,7 +51,18 @@ describe('Manage reports', () => {
         .should('have.value', candidates[index].last_name);
       PageUtils.calendarSetValue('[data-cy="candidate-date"]', new Date(), `[data-cy="candidate-${index}"]`);
     }
-    PageUtils.clickButton('Save');
-    cy.get('[data-cy="report-list-component').should('exist');
+    PageUtils.clickButton('Save and continue');
+    cy.get('[data-cy="print-preview"]').should('exist');
+
+    PageUtils.clickSidebarSection('REVIEW A REPORT');
+    PageUtils.clickSidebarItem('Add a report level memo');
+    const memoText = faker.lorem.sentence({ min: 1, max: 4 });
+    ReportLevelMemoPage.enterFormData(memoText);
+    PageUtils.clickButton('Save & continue');
+
+    // Verify it is still there when we go back to the page
+    PageUtils.clickSidebarSection('REVIEW A REPORT');
+    PageUtils.clickSidebarItem('Add a report level memo');
+    cy.get('[id="text4000"]').should('have.value', memoText);
   });
 });
