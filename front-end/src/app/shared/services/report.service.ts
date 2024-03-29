@@ -29,7 +29,7 @@ export class ReportService implements TableListService<Report> {
   apiEndpoint = '/reports';
 
   constructor(
-    protected apiService: ApiService,
+    public apiService: ApiService,
     protected store: Store,
   ) {}
 

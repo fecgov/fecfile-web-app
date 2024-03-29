@@ -121,4 +121,25 @@ describe('ReportListComponent', () => {
       expect(component.canDeleteMap.get(report)).toBeTrue();
     }));
   });
+
+  describe('deleteReport', () => {
+    it('should call confirm', () => {
+      const confirmSpy = spyOn(component.confirmationService, 'confirm');
+      component.confirmDelete(testActiveReport);
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should delete', fakeAsync(async () => {
+      const deleteSpy = spyOn(component.itemService, 'delete').and.returnValue(of(null));
+      const messageServiceSpy = spyOn(component.messageService, 'add');
+      await component.delete(testActiveReport);
+      expect(deleteSpy).toHaveBeenCalledOnceWith(testActiveReport);
+      expect(messageServiceSpy).toHaveBeenCalledOnceWith({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Deleted',
+        life: 3000,
+      });
+    }));
+  });
 });

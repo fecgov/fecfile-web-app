@@ -26,15 +26,15 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       this.editItem.bind(this),
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
-    new TableAction('Delete', this.deleteReport.bind(this), (report: Report) => !!this.canDeleteMap.get(report)),
+    new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => !!this.canDeleteMap.get(report)),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
 
   canDeleteMap: Map<Report, boolean> = new Map();
 
   constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
+    override messageService: MessageService,
+    public override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     override itemService: ReportService,
     public router: Router,
@@ -96,7 +96,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     );
   }
 
-  public deleteReport(report: Report): void {
+  public confirmDelete(report: Report): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this report? This action cannot be undone',
       header: 'Hang on...',
@@ -105,16 +105,18 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       rejectButtonStyleClass: 'p-button-secondary',
       acceptLabel: 'Confirm',
       acceptIcon: 'none',
-      accept: async () => {
-        await lastValueFrom(this.itemService.delete(report));
-        this.refreshTable();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Deleted',
-          life: 3000,
-        });
-      },
+      accept: async () => this.delete(report),
+    });
+  }
+
+  async delete(report: Report) {
+    await lastValueFrom(this.itemService.delete(report));
+    this.refreshTable();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Report Deleted',
+      life: 3000,
     });
   }
 

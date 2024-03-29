@@ -6,6 +6,7 @@ import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
+import { of } from 'rxjs';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -90,7 +91,17 @@ describe('ReportService', () => {
       const result = await service.canDelete(report);
       expect(result).toBeFalse();
     }));
+  });
 
-    //   it('should call api', fakeAsync(async () => {}));
+  describe('getAllReports', () => {
+    it('should get all reports', fakeAsync(async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const getSpy = spyOn(service.apiService, 'get').and.callFake(() => of([testActiveReport]));
+
+      const reports = await service.getAllReports();
+      expect(getSpy).toHaveBeenCalledTimes(1);
+      expect(reports.length).toBe(1);
+    }));
   });
 });
