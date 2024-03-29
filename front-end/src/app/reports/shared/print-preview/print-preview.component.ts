@@ -95,20 +95,20 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     this.pollingStatusMessage = 'This may take a while...';
     this.webPrintStage = 'checking';
 
-    setTimeout(() => {
-      this.refreshReportStatus();
+    setTimeout(async () => {
+      await this.refreshReportStatus();
     }, this.pollingTime);
   }
 
-  public refreshReportStatus() {
+  public async refreshReportStatus(): Promise<void> {
     if (this.report.id) {
-      this.webPrintService.getStatus(this.report.id);
+      await this.webPrintService.getStatus(this.report.id);
       if (
         !this.report.webprint_submission?.fec_status ||
         this.report.webprint_submission?.fec_status === 'PROCESSING'
       ) {
-        setTimeout(() => {
-          this.refreshReportStatus();
+        setTimeout(async () => {
+          await this.refreshReportStatus();
         }, this.pollingTime);
       }
     }
@@ -119,11 +119,11 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       if (this.report instanceof Form3X) {
         const payload: Form3X = Form3X.fromJSON({
           ...this.report,
-          qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount)
+          qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount),
         });
         await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
       }
-      this.webPrintService.submitPrintJob(this.report.id);
+      await this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }
   }

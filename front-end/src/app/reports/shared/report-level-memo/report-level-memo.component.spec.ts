@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,7 +16,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
-import { Report } from 'app/shared/models/report.model';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
@@ -54,7 +53,7 @@ describe('ReportLevelMemoComponent', () => {
           useValue: {
             data: of({
               report: f3x,
-              getNextUrl: (report?: Report) => `/reports/f3x/submit/step1/${report?.id}`,
+              getNextUrl: () => `/reports/f3x/submit/step1/999`,
             }),
           },
         },
@@ -86,7 +85,7 @@ describe('ReportLevelMemoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('save for existing memo text happy path', () => {
+  it('save for existing memo text happy path', fakeAsync(async () => {
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
@@ -97,26 +96,27 @@ describe('ReportLevelMemoComponent', () => {
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = '1';
-    component.save();
+    await component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
-  });
+  }));
 
-  it('save for new memo text happy path', () => {
+  it('save for new memo text happy path', fakeAsync(async () => {
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Created',
       life: 3000,
     };
+    component.report = f3x;
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = undefined;
-    component.save();
+    await component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
-  });
+  }));
 });

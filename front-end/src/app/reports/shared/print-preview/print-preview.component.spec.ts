@@ -1,12 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DividerModule } from 'primeng/divider';
 import { of } from 'rxjs';
 import { PrintPreviewComponent } from './print-preview.component';
@@ -47,11 +47,13 @@ describe('PrintPreviewComponent', () => {
     });
   }));
 
-  it('refreshes the active report', () => {
-    const refresh = spyOn(webPrintService, 'getStatus');
-    component.refreshReportStatus();
-    expect(refresh).toHaveBeenCalled();
-  });
+  it('refreshes the active report', fakeAsync(async () => {
+    component.report = testActiveReport;
+    component.report.id = '999';
+    const getStatus = spyOn(webPrintService, 'getStatus');
+    await component.refreshReportStatus();
+    expect(getStatus).toHaveBeenCalled();
+  }));
 
   it('Updates with a failed report', () => {
     const testF3x: Form3X = Form3X.fromJSON({
@@ -85,19 +87,19 @@ describe('PrintPreviewComponent', () => {
     component.updatePrintStatus(testF3x);
     expect(component.webPrintStage).toBe('checking');
     expect(component.pollingStatusMessage).toBe(
-      'Your report is still being processed. Please check back later to access your PDF'
+      'Your report is still being processed. Please check back later to access your PDF',
     );
   });
 
-  it('#submitPrintJob() calls the service', fakeAsync(() => {
+  it('#submitPrintJob() calls the service', fakeAsync(async () => {
+    component.report = testActiveReport;
+    component.report.id = '999';
     const submit = spyOn(webPrintService, 'submitPrintJob');
     const refresh = spyOn(component, 'refreshReportStatus');
-    component.submitPrintJob();
-    tick(5001);
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(refresh).toHaveBeenCalled();
-      expect(submit).toHaveBeenCalled();
-    });
+    await component.submitPrintJob();
+    tick(2000);
+    expect(refresh).toHaveBeenCalled();
+    expect(submit).toHaveBeenCalled();
+    flush();
   }));
 });

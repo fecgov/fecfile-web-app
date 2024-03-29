@@ -11,7 +11,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { takeUntil } from 'rxjs';
+import { firstValueFrom, takeUntil } from 'rxjs';
 import { Report } from 'app/shared/models/report.model';
 
 @Component({
@@ -76,7 +76,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
-  save() {
+  async save(): Promise<void> {
     this.formSubmitted = true;
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
 
@@ -87,24 +87,23 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     payload.report_id = this.report.id;
 
     if (this.assignedMemoText.id) {
-      this.memoTextService.update(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl(this.nextUrl);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Memo Updated',
-          life: 3000,
-        });
+      await firstValueFrom(this.memoTextService.update(payload, this.formProperties));
+
+      await this.router.navigateByUrl(this.nextUrl);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Memo Updated',
+        life: 3000,
       });
     } else {
-      this.memoTextService.create(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl(this.nextUrl);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Memo Created',
-          life: 3000,
-        });
+      await firstValueFrom(this.memoTextService.create(payload, this.formProperties));
+      await this.router.navigateByUrl(this.nextUrl);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Memo Created',
+        life: 3000,
       });
     }
   }
