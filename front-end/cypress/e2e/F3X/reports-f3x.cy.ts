@@ -4,6 +4,8 @@ import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xC
 import { F3xReportLevelMemoPage } from '../pages/f3xReportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { defaultFormData } from '../models/ReportFormModel';
+import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
+import { faker } from '@faker-js/faker';
 
 describe('Manage reports', () => {
   beforeEach(() => {
@@ -93,7 +95,9 @@ describe('Manage reports', () => {
     ReportListPage.createF3X();
     ReportListPage.goToPage();
     // Start second report and check to see if report code disabled
-    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.coverageCall();
+    ReportListPage.clickCreateAndSelectForm('F3X');
+    F3xCreateReportPage.waitForCoverage();
     cy.get('label[for="12G"]').should('have.class', 'p-disabled');
   });
 
@@ -121,7 +125,7 @@ describe('Manage reports', () => {
     // Enter the memo text
     PageUtils.clickSidebarSection('REVIEW A REPORT');
     PageUtils.clickSidebarItem('Add a report level memo');
-    const memoText = PageUtils.randomString(30);
+    const memoText = faker.lorem.sentence({ min: 1, max: 4 });
     F3xReportLevelMemoPage.enterFormData(memoText);
     PageUtils.clickButton('Save & continue');
 

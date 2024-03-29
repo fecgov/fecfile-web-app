@@ -13,6 +13,7 @@ import { StartTransaction } from './start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
 import { ScheduleFormData } from '../models/TransactionFormModel';
 import { Individual } from './start-transaction/receipts';
+import { faker } from '@faker-js/faker';
 
 const APRIL_15 = 'APRIL 15';
 
@@ -23,9 +24,9 @@ const receiptData: ScheduleFormData = {
   electionType: undefined,
   electionYear: undefined,
   election_other_description: '',
-  purpose_description: PageUtils.randomString(20),
+  purpose_description: faker.lorem.sentence({ min: 1, max: 4 }),
   memo_code: false,
-  memo_text: PageUtils.randomString(20),
+  memo_text: faker.lorem.sentence({ min: 1, max: 4 }),
 };
 
 const reattributeData: ScheduleFormData = {

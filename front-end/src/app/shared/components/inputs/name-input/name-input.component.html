@@ -3,7 +3,7 @@
     <div class="col-4">
       <div class="field">
         <label for="last_name">{{ labelPrefix }} LAST NAME</label>
-        <input type="text" pInputText id="last_name" [formControlName]="lastNameFieldName" />
+        <input type="text" pInputText id="last_name" [formControlName]="lastNameFieldName" data-cy="last-name" />
         <app-error-messages
           [form]="form"
           [fieldName]="lastNameFieldName"

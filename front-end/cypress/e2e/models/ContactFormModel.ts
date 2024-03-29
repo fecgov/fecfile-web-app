@@ -1,4 +1,5 @@
 import { PageUtils } from '../pages/pageUtils';
+import { faker } from '@faker-js/faker';
 
 export class ContactFormData {
   contact_type: string;
@@ -64,27 +65,33 @@ export const candidateFormData: ContactFormData = createContact(ContactType.CAND
 export const committeeFormData: ContactFormData = createContact(ContactType.COMMITTEE);
 
 export function createContact(contact_type: ContactType): ContactFormData {
+  const office = faker.helpers.arrayElement(['House', 'Presidential', 'Senate']);
+  let candidateId = `P${faker.string.numeric(8)}`;
+  if (office == 'House')
+    candidateId = `H${faker.string.numeric(1)}${faker.location.state({ abbreviated: true })}${faker.string.numeric(5)}`;
+  if (office == 'Senate')
+    candidateId = `S${faker.string.numeric(1)}${faker.location.state({ abbreviated: true })}${faker.string.numeric(5)}`;
   return {
     contact_type,
-    last_name: PageUtils.randomString(10),
-    first_name: PageUtils.randomString(10),
-    middle_name: PageUtils.randomString(10),
-    prefix: PageUtils.randomString(5),
-    suffix: PageUtils.randomString(5),
+    last_name: faker.person.lastName(),
+    first_name: faker.person.firstName(),
+    middle_name: faker.person.middleName(),
+    prefix: faker.person.prefix(),
+    suffix: faker.person.suffix(),
     country: 'United States of America',
-    street_1: PageUtils.randomString(10),
-    street_2: PageUtils.randomString(10),
-    city: PageUtils.randomString(10),
-    state: 'District of Columbia',
-    zip: PageUtils.randomString(5),
-    phone: PageUtils.randomString(10, 'numeric'),
-    employer: PageUtils.randomString(20),
-    occupation: PageUtils.randomString(20),
-    candidate_id: 'H2AZ12345',
-    candidate_office: 'House',
-    candidate_state: 'Virginia',
-    candidate_district: '01',
-    committee_id: 'C' + PageUtils.randomString(8, 'numeric'),
-    name: PageUtils.randomString(10),
+    street_1: faker.location.streetAddress(),
+    street_2: faker.location.secondaryAddress(),
+    city: faker.location.city(),
+    state: faker.location.state(),
+    zip: faker.location.zipCode('#####'),
+    phone: faker.string.numeric(10),
+    employer: faker.company.name(),
+    occupation: faker.person.jobTitle(),
+    candidate_id: candidateId,
+    candidate_office: office,
+    candidate_state: faker.location.state(),
+    candidate_district: '01', //because the options are based on state, just pick 01
+    committee_id: `C${faker.string.numeric(8)}`,
+    name: faker.company.name(),
   };
 }

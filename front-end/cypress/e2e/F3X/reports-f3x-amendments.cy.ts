@@ -25,7 +25,9 @@ describe('Amendments', () => {
 
     // Create report to add loan too
     ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.coverageCall();
+    ReportListPage.clickCreateAndSelectForm('F3X');
+    F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(reportFormData);
     PageUtils.clickButton('Save and continue');
 
