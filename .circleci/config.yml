@@ -228,6 +228,9 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end
+      - run:
+          name: Install compodoc
+          command: npm install -g @compodoc/compodoc
 
       - run:
           name: Run Compodoc
@@ -235,8 +238,8 @@ jobs:
           working_directory: ~/project/front-end
 
       - persist_to_workspace:
-          root: ~/project/front-end/documentation
-          paths: html
+          root: ~/project/front-end
+          paths: documentation
 
   docs-deploy:
     docker:
@@ -244,9 +247,16 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project/front-end/documenation
+          at: ~/project/front-end/documentation
+
+      - run:
+          name: Disable jekyll builds
+          command: touch ~/project/front-end/documentation/.nojekyll
+      - node/install:
+          install-yarn: false
+          node-version: "16.13"
       - node/install-packages:
-          override-ci-command: npm install
+          pkg-manager: npm
           app-dir: ~/project/front-end/
       - run:
           name: Configure git
@@ -256,9 +266,11 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "0f:22:e1:9d:81:ea:82:a0:fa:18:f2:0f:25:f7:3f:6f"
+
       - run:
           name: Deploy docs to gh-pages branch
-          command: npx gh-pages --dotfiles --dist ~/project/front-end/documentation/html
+          command: npx gh-pages --dotfiles --dist ~/project/front-end/documentation
+          working_directory: ~/project/front-end
 
   dependency-check:
     docker:
