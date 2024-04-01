@@ -21,7 +21,7 @@ export class F3xCreateReportFormData {
 }
 
 export class F24CreateReportFormData {
-  report_type_24_48: '24' | '48' | undefined;
+  report_type_24_48: '24' | '48';
 
   constructor(formData: F24CreateReportFormData) {
     this.report_type_24_48 = formData.report_type_24_48;

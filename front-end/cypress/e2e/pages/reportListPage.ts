@@ -1,5 +1,5 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
-import { defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
+import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from './f3xCashOnHandPage';
 
@@ -9,11 +9,13 @@ export class ReportListPage {
     cy.get('.navbar-nav').find('.nav-link').contains('Reports').click();
   }
 
-  static clickCreateAndSelectForm(formType: string, force = false) {
+  static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
     cy.get('[data-cy="create-report"]').click({ force });
     cy.get('#typeDropdown').click();
     cy.get(`[data-cy-form-type="${formType}"]`).click();
-    cy.get('[data-cy="start-report"]').click();
+    if (submit) {
+      cy.get('[data-cy="start-report"]').click();
+    }
   }
 
   //Deletes all reports belonging to the logged-in committee
@@ -60,6 +62,13 @@ export class ReportListPage {
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('F1M', true);
     cy.get('[data-cy="form-1m-component"]').should('exist');
+  }
+
+  static createF24(report = defaultForm24Data) {
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateAndSelectForm('F24', true, false);
+    cy.get('div > span').contains(`${report.report_type_24_48} Hour`).should('exist').click();
+    cy.get('[data-cy="start-report"]').click();
   }
 
   static editReport(reportName: string, fieldName = 'Edit report') {
