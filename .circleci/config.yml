@@ -219,6 +219,47 @@ jobs:
           no_output_timeout: 15m
           command: pip install -r requirements.txt && invoke deploy --login
 
+  docs-build:
+    docker:
+      - image: cimg/node:16.15-browsers
+
+    steps:
+      - checkout
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end
+
+      - run:
+          name: Run Compodoc
+          command: npm run compodoc:build
+          working_directory: ~/project/front-end
+
+      - persist_to_workspace:
+          root: ~/project/front-end/documentation
+          paths: html
+
+  docs-deploy:
+    docker:
+      - image: cimg/node:16.15-browsers
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project/front-end/documenation
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
+      - run:
+          name: Configure git
+          command: |
+            git config user.email "apiinfo@fec.gov"
+            git config user.name "apiinfo"
+      - add_ssh_keys:
+          fingerprints:
+            - "0f:22:e1:9d:81:ea:82:a0:fa:18:f2:0f:25:f7:3f:6f"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: npx gh-pages --dotfiles --dist ~/project/front-end/documentation/html
+
   dependency-check:
     docker:
       - image: cimg/node:16.15-browsers
@@ -309,6 +350,14 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-\d+|main/
+      - docs-build:
+          requires:
+            - test
+            - dependency-check
+          
+      - docs-deploy:
+          requires:
+            - docs-build
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>

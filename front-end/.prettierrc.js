@@ -4,13 +4,14 @@ module.exports = {
   useTabs: false,
   tabWidth: 2,
   semi: true,
+  trailingComma: 'none',
   bracketSpacing: true,
   overrides: [
     {
       files: ['*.json'],
       options: {
-        tabWidth: 4
-      }
-    }
-  ]
+        tabWidth: 4,
+      },
+    },
+  ],
 };
