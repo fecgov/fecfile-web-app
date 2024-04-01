@@ -12,6 +12,7 @@ import {
 } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './start-transaction/start-transaction';
+import { faker } from '@faker-js/faker';
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -19,8 +20,8 @@ const independentExpVoidData: DisbursementFormData = {
     date2: new Date(currentYear, 4 - 1, 27),
     supportOpposeCode: 'SUPPORT',
     signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-    signatoryFirstName: PageUtils.randomString(10),
-    signatoryLastName: PageUtils.randomString(10),
+    signatoryFirstName: faker.person.firstName(),
+    signatoryLastName: faker.person.lastName(),
   },
 };
 
