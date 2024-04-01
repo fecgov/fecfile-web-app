@@ -1,18 +1,18 @@
 <div class="card">
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="rowsPerPage"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-      [showCurrentPageReport]="true"
-      sortField="line_label_order_key,created"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+    [showCurrentPageReport]="true"
+    sortField="line_label_order_key,created"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
@@ -117,6 +117,9 @@
           ></app-table-actions-button>
         </td>
       </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <span class="mx-3 d-block w-full">No data available in table</span>
     </ng-template>
   </p-table>
 </div>

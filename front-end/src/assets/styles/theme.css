@@ -6459,3 +6459,14 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: white;
   border-width: 2px;
 }
+
+
+eyeicon {
+  right: 16px;
+  scale: 1.25;
+}
+
+eyeslashicon {
+  right: 16px;
+  scale: 1.25;
+}

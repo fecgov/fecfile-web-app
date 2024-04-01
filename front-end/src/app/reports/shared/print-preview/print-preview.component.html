@@ -8,7 +8,7 @@
     <h3 class="no-vert-margins">
       <strong>{{ report.formLabel }}:</strong> {{ report.formSubLabel }}
     </h3>
-    <hr class="black-line" />
+    <hr class="black-line"/>
   </div>
 </div>
 <p-card>
@@ -39,22 +39,19 @@
             width="114"
           />
           <h1 class="align-center super-header">
-            <br /><br />
+            <br/><br/>
             <strong>Compiling your preview</strong>
-            <br />
+            <br/>
           </h1>
-          <h2 class="align-center">
-            {{ pollingStatusMessage }}
-          </h2>
         </div>
       </ng-container>
     </div>
     <ng-container *ngIf="webPrintStage === 'checking' && report.webprint_submission?.fec_status === 'PROCESSING'">
       <div class="col-12">
         <h1 class="align-center">
-          <br /><br />
+          <br/><br/>
           <strong>Your report is still being processed...</strong>
-          <br />
+          <br/>
         </h1>
         <h3 class="align-center">PLEASE CHECK BACK LATER TO ACCESS YOUR PDF</h3>
       </div>
@@ -64,7 +61,7 @@
     <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
       <ng-container *ngIf="webPrintStage === 'failure'">
         <div class="col-12">
-          <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
+          <h2 class="align-center">Printing error:<br/>{{ printError }}</h2>
         </div>
       </ng-container>
       <div class="col-5"></div>

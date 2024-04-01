@@ -4,7 +4,7 @@
 <h5>
   <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
 </h5>
-<p-divider></p-divider>
+<hr type="solid">
 <div class="p-fluid">
   <p-card>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -16,10 +16,10 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-12">
+        <div class="col-12 md:col-6">
           <div class="field">
             <label for="confirmation_email_1"><strong>Email #1</strong></label>
-            <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
+            <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1"/>
             <app-error-messages
               [form]="form"
               fieldName="confirmation_email_1"
@@ -27,10 +27,10 @@
             ></app-error-messages>
           </div>
         </div>
-        <div class="col-12">
+        <div class="col-12 md:col-6">
           <div class="field">
             <label for="confirmation_email_2"><strong>Email #2</strong> (Optional)</label>
-            <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
+            <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2"/>
             <app-error-messages
               [form]="form"
               fieldName="confirmation_email_2"
@@ -40,20 +40,20 @@
         </div>
       </div>
       <div *ngIf="report?.hasChangeOfAddress">
-        <p-divider></p-divider>
+        <hr type="solid">
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <h3>Verify physical address</h3>
-              <br />
+              <h2>Verify physical address</h2>
+              <br/>
               <div>Has your address changed in the last 10 days?</div>
             </div>
           </div>
         </div>
         <div class="grid">
-          <div class="col-2">
-            <div class="field">
-              <div class="radio-button-spacer">
+          <div class="col-12 field">
+            <div class="flex flex-wrap gap-3">
+              <div class="flex align-items-center">
                 <p-radioButton
                   name="change_of_address"
                   [value]="true"
@@ -62,17 +62,7 @@
                   ariaLabel="Address has changed in the last 10 days"
                 ></p-radioButton>
               </div>
-              <app-error-messages
-                [form]="form"
-                fieldName="change_of_address"
-                [formSubmitted]="formSubmitted"
-                patternErrorMessage="Please select 'Yes' or 'No'"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="field">
-              <div class="radio-button-spacer">
+              <div class="flex align-items-center">
                 <p-radioButton
                   name="change_of_address"
                   [value]="false"
@@ -81,6 +71,12 @@
                   ariaLabel="Address has not changed in the last 10 days"
                 ></p-radioButton>
               </div>
+              <app-error-messages
+                [form]="form"
+                fieldName="change_of_address"
+                [formSubmitted]="formSubmitted"
+                patternErrorMessage="Please select 'Yes' or 'No'"
+              ></app-error-messages>
             </div>
           </div>
         </div>
@@ -104,7 +100,7 @@
           <div class="col-6">
             <div class="field">
               <label for="street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="street_1" formControlName="street_1" />
+              <input type="text" pInputText id="street_1" formControlName="street_1"/>
               <app-error-messages
                 [form]="form"
                 fieldName="street_1"
@@ -115,7 +111,7 @@
           <div class="col-6">
             <div class="field">
               <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="street_2" formControlName="street_2" />
+              <input type="text" pInputText id="street_2" formControlName="street_2"/>
               <app-error-messages
                 [form]="form"
                 fieldName="street_2"
@@ -128,7 +124,7 @@
           <div class="col-6">
             <div class="field">
               <label for="city">CITY</label>
-              <input type="text" pInputText id="city" formControlName="city" />
+              <input type="text" pInputText id="city" formControlName="city"/>
               <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
@@ -148,13 +144,13 @@
           <div class="col-3">
             <div class="field">
               <label for="zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="zip" formControlName="zip" />
+              <input type="text" pInputText id="zip" formControlName="zip"/>
               <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         </div>
       </ng-container>
-      <p-divider></p-divider>
+      <hr type="solid">
       <div class="grid">
         <div class="col-2">
           <button

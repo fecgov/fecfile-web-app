@@ -1,7 +1,7 @@
 .debug-login {
   margin-left: auto;
   margin-right: auto;
-	background-color: #dedbdb;
+  background-color: #dedbdb;
   border: #000000;
   border-radius: 8px;
   border-style: solid;
@@ -19,12 +19,3 @@
   width: 100%;
 }
 
-:host ::ng-deep eyeicon {
-  right: 16px;
-  scale: 1.25;
-}
-
-:host ::ng-deep eyeslashicon {
-  right: 16px;
-  scale: 1.25;
-}
