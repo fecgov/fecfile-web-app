@@ -1,5 +1,5 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
-import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
+import { defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from './f3xCashOnHandPage';
 
