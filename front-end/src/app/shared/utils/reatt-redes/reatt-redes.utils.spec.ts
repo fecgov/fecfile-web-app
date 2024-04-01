@@ -185,8 +185,8 @@ describe('ReattRedesUtils', () => {
       payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(payload.reatt_redes as SchBTransaction);
       const cloned = ReattRedesUtils.getPayloads(payload, true);
       expect(cloneSpy).toHaveBeenCalled();
-      expect(cloned[0].report_id).toEqual(payload.report_id);
-      expect(cloned[0].report).toBeFalsy();
+      expect(cloned[0].report_ids).toEqual(payload.report_ids);
+      expect(cloned[0].reports).toBeFalsy();
       expect(cloned[0].id).toBeFalsy();
       expect(cloned[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
       expect(cloned[0].force_unaggregated).toBeTrue();
@@ -198,7 +198,7 @@ describe('ReattRedesUtils', () => {
         expect(cloned[0].memo_text.id).toBeFalsy();
         expect(cloned[0].memo_text?.transaction_uuid).toBeFalsy();
         expect(cloned[0].memo_text?.transaction_id_number).toBeFalsy();
-        expect(cloned[0].memo_text?.report_id).toBe(payload.report_id);
+        expect(cloned[0].memo_text?.report_id).toBe(payload.report_ids?.[0]);
       }
     });
   });

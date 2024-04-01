@@ -37,6 +37,7 @@ import { MainFormComponent } from './f1m/main-form/main-form.component';
 import { SubmitReportStep1Component } from './submission-workflow/submit-report-step1.component';
 import { SubmitReportStep2Component } from './submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from './submission-workflow/submit-report-status.component';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { SubmitReportStatusComponent } from './submission-workflow/submit-report
     InputNumberModule,
     RippleModule,
     NgOptimizedImage,
+    PasswordModule,
   ],
 })
 export class ReportsModule {}

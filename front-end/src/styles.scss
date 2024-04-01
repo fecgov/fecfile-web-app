@@ -6,6 +6,14 @@ p {
   line-height: 1.5;
 }
 
+hr {
+  margin: .5rem .5rem 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: 2px solid;
+  opacity: 1;
+}
+
 hr.black-line {
   color: black;
 }
