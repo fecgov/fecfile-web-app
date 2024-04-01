@@ -36,6 +36,7 @@ import { RippleModule } from 'primeng/ripple';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SelectReportDialogComponent } from './transaction-list/select-report-dialog/select-report-dialog.component';
 import { ReattRedesTransactionTypeDetailComponent } from './reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
+import { SectionHeaderComponent } from './transaction-input/section-header/section-header.component';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog/secondary-report-selection-dialog.component';
 
 @NgModule({
@@ -56,6 +57,7 @@ import { SecondaryReportSelectionDialogComponent } from './secondary-report-sele
     TransactionNavigationComponent,
     SelectReportDialogComponent,
     ReattRedesTransactionTypeDetailComponent,
+    SectionHeaderComponent,
     SecondaryReportSelectionDialogComponent,
   ],
   imports: [
