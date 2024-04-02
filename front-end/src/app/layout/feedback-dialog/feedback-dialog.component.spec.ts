@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ApiService } from 'app/shared/services/api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -13,7 +12,6 @@ import { FeedbackDialogComponent } from './feedback-dialog.component';
 describe('FeedbackDialogComponent', () => {
   let component: FeedbackDialogComponent;
   let fixture: ComponentFixture<FeedbackDialogComponent>;
-  let testApiService: ApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,7 +22,6 @@ describe('FeedbackDialogComponent', () => {
 
     fixture = TestBed.createComponent(FeedbackDialogComponent);
     component = fixture.componentInstance;
-    testApiService = TestBed.inject(ApiService);
     fixture.detectChanges();
   });
 
