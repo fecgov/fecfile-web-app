@@ -30,7 +30,7 @@ export class FeedbackDialogComponent {
 
   constructor(
     private fb: FormBuilder,
-    private feedbackService: FeedbackService,
+    public feedbackService: FeedbackService,
   ) { }
 
   openDialog(): void {

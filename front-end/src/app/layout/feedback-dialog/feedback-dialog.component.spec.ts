@@ -1,38 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DeletedContactDialogComponent } from './feedback-dialog.component';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ApiService } from 'app/shared/services/api.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { of } from 'rxjs';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { FeedbackDialogComponent } from './feedback-dialog.component';
 
-describe('DeletedContactDialogComponent', () => {
-  let component: DeletedContactDialogComponent;
-  let fixture: ComponentFixture<DeletedContactDialogComponent>;
+describe('FeedbackDialogComponent', () => {
+  let component: FeedbackDialogComponent;
+  let fixture: ComponentFixture<FeedbackDialogComponent>;
+  let testApiService: ApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ToastModule, TableModule, DialogModule, ConfirmDialogModule, HttpClientTestingModule],
-      declarations: [DeletedContactDialogComponent],
+      declarations: [FeedbackDialogComponent],
       providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DeletedContactDialogComponent);
+    fixture = TestBed.createComponent(FeedbackDialogComponent);
     component = fixture.componentInstance;
-    spyOn(component.itemService, 'getTableData').and.returnValue(
-      of({
-        count: 2,
-        pageNumber: 1,
-        next: 'https://next',
-        previous: 'https://previous',
-        results: [Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })],
-      })
-    );
+    testApiService = TestBed.inject(ApiService);
     fixture.detectChanges();
   });
 
@@ -40,26 +32,64 @@ describe('DeletedContactDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should enable restore', () => {
-    component.visible = true;
-    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
-    component.hide();
-    expect(component.selectedItems).toEqual([]);
+  it('#openDialog happy path', () => {
+    component.openDialog();
+    expect(component.formSubmitted).toBeFalse();
+    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
-  it('should restore', () => {
-    spyOn(component.itemService, 'restore').and.returnValue(of(['1']));
-    component.visible = true;
-    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
-    component.restoreSelected();
-
-    expect(component.selectedItems).toEqual([]);
+  it('#closeDialog happy path', () => {
+    component.closeDialog();
+    expect(component.visible).toBeFalse();
   });
 
-  it('should display name', () => {
-    const label = component.displayName(Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' }));
-    expect(label).toEqual('last, first');
-    const orglabel = component.displayName(Contact.fromJSON({ id: 1, name: 'name', type: ContactTypes.ORGANIZATION }));
-    expect(orglabel).toEqual('name');
+  it('#save happy path', fakeAsync(() => {
+    const test_action = 'test_action';
+    const test_feedback = 'test_feedback';
+    const test_about = 'test_about';
+    component.form.get('action')?.setValue(test_action);
+    component.form.get('feedback')?.setValue(test_feedback);
+    component.form.get('about')?.setValue(test_about);
+
+    const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
+    component.save();
+    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({
+      action: test_action,
+      feedback: test_feedback,
+      about: test_about,
+    }));
+    tick(1000);
+    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.SUCCESS);
+  }));
+
+  it('#save error', fakeAsync(() => {
+    const test_action = 'test_action';
+    const test_feedback = 'test_feedback';
+    const test_about = 'test_about';
+    component.form.get('action')?.setValue(test_action);
+    component.form.get('feedback')?.setValue(test_feedback);
+    component.form.get('about')?.setValue(test_about);
+
+    const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
+    component.save();
+    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({
+      action: test_action,
+      feedback: test_feedback,
+      about: test_about,
+    }));
+    tick(1000);
+    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.FAIL);
+  }));
+
+  it('#reset happy path', () => {
+    component.reset();
+    expect(component.formSubmitted).toBeFalse();
+    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
+
+  it('#tryAgain happy path', () => {
+    component.tryAgain();
+    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
+  });
+
 });

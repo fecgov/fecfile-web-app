@@ -32,12 +32,13 @@ describe('FeedbackService', () => {
     const feedback: Feedback = {
       action: 'test_action',
       feedback: 'test_feedback',
-      about: 'test_about'
+      about: 'test_about',
+      location: 'test_location'
     }
 
     service.submitFeedback(feedback).then();
     tick(100);
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/?fields_to_validate=`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/feedback/submit/`);
     expect(req.request.method).toEqual('POST');
     req.flush(feedback);
     httpTestingController.verify();
