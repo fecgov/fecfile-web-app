@@ -301,7 +301,7 @@ workflows:
           filters:
             branches:
               only: /release\/sprint-[\.\d]+|main/
-      - run:
+      - deploy-job:
           requires:
             - test
             - dependency-check
