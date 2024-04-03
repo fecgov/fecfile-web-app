@@ -9,9 +9,11 @@
       [options]="contactTypeOptions"
       [readonly]="contactTypeReadOnly"
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
-      [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : 'none'"
       id="entity_type_dropdown"
     >
+      <ng-template pTemplate="dropdownicon">
+          <img *ngIf="contactTypeOptions.length > 1" alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="11px" width="11px"/>
+      </ng-template>
     </p-dropdown>
   </div>
   <div *ngIf="showSearchBoxCallback()" class="col-4 pl-0">
@@ -38,14 +40,14 @@
         <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
       </ng-template>
       <ng-template pTemplate="dropdownicon">
-          <img alt="Magnifying lens" src="assets/img/contact_lookup_magnifying_glass.svg" height="70%" width="70%"/>
+          <img alt="Magnifying lens" src="assets/img/contact_lookup_magnifying_glass.svg" height="20px" width="20px"/>
       </ng-template>
     </p-autoComplete>
   </div>
   <div *ngIf="showCreateNewContactButton" class="col">
     <div class="add-contact-container">
       or
-      <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg"/></span>
+      <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px"/></span>
       <a (click)="onCreateNewContactSelect()">Create a new contact</a>
     </div>
   </div>

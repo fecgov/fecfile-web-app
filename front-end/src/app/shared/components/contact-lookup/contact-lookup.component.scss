@@ -2,11 +2,15 @@
 
   .dropdown-with-search .p-dropdown {
     border-radius: 4px 0 0 4px;
-    border-color: #AEB0B5;
   }
 
   .dropdown-with-search .p-dropdown:hover {
     border-color: #d6d7d9;
+  }
+
+  .p-dropdown {
+    border-color: #AEB0B5;
+    background-color: #EEEEEE;
   }
 
   .p-autocomplete-input {
@@ -20,7 +24,7 @@
     pointer-events: none;
     position: absolute;
     right: 5px;
-    top: 2px;
+    top: 5px;
     min-width: 15px;
     border: none;
   }
@@ -69,19 +73,6 @@
   border-bottom: none;
 }
 
-select {
-  height: 48px;
-  border: 2px solid #aeb0b5;
-}
-
-select:active, select:hover {
-  background-color: white;
-}
-
-select:hover {
-  border-color: #d6d7d9;
-}
-
-select:disabled:hover {
-  background-color: #e9ecef;
+.contact-lookup-container {
+  max-width: 65em;
 }
