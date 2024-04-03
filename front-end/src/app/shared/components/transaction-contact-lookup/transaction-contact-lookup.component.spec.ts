@@ -16,6 +16,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/cont
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -39,6 +40,12 @@ describe('TransactionContactLookupComponent', () => {
         EventEmitter,
         provideMockStore(testMockStore),
         DatePipe,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: { reportId: '99' } },
+          },
+        },
       ],
     }).compileComponents();
   });

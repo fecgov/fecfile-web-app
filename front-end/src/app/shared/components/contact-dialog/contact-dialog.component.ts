@@ -26,14 +26,14 @@ import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { getReportFromJSON } from '../../services/report.service';
 
 export class TransactionData {
   id: string;
-  report_id: string;
+  report_ids: string[];
   formType: string;
   reportType: string;
   transaction_type_identifier: string;
@@ -43,7 +43,7 @@ export class TransactionData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(transaction: any) {
     this.id = transaction.id;
-    this.report_id = transaction.report_id;
+    this.report_ids = transaction.report_ids;
     this.date = transaction.date;
     this.amount = transaction.amount;
     this.transaction_type_identifier = transaction.transaction_type_identifier;
@@ -110,6 +110,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     private fb: FormBuilder,
     private contactService: ContactService,
     private transactionService: TransactionService,
+    private activatedRoute: ActivatedRoute,
     protected confirmationService: ConfirmationService,
     public router: Router,
   ) {
@@ -336,6 +337,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   async openTransaction(transaction: TransactionData) {
-    await this.router.navigate([`reports/transactions/report/${transaction.report_id}/list/${transaction.id}`]);
+    const reportId = this.activatedRoute.snapshot.params['report_id'];
+    await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
   }
 }

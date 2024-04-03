@@ -1,4 +1,4 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -6,8 +6,8 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
-import { ReportService } from "../../../shared/services/report.service";
-import { Transaction } from "../../../shared/models/transaction.model";
+import { ReportService } from '../../../shared/services/report.service';
+import { Transaction } from '../../../shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-list',
@@ -15,9 +15,18 @@ import { Transaction } from "../../../shared/models/transaction.model";
   styleUrls: ['../transaction.scss'],
 })
 export class TransactionListComponent extends DestroyerComponent implements OnInit {
+  @ViewChild('reportSelectDialog') reportSelectDialog?: ElementRef;
   report: Report | undefined;
   reportTypes = ReportTypes;
   reportStatus = ReportStatus;
+
+  reportSelectDialogVisible = false;
+  reportSelectFormType: ReportTypes | undefined;
+  reportSelectionTransaction: Transaction | undefined;
+  reportSelectionCreateMethod = () => {
+    return;
+  };
+  openReportSelectDialog = this.openSecondaryReportSelectionDialog.bind(this);
 
   availableReports: Report[] = [];
   public tableActions: TableAction[] = [
@@ -27,7 +36,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => true
+      () => true,
     ),
     new TableAction(
       'Add a disbursement',
@@ -35,7 +44,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => true
+      () => true,
     ),
     new TableAction(
       'Add loans and debts',
@@ -43,7 +52,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => true
+      () => true,
     ),
     new TableAction(
       'Add other transactions',
@@ -51,7 +60,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
       },
-      () => false
+      () => false,
     ),
     new TableAction(
       'Add an independent expenditure',
@@ -59,12 +68,16 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F24;
       },
-      () => true
+      () => true,
     ),
   ];
   transaction?: Transaction;
 
-  constructor(private router: Router, private store: Store, private reportService: ReportService) {
+  constructor(
+    private router: Router,
+    private store: Store,
+    private reportService: ReportService,
+  ) {
     super();
   }
 
@@ -75,7 +88,6 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       .subscribe((report) => (this.report = report));
   }
 
-
   async createTransactions(transactionCategory: string, report?: Report): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
@@ -84,12 +96,19 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
     await this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
   }
 
+  public openSecondaryReportSelectionDialog(transaction: Transaction, formType: ReportTypes, createMethod: () => void) {
+    this.reportSelectDialogVisible = true;
+    this.reportSelectFormType = formType;
+    this.reportSelectionTransaction = transaction;
+    this.reportSelectionCreateMethod = createMethod;
+  }
+
   public onTableActionClick(action: TableAction, report?: Report) {
     action.action(report);
   }
 }
 
-@Pipe({name: 'memoCode'})
+@Pipe({ name: 'memoCode' })
 export class MemoCodePipe implements PipeTransform {
   transform(value: boolean) {
     return value ? 'Y' : '-';

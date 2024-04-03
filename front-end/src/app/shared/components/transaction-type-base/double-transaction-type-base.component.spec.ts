@@ -100,7 +100,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   beforeEach(() => {
     testRouter = TestBed.inject(Router);
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    testTransaction.report_id = '123';
+    testTransaction.report_ids = ['123'];
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];

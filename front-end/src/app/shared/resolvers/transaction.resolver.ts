@@ -99,7 +99,7 @@ export class TransactionResolver {
   resolveNewTransaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
-    transaction.report_id = String(reportId);
+    transaction.report_ids = [String(reportId)];
 
     // If this transaction must be completed alongside other on-screen transactions, add them
     if (transactionType.dependentChildTransactionTypes) {
@@ -123,7 +123,7 @@ export class TransactionResolver {
           repayment.debt = to;
           repayment.debt_id = to.id;
         }
-        repayment.report_id = to.report_id;
+        repayment.report_ids = to.report_ids;
         return repayment;
       }),
     );
@@ -189,7 +189,7 @@ export class TransactionResolver {
     const childTransaction = childTransactionType.getNewTransaction();
     childTransaction.parent_transaction = parentTransaction;
     childTransaction.parent_transaction_id = parentTransaction.id;
-    childTransaction.report_id = parentTransaction.report_id;
+    childTransaction.report_ids = parentTransaction.report_ids;
     return childTransaction;
   }
 }

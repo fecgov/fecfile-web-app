@@ -53,7 +53,7 @@ describe('TransactionReceiptsComponent', () => {
                 SchATransaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
-                })
+                }),
               ),
             getTableData: () => of([]),
             update: () => of([]),
@@ -81,30 +81,36 @@ describe('TransactionReceiptsComponent', () => {
     expect(component.rowActions[0].isAvailable()).toEqual(true);
     expect(component.rowActions[1].isAvailable()).toEqual(false);
     expect(
-      component.rowActions[2].isAvailable({force_unaggregated: true, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(false);
     expect(
-      component.rowActions[3].isAvailable({force_unaggregated: false, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[3].isAvailable({
+        force_unaggregated: false,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
     ).toEqual(false);
-    expect(component.rowActions[4].isAvailable({itemized: false})).toEqual(false);
-    expect(component.rowActions[5].isAvailable({itemized: true})).toEqual(false);
+    expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(false);
+    expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(false);
     component.reportIsEditable = true;
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
     expect(
-      component.rowActions[2].isAvailable({force_unaggregated: true, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(true);
     expect(
-      component.rowActions[3].isAvailable({force_unaggregated: false, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[3].isAvailable({
+        force_unaggregated: false,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
     ).toEqual(true);
     expect(
-      component.rowActions[4].isAvailable({itemized: false, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[4].isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(true);
     expect(
-      component.rowActions[5].isAvailable({itemized: true, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[5].isAvailable({ itemized: true, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(true);
     expect(
-      component.rowActions[12].isAvailable({itemized: false, transactionType: {scheduleId: ScheduleIds.A}})
+      component.rowActions[12].isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(true);
     expect(component.rowActions[0].isEnabled({})).toEqual(true);
     expect(component.rowActions[1].isEnabled({})).toEqual(true);
@@ -117,7 +123,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test forceAggregate', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = {force_aggregated: null} as unknown as Transaction;
+    const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
     component.forceAggregate(testTransaction);
     tick(500);
     expect(testTransaction.force_unaggregated).toBe(false);
@@ -125,7 +131,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test forceUnaggregate', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = {force_aggregated: null} as unknown as Transaction;
+    const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
     component.forceUnaggregate(testTransaction);
     tick(500);
     expect(testTransaction.force_unaggregated).toBe(true);
@@ -133,7 +139,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test forceItemize', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = {force_itemized: null} as unknown as Transaction;
+    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceItemize(testTransaction);
     tick(500);
     expect(testTransaction.force_itemized).toBe(true);
@@ -141,7 +147,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test forceUnitemize', fakeAsync(() => {
     spyOn(testItemService, 'update').and.returnValue(of());
-    const testTransaction: Transaction = {force_itemized: null} as unknown as Transaction;
+    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceUnitemize(testTransaction);
     tick(500);
     expect(testTransaction.force_itemized).toBe(false);
@@ -149,19 +155,19 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test editItem', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    const testTransaction: Transaction = {id: 'testId', report_id: 'test'} as unknown as Transaction;
+    const testTransaction: Transaction = { id: 'testId', report_ids: ['test'] } as unknown as Transaction;
     component.editItem(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
 
   describe('format id', () => {
     it('should return empty string if null id', () => {
-      const str = component.formatId(null)
+      const str = component.formatId(null);
       expect(str).toBe('');
     });
 
     it('should properly format', () => {
-      const str = component.formatId("abcdefghijklmnopqrstuvwxyz");
+      const str = component.formatId('abcdefghijklmnopqrstuvwxyz');
       expect(str).toBe('ABCDEFGH');
     });
   });
