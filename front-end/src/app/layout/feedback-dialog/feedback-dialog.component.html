@@ -9,39 +9,60 @@
 >
   <ng-template pTemplate="content">
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.DRAFT">
-      <h2>Post feedback about FECFile anonymously</h2>
-      <p>
-        How can we improve FECFile? When you submit your feedback, it will
-        include your comments, browser information and the URL you were
-        viewing at the time of submission.
-      </p>
+      <div class="grid">
+        <div class="col-12">
+          <div class="field">
+            <h2>Post feedback about FECFile anonymously</h2>
+            <p>
+              How can we improve FECFile? When you submit your feedback, it will
+              include your comments, browser information and the URL you were
+              viewing at the time of submission.
+            </p>
+          </div>
+        </div>
+      </div>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="field">
-          <label for="action">WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT? (Required)</label>
-          <input type="text" pInputText id="action" formControlName="action"/>
-          <app-error-messages
-            [form]="form"
-            fieldName="action"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+        <div class="grid">
+          <div class="col-12">
+            <div class="field">
+              <label for="action">WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT? <span class="font-karla">(Required)</span></label>
+              <input type="text" pInputText id="action" formControlName="action"/>
+              <app-error-messages
+                [form]="form"
+                fieldName="action"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <label for="feedback">GENERAL WEBSITE FEEDBACK (Optional)</label>
-          <input type="text" pInputText id="feedback" formControlName="feedback"/>
-          <app-error-messages
-            [form]="form"
-            fieldName="feedback"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+        <div class="grid">
+          <div class="col-12">
+            <div class="field">
+              <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
+              <input type="text" pInputText id="feedback" formControlName="feedback"/>
+              <app-error-messages
+                [form]="form"
+                fieldName="feedback"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <label for="about">TELL US ABOUT YOURSELF (Optional)</label>
-          <input type="text" pInputText id="about" formControlName="about"/>
-          <app-error-messages
-            [form]="form"
-            fieldName="about"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+        <div class="grid">
+          <div class="col-12">
+            <div class="field">
+              <label for="about">TELL US ABOUT YOURSELF
+                <br>
+                <span class="font-karla">(Please don't include sensitive information like your name, contact information or Social Security number.)</span>
+              </label>
+              <input type="text" pInputText id="about" formControlName="about"/>
+              <app-error-messages
+                [form]="form"
+                fieldName="about"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
         </div>
       </form>
     </ng-container>
@@ -85,8 +106,8 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-12 flex font-karla">
-          <div>
+        <div class="col-12">
+          <div class="field text-start">
             <a href="https://www.fec.gov/use-recaptcha/" target="_blank" rel="noopener">Use of reCAPTCHA</a>
             |
             <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener">Contact the FEC about a specific question</a>

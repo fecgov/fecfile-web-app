@@ -19,6 +19,8 @@ import { loginReducer } from './store/user-login-data.reducer';
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 import { MenubarModule } from 'primeng/menubar';
 import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -35,6 +37,7 @@ import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BannerComponent } from './layout/banner/banner.component';
 import { CommitteeBannerComponent } from './layout/committee-banner/committee-banner.component';
+import { FeedbackDialogComponent } from './layout/feedback-dialog/feedback-dialog.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -49,8 +52,6 @@ import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { LoginService } from './shared/services/login.service';
 import { SharedModule } from './shared/shared.module';
 import { UsersModule } from './users/users.module';
-import { FeedbackDialogComponent } from './layout/feedback-dialog/feedback-dialog.component';
-import { DialogModule } from 'primeng/dialog';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -112,6 +113,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     SharedModule,
     NgOptimizedImage,
     DialogModule,
+    InputTextModule,
   ],
   providers: [
     CookieService,

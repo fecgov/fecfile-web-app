@@ -7,3 +7,32 @@
   border-left: 6px solid #aeb0b5;
   height: 100px;
 }
+
+:host ::ng-deep {
+  .p-dialog .p-dialog-header,
+  .p-dialog .p-dialog-content,
+  .p-dialog .p-dialog-footer {
+    background: #f1f1f1;
+    border: none;
+  }
+
+  .p-dialog .p-dialog-header {
+    padding: 2rem 2rem 0 2rem;
+  }
+  
+  .p-dialog .p-dialog-content {
+    padding: 0 2rem;
+  }
+  
+  .p-dialog .p-dialog-footer {
+    padding: 0 2rem 2rem 2rem;
+  }
+
+  .p-dialog-header-icons {
+    transform: scale(1.5);
+  }
+  
+  p, span, a {
+    font-size: 14px;
+  }
+}
