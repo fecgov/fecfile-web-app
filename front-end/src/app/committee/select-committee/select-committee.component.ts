@@ -15,11 +15,12 @@ import { concatMap, forkJoin, map, of } from 'rxjs';
 })
 export class SelectCommitteeComponent extends DestroyerComponent implements OnInit {
   committees?: CommitteeAccount[];
+
   constructor(
     protected committeeAccountService: CommitteeAccountService,
     protected fecApiService: FecApiService,
     protected store: Store,
-    protected router: Router
+    protected router: Router,
   ) {
     super();
   }
@@ -33,19 +34,19 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
             return this.fecApiService.getCommitteeDetails(committee.committee_id || '').pipe(
               map((fecCommittee: CommitteeAccount) => {
                 return { ...committee, ...fecCommittee } as CommitteeAccount;
-              })
+              }),
             );
           });
           return augmented.length ? forkJoin(augmented) : of([]);
-        })
+        }),
       )
       .subscribe((committees) => (this.committees = committees));
   }
 
   activateCommittee(committee: CommitteeAccount): void {
-    this.committeeAccountService.activateCommittee(committee.id).subscribe(() => {
+    this.committeeAccountService.activateCommittee(committee.id).subscribe(async () => {
       this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committee }));
-      this.router.navigateByUrl(`dashboard`);
+      await this.router.navigateByUrl(``);
     });
   }
 }
