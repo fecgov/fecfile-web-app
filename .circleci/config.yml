@@ -38,7 +38,7 @@ jobs:
       - checkout
 
       - browser-tools/install-chrome:
-          chrome-version: "114.0.5735.90"
+          chrome-version: '114.0.5735.90'
       - browser-tools/install-chromedriver
       - run:
           command: |
@@ -151,7 +151,7 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/videos
           destination: cypress/videos
-  deploy:
+  deploy-job:
     docker:
       - image: cimg/node:16.15-browsers
     resource_class: large
@@ -301,7 +301,7 @@ workflows:
           filters:
             branches:
               only: /release\/sprint-[\.\d]+|main/
-      - deploy:
+      - run:
           requires:
             - test
             - dependency-check
