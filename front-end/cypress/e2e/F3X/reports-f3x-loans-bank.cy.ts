@@ -6,6 +6,7 @@ import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly, Setup } from './f3x-setup';
+import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -20,8 +21,12 @@ const formData = {
   },
 };
 
-function setupLoanFromBank(setup: Setup) {
+function setupLoanFromBank(setup: Setup, addCoh = false) {
   F3XSetup(setup);
+  if (addCoh) {
+    F3xCashOnHandPage.enterFormData(cohFormData);
+    PageUtils.clickButton('Save & continue');
+  }
   StartTransaction.Loans().FromBank();
 
   PageUtils.searchBoxInput(organizationFormData.name);
@@ -38,7 +43,7 @@ describe('Loans', () => {
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    setupLoanFromBank({ individual: true, organization: true, report: reportFormDataApril });
+    setupLoanFromBank({ individual: true, organization: true, report: reportFormDataApril }, true);
 
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');

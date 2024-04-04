@@ -11,7 +11,7 @@ describe('Manage reports', () => {
     Initialize();
   });
 
-  xit('should create form 1m by affiliation', () => {
+  it('should create form 1m by affiliation', () => {
     ContactListPage.createCommittee();
     ReportListPage.createF1M();
     PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C00601211');
