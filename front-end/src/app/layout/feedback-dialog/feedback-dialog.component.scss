@@ -8,6 +8,14 @@
   height: 100px;
 }
 
+.p-button-info {
+  color: black;
+}
+
+.p-button-info:enabled:hover {
+  color: black;
+}
+
 :host ::ng-deep {
   .p-dialog .p-dialog-header,
   .p-dialog .p-dialog-content,

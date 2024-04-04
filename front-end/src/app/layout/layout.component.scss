@@ -58,6 +58,11 @@ app-footer {
 .feedback-button {
   position: fixed;
   bottom: 0;
-  right: 1rem;
+  right: 32px;
   z-index: 99;
+  color: black;
+}
+
+.feedback-button:enabled:hover {
+  color: black;
 }
