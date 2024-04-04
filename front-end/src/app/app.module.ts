@@ -22,6 +22,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenubarModule } from 'primeng/menubar';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
 
@@ -37,7 +38,7 @@ import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BannerComponent } from './layout/banner/banner.component';
 import { CommitteeBannerComponent } from './layout/committee-banner/committee-banner.component';
-import { FeedbackDialogComponent } from './layout/feedback-dialog/feedback-dialog.component';
+import { FeedbackOverlayComponent } from './layout/feedback-overlay/feedback-overlay.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -85,7 +86,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     F1MMenuComponent,
     F99MenuComponent,
     F24MenuComponent,
-    FeedbackDialogComponent,
+    FeedbackOverlayComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,6 +115,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     NgOptimizedImage,
     DialogModule,
     InputTextModule,
+    OverlayPanelModule,
   ],
   providers: [
     CookieService,
@@ -131,4 +133,4 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

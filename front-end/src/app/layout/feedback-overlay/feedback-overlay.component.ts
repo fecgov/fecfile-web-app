@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback } from 'app/shared/models/feedback.model';
 import { FeedbackService } from 'app/shared/services/feedback.service';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 enum SubmissionStates {
   DRAFT,
@@ -10,13 +11,12 @@ enum SubmissionStates {
 }
 
 @Component({
-  selector: 'app-feedback-dialog',
-  templateUrl: './feedback-dialog.component.html',
-  styleUrls: ['./feedback-dialog.component.scss'],
+  selector: 'app-feedback-overlay',
+  templateUrl: './feedback-overlay.component.html',
+  styleUrls: ['./feedback-overlay.component.scss'],
 })
-export class FeedbackDialogComponent {
-  @Input() visible = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
+export class FeedbackOverlayComponent {
+  @ViewChild(OverlayPanel) op!: OverlayPanel;
 
   form: FormGroup = this.fb.group({
     action: ['', [Validators.required, Validators.maxLength(2000)]],
@@ -26,21 +26,20 @@ export class FeedbackDialogComponent {
   formSubmitted = false;
   SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;
-  uri = '';
 
   constructor(
     private fb: FormBuilder,
     public feedbackService: FeedbackService,
   ) { }
 
-  openDialog(): void {
+  show(event: any, target: any): void {
     this.reset();
+    this.op.show(event, target);
   }
 
-  closeDialog(): void {
+  hide(): void {
     this.reset();
-    this.visibleChange.emit(false);
-    this.visible = false;
+    this.op.hide();
   }
 
   save() {

@@ -1,11 +1,9 @@
-<p-dialog
-  [(visible)]="visible"
-  [modal]="true"
-  [closeOnEscape]="true"
-  [style]="{ width: '30%' }"
+<p-overlayPanel
+  #op
+  [style]="{ 'width': '30%' }"
   styleClass="p-fluid"
-  (onShow)="openDialog()"
-  (onHide)="closeDialog()"
+  showTransitionOptions=".25s linear(0, 1)"
+  [showCloseIcon]="true"
 >
   <ng-template pTemplate="content">
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.DRAFT">
@@ -65,34 +63,6 @@
           </div>
         </div>
       </form>
-    </ng-container>
-    <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.SUCCESS">
-      <div class="flex">
-        <div class="success-verticle-bar"></div>
-        <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%"/>
-        <div>
-          <h1>
-            Thanks for helping us improve FECFile
-          </h1>
-          <p class="mt-2">This information has been reported.</p>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.FAIL">
-      <div class="flex">
-        <div class="fail-verticle-bar"></div>
-        <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%"/>
-        <div>
-          <h1>
-            Oops: Something went wrong.
-          </h1>
-          <p class="mt-2">We had trouble processing your feedback.</p>
-        </div>
-      </div>
-    </ng-container>
-  </ng-template>
-  <ng-template pTemplate="footer">
-    <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.DRAFT">
       <div class="grid">
         <div class="col-1">
           <button
@@ -116,6 +86,16 @@
       </div>
     </ng-container>
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.SUCCESS">
+      <div class="flex">
+        <div class="success-verticle-bar"></div>
+        <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%"/>
+        <div>
+          <h1>
+            Thanks for helping us improve FECFile
+          </h1>
+          <p class="mt-2">This information has been reported.</p>
+        </div>
+      </div>
       <div class="grid">
         <div class="col-6 flex">
           <button
@@ -130,6 +110,16 @@
       </div>
     </ng-container>
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.FAIL">
+      <div class="flex">
+        <div class="fail-verticle-bar"></div>
+        <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%"/>
+        <div>
+          <h1>
+            Oops: Something went wrong.
+          </h1>
+          <p class="mt-2">We had trouble processing your feedback.</p>
+        </div>
+      </div>
       <div class="grid">
         <div class="col-1">
           <button
@@ -147,4 +137,4 @@
   <ng-template pTemplate="closeicon">
     <img alt="Close icon" src="assets/img/feedback-close-icon.svg" />
   </ng-template>
-</p-dialog>
+</p-overlayPanel>

@@ -7,20 +7,20 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { FeedbackDialogComponent } from './feedback-dialog.component';
+import { FeedbackOverlayComponent } from './feedback-overlay.component';
 
-describe('FeedbackDialogComponent', () => {
-  let component: FeedbackDialogComponent;
-  let fixture: ComponentFixture<FeedbackDialogComponent>;
+describe('FeedbackOverlayComponent', () => {
+  let component: FeedbackOverlayComponent;
+  let fixture: ComponentFixture<FeedbackOverlayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ToastModule, TableModule, DialogModule, ConfirmDialogModule, HttpClientTestingModule],
-      declarations: [FeedbackDialogComponent],
+      declarations: [FeedbackOverlayComponent],
       providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FeedbackDialogComponent);
+    fixture = TestBed.createComponent(FeedbackOverlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -29,15 +29,16 @@ describe('FeedbackDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#openDialog happy path', () => {
-    component.openDialog();
+  it('#show happy path', () => {
+    component.show(null, null);
     expect(component.formSubmitted).toBeFalse();
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
-  it('#closeDialog happy path', () => {
-    component.closeDialog();
-    expect(component.visible).toBeFalse();
+  it('#hide happy path', () => {
+    component.hide();
+    expect(component.formSubmitted).toBeFalse();
+    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
   it('#save happy path', fakeAsync(() => {

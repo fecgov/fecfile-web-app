@@ -60,9 +60,7 @@
     pRipple
     label="Feedback"
     class="p-button-info feedback-button"
-    (click)="feedbackClicked()"
-  ></button>
-  <app-feedback-dialog
-    [(visible)]="feedbackDialogVisible"
-  ></app-feedback-dialog>
+    (click)="this.feedbackOverlay.show($event, dahtest)"
+  ><div #dahtest></div></button>
+  <app-feedback-overlay></app-feedback-overlay>
 </div>

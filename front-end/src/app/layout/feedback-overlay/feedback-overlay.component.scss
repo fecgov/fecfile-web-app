@@ -1,0 +1,28 @@
+.success-verticle-bar {
+  border-left: 6px solid #35bdbb;
+  height: 100px;
+}
+
+.fail-verticle-bar {
+  border-left: 6px solid #aeb0b5;
+  height: 100px;
+}
+
+.p-button-info {
+  color: black;
+}
+
+.p-button-info:enabled:hover {
+  color: black;
+}
+
+.p-overlaypanel {
+  position: fixed;
+}
+
+:host ::ng-deep {  
+  p, span, a {
+    font-size: 14px;
+  }
+}
+
