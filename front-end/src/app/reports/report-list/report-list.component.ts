@@ -26,11 +26,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       this.editItem.bind(this),
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
-    new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => !!this.canDeleteMap.get(report)),
+    new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
-
-  canDeleteMap: Map<Report, boolean> = new Map();
 
   constructor(
     override messageService: MessageService,
@@ -51,7 +49,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   override async loadTableItems(event: TableLazyLoadEvent) {
     await super.loadTableItems(event);
-    this.items.forEach((item) => this.canDelete(item));
   }
 
   protected getEmptyItem(): Report {
@@ -87,13 +84,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   public async amendReport(report: Report): Promise<void> {
     await lastValueFrom(this.itemService.startAmendment(report).pipe(take(1), takeUntil(this.destroy$)));
     await this.loadTableItems({});
-  }
-
-  public async canDelete(report: Report) {
-    this.canDeleteMap.set(
-      report,
-      report.report_status == ReportStatus.IN_PROGRESS && (await this.itemService.canDelete(report)),
-    );
   }
 
   public confirmDelete(report: Report): void {

@@ -1,9 +1,9 @@
 import { BaseModel } from './base.model';
 import { Contact, ContactTypes } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
+import { SchATransaction, ScheduleATransactionGroupsType, ScheduleATransactionTypes } from './scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionGroupsType, ScheduleBTransactionTypes } from './schb-transaction.model';
+import { SchCTransaction, ScheduleCTransactionGroupsType, ScheduleCTransactionTypes } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
@@ -18,7 +18,7 @@ import {
   ScheduleC2TransactionTypes,
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
-import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
+import { ScheduleETransactionGroupsType, ScheduleETransactionTypes, SchETransaction } from './sche-transaction.model';
 import { Report, ReportTypes } from './report.model';
 import { Form3X } from './form-3x.model';
 import { Form24 } from './form-24.model';
@@ -56,7 +56,6 @@ export abstract class Transaction extends BaseModel {
 
   created: string | undefined;
   updated: string | undefined;
-  deleted: string | undefined;
 
   reports: Report[] | undefined;
   report_ids: string[] | undefined;
@@ -212,21 +211,27 @@ export function getTransactionName(transaction: ScheduleTransaction): string {
   ] as string;
   return orgName;
 }
+
 export function isNewTransaction(transaction?: Transaction): boolean {
   return !transaction?.id;
 }
+
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
 }
+
 export function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
+
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
+
 export function isLoanRepayment(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId !== ScheduleIds.C;
 }
+
 export function isDebtRepayment(transaction?: Transaction): boolean {
   return !!transaction?.debt_id && transaction.transactionType.scheduleId !== ScheduleIds.D;
 }

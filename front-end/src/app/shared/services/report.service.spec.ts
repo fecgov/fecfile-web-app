@@ -84,15 +84,6 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
-  describe('canDelete', () => {
-    it('should return false if report provided is missing id', fakeAsync(async () => {
-      const report = testActiveReport;
-      report.id = undefined;
-      const result = await service.canDelete(report);
-      expect(result).toBeFalse();
-    }));
-  });
-
   describe('getAllReports', () => {
     it('should get all reports', fakeAsync(async () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

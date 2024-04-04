@@ -8,7 +8,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { F3xFormTypes, Form3X } from '../../shared/models/form-3x.model';
-import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
+import { Report, ReportTypes } from '../../shared/models/report.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';
@@ -102,24 +102,6 @@ describe('ReportListComponent', () => {
       component.editItem(item);
       expect(navigateSpy).toHaveBeenCalledWith('/reports/f1m/edit/99');
     });
-  });
-
-  describe('canDelete', () => {
-    it('should update map with False if report status is not In Progress', fakeAsync(async () => {
-      const report = testActiveReport;
-      report.report_status = ReportStatus.SUBMIT_SUCCESS;
-      await component.canDelete(report);
-      expect(component.canDeleteMap.get(report)).toBeFalse();
-    }));
-
-    it('should call api to check if it can delete if the report status is in progress', fakeAsync(async () => {
-      const serviceSpy = spyOn(component.itemService, 'canDelete').and.returnValue(Promise.resolve(true));
-      const report = testActiveReport;
-      report.report_status = ReportStatus.IN_PROGRESS;
-      await component.canDelete(report);
-      expect(serviceSpy).toHaveBeenCalledWith(report);
-      expect(component.canDeleteMap.get(report)).toBeTrue();
-    }));
   });
 
   describe('deleteReport', () => {
