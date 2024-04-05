@@ -87,7 +87,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   public confirmDelete(report: Report): void {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this report? This action cannot be undone',
+      message: 'Are you sure you want to delete this report? This action cannot be undone.',
       header: 'Hang on...',
       rejectLabel: 'Cancel',
       rejectIcon: 'none',
