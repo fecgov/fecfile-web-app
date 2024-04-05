@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
-import { Form3X, F3xFormTypes } from '../../shared/models/form-3x.model';
+import { F3xFormTypes, Form3X } from '../../shared/models/form-3x.model';
 import { Report, ReportTypes } from '../../shared/models/report.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
@@ -100,5 +100,26 @@ describe('ReportListComponent', () => {
     const item: Report = Form1M.fromJSON({ id: '99', report_type: ReportTypes.F1M });
     component.editItem(item);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f1m/edit/99');
+  });
+
+  describe('deleteReport', () => {
+    it('should call confirm', () => {
+      const confirmSpy = spyOn(component.confirmationService, 'confirm');
+      component.confirmDelete(testActiveReport);
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should delete', fakeAsync(async () => {
+      const deleteSpy = spyOn(component.itemService, 'delete').and.returnValue(of(null));
+      const messageServiceSpy = spyOn(component.messageService, 'add');
+      await component.delete(testActiveReport);
+      expect(deleteSpy).toHaveBeenCalledOnceWith(testActiveReport);
+      expect(messageServiceSpy).toHaveBeenCalledOnceWith({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Deleted',
+        life: 3000,
+      });
+    }));
   });
 });
