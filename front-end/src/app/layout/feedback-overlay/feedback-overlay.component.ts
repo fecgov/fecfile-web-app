@@ -32,7 +32,7 @@ export class FeedbackOverlayComponent {
     public feedbackService: FeedbackService,
   ) { }
 
-  show(event: any): void {
+  show(event: any): void { // eslint-disable-line @typescript-eslint/no-explicit-any
     this.reset();
     this.op.show(event, 'anchor');
   }

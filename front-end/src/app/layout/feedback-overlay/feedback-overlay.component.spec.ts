@@ -5,6 +5,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FeedbackOverlayComponent } from './feedback-overlay.component';
@@ -15,7 +16,7 @@ describe('FeedbackOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToastModule, TableModule, DialogModule, ConfirmDialogModule, HttpClientTestingModule],
+      imports: [ToastModule, TableModule, OverlayPanelModule, ConfirmDialogModule, HttpClientTestingModule],
       declarations: [FeedbackOverlayComponent],
       providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
@@ -30,13 +31,13 @@ describe('FeedbackOverlayComponent', () => {
   });
 
   it('#show happy path', () => {
-    component.show(null, null);
+    component.show(null);
     expect(component.formSubmitted).toBeFalse();
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
   it('#hide happy path', () => {
-    component.hide();
+    component.onHide();
     expect(component.formSubmitted).toBeFalse();
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
