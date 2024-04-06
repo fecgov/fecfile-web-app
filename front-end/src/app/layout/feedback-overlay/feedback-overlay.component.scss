@@ -29,5 +29,20 @@
   p, span, a {
     font-size: 14px;
   }
+  
+  .close-icon {
+    right: 50px;
+    top: 50px;
+  }
+
+  .p-overlaypanel .p-overlaypanel-close {
+    right: 0;
+    top: 0;
+    background: transparent;
+  }
+
+  .p-overlaypanel {
+    background: #f1f1f1;
+  }
 }
 

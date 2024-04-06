@@ -1,8 +1,7 @@
-<div class="anchor" #anchor ></div>
+<div class="anchor" #anchor></div>
 <p-overlayPanel
   #op
   [style]="{ 'width': '450px', 'height': '800px' }"
-  styleClass="p-fluid"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
   [appendTo]="anchor"
@@ -124,7 +123,7 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-1">
+        <div class="col-4">
           <button
             type="button"
             pButton
@@ -138,6 +137,6 @@
     </ng-container>
   </ng-template>
   <ng-template pTemplate="closeicon">
-    <img alt="Close icon" src="assets/img/feedback-close-icon.svg" />
+    <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" />
   </ng-template>
 </p-overlayPanel>
