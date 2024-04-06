@@ -1,7 +1,7 @@
 <div class="anchor" #anchor></div>
 <p-overlayPanel
   #op
-  [style]="{ 'width': '450px', 'height': '800px' }"
+  [style]="{ 'width': '500px', 'height': '900px' }"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
   [appendTo]="anchor"
@@ -12,7 +12,7 @@
       <div class="grid">
         <div class="col-12">
           <div class="field">
-            <h2>Post feedback about FECFile anonymously</h2>
+            <h3>Post feedback about FECFile anonymously</h3>
             <p>
               How can we improve FECFile? When you submit your feedback, it will
               include your comments, browser information, and the URL you were
@@ -26,7 +26,13 @@
           <div class="col-12">
             <div class="field">
               <label for="action">WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT? <span class="font-karla">(Required)</span></label>
-              <input type="text" pInputText id="action" formControlName="action"/>
+              <textarea
+                id="action"
+                [rows]="3"
+                pInputTextarea
+                [autoResize]="true"
+                formControlName="action"
+              ></textarea>
               <app-error-messages
                 [form]="form"
                 fieldName="action"
@@ -39,7 +45,13 @@
           <div class="col-12">
             <div class="field">
               <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
-              <input type="text" pInputText id="feedback" formControlName="feedback"/>
+              <textarea
+                id="feedback"
+                [rows]="3"
+                pInputTextarea
+                [autoResize]="true"
+                formControlName="feedback"
+              ></textarea>
               <app-error-messages
                 [form]="form"
                 fieldName="feedback"
@@ -55,7 +67,13 @@
                 <br>
                 <span class="font-karla">(Please don't include sensitive information like your name, contact information or Social Security number.)</span>
               </label>
-              <input type="text" pInputText id="about" formControlName="about"/>
+              <textarea
+                id="about"
+                [rows]="3"
+                pInputTextarea
+                [autoResize]="true"
+                formControlName="about"
+              ></textarea>
               <app-error-messages
                 [form]="form"
                 fieldName="about"
@@ -137,6 +155,6 @@
     </ng-container>
   </ng-template>
   <ng-template pTemplate="closeicon">
-    <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" />
+    <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" height="250%" width="250%" />
   </ng-template>
 </p-overlayPanel>

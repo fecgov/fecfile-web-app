@@ -18,8 +18,8 @@
 
 .anchor {
   height: 0px;
-  right: 482px;
-  bottom: 800px;
+  right: 532px;
+  bottom: 900px;
   z-index: 1000;
   position: fixed;
 }
@@ -36,13 +36,18 @@
   }
 
   .p-overlaypanel .p-overlaypanel-close {
-    right: 0;
-    top: 0;
+    right: 0.5rem;
+    top: 0.5rem;
     background: transparent;
+    transform: scale(1.5);
   }
 
   .p-overlaypanel {
     background: #f1f1f1;
+  }
+
+  .p-overlaypanel .p-overlaypanel-content {
+    padding-top: 2.5rem;
   }
 }
 
