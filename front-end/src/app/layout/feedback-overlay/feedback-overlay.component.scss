@@ -16,9 +16,14 @@
   color: black;
 }
 
-.p-overlaypanel {
+.anchor {
+  height: 0px;
+  right: 482px;
+  bottom: 700px;
+  z-index: 1000;
   position: fixed;
 }
+
 
 :host ::ng-deep {  
   p, span, a {

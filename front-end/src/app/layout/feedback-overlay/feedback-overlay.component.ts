@@ -32,14 +32,13 @@ export class FeedbackOverlayComponent {
     public feedbackService: FeedbackService,
   ) { }
 
-  show(event: any, target: any): void {
+  show(event: any): void {
     this.reset();
-    this.op.show(event, target);
+    this.op.show(event, 'anchor');
   }
 
-  hide(): void {
+  onHide() {
     this.reset();
-    this.op.hide();
   }
 
   save() {

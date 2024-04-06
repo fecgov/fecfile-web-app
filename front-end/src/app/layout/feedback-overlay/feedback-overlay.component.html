@@ -1,9 +1,12 @@
+<div class="anchor" #anchor ></div>
 <p-overlayPanel
   #op
-  [style]="{ 'width': '30%' }"
+  [style]="{ 'width': '450px', 'height': '700px' }"
   styleClass="p-fluid"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
+  [appendTo]="anchor"
+  (onHide)="onHide()"
 >
   <ng-template pTemplate="content">
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.DRAFT">
