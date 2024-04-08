@@ -8,9 +8,14 @@ export class Candidate extends BaseModel {
   address_street_1: string | undefined;
   address_street_2: string | undefined;
   address_zip: string | undefined;
+  candidate_first_name: string | undefined;
   candidate_id: string | undefined;
   candidate_inactive: boolean | undefined;
+  candidate_last_name: string | undefined;
+  candidate_middle_name: string | undefined;
+  candidate_prefix: string | undefined;
   candidate_status: string | undefined;
+  candidate_suffix: string | undefined;
   cycles: number[] = [];
   district: string | undefined;
   district_number: number | undefined;
