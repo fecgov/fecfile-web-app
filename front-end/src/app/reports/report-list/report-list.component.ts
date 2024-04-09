@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { take, takeUntil } from 'rxjs';
+import { lastValueFrom, take, takeUntil } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
@@ -25,14 +25,15 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       this.editItem.bind(this),
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
+    new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
 
   constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
+    override messageService: MessageService,
+    override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: ReportService,
+    override itemService: ReportService,
     public router: Router,
   ) {
     super(messageService, confirmationService, elementRef);
@@ -82,6 +83,30 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       .subscribe(() => {
         this.loadTableItems({});
       });
+  }
+
+  public confirmDelete(report: Report): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this report? This action cannot be undone.',
+      header: 'Hang on...',
+      rejectLabel: 'Cancel',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-secondary',
+      acceptLabel: 'Confirm',
+      acceptIcon: 'none',
+      accept: async () => this.delete(report),
+    });
+  }
+
+  async delete(report: Report) {
+    await lastValueFrom(this.itemService.delete(report));
+    this.refreshTable();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Report Deleted',
+      life: 3000,
+    });
   }
 
   public async goToTest(item: Report): Promise<void> {

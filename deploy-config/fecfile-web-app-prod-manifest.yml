@@ -1,7 +1,7 @@
 applications:
   - name: fecfile-web-app
     instances: 2
-    memory: 128M
+    memory: 1G
     buildpack: https://github.com/cloudfoundry/nginx-buildpack.git
     stack: cflinuxfs4
 
