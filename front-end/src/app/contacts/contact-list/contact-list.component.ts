@@ -64,7 +64,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public canDeleteItem(item: Contact): boolean {
-    return item.transaction_count === 0 && item.report_count === 0;
+    return !item.has_transaction_or_report;
   }
 
   public onRestoreClick() {
