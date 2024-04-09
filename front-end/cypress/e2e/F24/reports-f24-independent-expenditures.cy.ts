@@ -1,0 +1,55 @@
+import { Initialize } from '../pages/loginPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
+import { candidateFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
+import {
+  defaultScheduleFormData as defaultTransactionFormData,
+  DisbursementFormData,
+} from '../models/TransactionFormModel';
+import { F3XSetup } from '../F3X/f3x-setup';
+import { StartTransaction } from '../F3X/start-transaction/start-transaction';
+import { faker } from '@faker-js/faker';
+import { F24Setup } from './f24-setup';
+import { ReportListPage } from '../pages/reportListPage';
+
+const independentExpenditureData: DisbursementFormData = {
+  ...defaultTransactionFormData,
+  ...{
+    date2: new Date(currentYear, 4 - 1, 27),
+    supportOpposeCode: 'SUPPORT',
+    signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
+    signatoryFirstName: faker.person.firstName(),
+    signatoryLastName: faker.person.lastName(),
+  },
+};
+
+describe('Form 24 Independent Expenditures', () => {
+  beforeEach(() => {
+    Initialize();
+  });
+
+  it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
+    F3XSetup({ individual: true, candidate: true });
+    F24Setup();
+    StartTransaction.IndependentExpenditures().IndependentExpenditure();
+
+    PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
+    cy.contains('LOOKUP').should('exist');
+    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.contains(individualContactFormData.last_name).click();
+
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independentExpenditureData, candidateFormData);
+
+    PageUtils.clickButton('Save');
+    PageUtils.clickLink('Independent Expenditure');
+    cy.contains(individualContactFormData.first_name).should('exist');
+    cy.contains(individualContactFormData.last_name).should('exist');
+
+    ReportListPage.editReport('12-DAY PRE-GENERAL');
+    PageUtils.clickSidebarItem('Manage your transactions');
+    PageUtils.clickLink('Independent Expenditure');
+    cy.contains(individualContactFormData.first_name).should('exist');
+    cy.contains(individualContactFormData.last_name).should('exist');
+  });
+});
