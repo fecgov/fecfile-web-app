@@ -3,7 +3,7 @@ import { ReportListPage } from '../pages/reportListPage';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
-import { defaultFormData } from '../models/ReportFormModel';
+import { defaultForm3XData } from '../models/ReportFormModel';
 import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { faker } from '@faker-js/faker';
 
@@ -26,7 +26,7 @@ describe('Manage reports', () => {
 
   it('Create a Monthly Election Year report', () => {
     const formData = {
-      ...defaultFormData,
+      ...defaultForm3XData,
       ...{
         filing_frequency: 'M',
         report_code: 'M10',
@@ -40,7 +40,7 @@ describe('Manage reports', () => {
 
   it('Create a Quarterly Non-Election Year report', () => {
     const formData = {
-      ...defaultFormData,
+      ...defaultForm3XData,
       ...{
         report_type_category: 'Non-Election Year',
         report_code: '30R',
@@ -54,7 +54,7 @@ describe('Manage reports', () => {
 
   it('Create a Monthly Non-Election Year report', () => {
     const formData = {
-      ...defaultFormData,
+      ...defaultForm3XData,
       ...{
         filing_frequency: 'M',
         report_type_category: 'Non-Election Year',
@@ -77,7 +77,7 @@ describe('Manage reports', () => {
 
     // Create report #2
     const formData = {
-      ...defaultFormData,
+      ...defaultForm3XData,
       ...{
         report_code: '30G',
       },

@@ -76,6 +76,7 @@ function legacyLogin() {
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');
   cy.wait('@GetLoggedIn');
+  cy.visit('/login/security-notice');
   cy.get('button').contains('Consent').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();

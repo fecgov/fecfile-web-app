@@ -20,7 +20,15 @@ export class F3xCreateReportFormData {
   }
 }
 
-export const defaultFormData: F3xCreateReportFormData = {
+export class F24CreateReportFormData {
+  report_type_24_48: '24' | '48';
+
+  constructor(formData: F24CreateReportFormData) {
+    this.report_type_24_48 = formData.report_type_24_48;
+  }
+}
+
+export const defaultForm3XData: F3xCreateReportFormData = {
   filing_frequency: 'Q', // Q, M
   report_type_category: 'Election Year',
   report_code: '12G',
@@ -28,4 +36,8 @@ export const defaultFormData: F3xCreateReportFormData = {
   coverage_through_date: new Date(currentYear, 4 - 1, 30),
   date_of_election: new Date(currentYear, 11 - 1, 4),
   state_of_election: 'California',
+};
+
+export const defaultForm24Data: F24CreateReportFormData = {
+  report_type_24_48: '24',
 };

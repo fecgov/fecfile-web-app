@@ -1,6 +1,6 @@
 import {
-  defaultFormData as reportFormData,
-  defaultFormData as defaultReportFormData,
+  defaultForm3XData as reportFormData,
+  defaultForm3XData as defaultReportFormData,
   F3xCreateReportFormData,
 } from '../models/ReportFormModel';
 import { ContactListPage } from '../pages/contactListPage';
