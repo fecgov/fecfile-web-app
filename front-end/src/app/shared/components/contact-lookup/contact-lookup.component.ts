@@ -64,7 +64,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   constructor(
     private contactService: ContactService,
-    private fecApiService: FecApiService,
+    public fecApiService: FecApiService,
   ) {
     super();
   }
