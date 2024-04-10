@@ -317,7 +317,7 @@ describe('ContactLookupComponent', () => {
     component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
     tick(500);
     expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(
-      testFecApiCandidateLookupData.candidate_id!);
+      testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       Contact.fromJSON({
         type: ContactTypes.CANDIDATE,
