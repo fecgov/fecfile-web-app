@@ -18,7 +18,7 @@
             [innerHTML]="dropdownButtonText"
           ></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li *ngFor="let type of formTypeOptions">
+            <li *ngFor="let type of formTypeOptions" [attr.data-cy-form-type]="type">
               <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
                 <span class="option">
                   <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
@@ -44,6 +44,7 @@
             !getFormType(selectedType)?.createRoute && (!(selectedType === formTypes.F24) || !selectedForm24Type)
           "
           label="Start building report"
+          data-cy="start-report"
           class="p-button-primary"
           (click)="goToReportForm()"
         ></button>

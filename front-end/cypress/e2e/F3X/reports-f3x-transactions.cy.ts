@@ -7,6 +7,7 @@ import { defaultFormData as defaultContactFormData, organizationFormData } from 
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './start-transaction/start-transaction';
+import { faker } from '@faker-js/faker';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -302,7 +303,7 @@ describe('Transactions', () => {
       ...{
         electionType: 'General',
         electionYear: 2024,
-        election_other_description: PageUtils.randomString(10),
+        election_other_description: faker.lorem.sentence({ min: 1, max: 2 }),
         purpose_description: '',
         category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
