@@ -278,6 +278,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   private resetForm() {
     this.form.reset();
+    this.form.get('country')?.setValue(this.countryOptions[0]['value']);
+    this.form.get('state')?.setValue(this.stateOptions[0]['value']);
     this.isNewItem = true;
     this.contactLookup.contactTypeFormControl.enable();
     this.contactLookup.contactTypeFormControl.setValue(this.contactType);
