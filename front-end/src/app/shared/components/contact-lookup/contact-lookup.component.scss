@@ -1,8 +1,42 @@
-:host ::ng-deep .p-autocomplete-dropdown {
-  color: black;
-  background-color: white;
-  border: 1px solid hsl(210, 14%, 83%);
-  border-left: 0px;
+:host ::ng-deep {
+
+  .dropdown-with-search .p-dropdown {
+    border-radius: 4px 0 0 4px;
+  }
+
+  .dropdown-with-search .p-dropdown:hover {
+    border-color: #d6d7d9;
+  }
+
+  .p-dropdown {
+    border-color: #AEB0B5;
+    background-color: #EEEEEE;
+  }
+
+  .p-dropdown-label {
+    color: black;
+  }
+
+  .p-autocomplete-input {
+    border-radius: 0 4px 4px 0;
+    border-left: 0px;
+    border-color: #AEB0B5;
+  }
+
+  .p-button-icon-only {
+    background-color: transparent;
+    pointer-events: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    min-width: 15px;
+    border: none;
+  }
+
+  .readonly {
+    pointer-events: none;
+  }
+
 }
 
 .ng-submitted .transaction-contact-invalid :host ::ng-deep .p-autocomplete-input {
@@ -43,19 +77,6 @@
   border-bottom: none;
 }
 
-select {
-  height: 48px;
-  border: 2px solid #aeb0b5;
-}
-
-select:active, select:hover {
-  background-color: white;
-}
-
-select:hover {
-  border-color: #d6d7d9;
-}
-
-select:disabled:hover {
-  background-color: #e9ecef;
+.contact-lookup-container {
+  max-width: 65em;
 }

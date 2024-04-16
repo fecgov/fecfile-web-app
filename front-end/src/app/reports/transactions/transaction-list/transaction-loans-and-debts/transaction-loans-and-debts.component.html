@@ -1,18 +1,18 @@
 <div class="card">
   <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [paginator]="true"
-      [rows]="rowsPerPage"
-      [totalRecords]="totalItems"
-      [loading]="loading"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-      [showCurrentPageReport]="true"
-      sortField="line_label_order_key,created"
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+    [showCurrentPageReport]="true"
+    sortField="line_label_order_key,created"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
@@ -35,7 +35,7 @@
     <ng-template pTemplate="header">
       <tr role="row">
         <th *ngFor="let h of sortableHeaders" [pSortableColumn]="h.field" [id]="h.field+'-column'" role="columnheader">
-          {{h.label}}
+          {{ h.label }}
           <p-sortIcon [field]="h.field"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
@@ -84,6 +84,9 @@
           ></app-table-actions-button>
         </td>
       </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <span class="mx-3 d-block w-full">No data available in table</span>
     </ng-template>
   </p-table>
 </div>

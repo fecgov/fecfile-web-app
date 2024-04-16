@@ -10,6 +10,7 @@ import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 @Component({
   selector: 'app-report-summary',
   templateUrl: './submit-report-status.component.html',
+  styleUrls: ['./submit-report-status.component.scss'],
 })
 export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
   report?: Report;

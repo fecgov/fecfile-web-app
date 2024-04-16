@@ -29,22 +29,22 @@
     <div class="col-4">
       <div class="grid">
         <div class="col-12">
-          <h5 class="no-vert-margins">YOUR FORM TYPE:</h5>
-          <h3 class="no-vert-margins">
+          <h5>YOUR FORM TYPE:</h5>
+          <h3>
             {{ report?.formLabel }}
           </h3>
           <br />
         </div>
         <div class="col-12" *ngIf="reportCode">
-          <h5 class="no-vert-margins">YOUR REPORT TYPE:</h5>
-          <h3 class="no-vert-margins">
+          <h5>YOUR REPORT TYPE:</h5>
+          <h3>
             {{ reportCode | reportCodeLabel }}
           </h3>
           <br />
         </div>
         <div class="col-12" *ngIf="coverageDates">
-          <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
-          <h3 class="no-vert-margins no-wrap">
+          <h5>YOUR COVERAGE DATES:</h5>
+          <h3 class="no-wrap">
             {{ coverageDates['coverage_from_date'] || null | longDate }} —
             <wbr />
             {{ coverageDates['coverage_through_date'] || null | longDate }}
@@ -52,8 +52,8 @@
           <br />
         </div>
         <div class="col-12">
-          <h5 class="no-vert-margins word-break">CONFIRMATION EMAILS:</h5>
-          <h3 class="no-vert-margins word-break">
+          <h5 class="word-break">CONFIRMATION EMAILS:</h5>
+          <h3 class="word-break">
             {{ report?.confirmation_email_1 }} <br />
             {{ report?.confirmation_email_2 }}
           </h3>
@@ -61,8 +61,8 @@
         </div>
         <ng-container *ngIf="report?.upload_submission?.fec_report_id">
           <div class="col-12">
-            <h5 class="no-vert-margins">FILING ID:</h5>
-            <h3 class="no-vert-margins">
+            <h5>FILING ID:</h5>
+            <h3>
               {{ report?.upload_submission?.fec_report_id }}
             </h3>
           </div>
