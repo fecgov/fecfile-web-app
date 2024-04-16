@@ -10,6 +10,7 @@ export type UserLoginData = {
   last_name?: string;
   email?: string;
   security_consent_exp_date?: string;
+  temporary_security_consent?: boolean;
 };
 
 export class User extends BaseModel {

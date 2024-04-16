@@ -43,10 +43,12 @@ export class LoginService extends DestroyerComponent {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
-    return firstValueFrom(this.apiService.post<null>('/user/login/authenticate', {
-      username,
-      password,
-    })).then(() => {
+    return firstValueFrom(
+      this.apiService.post<null>('/user/login/authenticate', {
+        username,
+        password,
+      }),
+    ).then(() => {
       return this.retrieveUserLoginData().then(() => {
         return Promise.resolve(null);
       });
@@ -70,7 +72,7 @@ export class LoginService extends DestroyerComponent {
   }
 
   public async retrieveUserLoginData(): Promise<void> {
-    return this.usersService.getCurrentUser().then(userLoginData => {
+    return this.usersService.getCurrentUser().then((userLoginData) => {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });
   }
@@ -92,13 +94,11 @@ export class LoginService extends DestroyerComponent {
     return !!userLoginData?.first_name && !!userLoginData.last_name;
   }
 
-  public async userHasRecentSecurityConsentDate(): Promise<boolean> {
+  public async userHasConsented(): Promise<boolean> {
     const userLoginData = await firstValueFrom(this.userLoginData$);
-    if (!userLoginData.security_consent_exp_date) {
-      return false;
-    }
-    const security_date_exp = DateUtils.convertFecFormatToDate(
-      userLoginData.security_consent_exp_date);
-    return !!security_date_exp && new Date() < security_date_exp;
+    const consentExpirationDate = DateUtils.convertFecFormatToDate(userLoginData.security_consent_exp_date || null);
+    const consentExpired = consentExpirationDate ? new Date() > consentExpirationDate : false;
+
+    return !consentExpired || !!userLoginData.temporary_security_consent;
   }
 }
