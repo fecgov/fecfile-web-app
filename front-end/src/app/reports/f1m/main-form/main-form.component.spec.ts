@@ -232,7 +232,6 @@ describe('MainFormComponent', () => {
 
   // Unit test is broken because of Async problems
   xit('Exclude ids should prepopulate when editing a F1M', () => {
-    component.statusByControl?.setValue('affiliation');
     fixture.detectChanges();
     component.ngOnInit();
     expect(component.excludeFecIds[0]).toEqual('C000000005');
