@@ -294,12 +294,11 @@ describe('ContactLookupComponent', () => {
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testContact);
   }));
 
-  it('#onFecApiCandidateLookupDataSelect happy path', fakeAsync(() => {
+  it('#onFecApiCandidateLookupDataSelect candidate name only', fakeAsync(() => {
     const testCandidate = Candidate.fromJSON({
       candidate_id: 'P80000722',
       name: 'BIDEN, JOSEPH R JR',
     });
-    const nameSplit = testCandidate.name?.split(', ');
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
     const getCandidateDetailsSpy = spyOn(component.fecApiService,
       'getCandidateDetails').and.returnValue(of(testCandidate));
@@ -321,24 +320,71 @@ describe('ContactLookupComponent', () => {
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       Contact.fromJSON({
         type: ContactTypes.CANDIDATE,
-        candidate_id: testCandidate.candidate_id,
-        last_name: (testCandidate.candidate_first_name && testCandidate.candidate_last_name ?
-          testCandidate.candidate_last_name : nameSplit?.[0]), // namesplit to account for paper filers
-        first_name: (testCandidate.candidate_first_name && testCandidate.candidate_last_name ?
-          testCandidate.candidate_first_name : nameSplit?.[1]), // namesplit to account for paper filers
-        middle_name: testCandidate.candidate_middle_name,
-        prefix: testCandidate.candidate_prefix,
-        suffix: testCandidate.candidate_suffix,
-        street_1: testCandidate.address_street_1,
-        street_2: testCandidate.address_street_2,
-        city: testCandidate.address_city,
-        state: testCandidate.address_state,
-        zip: testCandidate.address_zip,
+        candidate_id: 'P80000722',
+        last_name: 'BIDEN',
+        first_name: 'JOSEPH R JR',
+        middle_name: undefined,
+        prefix: undefined,
+        suffix: undefined,
+        street_1: undefined,
+        street_2: undefined,
+        city: undefined,
+        state: undefined,
+        zip: undefined,
         employer: '',
         occupation: '',
-        candidate_office: testCandidate.office,
-        candidate_state: testCandidate.state === 'US' ? '' : testCandidate.state,
-        candidate_district: testCandidate.district === '00' ? '' : testCandidate.district,
+        candidate_office: undefined,
+        candidate_state: undefined,
+        candidate_district: undefined,
+      }));
+  }));
+
+  it('#onFecApiCandidateLookupDataSelect candidate last_name and first_name', fakeAsync(() => {
+    const testCandidate = Candidate.fromJSON({
+      candidate_id: 'P80000722',
+      candidate_first_name: 'test_candidate_first_name',
+      candidate_last_name: 'test_candidate_last_name',
+      candidate_middle_name: 'test_candidate_middle_name',
+      candidate_prefix: 'test_candidate_prefix',
+      candidate_suffix: 'test_candidate_suffix',
+    });
+    const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
+    const getCandidateDetailsSpy = spyOn(component.fecApiService,
+      'getCandidateDetails').and.returnValue(of(testCandidate));
+    const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
+      candidate_id: 'P80000722',
+      office: 'P',
+      name: 'BIDEN, JOSEPH R JR',
+      toSelectItem(): SelectItem<FecApiCandidateLookupData> {
+        return {
+          label: `${this.name} (${this.candidate_id})`,
+          value: this,
+        };
+      }
+    }
+    component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
+    tick(500);
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(
+      testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+      Contact.fromJSON({
+        type: ContactTypes.CANDIDATE,
+        candidate_id: 'P80000722',
+        last_name: 'test_candidate_last_name',
+        first_name: 'test_candidate_first_name',
+        middle_name: 'test_candidate_middle_name',
+        prefix: 'test_candidate_prefix',
+        suffix: 'test_candidate_suffix',
+        street_1: undefined,
+        street_2: undefined,
+        city: undefined,
+        state: undefined,
+        zip: undefined,
+        employer: '',
+        occupation: '',
+        candidate_office: undefined,
+        candidate_state: undefined,
+        candidate_district: undefined,
       }));
   }));
 
