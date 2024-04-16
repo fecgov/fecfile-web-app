@@ -90,13 +90,12 @@ export class Contact extends BaseModel {
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;
-  transaction_count: number | undefined;
-  report_count: number | undefined;
+  has_transaction_or_report = false;
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToInstance(Contact, json);
-  }
+        return plainToInstance(Contact, json);
+    }
 
   getNameString(): string {
     return this.name ? this.name : `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
@@ -316,8 +315,8 @@ export class CandidateLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): CandidateLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(CandidateLookupResponse, json);
-  }
+        return plainToClass(CandidateLookupResponse, json);
+    }
 
   toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
     const fecApiSelectItems =
@@ -383,8 +382,8 @@ export class CommitteeLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(CommitteeLookupResponse, json);
-  }
+        return plainToClass(CommitteeLookupResponse, json);
+    }
 
   toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
     const fecApiSelectItems =
@@ -431,8 +430,8 @@ export class IndividualLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(IndividualLookupResponse, json);
-  }
+        return plainToClass(IndividualLookupResponse, json);
+    }
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecfileSelectItems =
@@ -467,8 +466,8 @@ export class OrganizationLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): OrganizationLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(OrganizationLookupResponse, json);
-  }
+        return plainToClass(OrganizationLookupResponse, json);
+    }
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecfileSelectItems =
