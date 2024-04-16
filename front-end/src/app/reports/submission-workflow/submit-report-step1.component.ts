@@ -79,12 +79,13 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
   }
 
   initializeFormWithReport(report: Report, committeeAccount: CommitteeAccount) {
+    const emails = (committeeAccount?.email || '').split(/[;,]+/);
     this.form.patchValue({
       change_of_address: false,
-      confirmation_email_1: committeeAccount?.email,
-      confirmation_email_2: undefined,
+      confirmation_email_1: emails[0],
+      confirmation_email_2: emails[1],
+      ...committeeAccount,
     });
-    this.form.patchValue(committeeAccount);
     if (report && report['confirmation_email_1']) {
       this.form.patchValue(report);
     }
