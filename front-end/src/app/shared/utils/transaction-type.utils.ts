@@ -481,6 +481,7 @@ export function PACRestricted(): TransactionTypes[] {
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
+    ScheduleBTransactionTypes.PAC_IN_KIND_OUT
   ];
 }
 
