@@ -196,12 +196,16 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
         this.form.get('date_of_original_registration')?.setValue(undefined);
         this.form.get('date_of_51st_contributor')?.setValue(undefined);
         this.form.get('date_committee_met_requirements')?.setValue(undefined);
+        this.excludeIds = [];
+        this.excludeFecIds = [];
       } else {
         this.enableValidation(this.candidateContacts);
         this.form.get('date_of_original_registration')?.addValidators(Validators.required);
         this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
         this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
         this.disableValidation([this.affiliatedContact]);
+        this.excludeIds = [];
+        this.excludeFecIds = [];
       }
       this.form.get('date_of_original_registration')?.updateValueAndValidity();
       this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
