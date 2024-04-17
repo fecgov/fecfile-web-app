@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
@@ -65,49 +63,6 @@ export class PageUtils {
       .scrollIntoView()
       .click();
     cy.wait(100);
-  }
-
-  static randomString(
-    strLength: number,
-    charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' | 'symbols' = 'alphanumeric',
-    includeCurlyBraces = true,
-  ): string {
-    // prettier-ignore
-    let symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '|', '~', '`'];
-    if (includeCurlyBraces) symbols = symbols.concat('{', '}');
-    // prettier-ignore
-    const alphabet: Array<string> = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-    // prettier-ignore
-    const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-    const alphanumeric = alphabet.concat(numeric);
-    const special = alphanumeric.concat(symbols);
-
-    let characters: Array<string> = [];
-    if (charType == 'special') {
-      characters = special;
-    } else if (charType == 'alphanumeric') {
-      characters = alphanumeric;
-    } else if (charType == 'numeric') {
-      characters = numeric;
-    } else if (charType == 'alphabet') {
-      characters = alphabet;
-    } else if (charType == 'symbols') {
-      characters = symbols;
-    } else {
-      return '';
-    }
-
-    let outString = '';
-    while (outString.length < strLength) {
-      outString += _.sample(characters);
-    }
-    /*
-     *  Cypress uses {} to escape the previous character.
-     *  This is necessary to avoid accidentally passing
-     *  cypress a command
-     */
-    return outString.replaceAll('{', '{{}');
   }
 
   static clickSidebarSection(section: string) {

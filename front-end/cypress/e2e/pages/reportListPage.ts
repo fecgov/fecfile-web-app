@@ -1,5 +1,5 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
-import { defaultFormData as defaultReportFormData } from '../models/ReportFormModel';
+import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 import { defaultFormData as cohFormData, F3xCashOnHandPage } from './f3xCashOnHandPage';
 
@@ -9,15 +9,13 @@ export class ReportListPage {
     cy.get('.navbar-nav').find('.nav-link').contains('Reports').click();
   }
 
-  static clickCreateButton(force = false) {
-    cy.get("button[label='Create a new report']").click({ force });
-    cy.intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' }).as(
-      'coverageDates',
-    );
+  static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
+    cy.get('[data-cy="create-report"]').click({ force });
     cy.get('#typeDropdown').click();
-    cy.get('button').contains('Form 3X').click();
-    cy.get('button').contains('Start building report').click();
-    cy.wait('@coverageDates'); // the page is ready when coverage_dates has returned
+    cy.get(`[data-cy-form-type="${formType}"]`).click();
+    if (submit) {
+      cy.get('[data-cy="start-report"]').click();
+    }
   }
 
   //Deletes all reports belonging to the logged-in committee
@@ -53,9 +51,24 @@ export class ReportListPage {
 
   static createF3X(fd = defaultReportFormData) {
     ReportListPage.goToPage();
-    ReportListPage.clickCreateButton(true);
+    F3xCreateReportPage.coverageCall();
+    ReportListPage.clickCreateAndSelectForm('F3X');
+    F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
+  }
+
+  static createF1M() {
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateAndSelectForm('F1M', true);
+    cy.get('[data-cy="form-1m-component"]').should('exist');
+  }
+
+  static createF24(report = defaultForm24Data) {
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateAndSelectForm('F24', true, false);
+    cy.get('div > span').contains(`${report.report_type_24_48} Hour`).should('exist').click();
+    cy.get('[data-cy="start-report"]').click();
   }
 
   static editReport(reportName: string, fieldName = 'Edit report') {

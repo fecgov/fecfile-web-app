@@ -11,7 +11,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -57,7 +57,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
           this.openReportSelectionDialog(transaction as Transaction, ReportTypes.F24, this.refreshTable.bind(this));
         },
         (transaction) => {
-          return this.report?.report_type === ReportTypes.F3X && transaction.report_ids?.length === 1;
+          return (
+            this.report?.report_type === ReportTypes.F3X &&
+            transaction.report_ids?.length === 1 &&
+            transaction.transactionType?.scheduleId === ScheduleIds.E
+          );
         },
         () => true,
       ),

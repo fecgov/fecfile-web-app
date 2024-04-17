@@ -1,5 +1,5 @@
 import { defaultFormData as contactFormData } from '../models/ContactFormModel';
-import { defaultFormData as reportFormData } from '../models/ReportFormModel';
+import { defaultForm3XData as reportFormData } from '../models/ReportFormModel';
 import { ContactListPage } from '../pages/contactListPage';
 import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { PageUtils } from '../pages/pageUtils';
@@ -25,7 +25,9 @@ describe('Amendments', () => {
 
     // Create report to add loan too
     ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.coverageCall();
+    ReportListPage.clickCreateAndSelectForm('F3X');
+    F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(reportFormData);
     PageUtils.clickButton('Save and continue');
 

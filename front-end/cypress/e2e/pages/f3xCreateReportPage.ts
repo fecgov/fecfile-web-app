@@ -27,4 +27,13 @@ export class F3xCreateReportPage {
       new Date(formData['coverage_through_date']),
     );
   }
+
+  static coverageCall() {
+    return cy
+      .intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' })
+      .as('coverageDates');
+  }
+  static waitForCoverage() {
+    cy.wait('@coverageDates'); // the page is ready when coverage_dates has returned
+  }
 }

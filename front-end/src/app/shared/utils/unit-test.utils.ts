@@ -147,7 +147,7 @@ export const testContact = Contact.fromJSON({
   created: '8/27/2023',
   updated: null,
   deleted: null,
-  transaction_count: 3,
+  has_transaction_or_report: true,
 });
 
 export function getTestIndividualReceipt(): SchATransaction {

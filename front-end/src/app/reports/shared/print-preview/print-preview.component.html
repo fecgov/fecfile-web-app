@@ -1,4 +1,4 @@
-<div class="grid">
+<div class="grid" data-cy="print-preview">
   <div class="col-12">
     <h1 class="super-header no-vert-margins">Print preview</h1>
   </div>
@@ -31,7 +31,7 @@
       <ng-container *ngIf="webPrintStage === 'checking' && !report.webprint_submission?.fec_status">
         <div class="fec-loader-div col-12">
           <img
-            class="image-max-width fec-loader-image"
+            class="image-max-width fec-loader-image top-30"
             ngSrc="assets/img/fec-loading-flag.gif"
             draggable="false"
             alt="The report's web print status is loading..."
