@@ -15,7 +15,7 @@ import { firstValueFrom, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../../styles.scss', './print-preview.component.scss'],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   report: Report = new Form3X() as unknown as Report;
