@@ -24,6 +24,7 @@ import { combineLatest, startWith, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -49,6 +50,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public existingCoverage: F3xCoverageDates[] | undefined;
   public usedReportCodes?: F3xReportCodes[];
   public thisYear = new Date().getFullYear();
+  committeeAccount?: CommitteeAccount;
 
   constructor(
     private store: Store,
@@ -75,6 +77,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     combineLatest([this.store.select(selectCommitteeAccount), this.form3XService.getF3xCoverageDates()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([committeeAccount, existingCoverage]) => {
+        this.committeeAccount = committeeAccount;
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
@@ -173,7 +176,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     this.router.navigateByUrl('/reports');
   }
 
-  public save(jump: 'continue' | undefined = undefined) {
+  public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
@@ -181,6 +184,14 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     }
 
     const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
+    if (this.committeeAccount) {
+      summary.committee_name = this.committeeAccount.name;
+      summary.street_1 = this.committeeAccount.street_1;
+      summary.street_2 = this.committeeAccount.street_2;
+      summary.city = this.committeeAccount.city;
+      summary.state = this.committeeAccount.state;
+      summary.zip = this.committeeAccount.zip;
+    }
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === F3xReportCodes.TER) {
