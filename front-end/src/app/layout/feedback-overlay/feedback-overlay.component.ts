@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Feedback } from 'app/shared/models/feedback.model';
 import { FeedbackService } from 'app/shared/services/feedback.service';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { OverlayPanel } from 'primeng/overlaypanel';
 
 enum SubmissionStates {
@@ -29,6 +31,7 @@ export class FeedbackOverlayComponent {
 
   constructor(
     private fb: FormBuilder,
+    private store: Store,
     public feedbackService: FeedbackService,
   ) { }
 
@@ -44,6 +47,7 @@ export class FeedbackOverlayComponent {
   save() {
     this.formSubmitted = true;
     if (this.form.invalid) {
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
     const feedback: Feedback = {
