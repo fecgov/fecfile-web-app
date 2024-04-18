@@ -17,7 +17,12 @@ import {
   ScheduleBTransactionTypes,
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils, getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
+import {
+  PACRestricted,
+  PTYRestricted,
+  TransactionTypeUtils,
+  getTransactionTypeClass,
+} from 'app/shared/utils/transaction-type.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import {
   ScheduleCTransactionGroups,
@@ -34,6 +39,8 @@ import {
   ScheduleETransactionTypeLabels,
   ScheduleETransactionTypes,
 } from 'app/shared/models/sche-transaction.model';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeAccount, isPAC, isPTY } from 'app/shared/models/committee-account.model';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -54,16 +61,27 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   category: Categories = 'receipt';
   title: string = this.getCategoryTitle();
   debtId?: string;
+  committeeAccount?: CommitteeAccount;
 
-  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private titleService: Title,
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    combineLatest([this.store.select(selectActiveReport), this.route.params, this.route.queryParamMap])
+    combineLatest([
+      this.store.select(selectActiveReport),
+      this.route.params,
+      this.route.queryParamMap,
+      this.store.select(selectCommitteeAccount),
+    ])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([report, params, queryParamMap]) => {
+      .subscribe(([report, params, queryParamMap, committeeAccount]) => {
         this.report = report;
+        this.committeeAccount = committeeAccount;
         this.category = params['category'];
         this.debtId = queryParamMap.get('debt') ?? undefined;
         this.title = this.getCategoryTitle();
@@ -285,6 +303,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       default:
         break;
     }
+    if (isPAC(this.committeeAccount?.committee_type))
+      transactionTypes = transactionTypes.filter((tt) => !PACRestricted().includes(tt));
+    if (isPTY(this.committeeAccount?.committee_type))
+      transactionTypes = transactionTypes.filter((tt) => !PTYRestricted().includes(tt));
 
     if (this.debtId) {
       const debtPaymentLines = [
@@ -298,6 +320,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       });
     }
     return transactionTypes;
+  }
+
+  hasTransactions(group: TransactionGroupTypes): boolean {
+    return this.getTransactionTypes(group).length > 0;
   }
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {

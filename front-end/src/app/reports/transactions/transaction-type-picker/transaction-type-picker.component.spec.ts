@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,6 +16,8 @@ import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.mo
 import { ReportTypes } from 'app/shared/models/report.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.model';
+import { isPAC, isPTY } from 'app/shared/models/committee-account.model';
+import { ScheduleATransactionGroups, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -39,6 +41,7 @@ describe('TransactionTypePickerComponent', () => {
             params: of({
               catalog: 'receipt',
             }),
+            queryParamMap: of({ get: (key: string) => (key === 'param1' ? 'value1' : undefined) }),
           },
         },
         provideMockStore(testMockStore),
@@ -95,5 +98,31 @@ describe('TransactionTypePickerComponent', () => {
     expect(component.getCategoryTitle()).toEqual('Add a disbursement');
     component.category = 'loans-and-debts';
     expect(component.getCategoryTitle()).toEqual('Add loans and debts');
+  });
+
+  it('should get committee account', fakeAsync(() => {
+    component.ngOnInit();
+    tick(500);
+    expect(component.committeeAccount).toBeTruthy();
+  }));
+
+  describe('getTransactionTypes', () => {
+    it('should limit by PACRestricted if Committee type is PAC', fakeAsync(() => {
+      component.ngOnInit();
+      tick(500);
+      if (component.committeeAccount) component.committeeAccount.committee_type = 'O';
+      expect(isPAC(component.committeeAccount?.committee_type)).toBeTrue();
+      const types = component.getTransactionTypes(ScheduleATransactionGroups.TRANSFERS);
+      expect(types.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
+    }));
+
+    it('should limit by PTYRestricted if Committee type is PTY', fakeAsync(() => {
+      component.ngOnInit();
+      tick(500);
+      if (component.committeeAccount) component.committeeAccount.committee_type = 'X';
+      expect(isPTY(component.committeeAccount?.committee_type)).toBeTrue();
+      const types = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
+      expect(types.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
+    }));
   });
 });
