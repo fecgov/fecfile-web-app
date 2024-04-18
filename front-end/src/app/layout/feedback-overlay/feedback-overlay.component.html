@@ -1,7 +1,7 @@
-<div class="anchor" #anchor></div>
+<div class="anchor" [style]="{ 'bottom': formSubmitted ? '860px' : '830px' }" #anchor></div>
 <p-overlayPanel
   #op
-  [style]="{ 'width': '500px', 'height': '850px' }"
+  [style]="{ 'width': '500px', 'height': formSubmitted ? '850px' : '830px' }"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
   [appendTo]="anchor"
@@ -11,14 +11,12 @@
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.DRAFT">
       <div class="grid">
         <div class="col-12">
-          <div class="field">
-            <h3>Post feedback about FECFile anonymously</h3>
-            <p>
-              How can we improve FECFile? When you submit your feedback, it will
-              include your comments, browser information, and the URL you were
-              viewing at the time of submission.
-            </p>
-          </div>
+          <h3>Post feedback about FECFile anonymously</h3>
+          <p class="mb-0">
+            How can we improve FECFile? When you submit your feedback, it will
+            include your comments, browser information, and the URL you were
+            viewing at the time of submission.
+          </p>
         </div>
       </div>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
