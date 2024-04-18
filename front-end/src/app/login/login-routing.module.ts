@@ -18,6 +18,7 @@ const routes: Routes = [
     data: {
       showUpperFooter: false,
       showCommitteeBanner: false,
+      showFeedbackButton: false,
       headerStyle: HeaderStyles.LOGIN,
       backgroundStyle: BackgroundStyles.LOGIN,
     },
