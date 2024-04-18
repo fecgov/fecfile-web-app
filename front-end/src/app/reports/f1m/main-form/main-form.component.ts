@@ -203,6 +203,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
         this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
         this.disableValidation([this.affiliatedContact]);
       }
+      this.excludeIds = [];
+      this.excludeFecIds = [];
       this.form.get('date_of_original_registration')?.updateValueAndValidity();
       this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
       this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
