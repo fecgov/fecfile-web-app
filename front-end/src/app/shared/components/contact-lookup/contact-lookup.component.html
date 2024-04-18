@@ -2,16 +2,18 @@
   <em>{{ candidateOfficeLabel }} candidates only</em>
 </div>
 <div class="grid contact-lookup-container">
-  <div class="col-3 pl-0 pr-0">
+  <div class="col-3 pl-0 pr-0" [ngClass]="showSearchBoxCallback() ? 'dropdown-with-search' : ''">
     <p-dropdown
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
       [options]="contactTypeOptions"
       [readonly]="contactTypeReadOnly"
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
-      [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : 'none'"
       id="entity_type_dropdown"
     >
+      <ng-template pTemplate="dropdownicon">
+          <img *ngIf="contactTypeOptions.length > 1" alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="11px" width="11px"/>
+      </ng-template>
     </p-dropdown>
   </div>
   <div *ngIf="showSearchBoxCallback()" class="col-4 pl-0">
@@ -20,8 +22,7 @@
       [formControl]="searchBoxFormControl"
       [group]="true"
       field="label"
-      dropdownMode="current"
-      dropdownIcon="pi pi-search"
+      [dropdown]="true"
       [suggestions]="contactLookupList"
       placeholder="Search for a contact"
       [forceSelection]="true"
@@ -38,12 +39,15 @@
         <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
         <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
       </ng-template>
+      <ng-template pTemplate="dropdownicon">
+          <img alt="Magnifying lens" src="assets/img/contact_lookup_magnifying_glass.svg" height="20px" width="20px"/>
+      </ng-template>
     </p-autoComplete>
   </div>
   <div *ngIf="showCreateNewContactButton" class="col">
     <div class="add-contact-container">
       or
-      <span class="pi pi-plus-circle"></span>
+      <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px"/></span>
       <a (click)="onCreateNewContactSelect()">Create a new contact</a>
     </div>
   </div>

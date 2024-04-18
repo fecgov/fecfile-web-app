@@ -4646,7 +4646,18 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 1rem;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
+  position: relative;
 }
+
+.p-dialog .p-dialog-header::after {
+  border-bottom: 2px solid #5b616b;
+  width: 94%;
+  position: absolute;
+  left: 3%;
+  bottom: 0;
+  content: "";
+}
+
 .p-dialog .p-dialog-header .p-dialog-title {
   font-weight: 600;
   font-size: 1.25rem;
@@ -4677,7 +4688,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-dialog .p-dialog-content {
   background: #ffffff;
   color: #212121;
-  padding: 1rem;
+  padding: 1rem 2rem;
 }
 .p-dialog .p-dialog-footer {
   border-top: 1px solid #e8e8e8;
@@ -4687,6 +4698,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   text-align: right;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
+  display: flex;
+  justify-content: space-between;
 }
 .p-dialog .p-dialog-footer button {
   margin: 0 0.5rem 0 0;
