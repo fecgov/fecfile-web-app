@@ -151,7 +151,7 @@ describe('LoginService', () => {
       service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
     });
 
-    it('testundefined security_consent_exp_date', () => {
+    it('test undefined security_consent_exp_date', () => {
       const one_day_ahead = new Date();
       one_day_ahead.setDate(one_day_ahead.getDate() + 1);
 

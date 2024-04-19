@@ -5,6 +5,7 @@ import { SelectCommitteeComponent } from 'app/committee/select-committee/select-
 import { HeaderStyles } from 'app/layout/header/header.component';
 import { BackgroundStyles } from 'app/layout/layout.component';
 import { nameGuard } from 'app/shared/guards/name.guard';
+import { loggedInGuard } from 'app/shared/guards/logged-in.guard';
 import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
 import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update-current-user.component';
 import { LoginComponent } from './login/login.component';
@@ -26,7 +27,7 @@ const routes: Routes = [
     path: 'security-notice',
     component: SecurityNoticeComponent,
     title: 'Security Notice',
-    canActivate: [nameGuard],
+    canActivate: [loggedInGuard, nameGuard],
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
@@ -38,7 +39,7 @@ const routes: Routes = [
     path: 'select-committee',
     title: 'Select Committee',
     component: SelectCommitteeComponent,
-    canActivate: [nameGuard, securityNoticeGuard],
+    canActivate: [loggedInGuard, nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
@@ -49,7 +50,7 @@ const routes: Routes = [
     path: 'register-committee',
     title: 'Register Committee',
     component: RegisterCommitteeComponent,
-    canActivate: [nameGuard, securityNoticeGuard],
+    canActivate: [loggedInGuard, nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
@@ -60,7 +61,7 @@ const routes: Routes = [
     path: 'create-profile',
     title: 'Create Profile',
     component: UpdateCurrentUserComponent,
-    canActivate: [],
+    canActivate: [loggedInGuard],
     data: {
       showCommitteeBanner: false,
       showHeader: false,
@@ -74,4 +75,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class LoginRoutingModule { }
+export class LoginRoutingModule {}

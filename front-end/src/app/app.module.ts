@@ -4,7 +4,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouteReuseStrategy } from '@angular/router';
+import { RouteReuseStrategy, Router } from '@angular/router';
 
 // NGRX
 import { EffectsModule } from '@ngrx/effects';
@@ -49,6 +49,7 @@ import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { LoginService } from './shared/services/login.service';
 import { SharedModule } from './shared/shared.module';
 import { UsersModule } from './users/users.module';
+import { SchedulerAction, asyncScheduler } from 'rxjs';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -59,8 +60,14 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
   })(reducer);
 }
 
-function initializeAppFactory(loginService: LoginService): () => Promise<void> {
+function initializeAppFactory(loginService: LoginService, router: Router): () => Promise<void> {
   return () => {
+    function checkSession(this: SchedulerAction<undefined>) {
+      console.log(`checking session cookie:${loginService.userIsAuthenticated()} ${router.url}`);
+      if (router.url !== '/login' && !loginService.userIsAuthenticated()) loginService.logOut();
+      this.schedule(undefined, 1000);
+    }
+    asyncScheduler.schedule(checkSession, 1000);
     return loginService.retrieveUserLoginData().catch((e) => e);
   };
 }
@@ -119,7 +126,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAppFactory,
-      deps: [LoginService],
+      deps: [LoginService, Router],
       multi: true,
     },
   ],

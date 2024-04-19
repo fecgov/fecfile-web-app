@@ -97,8 +97,13 @@ export class LoginService extends DestroyerComponent {
   public async userHasConsented(): Promise<boolean> {
     const userLoginData = await firstValueFrom(this.userLoginData$);
     const consentExpirationDate = DateUtils.convertFecFormatToDate(userLoginData.security_consent_exp_date || null);
-    const consentExpired = consentExpirationDate ? new Date() > consentExpirationDate : false;
+    if (!consentExpirationDate) return !!userLoginData.temporary_security_consent;
 
-    return !consentExpired || !!userLoginData.temporary_security_consent;
+    const consentExpired = new Date() > consentExpirationDate;
+    return !consentExpired;
+  }
+
+  public userIsAuthenticated() {
+    return new Date() < new Date(parseInt(this.cookieService.get('ffapi_timeout')) * 1000);
   }
 }
