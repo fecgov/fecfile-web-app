@@ -3089,7 +3089,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-width: 1px;
 }
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
-  background: rgba(0, 0, 0, 0.05);
+  background: #E8E8E8;
 }
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even).p-highlight {
   background: #112e51;

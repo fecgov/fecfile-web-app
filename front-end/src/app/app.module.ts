@@ -4,7 +4,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouteReuseStrategy } from '@angular/router';
+import { RouteReuseStrategy, Router } from '@angular/router';
 
 // NGRX
 import { EffectsModule } from '@ngrx/effects';
@@ -19,7 +19,11 @@ import { loginReducer } from './store/user-login-data.reducer';
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MenubarModule } from 'primeng/menubar';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
 
@@ -35,6 +39,7 @@ import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BannerComponent } from './layout/banner/banner.component';
 import { CommitteeBannerComponent } from './layout/committee-banner/committee-banner.component';
+import { FeedbackOverlayComponent } from './layout/feedback-overlay/feedback-overlay.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderLinksComponent } from './layout/header/header-links/header-links.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -49,6 +54,7 @@ import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { LoginService } from './shared/services/login.service';
 import { SharedModule } from './shared/shared.module';
 import { UsersModule } from './users/users.module';
+import { SchedulerAction, asyncScheduler } from 'rxjs';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -59,8 +65,13 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
   })(reducer);
 }
 
-function initializeAppFactory(loginService: LoginService): () => Promise<void> {
+function initializeAppFactory(loginService: LoginService, router: Router): () => Promise<void> {
   return () => {
+    function checkSession(this: SchedulerAction<undefined>) {
+      if (router.url !== '/login' && !loginService.userIsAuthenticated()) loginService.logOut();
+      this.schedule(undefined, 1000);
+    }
+    asyncScheduler.schedule(checkSession, 1000);
     return loginService.retrieveUserLoginData().catch((e) => e);
   };
 }
@@ -82,6 +93,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     F1MMenuComponent,
     F99MenuComponent,
     F24MenuComponent,
+    FeedbackOverlayComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,6 +120,10 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ButtonModule,
     SharedModule,
     NgOptimizedImage,
+    DialogModule,
+    InputTextModule,
+    InputTextareaModule,
+    OverlayPanelModule,
   ],
   providers: [
     CookieService,
@@ -119,10 +135,10 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAppFactory,
-      deps: [LoginService],
+      deps: [LoginService, Router],
       multi: true,
     },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

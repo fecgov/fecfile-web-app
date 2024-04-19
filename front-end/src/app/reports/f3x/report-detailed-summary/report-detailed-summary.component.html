@@ -6,7 +6,7 @@
       >{{ report.formSubLabel }}
     </div>
   </div>
-  <div *ngIf="(calculationFinished$ | async) === false">
+  <div *ngIf="(calculationFinished$ | async) === false" class="fec-loader-div col-12">
     <img
       class="image-max-width fec-loader-image"
       src="assets/img/fec-loading-flag.gif"

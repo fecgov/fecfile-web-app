@@ -68,3 +68,16 @@ export class CommitteeAccount extends BaseModel {
     return plainToClass(CommitteeAccount, json);
   }
 }
+
+export function isPAC(committee_type?: string): boolean {
+  if (!committee_type) return false;
+  return PAC.includes(committee_type);
+}
+
+export function isPTY(committee_type?: string): boolean {
+  if (!committee_type) return false;
+  return PTY.includes(committee_type);
+}
+
+const PAC = ["O", "U", "D", "N", "Q", "V", "W"];
+const PTY = ["X", "Y"];

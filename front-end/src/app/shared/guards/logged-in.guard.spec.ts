@@ -1,45 +1,47 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
-import { testMockStore } from '../utils/unit-test.utils';
-import { provideMockStore } from '@ngrx/store/testing';
-import { securityNoticeGuard } from './security-notice.guard';
+import { loggedInGuard } from './logged-in.guard';
 import { LoginService } from '../services/login.service';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from '../utils/unit-test.utils';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
-describe('securityNoticeGuard', () => {
+describe('loggedInGuard', () => {
+  let loginService: LoginService;
+  let router: Router;
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => securityNoticeGuard(...guardParameters));
+    TestBed.runInInjectionContext(() => loggedInGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [LoginService, provideMockStore(testMockStore)],
     });
+    loginService = TestBed.inject(LoginService);
+    router = TestBed.inject(Router);
   });
 
   it('should be created', () => {
     expect(executeGuard).toBeTruthy();
   });
 
-  it('should return false without notice', () => {
-    const router = TestBed.inject(Router);
-    const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasConsented').and.returnValue(Promise.resolve(false));
+  it('should continue if logged in', () => {
+    spyOn(loginService, 'userIsAuthenticated').and.returnValue(true);
+    const navigateSpy = spyOn(router, 'navigate');
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
-      expect(safe).toEqual(router.createUrlTree(['/login/security-notice']));
-    });
+    const safe = executeGuard(route, state) as boolean | UrlTree;
+    expect(navigateSpy).not.toHaveBeenCalled();
+    expect(safe).toEqual(true);
   });
-  it('should return true with notice', () => {
+
+  it('should redirect to login if not logged in', () => {
+    spyOn(loginService, 'userIsAuthenticated').and.returnValue(false);
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasConsented').and.returnValue(Promise.resolve(true));
-    return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
-      expect(safe).toBeTrue();
-    });
+    const safe = executeGuard(route, state) as boolean | UrlTree;
+    expect(safe).toEqual(router.createUrlTree(['login']));
   });
 });
