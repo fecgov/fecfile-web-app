@@ -63,7 +63,6 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
 function initializeAppFactory(loginService: LoginService, router: Router): () => Promise<void> {
   return () => {
     function checkSession(this: SchedulerAction<undefined>) {
-      console.log(`checking session cookie:${loginService.userIsAuthenticated()} ${router.url}`);
       if (router.url !== '/login' && !loginService.userIsAuthenticated()) loginService.logOut();
       this.schedule(undefined, 1000);
     }
