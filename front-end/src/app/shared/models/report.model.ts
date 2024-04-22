@@ -8,6 +8,12 @@ import { LabelList } from '../utils/label.utils';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
+  committee_name?: string;
+  street_1?: string;
+  street_2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
   abstract schema: JsonSchema;
   abstract report_type: ReportTypes;
   abstract form_type: string;
