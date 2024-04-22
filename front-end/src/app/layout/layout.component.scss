@@ -54,3 +54,15 @@ app-footer {
   background-size: cover, cover;
   background-position-x: 0px, 90%;
 }
+
+.feedback-button {
+  position: fixed;
+  bottom: 0;
+  right: 32px;
+  z-index: 99;
+  color: black;
+}
+
+.feedback-button:enabled:hover {
+  color: black;
+}

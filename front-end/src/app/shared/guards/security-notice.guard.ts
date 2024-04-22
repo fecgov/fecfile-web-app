@@ -5,8 +5,8 @@ import { LoginService } from '../services/login.service';
 export const securityNoticeGuard: CanActivateFn = () => {
   const router = inject(Router);
   const loginService = inject(LoginService);
-  return loginService.userHasRecentSecurityConsentDate().then((userHasRecentSecurityConsentDate) => {
-    if (!userHasRecentSecurityConsentDate) {
+  return loginService.userHasConsented().then((userHasConsented) => {
+    if (!userHasConsented) {
       return router.createUrlTree(['/login/security-notice']);
     }
     return true;

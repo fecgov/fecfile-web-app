@@ -93,9 +93,7 @@ describe('LoginService', () => {
     });
   });
 
-
-  describe('#userHasRecentSecurityConsentDate should work', () => {
-
+  describe('#userHasConsented should work', () => {
     const one_year_ahead = new Date();
     one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
 
@@ -109,9 +107,7 @@ describe('LoginService', () => {
         email: '',
         security_consent_exp_date: DateUtils.convertDateToFecFormat(one_day_ahead) as string,
       });
-      service
-        .userHasRecentSecurityConsentDate()
-        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
+      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
     });
 
     it('expiration six months ahead is recent', () => {
@@ -125,9 +121,7 @@ describe('LoginService', () => {
         email: '',
         security_consent_exp_date: testDate,
       });
-      service
-        .userHasRecentSecurityConsentDate()
-        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
+      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
     });
 
     it('expiration 364 days ahead is recent', () => {
@@ -141,9 +135,7 @@ describe('LoginService', () => {
         email: '',
         security_consent_exp_date: testDate,
       });
-      service
-        .userHasRecentSecurityConsentDate()
-        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeTrue());
+      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
     });
 
     it('expiration one year ago is not recent', () => {
@@ -156,12 +148,10 @@ describe('LoginService', () => {
         email: '',
         security_consent_exp_date: testDate,
       });
-      service
-        .userHasRecentSecurityConsentDate()
-        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeFalse());
+      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
     });
 
-    it('testundefined security_consent_exp_date', () => {
+    it('test undefined security_consent_exp_date', () => {
       const one_day_ahead = new Date();
       one_day_ahead.setDate(one_day_ahead.getDate() + 1);
 
@@ -171,10 +161,7 @@ describe('LoginService', () => {
         email: '',
         security_consent_exp_date: undefined,
       });
-      service
-        .userHasRecentSecurityConsentDate()
-        .then((userHasRecentSecurityConsentDate) => expect(userHasRecentSecurityConsentDate).toBeFalse());
+      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
     });
   });
-
 });
