@@ -109,6 +109,11 @@ jobs:
             git clone https://github.com/fecgov/fecfile-web-api.git
           working_directory: ~
       - run:
+          name: use redis
+          command: |
+            export MOCK_OPENFEC=REDIS
+            echo $MOCK_OPENFEC
+      - run:
           name: start fecfile-web-api
           command: |
             git checkout ${CIRCLE_BRANCH}
@@ -297,10 +302,7 @@ workflows:
       - lint
       - test
       - dependency-check
-      - e2e-test:
-          filters:
-            branches:
-              only: /release\/sprint-[\.\d]+|main/
+      - e2e-test
       - deploy-job:
           requires:
             - test

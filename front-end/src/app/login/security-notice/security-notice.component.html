@@ -73,12 +73,15 @@
         </form>
         <div class="align-center">
           <p-button class="security-notice-button" label="Decline and exit" (click)="loginService.logOut()"></p-button>
-          <p-button
+          <button
+            pButton
+            pRipple
+            data-test="consent-button"
             class="security-notice-button"
             label="Consent"
-            styleClass="p-button-secondary"
+            class="p-button-secondary"
             (click)="signConsentForm()"
-          ></p-button>
+          ></button>
         </div>
       </ng-template>
     </p-card>
