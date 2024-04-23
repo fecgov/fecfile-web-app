@@ -3,10 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
+import { Candidate } from '../models/candidate.model';
 import { FecFiling } from '../models/fec-filing.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { FecApiService } from './fec-api.service';
-import { Candidate } from '../models/candidate.model';
 
 describe('FecApiService', () => {
   let httpTestingController: HttpTestingController;
@@ -28,16 +28,6 @@ describe('FecApiService', () => {
   describe('#getCandidateDetails()', () => {
     it('should return candidate details', () => {
       const candidate: Candidate = new Candidate();
-      const response: FecApiPaginatedResponse = {
-        api_version: '1.0',
-        pagination: {
-          page: 1,
-          per_page: 20,
-          count: 1,
-          pages: 1,
-        },
-        results: [candidate],
-      };
 
       service.getCandidateDetails('P12345678').subscribe((candidateData) => {
         expect(candidateData).toEqual(candidate);
@@ -48,7 +38,7 @@ describe('FecApiService', () => {
       );
 
       expect(req.request.method).toEqual('GET');
-      req.flush(response);
+      req.flush(candidate);
     });
   });
 
