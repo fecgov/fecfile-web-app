@@ -1,4 +1,4 @@
-import { Initialize } from '../pages/loginPage';
+import { Initialize, setCommitteeType } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import {
@@ -34,6 +34,7 @@ describe('Disbursements', () => {
 
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
     F3XSetup({ individual: true });
+    setCommitteeType('X');
     StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');

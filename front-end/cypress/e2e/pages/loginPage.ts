@@ -81,7 +81,8 @@ function legacyLogin() {
   cy.get('button').contains('Consent').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
-  cy.wait('@ActivateCommittee');
+  cy.wait('@ActivateCommittee').then(() => {
+  });
   cy.visit('/dashboard');
 }
 
@@ -95,4 +96,12 @@ export function Initialize() {
   LoginPage.login();
   ReportListPage.deleteAllReports();
   ContactListPage.deleteAllContacts();
+}
+
+export function setCommitteeType(committeeType = 'O') {
+  const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
+  if (!fecfile_online_committeeAccount) return;
+  const json = JSON.parse(fecfile_online_committeeAccount);
+  json.committee_type = committeeType;
+  localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
 }
