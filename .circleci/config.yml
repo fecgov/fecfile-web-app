@@ -302,7 +302,10 @@ workflows:
       - lint
       - test
       - dependency-check
-      - e2e-test
+      - e2e-test:
+          filters:
+            branches:
+              only: /release\/sprint-[\.\d]+|main/
       - deploy-job:
           requires:
             - test
