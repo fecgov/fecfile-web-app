@@ -11,7 +11,8 @@ describe('Amendments', () => {
     Initialize();
   });
 
-  xit('should test Create an amendment', () => {
+  it('should test Create an amendment', () => {
+    
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
     const formData = {
@@ -42,8 +43,8 @@ describe('Amendments', () => {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickLink('Submit report');
     PageUtils.urlCheck('/submit/step2');
-    PageUtils.enterValue('#filingPassword', ''); // Insert password from env variable
-    cy.get(alias).find('p-checkbox[inputid="userCertified"]').click();
+    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD')); // Insert password from env variable
+    cy.get(alias).find('.p-checkbox-box').first().click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
 
