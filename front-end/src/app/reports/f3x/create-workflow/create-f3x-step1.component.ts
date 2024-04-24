@@ -184,14 +184,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     }
 
     const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
-    if (this.committeeAccount) {
-      summary.committee_name = this.committeeAccount.name;
-      summary.street_1 = this.committeeAccount.street_1;
-      summary.street_2 = this.committeeAccount.street_2;
-      summary.city = this.committeeAccount.city;
-      summary.state = this.committeeAccount.state;
-      summary.zip = this.committeeAccount.zip;
-    }
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === F3xReportCodes.TER) {
