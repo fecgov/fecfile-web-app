@@ -78,11 +78,10 @@ function legacyLogin() {
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('.p-checkbox-box').click();
-  cy.get('button').contains('Consent').click();
+  cy.get('[data-test="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
-  cy.wait('@ActivateCommittee').then(() => {
-  });
+  cy.wait('@ActivateCommittee');
   cy.visit('/dashboard');
 }
 
