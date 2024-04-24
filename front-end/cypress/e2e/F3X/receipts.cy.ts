@@ -1,13 +1,12 @@
 import { ContactListPage } from '../pages/contactListPage';
 import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
-import { Initialize, setCommitteeType } from '../pages/loginPage';
+import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData, organizationFormData } from '../models/ContactFormModel';
+import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './start-transaction/start-transaction';
-import { faker } from '@faker-js/faker';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -18,44 +17,240 @@ const scheduleData = {
   },
 };
 
-describe('PTY Transactions', () => {
+describe('Receipt Transactions', () => {
   beforeEach(() => {
     Initialize();
   });
 
-  it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    F3XSetup({ organization: true });
-    setCommitteeType('X');
-    StartTransaction.Disbursements().Federal().CreditCardPayment();
+  it('Create an Individual Receipt transaction using the contact lookup', () => {
+    cy.runLighthouse('reports', 'transactions-list');
 
-    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));
-    cy.contains(organizationFormData.name).should('exist');
-    cy.contains(organizationFormData.name).click();
+    F3XSetup({ individual: true });
+    StartTransaction.Receipts().Individual().IndividualReceipt();
 
-    const transactionFormData = {
+    // Select the contact from the contact lookup
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.contains(defaultContactFormData['last_name']).should('exist');
+    cy.contains(defaultContactFormData['last_name']).click({ force: true });
+
+    TransactionDetailPage.enterScheduleFormData(scheduleData);
+    PageUtils.clickButton('Save');
+    scheduleData.date_received = new Date(currentYear, 4 - 1, 27);
+    cy.get('tr').should('contain', 'Individual Receipt');
+    cy.get('tr').should('contain', 'Unitemized');
+    cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
+    cy.get('tr').should('contain', PageUtils.dateToString(scheduleData.date_received));
+    cy.get('tr').should('contain', '$' + scheduleData.amount);
+
+    // Check values of edit form
+    PageUtils.clickLink('Individual Receipt');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Individual');
+    ContactListPage.assertFormData(defaultContactFormData, true);
+    TransactionDetailPage.assertFormData(scheduleData);
+
+    cy.runLighthouse('reports', 'single-transaction');
+  });
+
+  it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Returned();
+
+    PageUtils.clickLink('Create a new contact');
+    ContactListPage.enterFormData(defaultContactFormData, true);
+    PageUtils.clickButton('Save & continue');
+    const negativeAmountFormData = {
       ...formTransactionDataForSchedule,
       ...{
-        electionType: 'General',
-        electionYear: 2024,
-        election_other_description: faker.lorem.sentence({ min: 1, max: 2 }),
-        purpose_description: '',
+        amount: -100.55,
+        date_received: new Date(currentYear, 4 - 1, 27),
+        category_code: '',
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(negativeAmountFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    cy.get('tr').should('contain', 'Returned/Bounced Receipt');
+    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
+    cy.get('tr').should('contain', PageUtils.dateToString(negativeAmountFormData.date_received));
+    const amount =
+      negativeAmountFormData.amount < 0 ? -1 * negativeAmountFormData.amount : negativeAmountFormData.amount;
+    // Assert that the positive amount was converted to a negative amount
+    cy.get('tr').should('contain', '-$' + amount);
+
+    // Check values of edit form
+    PageUtils.clickLink('Returned/Bounced Receipt');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Individual');
+    ContactListPage.assertFormData(defaultContactFormData, true);
+    TransactionDetailPage.assertFormData(negativeAmountFormData);
+  });
+
+  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
+    function checkTable(index: number, type: string, containMemo: boolean, value: string) {
+      cy.get('tbody tr').eq(index).as('row');
+      cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
+      cy.get('@row')
+        .find('td')
+        .eq(TransactionTableColumns.memo_code)
+        .should(containMemo ? 'contain' : 'not.contain', 'Y');
+      cy.get('@row').find('td').eq(TransactionTableColumns.aggregate).should('contain', value);
+    }
+
+    F3XSetup();
+    StartTransaction.Receipts().Individual().Partnership();
+
+    PageUtils.clickLink('Create a new contact');
+    const formContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Organization' },
+    };
+    ContactListPage.enterFormData(formContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const formTransactionData = {
+      ...formTransactionDataForSchedule,
+      ...{ purpose_description: '', category_code: '' },
+    };
+    TransactionDetailPage.enterScheduleFormData(formTransactionData);
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    // Create memo transaction
+    cy.contains('h1', 'Partnership Attribution').should('exist');
+    PageUtils.clickLink('Create a new contact');
+    ContactListPage.enterFormData(defaultContactFormData, true);
+    PageUtils.clickButton('Save & continue');
+    const memoFormTransactionData = {
+      ...formTransactionDataForSchedule,
+      ...{ memo_code: true, purpose_description: '', category_code: '' },
+    };
+
+    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
+    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    // Create a second memo transaction so we can check the aggregate value
+    cy.contains('Transactions in this report').should('exist');
+    PageUtils.clickLink('Partnership Receipt');
+    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
+    PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.contains(defaultContactFormData['last_name']).should('exist');
+    cy.contains(defaultContactFormData['last_name']).click();
+    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
+
+    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
+
+    // Assert transaction list table is correct
+    checkTable(0, 'Partnership Receipt', false, '$200.01');
+    checkTable(1, 'Partnership Attribution', true, '$200.01');
+    checkTable(2, 'Partnership Attribution', true, '$400.02');
+
+    // Check form values of receipt form
+    PageUtils.clickLink('Partnership Receipt');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Organization');
+    ContactListPage.assertFormData(formContactData, true);
+    TransactionDetailPage.assertFormData({
+      ...formTransactionData,
+      ...{ purpose_description: 'See Partnership Attribution(s) below' },
+    });
+    PageUtils.clickButton('Cancel');
+    PageUtils.urlCheck('/list');
+    // Check form values of memo form
+    PageUtils.clickLink('Partnership Attribution');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Individual');
+    ContactListPage.assertFormData(defaultContactFormData, true);
+    TransactionDetailPage.assertFormData({
+      ...memoFormTransactionData,
+      ...{ purpose_description: 'Partnership Attribution' },
+    });
+  });
+
+  it('Create a Party Receipt transaction', () => {
+    F3XSetup();
+    StartTransaction.Receipts().RegisteredFilers().Party();
+
+    PageUtils.clickLink('Create a new contact');
+    const formContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Committee' },
+    };
+    ContactListPage.enterFormData(formContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const localFormTransactionData = {
+      ...formTransactionDataForSchedule,
+      ...{
         category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
-    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
 
-    cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('contain', organizationFormData['name']);
-    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
-    cy.get('tr').should('contain', '$' + transactionFormData.amount);
+    TransactionDetailPage.enterScheduleFormData(localFormTransactionData);
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    cy.get('tr').should('contain', 'Party Receipt');
+    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', formContactData['name']);
+    cy.get('tr').should('contain', PageUtils.dateToString(localFormTransactionData.date_received));
+    cy.get('tr').should('contain', '$' + localFormTransactionData.amount);
 
     // Check values of edit form
-    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
+    PageUtils.clickLink('Party Receipt');
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
-    cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    ContactListPage.assertFormData(organizationFormData, true);
+    cy.get('#entity_type_dropdown').should('contain', 'Committee');
+    ContactListPage.assertFormData(formContactData, true);
+    TransactionDetailPage.assertFormData(localFormTransactionData);
+  });
+
+  it('Create a Group I transaction', () => {
+    F3XSetup();
+    StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
+
+    PageUtils.clickLink('Create a new contact');
+    const formContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Committee' },
+    };
+    ContactListPage.enterFormData(formContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const transactionFormData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(transactionFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    cy.get('tr').should('contain', 'Refund of Contribution to Other Political Committee');
+    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', formContactData['name']);
+    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
+    cy.get('tr').should('contain', '$' + transactionFormData['amount']);
+
+    // Check values of edit form
+    PageUtils.clickLink('Refund of Contribution to Other Political Committee');
+    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Committee');
+    ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
@@ -329,4 +524,5 @@ describe('PTY Transactions', () => {
     });
     PageUtils.clickButton('Cancel');
   });
+  
 });
