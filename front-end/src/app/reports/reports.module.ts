@@ -16,6 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { SidebarModule } from 'primeng/sidebar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -28,7 +29,6 @@ import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/re
 import { ReportLevelMemoComponent } from './shared/report-level-memo/report-level-memo.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { PrintPreviewComponent } from './shared/print-preview/print-preview.component';
-import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { FormTypeDialogComponent } from './form-type-dialog/form-type-dialog.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
@@ -50,7 +50,6 @@ import { PasswordModule } from 'primeng/password';
     ReportDetailedSummaryComponent,
     ReportLevelMemoComponent,
     PrintPreviewComponent,
-    TestDotFecComponent,
     CashOnHandComponent,
     FormTypeDialogComponent,
     MainFormComponent,
@@ -74,6 +73,7 @@ import { PasswordModule } from 'primeng/password';
     CalendarModule,
     SelectButtonModule,
     ToastModule,
+    SidebarModule,
     CardModule,
     SharedModule,
     TooltipModule,

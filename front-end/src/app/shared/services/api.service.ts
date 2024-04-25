@@ -60,6 +60,13 @@ export class ApiService {
       withCredentials: true,
     });
   }
+  public getString(endpoint: string): Observable<string> {
+    const headers = this.getHeaders();
+    return this.http.get<string>(`${environment.apiUrl}${endpoint}`, {
+      headers: headers,
+      withCredentials: true,
+    });
+  }
 
   public post<T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Observable<T>;
   public post<T>(

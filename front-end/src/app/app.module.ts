@@ -55,6 +55,7 @@ import { LoginService } from './shared/services/login.service';
 import { SharedModule } from './shared/shared.module';
 import { UsersModule } from './users/users.module';
 import { SchedulerAction, asyncScheduler } from 'rxjs';
+import { SidebarModule } from 'primeng/sidebar';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -121,9 +122,11 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     SharedModule,
     NgOptimizedImage,
     DialogModule,
+    SidebarModule,
     InputTextModule,
     InputTextareaModule,
     OverlayPanelModule,
+    SharedModule
   ],
   providers: [
     CookieService,
