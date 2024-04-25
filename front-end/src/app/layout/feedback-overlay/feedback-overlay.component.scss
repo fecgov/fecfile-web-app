@@ -27,6 +27,14 @@
   p, span, a {
     font-size: 14px;
   }
+
+  label {
+    font-weight: bold;
+  }
+
+  span {
+    font-weight: normal;
+  }
   
   .close-icon {
     right: 50px;
@@ -40,6 +48,10 @@
     transform: scale(1.5);
   }
 
+  .p-overlaypanel .p-overlaypanel-close:hover {
+    background: transparent;
+  }
+
   .p-overlaypanel {
     background: #f1f1f1;
   }
@@ -47,5 +59,10 @@
   .p-overlaypanel .p-overlaypanel-content {
     padding-top: 2.5rem;
   }
+
+  .p-overlaypanel .p-overlaypanel-content * {
+    font-family: karla, sans-serif;   
+  }
+
 }
 
