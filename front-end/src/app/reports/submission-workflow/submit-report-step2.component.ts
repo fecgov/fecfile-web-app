@@ -19,6 +19,7 @@ import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs'
 @Component({
   selector: 'app-submit-report-step2',
   templateUrl: './submit-report-step2.component.html',
+  styleUrls: ['./submit-report-step2.component.scss'],
 })
 export class SubmitReportStep2Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
