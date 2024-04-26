@@ -141,4 +141,4 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

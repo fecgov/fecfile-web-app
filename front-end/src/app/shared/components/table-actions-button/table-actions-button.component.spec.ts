@@ -34,7 +34,7 @@ describe('TableActionsButtonComponent', () => {
         () => {
           return;
         },
-        (report: Report) => report.report_status === ReportStatus.IN_PROGRESS
+        (report: Report) => report.report_status === ReportStatus.IN_PROGRESS,
       ),
     ];
     component.actionItem = {};

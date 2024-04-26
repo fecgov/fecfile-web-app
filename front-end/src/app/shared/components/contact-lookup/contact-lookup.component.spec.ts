@@ -19,7 +19,7 @@ import {
   FecfileIndividualLookupData,
   FecfileOrganizationLookupData,
   IndividualLookupResponse,
-  OrganizationLookupResponse
+  OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
@@ -133,7 +133,7 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true)),
+        JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true)),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -195,7 +195,7 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     expect(
       JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
+        JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -269,7 +269,7 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups()),
+        JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups()),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -300,8 +300,9 @@ describe('ContactLookupComponent', () => {
       name: 'BIDEN, JOSEPH R JR',
     });
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService,
-      'getCandidateDetails').and.returnValue(of(testCandidate));
+    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
+      of(testCandidate),
+    );
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
       candidate_id: 'P80000722',
       office: 'P',
@@ -311,12 +312,11 @@ describe('ContactLookupComponent', () => {
           label: `${this.name} (${this.candidate_id})`,
           value: this,
         };
-      }
-    }
+      },
+    };
     component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
     tick(500);
-    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(
-      testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       Contact.fromJSON({
         type: ContactTypes.CANDIDATE,
@@ -336,7 +336,8 @@ describe('ContactLookupComponent', () => {
         candidate_office: undefined,
         candidate_state: undefined,
         candidate_district: undefined,
-      }));
+      }),
+    );
   }));
 
   it('#onFecApiCandidateLookupDataSelect candidate last_name and first_name', fakeAsync(() => {
@@ -349,8 +350,9 @@ describe('ContactLookupComponent', () => {
       candidate_suffix: 'test_candidate_suffix',
     });
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService,
-      'getCandidateDetails').and.returnValue(of(testCandidate));
+    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
+      of(testCandidate),
+    );
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
       candidate_id: 'P80000722',
       office: 'P',
@@ -360,12 +362,11 @@ describe('ContactLookupComponent', () => {
           label: `${this.name} (${this.candidate_id})`,
           value: this,
         };
-      }
-    }
+      },
+    };
     component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
     tick(500);
-    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(
-      testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       Contact.fromJSON({
         type: ContactTypes.CANDIDATE,
@@ -385,7 +386,8 @@ describe('ContactLookupComponent', () => {
         candidate_office: undefined,
         candidate_state: undefined,
         candidate_district: undefined,
-      }));
+      }),
+    );
   }));
 
   it('#onCreateNewContactSelect Contact happy path', fakeAsync(() => {

@@ -30,7 +30,10 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   outOfDateDialogVisible = false;
   memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private store: Store,
+  ) {
     super();
   }
 

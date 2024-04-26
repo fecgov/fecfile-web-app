@@ -37,10 +37,10 @@ describe('UsersService', () => {
       first_name: 'testFirstName',
       last_name: 'testLastName',
       email: 'testEmail@testhost.com',
-      security_consent_exp_date: '1970-01-01'
-    }
+      security_consent_exp_date: '1970-01-01',
+    };
 
-    service.getCurrentUser().then(response => {
+    service.getCurrentUser().then((response) => {
       expect(response).toEqual(testCurrentUser);
     });
 
@@ -49,5 +49,4 @@ describe('UsersService', () => {
     req.flush(testCurrentUser);
     httpTestingController.verify();
   });
-
 });

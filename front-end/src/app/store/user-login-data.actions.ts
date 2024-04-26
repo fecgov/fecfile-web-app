@@ -9,6 +9,4 @@ export const userLoginDataUpdatedAction = createAction(
   '[User Login Data] Updated',
   props<{ payload: UserLoginData }>(),
 );
-export const userLoginDataDiscardedAction = createAction(
-  '[User Login Data] Discarded',
-);
+export const userLoginDataDiscardedAction = createAction('[User Login Data] Discarded');

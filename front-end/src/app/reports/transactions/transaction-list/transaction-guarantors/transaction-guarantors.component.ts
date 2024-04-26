@@ -28,7 +28,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     protected override router: Router,
     protected override itemService: TransactionSchC2Service,
     protected override store: Store,
-    protected override reportService: ReportService
+    protected override reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
@@ -53,19 +53,19 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
       'View',
       this.editItem.bind(this),
       () => !this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Edit',
       this.editItem.bind(this),
       () => this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
       () => this.reportIsEditable,
-      () => true
+      () => true,
     ),
   ];
 }

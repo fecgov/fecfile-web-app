@@ -51,11 +51,13 @@ describe('FeedbackOverlayComponent', () => {
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
     component.save();
-    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({
-      action: test_action,
-      feedback: test_feedback,
-      about: test_about,
-    }));
+    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
+      jasmine.objectContaining({
+        action: test_action,
+        feedback: test_feedback,
+        about: test_about,
+      }),
+    );
     tick(1000);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.SUCCESS);
   }));
@@ -70,11 +72,13 @@ describe('FeedbackOverlayComponent', () => {
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
     component.save();
-    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(jasmine.objectContaining({
-      action: test_action,
-      feedback: test_feedback,
-      about: test_about,
-    }));
+    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
+      jasmine.objectContaining({
+        action: test_action,
+        feedback: test_feedback,
+        about: test_about,
+      }),
+    );
     tick(1000);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.FAIL);
   }));
@@ -89,5 +93,4 @@ describe('FeedbackOverlayComponent', () => {
     component.tryAgain();
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
-
 });

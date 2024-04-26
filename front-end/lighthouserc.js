@@ -1,7 +1,7 @@
 module.exports = {
-    ci: {
-        upload: {
-            target: 'filesystem',
-        },
+  ci: {
+    upload: {
+      target: 'filesystem',
     },
+  },
 };

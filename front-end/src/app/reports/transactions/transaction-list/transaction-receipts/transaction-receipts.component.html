@@ -74,18 +74,16 @@
           {{ item.line_label }}
         </td>
         <td>
-          <a [routerLink]="[item?.id]">{{
-              item.transaction_type_identifier | label : scheduleTransactionTypeLabels
-            }}</a>
+          <a [routerLink]="[item?.id]">{{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}</a>
           <div *ngIf="item?.force_unaggregated === true"><strong>Unaggregated</strong></div>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
           {{
             item[item.transactionType.templateMap.organization_name] ||
-            item[item.transactionType.templateMap.last_name] +
-            ', ' +
-            item[item.transactionType.templateMap.first_name]
+              item[item.transactionType.templateMap.last_name] +
+                ', ' +
+                item[item.transactionType.templateMap.first_name]
           }}
         </td>
         <td>

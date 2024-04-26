@@ -15,7 +15,7 @@ export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType
   override contactConfig = STANDARD_AND_TERTIARY;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE
+    ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

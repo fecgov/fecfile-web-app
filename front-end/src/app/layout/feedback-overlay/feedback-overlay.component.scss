@@ -23,8 +23,10 @@
   position: fixed;
 }
 
-:host ::ng-deep {  
-  p, span, a {
+:host ::ng-deep {
+  p,
+  span,
+  a {
     font-size: 14px;
   }
 
@@ -35,7 +37,7 @@
   span {
     font-weight: normal;
   }
-  
+
   .close-icon {
     right: 50px;
     top: 50px;
@@ -61,8 +63,6 @@
   }
 
   .p-overlaypanel .p-overlaypanel-content * {
-    font-family: karla, sans-serif;   
+    font-family: karla, sans-serif;
   }
-
 }
-

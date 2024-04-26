@@ -29,7 +29,7 @@ export class NavigationEvent {
     action?: NavigationAction,
     destination?: NavigationDestination,
     transaction?: Transaction,
-    destinationTransactionType?: TransactionTypes
+    destinationTransactionType?: TransactionTypes,
   ) {
     this.action = action || NavigationAction.CANCEL;
     this.destination = destination || NavigationDestination.LIST;
@@ -56,7 +56,7 @@ export class NavigationControl {
     disabledCondition?: (transaction?: Transaction) => boolean,
     visibleCondition?: (transaction?: Transaction) => boolean,
     icon?: string,
-    controlType = ControlType.BUTTON
+    controlType = ControlType.BUTTON,
   ) {
     this.navigationAction = navigationAction;
     this.navigationDestination = navigationDestination;
@@ -73,14 +73,14 @@ export const CANCEL_CONTROL = new NavigationControl(
   NavigationAction.CANCEL,
   NavigationDestination.LIST,
   'Cancel',
-  'p-button-secondary'
+  'p-button-secondary',
 );
 
 export const GO_BACK_CONTROL = new NavigationControl(
   NavigationAction.CANCEL,
   NavigationDestination.LIST,
   'Go back',
-  'p-button-secondary'
+  'p-button-secondary',
 );
 
 export const SAVE_LIST_CONTROL = new NavigationControl(
@@ -88,7 +88,7 @@ export const SAVE_LIST_CONTROL = new NavigationControl(
   NavigationDestination.LIST,
   'Save',
   'p-button-primary',
-  hasNoContact
+  hasNoContact,
 );
 
 export const SAVE_DOUBLE_ENTRY_LIST_CONTROL = new NavigationControl(
@@ -96,7 +96,7 @@ export const SAVE_DOUBLE_ENTRY_LIST_CONTROL = new NavigationControl(
   NavigationDestination.LIST,
   'Save both transactions',
   'p-button-primary',
-  hasNoContact
+  hasNoContact,
 );
 
 export const SAVE_TRIPLE_ENTRY_LIST_CONTROL = new NavigationControl(
@@ -104,7 +104,7 @@ export const SAVE_TRIPLE_ENTRY_LIST_CONTROL = new NavigationControl(
   NavigationDestination.LIST,
   'Save transactions',
   'p-button-primary',
-  hasNoContact
+  hasNoContact,
 );
 
 export const SAVE_ANOTHER_CONTROL = new NavigationControl(
@@ -113,7 +113,7 @@ export const SAVE_ANOTHER_CONTROL = new NavigationControl(
   'Save & add another',
   'p-button-info',
   hasNoContact,
-  isNewTransaction
+  isNewTransaction,
 );
 
 export const SAVE_CHILD_CONTROL = new NavigationControl(
@@ -124,7 +124,7 @@ export const SAVE_CHILD_CONTROL = new NavigationControl(
   hasNoContact,
   () => true,
   'pi pi-plus',
-  ControlType.DROPDOWN
+  ControlType.DROPDOWN,
 );
 
 export class TransactionNavigationControls {
@@ -135,7 +135,7 @@ export class TransactionNavigationControls {
   constructor(
     inlineControls?: NavigationControl[],
     cancelControls?: NavigationControl[],
-    continueControls?: NavigationControl[]
+    continueControls?: NavigationControl[],
   ) {
     this.inlineControls = inlineControls;
     this.cancelControls = cancelControls;
@@ -168,7 +168,7 @@ export const STANDARD_CONTROLS = new TransactionNavigationControls([], [CANCEL_C
 export const STANDARD_DOUBLE_ENTRY_CONTROLS = new TransactionNavigationControls(
   [],
   [CANCEL_CONTROL],
-  [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
+  [SAVE_DOUBLE_ENTRY_LIST_CONTROL],
 );
 
 /**
@@ -177,7 +177,7 @@ export const STANDARD_DOUBLE_ENTRY_CONTROLS = new TransactionNavigationControls(
 export const STANDARD_PARENT_CONTROLS = new TransactionNavigationControls(
   [SAVE_CHILD_CONTROL],
   [CANCEL_CONTROL],
-  [SAVE_LIST_CONTROL]
+  [SAVE_LIST_CONTROL],
 );
 
 /**
@@ -193,9 +193,9 @@ export const CHILD_CONTROLS = new TransactionNavigationControls(
       hasNoContact,
       () => true,
       'pi pi-plus',
-      ControlType.DROPDOWN
+      ControlType.DROPDOWN,
     ),
   ],
   [CANCEL_CONTROL],
-  [SAVE_LIST_CONTROL]
+  [SAVE_LIST_CONTROL],
 );

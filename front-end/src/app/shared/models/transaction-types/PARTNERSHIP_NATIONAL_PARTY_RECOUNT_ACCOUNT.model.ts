@@ -11,7 +11,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionT
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   );
   schema = schema;
   override subTransactionConfig = [

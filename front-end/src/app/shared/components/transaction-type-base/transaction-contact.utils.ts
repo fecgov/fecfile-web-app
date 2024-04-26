@@ -19,7 +19,7 @@ export class TransactionContactUtils {
     form: FormGroup,
     templateMap: TransactionTemplateMapType,
     contactKey: string,
-    messagePrologue = 'By saving this transaction'
+    messagePrologue = 'By saving this transaction',
   ): string {
     let confirmationContactTitle = '';
     if (!templateMap) {
@@ -67,7 +67,7 @@ export class TransactionContactUtils {
     form: FormGroup,
     contact: Contact,
     templateMap: TransactionTemplateMapType,
-    contactConfig: { [formField: string]: string }
+    contactConfig: { [formField: string]: string },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any[] {
     return Object.entries(contactConfig)
@@ -108,7 +108,7 @@ export class TransactionContactUtils {
   static displayConfirmationPopup(
     message: string,
     confirmationService: ConfirmationService,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
   ): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
       confirmationService.confirm({
@@ -148,7 +148,7 @@ export class TransactionContactUtils {
             contact[property] = value as never;
           });
         }
-      }
+      },
     );
   }
 
@@ -165,7 +165,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>
+    contactId$: Subject<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -212,7 +212,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>
+    contactId$: Subject<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -244,7 +244,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>
+    contactId$: Subject<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -265,7 +265,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>
+    contactId$: Subject<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;

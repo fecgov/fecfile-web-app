@@ -9,19 +9,19 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class FeedbackService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public submitFeedback(feedback: Feedback): Promise<void> {
     return firstValueFrom(
-      this.apiService.post<void>(`/feedback/submit/`,
-        feedback, {}, [
-        HttpStatusCode.BadRequest,
-        HttpStatusCode.InternalServerError
-      ]).pipe(map((response) => {
-        if (!response.body) {
-          throw new Error();
-        }
-      }))
+      this.apiService
+        .post<void>(`/feedback/submit/`, feedback, {}, [HttpStatusCode.BadRequest, HttpStatusCode.InternalServerError])
+        .pipe(
+          map((response) => {
+            if (!response.body) {
+              throw new Error();
+            }
+          }),
+        ),
     );
   }
 }

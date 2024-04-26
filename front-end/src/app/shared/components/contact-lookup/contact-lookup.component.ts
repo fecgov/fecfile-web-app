@@ -8,7 +8,7 @@ import {
   ContactTypes,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
-  FecApiLookupData
+  FecApiLookupData,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
@@ -170,10 +170,14 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
           Contact.fromJSON({
             type: ContactTypes.CANDIDATE,
             candidate_id: candidate.candidate_id,
-            last_name: (candidate.candidate_first_name && candidate.candidate_last_name ?
-              candidate.candidate_last_name : nameSplit?.[0]), // namesplit to account for paper filers
-            first_name: (candidate.candidate_first_name && candidate.candidate_last_name ?
-              candidate.candidate_first_name : nameSplit?.[1]), // namesplit to account for paper filers
+            last_name:
+              candidate.candidate_first_name && candidate.candidate_last_name
+                ? candidate.candidate_last_name
+                : nameSplit?.[0], // namesplit to account for paper filers
+            first_name:
+              candidate.candidate_first_name && candidate.candidate_last_name
+                ? candidate.candidate_first_name
+                : nameSplit?.[1], // namesplit to account for paper filers
             middle_name: candidate.candidate_middle_name,
             prefix: candidate.candidate_prefix,
             suffix: candidate.candidate_suffix,

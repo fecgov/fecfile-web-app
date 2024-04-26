@@ -32,7 +32,11 @@ export class TransactionIndependentExpenditurePickerComponent extends DestroyerC
   report?: Report;
   title = 'Add an independent expenditure';
 
-  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private titleService: Title,
+  ) {
     super();
   }
 
