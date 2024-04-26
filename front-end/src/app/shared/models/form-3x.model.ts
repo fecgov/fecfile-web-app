@@ -36,13 +36,7 @@ export class Form3X extends Report {
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
-  committee_name: string | undefined;
   change_of_address: boolean | undefined;
-  street_1: string | undefined;
-  street_2: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  zip: string | undefined;
   report_code: F3xReportCodes | undefined;
   election_code: string | undefined;
   @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;

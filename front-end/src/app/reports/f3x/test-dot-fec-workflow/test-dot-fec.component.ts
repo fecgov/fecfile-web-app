@@ -24,7 +24,8 @@ export class TestDotFecComponent extends DestroyerComponent implements OnInit {
     private store: Store,
     private apiService: ApiService,
     private http: HttpClient,
-    private form3XService: Form3XService) {
+    private form3XService: Form3XService,
+  ) {
     super();
   }
 
@@ -44,11 +45,7 @@ export class TestDotFecComponent extends DestroyerComponent implements OnInit {
 
   async generate() {
     if (this.report instanceof Form3X) {
-      const payload: Form3X = Form3X.fromJSON({
-        ...this.report,
-        qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount)
-      });
-      await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
+      await firstValueFrom(this.form3XService.fecUpdate(this.report, this.committeeAccount));
     }
     this.apiService.post(`/web-services/dot-fec/`, { report_id: this.report?.id }).subscribe(() => undefined);
     this.fileIsGenerated = true;

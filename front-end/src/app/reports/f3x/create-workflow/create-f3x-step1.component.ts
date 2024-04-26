@@ -24,6 +24,7 @@ import { combineLatest, startWith, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -49,6 +50,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public existingCoverage: F3xCoverageDates[] | undefined;
   public usedReportCodes?: F3xReportCodes[];
   public thisYear = new Date().getFullYear();
+  committeeAccount?: CommitteeAccount;
 
   constructor(
     private store: Store,
@@ -75,6 +77,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     combineLatest([this.store.select(selectCommitteeAccount), this.form3XService.getF3xCoverageDates()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([committeeAccount, existingCoverage]) => {
+        this.committeeAccount = committeeAccount;
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
@@ -173,7 +176,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     this.router.navigateByUrl('/reports');
   }
 
-  public save(jump: 'continue' | undefined = undefined) {
+  public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
