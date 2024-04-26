@@ -107,6 +107,4 @@ export class ReportService implements TableListService<Report> {
     delete payload['schema'];
     return payload;
   }
-
-  
 }

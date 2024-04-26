@@ -16,7 +16,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { SidebarModule } from 'primeng/sidebar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -73,7 +72,6 @@ import { PasswordModule } from 'primeng/password';
     CalendarModule,
     SelectButtonModule,
     ToastModule,
-    SidebarModule,
     CardModule,
     SharedModule,
     TooltipModule,
