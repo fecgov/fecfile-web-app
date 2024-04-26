@@ -46,12 +46,6 @@ export class Form24 extends Report {
 
   report_type_24_48: '24' | '48' | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
-  committee_name: string | undefined;
-  street_1: string | undefined;
-  street_2: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  zip: string | undefined;
   treasurer_last_name: string | undefined;
   treasurer_first_name: string | undefined;
   treasurer_middle_name: string | undefined;

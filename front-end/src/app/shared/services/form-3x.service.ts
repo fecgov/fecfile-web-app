@@ -6,6 +6,7 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xCoverageDates, F3xQualifiedCommitteeTypeCodes, Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
+import { Report } from '../models/report.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,30 @@ export class Form3XService extends ReportService {
   }
 
   public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
-    return !!committeeAccount?.committee_type &&
-      F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type);
+    return (
+      !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
+    );
+  }
+
+  public fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {
+    const payload: Form3X = Form3X.fromJSON({
+      ...report,
+      qualified_committee: this.isQualifiedCommittee(committeeAccount),
+      committee_name: committeeAccount?.name,
+      street_1: committeeAccount?.street_1,
+      street_2: committeeAccount?.street_2,
+      city: committeeAccount?.city,
+      state: committeeAccount?.state,
+      zip: committeeAccount?.zip,
+    });
+    return this.update(payload, [
+      'qualified_committee',
+      'committee_name',
+      'street_1',
+      'street_2',
+      'city',
+      'state',
+      'zip',
+    ]);
   }
 }
