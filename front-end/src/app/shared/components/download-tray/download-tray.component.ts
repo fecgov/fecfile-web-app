@@ -20,8 +20,8 @@ export class DownloadTrayComponent implements OnInit {
   }
 
   removeDownload(download: Download) {
-    this.downloads = this.downloads.filter((d) => d !== download);
-    if (this.downloads.length === 0) this.sidebarVisible = false;
+    const downloads = this.downloads.filter((d) => d !== download);
+    this.dotFecService.downloads.next(downloads);
   }
 
   download(download: Download) {
