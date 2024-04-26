@@ -20,7 +20,8 @@
     "license-report": "./node_modules/.bin/license-checker",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "prettier:check:ci": "./node_modules/.bin/prettier --check ."
+    "prettier:check:ci": "./node_modules/.bin/prettier --check .",
+    "prettier:fix": "./node_modules/.bin/prettier --write ."
   },
   "private": true,
   "dependencies": {
