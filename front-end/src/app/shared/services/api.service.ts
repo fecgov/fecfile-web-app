@@ -60,11 +60,13 @@ export class ApiService {
       withCredentials: true,
     });
   }
+  
   public getString(endpoint: string): Observable<string> {
     const headers = this.getHeaders();
-    return this.http.get<string>(`${environment.apiUrl}${endpoint}`, {
+    return this.http.get(`${environment.apiUrl}${endpoint}`, {
       headers: headers,
       withCredentials: true,
+      responseType: 'text',
     });
   }
 
