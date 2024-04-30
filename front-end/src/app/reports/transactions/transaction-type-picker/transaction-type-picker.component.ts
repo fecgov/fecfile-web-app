@@ -303,9 +303,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       default:
         break;
     }
+
     if (isPAC(this.committeeAccount?.committee_type))
       transactionTypes = transactionTypes.filter((tt) => !PACRestricted().includes(tt));
-    if (isPTY(this.committeeAccount?.committee_type))
+    if (isPTY(this.committeeAccount?.committee_type, this.committeeAccount?.designation))
       transactionTypes = transactionTypes.filter((tt) => !PTYRestricted().includes(tt));
 
     if (this.debtId) {
