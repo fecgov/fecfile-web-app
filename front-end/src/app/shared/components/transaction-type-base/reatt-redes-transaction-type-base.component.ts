@@ -63,12 +63,11 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     await this.initializePullForward();
   }
 
-  override processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
+  override async processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
     const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload, this.pullForward);
-    this.transactionService.multiSaveReattRedes(payloads).subscribe((response) => {
-      navigationEvent.transaction = response[0];
-      this.navigateTo(navigationEvent);
-    });
+    const response = await this.transactionService.multiSaveReattRedes(payloads);
+    navigationEvent.transaction = response[0];
+    this.navigateTo(navigationEvent);
   }
 
   updateElectionData() {

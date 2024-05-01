@@ -138,11 +138,16 @@ export class TransactionService implements TableListService<Transaction> {
     return of(undefined);
   }
 
-  public create(transaction: Transaction): Observable<Transaction> {
+  public create(transaction: Transaction): Promise<string> {
     const payload = this.preparePayload(transaction);
-    return this.apiService
-      .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload)
-      .pipe(map((response) => getFromJSON(response)));
+    return firstValueFrom(this.apiService.post<string>(`${transaction.transactionType.apiEndpoint}/`, payload));
+  }
+
+  public async updateTransaction(transaction: Transaction): Promise<string> {
+    const payload = this.preparePayload(transaction);
+    return firstValueFrom(
+      this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {}),
+    );
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
@@ -176,12 +181,14 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
-  public multiSaveReattRedes(transactions: Transaction[]): Observable<Transaction[]> {
+  public multiSaveReattRedes(transactions: Transaction[]): Promise<Transaction[]> {
     const payload = transactions.map((t) => this.preparePayload(t));
-    return this.apiService.put<Transaction[]>(
-      `${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`,
-      payload,
-      {},
+    return firstValueFrom(
+      this.apiService.put<Transaction[]>(
+        `${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`,
+        payload,
+        {},
+      ),
     );
   }
 
