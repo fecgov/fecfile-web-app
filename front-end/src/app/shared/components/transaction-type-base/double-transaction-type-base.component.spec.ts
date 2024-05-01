@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -18,7 +18,6 @@ import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionType } from '../../models/transaction-type.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
@@ -196,8 +195,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
   });
 
-  it('should save a parent and child transaction', () => {
-    const apiPostSpy = spyOn(transactionService, 'create').and.returnValue(of(testTransaction));
+  it('should save a parent and child transaction', waitForAsync(async () => {
+    const apiPostSpy = spyOn(transactionService, 'create').and.returnValue(
+      new Promise<string>(() => testTransaction.id),
+    );
     spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
 
     if (testTransaction.children) {
@@ -259,9 +260,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.childForm.get(key)?.updateValueAndValidity();
     });
 
-    component.handleNavigate(navEvent);
+    await component.handleNavigate(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
-  });
+  }));
 
   describe('save', () => {
     it('should bail out if transactions are invalid', () => {

@@ -143,7 +143,7 @@ export class TransactionService implements TableListService<Transaction> {
     return firstValueFrom(this.apiService.post<string>(`${transaction.transactionType.apiEndpoint}/`, payload));
   }
 
-  public async updateTransaction(transaction: Transaction): Promise<string> {
+  public async updateString(transaction: Transaction): Promise<string> {
     const payload = this.preparePayload(transaction);
     return firstValueFrom(
       this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {}),

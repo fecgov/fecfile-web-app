@@ -7,7 +7,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../services/transaction.service';
 import { ReportService } from '../../services/report.service';
@@ -23,6 +23,7 @@ import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-fr
 import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { ReattributedUtils } from '../../utils/reatt-redes/reattributed.utils';
 import { ActivatedRoute } from '@angular/router';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -102,19 +103,23 @@ describe('ReattTransactionTypeBaseComponent', () => {
       expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should save all transaction', () => {
+    it('should save all transaction', waitForAsync(async () => {
       if (!component.transaction) throw Error('Bad test setup');
       spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
-      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() => of([testTransaction]));
+      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(
+        () => new Promise<Transaction[]>(() => [testTransaction]),
+      );
       const navSpy = spyOn(component, 'navigateTo').and.callFake(() => {
         return;
       });
       component.ngOnInit();
-      component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
+      await component.save(
+        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+      );
 
       expect(multiSaveSpy).toHaveBeenCalledTimes(1);
       expect(navSpy).toHaveBeenCalledTimes(1);
-    });
+    }));
   });
 
   describe('updateElectionData', () => {

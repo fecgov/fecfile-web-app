@@ -112,7 +112,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     })[0];
   }
 
-  override save(navigationEvent: NavigationEvent) {
+  override save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -139,7 +139,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     ];
     payload.children[0].reports = payload.reports;
 
-    this.processPayload(payload, navigationEvent);
+    return this.processPayload(payload, navigationEvent);
   }
 
   override isInvalid(): boolean {

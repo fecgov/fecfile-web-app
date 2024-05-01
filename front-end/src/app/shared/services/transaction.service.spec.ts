@@ -1,6 +1,6 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { AggregationGroups, Transaction } from '../models/transaction.model';
@@ -149,15 +149,14 @@ describe('TransactionService', () => {
   });
 
   describe('create', () => {
-    xit('should POST a record', () => {
+    xit('should POST a record', async () => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.create(schATransaction).subscribe((response) => {
-        expect(response?.id).toEqual(schATransaction.id);
-      });
+      const id = await service.create(schATransaction);
+      expect(schATransaction.id).toEqual(id);
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/`);
       expect(req.request.method).toEqual('POST');
@@ -182,6 +181,22 @@ describe('TransactionService', () => {
       req.flush(schATransaction);
       httpTestingController.verify();
     });
+  });
+
+  describe('update string', () => {
+    it('should PUT  a record', waitForAsync(async () => {
+      const schATransaction: SchATransaction = SchATransaction.fromJSON({
+        id: '1',
+        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+      });
+      const id = await service.updateString(schATransaction);
+      expect(schATransaction.id).toEqual(id);
+
+      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
+      expect(req.request.method).toEqual('PUT');
+      req.flush(schATransaction);
+      httpTestingController.verify();
+    }));
   });
 
   describe('delete', () => {
@@ -232,7 +247,7 @@ describe('TransactionService', () => {
   });
 
   describe('multiSaveReattRedes', () => {
-    it('should PUT an array of records', fakeAsync(() => {
+    it('should PUT an array of records', waitForAsync(async () => {
       const transactions: SchATransaction[] = [
         SchATransaction.fromJSON({
           id: '1',
@@ -248,10 +263,9 @@ describe('TransactionService', () => {
         }),
       ];
 
-      service.multiSaveReattRedes(transactions).subscribe((response) => {
-        expect(response[0]?.id).toEqual('1');
-      });
-      tick(100);
+      const response = await service.multiSaveReattRedes(transactions);
+      expect(response[0]?.id).toEqual('1');
+
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/reattribution/`);
       expect(req.request.method).toEqual('PUT');
       req.flush(transactions);

@@ -95,7 +95,7 @@ export abstract class TripleTransactionTypeBaseComponent
     Object.values(this.childContactIdMap_2).forEach((id$) => id$.complete());
   }
 
-  override save(navigationEvent: NavigationEvent) {
+  override save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction && this.childTransaction_2) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -134,7 +134,7 @@ export abstract class TripleTransactionTypeBaseComponent
     payload.children[0].report_ids = payload.report_ids;
     payload.children[1].report_ids = payload.report_ids;
 
-    this.processPayload(payload, navigationEvent);
+    return this.processPayload(payload, navigationEvent);
   }
 
   override isInvalid(): boolean {

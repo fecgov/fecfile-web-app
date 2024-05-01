@@ -20,7 +20,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { concatAll, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
+import { concatAll, from, lastValueFrom, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -126,13 +126,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
 
   writeToApi(payload: Transaction): Promise<string> {
     if (payload.id) {
-      return this.transactionService.updateTransaction(payload);
+      return this.transactionService.updateString(payload);
     } else {
       return this.transactionService.create(payload);
     }
   }
 
-  save(navigationEvent: NavigationEvent) {
+  save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -147,7 +147,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
       this.form,
       this.formProperties,
     );
-    this.processPayload(payload, navigationEvent);
+    return this.processPayload(payload, navigationEvent);
   }
 
   async processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
@@ -211,7 +211,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     return this.confirmWithUser(this.transaction, this.form);
   }
 
-  handleNavigate(navigationEvent: NavigationEvent): void {
+  async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {
@@ -219,11 +219,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
         this.store.dispatch(singleClickEnableAction());
         return;
       }
-      this.confirmation$.subscribe((confirmed: boolean) => {
-        // if every confirmation was accepted
-        if (confirmed) this.save(navigationEvent);
-        else this.store.dispatch(singleClickEnableAction());
-      });
+      const confirmed = await lastValueFrom(this.confirmation$);
+      // if every confirmation was accepted
+      if (confirmed) return this.save(navigationEvent);
+      else this.store.dispatch(singleClickEnableAction());
     } else {
       this.navigateTo(navigationEvent);
     }

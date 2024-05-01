@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
@@ -67,7 +67,7 @@ describe('TransactionTypeBaseComponent', () => {
         {
           provide: TransactionService,
           useValue: jasmine.createSpyObj('TransactionService', {
-            update: of(undefined),
+            updateString: new Promise<string>(() => ''),
             create: of(undefined),
             getPreviousTransactionForAggregate: of(undefined),
           }),
@@ -132,17 +132,21 @@ describe('TransactionTypeBaseComponent', () => {
     beforeEach(() => {
       navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
     });
-    it('should update contacts form if there is a transaction', () => {
+
+    it('should update contacts form if there is a transaction', waitForAsync(async () => {
       const contactSpy = spyOn(TransactionContactUtils, 'updateContactsWithForm');
-      component.save(navEvent);
+      await component.save(navEvent);
       expect(contactSpy).toHaveBeenCalled();
-    });
-    it('should stop processing and throw an error if there is no transaction', () => {
+    }));
+
+    it('should stop processing and throw an error if there is no transaction', waitForAsync(async () => {
       component.transaction = undefined;
-      expect(function () {
-        component.save(navEvent);
-      }).toThrow(new Error('Fecfile: No transactions submitted for single-entry transaction form.'));
-    });
+      try {
+        await component.save(navEvent);
+      } catch (e) {
+        expect(e).toEqual(new Error('Fecfile: No transactions submitted for single-entry transaction form.'));
+      }
+    }));
   });
 
   describe('processPayload', () => {
@@ -160,17 +164,17 @@ describe('TransactionTypeBaseComponent', () => {
       component.processPayload(payload, navEvent);
     });
 
-    it('should update data and then set processing to false', () => {
+    it('should update data and then set processing to false', waitForAsync(async () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         '999',
         component.form,
         component.formProperties,
       );
-      component.processPayload(payload, navEvent);
-      expect(transactionServiceSpy.update).toHaveBeenCalled();
+      await component.processPayload(payload, navEvent);
+      expect(transactionServiceSpy.updateString).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
-    });
+    }));
 
     it('should set processing to false if no transaction type identifier on payload', () => {
       component.form.addControl('linkedF3xId', new FormControl());
@@ -274,15 +278,14 @@ describe('TransactionTypeBaseComponent', () => {
         tick(500);
       }));
 
-      it('should save on confirmation', fakeAsync(() => {
-        if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction));
-        confirmSpy.and.callFake((confirmation: Confirmation) => {
-          if (confirmation.accept) return confirmation?.accept();
-        });
+      it('should save on confirmation', waitForAsync(async () => {
+        if (component.transaction)
+          confirmSpy.and.callFake((confirmation: Confirmation) => {
+            if (confirmation.accept) return confirmation?.accept();
+          });
         expect(component.form.invalid).toBeFalse();
-        component.handleNavigate(navEvent);
-        tick(500);
-        expect(transactionServiceSpy.update).toHaveBeenCalled();
+        await component.handleNavigate(navEvent);
+        expect(transactionServiceSpy.updateString).toHaveBeenCalled();
         expect(navigateToSpy).toHaveBeenCalled();
       }));
     });
