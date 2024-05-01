@@ -10,11 +10,6 @@ export enum F24FormTypes {
 
 export type F24FormType = F24FormTypes.F24N | F24FormTypes.F24A;
 
-export const F24FormVersionLabels: { [key in F24FormTypes]: string } = {
-  [F24FormTypes.F24N]: 'Original',
-  [F24FormTypes.F24A]: 'Amendment',
-};
-
 export class Form24 extends Report {
   schema = f24Schema;
   report_type = ReportTypes.F24;
@@ -30,10 +25,6 @@ export class Form24 extends Report {
 
   get reportLabel(): string {
     return `${this.report_type_24_48} HOUR`;
-  }
-
-  get versionLabel() {
-    return `${F24FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
   override get canAmend(): boolean {

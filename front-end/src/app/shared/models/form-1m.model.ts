@@ -14,11 +14,6 @@ export enum F1MFormTypes {
   F1MA = 'F1MA',
 }
 
-export const F1MFormVersionLabels: { [key in F1MFormTypes]: string } = {
-  [F1MFormTypes.F1MN]: 'Original',
-  [F1MFormTypes.F1MA]: 'Amendment',
-};
-
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
@@ -38,10 +33,6 @@ export class Form1M extends Report {
 
   get reportLabel(): string {
     return '';
-  }
-
-  get versionLabel() {
-    return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
   committee_type?: CommitteeType;
