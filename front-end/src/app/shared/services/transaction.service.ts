@@ -143,18 +143,9 @@ export class TransactionService implements TableListService<Transaction> {
     return firstValueFrom(this.apiService.post<string>(`${transaction.transactionType.apiEndpoint}/`, payload));
   }
 
-  public async updateString(transaction: Transaction): Promise<string> {
+  public update(transaction: Transaction): Observable<string> {
     const payload = this.preparePayload(transaction);
-    return firstValueFrom(
-      this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {}),
-    );
-  }
-
-  public update(transaction: Transaction): Observable<Transaction> {
-    const payload = this.preparePayload(transaction);
-    return this.apiService
-      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {})
-      .pipe(map((response) => getFromJSON(response)));
+    return this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {});
   }
 
   public delete(transaction: Transaction): Observable<null> {
@@ -166,7 +157,7 @@ export class TransactionService implements TableListService<Transaction> {
             (child) => child.id !== transaction.id,
           );
           const parentTransactionPayload = transaction.getUpdatedParent(true);
-          this.update(parentTransactionPayload).subscribe();
+          this.update(parentTransactionPayload);
         }
       }),
     );

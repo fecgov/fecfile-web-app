@@ -67,7 +67,7 @@ describe('TransactionTypeBaseComponent', () => {
         {
           provide: TransactionService,
           useValue: jasmine.createSpyObj('TransactionService', {
-            updateString: new Promise<string>(() => ''),
+            update: of(''),
             create: of(undefined),
             getPreviousTransactionForAggregate: of(undefined),
           }),
@@ -172,7 +172,7 @@ describe('TransactionTypeBaseComponent', () => {
         component.formProperties,
       );
       await component.processPayload(payload, navEvent);
-      expect(transactionServiceSpy.updateString).toHaveBeenCalled();
+      expect(transactionServiceSpy.update).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
     }));
 
@@ -285,7 +285,7 @@ describe('TransactionTypeBaseComponent', () => {
           });
         expect(component.form.invalid).toBeFalse();
         await component.handleNavigate(navEvent);
-        expect(transactionServiceSpy.updateString).toHaveBeenCalled();
+        expect(transactionServiceSpy.update).toHaveBeenCalled();
         expect(navigateToSpy).toHaveBeenCalled();
       }));
     });

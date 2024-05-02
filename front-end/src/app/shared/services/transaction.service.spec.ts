@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { Form3X } from '../models/form-3x.model';
+import { firstValueFrom } from 'rxjs';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -165,31 +166,13 @@ describe('TransactionService', () => {
     });
   });
 
-  describe('update', () => {
-    it('should PUT  a record', () => {
-      const schATransaction: SchATransaction = SchATransaction.fromJSON({
-        id: '1',
-        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      });
-
-      service.update(schATransaction).subscribe((response) => {
-        expect(response?.id).toEqual(schATransaction.id);
-      });
-
-      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
-      expect(req.request.method).toEqual('PUT');
-      req.flush(schATransaction);
-      httpTestingController.verify();
-    });
-  });
-
   describe('update string', () => {
     it('should PUT  a record', waitForAsync(async () => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
-      const id = await service.updateString(schATransaction);
+      const id = await firstValueFrom(service.update(schATransaction));
       expect(schATransaction.id).toEqual(id);
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);

@@ -20,7 +20,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { concatAll, from, lastValueFrom, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
+import { concatAll, firstValueFrom, from, lastValueFrom, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -126,7 +126,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
 
   writeToApi(payload: Transaction): Promise<string> {
     if (payload.id) {
-      return this.transactionService.updateString(payload);
+      return firstValueFrom(this.transactionService.update(payload));
     } else {
       return this.transactionService.create(payload);
     }
