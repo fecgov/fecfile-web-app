@@ -35,22 +35,28 @@ describe('CommitteeMemberDialogComponent', () => {
   });
 
   it('should add new users', () => {
-    const new_email = 'test_1234321@test.com';
-    component.form.get('email')?.setValue(new_email);
+    const newEmail = 'test_1234321@test.com';
+    component.form.get('email')?.setValue(newEmail);
     component.addUser();
     expect(component.detailVisible).toBeFalse();
   });
 
   it('should not add user with pre-existing email', () => {
-    const taken_email = 'test@test.com';
+    const takenEmail = 'test@test.com';
+    const takenEmail2 = 'TeSt@TeSt.CoM'; // Same email but with different case
     const serviceSpy = spyOn(testCommitteeService, 'getMembers').and.returnValue(
-      firstValueFrom(of([CommitteeMember.fromJSON({ email: taken_email })])),
+      firstValueFrom(of([CommitteeMember.fromJSON({ email: takenEmail })])),
     );
 
-    component.form.get('email')?.patchValue(taken_email);
+    component.form.get('email')?.patchValue(takenEmail);
     component.form.updateValueAndValidity();
 
     expect(serviceSpy).toHaveBeenCalled();
+    expect(component.form.valid).toBeFalse();
+
+    component.form.get('email')?.patchValue(takenEmail2);
+    component.form.updateValueAndValidity();
+
     expect(component.form.valid).toBeFalse();
   });
 });
