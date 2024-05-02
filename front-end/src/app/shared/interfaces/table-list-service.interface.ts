@@ -10,5 +10,5 @@ export interface TableListService<T> {
 
   delete(item: T): Observable<null>;
 
-  update?(item: T, fieldsToValidate?: string[]): Observable<T>;
+  update?(item: T, fieldsToValidate?: string[]): Observable<T|string>;
 }

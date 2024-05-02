@@ -275,7 +275,7 @@ describe('TransactionTypeBaseComponent', () => {
       }));
 
       it('should save on confirmation', fakeAsync(() => {
-        if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction));
+        if (component.transaction) transactionServiceSpy.update.and.returnValue(of(component.transaction.id ?? '1'));
         confirmSpy.and.callFake((confirmation: Confirmation) => {
           if (confirmation.accept) return confirmation?.accept();
         });

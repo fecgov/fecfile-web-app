@@ -1,6 +1,6 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { AggregationGroups, Transaction } from '../models/transaction.model';
@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { Form3X } from '../models/form-3x.model';
+import { firstValueFrom } from 'rxjs';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -149,39 +150,37 @@ describe('TransactionService', () => {
   });
 
   describe('create', () => {
-    xit('should POST a record', () => {
+    xit('should POST a record', waitForAsync(async() => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.create(schATransaction).subscribe((response) => {
-        expect(response?.id).toEqual(schATransaction.id);
-      });
+      const response = await firstValueFrom(service.create(schATransaction));
+      expect(schATransaction.id).toEqual(response);
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/`);
       expect(req.request.method).toEqual('POST');
       req.flush(schATransaction);
       httpTestingController.verify();
-    });
+    }));
   });
 
   describe('update', () => {
-    it('should PUT  a record', () => {
+    it('should PUT  a record', waitForAsync(async () => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.update(schATransaction).subscribe((response) => {
-        expect(response?.id).toEqual(schATransaction.id);
-      });
+      const response = await firstValueFrom(service.update(schATransaction));
+      expect(schATransaction.id).toEqual(response);
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
       expect(req.request.method).toEqual('PUT');
       req.flush(schATransaction);
       httpTestingController.verify();
-    });
+    }));
   });
 
   describe('delete', () => {

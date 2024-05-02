@@ -138,18 +138,14 @@ export class TransactionService implements TableListService<Transaction> {
     return of(undefined);
   }
 
-  public create(transaction: Transaction): Observable<Transaction> {
+  public create(transaction: Transaction): Observable<string> {
     const payload = this.preparePayload(transaction);
-    return this.apiService
-      .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload)
-      .pipe(map((response) => getFromJSON(response)));
+    return this.apiService.post<string>(`${transaction.transactionType.apiEndpoint}/`, payload);
   }
 
-  public update(transaction: Transaction): Observable<Transaction> {
+  public update(transaction: Transaction): Observable<string> {
     const payload = this.preparePayload(transaction);
-    return this.apiService
-      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {})
-      .pipe(map((response) => getFromJSON(response)));
+    return this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {});
   }
 
   public delete(transaction: Transaction): Observable<null> {

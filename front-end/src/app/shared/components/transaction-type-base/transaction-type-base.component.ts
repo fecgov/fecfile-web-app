@@ -124,7 +124,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     Object.values(this.contactIdMap).forEach((id$) => id$.complete());
   }
 
-  writeToApi(payload: Transaction): Observable<Transaction> {
+  writeToApi(payload: Transaction): Observable<Transaction | string> {
     if (payload.id) {
       return this.transactionService.update(payload);
     } else {
@@ -152,8 +152,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
 
   processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
-      this.writeToApi(payload).subscribe((transaction) => {
-        navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
+      this.writeToApi(payload).subscribe(() => {
+        navigationEvent.transaction = payload;
         this.navigateTo(navigationEvent);
       });
     } else {

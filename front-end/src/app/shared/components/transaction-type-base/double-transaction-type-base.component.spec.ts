@@ -197,7 +197,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('should save a parent and child transaction', () => {
-    const apiPostSpy = spyOn(transactionService, 'create').and.returnValue(of(testTransaction));
+    const apiPostSpy = spyOn(transactionService, 'create').and.returnValue(of(testTransaction.id ?? '1'));
     spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
 
     if (testTransaction.children) {
