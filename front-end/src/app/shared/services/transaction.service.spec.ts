@@ -150,7 +150,7 @@ describe('TransactionService', () => {
   });
 
   describe('create', () => {
-    xit('should POST a record', waitForAsync(async() => {
+    it('should POST a record', waitForAsync(async () => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
