@@ -49,7 +49,13 @@
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
         <h2 class="m-0">Contacts</h2>
-        <button pButton pRipple label="Restore deleted contact(s)" class="restore-contact-button" (click)="onRestoreClick()"></button>
+        <button
+          pButton
+          pRipple
+          label="Restore deleted contact(s)"
+          class="restore-contact-button"
+          (click)="onRestoreClick()"
+        ></button>
       </div>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
@@ -99,6 +105,22 @@
           ></em>
         </td>
       </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+      <app-results-dropdown [rowsPerPage]="rowsPerPage" (rowsPerPageChange)="onRowsPerPageChange()">
+      </app-results-dropdown>
+    </ng-template>
+    <ng-template pTemplate="paginatorfirstpagelinkicon">
+      <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorpreviouspagelinkicon">
+      <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatornextpagelinkicon">
+      <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorlastpagelinkicon">
+      <img alt="last page icon" src="/assets/img/last_arrow.svg" />
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <span class="mx-3 d-block w-full">No data available in table</span>

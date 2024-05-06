@@ -342,4 +342,11 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     const reportId = this.activatedRoute.snapshot.params['report_id'];
     await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
   }
+
+  onRowsPerPageChange() {
+    this.loadTransactions({
+      first: 0,
+      rows: this.rowsPerPage,
+    });
+  }
 }

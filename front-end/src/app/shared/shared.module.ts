@@ -59,6 +59,7 @@ import { LinkedReportInputComponent } from './components/inputs/linked-report-in
 import { IndependentExpenditureCreateF3xInputComponent } from './components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
+import { ResultsDropdownComponent } from './components/results-dropdown/results-dropdown.component';
 
 @NgModule({
   imports: [
@@ -128,6 +129,7 @@ import { TableModule } from 'primeng/table';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
+    ResultsDropdownComponent,
   ],
   exports: [
     FecDatePipe,
@@ -168,6 +170,7 @@ import { TableModule } from 'primeng/table';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
+    ResultsDropdownComponent
   ],
   providers: [DatePipe],
 })

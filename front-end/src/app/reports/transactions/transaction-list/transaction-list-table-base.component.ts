@@ -209,13 +209,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return { report_id: this.reportId, page_size: this.rowsPerPage };
   }
 
-  onRowsPerPageChange() {
-    this.loadTableItems({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
-  }
-
   override async editItem(item: Transaction): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
   }

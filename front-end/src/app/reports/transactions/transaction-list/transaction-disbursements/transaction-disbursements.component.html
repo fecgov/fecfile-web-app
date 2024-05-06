@@ -7,7 +7,7 @@
     responsiveLayout="scroll"
     dataKey="id"
     [paginator]="true"
-    [rows]="rowsPerPage"
+    [pageLinks]="rowsPerPage"
     [totalRecords]="totalItems"
     [loading]="loading"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
@@ -19,14 +19,6 @@
       <div class="grid">
         <div class="col-9 flex align-items-center justify-content-between">
           <h5 class="gandhi-bold size-24">Disbursements</h5>
-        </div>
-        <div class="col-3 align-right">
-          Results per table:
-          <p-dropdown
-            [options]="paginationPageSizeOptions"
-            [(ngModel)]="rowsPerPage"
-            (onChange)="onRowsPerPageChange()"
-          ></p-dropdown>
         </div>
       </div>
     </ng-template>
@@ -103,6 +95,22 @@
           ></app-table-actions-button>
         </td>
       </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+      <app-results-dropdown [rowsPerPage]="rowsPerPage" (rowsPerPageChange)="onRowsPerPageChange()">
+      </app-results-dropdown>
+    </ng-template>
+    <ng-template pTemplate="paginatorfirstpagelinkicon">
+      <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorpreviouspagelinkicon">
+      <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatornextpagelinkicon">
+      <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorlastpagelinkicon">
+      <img alt="last page icon" src="/assets/img/last_arrow.svg" />
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <span class="mx-3 d-block w-full">No data available in table</span>

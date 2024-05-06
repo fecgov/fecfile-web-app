@@ -92,6 +92,22 @@
         </td>
       </tr>
     </ng-template>
+    <ng-template pTemplate="paginatorleft">
+      <app-results-dropdown [rowsPerPage]="rowsPerPage" (rowsPerPageChange)="onRowsPerPageChange()">
+      </app-results-dropdown>
+    </ng-template>
+    <ng-template pTemplate="paginatorfirstpagelinkicon">
+      <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorpreviouspagelinkicon">
+      <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatornextpagelinkicon">
+      <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorlastpagelinkicon">
+      <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+    </ng-template>
     <ng-template pTemplate="emptymessage">
       <span class="mx-3 d-block w-full">No data available in table</span>
     </ng-template>

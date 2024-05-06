@@ -60,17 +60,41 @@
             <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
           </td>
           <td>{{ displayName(item) }}</td>
-          <td>{{ item.type | label : contactTypeLabels }}</td>
+          <td>{{ item.type | label: contactTypeLabels }}</td>
           <td>{{ item.employer }}</td>
           <td>{{ item.occupation }}</td>
         </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+        <app-results-dropdown [rowsPerPage]="rowsPerPage" (rowsPerPageChange)="onRowsPerPageChange()">
+        </app-results-dropdown>
+      </ng-template>
+      <ng-template pTemplate="paginatorfirstpagelinkicon">
+        <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+      </ng-template>
+      <ng-template pTemplate="paginatorpreviouspagelinkicon">
+        <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+      </ng-template>
+      <ng-template pTemplate="paginatornextpagelinkicon">
+        <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+      </ng-template>
+      <ng-template pTemplate="paginatorlastpagelinkicon">
+        <img alt="last page icon" src="/assets/img/last_arrow.svg" />
       </ng-template>
     </p-table>
   </ng-template>
   <ng-template pTemplate="footer">
     <div class="grid">
       <div class="col-1">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="hide()" [autofocus]="true"></button>
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (click)="hide()"
+          [autofocus]="true"
+        ></button>
       </div>
       <div class="col-11">
         <button

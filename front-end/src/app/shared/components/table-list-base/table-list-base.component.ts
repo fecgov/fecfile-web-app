@@ -100,6 +100,13 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     });
   }
 
+  onRowsPerPageChange() {
+    this.loadTableItems({
+      first: 0,
+      rows: this.rowsPerPage,
+    });
+  }
+
   /**
    * Event listener when user selects table row checkboxes.
    * @param items
