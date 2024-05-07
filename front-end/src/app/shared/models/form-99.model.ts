@@ -9,10 +9,6 @@ export enum F99FormTypes {
 
 export type F99FormType = F99FormTypes.F99;
 
-export const F99FormVersionLabels: { [key in F99FormTypes]: string } = {
-  [F99FormTypes.F99]: 'Original',
-};
-
 export class Form99 extends Report {
   schema = f99Schema;
   report_type = ReportTypes.F99;
@@ -30,10 +26,6 @@ export class Form99 extends Report {
 
   get reportLabel(): string {
     return '';
-  }
-
-  get versionLabel() {
-    return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
   treasurer_last_name: string | undefined;
