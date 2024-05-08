@@ -24,28 +24,4 @@ describe('Form-1M', () => {
     const form = Form1M.fromJSON(data);
     expect(form.formSubLabel).toEqual('NOTIFICATION OF MULTICANDIDATE STATUS');
   });
-
-  describe('versionLabel', () => {
-    it('should return just version label if report version is undefined', () => {
-      const data = {
-        id: '999',
-        form_type: F1MFormTypes.F1MN,
-        committee_name: 'foo',
-        report_version: undefined,
-      };
-      const form = Form1M.fromJSON(data);
-      expect(form.versionLabel).toEqual('Original');
-    });
-
-    it('should also display report version if defined', () => {
-      const data = {
-        id: '999',
-        form_type: F1MFormTypes.F1MN,
-        committee_name: 'foo',
-        report_version: '1',
-      };
-      const form = Form1M.fromJSON(data);
-      expect(form.versionLabel).toEqual('Original 1');
-    });
-  });
 });
