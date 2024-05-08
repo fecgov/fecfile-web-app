@@ -11,7 +11,7 @@ describe('PAC_CONDUIT_EARMARK_OUT', () => {
   beforeEach(() => {
     transactionType = new PAC_CONDUIT_EARMARK_OUT();
     transaction = getTestTransactionByType(
-      ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_DEPOSITED
+      ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_DEPOSITED,
     ) as SchBTransaction;
   });
 
@@ -28,7 +28,7 @@ describe('PAC_CONDUIT_EARMARK_OUT', () => {
 
   it('#generatePurposeDescription() should reflect child', () => {
     const parentTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED
+      ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
     ) as SchATransaction;
     parentTransaction.entity_type = ContactTypes.INDIVIDUAL;
     parentTransaction.contributor_organization_name = 'Joe';

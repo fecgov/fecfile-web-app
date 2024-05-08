@@ -7,7 +7,7 @@
     [styleClass]="(rounded ? 'rounded-text ' : '') + buttonStyleClass"
     [ariaLabel]="buttonAriaLabel"
   ></p-button>
-  <ul class="dropdown-menu ">
+  <ul class="dropdown-menu">
     <li *ngFor="let action of filteredActions; let index = index">
       <button
         [disabled]="!action.isEnabled(actionItem)"
@@ -16,7 +16,7 @@
         type="button"
         class="p-button-secondary p-button-text w-full text-left"
         [id]="'button-' + index"
-        (click)="tableActionClick.emit({action, actionItem})"
+        (click)="tableActionClick.emit({ action, actionItem })"
       >
         {{ action.label }}
       </button>

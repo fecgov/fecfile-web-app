@@ -85,7 +85,7 @@ describe('PrintPreviewComponent', () => {
     component.updatePrintStatus(testF3x);
     expect(component.webPrintStage).toBe('checking');
     expect(component.pollingStatusMessage).toBe(
-      'Your report is still being processed. Please check back later to access your PDF'
+      'Your report is still being processed. Please check back later to access your PDF',
     );
   });
 

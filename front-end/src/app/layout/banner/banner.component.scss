@@ -7,12 +7,12 @@
   flex-wrap: wrap !important;
 }
 
-.usa-banner .grid-row.grid-gap-lg>* {
-  padding-left: .75rem;
-  padding-right: .75rem;
+.usa-banner .grid-row.grid-gap-lg > * {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
-@media all and (min-width:40em) {
+@media all and (min-width: 40em) {
   .usa-banner .grid-row .tablet\:grid-col-6 {
     flex: 0 1 auto;
     width: 50%;
@@ -21,7 +21,7 @@
 
 .usa-banner__content {
   p {
-    font-family: karla,sans-serif;
+    font-family: karla, sans-serif;
   }
   margin-left: auto;
   margin-right: auto;
@@ -29,21 +29,21 @@
   background-color: transparent;
   font-size: 1rem;
   overflow: hidden;
-  padding: .25rem 1rem 1rem .5rem;
+  padding: 0.25rem 1rem 1rem 0.5rem;
   width: 100%;
 }
 
-@media all and (min-width:64em) {
+@media all and (min-width: 64em) {
   .usa-banner__content {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 }
 
-@media all and (min-width:40em) {
+@media all and (min-width: 40em) {
   .usa-banner__content {
-    padding-bottom: .5rem;
-    padding-top: .5rem;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
   }
 }
 
@@ -71,23 +71,23 @@
 }
 
 .usa-banner__header {
-  padding-bottom: .4rem;
-  padding-top: .4rem;
+  padding-bottom: 0.4rem;
+  padding-top: 0.4rem;
   min-height: 0;
 }
 
 .usa-banner__header-text {
-  font-family: karla,sans-serif;
+  font-family: karla, sans-serif;
   margin-bottom: 0;
   margin-top: 0;
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1.1;
 }
 
 .usa-banner__header-flag {
-  padding-top: .125rem;
+  padding-top: 0.125rem;
   float: left;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
   width: 1rem;
 }
 
@@ -103,13 +103,13 @@
   display: inline-block;
   height: 1rem;
   width: 1rem;
-  content: "";
+  content: '';
   vertical-align: middle;
   margin-left: px;
 }
 
-.usa-banner__button[aria-expanded=true]::after {
-  background: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain;
+.usa-banner__button[aria-expanded='true']::after {
+  background: url(/assets/img/uswds/expand_less.svg) no-repeat center/contain;
 }
 
 .usa-banner__button-text {
@@ -118,7 +118,7 @@
 
 .usa-banner__icon {
   width: 2.5rem;
-  margin-right: .75rem;
+  margin-right: 0.75rem;
 }
 
 .usa-media-block__body p {

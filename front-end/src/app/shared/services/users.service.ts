@@ -8,12 +8,10 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class UsersService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public getCurrentUser(): Promise<UserLoginData> {
-    return firstValueFrom(
-      this.apiService.get<UserLoginData>(`/users/current/`).pipe(map((response) => response))
-    )
+    return firstValueFrom(this.apiService.get<UserLoginData>(`/users/current/`).pipe(map((response) => response)));
   }
 
   public updateCurrentUser(userLoginData: UserLoginData): Observable<UserLoginData> {

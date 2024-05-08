@@ -6,7 +6,7 @@ describe('PARTNERSHIP_RECEIPT', () => {
 
   beforeEach(() => {
     transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT
+      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
     ).getNewTransaction() as SchATransaction;
   });
 

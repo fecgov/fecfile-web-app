@@ -33,8 +33,8 @@ describe('FeedbackService', () => {
       action: 'test_action',
       feedback: 'test_feedback',
       about: 'test_about',
-      location: 'test_location'
-    }
+      location: 'test_location',
+    };
 
     service.submitFeedback(feedback).then();
     tick(100);

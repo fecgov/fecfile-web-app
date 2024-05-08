@@ -19,14 +19,16 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     const txn = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     );
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
     const transaction = transactionType.getNewTransaction();
     let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Pres. Nominating Convention Account (Partnership attributions do not meet itemization threshold)');
+    expect(descrip).toBe(
+      'Pres. Nominating Convention Account (Partnership attributions do not meet itemization threshold)',
+    );
 
     transaction.children = [transactionType.getNewTransaction()];
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);

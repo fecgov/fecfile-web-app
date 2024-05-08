@@ -79,5 +79,5 @@ export function isPTY(committee_type?: string): boolean {
   return PTY.includes(committee_type);
 }
 
-const PAC = ["O", "U", "D", "N", "Q", "V", "W"];
-const PTY = ["X", "Y"];
+const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];
+const PTY = ['X', 'Y'];

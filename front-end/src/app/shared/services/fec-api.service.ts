@@ -16,7 +16,7 @@ export class FecApiService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
-  ) { }
+  ) {}
 
   getHeaders() {
     return {

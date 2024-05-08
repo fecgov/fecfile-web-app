@@ -1,7 +1,7 @@
-<div class="anchor" [style]="{ 'bottom': formSubmitted ? '860px' : '830px' }" #anchor></div>
+<div class="anchor" [style]="{ bottom: formSubmitted ? '860px' : '830px' }" #anchor></div>
 <p-overlayPanel
   #op
-  [style]="{ 'width': '500px', 'height': formSubmitted ? '850px' : '830px' }"
+  [style]="{ width: '500px', height: formSubmitted ? '850px' : '830px' }"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
   [appendTo]="anchor"
@@ -13,9 +13,8 @@
         <div class="col-12">
           <h3>Post feedback about FECFile anonymously</h3>
           <p class="mb-2">
-            How can we improve FECFile? When you submit your feedback, it will
-            include your comments, browser information, and the URL you were
-            viewing at the time of submission.
+            How can we improve FECFile? When you submit your feedback, it will include your comments, browser
+            information, and the URL you were viewing at the time of submission.
           </p>
         </div>
       </div>
@@ -23,19 +22,11 @@
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <label for="action">WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT? <span>(Required)</span></label>
-              <textarea
-                id="action"
-                [rows]="3"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="action"
-              ></textarea>
-              <app-error-messages
-                [form]="form"
-                fieldName="action"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <label for="action"
+                >WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT? <span>(Required)</span></label
+              >
+              <textarea id="action" [rows]="3" pInputTextarea [autoResize]="true" formControlName="action"></textarea>
+              <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         </div>
@@ -61,22 +52,16 @@
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <label for="about">TELL US ABOUT YOURSELF
-                <br>
-                <span>(Please don't include sensitive information like your name, contact information or Social Security number.)</span>
+              <label for="about"
+                >TELL US ABOUT YOURSELF
+                <br />
+                <span
+                  >(Please don't include sensitive information like your name, contact information or Social Security
+                  number.)</span
+                >
               </label>
-              <textarea
-                id="about"
-                [rows]="3"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="about"
-              ></textarea>
-              <app-error-messages
-                [form]="form"
-                fieldName="about"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <textarea id="about" [rows]="3" pInputTextarea [autoResize]="true" formControlName="about"></textarea>
+              <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         </div>
@@ -99,7 +84,9 @@
           <div class="field text-start">
             <a href="https://www.fec.gov/use-recaptcha/" target="_blank" rel="noopener">Use of reCAPTCHA</a>
             |
-            <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener">Contact the FEC about a specific question</a>
+            <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener"
+              >Contact the FEC about a specific question</a
+            >
           </div>
         </div>
       </div>
@@ -107,11 +94,9 @@
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.SUCCESS">
       <div class="flex">
         <div class="success-verticle-bar"></div>
-        <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%"/>
+        <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%" />
         <div>
-          <h2>
-            Thanks for helping us improve FECFile
-          </h2>
+          <h2>Thanks for helping us improve FECFile</h2>
           <p>This information has been reported.</p>
         </div>
       </div>
@@ -131,24 +116,15 @@
     <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.FAIL">
       <div class="flex">
         <div class="fail-verticle-bar"></div>
-        <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%"/>
+        <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%" />
         <div>
-          <h2>
-            Oops: Something went wrong.
-          </h2>
+          <h2>Oops: Something went wrong.</h2>
           <p>We had trouble processing your feedback.</p>
         </div>
       </div>
       <div class="grid">
         <div class="col-4">
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Try Again"
-            class="p-button-info"
-            (click)="tryAgain()"
-          ></button>
+          <button type="button" pButton pRipple label="Try Again" class="p-button-info" (click)="tryAgain()"></button>
         </div>
       </div>
     </ng-container>

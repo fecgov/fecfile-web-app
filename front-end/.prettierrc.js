@@ -9,8 +9,8 @@ module.exports = {
     {
       files: ['*.json'],
       options: {
-        tabWidth: 4
-      }
-    }
-  ]
+        tabWidth: 4,
+      },
+    },
+  ],
 };

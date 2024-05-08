@@ -17,7 +17,7 @@ describe('FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB30B');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO
+      ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO,
     );
   });
 

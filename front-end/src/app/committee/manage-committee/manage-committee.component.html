@@ -45,14 +45,16 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th id="name-column" pSortableColumn="name" role="columnheader">Name
+        <th id="name-column" pSortableColumn="name" role="columnheader">
+          Name
           <p-sortIcon field="name"></p-sortIcon>
         </th>
         <th id="email-column" pSortableColumn="email" role="columnheader">
           Email
           <p-sortIcon field="email"></p-sortIcon>
         </th>
-        <th id="role-column" pSortableColumn="role" role="columnheader">Role
+        <th id="role-column" pSortableColumn="role" role="columnheader">
+          Role
           <p-sortIcon field="role"></p-sortIcon>
         </th>
         <th id="active-column" pSortableColumn="is_active" role="columnheader">
@@ -101,4 +103,3 @@
 ></app-committee-member-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
-

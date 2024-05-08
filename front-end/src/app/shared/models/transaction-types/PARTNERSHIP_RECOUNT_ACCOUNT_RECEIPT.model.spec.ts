@@ -7,7 +7,7 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT', () => {
 
   beforeEach(() => {
     transaction = getTestTransactionByType(
-      ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT
+      ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
     ) as SchATransaction;
   });
 
