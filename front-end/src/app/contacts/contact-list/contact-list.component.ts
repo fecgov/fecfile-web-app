@@ -10,7 +10,7 @@ import { TableSelectAllChangeEvent } from 'primeng/table';
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
-  styleUrls: ['./contact-list.component.scss']
+  styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
