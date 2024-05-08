@@ -1,4 +1,3 @@
-<p-toast></p-toast>
 <p-toolbar styleClass="mb-4">
   <ng-template pTemplate="left">
     <h1>Manage Users</h1>
@@ -8,100 +7,54 @@
   </ng-template>
 </p-toolbar>
 <p-divider></p-divider>
-<div class="card">
-  <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left">
-      <h1>Existing Users</h1>
-    </ng-template>
-  </p-toolbar>
-
-  <p-table
-    (onLazyLoad)="loadTableItems($event)"
-    (selectAllChange)="onSelectAllChange($event)"
-    (selectionChange)="onSelectionChange($event)"
-    [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-    [lazy]="true"
-    [loading]="loading"
-    [paginator]="true"
-    [rows]="10"
-    [selectAll]="selectAll"
-    [selection]="selectedItems"
-    [showCurrentPageReport]="true"
-    [totalRecords]="totalItems"
-    [value]="items"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
-    dataKey="id"
-    responsiveLayout="scroll"
-    sortField="created"
-    styleClass="p-datatable-striped"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        <h3 class="m-0">Existing Users</h3>
-      </div>
-    </ng-template>
-    <ng-template let-sortOrder pTemplate="sorticon">
-      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr role="row">
-        <th id="name-column" pSortableColumn="name" role="columnheader">
-          Name
-          <p-sortIcon field="name"></p-sortIcon>
-        </th>
-        <th id="email-column" pSortableColumn="email" role="columnheader">
-          Email
-          <p-sortIcon field="email"></p-sortIcon>
-        </th>
-        <th id="role-column" pSortableColumn="role" role="columnheader">
-          Role
-          <p-sortIcon field="role"></p-sortIcon>
-        </th>
-        <th id="active-column" pSortableColumn="is_active" role="columnheader">
-          Status
-          <p-sortIcon field="is_active"></p-sortIcon>
-        </th>
-        <th id="buttons" role="columnheader">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template let-item pTemplate="body">
-      <tr role="row">
-        <td>{{ item.name }}</td>
-        <td>{{ item.email }}</td>
-        <td>{{ item.getRoleLabel() }}</td>
-        <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-        <td>
-          <app-table-actions-button
-            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-            [actionItem]="item"
-            [tableActions]="rowActions"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-          ></app-table-actions-button>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="paginatorleft">
-      <app-results-dropdown [rowsPerPage]="rowsPerPage" (rowsPerPageChange)="onRowsPerPageChange()">
-      </app-results-dropdown>
-    </ng-template>
-    <ng-template pTemplate="paginatorfirstpagelinkicon">
-      <img alt="first page icon" src="/assets/img/first_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="paginatorpreviouspagelinkicon">
-      <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="paginatornextpagelinkicon">
-      <img alt="next page icon" src="/assets/img/next_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="paginatorlastpagelinkicon">
-      <img alt="last page icon" src="/assets/img/last_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <span class="mx-3 d-block w-full">No data available in table</span>
-    </ng-template>
-  </p-table>
-</div>
+<app-table title="Loans and Debts" [items]="items" [totalItems]="totalItems" [loading]="loading" sortField="created"
+  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
+  [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']" [selectedItems]="selectedItems"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+  (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)">
+  <ng-template #toolbar>
+    <p-toolbar styleClass="mb-4">
+      <ng-template pTemplate="left">
+        <h1>Existing Users</h1>
+      </ng-template>
+    </p-toolbar>
+  </ng-template>
+  <ng-template #header>
+    <tr role="row">
+      <th id="name-column" pSortableColumn="name" role="columnheader">
+        Name
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th id="email-column" pSortableColumn="email" role="columnheader">
+        Email
+        <p-sortIcon field="email"></p-sortIcon>
+      </th>
+      <th id="role-column" pSortableColumn="role" role="columnheader">
+        Role
+        <p-sortIcon field="role"></p-sortIcon>
+      </th>
+      <th id="active-column" pSortableColumn="is_active" role="columnheader">
+        Status
+        <p-sortIcon field="is_active"></p-sortIcon>
+      </th>
+      <th id="buttons" role="columnheader">Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template let-item #body>
+    <tr role="row">
+      <td>{{ item.name }}</td>
+      <td>{{ item.email }}</td>
+      <td>{{ item.getRoleLabel() }}</td>
+      <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
+      <td>
+        <app-table-actions-button (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+          [actionItem]="item" [tableActions]="rowActions" buttonIcon="pi pi-ellipsis-v"
+          buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"></app-table-actions-button>
+      </td>
+    </tr>
+  </ng-template>
+</app-table>
 
 <p-confirmDialog #cd [style]="{ width: '450px' }">
   <ng-template pTemplate="footer">
@@ -112,10 +65,5 @@
   </ng-template>
 </p-confirmDialog>
 
-<app-committee-member-dialog
-  (detailClose)="detailVisible = false"
-  (saveMembership)="saveMembership($event)"
-  [(detailVisible)]="detailVisible"
-></app-committee-member-dialog>
-
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<app-committee-member-dialog (detailClose)="detailVisible = false" (saveMembership)="saveMembership($event)"
+  [(detailVisible)]="detailVisible"></app-committee-member-dialog>

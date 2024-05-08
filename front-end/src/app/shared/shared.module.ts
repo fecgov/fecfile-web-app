@@ -60,6 +60,8 @@ import { IndependentExpenditureCreateF3xInputComponent } from './components/inpu
 import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ResultsDropdownComponent } from './components/results-dropdown/results-dropdown.component';
+import { TableComponent } from './components/table/table.component';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   imports: [
@@ -87,6 +89,7 @@ import { ResultsDropdownComponent } from './components/results-dropdown/results-
     RippleModule,
     RouterLink,
     TableModule,
+    ToastModule,
   ],
   declarations: [
     LabelPipe,
@@ -130,6 +133,7 @@ import { ResultsDropdownComponent } from './components/results-dropdown/results-
     SupportOpposeInputComponent,
     SingleClickDirective,
     ResultsDropdownComponent,
+    TableComponent,
   ],
   exports: [
     FecDatePipe,
@@ -170,7 +174,8 @@ import { ResultsDropdownComponent } from './components/results-dropdown/results-
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
-    ResultsDropdownComponent
+    ResultsDropdownComponent,
+    TableComponent,
   ],
   providers: [DatePipe],
 })

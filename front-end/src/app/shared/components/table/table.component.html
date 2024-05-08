@@ -1,0 +1,51 @@
+<div class="card">
+  <ng-container *ngTemplateOutlet="toolbar"></ng-container>
+  <p-table #dt [value]="items" [lazy]="true" (onLazyLoad)="loadTableItems.emit($event)" responsiveLayout="scroll"
+    dataKey="id" [selection]="selectedItems" (selectionChange)="selectionChange.emit($event)" [selectAll]="selectAll"
+    (selectAllChange)="selectAllChange.emit($event)" [paginator]="true" [rows]="10" [totalRecords]="totalItems"
+    [loading]="loading" [globalFilterFields]="globalFilterFields"
+    [currentPageReportTemplate]="currentPageReportTemplate" [sortField]="sortField" [showCurrentPageReport]="true"
+    styleClass="p-datatable-striped">
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h2 class="m-0">{{title}}</h2>
+        <ng-container *ngTemplateOutlet="caption"></ng-container>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <ng-container *ngTemplateOutlet="header"></ng-container>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
+    </ng-template>
+    <ng-template pTemplate="sorticon" let-sortOrder>
+      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+      Results per table:
+      <p-dropdown [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" (onChange)="rowsPerPageChange.emit()">
+        <ng-template pTemplate="dropdownicon">
+          <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+        </ng-template>
+      </p-dropdown>
+    </ng-template>
+    <ng-template pTemplate="paginatorfirstpagelinkicon">
+      <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorpreviouspagelinkicon">
+      <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatornextpagelinkicon">
+      <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="paginatorlastpagelinkicon">
+      <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <span class="mx-3 d-block w-full">No data available in table</span>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
