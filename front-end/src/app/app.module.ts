@@ -124,6 +124,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     InputTextModule,
     InputTextareaModule,
     OverlayPanelModule,
+    SharedModule
   ],
   providers: [
     CookieService,
