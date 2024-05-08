@@ -19,7 +19,7 @@ describe('LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', () => {
     expect(transaction.form_type).toBe('SA13');
     expect(transaction.aggregation_group).toBe(AggregationGroups.GENERAL);
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT
+      ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
     );
   });
 

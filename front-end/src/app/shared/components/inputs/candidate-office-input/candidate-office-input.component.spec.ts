@@ -88,7 +88,7 @@ describe('CandidateOfficeInputComponent', () => {
     expect(districtFormControl?.disabled).toBe(false);
 
     expect(component.candidateDistrictOptions).toEqual(
-      LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels('FL'))
+      LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels('FL')),
     );
   });
 });

@@ -230,10 +230,11 @@ export class CommitteeMemberEmailValidator implements AsyncValidator {
     if (control.value) {
       const existing_members = await this.committeeMemberService.getMembers();
       const emails = existing_members.map((member) => {
-        return member.email;
+        return member.email.toLowerCase();
       });
 
-      if (emails.includes(control.value)) {
+      const newEmail = control.value?.toLowerCase();
+      if (emails.includes(newEmail)) {
         return {
           email: 'taken-in-committee',
         };

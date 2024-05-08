@@ -80,28 +80,4 @@ describe('Form3X', () => {
       expect(form3X.formSubLabel).toEqual('APRIL 15 QUARTERLY REPORT (Q1)');
     });
   });
-
-  describe('versionLabel', () => {
-    it('should return just version label if report version is undefined', () => {
-      const data = {
-        id: '999',
-        form_type: F3xFormTypes.F3XN,
-        committee_name: 'foo',
-        report_version: undefined,
-      };
-      const form3X = Form3X.fromJSON(data);
-      expect(form3X.versionLabel).toEqual('Original');
-    });
-
-    it('should also display report version if defined', () => {
-      const data = {
-        id: '999',
-        form_type: F3xFormTypes.F3XN,
-        committee_name: 'foo',
-        report_version: '1',
-      };
-      const form3X = Form3X.fromJSON(data);
-      expect(form3X.versionLabel).toEqual('Original 1');
-    });
-  });
 });

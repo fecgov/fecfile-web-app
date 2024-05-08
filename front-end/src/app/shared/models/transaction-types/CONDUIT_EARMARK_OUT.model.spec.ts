@@ -26,7 +26,7 @@ describe('CONDUIT_EARMARK_OUT', () => {
 
   it('#generatePurposeDescription() should reflect child', () => {
     const parentTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED
+      ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
     ) as SchATransaction;
     parentTransaction.entity_type = ContactTypes.INDIVIDUAL;
     parentTransaction.contributor_first_name = 'Joe';

@@ -35,9 +35,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 If you need a mock API to begin front end development, you can use the Node server setup within the server directory.
 To start the server you run the command `npm run json-server`.
 
-
-- If on Ubuntu and  Angular CLI stops watching changes suddenly, then increase the notify watches limit on Linux.
+- If on Ubuntu and Angular CLI stops watching changes suddenly, then increase the notify watches limit on Linux.
   - `sudo sysctl fs.inotify.max_user_watches=524288`
   - `sudo sysctl -p --system`
   - From: https://github.com/angular/angular-cli/issues/2356
-

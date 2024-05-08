@@ -19,7 +19,9 @@
     "lint": "sh ./build-scripts/lint.sh",
     "license-report": "./node_modules/.bin/license-checker",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "prettier:check:ci": "./node_modules/.bin/prettier --check .",
+    "prettier:fix": "./node_modules/.bin/prettier --write ."
   },
   "private": true,
   "dependencies": {

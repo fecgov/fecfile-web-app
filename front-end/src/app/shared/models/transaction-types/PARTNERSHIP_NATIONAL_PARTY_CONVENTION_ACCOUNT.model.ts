@@ -11,7 +11,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   );
   schema = schema;
   override subTransactionConfig = [

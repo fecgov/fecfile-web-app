@@ -12,7 +12,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATra
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
   );
   schema = schema;
   override shortName = 'Partnership Receipt';
@@ -20,7 +20,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATra
 
   override subTransactionConfig = new SubTransactionGroup(
     'Partnership Receipt Recount/Legal Proceedings Account JF Transfer Memo',
-    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO]
+    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO],
   );
 
   getNewTransaction() {

@@ -13,7 +13,7 @@ export abstract class SchCTransactionType extends TransactionType {
       return new TransactionNavigationControls(
         this.navigationControls.inlineControls,
         this.navigationControls.cancelControls,
-        [SAVE_LIST_CONTROL]
+        [SAVE_LIST_CONTROL],
       );
     }
     return this.navigationControls;

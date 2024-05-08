@@ -47,7 +47,7 @@ export function runLighthouse(directory: string, filename: string) {
         height: Cypress.config('viewportHeight'),
         deviceScaleRatio: 1,
       },
-    }
+    },
   ).then(() => {
     cy.exec(`mv lighthouse.html cypress/lighthouse/${directory}/${filename}.html`);
   });

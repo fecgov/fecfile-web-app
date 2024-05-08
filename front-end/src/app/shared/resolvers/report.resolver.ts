@@ -9,7 +9,10 @@ import { ReportService } from '../services/report.service';
   providedIn: 'root',
 })
 export class ReportResolver {
-  constructor(private store: Store, private reportService: ReportService) {}
+  constructor(
+    private store: Store,
+    private reportService: ReportService,
+  ) {}
 
   /**
    * Returns the report record for the id passed in the URL

@@ -38,11 +38,11 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
         hasNoContact,
         () => true,
         'pi pi-plus',
-        ControlType.BUTTON
+        ControlType.BUTTON,
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL]
+    [SAVE_LIST_CONTROL],
   );
   contactTypeOptions = INDIVIDUAL;
   schema = schema;

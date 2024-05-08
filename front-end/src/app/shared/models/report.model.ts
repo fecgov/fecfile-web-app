@@ -39,12 +39,11 @@ export abstract class Report extends BaseModel {
   @Transform(BaseModel.dateTransform)
   updated: Date | undefined;
   can_delete = false;
+  version_label?: string;
 
   abstract get formLabel(): string;
 
   abstract get formSubLabel(): string;
-
-  abstract get versionLabel(): string;
 
   abstract get reportLabel(): string;
 

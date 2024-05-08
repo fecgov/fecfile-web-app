@@ -524,5 +524,4 @@ describe('Receipt Transactions', () => {
     });
     PageUtils.clickButton('Cancel');
   });
-  
 });

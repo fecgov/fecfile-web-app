@@ -12,7 +12,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   );
   schema = schema;
   override shortName = 'Partnership Receipt';
@@ -20,7 +20,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
 
   override subTransactionConfig = new SubTransactionGroup(
     'PARTNERSHIP RECEIPT HEADQUARTERS BUILDINGS ACCOUNT JF TRANSFER MEMO',
-    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO]
+    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO],
   );
 
   getNewTransaction() {

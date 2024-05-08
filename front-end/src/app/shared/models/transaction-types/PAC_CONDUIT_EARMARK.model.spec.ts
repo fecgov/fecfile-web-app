@@ -27,7 +27,7 @@ describe('PAC_PAC_CONDUIT_EARMARK', () => {
 
   it('#generatePurposeDescription() should reflect child', () => {
     const childTransaction = getTestTransactionByType(
-      ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT
+      ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT,
     ) as SchBTransaction;
     childTransaction.entity_type = ContactTypes.COMMITTEE;
     childTransaction.payee_organization_name = 'Joe';

@@ -28,6 +28,10 @@ jobs:
           name: Run linter
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
+      - run:
+          name: "Run Prettier with project configuration"
+          command: npm run prettier:check:ci
+          working_directory: ~/project/front-end/
   test:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python

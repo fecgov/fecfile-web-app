@@ -33,9 +33,10 @@ export class FeedbackOverlayComponent {
     private fb: FormBuilder,
     private store: Store,
     public feedbackService: FeedbackService,
-  ) { }
+  ) {}
 
-  show(event: any): void { // eslint-disable-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  show(event: any): void {
     this.reset();
     this.op.show(event, 'anchor');
   }
@@ -55,12 +56,15 @@ export class FeedbackOverlayComponent {
       feedback: this.form.get('feedback')?.value,
       about: this.form.get('about')?.value,
       location: window.location.href,
-    }
-    this.feedbackService.submitFeedback(feedback).then(() => {
-      this.submitStatus = this.SubmissionStatesEnum.SUCCESS;
-    }, () => {
-      this.submitStatus = this.SubmissionStatesEnum.FAIL;
-    });
+    };
+    this.feedbackService.submitFeedback(feedback).then(
+      () => {
+        this.submitStatus = this.SubmissionStatesEnum.SUCCESS;
+      },
+      () => {
+        this.submitStatus = this.SubmissionStatesEnum.FAIL;
+      },
+    );
   }
 
   reset() {
@@ -72,5 +76,4 @@ export class FeedbackOverlayComponent {
   tryAgain() {
     this.submitStatus = this.SubmissionStatesEnum.DRAFT;
   }
-
 }

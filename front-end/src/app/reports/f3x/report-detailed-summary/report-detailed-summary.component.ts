@@ -21,7 +21,7 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
     private store: Store,
     public router: Router,
     private apiService: ApiService,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {
     super();
   }
