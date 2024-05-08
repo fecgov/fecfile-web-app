@@ -74,10 +74,10 @@ export function isPAC(committee_type?: string): boolean {
   return PAC.includes(committee_type);
 }
 
-export function isPTY(committee_type?: string): boolean {
-  if (!committee_type) return false;
-  return PTY.includes(committee_type);
+export function isPTY(committee_type?: string, designation?: string): boolean {
+  if (!committee_type || !designation) return false;
+  if (committee_type === 'Y') return true;
+  return committee_type === 'X' && designation !== 'U';
 }
 
 const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];
-const PTY = ['X', 'Y'];

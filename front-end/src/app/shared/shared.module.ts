@@ -88,7 +88,7 @@ import { SidebarModule } from 'primeng/sidebar';
     RippleModule,
     RouterLink,
     TableModule,
-    SidebarModule
+    SidebarModule,
   ],
   declarations: [
     LabelPipe,
@@ -172,7 +172,7 @@ import { SidebarModule } from 'primeng/sidebar';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
-    DownloadTrayComponent
+    DownloadTrayComponent,
   ],
   providers: [DatePipe],
 })
