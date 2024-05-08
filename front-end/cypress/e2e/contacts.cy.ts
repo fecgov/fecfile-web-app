@@ -13,7 +13,7 @@ describe('Manage contacts', () => {
   it('Create an Individual contact', () => {
     cy.runLighthouse('contacts', 'list');
 
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
@@ -27,7 +27,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Candidate contact', () => {
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
 
     const formData = {
       ...contactFormData,
@@ -51,7 +51,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Committee contact', () => {
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
 
     const formData = {
       ...contactFormData,
@@ -71,7 +71,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create an Organization contact', () => {
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
 
     const formData = {
       ...contactFormData,
@@ -91,7 +91,7 @@ describe('Manage contacts', () => {
   });
 
   it('Empty required fields should display an error message', () => {
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
       ...contactFormData,
       ...{
@@ -114,7 +114,7 @@ describe('Manage contacts', () => {
   });
 
   it('Fields with too a long string should display an error message', () => {
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
       ...contactFormData,
       ...{
