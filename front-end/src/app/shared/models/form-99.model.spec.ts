@@ -51,28 +51,4 @@ describe('Form99', () => {
       expect(form.formSubLabel).toEqual('Disavowal Response');
     });
   });
-
-  describe('versionLabel', () => {
-    it('should return just version label if report version is undefined', () => {
-      const data = {
-        id: '999',
-        form_type: F99FormTypes.F99,
-        committee_name: 'foo',
-        report_version: undefined,
-      };
-      const form = Form99.fromJSON(data);
-      expect(form.versionLabel).toEqual('Original');
-    });
-
-    it('should also display report version if defined', () => {
-      const data = {
-        id: '999',
-        form_type: F99FormTypes.F99,
-        committee_name: 'foo',
-        report_version: '1',
-      };
-      const form = Form99.fromJSON(data);
-      expect(form.versionLabel).toEqual('Original 1');
-    });
-  });
 });

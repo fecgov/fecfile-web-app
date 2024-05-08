@@ -196,9 +196,17 @@ label.disabled {
 
 .add-button {
   color: #212121;
-  font-weight: bold;
   background-color: #f77b42;
+  border-color: #f77b42;
   border: 0;
+  font-weight: 600;
+}
+
+.add-button:hover {
+  background: #F78D5B !important;
+  border-color: #F78D5B !important;
+  color: #212121 !important;
+  font-weight: 600;
 }
 
 // PRIMENG PANELMENU STYLE OVERRIDE
@@ -438,4 +446,8 @@ label.disabled {
 
 table {
   caption-side: top;
+}
+
+.card {
+  border: 0;
 }

@@ -71,7 +71,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   isNotCurrentUser(member: CommitteeMember): boolean {
-    return member.email !== this.currentUserEmail;
+    return member.email.toLowerCase() !== this.currentUserEmail?.toLowerCase();
   }
 
   override async deleteItem(member: CommitteeMember) {

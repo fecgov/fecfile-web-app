@@ -9,9 +9,9 @@
         id="button-contacts-new"
         pButton
         pRipple
-        label="New"
+        label="Add Contact"
         icon="pi pi-plus"
-        class="p-button-success mr-2"
+        class="add-button"
         (click)="addItem()"
       ></button>
       <!--      <p-fileUpload-->
@@ -49,7 +49,7 @@
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
         <h2 class="m-0">Contacts</h2>
-        <p-button label="Restore deleted contact(s)" styleClass="p-button-link" (click)="onRestoreClick()"></p-button>
+        <button pButton pRipple label="Restore deleted contact(s)" class="restore-contact-button" (click)="onRestoreClick()"></button>
       </div>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>

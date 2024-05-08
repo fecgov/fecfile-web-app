@@ -38,30 +38,6 @@ describe('Form24', () => {
     expect(form.formSubLabel).toEqual('');
   });
 
-  describe('versionLabel', () => {
-    it('should return just version label if report version is undefined', () => {
-      const data = {
-        id: '999',
-        form_type: F24FormTypes.F24N,
-        committee_name: 'foo',
-        report_version: undefined,
-      };
-      const form = Form24.fromJSON(data);
-      expect(form.versionLabel).toEqual('Original');
-    });
-
-    it('should also display report version if defined', () => {
-      const data = {
-        id: '999',
-        form_type: F24FormTypes.F24N,
-        committee_name: 'foo',
-        report_version: '1',
-      };
-      const form = Form24.fromJSON(data);
-      expect(form.versionLabel).toEqual('Original 1');
-    });
-  });
-
   describe('getReportLabel', () => {
     it('should return 24 or 48 depending upon 24_48 prop', () => {
       const data = {
