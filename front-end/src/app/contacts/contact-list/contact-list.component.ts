@@ -6,7 +6,7 @@ import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.util
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
-import { firstValueFrom, takeUntil } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
