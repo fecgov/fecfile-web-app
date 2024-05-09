@@ -29,6 +29,15 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'form_type', label: 'Form type' },
+    { field: 'report_code_label', label: 'Type of report' },
+    { field: 'coverage_through_date', label: 'Coverage dates' },
+    { field: 'report_status', label: 'Status' },
+    { field: 'version_label', label: 'Version' },
+    { field: 'upload_submission__created', label: 'Date filed' },
+  ];
+
   constructor(
     override messageService: MessageService,
     override confirmationService: ConfirmationService,

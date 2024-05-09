@@ -4,7 +4,6 @@ import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
 })
 export class TableComponent<T> {
   @Input() title = '';
@@ -16,7 +15,10 @@ export class TableComponent<T> {
   @Input() selectAll = false;
   @Input() selectedItems: T[] = [];
   @Input() currentPageReportTemplate = 'Showing {first} to {last} of {totalRecords} items';
-  @Input() sortField = ""
+  @Input() sortField = '';
+  @Input() sortableHeaders: { field: string; label: string }[] = [];
+  @Input() hasCheckbox = false;
+  @Input() checkboxLabel?: (item: T) => string;
 
   @Output() loadTableItems = new EventEmitter<TableLazyLoadEvent>();
   @Output() selectionChange = new EventEmitter<T[]>();
@@ -25,8 +27,12 @@ export class TableComponent<T> {
 
   paginationPageSizeOptions = [5, 10, 15, 20];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @ContentChild('toolbar') toolbar!: TemplateRef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @ContentChild('caption') caption!: TemplateRef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @ContentChild('header') header!: TemplateRef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @ContentChild('body') body!: TemplateRef<any>;
 }

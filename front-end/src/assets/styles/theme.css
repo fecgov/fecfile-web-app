@@ -2038,6 +2038,11 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #112e51;
   border-color: transparent;
 }
+
+.p-button.p-component.p-button-icon-only.p-button-text:enabled:hover {
+  background: transparent !important;
+}
+
 .p-button.p-button-text:enabled:active {
   background: rgba(0, 123, 255, 0.16);
   color: #112e51;
@@ -3807,10 +3812,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-paginator {
   background: #ffffff;
   color: #112e51;
-  border: solid #d6d7d9;
-  border-width: 0;
+  border-top: 2px solid black;
   padding: 0.75rem;
-  border-radius: 4px;
 }
 
 .p-paginator .p-paginator-first,

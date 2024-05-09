@@ -25,6 +25,14 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.INDIVIDUAL,
   ]);
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'sort_name', label: 'Name' },
+    { field: 'type', label: 'Type' },
+    { field: 'sort_fec_id', label: 'FEC ID' },
+    { field: 'employer', label: 'Employer' },
+    { field: 'occupation', label: 'Occupation' },
+  ];
+
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
@@ -41,7 +49,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   public override addItem() {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
-    this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {

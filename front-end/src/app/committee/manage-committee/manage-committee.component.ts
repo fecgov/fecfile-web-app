@@ -24,6 +24,13 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   public members: Promise<CommitteeMember[]>;
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'name', label: 'Name' },
+    { field: 'email', label: 'Email' },
+    { field: 'role', label: 'Role' },
+    { field: 'is_active', label: 'Status' },
+  ];
+
   constructor(
     override messageService: MessageService,
     override confirmationService: ConfirmationService,

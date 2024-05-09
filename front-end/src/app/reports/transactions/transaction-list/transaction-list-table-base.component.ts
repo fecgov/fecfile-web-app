@@ -170,6 +170,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'line_label_order_key', label: 'Line' },
+    { field: 'transaction_type_identifier', label: 'Type' },
+    { field: 'name', label: 'Name' },
+  ];
+
   protected constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,

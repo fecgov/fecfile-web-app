@@ -10,7 +10,7 @@
 <app-table title="Loans and Debts" [items]="items" [totalItems]="totalItems" [loading]="loading" sortField="created"
   [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']" [selectedItems]="selectedItems"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users" [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
   (selectAllChange)="onSelectAllChange($event)">
   <ng-template #toolbar>
@@ -21,38 +21,18 @@
     </p-toolbar>
   </ng-template>
   <ng-template #header>
-    <tr role="row">
-      <th id="name-column" pSortableColumn="name" role="columnheader">
-        Name
-        <p-sortIcon field="name"></p-sortIcon>
-      </th>
-      <th id="email-column" pSortableColumn="email" role="columnheader">
-        Email
-        <p-sortIcon field="email"></p-sortIcon>
-      </th>
-      <th id="role-column" pSortableColumn="role" role="columnheader">
-        Role
-        <p-sortIcon field="role"></p-sortIcon>
-      </th>
-      <th id="active-column" pSortableColumn="is_active" role="columnheader">
-        Status
-        <p-sortIcon field="is_active"></p-sortIcon>
-      </th>
-      <th id="buttons" role="columnheader">Actions</th>
-    </tr>
+    <th id="buttons" role="columnheader">Actions</th>
   </ng-template>
   <ng-template let-item #body>
-    <tr role="row">
-      <td>{{ item.name }}</td>
-      <td>{{ item.email }}</td>
-      <td>{{ item.getRoleLabel() }}</td>
-      <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-      <td>
-        <app-table-actions-button (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-          [actionItem]="item" [tableActions]="rowActions" buttonIcon="pi pi-ellipsis-v"
-          buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"></app-table-actions-button>
-      </td>
-    </tr>
+    <td>{{ item.name }}</td>
+    <td>{{ item.email }}</td>
+    <td>{{ item.getRoleLabel() }}</td>
+    <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
+    <td>
+      <app-table-actions-button (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        [actionItem]="item" [tableActions]="rowActions" buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"></app-table-actions-button>
+    </td>
   </ng-template>
 </app-table>
 

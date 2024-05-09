@@ -209,6 +209,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
    */
   contactTypeChanged(contactType: ContactTypes) {
     this.contactType = contactType;
+    if (!this.contact) this.contact = new Contact();
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so

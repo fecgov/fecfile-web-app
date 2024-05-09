@@ -59,7 +59,6 @@ import { LinkedReportInputComponent } from './components/inputs/linked-report-in
 import { IndependentExpenditureCreateF3xInputComponent } from './components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { ResultsDropdownComponent } from './components/results-dropdown/results-dropdown.component';
 import { TableComponent } from './components/table/table.component';
 import { ToastModule } from 'primeng/toast';
 
@@ -132,7 +131,6 @@ import { ToastModule } from 'primeng/toast';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
-    ResultsDropdownComponent,
     TableComponent,
   ],
   exports: [
@@ -174,7 +172,6 @@ import { ToastModule } from 'primeng/toast';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
-    ResultsDropdownComponent,
     TableComponent,
   ],
   providers: [DatePipe],

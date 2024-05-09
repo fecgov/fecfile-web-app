@@ -13,10 +13,27 @@
       </div>
     </ng-template>
     <ng-template pTemplate="header">
-      <ng-container *ngTemplateOutlet="header"></ng-container>
+      <tr role="row">
+        <th *ngIf="hasCheckbox" style="width: 3rem" id="header-checkbox" role="columnheader">
+          <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
+        </th>
+        <ng-container *ngIf="sortableHeaders">
+          <th *ngFor="let h of sortableHeaders" [pSortableColumn]="h.field" [id]="h.field + '-column'"
+            role="columnheader">
+            {{ h.label }}
+            <p-sortIcon [field]="h.field"></p-sortIcon>
+          </th>
+        </ng-container>
+        <ng-container *ngTemplateOutlet="header"></ng-container>
+      </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
-      <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
+      <tr role="row">
+        <td *ngIf="hasCheckbox">
+          <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel!(item)"></p-tableCheckbox>
+        </td>
+        <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
+      </tr>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
       <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
