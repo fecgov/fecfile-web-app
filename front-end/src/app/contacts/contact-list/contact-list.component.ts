@@ -6,7 +6,7 @@ import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.util
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
-import { takeUntil } from 'rxjs';
+import { firstValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -40,13 +40,11 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     this.checkForDeletedContacts();
   }
 
-  public checkForDeletedContacts() {
-    return this.deletedContactService
-      .getTableData()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((contactList) => {
-        this.restoreContactsButtonIsVisible = contactList.count > 0;
-      });
+  public async checkForDeletedContacts() {
+    const contactListResponse = await firstValueFrom(this.deletedContactService.getTableData());
+    const deletedContactsExist = contactListResponse.count > 0;
+    this.restoreContactsButtonIsVisible = deletedContactsExist;
+    return deletedContactsExist;
   }
 
   public override loadTableItems(event: TableLazyLoadEvent): void {

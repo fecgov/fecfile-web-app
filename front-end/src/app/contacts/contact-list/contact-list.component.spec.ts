@@ -144,8 +144,7 @@ describe('ContactListComponent', () => {
         results: [contact],
       }),
     );
-    const sub = component.checkForDeletedContacts();
-    await sub;
+    await component.checkForDeletedContacts();
 
     expect(component.restoreContactsButtonIsVisible).toBeTrue();
   });
@@ -162,8 +161,7 @@ describe('ContactListComponent', () => {
         results: [],
       }),
     );
-    const sub = component.checkForDeletedContacts();
-    await sub;
+    await component.checkForDeletedContacts();
 
     expect(component.restoreContactsButtonIsVisible).toBeFalse();
   });
