@@ -12,12 +12,6 @@ export enum F3xFormTypes {
 
 export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
-export const F3xFormVersionLabels: { [key in F3xFormTypes]: string } = {
-  [F3xFormTypes.F3XN]: 'Original',
-  [F3xFormTypes.F3XA]: 'Amendment',
-  [F3xFormTypes.F3XT]: 'Termination',
-};
-
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
@@ -176,10 +170,6 @@ export class Form3X extends Report {
 
   get reportLabel(): string {
     return getReportCodeLabel(this.reportCode) ?? '';
-  }
-
-  get versionLabel() {
-    return `${F3xFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
   static fromJSON(json: unknown): Form3X {

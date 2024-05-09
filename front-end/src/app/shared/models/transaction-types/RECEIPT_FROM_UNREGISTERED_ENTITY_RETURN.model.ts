@@ -11,7 +11,7 @@ export class RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN extends SchATransactionType
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
   );
   schema = schema;
   override negativeAmountValueOnly = true;

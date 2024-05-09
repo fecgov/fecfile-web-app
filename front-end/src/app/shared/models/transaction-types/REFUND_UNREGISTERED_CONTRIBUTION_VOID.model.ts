@@ -11,7 +11,7 @@ export class REFUND_UNREGISTERED_CONTRIBUTION_VOID extends SchBTransactionType {
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID
+    ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
   );
   schema = schema;
   override negativeAmountValueOnly = true;

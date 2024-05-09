@@ -7,7 +7,7 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
 
   beforeEach(() => {
     transaction = getTestTransactionByType(
-      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
+      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
     ) as SchATransaction;
   });
 
@@ -19,7 +19,7 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
+      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
     );
   });
 
@@ -30,7 +30,7 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
 
   it('#generatePurposeDescription() should reflect child', () => {
     const childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT
+      ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT,
     ) as SchATransaction;
     childTransaction.entity_type = ContactTypes.INDIVIDUAL;
     childTransaction.contributor_first_name = 'Joe';

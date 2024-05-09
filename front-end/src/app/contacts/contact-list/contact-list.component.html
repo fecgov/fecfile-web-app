@@ -2,16 +2,16 @@
 
 <div class="card">
   <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left"><h1 class="m-0">Manage Contacts</h1></ng-template>
+    <ng-template pTemplate="left"><h1 class="m-0">Manage contacts</h1></ng-template>
 
     <ng-template pTemplate="right">
       <button
         id="button-contacts-new"
         pButton
         pRipple
-        label="New"
+        label="Add contact"
         icon="pi pi-plus"
-        class="p-button-success mr-2"
+        class="add-button"
         (click)="addItem()"
       ></button>
       <!--      <p-fileUpload-->
@@ -49,7 +49,13 @@
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
         <h2 class="m-0">Contacts</h2>
-        <p-button label="Restore deleted contact(s)" styleClass="p-button-link" (click)="onRestoreClick()"></p-button>
+        <button
+          pButton
+          pRipple
+          label="Restore deleted contact(s)"
+          class="restore-contact-button"
+          (click)="onRestoreClick()"
+        ></button>
       </div>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
@@ -61,7 +67,8 @@
           Name
           <p-sortIcon field="sort_name"></p-sortIcon>
         </th>
-        <th pSortableColumn="type" id="type-column" role="columnheader">Type
+        <th pSortableColumn="type" id="type-column" role="columnheader">
+          Type
           <p-sortIcon field="type"></p-sortIcon>
         </th>
         <th pSortableColumn="sort_fec_id" id="fec-id-column" role="columnheader">

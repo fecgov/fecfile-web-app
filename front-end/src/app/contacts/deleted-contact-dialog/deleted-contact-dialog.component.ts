@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -20,7 +29,7 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    public override itemService: DeletedContactService
+    public override itemService: DeletedContactService,
   ) {
     super(messageService, confirmationService, elementRef);
   }

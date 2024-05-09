@@ -60,7 +60,8 @@ label {
   margin-bottom: 8px;
 }
 
-:host ::ng-deep .dropdown-toggle, .dropdown > ul {
+:host ::ng-deep .dropdown-toggle,
+.dropdown > ul {
   width: 100% !important;
 }
 
@@ -88,7 +89,7 @@ label {
 }
 
 .hover {
-  cursor: pointer
+  cursor: pointer;
 }
 
 .option {

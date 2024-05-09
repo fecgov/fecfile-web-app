@@ -34,6 +34,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
+  accordionActiveIndex = 0; // Value determines which accordion pane to open by default
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -84,6 +85,11 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
+    // Determine which accordion pane to open initially based on transaction id in page URL
+    const transactionId = this.activatedRoute.snapshot.params['transactionId'];
+    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
+      this.accordionActiveIndex = 1;
+    }
   }
 
   override ngOnDestroy(): void {

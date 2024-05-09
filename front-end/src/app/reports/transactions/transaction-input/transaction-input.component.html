@@ -31,13 +31,13 @@
   <ng-container *ngIf="this.form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
     <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-name-input>
   </ng-container>
-  <hr class="solid">
+  <hr class="solid" />
   <app-section-header [isSingle]="isSingle" text="Address"></app-section-header>
   <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
   <ng-container
     *ngIf="transactionType?.hasEmployeeFields() && form.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
   >
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Employer"></app-section-header>
     <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-employer-input>
   </ng-container>
@@ -45,9 +45,11 @@
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   </ng-container>
   <ng-container *ngIf="transaction?.transactionType?.hasAmountInput">
-    <hr class="solid">
-    <app-section-header [isSingle]="isSingle"
-                        [text]="transaction?.transactionType?.amountInputHeader"></app-section-header>
+    <hr class="solid" />
+    <app-section-header
+      [isSingle]="isSingle"
+      [text]="transaction?.transactionType?.amountInputHeader"
+    ></app-section-header>
     <app-amount-input
       [activeReport$]="activeReport$"
       [form]="form"
@@ -62,9 +64,11 @@
     ></app-amount-input>
   </ng-container>
   <ng-container *ngIf="transaction?.transactionType?.hasDebtInput">
-    <hr class="solid">
-    <app-section-header [isSingle]="isSingle"
-                        [text]="transaction?.transactionType?.debtInputHeader"></app-section-header>
+    <hr class="solid" />
+    <app-section-header
+      [isSingle]="isSingle"
+      [text]="transaction?.transactionType?.debtInputHeader"
+    ></app-section-header>
     <app-debt-input
       [form]="form"
       [formSubmitted]="formSubmitted"
@@ -73,7 +77,7 @@
     ></app-debt-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.amountInputHeader"></app-section-header>
     <app-loan-info-input
       [form]="form"
@@ -84,7 +88,7 @@
     ></app-loan-info-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanTermsFields() && !transactionType?.hasLoanAgreement">
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Terms"></app-section-header>
     <app-loan-terms-input
       [form]="form"
@@ -94,7 +98,7 @@
     ></app-loan-terms-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasLoanAgreement">
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Loan information"></app-section-header>
     <app-loan-agreement-input
       [form]="form"
@@ -108,7 +112,7 @@
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasAdditionalInfo">
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Additional information"></app-section-header>
     <app-additional-info-input
       [form]="form"
@@ -118,8 +122,8 @@
     ></app-additional-info-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasSignature1()">
-    <hr class="solid">
-    <app-section-header [isSingle]="isSingle" [text]=" transactionType.signatoryOneHeader"></app-section-header>
+    <hr class="solid" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType.signatoryOneHeader"></app-section-header>
     <app-signature-input
       [form]="form"
       [formSubmitted]="formSubmitted"
@@ -129,8 +133,8 @@
     ></app-signature-input>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasSignature2()">
-    <hr class="solid">
-    <app-section-header [isSingle]="isSingle" [text]=" transactionType.signatoryTwoHeader"></app-section-header>
+    <hr class="solid" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType.signatoryTwoHeader"></app-section-header>
     <app-signature-input
       [form]="form"
       [formSubmitted]="formSubmitted"
@@ -140,7 +144,7 @@
     ></app-signature-input>
   </ng-container>
   <ng-container *ngIf="transactionType.getFooter(transaction)">
-    <hr class="solid">
+    <hr class="solid" />
     <div class="grid">
       <span style="font-style: italic">
         <b>{{ transactionType.getFooter(transaction) }}</b>
@@ -151,7 +155,7 @@
 
 <ng-template #candidateInfo>
   <ng-container *ngIf="transactionType?.hasCommitteeOrCandidateInformation()">
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.committeeCandidateHeader"></app-section-header>
     <ng-container *ngIf="!transactionType?.contact3IsRequired">
       <app-committee-input
@@ -192,7 +196,7 @@
     <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation(form)">
       <ng-container *ngIf="!transactionType?.hideContactLookup">
         <label for="contact_2"
-        >LOOKUP
+          >LOOKUP
           <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container>
         </label>
         <app-transaction-contact-lookup
@@ -216,7 +220,7 @@
     </ng-container>
   </ng-container>
   <ng-container *ngIf="transactionType?.hasElectionInformation()">
-    <hr class="solid">
+    <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Election information"></app-section-header>
     <app-election-input
       [transaction]="transaction"

@@ -7,7 +7,11 @@ import { ReportService } from './report.service';
   providedIn: 'root',
 })
 export class WebPrintService {
-  constructor(private apiService: ApiService, private reportService: ReportService, private store: Store) {}
+  constructor(
+    private apiService: ApiService,
+    private reportService: ReportService,
+    private store: Store,
+  ) {}
 
   /**
    * Gets the print-status of a report.

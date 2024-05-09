@@ -8,7 +8,7 @@ import { EARMARK } from './common-types/EARMARK.model';
 export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends EARMARK {
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
+    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
   );
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT];

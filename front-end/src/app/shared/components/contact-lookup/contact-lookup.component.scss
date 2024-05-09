@@ -1,5 +1,4 @@
 :host ::ng-deep {
-
   .dropdown-with-search .p-dropdown {
     border-radius: 4px 0 0 4px;
   }
@@ -9,8 +8,8 @@
   }
 
   .p-dropdown {
-    border-color: #AEB0B5;
-    background-color: #EEEEEE;
+    border-color: #aeb0b5;
+    background-color: #eeeeee;
   }
 
   .p-dropdown-label {
@@ -20,7 +19,7 @@
   .p-autocomplete-input {
     border-radius: 0 4px 4px 0;
     border-left: 0px;
-    border-color: #AEB0B5;
+    border-color: #aeb0b5;
   }
 
   .p-button-icon-only {
@@ -36,7 +35,6 @@
   .readonly {
     pointer-events: none;
   }
-
 }
 
 .ng-submitted .transaction-contact-invalid :host ::ng-deep .p-autocomplete-input {

@@ -11,7 +11,7 @@ export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType 
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT
+    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;

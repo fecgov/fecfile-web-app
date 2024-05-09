@@ -7,7 +7,7 @@ describe('INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
   beforeEach(() => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
-      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
@@ -20,7 +20,7 @@ describe('INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
+      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     );
   });
 
