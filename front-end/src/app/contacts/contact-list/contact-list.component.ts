@@ -40,8 +40,8 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     this.checkForDeletedContacts();
   }
 
-  protected checkForDeletedContacts() {
-    this.deletedContactService
+  public checkForDeletedContacts() {
+    return this.deletedContactService
       .getTableData()
       .pipe(takeUntil(this.destroy$))
       .subscribe((contactList) => {
