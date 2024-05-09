@@ -1,4 +1,5 @@
-import { TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
+import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { PACRestricted, PTYRestricted, TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
 
 describe('LabelUtils', () => {
   it('should create an instance', () => {
@@ -26,5 +27,25 @@ describe('LabelUtils', () => {
     testJSON.transaction_type_identifier = 'INDEPENDENT_EXPENDITURE';
     scheduleObject = getFromJSON(testJSON);
     expect(scheduleObject.constructor.name).toBe('SchETransaction');
+  });
+
+  it('should return list of Transaction Types PAC does not need access to', () => {
+    [
+      ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ].forEach((r) => {
+      expect(PACRestricted().includes(r));
+    });
+  });
+
+  it('should return list of Transaction Types PTY does not need access to', () => {
+    [
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+      ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+      ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+    ].forEach((r) => {
+      expect(PTYRestricted().includes(r));
+    });
   });
 });

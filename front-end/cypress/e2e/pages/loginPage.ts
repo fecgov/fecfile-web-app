@@ -76,10 +76,13 @@ function legacyLogin() {
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');
   cy.wait('@GetLoggedIn');
-  cy.get('button').contains('Consent').click();
+  cy.visit('/login/security-notice');
+  cy.get('.p-checkbox-box').click();
+  cy.get('[data-test="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
+  cy.visit('/dashboard');
 }
 
 function retrieveAuthToken() {
@@ -92,4 +95,12 @@ export function Initialize() {
   LoginPage.login();
   ReportListPage.deleteAllReports();
   ContactListPage.deleteAllContacts();
+}
+
+export function setCommitteeType(committeeType = 'O') {
+  const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
+  if (!fecfile_online_committeeAccount) return;
+  const json = JSON.parse(fecfile_online_committeeAccount);
+  json.committee_type = committeeType;
+  localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
 }

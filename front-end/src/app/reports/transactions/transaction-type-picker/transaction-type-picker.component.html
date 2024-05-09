@@ -1,19 +1,24 @@
 <h1>{{ this.title }}</h1>
 <p *ngIf="this.debtId">Select the proper transaction type below to report this debt repayment.</p>
 <p-accordion muiltiple="false">
-  <p-accordionTab *ngFor="let transactionGroup of getTransactionGroups()" [header]="transactionGroup">
-    <div class="grid">
-      <div class="col-12" *ngFor="let transactionType of getTransactionTypes(transactionGroup)">
-        <a
-          *ngIf="!isTransactionDisabled(transactionType); else elseBlock"
-          [routerLink]="getRouterLink(transactionType)"
-          [queryParams]="debtId ? { debt: debtId } : undefined"
-          >{{ transactionType | label : transactionTypeLabels }}</a
-        >
-        <ng-template #elseBlock>
-          <div class="disabled">{{ transactionType | label : transactionTypeLabels }}</div></ng-template
-        >
+  <ng-container *ngFor="let transactionGroup of getTransactionGroups()">
+    <p-accordionTab [header]="transactionGroup" *ngIf="hasTransactions(transactionGroup)">
+      <div class="grid">
+        <div class="col-12" *ngFor="let transactionType of getTransactionTypes(transactionGroup)">
+          <a
+            *ngIf="!isTransactionDisabled(transactionType); else elseBlock"
+            [routerLink]="getRouterLink(transactionType)"
+            [queryParams]="debtId ? { debt: debtId } : undefined"
+          >
+            {{ transactionType | label: transactionTypeLabels }}
+          </a>
+          <ng-template #elseBlock>
+            <div class="disabled">
+              {{ transactionType | label: transactionTypeLabels }}
+            </div>
+          </ng-template>
+        </div>
       </div>
-    </div>
-  </p-accordionTab>
+    </p-accordionTab>
+  </ng-container>
 </p-accordion>

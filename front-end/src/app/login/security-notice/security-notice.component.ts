@@ -53,17 +53,15 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
       this.store.dispatch(singleClickEnableAction());
       return;
     }
-
-    const one_day_ahead = new Date();
-    one_day_ahead.setDate(one_day_ahead.getDate() + 1);
-    const one_year_ahead = new Date();
-    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
-    const updatedUserLoginData: UserLoginData = {
-      ...this.userLoginData,
-      security_consent_exp_date: DateUtils.convertDateToFecFormat(
-        this.form.get('security-consent-annual')?.value ? one_year_ahead : one_day_ahead
-      ) as string,
-    };
+    const updatedUserLoginData = { ...this.userLoginData };
+    if (this.form.get('security-consent-annual')?.value) {
+      const one_year_ahead = new Date();
+      one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
+      updatedUserLoginData.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_year_ahead) as string;
+    } else {
+      updatedUserLoginData.temporary_security_consent = true;
+      updatedUserLoginData.security_consent_exp_date = undefined;
+    }
 
     this.usersService
       .updateCurrentUser(updatedUserLoginData)

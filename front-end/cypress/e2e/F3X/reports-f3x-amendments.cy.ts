@@ -1,5 +1,5 @@
 import { defaultFormData as contactFormData } from '../models/ContactFormModel';
-import { defaultFormData as reportFormData } from '../models/ReportFormModel';
+import { defaultForm3XData as reportFormData } from '../models/ReportFormModel';
 import { ContactListPage } from '../pages/contactListPage';
 import { F3xCreateReportPage } from '../pages/f3xCreateReportPage';
 import { PageUtils } from '../pages/pageUtils';
@@ -11,7 +11,8 @@ describe('Amendments', () => {
     Initialize();
   });
 
-  xit('should test Create an amendment', () => {
+  it('should test Create an amendment', () => {
+    
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
     const formData = {
@@ -25,7 +26,9 @@ describe('Amendments', () => {
 
     // Create report to add loan too
     ReportListPage.goToPage();
-    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.coverageCall();
+    ReportListPage.clickCreateAndSelectForm('F3X');
+    F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(reportFormData);
     PageUtils.clickButton('Save and continue');
 
@@ -40,8 +43,8 @@ describe('Amendments', () => {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickLink('Submit report');
     PageUtils.urlCheck('/submit/step2');
-    PageUtils.enterValue('#filingPassword', ''); // Insert password from env variable
-    cy.get(alias).find('p-checkbox[inputid="userCertified"]').click();
+    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD')); // Insert password from env variable
+    cy.get(alias).find('.p-checkbox-box').first().click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
 

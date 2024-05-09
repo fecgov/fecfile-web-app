@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map, Observable } from 'rxjs';
+import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
-import { Candidate } from '../models/candidate.model';
 import { FecFiling } from '../models/fec-filing.model';
 import { ApiService } from './api.service';
 
@@ -16,7 +16,7 @@ export class FecApiService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService,
-  ) {}
+  ) { }
 
   getHeaders() {
     return {
@@ -33,11 +33,7 @@ export class FecApiService {
     if (!candidate_id) {
       throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
     }
-    return this.apiService
-      .get<FecApiPaginatedResponse>('/contacts/candidate/', {
-        candidate_id,
-      })
-      .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as Candidate) || undefined));
+    return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
   }
 
   /**

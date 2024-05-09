@@ -64,7 +64,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   constructor(
     private contactService: ContactService,
-    private fecApiService: FecApiService,
+    public fecApiService: FecApiService,
   ) {
     super();
   }
@@ -165,17 +165,18 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
     if (data.candidate_id) {
       this.fecApiService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
-        // TODO: fix once we get info from api and set all names below properly
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
           Contact.fromJSON({
             type: ContactTypes.CANDIDATE,
             candidate_id: candidate.candidate_id,
-            last_name: nameSplit?.[0],
-            first_name: nameSplit?.[1],
-            middle_name: '',
-            prefix: '',
-            suffix: '',
+            last_name: (candidate.candidate_first_name && candidate.candidate_last_name ?
+              candidate.candidate_last_name : nameSplit?.[0]), // namesplit to account for paper filers
+            first_name: (candidate.candidate_first_name && candidate.candidate_last_name ?
+              candidate.candidate_first_name : nameSplit?.[1]), // namesplit to account for paper filers
+            middle_name: candidate.candidate_middle_name,
+            prefix: candidate.candidate_prefix,
+            suffix: candidate.candidate_suffix,
             street_1: candidate.address_street_1,
             street_2: candidate.address_street_2,
             city: candidate.address_city,

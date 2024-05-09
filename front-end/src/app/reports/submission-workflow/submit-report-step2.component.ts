@@ -19,6 +19,7 @@ import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs'
 @Component({
   selector: 'app-submit-report-step2',
   templateUrl: './submit-report-step2.component.html',
+  styleUrls: ['./submit-report-step2.component.scss'],
 })
 export class SubmitReportStep2Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
@@ -140,6 +141,12 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     });
     if (payload instanceof Form3X) {
       payload.qualified_committee = this.form3XService.isQualifiedCommittee(this.committeeAccount);
+      payload.committee_name = this.committeeAccount?.name;
+      payload.street_1 = this.committeeAccount?.street_1;
+      payload.street_2 = this.committeeAccount?.street_2;
+      payload.city = this.committeeAccount?.city;
+      payload.state = this.committeeAccount?.state;
+      payload.zip = this.committeeAccount?.zip;
     }
 
     return this.reportService.update(payload, this.formProperties);

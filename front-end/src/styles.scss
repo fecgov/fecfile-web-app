@@ -1,13 +1,12 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
 
-
 p {
   max-width: 100%;
   line-height: 1.5;
 }
 
 hr {
-  margin: .5rem .5rem 1rem 0;
+  margin: 0.5rem 0 1rem 0;
   color: inherit;
   border: 0;
   border-top: 2px solid;
@@ -118,12 +117,30 @@ label.disabled {
 }
 
 .font-karla {
-  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family:
+    karla,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 .font-karla-bold {
-  font-family: karla-bold, karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-  Segoe UI Symbol;
+  font-family:
+    karla-bold,
+    karla,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 .fec-background-gradient {

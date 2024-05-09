@@ -3,7 +3,7 @@ import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData, organizationFormData } from '../models/ContactFormModel';
+import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './start-transaction/start-transaction';
@@ -17,7 +17,7 @@ const scheduleData = {
   },
 };
 
-describe('Transactions', () => {
+describe('Receipt Transactions', () => {
   beforeEach(() => {
     Initialize();
   });
@@ -50,41 +50,6 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(scheduleData);
 
     cy.runLighthouse('reports', 'single-transaction');
-  });
-
-  it('Create an Other Disbursement transaction', () => {
-    F3XSetup();
-    StartTransaction.Disbursements().Other().Other();
-
-    PageUtils.clickLink('Create a new contact');
-    const formContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Organization' },
-    };
-    ContactListPage.enterFormData(formContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const formTransactionData = {
-      ...scheduleData,
-      ...{ amount: 200.01, category_code: '005 Polling Expenses' },
-    };
-    TransactionDetailPage.enterScheduleFormData(formTransactionData);
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue');
-
-    cy.get('tr').should('contain', 'Other Disbursement');
-    cy.get('tr').should('not.contain', 'Unitemized');
-    cy.get('tr').should('contain', formContactData.name);
-    cy.get('tr').should('contain', PageUtils.dateToString(formTransactionData.date_received));
-    cy.get('tr').should('contain', '$' + formTransactionDataForSchedule.amount);
-
-    // Check values of edit form
-    PageUtils.clickLink('Other Disbursement');
-    cy.get('#entity_type_dropdown > div.readonly').should('exist');
-    cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData(formTransactionDataForSchedule);
   });
 
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
@@ -286,41 +251,6 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData(transactionFormData);
-  });
-
-  it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    F3XSetup({ organization: true });
-    StartTransaction.Disbursements().Federal().CreditCardPayment();
-
-    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));
-    cy.contains(organizationFormData.name).should('exist');
-    cy.contains(organizationFormData.name).click();
-
-    const transactionFormData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        electionType: 'General',
-        electionYear: 2024,
-        election_other_description: PageUtils.randomString(10),
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 4 - 1, 27),
-      },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
-    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
-
-    cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('contain', organizationFormData['name']);
-    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData.date_received));
-    cy.get('tr').should('contain', '$' + transactionFormData.amount);
-
-    // Check values of edit form
-    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-    cy.get('#entity_type_dropdown > div.readonly').should('exist');
-    cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    ContactListPage.assertFormData(organizationFormData, true);
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
@@ -594,4 +524,5 @@ describe('Transactions', () => {
     });
     PageUtils.clickButton('Cancel');
   });
+  
 });

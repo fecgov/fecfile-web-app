@@ -36,12 +36,6 @@ export class Form99 extends Report {
     return `${F99FormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  committee_name: string | undefined;
-  street_1: string | undefined;
-  street_2: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  zip: string | undefined;
   treasurer_last_name: string | undefined;
   treasurer_first_name: string | undefined;
   treasurer_middle_name: string | undefined;

@@ -1,0 +1,68 @@
+.success-verticle-bar {
+  border-left: 6px solid #35bdbb;
+  height: 100px;
+}
+
+.fail-verticle-bar {
+  border-left: 6px solid #aeb0b5;
+  height: 100px;
+}
+
+.p-button-info {
+  color: black;
+}
+
+.p-button-info:enabled:hover {
+  color: black;
+}
+
+.anchor {
+  height: 0px;
+  right: 532px;
+  z-index: 1000;
+  position: fixed;
+}
+
+:host ::ng-deep {  
+  p, span, a {
+    font-size: 14px;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  span {
+    font-weight: normal;
+  }
+  
+  .close-icon {
+    right: 50px;
+    top: 50px;
+  }
+
+  .p-overlaypanel .p-overlaypanel-close {
+    right: 0.5rem;
+    top: 0.5rem;
+    background: transparent;
+    transform: scale(1.5);
+  }
+
+  .p-overlaypanel .p-overlaypanel-close:hover {
+    background: transparent;
+  }
+
+  .p-overlaypanel {
+    background: #f1f1f1;
+  }
+
+  .p-overlaypanel .p-overlaypanel-content {
+    padding-top: 2.5rem;
+  }
+
+  .p-overlaypanel .p-overlaypanel-content * {
+    font-family: karla, sans-serif;   
+  }
+
+}
+

@@ -49,18 +49,17 @@ describe('SecurityNoticeComponent', () => {
   it('should submit', () => {
     const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(of(testUserLoginData));
     component.signConsentForm();
-    const expectedRetval = testUserLoginData;
+    const expectedUserLoginData = testUserLoginData;
 
-    const one_day_ahead = new Date();
-    one_day_ahead.setDate(one_day_ahead.getDate() + 1);
-    expectedRetval.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_day_ahead) as string;
-    expect(spy).toHaveBeenCalledOnceWith(expectedRetval);
+    expectedUserLoginData.security_consent_exp_date = undefined;
+    expectedUserLoginData.temporary_security_consent = true;
+    expect(spy).toHaveBeenCalledOnceWith(expectedUserLoginData);
 
     const one_year_ahead = new Date();
     one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
-    expectedRetval.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_year_ahead) as string;
+    expectedUserLoginData.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_year_ahead) as string;
     component.form.get('security-consent-annual')?.setValue(true);
     component.signConsentForm();
-    expect(spy).toHaveBeenCalledWith(expectedRetval);
+    expect(spy).toHaveBeenCalledWith(expectedUserLoginData);
   });
 });

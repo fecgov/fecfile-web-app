@@ -33,6 +33,10 @@ describe('Manage contacts', () => {
       ...contactFormData,
       ...{
         contact_type: 'Candidate',
+        candidate_id: 'H0VA00001',
+        candidate_office: 'House',
+        candidate_state: 'Virginia',
+        candidate_district: '01',
       },
     };
     ContactListPage.enterFormData(formData);

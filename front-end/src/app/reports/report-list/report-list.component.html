@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" data-cy="report-list-component">
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left"><span class="title1">Manage reports</span></ng-template>
 
@@ -7,6 +7,7 @@
         pButton
         pRipple
         label="Create a new report"
+        data-cy="create-report"
         icon="pi pi-plus"
         class="mr-2 add-button"
         (click)="showDialog()"
@@ -28,6 +29,7 @@
     [loading]="loading"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
     [showCurrentPageReport]="true"
+    styleClass="p-datatable-striped"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -72,9 +74,8 @@
         <td>{{ item.reportLabel }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
-          >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
-          </ng-container
-          >
+            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+          </ng-container>
         </td>
         <td>{{ item.report_status }}</td>
         <td>{{ item.versionLabel }}</td>

@@ -44,12 +44,6 @@ export class Form1M extends Report {
     return `${F1MFormVersionLabels[this.form_type]} ${this.report_version ?? ''}`.trim();
   }
 
-  committee_name?: string;
-  street_1?: string;
-  street_2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;

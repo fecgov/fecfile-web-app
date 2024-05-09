@@ -1,18 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
-import { of } from 'rxjs';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SharedModule } from 'app/shared/shared.module';
-import { ContactService } from 'app/shared/services/contact.service';
-import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { DropdownModule } from 'primeng/dropdown';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { DialogModule } from 'primeng/dialog';
-import { ContactLookupComponent } from './contact-lookup.component';
-import { LabelPipe } from '../../pipes/label.pipe';
-import { LabelUtils } from 'app/shared/utils/label.utils';
+import { Candidate } from 'app/shared/models/candidate.model';
 import {
   CandidateLookupResponse,
   CandidateOfficeTypes,
@@ -20,14 +12,27 @@ import {
   Contact,
   ContactTypeLabels,
   ContactTypes,
+  FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
   FecfileCandidateLookupData,
   FecfileCommitteeLookupData,
   FecfileIndividualLookupData,
   FecfileOrganizationLookupData,
   IndividualLookupResponse,
-  OrganizationLookupResponse,
+  OrganizationLookupResponse
 } from 'app/shared/models/contact.model';
+import { ContactService } from 'app/shared/services/contact.service';
+import { FecApiService } from 'app/shared/services/fec-api.service';
+import { SharedModule } from 'app/shared/shared.module';
+import { LabelUtils } from 'app/shared/utils/label.utils';
+import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { SelectItem } from 'primeng/api';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { of } from 'rxjs';
+import { LabelPipe } from '../../pipes/label.pipe';
+import { ContactLookupComponent } from './contact-lookup.component';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -47,7 +52,14 @@ describe('ContactLookupComponent', () => {
         AutoCompleteModule,
         SharedModule,
       ],
-      providers: [FormBuilder, ContactService, EventEmitter, provideMockStore(testMockStore)],
+      providers: [
+        FormBuilder,
+        ContactService,
+        FecApiService,
+        EventEmitter,
+        provideMockStore(testMockStore),
+        HttpClient,
+      ],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
@@ -121,7 +133,7 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-        JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true)),
+      JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true)),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -183,7 +195,7 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     expect(
       JSON.stringify(component.contactLookupList) ===
-        JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
+      JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -257,7 +269,7 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(
       JSON.stringify(component.contactLookupList) ===
-        JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups()),
+      JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups()),
     ).toBeTrue();
     expect(
       JSON.stringify([
@@ -280,6 +292,100 @@ describe('ContactLookupComponent', () => {
     component.onContactSelect(testContact);
     tick(500);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testContact);
+  }));
+
+  it('#onFecApiCandidateLookupDataSelect candidate name only', fakeAsync(() => {
+    const testCandidate = Candidate.fromJSON({
+      candidate_id: 'P80000722',
+      name: 'BIDEN, JOSEPH R JR',
+    });
+    const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
+    const getCandidateDetailsSpy = spyOn(component.fecApiService,
+      'getCandidateDetails').and.returnValue(of(testCandidate));
+    const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
+      candidate_id: 'P80000722',
+      office: 'P',
+      name: 'BIDEN, JOSEPH R JR',
+      toSelectItem(): SelectItem<FecApiCandidateLookupData> {
+        return {
+          label: `${this.name} (${this.candidate_id})`,
+          value: this,
+        };
+      }
+    }
+    component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
+    tick(500);
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(
+      testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+      Contact.fromJSON({
+        type: ContactTypes.CANDIDATE,
+        candidate_id: 'P80000722',
+        last_name: 'BIDEN',
+        first_name: 'JOSEPH R JR',
+        middle_name: undefined,
+        prefix: undefined,
+        suffix: undefined,
+        street_1: undefined,
+        street_2: undefined,
+        city: undefined,
+        state: undefined,
+        zip: undefined,
+        employer: '',
+        occupation: '',
+        candidate_office: undefined,
+        candidate_state: undefined,
+        candidate_district: undefined,
+      }));
+  }));
+
+  it('#onFecApiCandidateLookupDataSelect candidate last_name and first_name', fakeAsync(() => {
+    const testCandidate = Candidate.fromJSON({
+      candidate_id: 'P80000722',
+      candidate_first_name: 'test_candidate_first_name',
+      candidate_last_name: 'test_candidate_last_name',
+      candidate_middle_name: 'test_candidate_middle_name',
+      candidate_prefix: 'test_candidate_prefix',
+      candidate_suffix: 'test_candidate_suffix',
+    });
+    const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
+    const getCandidateDetailsSpy = spyOn(component.fecApiService,
+      'getCandidateDetails').and.returnValue(of(testCandidate));
+    const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
+      candidate_id: 'P80000722',
+      office: 'P',
+      name: 'BIDEN, JOSEPH R JR',
+      toSelectItem(): SelectItem<FecApiCandidateLookupData> {
+        return {
+          label: `${this.name} (${this.candidate_id})`,
+          value: this,
+        };
+      }
+    }
+    component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
+    tick(500);
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(
+      testFecApiCandidateLookupData.candidate_id!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+      Contact.fromJSON({
+        type: ContactTypes.CANDIDATE,
+        candidate_id: 'P80000722',
+        last_name: 'test_candidate_last_name',
+        first_name: 'test_candidate_first_name',
+        middle_name: 'test_candidate_middle_name',
+        prefix: 'test_candidate_prefix',
+        suffix: 'test_candidate_suffix',
+        street_1: undefined,
+        street_2: undefined,
+        city: undefined,
+        state: undefined,
+        zip: undefined,
+        employer: '',
+        occupation: '',
+        candidate_office: undefined,
+        candidate_state: undefined,
+        candidate_district: undefined,
+      }));
   }));
 
   it('#onCreateNewContactSelect Contact happy path', fakeAsync(() => {

@@ -1,4 +1,5 @@
-import { currentYear, PageUtils } from '../pages/pageUtils';
+import { faker } from '@faker-js/faker';
+import { currentYear } from '../pages/pageUtils';
 
 export class ScheduleFormData {
   amount: number;
@@ -31,9 +32,9 @@ export const defaultScheduleFormData: ScheduleFormData = {
   electionType: 'G',
   electionYear: 2022,
   election_other_description: '',
-  purpose_description: PageUtils.randomString(20),
+  purpose_description: faker.lorem.sentence({ min: 1, max: 4 }),
   memo_code: false,
-  memo_text: PageUtils.randomString(20),
+  memo_text: faker.lorem.sentence({ min: 1, max: 4 }),
 };
 
 export class ContributionFormData extends ScheduleFormData {
@@ -131,15 +132,15 @@ export const defaultDebtFormData: DebtFormData = {
   memo_code: false,
   memo_text: '',
   others_liable: '',
-  purpose_description: PageUtils.randomString(20),
+  purpose_description: faker.lorem.sentence({ min: 1, max: 4 }),
   secured: undefined,
 };
 
 export const defaultLoanFormData: LoanFormData = {
   amount: 60000,
-  authorized_first_name: PageUtils.randomString(6),
-  authorized_last_name: PageUtils.randomString(6),
-  authorized_title: PageUtils.randomString(6),
+  authorized_first_name: faker.person.firstName(),
+  authorized_last_name: faker.person.lastName(),
+  authorized_title: faker.person.jobDescriptor(),
   category_code: '',
   collateral: 'NO',
   date_incurred: new Date(currentYear, 4 - 1, 27),
@@ -150,17 +151,17 @@ export const defaultLoanFormData: LoanFormData = {
   electionType: undefined,
   electionYear: undefined,
   election_other_description: '',
-  first_name: PageUtils.randomString(6),
+  first_name: faker.person.firstName(),
   future_income: 'NO',
   interest_rate_setting: 'Enter an exact percentage',
   interest_rate: 2.3,
-  last_name: PageUtils.randomString(6),
+  last_name: faker.person.lastName(),
   line_of_credit: 'NO',
   loan_restructured: 'NO',
   memo_code: false,
-  memo_text: PageUtils.randomString(20),
+  memo_text: faker.lorem.sentence({ min: 1, max: 4 }),
   others_liable: 'NO',
-  purpose_description: PageUtils.randomString(20),
+  purpose_description: faker.lorem.sentence({ min: 1, max: 4 }),
   secured: 'YES',
 };
 

@@ -1,4 +1,4 @@
-<div class="p-fluid">
+<div class="p-fluid" data-cy="form-1m-component">
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
@@ -44,6 +44,7 @@
             [readonly]="true"
             pInputText
             id="filer_committee_id_number"
+            data-cy="committee-id-input"
             formControlName="filer_committee_id_number"
           />
           <app-error-messages
@@ -68,6 +69,7 @@
           name="committee_type"
           value="X"
           label="STATE PARTY"
+          data-cy="state-party-radio"
           formControlName="committee_type"
           [class]="
             committeeTypeControl?.invalid &&
@@ -138,6 +140,7 @@
           name="statusBy"
           value="affiliation"
           label="AFFILIATION"
+          data-cy="affiliation-radio"
           formControlName="statusBy"
           [class]="
             statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
@@ -154,6 +157,7 @@
           name="statusBy"
           value="qualification"
           label="QUALIFICATION"
+          data-cy="qualification-radio"
           formControlName="statusBy"
           [class]="
             statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
@@ -250,11 +254,13 @@
                 inputId="affiliated_date_form_f1_filed"
                 name="affiliated_date_form_f1_filed"
                 formControlName="affiliated_date_form_f1_filed"
+                data-cy="date-of-affiliation"
               ></p-calendar>
               <app-error-messages
                 [form]="form"
                 fieldName="affiliated_date_form_f1_filed"
                 [formSubmitted]="formSubmitted"
+                data-cy="date-of-affiliation-error"
               ></app-error-messages>
             </div>
           </div>
@@ -280,6 +286,7 @@
               inputId="date_of_51st_contributor"
               name="date_of_51st_contributor"
               formControlName="date_of_51st_contributor"
+              data-cy="date-of-contribution"
             ></p-calendar>
             <app-error-messages
               [form]="form"
@@ -295,6 +302,7 @@
               inputId="date_of_original_registration"
               name="date_of_original_registration"
               formControlName="date_of_original_registration"
+              data-cy="date-of-registration"
             ></p-calendar>
             <app-error-messages
               [form]="form"
@@ -310,6 +318,7 @@
               inputId="date_committee_met_requirements"
               name="date_committee_met_requirements"
               formControlName="date_committee_met_requirements"
+              data-cy="date-of-requirements"
             ></p-calendar>
             <app-error-messages
               [form]="form"
@@ -325,96 +334,102 @@
         </div>
       </div>
       <ng-container *ngFor="let candidateContact of candidateContacts; index as i">
-        <div class="grid">
-          <div class="col-12">
-            <h4>Candidate #{{ i + 1 }}</h4>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <div
-              class="field"
-              [ngClass]="{
-                'transaction-contact-invalid': candidateContact.control?.status === 'INVALID'
-              }"
-            >
-              <label for="entity_type">LOOKUP</label>
-              <app-transaction-contact-lookup
-                [form]="form"
-                [formSubmitted]="formSubmitted"
-                [contactTypeOptions]="candidateContact.contactTypeOptions"
-                [excludeFecIds]="excludeFecIds"
-                [excludeIds]="excludeIds"
-                (contactSelect)="candidateContact.update($event)"
-              >
-              </app-transaction-contact-lookup>
-              <app-error-messages
-                [form]="form"
-                [fieldName]="candidateContact.contactLookupKey"
-                [formSubmitted]="formSubmitted"
-                requiredErrorMessage="Candidate information is required"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <ng-container *ngIf="report[candidateContact.contactKey]">
-          <app-name-input
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            [templateMap]="templateMapConfigs[candidateContact.contactKey]"
-            templateMapKeyPrefix="candidate"
-            labelPrefix="CANDIDATE"
-          ></app-name-input>
+        <div attr.data-cy="candidate-{{ i }}">
           <div class="grid">
-            <div class="col-3">
-              <div class="field">
-                <label [for]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']">CANDIDATE ID</label>
-                <input
-                  type="text"
-                  pInputText
-                  [id]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                  [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                />
-                <app-error-messages
-                  [form]="form"
-                  [fieldName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                  [formSubmitted]="formSubmitted"
-                  uniqueFecIdMessage="Candidate already entered in form."
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-9" style="margin-top: -9px">
-              <app-candidate-office-input
-                [form]="form"
-                [formSubmitted]="formSubmitted"
-                [officeFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_office']"
-                [stateFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_state']"
-                [districtFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_district']"
-              >
-              </app-candidate-office-input>
+            <div class="col-12">
+              <h4>Candidate #{{ i + 1 }}</h4>
             </div>
           </div>
           <div class="grid">
-            <div class="col-3">
-              <div class="field">
-                <label for="name">DATE OF CONTRIBUTION</label>
-                <p-calendar
-                  [inputId]="candidateContact.dateOfContributionField"
-                  [name]="candidateContact.dateOfContributionField"
-                  [formControlName]="candidateContact.dateOfContributionField"
-                ></p-calendar>
+            <div class="col-12">
+              <div
+                class="field"
+                [ngClass]="{
+                  'transaction-contact-invalid': candidateContact.control?.status === 'INVALID'
+                }"
+              >
+                <label for="entity_type">LOOKUP</label>
+                <app-transaction-contact-lookup
+                  [form]="form"
+                  [formSubmitted]="formSubmitted"
+                  [contactTypeOptions]="candidateContact.contactTypeOptions"
+                  [excludeFecIds]="excludeFecIds"
+                  [excludeIds]="excludeIds"
+                  (contactSelect)="candidateContact.update($event)"
+                  data-cy="candidate-lookup"
+                >
+                </app-transaction-contact-lookup>
                 <app-error-messages
                   [form]="form"
-                  [fieldName]="candidateContact.dateOfContributionField"
+                  [fieldName]="candidateContact.contactLookupKey"
                   [formSubmitted]="formSubmitted"
+                  requiredErrorMessage="Candidate information is required"
                 ></app-error-messages>
               </div>
             </div>
           </div>
-        </ng-container>
-        <div class="grid">
-          <div class="col-12">
-            <hr />
+          <ng-container *ngIf="report[candidateContact.contactKey]">
+            <app-name-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="templateMapConfigs[candidateContact.contactKey]"
+              templateMapKeyPrefix="candidate"
+              labelPrefix="CANDIDATE"
+            ></app-name-input>
+            <div class="grid">
+              <div class="col-3">
+                <div class="field">
+                  <label [for]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    >CANDIDATE ID</label
+                  >
+                  <input
+                    type="text"
+                    pInputText
+                    [id]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                  />
+                  <app-error-messages
+                    [form]="form"
+                    [fieldName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [formSubmitted]="formSubmitted"
+                    uniqueFecIdMessage="Candidate already entered in form."
+                  ></app-error-messages>
+                </div>
+              </div>
+              <div class="col-9" style="margin-top: -9px">
+                <app-candidate-office-input
+                  [form]="form"
+                  [formSubmitted]="formSubmitted"
+                  [officeFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_office']"
+                  [stateFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_state']"
+                  [districtFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_district']"
+                >
+                </app-candidate-office-input>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="col-3">
+                <div class="field">
+                  <label for="name">DATE OF CONTRIBUTION</label>
+                  <p-calendar
+                    [inputId]="candidateContact.dateOfContributionField"
+                    [name]="candidateContact.dateOfContributionField"
+                    [formControlName]="candidateContact.dateOfContributionField"
+                    data-cy="candidate-date"
+                  ></p-calendar>
+                  <app-error-messages
+                    [form]="form"
+                    [fieldName]="candidateContact.dateOfContributionField"
+                    [formSubmitted]="formSubmitted"
+                  ></app-error-messages>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="grid">
+            <div class="col-12">
+              <hr />
+            </div>
           </div>
         </div>
       </ng-container>
@@ -426,7 +441,15 @@
     </div>
     <div class="col-5"></div>
     <div class="col-2 align-right">
-      <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
+      <button
+        pButton
+        pRipple
+        appSingleClick
+        label="Save"
+        (click)="save()"
+        data-cy="save-and-end"
+        class="p-button-primary"
+      ></button>
     </div>
     <div class="col-3 align-right">
       <button
@@ -435,6 +458,7 @@
         appSingleClick
         label="Save and continue"
         (click)="save('continue')"
+        data-cy="save-and-continue"
         class="p-button-info"
       ></button>
     </div>

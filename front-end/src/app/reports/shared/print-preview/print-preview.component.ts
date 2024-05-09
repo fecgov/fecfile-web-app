@@ -15,7 +15,7 @@ import { firstValueFrom, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../../styles.scss', './print-preview.component.scss'],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   report: Report = new Form3X() as unknown as Report;
@@ -117,11 +117,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   public async submitPrintJob() {
     if (this.report.id) {
       if (this.report instanceof Form3X) {
-        const payload: Form3X = Form3X.fromJSON({
-          ...this.report,
-          qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount)
-        });
-        await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
+        await firstValueFrom(this.form3XService.fecUpdate(this.report, this.committeeAccount));
       }
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
