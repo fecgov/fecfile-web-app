@@ -55,6 +55,7 @@
           label="Restore deleted contact(s)"
           class="restore-contact-button"
           (click)="onRestoreClick()"
+          *ngIf="restoreContactsButtonIsVisible"
         ></button>
       </div>
     </ng-template>

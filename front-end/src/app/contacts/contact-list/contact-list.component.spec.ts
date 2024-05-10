@@ -17,6 +17,7 @@ import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted
 import { ContactListComponent } from './contact-list.component';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { DeletedContactService } from 'app/shared/services/contact.service';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -36,6 +37,7 @@ describe('ContactListComponent', () => {
       Contact.fromJSON({ id: 2, has_transaction_or_report: true }),
     ],
   };
+  let deletedContactService: DeletedContactService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -52,6 +54,7 @@ describe('ContactListComponent', () => {
       declarations: [ContactListComponent, ContactDialogComponent, DeletedContactDialogComponent],
       providers: [
         ConfirmationService,
+        DeletedContactService,
         FormBuilder,
         MessageService,
         provideMockStore(testMockStore),
@@ -63,6 +66,7 @@ describe('ContactListComponent', () => {
         },
       ],
     }).compileComponents();
+    deletedContactService = TestBed.inject(DeletedContactService);
   });
 
   beforeEach(() => {
@@ -126,6 +130,40 @@ describe('ContactListComponent', () => {
   it('#restoreButton should make dialog visible', () => {
     component.onRestoreClick();
     expect(component.restoreDialogIsVisible).toBeTrue();
+  });
+
+  it('#restoreButton should be visible if there is a deleted contact', async () => {
+    expect(component.restoreContactsButtonIsVisible).toBeFalse();
+
+    spyOn(deletedContactService, 'getTableData').and.returnValue(
+      of({
+        count: 1,
+        next: '',
+        previous: '',
+        pageNumber: 1,
+        results: [contact],
+      }),
+    );
+    await component.checkForDeletedContacts();
+
+    expect(component.restoreContactsButtonIsVisible).toBeTrue();
+  });
+
+  it('#restoreButton should not be visible if there are no deleted contacts', async () => {
+    component.restoreContactsButtonIsVisible = true;
+
+    spyOn(deletedContactService, 'getTableData').and.returnValue(
+      of({
+        count: 0,
+        next: '',
+        previous: '',
+        pageNumber: 1,
+        results: [],
+      }),
+    );
+    await component.checkForDeletedContacts();
+
+    expect(component.restoreContactsButtonIsVisible).toBeFalse();
   });
 
   it('#saveContact calls itemService', () => {

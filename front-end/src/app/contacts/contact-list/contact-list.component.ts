@@ -4,8 +4,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
-import { ContactService } from '../../shared/services/contact.service';
-import { TableSelectAllChangeEvent } from 'primeng/table';
+import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
+import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -18,6 +19,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
+  restoreContactsButtonIsVisible = false;
   searchTerm = '';
 
   // contact lookup
@@ -31,8 +33,24 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     public override itemService: ContactService,
+    public deletedContactService: DeletedContactService,
   ) {
     super(messageService, confirmationService, elementRef);
+
+    this.checkForDeletedContacts();
+  }
+
+  public async checkForDeletedContacts() {
+    const contactListResponse = await firstValueFrom(this.deletedContactService.getTableData());
+    const deletedContactsExist = contactListResponse.count > 0;
+    this.restoreContactsButtonIsVisible = deletedContactsExist;
+    return deletedContactsExist;
+  }
+
+  public override loadTableItems(event: TableLazyLoadEvent): void {
+    super.loadTableItems(event);
+
+    this.checkForDeletedContacts();
   }
 
   protected getEmptyItem(): Contact {
