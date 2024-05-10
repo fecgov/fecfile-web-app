@@ -61,6 +61,7 @@ import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TableComponent } from './components/table/table.component';
 import { ToastModule } from 'primeng/toast';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   imports: [
@@ -89,6 +90,7 @@ import { ToastModule } from 'primeng/toast';
     RouterLink,
     TableModule,
     ToastModule,
+    PaginatorModule,
   ],
   declarations: [
     LabelPipe,

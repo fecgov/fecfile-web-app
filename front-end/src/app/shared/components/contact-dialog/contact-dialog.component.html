@@ -230,8 +230,7 @@
 
       <div *ngIf="showHistory && !isNewItem">
         <app-table title="Transaction history" [items]="transactions" [totalItems]="totalTransactions"
-          [loading]="tableLoading" [rowsPerPage]="rowsPerPage"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+          [loading]="tableLoading" [rowsPerPage]="rowsPerPage" itemName="transactions"
           (loadTableItems)="loadTransactions($event)">
           <ng-template #header>
             <th scope="col">Transaction type</th>

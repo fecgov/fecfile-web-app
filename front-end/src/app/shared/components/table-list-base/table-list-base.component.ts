@@ -100,7 +100,8 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     });
   }
 
-  onRowsPerPageChange() {
+  onRowsPerPageChange(rowsPerPage: number) {
+    this.rowsPerPage = rowsPerPage;
     this.loadTableItems({
       first: 0,
       rows: this.rowsPerPage,
@@ -198,7 +199,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    */
 
   public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    return {};
+    return { page_size: this.rowsPerPage };
   }
 
   public onRowActionClick(action: TableAction, item: T) {

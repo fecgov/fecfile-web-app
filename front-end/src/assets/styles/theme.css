@@ -833,6 +833,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   background: transparent;
   border: 0 none;
   line-height: 1.6;
+  outline: none;
 }
 .p-dropdown .p-dropdown-label.p-placeholder {
   color: #5b616b;
@@ -2991,11 +2992,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   font-weight: 600;
 }
 .p-datatable .p-datatable-footer {
-  background: #f1f1f1;
+  background: transparent;
   color: #212121;
-  border: 1px solid #000000;
-  border-width: 1px 0 1px 0;
-  padding: 1rem 1rem;
   font-weight: 600;
 }
 .p-datatable .p-datatable-thead > tr > th {
@@ -3812,8 +3810,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-paginator {
   background: #ffffff;
   color: #112e51;
-  border-top: 2px solid black;
-  padding: 0.75rem;
 }
 
 .p-paginator .p-paginator-first,

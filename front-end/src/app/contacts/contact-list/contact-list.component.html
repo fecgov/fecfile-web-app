@@ -1,8 +1,8 @@
 <app-table title="Contacts" [items]="items" [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
   [totalItems]="totalItems" [loading]="loading" [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
-  [selectedItems]="selectedItems" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} contacts"
-  [sortableHeaders]="sortableHeaders" (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)">
+  [selectedItems]="selectedItems" itemName="contacts" [sortableHeaders]="sortableHeaders"
+  (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)" (rowsPerPageChange)="onRowsPerPageChange($event)">
   <ng-template #toolbar>
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="left">

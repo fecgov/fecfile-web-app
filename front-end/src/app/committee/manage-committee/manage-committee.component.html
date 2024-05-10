@@ -1,22 +1,16 @@
-<p-toolbar styleClass="mb-4">
-  <ng-template pTemplate="left">
-    <h1>Manage Users</h1>
-  </ng-template>
-  <ng-template pTemplate="right">
-    <button (click)="addItem()" class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
-  </ng-template>
-</p-toolbar>
-<p-divider></p-divider>
-<app-table title="Loans and Debts" [items]="items" [totalItems]="totalItems" [loading]="loading" sortField="created"
+<app-table title="Existing Users" [items]="items" [totalItems]="totalItems" [loading]="loading" sortField="created"
   [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']" [selectedItems]="selectedItems"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users" [sortableHeaders]="sortableHeaders"
-  (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)">
+  itemName="users" [sortableHeaders]="sortableHeaders" (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)">
   <ng-template #toolbar>
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="left">
-        <h1>Existing Users</h1>
+        <h1 class="m-0">Manage Users</h1>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <button (click)="addItem()" class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
       </ng-template>
     </p-toolbar>
   </ng-template>

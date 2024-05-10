@@ -2,7 +2,7 @@
   <ng-container *ngTemplateOutlet="toolbar"></ng-container>
   <p-table #dt [value]="items" [lazy]="true" (onLazyLoad)="loadTableItems.emit($event)" responsiveLayout="scroll"
     dataKey="id" [selection]="selectedItems" (selectionChange)="selectionChange.emit($event)" [selectAll]="selectAll"
-    (selectAllChange)="selectAllChange.emit($event)" [paginator]="true" [rows]="10" [totalRecords]="totalItems"
+    (selectAllChange)="selectAllChange.emit($event)" [rows]="rowsPerPage" [totalRecords]="totalItems"
     [loading]="loading" [globalFilterFields]="globalFilterFields"
     [currentPageReportTemplate]="currentPageReportTemplate" [sortField]="sortField" [showCurrentPageReport]="true"
     styleClass="p-datatable-striped">
@@ -35,16 +35,50 @@
         <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
       </tr>
     </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="d-flex justify-content-between">
+        <div class="responsive-container">
+          <span class="paginator-text">Results per table:</span>
+          <p-dropdown [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" class="custom-paginator-dropdown"
+            (onChange)="rowsPerPageChange.emit($event.value)">
+            <ng-template pTemplate="dropdownicon">
+              <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="responsive-container">
+          <span class="paginator-text">{{showing}}</span>
+          <p-paginator [rows]="rowsPerPage" [totalRecords]="totalItems" [first]="first"
+            (onPageChange)="changePage($event)">
+            <ng-template pTemplate="firstpagelinkicon">
+              <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+            </ng-template>
+            <ng-template pTemplate="previouspagelinkicon">
+              <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+            </ng-template>
+            <ng-template pTemplate="nextpagelinkicon">
+              <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+            </ng-template>
+            <ng-template pTemplate="lastpagelinkicon">
+              <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+            </ng-template>
+          </p-paginator>
+        </div>
+      </div>
+    </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
       <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
     </ng-template>
     <ng-template pTemplate="paginatorleft">
-      Results per table:
-      <p-dropdown [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" (onChange)="rowsPerPageChange.emit()">
-        <ng-template pTemplate="dropdownicon">
-          <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
-        </ng-template>
-      </p-dropdown>
+      <div class="responsive-container">
+        <span>Results per table:</span>
+        <p-dropdown [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage"
+          (onChange)="rowsPerPageChange.emit()">
+          <ng-template pTemplate="dropdownicon">
+            <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+          </ng-template>
+        </p-dropdown>
+      </div>
     </ng-template>
     <ng-template pTemplate="paginatorfirstpagelinkicon">
       <img alt="first page icon" src="/assets/img/first_arrow.svg" />
@@ -59,7 +93,7 @@
       <img alt="last page icon" src="/assets/img/last_arrow.svg" />
     </ng-template>
     <ng-template pTemplate="emptymessage">
-      <span class="mx-3 d-block w-full">No data available in table</span>
+      <td colspan="100" class="mx-3 empty-message">No data available in table</td>
     </ng-template>
   </p-table>
 </div>

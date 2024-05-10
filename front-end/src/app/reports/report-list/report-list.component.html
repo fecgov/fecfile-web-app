@@ -1,8 +1,8 @@
 <app-table title="Recent reports" [items]="items" [totalItems]="totalItems" [loading]="loading"
-  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll" [selectedItems]="selectedItems"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports" [sortableHeaders]="sortableHeaders"
-  (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)">
+  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll" [selectedItems]="selectedItems" itemName="reports"
+  [sortableHeaders]="sortableHeaders" (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)">
   <ng-template #toolbar>
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="left"><span class="title1">Manage reports</span></ng-template>

@@ -1,8 +1,8 @@
 <app-table title="Disbursements" [items]="items" [totalItems]="totalItems" [loading]="loading"
-  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll" [selectedItems]="selectedItems"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll" [selectedItems]="selectedItems" itemName="transactions"
   [sortableHeaders]="sortableHeaders" (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)">
+  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)">
   <ng-template #header>
     <th id="transaction_id" role="columnheader">Transaction ID</th>
     <th id="back_reference_tran_id_number" role="columnheader">Associated With</th>

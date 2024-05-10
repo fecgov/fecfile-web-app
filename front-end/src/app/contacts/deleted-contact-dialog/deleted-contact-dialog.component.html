@@ -7,7 +7,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
       [sortableHeaders]="sortableHeaders" [hasCheckbox]="true" [checkboxLabel]="getCheckboxLabel.bind(this)"
       (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
-      (selectAllChange)="onSelectAllChange($event)">
+      (selectAllChange)="onSelectAllChange($event)" (rowsPerPageChange)="onRowsPerPageChange($event)">
       <ng-template #header>
 
       </ng-template>
