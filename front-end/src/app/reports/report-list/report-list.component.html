@@ -1,14 +1,32 @@
-<app-table title="Recent reports" [items]="items" [totalItems]="totalItems" [loading]="loading"
-  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll" [selectedItems]="selectedItems" itemName="reports"
-  [sortableHeaders]="sortableHeaders" (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)">
+<app-table
+  title="Recent reports"
+  [items]="items"
+  [totalItems]="totalItems"
+  [loading]="loading"
+  [rowsPerPage]="rowsPerPage"
+  [selectAll]="selectAll"
+  [selectedItems]="selectedItems"
+  itemName="reports"
+  [sortableHeaders]="sortableHeaders"
+  (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)"
+>
   <ng-template #toolbar>
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="left"><span class="title1">Manage reports</span></ng-template>
       <ng-template pTemplate="right">
-        <button pButton pRipple label="Create a new report" data-cy="create-report" icon="pi pi-plus" class="add-button"
-          (click)="showDialog()" [disabled]="noCashOnHand()"></button>
+        <button
+          pButton
+          pRipple
+          label="Create a new report"
+          data-cy="create-report"
+          icon="pi pi-plus"
+          class="add-button"
+          (click)="showDialog()"
+          [disabled]="noCashOnHand()"
+        ></button>
       </ng-template>
     </p-toolbar>
   </ng-template>
@@ -19,21 +37,28 @@
     <td>{{ item.formLabel }}</td>
     <td>{{ item.reportLabel }}</td>
     <td>
-      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date">{{ item.coverage_from_date |
-        fecDate }} - {{ item.coverage_through_date | fecDate }}
+      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
+        >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
       </ng-container>
     </td>
     <td>{{ item.report_status }}</td>
-    <td>{{ item.versionLabel }}</td>
+    <td>{{ item.version_label }}</td>
     <td>{{ item.upload_submission?.created | fecDate }}</td>
     <td>
-      <app-table-actions-button [tableActions]="rowActions" [actionItem]="item"
-        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)" buttonIcon="pi pi-ellipsis-v"
+      <app-table-actions-button
+        [tableActions]="rowActions"
+        [actionItem]="item"
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-        [buttonAriaLabel]="'edit ' + displayName(item)"></app-table-actions-button>
+        [buttonAriaLabel]="'edit ' + displayName(item)"
+      ></app-table-actions-button>
     </td>
   </ng-template>
 </app-table>
 
-<app-form-type-dialog [noReports]="totalItems === 0" (dialogClose)="dialogVisible = false"
-  [dialogVisible]="dialogVisible"></app-form-type-dialog>
+<app-form-type-dialog
+  [noReports]="totalItems === 0"
+  (dialogClose)="dialogVisible = false"
+  [dialogVisible]="dialogVisible"
+></app-form-type-dialog>

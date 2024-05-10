@@ -11,7 +11,7 @@ export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID
+    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
   );
   schema = schema;
   override isRefund = true;

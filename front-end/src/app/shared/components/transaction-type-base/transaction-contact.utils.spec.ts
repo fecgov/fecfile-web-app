@@ -70,60 +70,60 @@ describe('ContactUtils', () => {
       ContactTypes.INDIVIDUAL,
       form,
       testTemplateMap,
-      'contact_1'
+      'contact_1',
     );
     expect(output).toBe(
-      "By saving this transaction, you're also creating a new individual contact for <b> test_ln, test_fn</b>."
+      "By saving this transaction, you're also creating a new individual contact for <b> test_ln, test_fn</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.COMMITTEE,
       form,
       testTemplateMap,
-      'contact_1'
+      'contact_1',
     );
     expect(output).toBe(
-      "By saving this transaction, you're also creating a new committee contact for <b> test_org_name</b>."
+      "By saving this transaction, you're also creating a new committee contact for <b> test_org_name</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.COMMITTEE,
       form,
       testTemplateMap,
-      'contact_3'
+      'contact_3',
     );
     expect(output).toBe(
-      "By saving this transaction, you're also creating a new committee contact for <b> test_com_name</b>."
+      "By saving this transaction, you're also creating a new committee contact for <b> test_com_name</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.ORGANIZATION,
       form,
       testTemplateMap,
-      'contact_1'
+      'contact_1',
     );
     expect(output).toBe(
-      "By saving this transaction, you're also creating a new organization contact for <b> test_org_name</b>."
+      "By saving this transaction, you're also creating a new organization contact for <b> test_org_name</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.ORGANIZATION,
       form,
       testTemplateMap,
-      'contact_2'
+      'contact_2',
     );
     expect(output).toBe(
-      "By saving this transaction, you're also creating a new organization contact for <b> secondary_org_name</b>."
+      "By saving this transaction, you're also creating a new organization contact for <b> secondary_org_name</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
       ContactTypes.CANDIDATE,
       form,
       testTemplateMap,
-      'contact_2'
+      'contact_2',
     );
     expect(output).toBe(
-      "By saving this transaction, you're also creating a new candidate contact for <b> test_candidate_ln, test_candidate_fn</b>."
+      "By saving this transaction, you're also creating a new candidate contact for <b> test_candidate_ln, test_candidate_fn</b>.",
     );
   });
 
@@ -158,7 +158,7 @@ describe('ContactUtils', () => {
       selectItem,
       form,
       testScheduleATransaction,
-      new Subject<string>()
+      new Subject<string>(),
     );
     expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Smith');
@@ -186,7 +186,7 @@ describe('ContactUtils', () => {
 
   it('test updateFormWithSecondaryContact', () => {
     const transaction = getTestTransactionByType(
-      ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE
+      ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
     ) as SchBTransaction;
     TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');

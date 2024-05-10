@@ -15,7 +15,7 @@ describe('Transaction', () => {
   it('should update child purpose descriptions', () => {
     const testTransaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
-      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT
+      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
     ) as SchATransaction;
 
     const payload = testTransaction.getUpdatedParent();

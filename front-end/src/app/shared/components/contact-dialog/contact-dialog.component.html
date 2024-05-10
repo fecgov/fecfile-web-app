@@ -1,8 +1,17 @@
-<div [ngStyle]="{ display: dialogVisible ? '' : 'none' }"
-  [ngClass]="{ 'contact-dialog-not-submitted': !formSubmitted }">
-  <p-dialog [visible]="detailVisible" [style]="{ width: '90%' }"
-    [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')" [modal]="true" styleClass="p-fluid"
-    (onShow)="openDialog()" (onHide)="closeDialog()" (visibleChange)="closeDialog($event)">
+<div
+  [ngStyle]="{ display: dialogVisible ? '' : 'none' }"
+  [ngClass]="{ 'contact-dialog-not-submitted': !formSubmitted }"
+>
+  <p-dialog
+    [visible]="detailVisible"
+    [style]="{ width: '90%' }"
+    [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
+    [modal]="true"
+    styleClass="p-fluid"
+    (onShow)="openDialog()"
+    (onHide)="closeDialog()"
+    (visibleChange)="closeDialog($event)"
+  >
     <ng-template pTemplate="content">
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid">
@@ -14,10 +23,15 @@
           <div class="col-10">
             <div class="field">
               <label for="type">CONTACT TYPE</label>
-              <app-contact-lookup [contactTypeOptions]="contactTypeOptions" [showSearchBoxCallback]="showSearchBox"
-                [showCreateNewContactButton]="false" [includeFecfileResults]="false"
-                [candidateOffice]="defaultCandidateOffice" (contactTypeSelect)="contactTypeChanged($event)"
-                (contactLookupSelect)="updateContact($event)">
+              <app-contact-lookup
+                [contactTypeOptions]="contactTypeOptions"
+                [showSearchBoxCallback]="showSearchBox"
+                [showCreateNewContactButton]="false"
+                [includeFecfileResults]="false"
+                [candidateOffice]="defaultCandidateOffice"
+                (contactTypeSelect)="contactTypeChanged($event)"
+                (contactLookupSelect)="updateContact($event)"
+              >
               </app-contact-lookup>
             </div>
           </div>
@@ -29,8 +43,11 @@
               <div class="field">
                 <label for="candidate_id">CANDIDATE ID</label>
                 <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
-                <app-error-messages [form]="form" fieldName="candidate_id"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="candidate_id"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
             <div class="col-4"></div>
@@ -43,8 +60,11 @@
                 <div class="field">
                   <label for="committee_id">COMMITTEE ID</label>
                   <input type="text" pInputText id="committee_id" formControlName="committee_id" />
-                  <app-error-messages [form]="form" fieldName="committee_id"
-                    [formSubmitted]="formSubmitted"></app-error-messages>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="committee_id"
+                    [formSubmitted]="formSubmitted"
+                  ></app-error-messages>
                 </div>
               </div>
             </ng-container>
@@ -66,24 +86,33 @@
               <div class="field">
                 <label for="last_name">LAST NAME</label>
                 <input type="text" pInputText id="last_name" formControlName="last_name" />
-                <app-error-messages [form]="form" fieldName="last_name"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="last_name"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
             <div class="col-4">
               <div class="field">
                 <label for="first_name">FIRST NAME</label>
                 <input type="text" pInputText id="first_name" formControlName="first_name" />
-                <app-error-messages [form]="form" fieldName="first_name"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="first_name"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
             <div class="col-4">
               <div class="field">
                 <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
                 <input type="text" pInputText id="middle_name" formControlName="middle_name" />
-                <app-error-messages [form]="form" fieldName="middle_name"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="middle_name"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
           </div>
@@ -92,16 +121,22 @@
               <div class="field">
                 <label for="prefix">PREFIX (OPTIONAL)</label>
                 <input type="text" pInputText id="prefix" formControlName="prefix" />
-                <app-error-messages [form]="form" fieldName="prefix"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="prefix"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
             <div class="col-3">
               <div class="field">
                 <label for="suffix">SUFFIX (OPTIONAL)</label>
                 <input type="text" pInputText id="suffix" formControlName="suffix" />
-                <app-error-messages [form]="form" fieldName="suffix"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="suffix"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
             <div class="col-6"></div>
@@ -131,16 +166,22 @@
             <div class="field">
               <label for="street_1">STREET ADDRESS</label>
               <input type="text" pInputText id="street_1" formControlName="street_1" />
-              <app-error-messages [form]="form" fieldName="street_1"
-                [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages
+                [form]="form"
+                fieldName="street_1"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
           <div class="col-6">
             <div class="field">
               <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
               <input type="text" pInputText id="street_2" formControlName="street_2" />
-              <app-error-messages [form]="form" fieldName="street_2"
-                [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages
+                [form]="form"
+                fieldName="street_2"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
         </div>
@@ -155,8 +196,13 @@
           <div class="col-3">
             <div class="field">
               <label for="state">STATE/PROVINCE</label>
-              <p-dropdown inputId="state" formControlName="state" [options]="stateOptions" [autoDisplayFirst]="false"
-                appendTo="body"></p-dropdown>
+              <p-dropdown
+                inputId="state"
+                formControlName="state"
+                [options]="stateOptions"
+                [autoDisplayFirst]="false"
+                appendTo="body"
+              ></p-dropdown>
               <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
@@ -174,8 +220,12 @@
               <label for="telephone">TELEPHONE (OPTIONAL)</label>
               <app-fec-international-phone-input id="telephone" formControlName="telephone">
               </app-fec-international-phone-input>
-              <app-error-messages [form]="form" fieldName="telephone" [formSubmitted]="formSubmitted"
-                patternErrorMessage="This field must contain 10 numeric characters."></app-error-messages>
+              <app-error-messages
+                [form]="form"
+                fieldName="telephone"
+                [formSubmitted]="formSubmitted"
+                patternErrorMessage="This field must contain 10 numeric characters."
+              ></app-error-messages>
             </div>
           </div>
           <div class="col-6"></div>
@@ -196,16 +246,22 @@
               <div class="field">
                 <label for="employer">EMPLOYER (OPTIONAL)</label>
                 <input type="text" pInputText id="employer" formControlName="employer" />
-                <app-error-messages [form]="form" fieldName="employer"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="employer"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
             <div class="col-6">
               <div class="field">
                 <label for="occupation">OCCUPATION (OPTIONAL)</label>
                 <input type="text" pInputText id="occupation" formControlName="occupation" />
-                <app-error-messages [form]="form" fieldName="occupation"
-                  [formSubmitted]="formSubmitted"></app-error-messages>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="occupation"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
               </div>
             </div>
           </div>
@@ -221,17 +277,27 @@
               <h3>Office</h3>
             </div>
           </div>
-          <app-candidate-office-input [form]="form" [formSubmitted]="formSubmitted"
-            officeFormControlName="candidate_office" stateFormControlName="candidate_state"
-            districtFormControlName="candidate_district">
+          <app-candidate-office-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            officeFormControlName="candidate_office"
+            stateFormControlName="candidate_state"
+            districtFormControlName="candidate_district"
+          >
           </app-candidate-office-input>
         </ng-container>
       </form>
 
       <div *ngIf="showHistory && !isNewItem">
-        <app-table title="Transaction history" [items]="transactions" [totalItems]="totalTransactions"
-          [loading]="tableLoading" [rowsPerPage]="rowsPerPage" itemName="transactions"
-          (loadTableItems)="loadTransactions($event)">
+        <app-table
+          title="Transaction history"
+          [items]="transactions"
+          [totalItems]="totalTransactions"
+          [loading]="tableLoading"
+          [rowsPerPage]="rowsPerPage"
+          itemName="transactions"
+          (loadTableItems)="loadTransactions($event)"
+        >
           <ng-template #header>
             <th scope="col">Transaction type</th>
             <th scope="col">Form type</th>
@@ -253,21 +319,42 @@
             </tr>
           </ng-template>
         </app-table>
-
       </div>
     </ng-template>
     <ng-template pTemplate="footer">
       <div class="grid">
         <div class="col-1">
-          <button type="button" pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-secondary"
-            (click)="closeDialog()"></button>
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-secondary"
+            (click)="closeDialog()"
+          ></button>
         </div>
         <div class="col-11">
           <ng-container *ngIf="!headerTitle; else transactionContactLookupButton">
-            <button type="button" pButton pRipple label="Save" icon="pi pi-check" class="p-button-primary"
-              (click)="isNewItem ? saveContact() : confirmPropagation()"></button>
-            <button type="button" *ngIf="isNewItem" pButton pRipple label="Save & Add More" icon="pi pi-check"
-              class="p-button-info" (click)="saveContact(false)"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-primary"
+              (click)="isNewItem ? saveContact() : confirmPropagation()"
+            ></button>
+            <button
+              type="button"
+              *ngIf="isNewItem"
+              pButton
+              pRipple
+              label="Save & Add More"
+              icon="pi pi-check"
+              class="p-button-info"
+              (click)="saveContact(false)"
+            ></button>
           </ng-container>
         </div>
       </div>
@@ -276,8 +363,15 @@
 </div>
 
 <ng-template #transactionContactLookupButton>
-  <button type="button" pButton pRipple label="Save & continue" icon="pi pi-check" class="p-button-info"
-    (click)="saveContact()"></button>
+  <button
+    type="button"
+    pButton
+    pRipple
+    label="Save & continue"
+    icon="pi pi-check"
+    class="p-button-info"
+    (click)="saveContact()"
+  ></button>
 </ng-template>
 
 <p-confirmDialog key="contactDialogDialog" [style]="{ width: '450px' }"></p-confirmDialog>

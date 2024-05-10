@@ -1,16 +1,32 @@
-<p-dialog [(visible)]="visible" [style]="{ width: '90%' }" header="Restore deleted contact(s)" [modal]="true"
-  styleClass="p-fluid" (onHide)="hide()">
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '90%' }"
+  header="Restore deleted contact(s)"
+  [modal]="true"
+  styleClass="p-fluid"
+  (onHide)="hide()"
+>
   <ng-template pTemplate="content">
-    <app-table title="Restore deleted contact(s)" [items]="items" [totalItems]="totalItems" [loading]="loading"
-      sortField="created" [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
-      [globalFilterFields]="['name', 'type', 'employer', 'occupation']" [selectedItems]="selectedItems"
+    <app-table
+      title="Restore deleted contact(s)"
+      [items]="items"
+      [totalItems]="totalItems"
+      [loading]="loading"
+      sortField="created"
+      [rowsPerPage]="rowsPerPage"
+      [selectAll]="selectAll"
+      [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+      [selectedItems]="selectedItems"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
-      [sortableHeaders]="sortableHeaders" [hasCheckbox]="true" [checkboxLabel]="getCheckboxLabel.bind(this)"
-      (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
-      (selectAllChange)="onSelectAllChange($event)" (rowsPerPageChange)="onRowsPerPageChange($event)">
-      <ng-template #header>
-
-      </ng-template>
+      [sortableHeaders]="sortableHeaders"
+      [hasCheckbox]="true"
+      [checkboxLabel]="getCheckboxLabel.bind(this)"
+      (loadTableItems)="loadTableItems($event)"
+      (selectionChange)="onSelectionChange($event)"
+      (selectAllChange)="onSelectAllChange($event)"
+      (rowsPerPageChange)="onRowsPerPageChange($event)"
+    >
+      <ng-template #header> </ng-template>
       <ng-template #body let-item>
         <td>{{ displayName(item) }}</td>
         <td>{{ item.type | label: contactTypeLabels }}</td>
@@ -22,12 +38,27 @@
   <ng-template pTemplate="footer">
     <div class="grid">
       <div class="col-1">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="hide()"
-          [autofocus]="true"></button>
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (click)="hide()"
+          [autofocus]="true"
+        ></button>
       </div>
       <div class="col-11">
-        <button pButton pRipple id="restoreButton" [disabled]="selectedItems.length <= 0" label="Restore selected"
-          icon="pi pi-check" class="p-button-primary" (click)="restoreSelected()"></button>
+        <button
+          pButton
+          pRipple
+          id="restoreButton"
+          [disabled]="selectedItems.length <= 0"
+          label="Restore selected"
+          icon="pi pi-check"
+          class="p-button-primary"
+          (click)="restoreSelected()"
+        ></button>
       </div>
     </div>
   </ng-template>

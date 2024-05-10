@@ -18,19 +18,27 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { ReportService } from 'app/shared/services/report.service';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { Form24 } from 'app/shared/models/form-24.model';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
+import { Actions } from '@ngrx/effects';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
   let fixture: ComponentFixture<ReportListComponent>;
   let router: Router;
   let reportService: ReportService;
+  const actions$ = new Subject<{ type: string }>();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, TableModule, ToolbarModule, RouterTestingModule.withRoutes([]), DialogModule],
       declarations: [ReportListComponent, FormTypeDialogComponent, Dialog],
-      providers: [ConfirmationService, MessageService, ApiService, provideMockStore(testMockStore)],
+      providers: [
+        ConfirmationService,
+        MessageService,
+        ApiService,
+        provideMockStore(testMockStore),
+        { provide: Actions, useValue: actions$ },
+      ],
     }).compileComponents();
   });
 
@@ -78,8 +86,13 @@ describe('ReportListComponent', () => {
       report_type: ReportTypes.F3X,
     } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.onRowActionClick(new TableAction('', component.goToTest.bind(component)), { id: '888' } as Report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/test-dot-fec/888');
+  });
+
+  it('#onDownload should open download panel properly', () => {
+    const generateSpy = spyOn(component.dotFecService, 'generateFecFile');
+    const report = { id: '888' } as Report;
+    component.onRowActionClick(new TableAction('', component.download.bind(component)), report);
+    expect(generateSpy).toHaveBeenCalledWith(report);
   });
 
   it('#displayName should display the item form_type code', () => {

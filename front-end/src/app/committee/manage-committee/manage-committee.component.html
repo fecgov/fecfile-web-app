@@ -1,9 +1,20 @@
-<app-table title="Existing Users" [items]="items" [totalItems]="totalItems" [loading]="loading" sortField="created"
-  [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
-  [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']" [selectedItems]="selectedItems"
-  itemName="users" [sortableHeaders]="sortableHeaders" (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)">
+<app-table
+  title="Existing Users"
+  [items]="items"
+  [totalItems]="totalItems"
+  [loading]="loading"
+  sortField="created"
+  [rowsPerPage]="rowsPerPage"
+  [selectAll]="selectAll"
+  [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+  [selectedItems]="selectedItems"
+  itemName="users"
+  [sortableHeaders]="sortableHeaders"
+  (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)"
+>
   <ng-template #toolbar>
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="left">
@@ -23,9 +34,13 @@
     <td>{{ item.getRoleLabel() }}</td>
     <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
     <td>
-      <app-table-actions-button (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-        [actionItem]="item" [tableActions]="rowActions" buttonIcon="pi pi-ellipsis-v"
-        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"></app-table-actions-button>
+      <app-table-actions-button
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        [actionItem]="item"
+        [tableActions]="rowActions"
+        buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+      ></app-table-actions-button>
     </td>
   </ng-template>
 </app-table>
@@ -39,5 +54,8 @@
   </ng-template>
 </p-confirmDialog>
 
-<app-committee-member-dialog (detailClose)="detailVisible = false" (saveMembership)="saveMembership($event)"
-  [(detailVisible)]="detailVisible"></app-committee-member-dialog>
+<app-committee-member-dialog
+  (detailClose)="detailVisible = false"
+  (saveMembership)="saveMembership($event)"
+  [(detailVisible)]="detailVisible"
+></app-committee-member-dialog>

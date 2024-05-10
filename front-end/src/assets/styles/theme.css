@@ -4836,11 +4836,11 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-sidebar {
   background: #ffffff;
   color: #212121;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-top: 2px solid;
   box-shadow: none;
 }
 .p-sidebar .p-sidebar-header {
-  padding: 1rem 1.25rem;
+  padding: 1rem 4rem;
 }
 .p-sidebar .p-sidebar-header .p-sidebar-close,
 .p-sidebar .p-sidebar-header .p-sidebar-icon {
@@ -4868,7 +4868,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding-top: 0;
 }
 .p-sidebar .p-sidebar-content {
-  padding: 1.25rem;
+  padding: 1.25rem 4rem;
 }
 
 .p-tooltip .p-tooltip-text {

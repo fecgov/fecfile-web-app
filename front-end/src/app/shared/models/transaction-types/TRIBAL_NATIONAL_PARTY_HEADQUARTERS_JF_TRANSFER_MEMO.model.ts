@@ -11,7 +11,7 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATra
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   );
   override shortName = 'Tribal';
   schema = schema;

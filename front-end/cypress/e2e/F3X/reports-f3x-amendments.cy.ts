@@ -13,7 +13,7 @@ describe('Amendments', () => {
 
   it('should test Create an amendment', () => {
     ContactListPage.goToPage();
-    PageUtils.clickButton('Add Contact');
+    PageUtils.clickButton('Add contact');
     const formData = {
       ...contactFormData,
       ...{

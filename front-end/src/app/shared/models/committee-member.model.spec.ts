@@ -49,10 +49,11 @@ describe('CommitteeMember', () => {
 
   it('should confirm if committee is PTY', () => {
     expect(isPTY()).toBeFalse();
-    const PTY = ['X', 'Y'];
-    PTY.forEach((entry) => {
-      expect(isPTY(entry)).toBeTrue();
-    });
-    expect(isPTY('O')).toBeFalse();
+    expect(isPTY('Y')).toBeFalse();
+    expect(isPTY('Y', 'U')).toBeTrue();
+    expect(isPTY('Y', 'J')).toBeTrue();
+    expect(isPTY('X', 'U')).toBeFalse();
+    expect(isPTY('X', 'J')).toBeTrue();
+    expect(isPTY('O', 'U')).toBeFalse();
   });
 });

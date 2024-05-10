@@ -37,7 +37,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransaction
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(
     ScheduleETransactionTypeLabels,
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT
+    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;

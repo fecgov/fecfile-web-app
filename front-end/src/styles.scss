@@ -1,13 +1,12 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
 
-
 p {
   max-width: 100%;
   line-height: 1.5;
 }
 
 hr {
-  margin: .5rem .5rem 1rem 0;
+  margin: 0.5rem 0.5rem 1rem 0;
   color: inherit;
   border: 0;
   border-top: 2px solid;
@@ -24,14 +23,25 @@ hr.black-line {
 
 .p-panel .p-panel-header,
 .p-sidebar {
-  background-color: #164f85;
-  color: white;
+  background: #f1f1f1;
+  color: #112e51;
+}
+
+.p-sidebar-header {
+  font-family: karla, sans-serif;
+  font-weight: bold;
+  color: #112e51;
+  font-size: 16px;
 }
 
 .p-panel-content a {
   color: black;
   text-decoration: none;
   border-bottom: 1px black dotted;
+}
+
+.p-sidebar-bottom {
+  height: fit-content;
 }
 
 li {
@@ -118,12 +128,30 @@ label.disabled {
 }
 
 .font-karla {
-  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family:
+    karla,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 .font-karla-bold {
-  font-family: karla-bold, karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-  Segoe UI Symbol;
+  font-family:
+    karla-bold,
+    karla,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 .fec-background-gradient {
@@ -186,8 +214,8 @@ label.disabled {
 }
 
 .add-button:hover {
-  background: #F78D5B !important;
-  border-color: #F78D5B !important;
+  background: #f78d5b !important;
+  border-color: #f78d5b !important;
   color: #212121 !important;
   font-weight: 600;
 }

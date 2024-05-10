@@ -17,7 +17,7 @@ describe('INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SE');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO
+      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
     );
   });
 });

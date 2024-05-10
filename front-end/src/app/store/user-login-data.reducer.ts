@@ -1,6 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { userLoginDataDiscardedAction, userLoginDataRetrievedAction, userLoginDataUpdatedAction } from './user-login-data.actions';
+import {
+  userLoginDataDiscardedAction,
+  userLoginDataRetrievedAction,
+  userLoginDataUpdatedAction,
+} from './user-login-data.actions';
 
 export const initialState: UserLoginData = {
   first_name: undefined,

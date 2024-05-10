@@ -1,11 +1,16 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { lastValueFrom, take, takeUntil } from 'rxjs';
+import { firstValueFrom, lastValueFrom, take, takeUntil } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { DotFecService } from 'app/shared/services/dot-fec.service';
 
 @Component({
   selector: 'app-report-list',
@@ -13,6 +18,7 @@ import { Router } from '@angular/router';
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   dialogVisible = false;
+  committeeAccount?: CommitteeAccount;
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit report',
@@ -26,7 +32,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
     new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
-    new TableAction('Download as .fec', this.goToTest.bind(this)),
+    new TableAction('Download as .fec', this.download.bind(this)),
   ];
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -44,6 +50,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected override elementRef: ElementRef,
     override itemService: ReportService,
     public router: Router,
+    private store: Store,
+    private form3XService: Form3XService,
+    public dotFecService: DotFecService,
   ) {
     super(messageService, confirmationService, elementRef);
     this.caption =
@@ -53,6 +62,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
+    this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
+      this.committeeAccount = committeeAccount;
+    });
   }
 
   protected getEmptyItem(): Report {
@@ -118,8 +130,16 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     });
   }
 
-  public async goToTest(item: Report): Promise<void> {
-    await this.router.navigateByUrl(`/reports/f3x/test-dot-fec/${item.id}`);
+  public async download(report: Report): Promise<void> {
+    if (report instanceof Form3X) {
+      const payload: Form3X = Form3X.fromJSON({
+        ...report,
+        qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount),
+      });
+      await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
+    }
+    const download = await this.dotFecService.generateFecFile(report);
+    this.dotFecService.checkFecFileTask(download);
   }
 
   /**

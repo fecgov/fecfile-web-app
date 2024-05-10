@@ -62,6 +62,8 @@ import { TableModule } from 'primeng/table';
 import { TableComponent } from './components/table/table.component';
 import { ToastModule } from 'primeng/toast';
 import { PaginatorModule } from 'primeng/paginator';
+import { DownloadTrayComponent } from './components/download-tray/download-tray.component';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   imports: [
@@ -91,6 +93,7 @@ import { PaginatorModule } from 'primeng/paginator';
     TableModule,
     ToastModule,
     PaginatorModule,
+    SidebarModule,
   ],
   declarations: [
     LabelPipe,
@@ -134,6 +137,7 @@ import { PaginatorModule } from 'primeng/paginator';
     SupportOpposeInputComponent,
     SingleClickDirective,
     TableComponent,
+    DownloadTrayComponent,
   ],
   exports: [
     FecDatePipe,
@@ -175,6 +179,7 @@ import { PaginatorModule } from 'primeng/paginator';
     SupportOpposeInputComponent,
     SingleClickDirective,
     TableComponent,
+    DownloadTrayComponent,
   ],
   providers: [DatePipe],
 })

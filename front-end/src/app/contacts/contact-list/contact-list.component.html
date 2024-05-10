@@ -1,16 +1,34 @@
-<app-table title="Contacts" [items]="items" [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-  [totalItems]="totalItems" [loading]="loading" [rowsPerPage]="rowsPerPage" [selectAll]="selectAll"
-  [selectedItems]="selectedItems" itemName="contacts" [sortableHeaders]="sortableHeaders"
-  (loadTableItems)="loadTableItems($event)" (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)" (rowsPerPageChange)="onRowsPerPageChange($event)">
+<app-table
+  title="Contacts"
+  [items]="items"
+  [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+  [totalItems]="totalItems"
+  [loading]="loading"
+  [rowsPerPage]="rowsPerPage"
+  [selectAll]="selectAll"
+  [selectedItems]="selectedItems"
+  itemName="contacts"
+  [sortableHeaders]="sortableHeaders"
+  (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)"
+>
   <ng-template #toolbar>
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="left">
         <h1 class="m-0">Manage Contacts</h1>
       </ng-template>
       <ng-template pTemplate="right">
-        <button id="button-contacts-new" pButton pRipple label="Add Contact" icon="pi pi-plus" class="add-button"
-          (click)="addItem()"></button>
+        <button
+          id="button-contacts-new"
+          pButton
+          pRipple
+          label="Add Contact"
+          icon="pi pi-plus"
+          class="add-button"
+          (click)="addItem()"
+        ></button>
         <!--      <p-fileUpload-->
         <!--        mode="basic"-->
         <!--        accept="image/*"-->
@@ -24,8 +42,13 @@
     </p-toolbar>
   </ng-template>
   <ng-template #caption>
-    <button pButton pRipple label="Restore deleted contact(s)" class="restore-contact-button"
-      (click)="onRestoreClick()"></button>
+    <button
+      pButton
+      pRipple
+      label="Restore deleted contact(s)"
+      class="restore-contact-button"
+      (click)="onRestoreClick()"
+    ></button>
   </ng-template>
   <ng-template #header>
     <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
@@ -39,15 +62,27 @@
     <td>{{ item.employer }}</td>
     <td>{{ item.occupation }}</td>
     <td style="text-align: center">
-      <p-button icon="pi pi-trash" [text]="true" [ngClass]="{ disabled: !canDeleteItem(item) }"
+      <p-button
+        icon="pi pi-trash"
+        [text]="true"
+        [ngClass]="{ disabled: !canDeleteItem(item) }"
         pTooltip="This contact can not be deleted because it has associated transactions or reports."
-        [tooltipDisabled]="canDeleteItem(item)" (onClick)="canDeleteItem(item) && deleteItem(item)"></p-button>
+        [tooltipDisabled]="canDeleteItem(item)"
+        (onClick)="canDeleteItem(item) && deleteItem(item)"
+      ></p-button>
     </td>
   </ng-template>
 </app-table>
 
-<app-contact-dialog [contactTypeOptions]="dialogContactTypeOptions" [contact]="this.item"
-  [(detailVisible)]="detailVisible" [showHistory]="true" (savedContact)="saveContact($event)"></app-contact-dialog>
+<app-contact-dialog
+  [contactTypeOptions]="dialogContactTypeOptions"
+  [contact]="this.item"
+  [(detailVisible)]="detailVisible"
+  [showHistory]="true"
+  (savedContact)="saveContact($event)"
+></app-contact-dialog>
 
-<app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible"
-  (contactsRestored)="refreshTable()"></app-deleted-contact-dialog>
+<app-deleted-contact-dialog
+  [(visible)]="restoreDialogIsVisible"
+  (contactsRestored)="refreshTable()"
+></app-deleted-contact-dialog>
