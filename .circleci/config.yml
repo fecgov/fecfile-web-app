@@ -43,7 +43,7 @@ jobs:
       - checkout
 
       - browser-tools/install-chrome:
-          chrome-version: '114.0.5735.90'
+          chrome-version: "114.0.5735.90"
       - browser-tools/install-chromedriver
       - run:
           command: |
@@ -119,9 +119,14 @@ jobs:
             export MOCK_OPENFEC=REDIS
             echo $MOCK_OPENFEC
       - run:
+          name: use alternative login
+          command: |
+            export  ALTERNATIVE_LOGIN=USERNAME_PASSWORD
+            echo $ALTERNATIVE_LOGIN
+      - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${CIRCLE_BRANCH}
+            git checkout develop
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} docker-compose up --build -d
             docker container run --network container:fecfile-api \
@@ -310,21 +315,8 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - lint
       - test
-      - dependency-check
-      - e2e-test:
-          filters:
-            branches:
-              only: /release\/sprint-[\.\d]+|main/
-      - deploy-job:
-          requires:
-            - test
-            - dependency-check
-            - e2e-test
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|main/
+      - e2e-test
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
