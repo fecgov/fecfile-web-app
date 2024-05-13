@@ -28,7 +28,7 @@ export class TransactionService implements TableListService<Transaction> {
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
   ): Observable<ListRestResponse> {
     if (!ordering) {
-      ordering = 'line_label_order_key';
+      ordering = 'line_label';
     }
     return this.apiService
       .get<ListRestResponse>(`${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
