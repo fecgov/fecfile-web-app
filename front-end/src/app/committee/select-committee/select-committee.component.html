@@ -24,7 +24,9 @@
           <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
             <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
             <div class="committee-info">
-              <h3>{{ committee.name }}</h3>
+              <h3>
+                <span>{{ committee.name }}</span>
+              </h3>
               <h5 class="font-karla-bold">{{ committee.committee_id }}</h5>
             </div>
           </div>

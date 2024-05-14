@@ -75,10 +75,12 @@
 .committee-info {
   padding-left: 10px;
   h3 {
-    border-bottom: dotted 2px;
-    border-color: #d1d1d1;
     margin: 0;
     cursor: pointer;
+  }
+  span {
+    border-bottom: dotted 2px;
+    border-color: #d1d1d1;
   }
 }
 
