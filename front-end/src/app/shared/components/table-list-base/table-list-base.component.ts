@@ -94,11 +94,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     }
 
     this.itemService.getTableData(pageNumber, ordering, params).subscribe((response: ListRestResponse) => {
-      if (response.results?.length > 0) {
-        this.items = [...response.results];
-      } else {
-        this.items = [];
-      }
+      this.items = [...response.results];
       this.totalItems = response.count;
       this.loading = false;
     });

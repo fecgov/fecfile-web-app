@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -20,8 +21,6 @@ import { SharedModule } from '../../../shared/shared.module';
 import { TripleTransactionDetailComponent } from './triple-transaction-detail.component';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { RouterModule } from '@angular/router';
-import { TransactionService } from 'app/shared/services/transaction.service';
 
 describe('TripleTransactionDetailComponent', () => {
   let component: TripleTransactionDetailComponent;
@@ -33,13 +32,11 @@ describe('TripleTransactionDetailComponent', () => {
     getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
   ];
 
-  let transactionService: TransactionService;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule,
         FormsModule,
         ReactiveFormsModule,
         ToastModule,
@@ -61,7 +58,6 @@ describe('TripleTransactionDetailComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
-    transactionService = TestBed.inject(TransactionService);
     component = fixture.componentInstance;
     component.transaction = transaction;
     component.templateMap = testTemplateMap;
