@@ -74,6 +74,8 @@ function legacyLogin() {
 
   cy.visit('/');
   cy.wait('@LegacyLoginAvailable');
+  cy.get('.login-page').scrollTo(0, 300);
+  cy.wait(3000);
   cy.get(fieldEmail).type(email);
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');
