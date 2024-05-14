@@ -42,8 +42,7 @@ jobs:
     steps:
       - checkout
 
-      - browser-tools/install-chrome:
-          chrome-version: '124.0.6367.207'
+      - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
           command: |
