@@ -12,7 +12,7 @@
     [loading]="loading"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
     [showCurrentPageReport]="true"
-    sortField="line_label_order_key,created"
+    sortField="line_label,created"
     styleClass="p-datatable-striped"
   >
     <ng-template pTemplate="caption">
@@ -35,9 +35,9 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th pSortableColumn="line_label_order_key" id="line-label-column" role="columnheader">
+        <th pSortableColumn="line_label" id="line-label-column" role="columnheader">
           Line
-          <p-sortIcon field="line_label_order_key"></p-sortIcon>
+          <p-sortIcon field="line_label"></p-sortIcon>
         </th>
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
           Type

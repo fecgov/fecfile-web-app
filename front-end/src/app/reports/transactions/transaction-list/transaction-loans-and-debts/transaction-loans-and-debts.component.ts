@@ -25,7 +25,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   ];
 
   sortableHeaders = [
-    { field: 'line_label_order_key', label: 'Line' },
+    { field: 'line_label', label: 'Line' },
     { field: 'transaction_type_identifier', label: 'Type' },
     { field: 'name', label: 'Name' },
     { field: 'date', label: 'Date incurred' },
