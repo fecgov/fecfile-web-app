@@ -318,7 +318,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/|test\/e2e
+              only: /test-e2e-lb/
       - deploy-job:
           requires:
             - test
