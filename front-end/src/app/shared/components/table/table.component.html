@@ -55,8 +55,8 @@
     </ng-template>
     <ng-template pTemplate="summary">
       <div class="d-flex justify-content-between">
-        <div class="responsive-container">
-          <span class="paginator-text">Results per table:</span>
+        <div class="responsive-container left-container">
+          <span class="paginator-text">Results per page:</span>
           <p-dropdown
             [options]="paginationPageSizeOptions"
             [(ngModel)]="rowsPerPage"
@@ -122,7 +122,7 @@
       <img alt="last page icon" src="/assets/img/last_arrow.svg" />
     </ng-template>
     <ng-template pTemplate="emptymessage">
-      <td colspan="100" class="mx-3 empty-message">No data available in table</td>
+      <td colspan="100" class="mx-3 empty-message">{{ emptyMessage }}</td>
     </ng-template>
   </p-table>
 </div>

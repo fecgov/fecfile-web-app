@@ -33,6 +33,7 @@ export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges
   @Input() sortableHeaders: { field: string; label: string }[] = [];
   @Input() hasCheckbox = false;
   @Input() checkboxLabel?: (item: T) => string;
+  @Input() emptyMessage = 'No data available in table';
 
   @Output() loadTableItems = new EventEmitter<TableLazyLoadEvent>();
   @Output() selectionChange = new EventEmitter<T[]>();

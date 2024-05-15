@@ -296,6 +296,7 @@
           [loading]="tableLoading"
           [rowsPerPage]="rowsPerPage"
           itemName="transactions"
+          [emptyMessage]="emptyMessage"
           (loadTableItems)="loadTransactions($event)"
         >
           <ng-template #header>
@@ -306,17 +307,15 @@
             <th scope="col">Amount</th>
           </ng-template>
           <ng-template #body let-transaction>
-            <tr>
-              <td>
-                <a (click)="openTransaction(transaction)">
-                  {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
-                </a>
-              </td>
-              <td>{{ transaction.formType }}</td>
-              <td>{{ transaction.reportType }}</td>
-              <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
-              <td>{{ transaction.amount | currency }}</td>
-            </tr>
+            <td>
+              <a (click)="openTransaction(transaction)">
+                {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
+              </a>
+            </td>
+            <td>{{ transaction.formType }}</td>
+            <td>{{ transaction.reportType }}</td>
+            <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ transaction.amount | currency }}</td>
           </ng-template>
         </app-table>
       </div>
