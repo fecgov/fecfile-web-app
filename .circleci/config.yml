@@ -114,10 +114,12 @@ jobs:
             git clone https://github.com/fecgov/fecfile-web-api.git
           working_directory: ~
       - run:
-          name: use redis
+          name: use redis, trad login
           command: |
             export MOCK_OPENFEC=REDIS
-            echo $MOCK_OPENFEC
+            export ALTERNATIVE_LOGIN=USERNAME_PASSWORD
+            echo "MOCK_OPENFEC" $MOCK_OPENFEC
+            echo "ALTERNATIVE_LOGIN" $ALTERNATIVE_LOGIN
       - run:
           name: start fecfile-web-api
           command: |
@@ -316,7 +318,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/
+              only: /release\/sprint-[\.\d]+|main/|test\/e2e
       - deploy-job:
           requires:
             - test
