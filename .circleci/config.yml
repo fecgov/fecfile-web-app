@@ -102,6 +102,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
+          version: docker24
       - run:
           name: clone fecfile-web-api
           command: |
