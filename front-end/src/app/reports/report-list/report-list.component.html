@@ -14,8 +14,10 @@
   (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #toolbar>
-    <p-toolbar styleClass="mb-4">
-      <ng-template pTemplate="left"><span class="title1">Manage reports</span></ng-template>
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <h1 class="m-0">Manage reports</h1>
+      </ng-template>
       <ng-template pTemplate="right">
         <button
           pButton
