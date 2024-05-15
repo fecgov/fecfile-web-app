@@ -110,6 +110,11 @@ jobs:
             git clone https://github.com/fecgov/fecfile-web-api.git
           working_directory: ~
       - run:
+          name: use redis
+          command: |
+            export MOCK_OPENFEC=REDIS
+            echo $MOCK_OPENFEC
+      - run:
           name: start fecfile-web-api
           command: |
             git checkout 07e1e9e0b1d674079771ab0b697f673ea241ef71
