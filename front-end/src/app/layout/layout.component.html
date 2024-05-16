@@ -13,12 +13,12 @@
         </div>
         <div class="main-content">
           <div class="grid">
-            <div class="col-12" *ngIf="layoutControls.showCommitteeBanner">
+            <div *ngIf="layoutControls.showCommitteeBanner">
               <app-committee-banner></app-committee-banner>
             </div>
           </div>
           <div class="grid">
-            <div class="col-12 router-outlet">
+            <div class="router-outlet">
               <router-outlet></router-outlet>
             </div>
           </div>
@@ -38,9 +38,9 @@
       <div class="header-container" *ngIf="layoutControls.showHeader">
         <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
       </div>
-      <div class="col-12 main-content">
+      <div class="main-content">
         <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
-          <div class="col-12">
+          <div>
             <app-committee-banner></app-committee-banner>
           </div>
         </div>

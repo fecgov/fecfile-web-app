@@ -7,65 +7,33 @@
   (onHide)="hide()"
 >
   <ng-template pTemplate="content">
-    <p-table
-      #dt
-      [value]="items"
-      [lazy]="true"
-      (onLazyLoad)="loadTableItems($event)"
-      responsiveLayout="scroll"
-      dataKey="id"
-      [selection]="selectedItems"
-      (selectionChange)="onSelectionChange($event)"
-      [selectAll]="selectAll"
-      (selectAllChange)="onSelectAllChange($event)"
-      [paginator]="true"
-      [rows]="10"
-      [totalRecords]="totalItems"
+    <app-table
+      title="Restore deleted contact(s)"
+      [items]="items"
+      [totalItems]="totalItems"
       [loading]="loading"
+      sortField="created"
+      [rowsPerPage]="rowsPerPage"
+      [selectAll]="selectAll"
       [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+      [selectedItems]="selectedItems"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
-      [showCurrentPageReport]="true"
-      styleClass="p-datatable-striped"
+      [sortableHeaders]="sortableHeaders"
+      [hasCheckbox]="true"
+      [checkboxLabel]="getCheckboxLabel.bind(this)"
+      (loadTableItems)="loadTableItems($event)"
+      (selectionChange)="onSelectionChange($event)"
+      (selectAllChange)="onSelectAllChange($event)"
+      (rowsPerPageChange)="onRowsPerPageChange($event)"
     >
-      <ng-template pTemplate="caption">
-        <div class="flex align-items-center justify-content-between">
-          <h2 class="m-0">Restore deleted contact(s)</h2>
-        </div>
+      <ng-template #header> </ng-template>
+      <ng-template #body let-item>
+        <td>{{ displayName(item) }}</td>
+        <td>{{ item.type | label: contactTypeLabels }}</td>
+        <td>{{ item.employer }}</td>
+        <td>{{ item.occupation }}</td>
       </ng-template>
-      <ng-template pTemplate="sorticon" let-sortOrder>
-        <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-      </ng-template>
-      <ng-template pTemplate="header">
-        <tr role="row">
-          <th style="width: 3rem" id="header-checkbox" role="columnheader">
-            <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
-          </th>
-          <th pSortableColumn="sort_name" id="name-column" role="columnheader">
-            Contact Name <p-sortIcon field="sort_name"></p-sortIcon>
-          </th>
-          <th pSortableColumn="type" id="type-column" role="columnheader">
-            Contact Type <p-sortIcon field="type"></p-sortIcon>
-          </th>
-          <th pSortableColumn="employer" id="employer-column" role="columnheader">
-            Contact Employer <p-sortIcon field="employer"></p-sortIcon>
-          </th>
-          <th pSortableColumn="occupation" id="occupation-column" role="columnheader">
-            Contact Occupation <p-sortIcon field="occupation"></p-sortIcon>
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-item>
-        <tr role="row">
-          <td>
-            <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
-          </td>
-          <td>{{ displayName(item) }}</td>
-          <td>{{ item.type | label: contactTypeLabels }}</td>
-          <td>{{ item.employer }}</td>
-          <td>{{ item.occupation }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    </app-table>
   </ng-template>
   <ng-template pTemplate="footer">
     <div class="grid">

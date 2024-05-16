@@ -1,108 +1,66 @@
-<div class="card" data-cy="report-list-component">
-  <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left"><span class="title1">Manage reports</span></ng-template>
-
-    <ng-template pTemplate="right">
-      <button
-        pButton
-        pRipple
-        label="Create a new report"
-        data-cy="create-report"
-        icon="pi pi-plus"
-        class="add-button"
-        (click)="showDialog()"
-        [disabled]="noCashOnHand()"
-      ></button>
-    </ng-template>
-  </p-toolbar>
-
-  <p-table
-    #dt
-    [value]="items"
-    [lazy]="true"
-    (onLazyLoad)="loadTableItems($event)"
-    responsiveLayout="scroll"
-    dataKey="id"
-    [paginator]="true"
-    [rows]="10"
-    [totalRecords]="totalItems"
-    [loading]="loading"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
-    [showCurrentPageReport]="true"
-    styleClass="p-datatable-striped"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        <h5 class="m-0">Recent reports</h5>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="sorticon" let-sortOrder>
-      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr role="row">
-        <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
-          Form type
-          <p-sortIcon field="form_type"></p-sortIcon>
-        </th>
-        <th pSortableColumn="report_code_label" id="report-code-column" role="columnheader">
-          Type of report
-          <p-sortIcon field="report_code_label"></p-sortIcon>
-        </th>
-        <th pSortableColumn="coverage_through_date" id="coverage-dates-column" role="columnheader">
-          Coverage dates
-          <p-sortIcon field="coverage_through_date"></p-sortIcon>
-        </th>
-        <th pSortableColumn="report_status" id="status-column" role="columnheader">
-          Status
-          <p-sortIcon field="report_status"></p-sortIcon>
-        </th>
-        <th pSortableColumn="version_label" id="version" role="columnheader">
-          Version
-          <p-sortIcon field="version_label"></p-sortIcon>
-        </th>
-        <th pSortableColumn="upload_submission__created" id="date-filed-column" role="columnheader">
-          Date filed
-          <p-sortIcon field="upload_submission__created"></p-sortIcon>
-        </th>
-        <th id="actions" role="columnheader">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr role="row">
-        <td>{{ item.formLabel }}</td>
-        <td>{{ item.reportLabel }}</td>
-        <td>
-          <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
-            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
-          </ng-container>
-        </td>
-        <td>{{ item.report_status }}</td>
-        <td>{{ item.version_label }}</td>
-        <td>{{ item.upload_submission?.created | fecDate }}</td>
-        <td>
-          <app-table-actions-button
-            [tableActions]="rowActions"
-            [actionItem]="item"
-            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-            [buttonAriaLabel]="'edit ' + displayName(item)"
-          ></app-table-actions-button>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <span class="mx-3 d-block w-full">No data available in table</span>
-    </ng-template>
-  </p-table>
-</div>
+<app-table
+  title="Recent reports"
+  [items]="items"
+  [totalItems]="totalItems"
+  [loading]="loading"
+  [rowsPerPage]="rowsPerPage"
+  [selectAll]="selectAll"
+  [selectedItems]="selectedItems"
+  itemName="reports"
+  [sortableHeaders]="sortableHeaders"
+  (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)"
+>
+  <ng-template #toolbar>
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <h1 class="m-0">Manage reports</h1>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <button
+          pButton
+          pRipple
+          label="Create a new report"
+          data-cy="create-report"
+          icon="pi pi-plus"
+          class="add-button"
+          (click)="showDialog()"
+          [disabled]="noCashOnHand()"
+        ></button>
+      </ng-template>
+    </p-toolbar>
+  </ng-template>
+  <ng-template #header>
+    <th id="actions" role="columnheader">Actions</th>
+  </ng-template>
+  <ng-template #body let-item>
+    <td>{{ item.formLabel }}</td>
+    <td>{{ item.reportLabel }}</td>
+    <td>
+      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
+        >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+      </ng-container>
+    </td>
+    <td>{{ item.report_status }}</td>
+    <td>{{ item.version_label }}</td>
+    <td>{{ item.upload_submission?.created | fecDate }}</td>
+    <td>
+      <app-table-actions-button
+        [tableActions]="rowActions"
+        [actionItem]="item"
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+        [buttonAriaLabel]="'edit ' + displayName(item)"
+      ></app-table-actions-button>
+    </td>
+  </ng-template>
+</app-table>
 
 <app-form-type-dialog
   [noReports]="totalItems === 0"
   (dialogClose)="dialogVisible = false"
   [dialogVisible]="dialogVisible"
 ></app-form-type-dialog>
-
-<p-toast></p-toast>
-<p-confirmDialog></p-confirmDialog>

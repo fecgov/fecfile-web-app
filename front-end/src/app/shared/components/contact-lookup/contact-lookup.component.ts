@@ -44,7 +44,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @ViewChild(AutoComplete)
   set autoComplete(ac: AutoComplete) {
     setTimeout(() => {
-      if (ac.dropdownButton) {
+      if (ac?.dropdownButton) {
         ac.dropdownButton.nativeElement.tabIndex = -1;
       }
     }, 0);
