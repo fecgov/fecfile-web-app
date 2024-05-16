@@ -114,7 +114,7 @@ export class ContactListPage {
           'x-csrftoken': cookie?.value,
         },
       }).then((resp) => {
-        const contacts = resp.body.results;
+        const contacts = resp.body;
         for (const contact of contacts) {
           ContactListPage.deleteContact(contact.id);
         }
