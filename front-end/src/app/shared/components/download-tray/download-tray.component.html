@@ -1,0 +1,47 @@
+<p-sidebar [(visible)]="sidebarVisible" position="bottom" [showCloseIcon]="false" [modal]="false" appendTo="body">
+  <ng-template pTemplate="header">Your downloads</ng-template>
+  <ng-template pTemplate="content">
+    <table>
+      <thead>
+        <tr>
+          <th>isComplete</th>
+          <th>Name</th>
+          <th>Download Button</th>
+          <th>Remove Button</th>
+          <th>Downloading text</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of downloads">
+          <td>
+            <img *ngIf="item.isComplete" src="assets/img/check.svg" draggable="false" alt="Checkmark" />
+            <img *ngIf="!item.isComplete" src="assets/img/loading-dots.gif" draggable="false" alt="Loading dots gif" />
+          </td>
+          <td class="download-text">{{ item.name }}</td>
+          <td>
+            <button
+              pButton
+              pRipple
+              styleClass="p-button-primary"
+              (click)="download(item)"
+              [disabled]="!item.isComplete"
+            >
+              Download
+            </button>
+          </td>
+          <td>
+            <button (click)="removeDownload(item)">
+              <img src="assets/img/x-circle.svg" draggable="false" alt="X in a circle" />
+            </button>
+          </td>
+          <td class="download-text">
+            <span *ngIf="!item.isComplete">
+              We are preparing your download. Your wait will vary depending on how many records you requested and how
+              many downloads we are processing
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</p-sidebar>

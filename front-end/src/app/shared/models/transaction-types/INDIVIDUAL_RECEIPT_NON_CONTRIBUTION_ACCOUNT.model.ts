@@ -11,7 +11,7 @@ export class INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT extends SchATransaction
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT
+    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

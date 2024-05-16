@@ -53,14 +53,14 @@ describe('AdditionalInfoInputComponent', () => {
       [testTemplateMap.purpose_description]: 'abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.transaction?.transactionType?.purposeDescriptionPrefix
+      component.transaction?.transactionType?.purposeDescriptionPrefix,
     );
 
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'Prefax: abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc'
+      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc',
     );
   });
 
@@ -77,7 +77,7 @@ describe('AdditionalInfoInputComponent', () => {
     });
     fixture.detectChanges();
     expect(component.form.get(testTemplateMap.text4000)?.value).toBe(
-      component.transaction?.memo_text?.text_prefix + ' '
+      component.transaction?.memo_text?.text_prefix + ' ',
     );
   });
 });

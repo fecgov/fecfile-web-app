@@ -77,6 +77,6 @@ describe('RegisterCommitteeComponent', () => {
     httpTestingController.verify();
     setTimeout(() => {
       expect(component.unableToCreateAccount).toBeTrue();
-    }, 500)
+    }, 500);
   }));
 });

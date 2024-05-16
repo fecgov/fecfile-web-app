@@ -5,7 +5,6 @@ import { ReportSummaryComponent } from './report-summary/report-summary.componen
 import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
-import { TestDotFecComponent } from './test-dot-fec-workflow/test-dot-fec.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
@@ -120,13 +119,6 @@ const routes: Routes = [
     component: SubmitReportStatusComponent,
     resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'test-dot-fec/:reportId',
-    component: TestDotFecComponent,
-    resolve: { report: ReportResolver },
-    data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },

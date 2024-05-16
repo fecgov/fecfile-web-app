@@ -2,7 +2,8 @@
   <div class="grid">
     <div class="col-12">
       <label [for]="controlName" style="display: inline-block">{{ label }}</label>
-      <span *ngIf="tooltipText"
+      <span
+        *ngIf="tooltipText"
         class="pi pi-info-circle"
         style="font-size: 1.5rem; margin-left: 0.5rem"
         pTooltip="{{ tooltipText }}"

@@ -11,7 +11,7 @@ export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL extends SchBTransactionType {
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL
+    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
   );
   override subTransactionConfig = [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO];
   schema = schema;

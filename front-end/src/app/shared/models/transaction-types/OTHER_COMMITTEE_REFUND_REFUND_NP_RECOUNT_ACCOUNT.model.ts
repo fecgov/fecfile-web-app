@@ -11,7 +11,7 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransa
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT
+    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
   );
   schema = schema;
   override isRefund = true;

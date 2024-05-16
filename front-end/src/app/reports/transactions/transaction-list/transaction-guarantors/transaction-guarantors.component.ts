@@ -20,6 +20,11 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
   @Input() loan?: Transaction;
 
+  override sortableHeaders: { field: string; label: string }[] = [
+    { field: 'name', label: 'Name' },
+    { field: 'amount', label: 'Guaranteed financial information amount' },
+  ];
+
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
@@ -28,7 +33,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     protected override router: Router,
     protected override itemService: TransactionSchC2Service,
     protected override store: Store,
-    protected override reportService: ReportService
+    protected override reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
@@ -53,19 +58,19 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
       'View',
       this.editItem.bind(this),
       () => !this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Edit',
       this.editItem.bind(this),
       () => this.reportIsEditable,
-      () => true
+      () => true,
     ),
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
       () => this.reportIsEditable,
-      () => true
+      () => true,
     ),
   ];
 }

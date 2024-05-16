@@ -11,7 +11,7 @@ export class INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

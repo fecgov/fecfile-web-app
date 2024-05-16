@@ -59,9 +59,7 @@ describe('TransactionService', () => {
         expect(response).toEqual(mockResponse);
       });
 
-      const req = httpTestingController.expectOne(
-        `${environment.apiUrl}/transactions/?page=1&ordering=line_label_order_key`,
-      );
+      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=line_label`);
       expect(req.request.method).toEqual('GET');
       req.flush(mockResponse);
       httpTestingController.verify();
@@ -149,7 +147,7 @@ describe('TransactionService', () => {
   });
 
   describe('create', () => {
-    xit('should POST a record', () => {
+    it('should POST a record', () => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -203,34 +201,6 @@ describe('TransactionService', () => {
     });
   });
 
-  describe('multisave', () => {
-    it('should PUT an array of records', fakeAsync(() => {
-      const transactions: SchATransaction[] = [
-        SchATransaction.fromJSON({
-          id: '1',
-          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        }),
-        SchATransaction.fromJSON({
-          id: '2',
-          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        }),
-        SchATransaction.fromJSON({
-          id: '3',
-          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        }),
-      ];
-
-      service.multisave(transactions).subscribe((response) => {
-        expect(response[0]?.id).toEqual('1');
-      });
-      tick(100);
-      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/`);
-      expect(req.request.method).toEqual('PUT');
-      req.flush(transactions);
-      httpTestingController.verify();
-    }));
-  });
-
   describe('multiSaveReattRedes', () => {
     it('should PUT an array of records', fakeAsync(() => {
       const transactions: SchATransaction[] = [
@@ -250,12 +220,15 @@ describe('TransactionService', () => {
 
       service.multiSaveReattRedes(transactions).subscribe((response) => {
         expect(response[0]?.id).toEqual('1');
+        expect(response[1]?.id).toEqual('2');
+        expect(response[2]?.id).toEqual('3');
       });
-      tick(100);
+
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/reattribution/`);
       expect(req.request.method).toEqual('PUT');
-      req.flush(transactions);
+      req.flush(transactions.map((t) => t.id));
       httpTestingController.verify();
+      tick(100);
     }));
   });
 

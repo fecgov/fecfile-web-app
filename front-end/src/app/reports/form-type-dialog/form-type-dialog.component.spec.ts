@@ -81,7 +81,7 @@ describe('FormTypeDialogComponent', () => {
     it('should return a correctly formatted string if there is a selected type', () => {
       component.selectedType = FormTypes.F3X;
       expect(component.dropdownButtonText).toEqual(
-        '<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>'
+        '<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>',
       );
     });
   });
@@ -103,8 +103,8 @@ describe('FormTypeDialogComponent', () => {
       of(
         Form24.fromJSON({
           id: 2401,
-        })
-      )
+        }),
+      ),
     );
 
     component.goToReportForm();

@@ -11,7 +11,7 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionTyp
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

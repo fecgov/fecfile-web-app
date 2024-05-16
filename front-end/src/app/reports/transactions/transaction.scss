@@ -26,14 +26,17 @@
   color: #212121;
 }
 
-:host ::ng-deep .p-button.add-button {
-  color: black;
-  background-color: #f77b42;
-  border-color: #f77b42;
-}
-
 .read-only-tag {
-  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family:
+    karla,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
   color: gray;
   text-transform: uppercase;
   margin-bottom: 2.5em;
@@ -49,7 +52,7 @@
 }
 
 hr {
-  margin: .5rem .5rem 1rem 0;
+  margin: 0.5rem 0.5rem 1rem 0;
   color: inherit;
   border: 0;
   border-top: 2px solid;

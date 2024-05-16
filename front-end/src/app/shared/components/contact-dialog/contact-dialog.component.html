@@ -42,7 +42,7 @@
             <div class="col-6">
               <div class="field">
                 <label for="candidate_id">CANDIDATE ID</label>
-                <input type="text" pInputText id="candidate_id" formControlName="candidate_id"/>
+                <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
                 <app-error-messages
                   [form]="form"
                   fieldName="candidate_id"
@@ -59,7 +59,7 @@
               <div class="col-4">
                 <div class="field">
                   <label for="committee_id">COMMITTEE ID</label>
-                  <input type="text" pInputText id="committee_id" formControlName="committee_id"/>
+                  <input type="text" pInputText id="committee_id" formControlName="committee_id" />
                   <app-error-messages
                     [form]="form"
                     fieldName="committee_id"
@@ -71,9 +71,8 @@
             <div class="col-8">
               <div class="field">
                 <label for="name">NAME</label>
-                <input type="text" pInputText id="name" formControlName="name"/>
-                <app-error-messages [form]="form" fieldName="name"
-                                    [formSubmitted]="formSubmitted"></app-error-messages>
+                <input type="text" pInputText id="name" formControlName="name" />
+                <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
               </div>
             </div>
             <ng-container *ngIf="contactType === ContactTypes.ORGANIZATION">
@@ -86,7 +85,7 @@
             <div class="col-4">
               <div class="field">
                 <label for="last_name">LAST NAME</label>
-                <input type="text" pInputText id="last_name" formControlName="last_name"/>
+                <input type="text" pInputText id="last_name" formControlName="last_name" />
                 <app-error-messages
                   [form]="form"
                   fieldName="last_name"
@@ -97,7 +96,7 @@
             <div class="col-4">
               <div class="field">
                 <label for="first_name">FIRST NAME</label>
-                <input type="text" pInputText id="first_name" formControlName="first_name"/>
+                <input type="text" pInputText id="first_name" formControlName="first_name" />
                 <app-error-messages
                   [form]="form"
                   fieldName="first_name"
@@ -108,7 +107,7 @@
             <div class="col-4">
               <div class="field">
                 <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-                <input type="text" pInputText id="middle_name" formControlName="middle_name"/>
+                <input type="text" pInputText id="middle_name" formControlName="middle_name" />
                 <app-error-messages
                   [form]="form"
                   fieldName="middle_name"
@@ -121,7 +120,7 @@
             <div class="col-3">
               <div class="field">
                 <label for="prefix">PREFIX (OPTIONAL)</label>
-                <input type="text" pInputText id="prefix" formControlName="prefix"/>
+                <input type="text" pInputText id="prefix" formControlName="prefix" />
                 <app-error-messages
                   [form]="form"
                   fieldName="prefix"
@@ -132,7 +131,7 @@
             <div class="col-3">
               <div class="field">
                 <label for="suffix">SUFFIX (OPTIONAL)</label>
-                <input type="text" pInputText id="suffix" formControlName="suffix"/>
+                <input type="text" pInputText id="suffix" formControlName="suffix" />
                 <app-error-messages
                   [form]="form"
                   fieldName="suffix"
@@ -145,7 +144,7 @@
         </ng-container>
         <div class="grid">
           <div class="col-12">
-            <hr/>
+            <hr />
           </div>
         </div>
         <div class="grid">
@@ -157,8 +156,7 @@
           <div class="col-6">
             <div class="field">
               <label for="country">COUNTRY/REGION</label>
-              <p-dropdown inputId="country" formControlName="country"
-                          [options]="countryOptions"></p-dropdown>
+              <p-dropdown inputId="country" formControlName="country" [options]="countryOptions"></p-dropdown>
             </div>
           </div>
           <div class="col-6"></div>
@@ -167,7 +165,7 @@
           <div class="col-6">
             <div class="field">
               <label for="street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="street_1" formControlName="street_1"/>
+              <input type="text" pInputText id="street_1" formControlName="street_1" />
               <app-error-messages
                 [form]="form"
                 fieldName="street_1"
@@ -178,7 +176,7 @@
           <div class="col-6">
             <div class="field">
               <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="street_2" formControlName="street_2"/>
+              <input type="text" pInputText id="street_2" formControlName="street_2" />
               <app-error-messages
                 [form]="form"
                 fieldName="street_2"
@@ -191,9 +189,8 @@
           <div class="col-6">
             <div class="field">
               <label for="city">CITY</label>
-              <input type="text" pInputText id="city" formControlName="city"/>
-              <app-error-messages [form]="form" fieldName="city"
-                                  [formSubmitted]="formSubmitted"></app-error-messages>
+              <input type="text" pInputText id="city" formControlName="city" />
+              <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-3">
@@ -206,16 +203,14 @@
                 [autoDisplayFirst]="false"
                 appendTo="body"
               ></p-dropdown>
-              <app-error-messages [form]="form" fieldName="state"
-                                  [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="zip" formControlName="zip"/>
-              <app-error-messages [form]="form" fieldName="zip"
-                                  [formSubmitted]="formSubmitted"></app-error-messages>
+              <input type="text" pInputText id="zip" formControlName="zip" />
+              <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         </div>
@@ -238,7 +233,7 @@
         <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
           <div class="grid">
             <div class="col-12">
-              <hr/>
+              <hr />
             </div>
           </div>
           <div class="grid">
@@ -250,7 +245,7 @@
             <div class="col-6">
               <div class="field">
                 <label for="employer">EMPLOYER (OPTIONAL)</label>
-                <input type="text" pInputText id="employer" formControlName="employer"/>
+                <input type="text" pInputText id="employer" formControlName="employer" />
                 <app-error-messages
                   [form]="form"
                   fieldName="employer"
@@ -261,7 +256,7 @@
             <div class="col-6">
               <div class="field">
                 <label for="occupation">OCCUPATION (OPTIONAL)</label>
-                <input type="text" pInputText id="occupation" formControlName="occupation"/>
+                <input type="text" pInputText id="occupation" formControlName="occupation" />
                 <app-error-messages
                   [form]="form"
                   fieldName="occupation"
@@ -274,7 +269,7 @@
         <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
           <div class="grid">
             <div class="col-12">
-              <hr/>
+              <hr />
             </div>
           </div>
           <div class="grid">
@@ -294,46 +289,35 @@
       </form>
 
       <div *ngIf="showHistory && !isNewItem">
-        <p-table
-          [value]="transactions"
-          responsiveLayout="scroll"
-          dataKey="id"
-          [paginator]="true"
-          (onLazyLoad)="loadTransactions($event)"
+        <app-table
+          title="Transaction history"
+          [items]="transactions"
+          [totalItems]="totalTransactions"
           [loading]="tableLoading"
-          [totalRecords]="totalTransactions"
-          [lazy]="true"
-          [rows]="rowsPerPage"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
-          [showCurrentPageReport]="true"
-          styleClass="p-datatable-striped"
+          [rowsPerPage]="rowsPerPage"
+          itemName="transactions"
+          [emptyMessage]="emptyMessage"
+          (loadTableItems)="loadTransactions($event)"
         >
-          <ng-template pTemplate="caption">
-            <h2 class="m-0">Transaction history</h2>
+          <ng-template #header>
+            <th scope="col">Transaction type</th>
+            <th scope="col">Form type</th>
+            <th scope="col">Report type</th>
+            <th scope="col">Date</th>
+            <th scope="col">Amount</th>
           </ng-template>
-          <ng-template pTemplate="header">
-            <tr>
-              <th scope="col">Transaction type</th>
-              <th scope="col">Form type</th>
-              <th scope="col">Report type</th>
-              <th scope="col">Date</th>
-              <th scope="col">Amount</th>
-            </tr>
+          <ng-template #body let-transaction>
+            <td>
+              <a (click)="openTransaction(transaction)">
+                {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
+              </a>
+            </td>
+            <td>{{ transaction.formType }}</td>
+            <td>{{ transaction.reportType }}</td>
+            <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ transaction.amount | currency }}</td>
           </ng-template>
-          <ng-template pTemplate="body" let-transaction>
-            <tr>
-              <td>
-                <a (click)="openTransaction(transaction)">
-                  {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
-                </a>
-              </td>
-              <td>{{ transaction.formType }}</td>
-              <td>{{ transaction.reportType }}</td>
-              <td>{{ transaction.date | date:'MM/dd/yyyy' }}</td>
-              <td>{{ transaction.amount | currency }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
+        </app-table>
       </div>
     </ng-template>
     <ng-template pTemplate="footer">

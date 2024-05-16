@@ -6,6 +6,7 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
   node: circleci/node@5.2.0
+  python: circleci/python@2.1.1
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -27,6 +28,10 @@ jobs:
       - run:
           name: Run linter
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
+          working_directory: ~/project/front-end/
+      - run:
+          name: "Run Prettier with project configuration"
+          command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
@@ -227,6 +232,7 @@ jobs:
   dependency-check:
     docker:
       - image: cimg/node:20.4.0-browsers
+      - image: cimg/python:3.10-node
 
     steps:
       - checkout
@@ -280,7 +286,18 @@ jobs:
           paths:
             - snyk-linux
             - snyk.version
-
+      - run:
+          name: install python
+          command: |
+            sudo apt update
+            sudo apt install python3 python3-pip
+      - python/install-packages:
+          pkg-manager: pip
+          pip-dependency-file: requirements.txt
+      - run:
+          name: Run snyk python test
+          command: |
+            snyk test
       - run:
           name: Run snyk test
           command: |

@@ -1,89 +1,49 @@
-<p-toast></p-toast>
-<p-toolbar styleClass="mb-4">
-  <ng-template pTemplate="left">
-    <h1>Manage Users</h1>
+<app-table
+  title="Existing Users"
+  [items]="items"
+  [totalItems]="totalItems"
+  [loading]="loading"
+  sortField="created"
+  [rowsPerPage]="rowsPerPage"
+  [selectAll]="selectAll"
+  [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+  [selectedItems]="selectedItems"
+  itemName="users"
+  [sortableHeaders]="sortableHeaders"
+  (loadTableItems)="loadTableItems($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (selectAllChange)="onSelectAllChange($event)"
+  (rowsPerPageChange)="onRowsPerPageChange($event)"
+>
+  <ng-template #toolbar>
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <h1 class="m-0">Manage Users</h1>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <button (click)="addItem()" class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
+      </ng-template>
+    </p-toolbar>
   </ng-template>
-  <ng-template pTemplate="right">
-    <button (click)="addItem()" class="p-button" icon="pi pi-plus" label="Add User" pButton pRipple></button>
+  <ng-template #header>
+    <th id="buttons" role="columnheader">Actions</th>
   </ng-template>
-</p-toolbar>
-<p-divider></p-divider>
-<p-card>
-  <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left">
-      <h1>Existing Users</h1>
-    </ng-template>
-  </p-toolbar>
-
-  <p-table
-    (onLazyLoad)="loadTableItems($event)"
-    (selectAllChange)="onSelectAllChange($event)"
-    (selectionChange)="onSelectionChange($event)"
-    [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-    [lazy]="true"
-    [loading]="loading"
-    [paginator]="true"
-    [rows]="10"
-    [selectAll]="selectAll"
-    [selection]="selectedItems"
-    [showCurrentPageReport]="true"
-    [totalRecords]="totalItems"
-    [value]="items"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
-    dataKey="id"
-    responsiveLayout="scroll"
-    sortField="created"
-    styleClass="p-datatable-striped"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        <h3 class="m-0">Existing Users</h3>
-      </div>
-    </ng-template>
-    <ng-template let-sortOrder pTemplate="sorticon">
-      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr role="row">
-        <th id="name-column" pSortableColumn="name" role="columnheader">Name
-          <p-sortIcon field="name"></p-sortIcon>
-        </th>
-        <th id="email-column" pSortableColumn="email" role="columnheader">
-          Email
-          <p-sortIcon field="email"></p-sortIcon>
-        </th>
-        <th id="role-column" pSortableColumn="role" role="columnheader">Role
-          <p-sortIcon field="role"></p-sortIcon>
-        </th>
-        <th id="active-column" pSortableColumn="is_active" role="columnheader">
-          Status
-          <p-sortIcon field="is_active"></p-sortIcon>
-        </th>
-        <th id="buttons" role="columnheader">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template let-item pTemplate="body">
-      <tr role="row">
-        <td>{{ item.name }}</td>
-        <td>{{ item.email }}</td>
-        <td>{{ item.getRoleLabel() }}</td>
-        <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-        <td>
-          <app-table-actions-button
-            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-            [actionItem]="item"
-            [tableActions]="rowActions"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-          ></app-table-actions-button>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <span class="mx-3 d-block w-full">No data available in table</span>
-    </ng-template>
-  </p-table>
-</p-card>
+  <ng-template let-item #body>
+    <td>{{ item.name }}</td>
+    <td>{{ item.email }}</td>
+    <td>{{ item.getRoleLabel() }}</td>
+    <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
+    <td>
+      <app-table-actions-button
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        [actionItem]="item"
+        [tableActions]="rowActions"
+        buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+      ></app-table-actions-button>
+    </td>
+  </ng-template>
+</app-table>
 
 <p-confirmDialog #cd [style]="{ width: '450px' }">
   <ng-template pTemplate="footer">
@@ -99,6 +59,3 @@
   (saveMembership)="saveMembership($event)"
   [(detailVisible)]="detailVisible"
 ></app-committee-member-dialog>
-
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
-

@@ -61,11 +61,11 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
         hasNoContact,
         () => true,
         'pi pi-plus',
-        ControlType.BUTTON
+        ControlType.BUTTON,
       ),
     ],
     [CANCEL_CONTROL],
-    [SAVE_DOUBLE_ENTRY_LIST_CONTROL]
+    [SAVE_DOUBLE_ENTRY_LIST_CONTROL],
   );
 
   getNewTransaction() {

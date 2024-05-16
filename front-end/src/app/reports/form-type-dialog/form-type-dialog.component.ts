@@ -49,7 +49,11 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   ];
   selectedForm24Type: '24' | '48' | undefined;
 
-  constructor(public router: Router, private form24Service: Form24Service, private store: Store) {
+  constructor(
+    public router: Router,
+    private form24Service: Form24Service,
+    private store: Store,
+  ) {
     super();
   }
 
@@ -60,7 +64,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(
       takeUntil(this.destroy$),
-      filter((committeeAccount) => !!committeeAccount)
+      filter((committeeAccount) => !!committeeAccount),
     );
   }
 

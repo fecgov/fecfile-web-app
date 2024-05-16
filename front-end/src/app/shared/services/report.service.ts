@@ -33,13 +33,19 @@ export class ReportService implements TableListService<Report> {
     protected store: Store,
   ) {}
 
-  public getTableData(pageNumber = 1, ordering = 'form_type'): Observable<ListRestResponse> {
-    return this.apiService.get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`).pipe(
-      map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => getReportFromJSON(item));
-        return response;
-      }),
-    );
+  public getTableData(
+    pageNumber = 1,
+    ordering = 'form_type',
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
+  ): Observable<ListRestResponse> {
+    return this.apiService
+      .get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
+      .pipe(
+        map((response: ListRestResponse) => {
+          response.results = response.results.map((item) => getReportFromJSON(item));
+          return response;
+        }),
+      );
   }
 
   public getAllReports(): Promise<Report[]> {

@@ -9,7 +9,10 @@ import { ApiService } from './api.service';
 export class Form24Service extends ReportService {
   override apiEndpoint = '/reports/form-24';
 
-  constructor(override apiService: ApiService, override store: Store) {
+  constructor(
+    override apiService: ApiService,
+    override store: Store,
+  ) {
     super(apiService, store);
   }
 }

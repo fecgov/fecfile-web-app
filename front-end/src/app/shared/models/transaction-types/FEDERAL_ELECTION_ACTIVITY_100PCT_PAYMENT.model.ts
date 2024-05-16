@@ -16,7 +16,7 @@ export class FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT extends SchBTransactionTyp
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

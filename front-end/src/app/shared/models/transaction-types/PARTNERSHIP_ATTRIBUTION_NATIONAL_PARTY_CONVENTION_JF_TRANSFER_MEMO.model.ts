@@ -11,7 +11,7 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO 
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   );
   override updateParentOnSave = true;
   schema = schema;

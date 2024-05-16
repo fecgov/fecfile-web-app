@@ -11,7 +11,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactio
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
