@@ -14,7 +14,6 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
-  override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
@@ -27,6 +26,14 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.COMMITTEE,
     ContactTypes.INDIVIDUAL,
   ]);
+
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'sort_name', label: 'Name' },
+    { field: 'type', label: 'Type' },
+    { field: 'sort_fec_id', label: 'FEC ID' },
+    { field: 'employer', label: 'Employer' },
+    { field: 'occupation', label: 'Occupation' },
+  ];
 
   constructor(
     protected override messageService: MessageService,
@@ -60,7 +67,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   public override addItem() {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
-    this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {

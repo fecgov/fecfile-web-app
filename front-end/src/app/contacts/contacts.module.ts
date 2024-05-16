@@ -43,6 +43,7 @@ import { RippleModule } from 'primeng/ripple';
     SharedModule,
     TooltipModule,
     RippleModule,
+    SharedModule,
   ],
 })
 export class ContactsModule {}

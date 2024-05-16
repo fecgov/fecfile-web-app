@@ -2,7 +2,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getTestTransactionByType, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import {
+  getTestTransactionByType,
+  testActiveReport,
+  testContact,
+  testMockStore,
+} from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -127,6 +132,7 @@ describe('ContactDialogComponent', () => {
     let transaction: SchATransaction;
     beforeEach(() => {
       transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
+      transaction.reports = [testActiveReport];
     });
 
     it('should route to transaction', () => {

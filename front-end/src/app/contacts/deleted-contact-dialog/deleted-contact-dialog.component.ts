@@ -24,6 +24,13 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   @Output() contactsRestored = new EventEmitter<string[]>();
   contactTypeLabels: LabelList = ContactTypeLabels;
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'sort_name', label: 'Contact Name' },
+    { field: 'type', label: 'Contact Type' },
+    { field: 'employer', label: 'Contact Employer' },
+    { field: 'occupation', label: 'Contact Occupation' },
+  ];
+
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     protected override messageService: MessageService,
@@ -56,6 +63,10 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
       this.contactsRestored.emit(restoredContacts);
       this.hide();
     });
+  }
+
+  getCheckboxLabel(item: Contact): string {
+    return `'select ' + ${this.displayName(item)}`;
   }
 
   protected getEmptyItem(): Contact {

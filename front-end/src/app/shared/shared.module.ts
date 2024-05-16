@@ -59,6 +59,9 @@ import { LinkedReportInputComponent } from './components/inputs/linked-report-in
 import { IndependentExpenditureCreateF3xInputComponent } from './components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 import { RouterLink } from '@angular/router';
 import { TableModule } from 'primeng/table';
+import { TableComponent } from './components/table/table.component';
+import { ToastModule } from 'primeng/toast';
+import { PaginatorModule } from 'primeng/paginator';
 import { DownloadTrayComponent } from './components/download-tray/download-tray.component';
 import { SidebarModule } from 'primeng/sidebar';
 
@@ -88,6 +91,8 @@ import { SidebarModule } from 'primeng/sidebar';
     RippleModule,
     RouterLink,
     TableModule,
+    ToastModule,
+    PaginatorModule,
     SidebarModule,
   ],
   declarations: [
@@ -131,6 +136,7 @@ import { SidebarModule } from 'primeng/sidebar';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
+    TableComponent,
     DownloadTrayComponent,
   ],
   exports: [
@@ -172,6 +178,7 @@ import { SidebarModule } from 'primeng/sidebar';
     DebtInputComponent,
     SupportOpposeInputComponent,
     SingleClickDirective,
+    TableComponent,
     DownloadTrayComponent,
   ],
   providers: [DatePipe],
