@@ -65,7 +65,8 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   override processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
     const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload, this.pullForward);
-    this.transactionService.multiSaveReattRedes(payloads).subscribe((response) => {
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    this.transactionService.multiSaveReattRedes(payloads, reportId).subscribe((response) => {
       navigationEvent.transaction = response[0];
       this.navigateTo(navigationEvent);
     });
