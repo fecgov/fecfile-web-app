@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit } from '@angular/core';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -34,6 +34,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     protected override itemService: TransactionSchC2Service,
     protected override store: Store,
     protected override reportService: ReportService,
+    private cdr: ChangeDetectorRef,
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
@@ -48,6 +49,8 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     if (!this.loan?.id) {
       this.items = [];
       this.totalItems = 0;
+      this.loading = false;
+      this.cdr.detectChanges();
     } else {
       super.loadTableItems(event);
     }
