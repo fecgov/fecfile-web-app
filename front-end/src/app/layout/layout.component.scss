@@ -4,12 +4,11 @@
 
 .main-content {
   margin: 0;
-  padding: 0;
+  padding: 0 32px;
 }
 
 .header-container {
-  padding-bottom: 5px;
-  padding-top: 0;
+  padding: 0 32px 5px 32px;
 }
 
 .row {
@@ -22,7 +21,7 @@
 }
 
 app-footer {
-  padding: 0;
+  padding: 32px 0 0 0;
 }
 
 #page-container {

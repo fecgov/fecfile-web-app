@@ -24,15 +24,6 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     ...ScheduleDTransactionTypeLabels,
   ];
 
-  sortableHeaders = [
-    { field: 'line_label', label: 'Line' },
-    { field: 'transaction_type_identifier', label: 'Type' },
-    { field: 'name', label: 'Name' },
-    { field: 'date', label: 'Date incurred' },
-    { field: 'amount', label: 'Amount' },
-    { field: 'balance', label: 'Balance' },
-  ];
-
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
@@ -46,5 +37,13 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
     this.caption =
       'Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.';
+
+    this.sortableHeaders.push(
+      ...[
+        { field: 'date', label: 'Date incurred' },
+        { field: 'amount', label: 'Amount' },
+        { field: 'balance', label: 'Balance' },
+      ],
+    );
   }
 }

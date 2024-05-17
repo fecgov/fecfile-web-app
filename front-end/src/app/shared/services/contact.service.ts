@@ -45,11 +45,15 @@ export class ContactService implements TableListService<Contact> {
     return schema;
   }
 
-  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
+  public getTableData(
+    pageNumber = 1,
+    ordering = '',
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
+  ): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
     }
-    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}&ordering=${ordering}`).pipe(
+    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}&ordering=${ordering}`, params).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => Contact.fromJSON(item));
         return response;
@@ -177,16 +181,22 @@ export class ContactService implements TableListService<Contact> {
 export class DeletedContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
+  public getTableData(
+    pageNumber = 1,
+    ordering = '',
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
+  ): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
     }
-    return this.apiService.get<ListRestResponse>(`/contacts-deleted/?page=${pageNumber}&ordering=${ordering}`).pipe(
-      map((response: ListRestResponse) => {
-        response.results = response.results.map(Contact.fromJSON);
-        return response;
-      }),
-    );
+    return this.apiService
+      .get<ListRestResponse>(`/contacts-deleted/?page=${pageNumber}&ordering=${ordering}`, params)
+      .pipe(
+        map((response: ListRestResponse) => {
+          response.results = response.results.map(Contact.fromJSON);
+          return response;
+        }),
+      );
   }
 
   public restore(contacts: Contact[]): Observable<string[]> {

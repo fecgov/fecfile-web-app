@@ -20,6 +20,11 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
   @Input() loan?: Transaction;
 
+  override sortableHeaders: { field: string; label: string }[] = [
+    { field: 'name', label: 'Name' },
+    { field: 'amount', label: 'Guaranteed financial information amount' },
+  ];
+
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
