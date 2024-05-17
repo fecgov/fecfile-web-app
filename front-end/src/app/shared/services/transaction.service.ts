@@ -30,6 +30,10 @@ export class TransactionService implements TableListService<Transaction> {
     if (!ordering) {
       ordering = 'line_label,created';
     }
+    if (ordering === '-line_label,created') {
+      ordering = '-line_label,-created';
+    }
+
     return this.apiService
       .get<ListRestResponse>(`${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
       .pipe(
