@@ -9,9 +9,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class CommitteeAccountService {
-  constructor(
-    private apiService: ApiService,
-  ) { }
+  constructor(private apiService: ApiService) {}
 
   public getCommittees(): Observable<CommitteeAccount[]> {
     return this.apiService
@@ -29,8 +27,8 @@ export class CommitteeAccountService {
 
   public registerCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
     return firstValueFrom(
-      this.apiService.post<CommitteeAccount>('/committees/register/',
-        { committee_id: committeeId }, {}, [HttpStatusCode.BadRequest])
+      this.apiService
+        .post<CommitteeAccount>('/committees/register/', { committee_id: committeeId }, {}, [HttpStatusCode.BadRequest])
         .pipe(
           map((response) => {
             if (!response.body) {
@@ -38,7 +36,7 @@ export class CommitteeAccountService {
             }
             return response.body;
           }),
-        )
+        ),
     );
   }
 }

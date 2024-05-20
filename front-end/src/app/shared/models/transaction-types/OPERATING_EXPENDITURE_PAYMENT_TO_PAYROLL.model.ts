@@ -11,7 +11,7 @@ export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchBTransactionTyp
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL
+    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
   );
   override subTransactionConfig = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
   schema = schema;

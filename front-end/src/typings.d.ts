@@ -6,14 +6,14 @@
 declare let _process: Process;
 
 interface Process {
-    env: Env
+  env: Env;
 }
 
 interface Env {
-    ACCESS_KEY: string
-    SECRET_KEY: string
+  ACCESS_KEY: string;
+  SECRET_KEY: string;
 }
 
 interface GlobalEnvironment {
-    process: Process;
+  process: Process;
 }

@@ -18,8 +18,6 @@ export class ReattRedesTransactionTypeDetailComponent
   extends ReattRedesTransactionTypeBaseComponent
   implements OnInit, OnChanges
 {
-  accordionActiveIndex = 0; // Value determines which accordion pane to open by default
-
   constructor(
     protected override messageService: MessageService,
     public override transactionService: TransactionService,

@@ -4,19 +4,21 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
-import { ContactService } from '../../shared/services/contact.service';
-import { TableSelectAllChangeEvent } from 'primeng/table';
+import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
+import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
+  styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
-  override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
+  restoreContactsButtonIsVisible = false;
   searchTerm = '';
 
   // contact lookup
@@ -25,13 +27,37 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.INDIVIDUAL,
   ]);
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'sort_name', label: 'Name' },
+    { field: 'type', label: 'Type' },
+    { field: 'sort_fec_id', label: 'FEC ID' },
+    { field: 'employer', label: 'Employer' },
+    { field: 'occupation', label: 'Occupation' },
+  ];
+
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     public override itemService: ContactService,
+    public deletedContactService: DeletedContactService,
   ) {
     super(messageService, confirmationService, elementRef);
+
+    this.checkForDeletedContacts();
+  }
+
+  public async checkForDeletedContacts() {
+    const contactListResponse = await firstValueFrom(this.deletedContactService.getTableData());
+    const deletedContactsExist = contactListResponse.count > 0;
+    this.restoreContactsButtonIsVisible = deletedContactsExist;
+    return deletedContactsExist;
+  }
+
+  public override loadTableItems(event: TableLazyLoadEvent): void {
+    super.loadTableItems(event);
+
+    this.checkForDeletedContacts();
   }
 
   protected getEmptyItem(): Contact {
@@ -41,7 +67,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   public override addItem() {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
-    this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {

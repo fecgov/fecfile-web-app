@@ -11,7 +11,7 @@ export class PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO extends SchATransactionTyp
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
   );
   override updateParentOnSave = true;
   schema = schema;

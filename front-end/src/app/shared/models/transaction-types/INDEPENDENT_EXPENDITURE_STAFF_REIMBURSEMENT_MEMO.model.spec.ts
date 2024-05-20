@@ -17,7 +17,7 @@ describe('INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SE');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO
+      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
     );
   });
 });

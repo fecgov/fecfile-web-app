@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private store: Store,
     private cookieService: CookieService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.cookieService.deleteAll();

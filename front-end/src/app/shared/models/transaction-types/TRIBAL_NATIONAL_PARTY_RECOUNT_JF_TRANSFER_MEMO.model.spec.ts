@@ -20,7 +20,7 @@ describe('TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
     if (txn) {
       expect(txn.form_type).toBe('SA17');
       expect(txn.transaction_type_identifier).toBe(
-        ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
+        ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       );
     }
   });
