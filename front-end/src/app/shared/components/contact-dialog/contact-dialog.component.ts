@@ -109,6 +109,14 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
   emptyMessage = 'No data available in table';
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'transaction_type_identifier', label: 'Transaction type' },
+    { field: 'formType', label: 'Form Type' },
+    { field: 'reportType', label: 'Report Type' },
+    { field: 'date', label: 'Date' },
+    { field: 'amount', label: 'Amount' },
+  ];
+
   constructor(
     private fb: FormBuilder,
     private contactService: ContactService,
