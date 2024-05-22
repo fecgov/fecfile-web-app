@@ -38,8 +38,10 @@
             [id]="h.field + '-column'"
             role="columnheader"
           >
-            {{ h.label }}
-            <p-sortIcon [field]="h.field"></p-sortIcon>
+            <div class="d-flex justify-content-between">
+              <span>{{ h.label }}</span>
+              <p-sortIcon [field]="h.field"></p-sortIcon>
+            </div>
           </th>
         </ng-container>
         <ng-container *ngTemplateOutlet="header"></ng-container>
