@@ -220,13 +220,15 @@ describe('TransactionService', () => {
         }),
       ];
 
-      service.multiSaveReattRedes(transactions).subscribe((response) => {
+      service.multiSaveReattRedes(transactions, '999').subscribe((response) => {
         expect(response[0]?.id).toEqual('1');
         expect(response[1]?.id).toEqual('2');
         expect(response[2]?.id).toEqual('3');
       });
 
-      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/reattribution/`);
+      const req = httpTestingController.expectOne(
+        `${environment.apiUrl}/transactions/multisave/reattribution/?report_id=999`,
+      );
       expect(req.request.method).toEqual('PUT');
       req.flush(transactions.map((t) => t.id));
       httpTestingController.verify();
