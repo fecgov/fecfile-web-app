@@ -2987,7 +2987,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: #fff;
   color: #212121;
   border-bottom: 2px solid #000000;
-  padding: 64px 1rem 8px 0;
+  padding: 48px 1rem 8px 0;
   font-weight: 600;
 }
 .p-datatable .p-datatable-footer {
@@ -4679,8 +4679,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-toolbar {
   background: #ffffff;
-  padding: 1rem 1.25rem;
-  border-radius: 4px;
+  padding: 48px 0 0 0;
+  border-radius: 0;
+  display: flex;
+  align-items: baseline;
 }
 .p-toolbar .p-toolbar-separator {
   margin: 0 0.5rem;
