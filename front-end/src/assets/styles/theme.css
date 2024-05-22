@@ -4664,7 +4664,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-toolbar {
   background: #ffffff;
-  padding: 48px 0 8px 0;
+  padding: 48px 0 0 0;
   border-radius: 0;
   display: flex;
   align-items: baseline;
