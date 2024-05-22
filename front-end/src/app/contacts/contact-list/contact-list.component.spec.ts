@@ -79,6 +79,14 @@ describe('ContactListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should test TableAction behavior', () => {
+    const deleteAction = component.rowActions[1];
+    expect(deleteAction.isAvailable()).toBe(true);
+    expect(deleteAction.isEnabled(contact)).toBe(true);
+    contact.has_transaction_or_report = true;
+    expect(deleteAction.isEnabled(contact)).toBe(false);
+  });
+
   it('#addItem opens the dialog to add an item', () => {
     component.isNewItem = false;
     component.addItem();

@@ -53,7 +53,7 @@
     ></button>
   </ng-template>
   <ng-template #header>
-    <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
+    <th id="actions" role="columnheader">Actions</th>
   </ng-template>
   <ng-template #body let-item>
     <td>
@@ -63,15 +63,15 @@
     <td>{{ item.candidate_id || item.committee_id }}</td>
     <td>{{ item.employer }}</td>
     <td>{{ item.occupation }}</td>
-    <td style="text-align: center">
-      <p-button
-        icon="pi pi-trash"
-        [text]="true"
-        [ngClass]="{ disabled: !canDeleteItem(item) }"
-        pTooltip="This contact can not be deleted because it has associated transactions or reports."
-        [tooltipDisabled]="canDeleteItem(item)"
-        (onClick)="canDeleteItem(item) && deleteItem(item)"
-      ></p-button>
+    <td>
+      <app-table-actions-button
+        [tableActions]="rowActions"
+        [actionItem]="item"
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+        [buttonAriaLabel]="'edit ' + displayName(item)"
+      ></app-table-actions-button>
     </td>
   </ng-template>
 </app-table>

@@ -1,5 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
-import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -26,6 +26,16 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.COMMITTEE,
     ContactTypes.INDIVIDUAL,
   ]);
+
+  public rowActions: TableAction[] = [
+    new TableAction('Edit', this.editItem.bind(this)),
+    new TableAction(
+      'Delete',
+      this.deleteItem.bind(this),
+      () => true,
+      (contact: Contact) => this.canDeleteItem(contact),
+    ),
+  ];
 
   sortableHeaders: { field: string; label: string }[] = [
     { field: 'sort_name', label: 'Name' },
