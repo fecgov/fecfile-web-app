@@ -40,7 +40,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
 
     this.sortableHeaders.push(
       ...[
-        { field: 'date', label: 'Date incurred' },
+        { field: 'date', label: 'Incurred' },
         { field: 'amount', label: 'Amount' },
         { field: 'balance', label: 'Balance' },
       ],
