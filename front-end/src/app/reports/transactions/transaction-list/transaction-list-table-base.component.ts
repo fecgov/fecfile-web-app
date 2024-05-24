@@ -212,7 +212,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    return { report_id: this.reportId, page_size: this.rowsPerPage };
+    return { ...super.getGetParams(), page_size: this.rowsPerPage };
   }
 
   override async editItem(item: Transaction): Promise<void> {

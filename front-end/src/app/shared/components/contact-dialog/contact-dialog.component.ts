@@ -117,6 +117,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     { field: 'amount', label: 'Amount' },
   ];
 
+  pagerState?: TableLazyLoadEvent;
+
   constructor(
     private fb: FormBuilder,
     private contactService: ContactService,
@@ -131,11 +133,25 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   async loadTransactions(event: TableLazyLoadEvent) {
     this.tableLoading = true;
 
+    // event is undefined when triggered from the detail page because
+    // the detail doesn't know what page we are on. We check the local
+    // pagerState variable to retrieve the page state.
+    if (!!event && 'first' in event) {
+      this.pagerState = event;
+    } else {
+      event = this.pagerState
+        ? this.pagerState
+        : {
+            first: 0,
+            rows: this.rowsPerPage,
+          };
+    }
+
     // Calculate the record page number to retrieve from the API.
     const first: number = event.first ?? 0;
     const rows: number = event.rows ?? this.rowsPerPage;
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = { contact: this.contact.id! }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    const params = this.getGetParams();
 
     // Determine query sort ordering
     let ordering: string | string[] = event.sortField ? event.sortField : '';
@@ -144,6 +160,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     } else {
       ordering = `${ordering}`;
     }
+
     try {
       const transactionsPage = await lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params));
       this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
@@ -360,10 +377,15 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
   }
 
-  onRowsPerPageChange() {
+  onRowsPerPageChange(rowsPerPage: number) {
+    this.rowsPerPage = rowsPerPage;
     this.loadTransactions({
       first: 0,
       rows: this.rowsPerPage,
     });
+  }
+
+  getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
+    return { page_size: this.rowsPerPage, contact: this.contact.id ?? '' };
   }
 }
