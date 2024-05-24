@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
 import { CookieService } from 'ngx-cookie-service';
@@ -13,12 +13,26 @@ import { LoginService } from '../../shared/services/login.service';
 export class LoginComponent implements OnInit {
   public loginDotGovAuthUrl: string | undefined;
   public localLoginAvailable = false;
+  isDropdownOpen = false;
+  isDebugOpen = false;
 
   constructor(
     private loginService: LoginService,
     private store: Store,
     private cookieService: CookieService,
-  ) {}
+    private renderer: Renderer2,
+  ) {
+    this.renderer.listen('document', 'click', (event: Event) => {
+      const target = event.target as HTMLElement;
+      const dropdownMenuButton = document.querySelector('#dropdownMenuButton');
+
+      if (this.isDropdownOpen) {
+        this.isDropdownOpen = false;
+      } else {
+        this.isDropdownOpen = dropdownMenuButton?.contains(target) ?? false;
+      }
+    });
+  }
 
   ngOnInit() {
     this.cookieService.deleteAll();
@@ -35,5 +49,9 @@ export class LoginComponent implements OnInit {
     this.loginService.checkLocalLoginAvailability().subscribe((available) => {
       this.localLoginAvailable = available;
     });
+  }
+
+  showDebugLogin() {
+    this.isDebugOpen = true;
   }
 }

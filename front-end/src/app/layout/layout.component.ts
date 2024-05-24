@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 
 import { NavigationEnd, Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -18,13 +18,28 @@ export enum BackgroundStyles {
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent extends DestroyerComponent implements OnInit {
+export class LayoutComponent extends DestroyerComponent implements OnInit, AfterViewChecked {
   @ViewChild(FeedbackOverlayComponent) feedbackOverlay!: FeedbackOverlayComponent;
 
   layoutControls = new LayoutControls();
 
   constructor(private router: Router) {
     super();
+  }
+  ngAfterViewChecked(): void {
+    this.updateContentOffset();
+  }
+
+  updateContentOffset() {
+    const contentOffset = document.getElementById('content-offset');
+    if (!contentOffset) return;
+    const height = contentOffset.offsetHeight;
+    let headerFooterOffset = window.innerWidth < 768 ? 332 : 265;
+    if (this.layoutControls.showUpperFooter) headerFooterOffset += 80;
+    const marginBottom = Math.max(64, window.innerHeight - height - headerFooterOffset);
+
+    // Apply the margin-bottom to the div
+    contentOffset.style.marginBottom = marginBottom + 'px';
   }
 
   ngOnInit(): void {
