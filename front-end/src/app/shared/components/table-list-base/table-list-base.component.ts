@@ -5,6 +5,7 @@ import { TableListService } from '../../interfaces/table-list-service.interface'
 import { forkJoin, Observable } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { QueryParams } from 'app/shared/services/api.service';
 
 @Component({
   template: '',
@@ -195,10 +196,10 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    * method in order to control the parameters being sent in the GET request without overriding the
    * entire loadTableItems() method.
    *
-   * @return { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
+   * @return QueryParams
    */
 
-  public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
+  public getGetParams(): QueryParams {
     return { page_size: this.rowsPerPage };
   }
 

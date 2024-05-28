@@ -5,7 +5,7 @@ import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService } from './api.service';
+import { ApiService, QueryParams } from './api.service';
 import { Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
@@ -33,11 +33,7 @@ export class ReportService implements TableListService<Report> {
     protected store: Store,
   ) {}
 
-  public getTableData(
-    pageNumber = 1,
-    ordering = 'form_type',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-  ): Observable<ListRestResponse> {
+  public getTableData(pageNumber = 1, ordering = 'form_type', params: QueryParams = {}): Observable<ListRestResponse> {
     return this.apiService
       .get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
       .pipe(

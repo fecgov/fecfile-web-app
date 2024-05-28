@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CommitteeMember, CommitteeMemberRoles } from '../models/committee-member.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { ApiService } from './api.service';
+import { ApiService, QueryParams } from './api.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { firstValueFrom, map, Observable } from 'rxjs';
 
@@ -11,11 +11,7 @@ import { firstValueFrom, map, Observable } from 'rxjs';
 export class CommitteeMemberService implements TableListService<CommitteeMember> {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(
-    pageNumber = 1,
-    ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-  ): Observable<ListRestResponse> {
+  public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     let parameter_string = `?page=${pageNumber}`;
     if (ordering?.length > 0) {
       parameter_string += `&ordering=${ordering}`;

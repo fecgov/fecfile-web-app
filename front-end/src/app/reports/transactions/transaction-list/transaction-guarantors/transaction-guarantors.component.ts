@@ -10,6 +10,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { QueryParams } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-transaction-guarantors',
@@ -39,7 +40,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
 
-  override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
+  override getGetParams(): QueryParams {
     if (this.loan?.id) {
       return { ...super.getGetParams(), parent: this.loan.id };
     }
