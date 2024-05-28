@@ -212,8 +212,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return {} as Transaction;
   }
 
-  override getGetParams(): QueryParams {
-    const params: QueryParams = { ...super.getGetParams(), page_size: this.rowsPerPage };
+  override getParams(): QueryParams {
+    const params: QueryParams = { ...super.getParams(), page_size: this.rowsPerPage };
     if (this.reportId) params['report_id'] = this.reportId;
     return params;
   }

@@ -100,13 +100,6 @@ export class ApiService {
       withCredentials: true,
     });
   }
-  /* eslint-enable @typescript-eslint/no-explicit-any */
-
-  public postAbsoluteUrl<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
-    const headers = this.getHeaders();
-    const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${endpoint}`, payload, { headers, params, withCredentials: true });
-  }
 
   public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
     const headers = this.getHeaders();

@@ -40,11 +40,11 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
 
-  override getGetParams(): QueryParams {
+  override getParams(): QueryParams {
     if (this.loan?.id) {
-      return { ...super.getGetParams(), parent: this.loan.id };
+      return { ...super.getParams(), parent: this.loan.id };
     }
-    return super.getGetParams();
+    return super.getParams();
   }
   override loadTableItems(event: TableLazyLoadEvent): void {
     if (!this.loan?.id) {
