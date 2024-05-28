@@ -170,6 +170,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'line_label,created', label: 'Line' },
+    { field: 'transaction_type_identifier', label: 'Type' },
+    { field: 'name', label: 'Name' },
+  ];
+
   protected constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
@@ -207,13 +213,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     return { report_id: this.reportId, page_size: this.rowsPerPage };
-  }
-
-  onRowsPerPageChange() {
-    this.loadTableItems({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
   }
 
   override async editItem(item: Transaction): Promise<void> {

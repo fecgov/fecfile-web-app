@@ -124,6 +124,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     InputTextModule,
     InputTextareaModule,
     OverlayPanelModule,
+    SharedModule,
   ],
   providers: [
     CookieService,
@@ -141,4 +142,4 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

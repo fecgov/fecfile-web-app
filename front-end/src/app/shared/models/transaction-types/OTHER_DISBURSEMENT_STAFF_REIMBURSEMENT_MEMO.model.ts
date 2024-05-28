@@ -14,7 +14,7 @@ export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO extends SchBTransaction
   override contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO
+    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO,
   );
   schema = schema;
   override navigationControls = CHILD_CONTROLS;

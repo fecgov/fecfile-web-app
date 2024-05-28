@@ -34,8 +34,8 @@ import { getReportFromJSON } from '../../services/report.service';
 export class TransactionData {
   id: string;
   report_ids: string[];
-  formType: string;
-  reportType: string;
+  formType = '';
+  reportType = '';
   transaction_type_identifier: string;
   date: string;
   amount: string;
@@ -48,9 +48,11 @@ export class TransactionData {
     this.amount = transaction.amount;
     this.transaction_type_identifier = transaction.transaction_type_identifier;
 
-    const report = getReportFromJSON(transaction.report);
-    this.formType = report.formLabel;
-    this.reportType = report.reportLabel;
+    transaction.reports.map((r: JSON) => {
+      const report = getReportFromJSON(r);
+      this.formType = report.formLabel;
+      this.reportType = report.reportLabel;
+    });
   }
 }
 
@@ -105,6 +107,15 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
+  emptyMessage = 'No data available in table';
+
+  sortableHeaders: { field: string; label: string }[] = [
+    { field: 'transaction_type_identifier', label: 'Transaction type' },
+    { field: 'formType', label: 'Form Type' },
+    { field: 'reportType', label: 'Report Type' },
+    { field: 'date', label: 'Date' },
+    { field: 'amount', label: 'Amount' },
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -133,11 +144,16 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     } else {
       ordering = `${ordering}`;
     }
-    lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params)).then((transactionsPage) => {
+    try {
+      const transactionsPage = await lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params));
       this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
       this.totalTransactions = transactionsPage.count;
       this.tableLoading = false;
-    });
+      this.emptyMessage = 'No data available in table';
+    } catch (error) {
+      this.tableLoading = false;
+      this.emptyMessage = 'Error loading transactions for contact';
+    }
   }
 
   ngOnInit(): void {
@@ -209,6 +225,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
    */
   contactTypeChanged(contactType: ContactTypes) {
     this.contactType = contactType;
+    if (!this.contact) this.contact = new Contact();
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -341,5 +358,12 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   async openTransaction(transaction: TransactionData) {
     const reportId = this.activatedRoute.snapshot.params['report_id'];
     await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
+  }
+
+  onRowsPerPageChange() {
+    this.loadTransactions({
+      first: 0,
+      rows: this.rowsPerPage,
+    });
   }
 }

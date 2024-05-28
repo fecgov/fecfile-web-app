@@ -64,8 +64,7 @@ describe('DebugLoginComponent', () => {
   });
 
   it('should sign in only with a valid form', () => {
-    const loginSpy = spyOn(loginService,
-      'logIn').and.returnValue(Promise.resolve(null));
+    const loginSpy = spyOn(loginService, 'logIn').and.returnValue(Promise.resolve(null));
 
     component.doSignIn();
     expect(loginSpy).toHaveBeenCalledTimes(0);

@@ -28,8 +28,12 @@ export class TransactionService implements TableListService<Transaction> {
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
   ): Observable<ListRestResponse> {
     if (!ordering) {
-      ordering = 'line_label_order_key';
+      ordering = 'line_label,created';
     }
+    if (ordering === '-line_label,created') {
+      ordering = '-line_label,-created';
+    }
+
     return this.apiService
       .get<ListRestResponse>(`${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
       .pipe(
@@ -140,16 +144,19 @@ export class TransactionService implements TableListService<Transaction> {
 
   public create(transaction: Transaction): Observable<Transaction> {
     const payload = this.preparePayload(transaction);
-    return this.apiService
-      .post<Transaction>(`${transaction.transactionType.apiEndpoint}/`, payload)
-      .pipe(map((response) => getFromJSON(response)));
+    return this.apiService.post<string>(`${transaction.transactionType.apiEndpoint}/`, payload).pipe(
+      map((id) => {
+        transaction.id = id;
+        return transaction;
+      }),
+    );
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
     const payload = this.preparePayload(transaction);
     return this.apiService
-      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {})
-      .pipe(map((response) => getFromJSON(response)));
+      .put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {})
+      .pipe(map(() => transaction));
   }
 
   public delete(transaction: Transaction): Observable<null> {
@@ -167,22 +174,16 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
-  public multisave(transactions: Transaction[]): Observable<Transaction[]> {
-    const payload = transactions.map((t) => this.preparePayload(t));
-    return this.apiService.put<Transaction[]>(
-      `${transactions[0].transactionType?.apiEndpoint}/multisave/`,
-      payload,
-      {},
-    );
-  }
-
   public multiSaveReattRedes(transactions: Transaction[]): Observable<Transaction[]> {
     const payload = transactions.map((t) => this.preparePayload(t));
-    return this.apiService.put<Transaction[]>(
-      `${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`,
-      payload,
-      {},
-    );
+    return this.apiService
+      .put<string[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`, payload, {})
+      .pipe(
+        map((ids) => {
+          transactions.forEach((t, i) => (t.id = ids[i]));
+          return transactions;
+        }),
+      );
   }
 
   public addToReport(transaction: Transaction, report: Report): Promise<HttpResponse<string>> {

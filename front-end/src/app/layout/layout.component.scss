@@ -1,16 +1,14 @@
-
 #sidebar-container {
   min-height: calc(100vh - 2rem);
 }
 
 .main-content {
   margin: 0;
-  padding: 0;
+  padding: 0 32px;
 }
 
 .header-container {
-  padding-bottom: 5px;
-  padding-top: 0;
+  padding: 0 32px 5px 32px;
 }
 
 .row {
@@ -23,9 +21,8 @@
 }
 
 app-footer {
-  padding: 0;
+  padding: 32px 0 0 0;
 }
-
 
 #page-container {
   position: relative;
@@ -44,7 +41,7 @@ app-footer {
 }
 
 .login-background {
-	background-color: #ece8e8;
+  background-color: #ece8e8;
   max-height: 100vh;
 }
 
@@ -59,7 +56,7 @@ app-footer {
   position: fixed;
   bottom: 0;
   right: 32px;
-  z-index: 99;
+  z-index: 1103;
   color: black;
   border-radius: 4px 4px 0px 0px;
 }

@@ -5,7 +5,7 @@
   <h1 [ngClass]="{ 'dark-gray-text': transactionType?.showParentTransactionTitle }">
     {{ transactionType?.title }}
   </h1>
-  <hr class="solid">
+  <hr class="solid" />
   <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
   <app-independent-expenditure-create-f3x-input
     *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24"

@@ -24,9 +24,18 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
     protected override router: Router,
     protected override itemService: TransactionSchAService,
     protected override store: Store,
-    protected override reportService: ReportService
+    protected override reportService: ReportService,
   ) {
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
-    this.caption = "Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.";
+    this.caption =
+      'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.';
+    this.sortableHeaders.push(
+      ...[
+        { field: 'date', label: 'Date' },
+        { field: 'memo_code', label: 'Memo' },
+        { field: 'amount', label: 'Amount' },
+        { field: 'aggregate', label: 'Aggregate' },
+      ],
+    );
   }
 }

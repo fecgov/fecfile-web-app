@@ -1,5 +1,5 @@
 <div class="card">
-  <p-toolbar styleClass="mb-4">
+  <p-toolbar>
     <ng-template pTemplate="left">
       <div class="grid">
         <div class="col-12">
@@ -22,7 +22,7 @@
         (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-plus"
         buttonLabel="Add new transaction"
-        buttonStyleClass="mr-2 add-button"
+        buttonStyleClass="add-button"
         buttonAriaLabel="Add a Transaction"
       ></app-table-actions-button>
     </ng-template>

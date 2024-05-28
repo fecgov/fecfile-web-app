@@ -46,6 +46,14 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
     this.caption =
       'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
+
+    this.sortableHeaders.push(
+      ...[
+        { field: 'date', label: 'Date' },
+        { field: 'memo_code', label: 'Memo' },
+        { field: 'amount', label: 'Amount' },
+      ],
+    );
   }
 
   override ngOnInit(): void {

@@ -114,7 +114,7 @@ export class ContactListPage {
           'x-csrftoken': cookie?.value,
         },
       }).then((resp) => {
-        const contacts = resp.body.results;
+        const contacts = resp.body;
         for (const contact of contacts) {
           ContactListPage.deleteContact(contact.id);
         }
@@ -154,7 +154,7 @@ export class ContactListPage {
 
   private static create(fd: ContactFormData) {
     ContactListPage.goToPage();
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
     cy.wait(150);
     ContactListPage.enterFormData(fd);
     PageUtils.clickButton('Save');

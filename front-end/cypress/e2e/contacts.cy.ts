@@ -13,11 +13,11 @@ describe('Manage contacts', () => {
   it('Create an Individual contact', () => {
     cy.runLighthouse('contacts', 'list');
 
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('Add Contact').should('not.exist');
+    cy.contains('Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -27,7 +27,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Candidate contact', () => {
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
 
     const formData = {
       ...contactFormData,
@@ -41,7 +41,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('Add Contact').should('not.exist');
+    cy.contains('Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -51,7 +51,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Committee contact', () => {
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
 
     const formData = {
       ...contactFormData,
@@ -61,7 +61,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('Add Contact').should('not.exist');
+    cy.contains('Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -71,7 +71,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create an Organization contact', () => {
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
 
     const formData = {
       ...contactFormData,
@@ -81,7 +81,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('Add Contact').should('not.exist');
+    cy.contains('Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -91,7 +91,7 @@ describe('Manage contacts', () => {
   });
 
   it('Empty required fields should display an error message', () => {
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
       ...contactFormData,
       ...{
@@ -114,7 +114,7 @@ describe('Manage contacts', () => {
   });
 
   it('Fields with too a long string should display an error message', () => {
-    PageUtils.clickButton('New');
+    PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
       ...contactFormData,
       ...{
