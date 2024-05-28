@@ -41,13 +41,13 @@
 }
 
 .login-button {
+  color: #ffffff;
   background-color: #112e51;
   margin-right: 20px;
 }
 
 .login-button,
 .signup-button {
-  color: #ffffff;
   border-radius: 4px;
   display: inline-block;
   font-family: 'karla', Sans-serif;
@@ -60,7 +60,8 @@
 }
 
 .signup-button {
-  background-color: #367f90;
+  background-color: #35bdbb;
+  color: #212121;
 }
 
 .learn-more-link {
