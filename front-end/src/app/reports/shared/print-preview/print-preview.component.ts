@@ -28,7 +28,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     | 'This may take a while...'
     | 'Your report is still being processed. Please check back later to access your PDF'
     | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
-  webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
+  webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'not-submitted';
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
 
@@ -70,7 +70,8 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     if (!report.webprint_submission) {
       this.webPrintStage = 'not-submitted';
     } else {
-      switch (report?.webprint_submission.fec_status) {
+      const status = report.webprint_submission.fec_status ?? report.webprint_submission.fecfile_task_state;
+      switch (status) {
         case 'COMPLETED':
           this.store.dispatch(singleClickEnableAction());
           this.webPrintStage = 'success';
