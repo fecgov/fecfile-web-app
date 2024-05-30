@@ -87,6 +87,8 @@ export abstract class Transaction extends BaseModel {
 
   schema_name: string | undefined;
 
+  line_label?: string;
+
   /**
    * Some fields, such as ones in the spec but calculated by the backend, are listed
    * here so we don't try to save them to the database in the backend.

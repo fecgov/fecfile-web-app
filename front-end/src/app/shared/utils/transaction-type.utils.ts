@@ -420,17 +420,10 @@ export function getTransactionTypeClass(transactionTypeIdentifier: string): any 
  * @returns
  */
 export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
-  if (json.transaction_type_identifier) {
-    const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
-    if (transactionType.scheduleId === ScheduleIds.A) return SchATransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === ScheduleIds.B) return SchBTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === ScheduleIds.C) return SchCTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === ScheduleIds.C1) return SchC1Transaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === ScheduleIds.C2) return SchC2Transaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === ScheduleIds.D) return SchDTransaction.fromJSON(json, depth);
-    if (transactionType.scheduleId === ScheduleIds.E) return SchETransaction.fromJSON(json, depth);
-  }
-  return SchATransaction.fromJSON(json, depth); // Until 404 resolved
+  if (json.line_label) json.line_label = json.line_label.replace(/^0+/, '');
+
+  const transactionType = json.transaction_type_identifier ? TransactionTypeUtils.factory(json.transaction_type_identifier) : undefined;
+  return getfromJsonByType(json, transactionType, depth);
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
 }
 
@@ -498,4 +491,20 @@ export function PTYRestricted(): TransactionTypes[] {
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   ];
+}
+function getfromJsonByType(
+  json: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+  transactionType: TransactionType | undefined,
+  depth: number,
+): ScheduleTransaction {
+  if (transactionType) {
+    if (transactionType.scheduleId === ScheduleIds.A) return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.B) return SchBTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C) return SchCTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C1) return SchC1Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.C2) return SchC2Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.D) return SchDTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.E) return SchETransaction.fromJSON(json, depth);
+  }
+  return SchATransaction.fromJSON(json, depth); // Until 404 resolved
 }
