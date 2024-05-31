@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked, RendererFactory2, Renderer2 } from '@angular/core';
 
 import { NavigationEnd, Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -22,16 +22,22 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
   @ViewChild(FeedbackOverlayComponent) feedbackOverlay!: FeedbackOverlayComponent;
 
   layoutControls = new LayoutControls();
+  private renderer: Renderer2;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    rendererFactory: RendererFactory2,
+  ) {
     super();
+    this.renderer = rendererFactory.createRenderer(null, null);
   }
   ngAfterViewChecked(): void {
     this.updateContentOffset();
   }
 
   updateContentOffset() {
-    const contentOffset = document.getElementById('content-offset');
+    if (this.layoutControls.showSidebar) return;
+    const contentOffset = this.renderer.selectRootElement('#content-offset', true);
     if (!contentOffset) return;
     const height = contentOffset.offsetHeight;
     let headerFooterOffset = window.innerWidth < 768 ? 332 : 265;
