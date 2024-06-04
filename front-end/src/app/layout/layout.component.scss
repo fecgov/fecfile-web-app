@@ -8,7 +8,7 @@
 }
 
 .header-container {
-  padding: 0 32px 5px 32px;
+  padding: 0 32px 64px 32px;
 }
 
 .row {
@@ -29,10 +29,6 @@ app-footer {
   min-height: 100vh;
 }
 
-.content-offset {
-  padding-bottom: 314px;
-}
-
 .sidebar-content-container {
   min-height: calc(100vh - 2rem);
   width: 100%;
@@ -41,7 +37,7 @@ app-footer {
 }
 
 .login-background {
-  background-color: #ece8e8;
+  background-color: #ffffff;
   max-height: 100vh;
 }
 

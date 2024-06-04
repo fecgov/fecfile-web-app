@@ -12,6 +12,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { LoginRoutingModule } from './login-routing.module';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [LoginComponent, DebugLoginComponent, SecurityNoticeComponent],
@@ -28,6 +29,7 @@ import { PasswordModule } from 'primeng/password';
     CheckboxModule,
     InputTextModule,
     PasswordModule,
+    DialogModule,
   ],
 })
 export class LoginModule {}

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { ApiService } from './api.service';
 import { Report } from '../models/report.model';
@@ -17,11 +17,14 @@ export interface Download {
 })
 export class DotFecService {
   downloads = new BehaviorSubject<Download[]>([]);
+  renderer: Renderer2;
 
   constructor(
     private apiService: ApiService,
     private actions: Actions,
+    rendererFactory: RendererFactory2,
   ) {
+    this.renderer = rendererFactory.createRenderer(null, null);
     this.actions.subscribe((action) => {
       if (action.type === '[User Login Data] Discarded') {
         this.downloads.next([]);
@@ -46,9 +49,10 @@ export class DotFecService {
     const dotFEC = await firstValueFrom(this.apiService.getString(`/web-services/dot-fec/${download.id}/`));
     const newBlob = new Blob([dotFEC], { type: 'application/text' });
     const data = window.URL.createObjectURL(newBlob);
-    const link = document.createElement('a');
-    link.href = data;
-    link.download = download.report.id + '.fec';
+    const link = this.renderer.createElement('a');
+    this.renderer.setAttribute(link, 'href', data);
+    this.renderer.setAttribute(link, 'download', download.report.id + '.fec');
+    this.renderer.appendChild(document.body, link);
     link.click();
   }
 
