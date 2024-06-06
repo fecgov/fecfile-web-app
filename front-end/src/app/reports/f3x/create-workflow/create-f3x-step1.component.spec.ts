@@ -18,9 +18,9 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
 import { ReportService } from '../../../shared/services/report.service';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
-import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
+import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -47,16 +47,22 @@ describe('CreateF3XStep1Component', () => {
   const ninth = new Date('01/09/2024');
   const eighth = new Date('01/08/2024');
   const tenth = new Date('01/10/2024');
-  const thirdThroughFifth = F3xCoverageDates.fromJSON({
-    report_code: 'Q1',
-    coverage_from_date: third,
-    coverage_through_date: fifth,
-  });
-  const seventhThroughNinth = F3xCoverageDates.fromJSON({
-    report_code: 'Q2',
-    coverage_from_date: seventh,
-    coverage_through_date: ninth,
-  });
+  const thirdThroughFifth = F3xCoverageDates.fromJSON(
+    {
+      report_code: 'Q1',
+      coverage_from_date: third,
+      coverage_through_date: fifth,
+    },
+    'APRIL 15 QUARTERLY REPORT (Q1)',
+  );
+  const seventhThroughNinth = F3xCoverageDates.fromJSON(
+    {
+      report_code: 'Q2',
+      coverage_from_date: seventh,
+      coverage_through_date: ninth,
+    },
+    'JULY 15 QUARTERLY REPORT (Q2)',
+  );
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -75,7 +81,7 @@ describe('CreateF3XStep1Component', () => {
 
     router = TestBed.inject(Router);
     form3XService = TestBed.inject(Form3XService);
-    form3XService.getF3xCoverageDates = () => of([]);
+    form3XService.getF3xCoverageDates = () => firstValueFrom(of([]));
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
@@ -104,7 +110,7 @@ describe('CreateF3XStep1Component', () => {
     beforeEach(async () => {
       router = TestBed.inject(Router);
       form3XService = TestBed.inject(Form3XService);
-      form3XService.getF3xCoverageDates = () => of([thirdThroughFifth]);
+      form3XService.getF3xCoverageDates = () => firstValueFrom(of([thirdThroughFifth]));
       reportService = TestBed.inject(ReportService);
       fixture = TestBed.createComponent(CreateF3XStep1Component);
       component = fixture.componentInstance;
@@ -169,6 +175,7 @@ describe('CreateF3XStep1Component', () => {
         coverage_through_date: new FormControl(controlThroughDate),
       });
       validator(group);
+      console.log(group.get('coverage_from_date')?.errors);
       expect(group.get('coverage_from_date')?.errors).toEqual(
         expectedFromMessage ? { invaliddate: { msg: expectedFromMessage } } : null,
       );

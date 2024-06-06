@@ -54,7 +54,7 @@ export class TransactionData {
       const report = getReportFromJSON(r);
       if (report.report_type === ReportTypes.F24) return; // We will display the Form 3X version of the transaction #1977
       this.form_type = report.formLabel;
-      this.report_code_label = report.reportLabel;
+      this.report_code_label = report.report_code_label ?? '';
     });
   }
 }

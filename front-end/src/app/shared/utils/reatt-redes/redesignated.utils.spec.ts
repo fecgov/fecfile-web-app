@@ -20,7 +20,7 @@ describe('Redesignated Utils', () => {
     let data;
     it('should handle a different report', () => {
       if (!payload.reatt_redes || !(payload.reatt_redes instanceof SchBTransaction)) throw new Error('Bad test setup');
-      expect(payload.reatt_redes.getForm3X()?.reportCode).toBe(F3xReportCodes.Q1);
+      expect(payload.reatt_redes.getForm3X()?.report_code).toBe(F3xReportCodes.Q1);
       const overlay = RedesignatedUtils.overlayTransactionProperties(
         payload.reatt_redes,
         'not-the-same-report-as-orig',

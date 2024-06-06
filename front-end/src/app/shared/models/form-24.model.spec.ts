@@ -46,12 +46,14 @@ describe('Form24', () => {
         committee_name: 'foo',
         report_version: undefined,
         report_type_24_48: '24',
+        report_code_label: '24 HOUR',
       };
       const form = Form24.fromJSON(data);
-      expect(form.reportLabel).toBe('24 HOUR');
+      expect(form.report_code_label).toBe('24 HOUR');
 
       form.report_type_24_48 = '48';
-      expect(form.reportLabel).toBe('48 HOUR');
+      form.report_code_label = '48 HOUR';
+      expect(form.report_code_label).toBe('48 HOUR');
     });
   });
 

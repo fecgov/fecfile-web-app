@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -8,8 +7,11 @@ import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { SubmitReportStatusComponent } from './submit-report-status.component';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ApiService } from 'app/shared/services/api.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('ReportSummaryComponent', () => {
+describe('SubmitReportStatusComponent', () => {
   let component: SubmitReportStatusComponent;
   let fixture: ComponentFixture<SubmitReportStatusComponent>;
   const f3x: Form3X = Form3X.fromJSON({
@@ -21,10 +23,11 @@ describe('ReportSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, DividerModule, CardModule, RouterTestingModule.withRoutes([])],
+      imports: [SharedModule, DividerModule, CardModule, HttpClientTestingModule],
       declarations: [SubmitReportStatusComponent],
       providers: [
         provideMockStore(testMockStore),
+        provideRouter([]),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -35,6 +38,8 @@ describe('ReportSummaryComponent', () => {
             },
           },
         },
+        Form3XService,
+        ApiService,
       ],
     }).compileComponents();
   });

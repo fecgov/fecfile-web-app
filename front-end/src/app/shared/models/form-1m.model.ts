@@ -31,10 +31,6 @@ export class Form1M extends Report {
     return 'NOTIFICATION OF MULTICANDIDATE STATUS';
   }
 
-  get reportLabel(): string {
-    return '';
-  }
-
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
