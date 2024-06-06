@@ -356,8 +356,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   async openTransaction(transaction: TransactionData) {
-    const reportId = this.activatedRoute.snapshot.params['report_id'];
-    await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
+    await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
   }
 
   onRowsPerPageChange() {
