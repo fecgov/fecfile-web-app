@@ -2,12 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import {
-  getTestTransactionByType,
-  testActiveReport,
-  testContact,
-  testMockStore,
-} from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -17,13 +12,11 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { DatePipe } from '@angular/common';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { of } from 'rxjs';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
-import { ActivatedRoute } from '@angular/router';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -41,18 +34,7 @@ describe('ContactDialogComponent', () => {
         ContactLookupComponent,
         LabelPipe,
       ],
-      providers: [
-        ConfirmationService,
-        FormBuilder,
-        provideMockStore(testMockStore),
-        DatePipe,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: { params: { report_id: '999' } },
-          },
-        },
-      ],
+      providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore), DatePipe],
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
@@ -129,16 +111,13 @@ describe('ContactDialogComponent', () => {
   });
 
   describe('transactions', () => {
-    let transaction: SchATransaction;
-    beforeEach(() => {
-      transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
-      transaction.reports = [testActiveReport];
-    });
-
     it('should route to transaction', () => {
       const spy = spyOn(component.router, 'navigate');
+      const transaction = testScheduleATransaction;
       component.openTransaction(new TransactionData(transaction));
-      expect(spy).toHaveBeenCalledWith([`reports/transactions/report/999/list/${transaction.id}`]);
+      expect(spy).toHaveBeenCalledWith([
+        `reports/transactions/report/${transaction.report_ids?.[0]}/list/${transaction.id}`,
+      ]);
     });
 
     it('should handle pagination', () => {

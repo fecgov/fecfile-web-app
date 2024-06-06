@@ -26,7 +26,7 @@ import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { getReportFromJSON } from '../../services/report.service';
@@ -121,7 +121,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     private fb: FormBuilder,
     private contactService: ContactService,
     private transactionService: TransactionService,
-    private activatedRoute: ActivatedRoute,
     protected confirmationService: ConfirmationService,
     public router: Router,
   ) {
