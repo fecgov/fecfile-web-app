@@ -81,7 +81,7 @@
 
 .login-page {
   width: 100%;
-  max-width: 100%;
+  max-width: 800px;
   padding: 0;
   overflow: visible;
 }
@@ -122,16 +122,26 @@
   }
 }
 
+@media (max-width: 767px) {
+  ::ng-deep .container,
+  ::ng-deep .main-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 991px) {
+  ::ng-deep .container,
+  ::ng-deep .main-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
 @media (min-width: 768px) {
   .blue-background {
     top: 531px;
     height: max(449px, calc(100vh - 754px));
-  }
-}
-
-@media (min-width: 992px) {
-  .login-page {
-    max-width: 800px;
   }
 
   .header-filers {
@@ -141,11 +151,12 @@
   .header-productivity {
     display: inline;
   }
-
   .first-description-text {
     display: block;
   }
+}
 
+@media (min-width: 992px) {
   .dashboard-example-img-md {
     display: block;
   }
