@@ -40,7 +40,7 @@
     "bootstrap": "^5.3.3",
     "class-transformer": "^0.5.1",
     "fecfile-validate": "https://github.com/fecgov/fecfile-validate#2b8765a913034f90f1475394f5aea9a2fa349f50",
-    "intl-tel-input": "^23.0.4",
+    "intl-tel-input": "^23.0.6",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "luxon": "^3.4.4",
