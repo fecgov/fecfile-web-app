@@ -4,7 +4,6 @@ import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { FormControl } from '@angular/forms';
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
@@ -79,7 +78,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   getForm3XLabel(report: Form3X | undefined): string {
     if (!report) return '';
 
-    let label = getReportCodeLabel(report.report_code);
+    let label = report.report_code_label ?? '';
     const stringsToRemove = [' MID-YEAR-REPORT', ' YEAR-END', ' QUARTERLY REPORT', ' MONTHLY REPORT'];
     for (const string of stringsToRemove) {
       label = label?.replaceAll(string, '');

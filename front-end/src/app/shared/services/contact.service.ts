@@ -18,7 +18,7 @@ import {
   OrganizationLookupResponse,
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService } from './api.service';
+import { ApiService, QueryParams } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -45,11 +45,7 @@ export class ContactService implements TableListService<Contact> {
     return schema;
   }
 
-  public getTableData(
-    pageNumber = 1,
-    ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-  ): Observable<ListRestResponse> {
+  public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
     }
@@ -181,11 +177,7 @@ export class ContactService implements TableListService<Contact> {
 export class DeletedContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(
-    pageNumber = 1,
-    ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-  ): Observable<ListRestResponse> {
+  public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
     }

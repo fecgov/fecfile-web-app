@@ -1,7 +1,7 @@
+import { F3xReportCodes } from '../utils/report-code.utils';
 import { F3xFormTypes, Form3X } from './form-3x.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
-import { F3xReportCodes } from '../utils/report-code.utils';
 
 describe('Form3X', () => {
   it('should create an instance', () => {
@@ -75,6 +75,7 @@ describe('Form3X', () => {
         form_type: F3xFormTypes.F3XT,
         committee_name: 'foo',
         report_code: F3xReportCodes.Q1,
+        report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
       };
       const form3X = Form3X.fromJSON(data);
       expect(form3X.formSubLabel).toEqual('APRIL 15 QUARTERLY REPORT (Q1)');

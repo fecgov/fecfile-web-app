@@ -50,7 +50,6 @@ import { FecDatePipe } from './pipes/fec-date.pipe';
 import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
-import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { SupportOpposeInputComponent } from './components/inputs/support-oppose-input/support-oppose-input.component';
 import { SingleClickDirective } from './directives/single-click.directive';
 import { RippleModule } from 'primeng/ripple';
@@ -102,7 +101,6 @@ import { SidebarModule } from 'primeng/sidebar';
     LongDatePipe,
     DefaultZeroPipe,
     HighlightTermsPipe,
-    ReportCodeLabelPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -146,7 +144,6 @@ import { SidebarModule } from 'primeng/sidebar';
     ErrorMessagesComponent,
     DefaultZeroPipe,
     HighlightTermsPipe,
-    ReportCodeLabelPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,

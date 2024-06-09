@@ -61,12 +61,10 @@ describe('LoginService', () => {
     TestBed.resetTestingModule();
 
     const dispatchSpy = spyOn(store, 'dispatch');
-    const postSpy = spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
 
     service.userLoginData$ = of(testUserLoginData);
     service.logOut();
     expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
-    expect(postSpy).toHaveBeenCalledTimes(0);
   });
 
   //Can't figure out how to override service's userLoginData

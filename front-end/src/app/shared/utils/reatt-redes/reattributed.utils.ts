@@ -1,6 +1,5 @@
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
-import { getReportCodeLabel } from '../report-code.utils';
 
 export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {
@@ -12,7 +11,7 @@ export class ReattributedUtils {
       if (transaction.report_ids?.includes(activeReportId as string)) {
         transaction.contribution_purpose_descrip = 'See reattribution below.';
       } else {
-        transaction.contribution_purpose_descrip = `(Originally disclosed on ${getReportCodeLabel(transaction.getForm3X()?.report_code)}.) See reattribution below.`;
+        transaction.contribution_purpose_descrip = `(Originally disclosed on ${transaction.getForm3X()?.report_code_label ?? ''}.) See reattribution below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     }

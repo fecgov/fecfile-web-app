@@ -3,7 +3,6 @@ import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
 import { JsonSchema } from '../interfaces/json-schema.interface';
-import { F3xReportCodes } from '../utils/report-code.utils';
 import { LabelList } from '../utils/label.utils';
 
 export abstract class Report extends BaseModel {
@@ -40,16 +39,12 @@ export abstract class Report extends BaseModel {
   updated: Date | undefined;
   can_delete = false;
   version_label?: string;
+  report_code?: string;
+  report_code_label?: string;
 
   abstract get formLabel(): string;
 
   abstract get formSubLabel(): string;
-
-  abstract get reportLabel(): string;
-
-  get reportCode(): F3xReportCodes | undefined {
-    return;
-  }
 
   get coverageDates(): { [date: string]: Date | undefined } | undefined {
     return;

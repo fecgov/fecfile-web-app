@@ -300,6 +300,7 @@
           itemName="transactions"
           [emptyMessage]="emptyMessage"
           (loadTableItems)="loadTransactions($event)"
+          (rowsPerPageChange)="onRowsPerPageChange($event)"
         >
           <ng-template #header> </ng-template>
           <ng-template #body let-transaction>
@@ -308,8 +309,8 @@
                 {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
               </a>
             </td>
-            <td>{{ transaction.formType }}</td>
-            <td>{{ transaction.reportType }}</td>
+            <td>{{ transaction.form_type }}</td>
+            <td>{{ transaction.report_code_label }}</td>
             <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
             <td>{{ transaction.amount | currency }}</td>
           </ng-template>

@@ -24,6 +24,8 @@ import { of } from 'rxjs';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { ActivatedRoute } from '@angular/router';
+import { Form24 } from 'app/shared/models/form-24.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -135,18 +137,59 @@ describe('ContactDialogComponent', () => {
       transaction.reports = [testActiveReport];
     });
 
-    it('should route to transaction', () => {
+    it('should route to transaction', async () => {
       const spy = spyOn(component.router, 'navigate');
-      component.openTransaction(new TransactionData(transaction));
+      await component.openTransaction(new TransactionData(transaction));
       expect(spy).toHaveBeenCalledWith([`reports/transactions/report/999/list/${transaction.id}`]);
     });
 
-    it('should handle pagination', () => {
+    it('should handle pagination', async () => {
       spyOn(transactionService, 'getTableData').and.returnValue(
         of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
       );
-      component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
+      await component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
+
       expect(component.transactions).toEqual([]);
+    });
+
+    it('should not show Form 24s', async () => {
+      transaction.reports?.push(Form24.fromJSON({ id: '1', report_type: ReportTypes.F24 }));
+      spyOn(transactionService, 'getTableData').and.returnValue(
+        of({ results: [transaction], count: 1, pageNumber: 1, next: '', previous: '' } as ListRestResponse),
+      );
+      await component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
+
+      expect(component.transactions[0].report_code_label).toBe('APRIL 15 QUARTERLY REPORT (Q1)');
+    });
+
+    describe('loadTransactions', () => {
+      it('should load even without first in event or pagerState', async () => {
+        component.pagerState = undefined;
+        spyOn(transactionService, 'getTableData').and.returnValue(
+          of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
+        );
+        await component.loadTransactions({ rows: 5 } as TableLazyLoadEvent);
+
+        expect(component.transactions).toEqual([]);
+      });
+
+      it('should load even without first in event', async () => {
+        component.pagerState = { rows: 5 } as TableLazyLoadEvent;
+        spyOn(transactionService, 'getTableData').and.returnValue(
+          of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
+        );
+        await component.loadTransactions({ rows: 5 } as TableLazyLoadEvent);
+
+        expect(component.transactions).toEqual([]);
+      });
+    });
+
+    it('should get params', () => {
+      component.rowsPerPage = 5;
+      component.contact.id = '123';
+      const params = component.getParams();
+      expect(params['page_size']).toBe(5);
+      expect(params['contact']).toBe('123');
     });
   });
 });

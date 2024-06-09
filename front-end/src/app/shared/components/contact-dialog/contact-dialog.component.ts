@@ -30,12 +30,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionService } from '../../services/transaction.service';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { getReportFromJSON } from '../../services/report.service';
+import { ReportTypes } from 'app/shared/models/report.model';
+import { QueryParams } from 'app/shared/services/api.service';
 
 export class TransactionData {
   id: string;
   report_ids: string[];
-  formType = '';
-  reportType = '';
+  form_type = '';
+  report_code_label = '';
   transaction_type_identifier: string;
   date: string;
   amount: string;
@@ -48,10 +50,11 @@ export class TransactionData {
     this.amount = transaction.amount;
     this.transaction_type_identifier = transaction.transaction_type_identifier;
 
-    transaction.reports.map((r: JSON) => {
+    transaction.reports.forEach((r: JSON) => {
       const report = getReportFromJSON(r);
-      this.formType = report.formLabel;
-      this.reportType = report.reportLabel;
+      if (report.report_type === ReportTypes.F24) return; // We will display the Form 3X version of the transaction #1977
+      this.form_type = report.formLabel;
+      this.report_code_label = report.report_code_label ?? '';
     });
   }
 }
@@ -111,11 +114,13 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   sortableHeaders: { field: string; label: string }[] = [
     { field: 'transaction_type_identifier', label: 'Transaction type' },
-    { field: 'formType', label: 'Form Type' },
-    { field: 'reportType', label: 'Report Type' },
+    { field: 'form_type', label: 'Form Type' },
+    { field: 'report_code_label', label: 'Report Type' },
     { field: 'date', label: 'Date' },
     { field: 'amount', label: 'Amount' },
   ];
+
+  pagerState?: TableLazyLoadEvent;
 
   constructor(
     private fb: FormBuilder,
@@ -131,11 +136,25 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   async loadTransactions(event: TableLazyLoadEvent) {
     this.tableLoading = true;
 
+    // event is undefined when triggered from the detail page because
+    // the detail doesn't know what page we are on. We check the local
+    // pagerState variable to retrieve the page state.
+    if (!!event && 'first' in event) {
+      this.pagerState = event;
+    } else {
+      event = this.pagerState
+        ? this.pagerState
+        : {
+            first: 0,
+            rows: this.rowsPerPage,
+          };
+    }
+
     // Calculate the record page number to retrieve from the API.
     const first: number = event.first ?? 0;
     const rows: number = event.rows ?? this.rowsPerPage;
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = { contact: this.contact.id! }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    const params = this.getParams();
 
     // Determine query sort ordering
     let ordering: string | string[] = event.sortField ? event.sortField : '';
@@ -144,6 +163,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     } else {
       ordering = `${ordering}`;
     }
+
     try {
       const transactionsPage = await lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params));
       this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
@@ -360,10 +380,15 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     await this.router.navigate([`reports/transactions/report/${reportId}/list/${transaction.id}`]);
   }
 
-  onRowsPerPageChange() {
+  onRowsPerPageChange(rowsPerPage: number) {
+    this.rowsPerPage = rowsPerPage;
     this.loadTransactions({
       first: 0,
       rows: this.rowsPerPage,
     });
+  }
+
+  getParams(): QueryParams {
+    return { page_size: this.rowsPerPage, contact: this.contact.id ?? '' };
   }
 }

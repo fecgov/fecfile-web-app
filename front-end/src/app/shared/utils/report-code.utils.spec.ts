@@ -1,54 +1,236 @@
-import { F3xReportCode, F3xReportCodes, F3X_REPORT_CODE_MAP, getReportCodeLabel } from './report-code.utils';
+import { getCoverageDatesFunction, F3xReportCodes } from './report-code.utils';
 
 describe('ReportCodeUtils', () => {
-  describe('F3xReportCode', () => {
-    it('should carry properties', () => {
-      const coverageDateFunction = (year: number): [Date, Date] => {
-        return [new Date(year, 0, 1), new Date(year, 0, 2)];
-      };
-      const f3xReportCode = new F3xReportCode('MY', 'label for MY', coverageDateFunction);
-      expect(f3xReportCode.label).toBe('label for MY');
-      expect(f3xReportCode.coverageDatesFunction).toEqual(coverageDateFunction);
+  describe('getCoverageDatesFunction', () => {
+    it('should return correct function for Q1', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.Q1);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'Q');
+        expect(startDate.getMonth()).toBe(0);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(2);
+        expect(endDate.getDate()).toBe(31);
+      }
     });
-  });
 
-  describe('F3X_REPORT_CODE_MAP', () => {
-    it('should have Q1', () => {
-      const Q1 = F3X_REPORT_CODE_MAP.get(F3xReportCodes.Q1);
-      expect(Q1).toBeTruthy();
-      expect(Q1?.label).toEqual('APRIL 15 QUARTERLY REPORT (Q1)');
-      if (Q1?.coverageDatesFunction) {
-        expect(Q1.coverageDatesFunction(2022, false, 'M')).toEqual([new Date(2022, 0, 1), new Date(2022, 2, 31)]);
+    it('should return correct function for Q2', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.Q2);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'Q');
+        expect(startDate.getMonth()).toBe(3);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(5);
+        expect(endDate.getDate()).toBe(30);
       }
     });
-    it('should have M3', () => {
-      const M3 = F3X_REPORT_CODE_MAP.get(F3xReportCodes.M3);
-      expect(M3).toBeTruthy();
-      expect(M3?.label).toEqual('MARCH 20 MONTHLY REPORT (M3)');
-      if (M3?.coverageDatesFunction) {
-        expect(M3.coverageDatesFunction(2022, false, 'M')).toEqual([new Date(2022, 1, 1), new Date(2022, 1, 28)]);
-        // test leap year
-        expect(M3.coverageDatesFunction(2020, false, 'M')).toEqual([new Date(2020, 1, 1), new Date(2020, 1, 29)]);
-      }
-    });
-    it('should have YE', () => {
-      const YE = F3X_REPORT_CODE_MAP.get(F3xReportCodes.YE);
-      expect(YE).toBeTruthy();
-      expect(YE?.label).toEqual('JANUARY 31 YEAR-END (YE)');
-      if (YE?.coverageDatesFunction) {
-        expect(YE.coverageDatesFunction(2022, false, 'M')).toEqual([new Date(2021, 11, 1), new Date(2021, 11, 31)]);
-        // Quarterly non-election year
-        expect(YE.coverageDatesFunction(2022, false, 'Q')).toEqual([new Date(2021, 6, 1), new Date(2021, 11, 31)]);
-        // Quarterly election year
-        expect(YE.coverageDatesFunction(2022, true, 'Q')).toEqual([new Date(2021, 9, 1), new Date(2021, 11, 31)]);
-      }
-    });
-  });
 
-  describe('getReportCodeLabel', () => {
-    it('should get label for report code', () => {
-      expect(getReportCodeLabel(F3xReportCodes.YE)).toEqual('JANUARY 31 YEAR-END (YE)');
-      expect(getReportCodeLabel()).toEqual(undefined);
+    it('should return correct function for Q3', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.Q3);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'Q');
+        expect(startDate.getMonth()).toBe(6);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(8);
+        expect(endDate.getDate()).toBe(30);
+      }
+    });
+
+    it('should return correct function for YE', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.YE);
+      if (result) {
+        expect(typeof result).toBe('function');
+
+        // Test for election year
+        let [startDate, endDate] = result(2024, true, 'Q');
+        expect(startDate.getFullYear()).toBe(2023);
+        expect(startDate.getMonth()).toBe(9);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getFullYear()).toBe(2023);
+        expect(endDate.getMonth()).toBe(11);
+        expect(endDate.getDate()).toBe(31);
+
+        // Test for non-election year with filingFrequency 'Q'
+        [startDate, endDate] = result(2024, false, 'Q');
+        expect(startDate.getFullYear()).toBe(2023);
+        expect(startDate.getMonth()).toBe(6);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getFullYear()).toBe(2023);
+        expect(endDate.getMonth()).toBe(11);
+        expect(endDate.getDate()).toBe(31);
+
+        // Test for non-election year with filingFrequency other than 'Q'
+        [startDate, endDate] = result(2024, false, 'M');
+        expect(startDate.getFullYear()).toBe(2023);
+        expect(startDate.getMonth()).toBe(11);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getFullYear()).toBe(2023);
+        expect(endDate.getMonth()).toBe(11);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M2', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M2);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(0);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(0);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M3', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M3);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(1);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(1);
+        expect(endDate.getDate()).toBe(29);
+      }
+    });
+
+    it('should return correct function for M4', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M4);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(2);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(2);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M5', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M5);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(3);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(3);
+        expect(endDate.getDate()).toBe(30);
+      }
+    });
+
+    it('should return correct function for M6', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M6);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(4);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(4);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M7', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M7);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(5);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(5);
+        expect(endDate.getDate()).toBe(30);
+      }
+    });
+
+    it('should return correct function for M8', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M8);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(6);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(6);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M9', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M9);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(7);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(7);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M10', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M10);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(8);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(8);
+        expect(endDate.getDate()).toBe(30);
+      }
+    });
+
+    it('should return correct function for M11', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M11);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(9);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(9);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for M12', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.M12);
+      expect(typeof result).toBe('function');
+      if (result) {
+        const [startDate, endDate] = result(2024, true, 'M');
+        expect(startDate.getMonth()).toBe(10);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getMonth()).toBe(10);
+        expect(endDate.getDate()).toBe(30);
+      }
+    });
+
+    it('should return undefined for all others', () => {
+      let result = getCoverageDatesFunction(F3xReportCodes.TER);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.TwelveG);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.TwelveP);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.TwelveR);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.TwelveS);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.TwelveC);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.ThirtyG);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.ThirtyR);
+      expect(result).toBeUndefined();
+
+      result = getCoverageDatesFunction(F3xReportCodes.ThirtyS);
+      expect(result).toBeUndefined();
     });
   });
 });
