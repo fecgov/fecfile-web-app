@@ -148,9 +148,6 @@
     display: inline;
   }
 
-  .header-productivity {
-    display: inline;
-  }
   .first-description-text {
     display: block;
   }
@@ -176,6 +173,10 @@
 }
 
 @media (min-width: 1200px) {
+  .header-productivity {
+    display: inline;
+  }
+
   .dashboard-example-img-md {
     display: none;
   }
