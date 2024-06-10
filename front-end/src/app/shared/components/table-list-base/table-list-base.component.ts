@@ -5,6 +5,7 @@ import { TableListService } from '../../interfaces/table-list-service.interface'
 import { forkJoin, Observable } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { QueryParams } from 'app/shared/services/api.service';
 
 @Component({
   template: '',
@@ -83,7 +84,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     const first: number = event.first ? event.first : 0;
     const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = this.getGetParams();
+    const params = this.getParams();
 
     // Determine query sort ordering
     let ordering: string | string[] = event.sortField ? event.sortField : '';
@@ -189,16 +190,16 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   }
 
   /**
-   * getGetParams() is a method that provides optional parameters that the table-list-base component
+   * getParams() is a method that provides optional parameters that the table-list-base component
    * will pass in the GET request that loads the table's items, passing the parameters through the
    * itemService and to the api service.  A component extending this component can override this
    * method in order to control the parameters being sent in the GET request without overriding the
    * entire loadTableItems() method.
    *
-   * @return { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
+   * @return QueryParams
    */
 
-  public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
+  public getParams(): QueryParams {
     return { page_size: this.rowsPerPage };
   }
 

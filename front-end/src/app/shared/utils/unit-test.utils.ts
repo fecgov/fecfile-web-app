@@ -92,6 +92,7 @@ export const testActiveReport: Form3X = Form3X.fromJSON({
   form_type: 'F3XN',
   report_type: 'F3X',
   report_code: 'Q1',
+  report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
   upload_submission: UploadSubmission.fromJSON({}),
   webprint_submission: {
     fec_email: 'test@test.com',
@@ -208,7 +209,7 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
     {
       report_type: 'F3X',
       report_code: 'Q1',
-      reportCode: 'Q1',
+      report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
       coverage_through_date: '2024-04-20',
     },
   ],
@@ -233,7 +234,7 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
     {
       report_type: 'F3X',
       report_code: 'Q1',
-      reportCode: 'Q1',
+      report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
     },
   ],
 });

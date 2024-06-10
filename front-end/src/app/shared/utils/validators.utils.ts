@@ -1,7 +1,6 @@
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { F3xCoverageDates } from '../models/form-3x.model';
 import { DateUtils } from './date.utils';
-import { getReportCodeLabel } from './report-code.utils';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import * as _ from 'lodash';
 import { SchATransaction } from '../models/scha-transaction.model';
@@ -118,7 +117,7 @@ function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors 
   const fecDatePipe = new FecDatePipe();
   const message =
     `You have entered coverage dates that overlap ` +
-    `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
+    `the coverage dates of the following report: ${collision.report_code_label} ` +
     ` ${fecDatePipe.transform(collision.coverage_from_date)} -` +
     ` ${fecDatePipe.transform(collision.coverage_through_date)}`;
   return { invaliddate: { msg: message } };

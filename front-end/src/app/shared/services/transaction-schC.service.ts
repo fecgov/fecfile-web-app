@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
+import { ApiService, QueryParams } from './api.service';
 import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 
@@ -17,11 +17,7 @@ export class TransactionSchCService extends TransactionService {
     super(apiService, datePipe);
   }
 
-  override getTableData(
-    pageNumber = 1,
-    ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-  ): Observable<ListRestResponse> {
+  override getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     // The table data for the Schedule C loans also includes the Schedule D debts.
     params['schedules'] = 'C,D';
     return super.getTableData(pageNumber, ordering, params);

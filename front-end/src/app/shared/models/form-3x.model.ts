@@ -1,8 +1,8 @@
 import { plainToClass, plainToInstance, Transform } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { F3xReportCodes, getReportCodeLabel } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
+import { F3xReportCodes } from '../utils/report-code.utils';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -16,9 +16,11 @@ export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
   report_code: F3xReportCodes | undefined;
+  report_code_label?: string;
 
   // prettier-ignore
-  static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, reportCodeLabel: string): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
+        json.report_code_label = reportCodeLabel;
         return plainToClass(F3xCoverageDates, json);
     }
 }
@@ -31,7 +33,6 @@ export class Form3X extends Report {
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
   change_of_address: boolean | undefined;
-  report_code: F3xReportCodes | undefined;
   election_code: string | undefined;
   @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
   state_of_election: string | undefined;
@@ -148,10 +149,6 @@ export class Form3X extends Report {
   L38_net_operating_expenditures_ytd: number | undefined;
   calculation_status: string | undefined;
 
-  override get reportCode(): F3xReportCodes | undefined {
-    return this.report_code;
-  }
-
   override get coverageDates(): { [date: string]: Date | undefined } {
     return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
   }
@@ -165,11 +162,7 @@ export class Form3X extends Report {
   }
 
   get formSubLabel() {
-    return getReportCodeLabel(this.report_code) ?? '';
-  }
-
-  get reportLabel(): string {
-    return getReportCodeLabel(this.reportCode) ?? '';
+    return this.report_code_label ?? '';
   }
 
   static fromJSON(json: unknown): Form3X {
