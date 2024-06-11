@@ -10,4 +10,5 @@ export const environment = {
   loginDotGovLogoutUrl: 'http://localhost:8080/oidc/logout',
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
+  debugLogin: true,
 };

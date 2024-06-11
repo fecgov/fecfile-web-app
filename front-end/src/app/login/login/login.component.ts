@@ -53,9 +53,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   checkLocalLoginAvailability() {
-    this.loginService.checkLocalLoginAvailability().subscribe((available) => {
-      this.localLoginAvailable = available;
-    });
+    if (environment.debugLogin) {
+      this.localLoginAvailable = true;
+    } else {
+      this.loginService.checkLocalLoginAvailability().subscribe((available) => {
+        this.localLoginAvailable = available;
+      });
+    }
   }
 
   showDebugLogin() {

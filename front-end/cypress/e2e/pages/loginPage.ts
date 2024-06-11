@@ -64,7 +64,11 @@ function legacyLogin() {
   const fieldEmail = '#emailId';
   const fieldCommittee = '#committeeId';
   const fieldPassword = '#loginPassword';
-
+  // cy.request('http://localhost:8080/api/v1/user/login/authenticate').then((response) => {
+  //   expect(response.status).to.eq(200);
+  //   console.log(response);
+  //   expect(response.body.endpoint_available).to.be.true;
+  // });
   cy.fixture('FEC_Get_Committee_Account').then(() => {
     cy.intercept('POST', 'http://localhost:8080/api/v1/user/login/authenticate').as('GetLoggedIn');
     cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee`).as('GetCommitteeAccounts');

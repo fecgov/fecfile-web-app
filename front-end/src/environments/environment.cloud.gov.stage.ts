@@ -14,6 +14,7 @@ export const environment = {
   loginDotGovLogoutUrl: 'https://fecfile-web-api-stage.app.cloud.gov/oidc/logout',
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
+  debugLogin: false,
 };
 
 /*
