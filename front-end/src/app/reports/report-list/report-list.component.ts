@@ -5,7 +5,7 @@ import { TableAction, TableListBaseComponent } from '../../shared/components/tab
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -53,10 +53,17 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     private store: Store,
     private form3XService: Form3XService,
     public dotFecService: DotFecService,
+    private route: ActivatedRoute,
   ) {
     super(messageService, confirmationService, elementRef);
     this.caption =
       'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
+
+    this.route.queryParams.subscribe((p: Params) => {
+      if (p['start_new']) {
+        this.dialogVisible = true;
+      }
+    });
   }
 
   override ngOnInit() {
