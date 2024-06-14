@@ -1,8 +1,15 @@
+a {
+  font-family: karla, sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-left: 0;
+  margin-top: 32px;
   padding-left: 0;
 }
 
@@ -84,7 +91,7 @@ a {
   border-bottom: none;
 
   span {
-    border-bottom: 1px dotted #112e51;
+    border-bottom: 2px dotted #112e51;
   }
   img {
     padding-left: 5px;

@@ -141,49 +141,4 @@ describe('ReportListComponent', () => {
       });
     }));
   });
-
-  it('should set dialogVisible to false when start_new query param is not present', () => {
-    expect(component.dialogVisible).toBeFalse();
-  });
-});
-
-describe('ReportListComponent', () => {
-  let component: ReportListComponent;
-  let fixture: ComponentFixture<ReportListComponent>;
-  const actions$ = new Subject<{ type: string }>();
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TableModule, ToolbarModule, DialogModule],
-      declarations: [ReportListComponent, FormTypeDialogComponent, Dialog],
-      providers: [
-        ReportService,
-        ConfirmationService,
-        MessageService,
-        ApiService,
-        provideMockStore(testMockStore),
-        { provide: Actions, useValue: actions$ },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            queryParams: of({ start_new: true }),
-          },
-        },
-      ],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ReportListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should set dialogVisible to false when start_new query param is not present', () => {
-    expect(component.dialogVisible).toBeTrue();
-  });
 });

@@ -17,7 +17,7 @@ import { Report } from 'app/shared/models/report.model';
 })
 export class DashboardComponent implements AfterViewInit, OnInit {
   reports: Report[] = [];
-
+  dialogVisible = false;
   @ViewChildren('reportText') elements?: QueryList<ElementRef<HTMLParagraphElement>>;
 
   constructor(

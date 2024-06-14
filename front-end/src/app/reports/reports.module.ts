@@ -81,5 +81,6 @@ import { PasswordModule } from 'primeng/password';
     NgOptimizedImage,
     PasswordModule,
   ],
+  exports: [FormTypeDialogComponent],
 })
 export class ReportsModule {}
