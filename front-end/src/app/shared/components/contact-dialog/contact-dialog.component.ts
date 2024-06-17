@@ -113,9 +113,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   emptyMessage = 'No data available in table';
 
   sortableHeaders: { field: string; label: string }[] = [
-    { field: 'transaction_type_identifier', label: 'Transaction type' },
-    { field: 'form_type', label: 'Form Type' },
-    { field: 'report_code_label', label: 'Report Type' },
+    { field: 'transaction_type_identifier', label: 'Type' },
+    { field: 'form_type', label: 'Form' },
+    { field: 'report_code_label', label: 'Report' },
     { field: 'date', label: 'Date' },
     { field: 'amount', label: 'Amount' },
   ];
