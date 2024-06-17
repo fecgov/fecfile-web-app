@@ -22,7 +22,7 @@
   >
     <ng-template pTemplate="caption">
       <div *ngIf="title" class="flex align-items-center justify-content-between">
-        <h2 class="m-0">{{ title }}</h2>
+        <h1 class="m-0">{{ title }}</h1>
       </div>
       <ng-container *ngTemplateOutlet="caption"></ng-container>
     </ng-template>
@@ -71,7 +71,7 @@
           </p-dropdown>
         </div>
         <div class="responsive-container">
-          <span class="paginator-text">{{ showing }}</span>
+          <span class="paginator-text">{{ showing }}:</span>
           <p-paginator
             [rows]="rowsPerPage"
             [totalRecords]="totalItems"
