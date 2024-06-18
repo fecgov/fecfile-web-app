@@ -7,12 +7,12 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
-  F3X_REPORT_CODE_MAP,
   F3xReportCodes,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
+  getCoverageDatesFunction,
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -51,6 +51,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public usedReportCodes?: F3xReportCodes[];
   public thisYear = new Date().getFullYear();
   committeeAccount?: CommitteeAccount;
+  reportCodeLabelMap?: { [key in F3xReportCodes]: string };
 
   constructor(
     private store: Store,
@@ -65,6 +66,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
+    this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
@@ -121,7 +123,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         startWith(this.form.controls['report_type_category'].value),
       ),
     ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
-      const coverageDatesFunction = F3X_REPORT_CODE_MAP.get(reportCode)?.coverageDatesFunction;
+      const coverageDatesFunction = getCoverageDatesFunction(reportCode);
       if (coverageDatesFunction) {
         const isElectionYear = F3xReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
         const [coverage_from_date, coverage_through_date] = coverageDatesFunction(

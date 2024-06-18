@@ -36,12 +36,12 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   ];
 
   sortableHeaders: { field: string; label: string }[] = [
-    { field: 'form_type', label: 'Form type' },
-    { field: 'report_code_label', label: 'Type of report' },
-    { field: 'coverage_through_date', label: 'Coverage dates' },
+    { field: 'form_type', label: 'Form' },
+    { field: 'report_code_label', label: 'Type' },
+    { field: 'coverage_through_date', label: 'Coverage' },
     { field: 'report_status', label: 'Status' },
     { field: 'version_label', label: 'Version' },
-    { field: 'upload_submission__created', label: 'Date filed' },
+    { field: 'upload_submission__created', label: 'Filed' },
   ];
 
   constructor(

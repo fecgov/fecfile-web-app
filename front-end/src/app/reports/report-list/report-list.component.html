@@ -24,7 +24,7 @@
         <button
           pButton
           pRipple
-          label="Create a new report"
+          label="Create report"
           data-cy="create-report"
           icon="pi pi-plus"
           class="add-button"
@@ -39,7 +39,7 @@
   </ng-template>
   <ng-template #body let-item>
     <td>{{ item.formLabel }}</td>
-    <td>{{ item.reportLabel }}</td>
+    <td>{{ item.report_code_label }}</td>
     <td>
       <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
         >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}

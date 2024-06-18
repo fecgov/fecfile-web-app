@@ -67,14 +67,14 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.getGetParams()['parent']).toBeUndefined();
+    expect(component.getParams()['parent']).toBeUndefined();
   });
 
   it('should load items with loan', () => {
     component.loan = { id: '1' } as Transaction;
     fixture.detectChanges();
     expect(component).toBeTruthy();
-    expect(component.getGetParams()['parent']).toEqual('1');
+    expect(component.getParams()['parent']).toEqual('1');
   });
 
   it('should have delete', () => {

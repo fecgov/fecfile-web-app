@@ -2987,7 +2987,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: #fff;
   color: #212121;
   border-bottom: 2px solid #000000;
-  padding: 64px 1rem 8px 0;
+  padding: 48px 1rem 8px 0;
   font-weight: 600;
 }
 .p-datatable .p-datatable-footer {
@@ -3133,7 +3133,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-width: 1px 1px 0 1px;
 }
 .p-datatable.p-datatable-gridlines .p-datatable-footer {
-  border-width: 0 1px 1px 1px;
+  border-width: 2px 0;
 }
 .p-datatable.p-datatable-gridlines .p-paginator-top {
   border-width: 0 1px 0 1px;
@@ -3142,11 +3142,26 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-width: 0 1px 1px 1px;
 }
 .p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th {
-  border-width: 1px 1px 2px 1px;
+  border-width: 2px 1px;
+  border-left-color: #f1f1f1;
+  border-right-color: #f1f1f1;
 }
+
 .p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td {
   border-width: 1px;
+  border-color: #f1f1f1;
 }
+
+.p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td:first-child,
+.p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th:first-child {
+  border-left: 0;
+}
+
+.p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td:last-child,
+.p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th:last-child {
+  border-right: 0;
+}
+
 .p-datatable.p-datatable-gridlines .p-datatable-tfoot > tr > td {
   border-width: 1px;
 }
@@ -4664,8 +4679,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-toolbar {
   background: #ffffff;
-  padding: 1rem 1.25rem;
-  border-radius: 4px;
+  padding: 48px 0 0 0;
+  border-radius: 0;
+  display: flex;
+  align-items: baseline;
 }
 .p-toolbar .p-toolbar-separator {
   margin: 0 0.5rem;

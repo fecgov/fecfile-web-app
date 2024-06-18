@@ -24,10 +24,6 @@ export class Form99 extends Report {
     return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
   }
 
-  get reportLabel(): string {
-    return '';
-  }
-
   treasurer_last_name: string | undefined;
   treasurer_first_name: string | undefined;
   treasurer_middle_name: string | undefined;

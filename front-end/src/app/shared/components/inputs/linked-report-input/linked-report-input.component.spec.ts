@@ -55,6 +55,7 @@ describe('LinkedReportInputComponent', () => {
       coverage_from_date: '2020-01-15',
       coverage_through_date: '2020-04-29',
       report_code: F3xReportCodes.Q1,
+      report_code_label: 'APRIL 15 (Q1)',
     });
 
     component.committeeF3xReports = firstValueFrom(of([testF3X]));

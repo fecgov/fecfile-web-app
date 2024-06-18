@@ -38,7 +38,7 @@
         <div class="col-12" *ngIf="reportCode">
           <h5>YOUR REPORT TYPE:</h5>
           <h3>
-            {{ reportCode | reportCodeLabel }}
+            {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
           </h3>
           <br />
         </div>

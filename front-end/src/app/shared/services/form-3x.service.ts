@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xCoverageDates, F3xQualifiedCommitteeTypeCodes, Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
 import { Report } from '../models/report.model';
+import { F3xReportCodes } from '../utils/report-code.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Form3XService extends ReportService {
   override apiEndpoint = '/reports/form-3x';
+
+  f3xReportCodeLabelMap$ = new BehaviorSubject<{ [key in F3xReportCodes]: string } | undefined>(undefined);
 
   constructor(
     override apiService: ApiService,
@@ -21,10 +24,25 @@ export class Form3XService extends ReportService {
     super(apiService, store);
   }
 
-  public getF3xCoverageDates(): Observable<F3xCoverageDates[]> {
-    return this.apiService
-      .get<F3xCoverageDates[]>(`${this.apiEndpoint}/coverage_dates`)
-      .pipe(map((response) => response.map((fx3CoverageDate) => F3xCoverageDates.fromJSON(fx3CoverageDate))));
+  public async getF3xCoverageDates(): Promise<F3xCoverageDates[]> {
+    const [response, reportCodeLabelMap] = await Promise.all([
+      firstValueFrom(this.apiService.get<F3xCoverageDates[]>(`${this.apiEndpoint}/coverage_dates`)),
+      this.getReportCodeLabelMap(),
+    ]);
+    return response.map((fx3CoverageDate) =>
+      F3xCoverageDates.fromJSON(fx3CoverageDate, reportCodeLabelMap[fx3CoverageDate.report_code!]),
+    );
+  }
+
+  public async getReportCodeLabelMap(): Promise<{ [key in F3xReportCodes]: string }> {
+    let map = this.f3xReportCodeLabelMap$.getValue();
+    if (!map) {
+      map = await firstValueFrom(
+        this.apiService.get<{ [key in F3xReportCodes]: string }>(`${this.apiEndpoint}/report_code_map`),
+      );
+      this.f3xReportCodeLabelMap$.next(map);
+    }
+    return map;
   }
 
   public getFutureReports(coverage_through_date: string): Observable<Form3X[]> {

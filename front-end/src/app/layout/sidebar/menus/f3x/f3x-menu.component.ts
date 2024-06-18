@@ -4,7 +4,6 @@ import { MenuItem } from 'primeng/api';
 import { Report } from '../../../../shared/models/report.model';
 import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
-import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { AbstractMenuComponent } from '../abstract-menu.component';
 import { takeUntil } from 'rxjs';
 import { Form3X } from '../../../../shared/models/form-3x.model';
@@ -17,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   formLabel?: string;
-  report_code?: F3xReportCodes;
+  subLabel?: string;
   coverage_from_date?: Date;
   coverage_through_date?: Date;
 
@@ -31,7 +30,7 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
     if (!this.activeReport$) return;
     this.activeReport$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
       this.formLabel = report?.formLabel;
-      this.report_code = (report as Form3X).report_code;
+      this.subLabel = report?.formSubLabel;
       this.coverage_from_date = (report as Form3X).coverage_from_date;
       this.coverage_through_date = (report as Form3X).coverage_through_date;
     });

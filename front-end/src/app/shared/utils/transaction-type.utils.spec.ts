@@ -1,7 +1,7 @@
 import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { PACRestricted, PTYRestricted, TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
 
-describe('LabelUtils', () => {
+describe('TransactionTypeUtils', () => {
   it('should create an instance', () => {
     expect(new TransactionTypeUtils()).toBeTruthy();
   });
@@ -47,5 +47,11 @@ describe('LabelUtils', () => {
     ].forEach((r) => {
       expect(PTYRestricted().includes(r));
     });
+  });
+
+  it('should remove leading zeroes from Transactions', () => {
+    const testJSON = { line_label: '09' };
+    const scheduleObject = getFromJSON(testJSON);
+    expect(scheduleObject.line_label).toBe('9');
   });
 });

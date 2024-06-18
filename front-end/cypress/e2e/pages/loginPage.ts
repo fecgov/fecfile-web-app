@@ -72,6 +72,8 @@ function legacyLogin() {
   });
 
   cy.visit('/');
+  cy.get('#dropdownMenuButton').click();
+  cy.get('[data-test="debug-login-button"]').click();
   cy.get(fieldEmail).type(email);
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');

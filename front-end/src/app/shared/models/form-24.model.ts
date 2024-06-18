@@ -23,10 +23,6 @@ export class Form24 extends Report {
     return '';
   }
 
-  get reportLabel(): string {
-    return `${this.report_type_24_48} HOUR`;
-  }
-
   override get canAmend(): boolean {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }

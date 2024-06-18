@@ -10,6 +10,7 @@ import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.mo
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
@@ -211,8 +212,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return {} as Transaction;
   }
 
-  override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    return { report_id: this.reportId, page_size: this.rowsPerPage };
+  override getParams(): QueryParams {
+    const params: QueryParams = { ...super.getParams(), page_size: this.rowsPerPage };
+    if (this.reportId) params['report_id'] = this.reportId;
+    return params;
   }
 
   override async editItem(item: Transaction): Promise<void> {

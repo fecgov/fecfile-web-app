@@ -8,6 +8,38 @@ import { Actions } from '@ngrx/effects';
 import { Observable, Subject, of } from 'rxjs';
 import { Report } from '../models/report.model';
 import { ApiService } from './api.service';
+import { RendererFactory2 } from '@angular/core';
+
+const childNodesMap = new WeakMap();
+
+class MockRendererFactory {
+  createRenderer() {
+    return {
+      createElement: () => {
+        const attributes: { [key: string]: string } = {};
+        return {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setAttribute: (element: any, name: string, value: string) => {
+            element[name] = value;
+          },
+          getAttribute: (name: string) => attributes[name],
+          click: jasmine.createSpy('click'),
+        };
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      appendChild: (parent: any, child: any) => {
+        if (!childNodesMap.has(parent)) {
+          childNodesMap.set(parent, []);
+        }
+        childNodesMap.get(parent).push(child);
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setAttribute: (element: any, name: string, value: string) => {
+        element[name] = value;
+      },
+    };
+  }
+}
 
 describe('DotFecService', () => {
   let service: DotFecService;
@@ -19,7 +51,13 @@ describe('DotFecService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [DotFecService, ApiService, provideMockStore(testMockStore), { provide: Actions, useValue: actions$ }],
+      providers: [
+        DotFecService,
+        ApiService,
+        provideMockStore(testMockStore),
+        { provide: Actions, useValue: actions$ },
+        { provide: RendererFactory2, useClass: MockRendererFactory },
+      ],
     });
     apiService = TestBed.inject(ApiService);
     service = TestBed.inject(DotFecService);
@@ -63,15 +101,24 @@ describe('DotFecService', () => {
       href: '',
       download: '',
       click: jasmine.createSpy('click'),
+      getAttribute: (name: string) => {
+        if (name === 'href') {
+          return 'blob:testBlob';
+        } else if (name === 'download') {
+          return `${download.report.id}.fec`;
+        } else {
+          return '';
+        }
+      },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spyOn(document, 'createElement').and.returnValue(link as any);
-
+    spyOn(service['renderer'], 'createElement').and.returnValue(link);
     await service.downloadFecFile(download);
 
     expect(apiService.getString).toHaveBeenCalledWith(`/web-services/dot-fec/${download.id}/`);
-    expect(link.href).toBe('blob:testBlob');
-    expect(link.download).toBe(`${download.report.id}.fec`);
+    expect(link.getAttribute('href')).toBe('blob:testBlob');
+    expect(link.getAttribute('download')).toBe(`${download.report.id}.fec`);
     expect(link.click).toHaveBeenCalled();
   });
 

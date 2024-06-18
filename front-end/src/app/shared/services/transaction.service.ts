@@ -7,7 +7,7 @@ import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
-import { ApiService } from './api.service';
+import { ApiService, QueryParams } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { Report } from '../models/report.model';
 
@@ -22,11 +22,7 @@ export class TransactionService implements TableListService<Transaction> {
     protected datePipe: DatePipe,
   ) {}
 
-  public getTableData(
-    pageNumber = 1,
-    ordering = '',
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
-  ): Observable<ListRestResponse> {
+  public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'line_label,created';
     }

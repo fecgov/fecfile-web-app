@@ -1,0 +1,7 @@
+.table-action-button {
+  font-weight: 600;
+}
+
+.table-action-button:not(:disabled) {
+  color: #212121 !important;
+}
