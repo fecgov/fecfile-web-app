@@ -2,16 +2,17 @@
 // `ng build --configuration=cloud.gov.prod` replaces `environment.ts` with `environment.cloud.gov.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const apiBaseUrl = 'https://api.fecfile.fec.gov';
 export const environment = {
   production: true,
   name: 'production',
-  apiUrl: 'https://fecfile-web-api-prod.app.cloud.gov/api/v1',
+  apiUrl: `${apiBaseUrl}/api/v1`,
   appTitle: 'FECfile',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
   fecApiUrl: 'https://api.open.fec.gov/v1/',
   userCanSetFilingFrequency: true,
-  loginDotGovAuthUrl: 'https://fecfile-web-api-prod.app.cloud.gov/oidc/authenticate',
-  loginDotGovLogoutUrl: 'https://fecfile-web-api-prod.app.cloud.gov/oidc/logout',
+  loginDotGovAuthUrl: `${apiBaseUrl}/oidc/authenticate`,
+  loginDotGovLogoutUrl: `${apiBaseUrl}/oidc/logout`,
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
 };
