@@ -122,7 +122,7 @@ export const SAVE_CHILD_CONTROL = new NavigationControl(
   'Save & add memo',
   'p-button-warning',
   hasNoContact,
-  () => true,
+  (transaction) => (transaction ? !transaction.reatt_redes : true),
   'pi pi-plus',
   ControlType.DROPDOWN,
 );
@@ -191,7 +191,7 @@ export const CHILD_CONTROLS = new TransactionNavigationControls(
       'Save & add memo',
       '',
       hasNoContact,
-      () => true,
+      (transaction) => (transaction ? !transaction.reatt_redes : true),
       'pi pi-plus',
       ControlType.DROPDOWN,
     ),
