@@ -311,6 +311,10 @@ parameters:
     type: boolean
     default: false
 
+  is-triggered-e2e-test:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
