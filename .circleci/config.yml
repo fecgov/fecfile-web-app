@@ -322,17 +322,29 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/
+              only: /develop|release\/sprint-[\.\d]+|main/
       - deploy-job:
+          name: deploy-job-conditional
           requires:
             - test
             - dependency-check
             - e2e-test
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|main/
+              only: /develop|release\/sprint-[\.\d]+/
+      - deploy-job:
+          name: deploy-job-always
+          filters:
+            branches:
+              only:
+                - main
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
+    jobs:
+      - e2e-test
+
+  triggered-e2e-test:
+    when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
