@@ -56,6 +56,12 @@ export class ReportListPage {
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
+    if (fd.cash_on_hand) {
+      F3xCashOnHandPage.enterFormData({
+        cashOnHand: fd.cash_on_hand.toString(),
+        date: fd.coverage_from_date,
+      });
+    }
   }
 
   static createF1M() {
