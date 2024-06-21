@@ -106,7 +106,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
-          version: docker24
+          version: docker26
       - run:
           name: clone fecfile-web-api
           command: |
@@ -121,7 +121,7 @@ jobs:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${CIRCLE_BRANCH}
+            git checkout develop
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} docker-compose up --build -d
             docker container run --network container:fecfile-api \
