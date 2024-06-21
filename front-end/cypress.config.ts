@@ -12,8 +12,6 @@ export default defineConfig({
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
   videoUploadOnPasses: false,
-  viewportHeight: 768,
-  viewportWidth: 1366,
   chromeWebSecurity: false,
   reporter: 'mochawesome',
   reporterOptions: {
