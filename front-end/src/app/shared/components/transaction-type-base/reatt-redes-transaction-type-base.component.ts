@@ -34,14 +34,6 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   override async ngOnInit(): Promise<void> {
     super.ngOnInit();
-    // If the parent is a reattribution/redesignation transaction, initialize
-    // its specialized validation rules and form element behavior.
-    ReattRedesUtils.overlayForms(
-      this.form,
-      this.transaction as SchATransaction | SchBTransaction,
-      this.childForm,
-      this.childTransaction as SchATransaction | SchBTransaction,
-    );
     this.childUpdateFormWithPrimaryContact({
       value: this.transaction?.reatt_redes?.contact_1,
     } as SelectItem);
@@ -60,7 +52,15 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       } as SelectItem);
       this.updateElectionData();
     }
-    await this.initializePullForward();
+    this.initializePullForward();
+    // If the parent is a reattribution/redesignation transaction, initialize
+    // its specialized validation rules and form element behavior.
+    ReattRedesUtils.overlayForms(
+      this.form,
+      this.transaction as SchATransaction | SchBTransaction,
+      this.childForm,
+      this.childTransaction as SchATransaction | SchBTransaction,
+    );
   }
 
   override processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
