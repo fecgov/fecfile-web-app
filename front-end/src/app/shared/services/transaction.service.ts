@@ -170,10 +170,12 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
-  public multiSaveReattRedes(transactions: Transaction[]): Observable<Transaction[]> {
+  public multiSaveReattRedes(transactions: Transaction[], reportId: string): Observable<Transaction[]> {
     const payload = transactions.map((t) => this.preparePayload(t));
     return this.apiService
-      .put<string[]>(`${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/`, payload, {})
+      .put<
+        string[]
+      >(`${transactions[0].transactionType?.apiEndpoint}/multisave/reattribution/?report_id=${reportId}`, payload, {})
       .pipe(
         map((ids) => {
           transactions.forEach((t, i) => (t.id = ids[i]));
