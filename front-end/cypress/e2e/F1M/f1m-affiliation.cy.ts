@@ -9,19 +9,14 @@ import { ProfileAccountPage } from '../pages/profileAccountPage';
 
 describe('Manage reports', () => {
   beforeEach(() => {
-    cy.intercept('GET', `http://localhost:8080/api/v1/openfec/C99999999/f1_filing/`, {
-      fixture: 'FEC_Get_F1_Filing.json',
-    });
     Initialize();
   });
 
   it('should create form 1m by affiliation', () => {
     ContactListPage.createCommittee();
     const committeeID = Cypress.env('COMMITTEE_ID');
-    ProfileAccountPage.goToPage();
-    cy.wait(10000);
     ReportListPage.createF1M();
-    PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
+    PageUtils.valueCheck('[data-cy="committee-id-input"]', committeeID);
     cy.get('[data-cy="state-party-radio"]').click();
     cy.get('[data-cy="affiliation-radio"').click();
     cy.get('[id="searchBox"]').type(committeeFormData.committee_id.slice(0, 3));

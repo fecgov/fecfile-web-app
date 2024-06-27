@@ -65,13 +65,11 @@ function legacyLogin() {
   const fieldCommittee = '#committeeId';
   const fieldPassword = '#loginPassword';
 
-  cy.fixture('FEC_Get_Committee_Account').then(() => {
-    cy.intercept('POST', 'http://localhost:8080/api/v1/user/login/authenticate').as('GetLoggedIn');
-    cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee`, {
-      fixture: 'FEC_Get_Committee_Account',
-    }).as('GetCommitteeAccounts');
-    cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  });
+  cy.intercept('POST', 'http://localhost:8080/api/v1/user/login/authenticate').as('GetLoggedIn');
+  cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee`, {
+    fixture: 'FEC_Get_Committee_Account',
+  }).as('GetCommitteeAccounts');
+  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
 
   cy.visit('/');
   cy.get('#dropdownMenuButton').click();
