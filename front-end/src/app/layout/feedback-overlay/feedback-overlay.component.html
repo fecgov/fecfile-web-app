@@ -1,7 +1,13 @@
-<div class="anchor" [style]="{ bottom: formSubmitted ? '860px' : '830px' }" #anchor></div>
+<div class="anchor" [style]="{ bottom: anchorBottom }" #anchor></div>
 <p-overlayPanel
   #op
-  [style]="{ width: '500px', height: formSubmitted ? '850px' : '830px' }"
+  [style]="{
+    overflow: 'auto',
+    width: '500px',
+    maxHeight: formSubmitted ? '872px' : '848px',
+    height: 'calc(100vh - 40px)',
+    margin: '0',
+  }"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
   [appendTo]="anchor"

@@ -40,7 +40,7 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
     const contentOffset = this.renderer.selectRootElement('#content-offset', true);
     if (!contentOffset) return;
     const height = contentOffset.offsetHeight;
-    let headerFooterOffset = window.innerWidth < 768 ? 332 : 265;
+    let headerFooterOffset = window.innerWidth < 768 ? 332 : 266;
     if (this.layoutControls.showUpperFooter) headerFooterOffset += 80;
     const marginBottom = Math.max(64, window.innerHeight - height - headerFooterOffset);
 
