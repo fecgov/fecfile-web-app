@@ -22,16 +22,11 @@ export class ReportListPage {
   static deleteAllReports() {
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
-        method: 'GET',
-        url: 'http://localhost:8080/api/v1/reports/',
+        method: 'POST',
+        url: 'http://localhost:8080/api/v1/reports/e2e-delete-all-reports/',
         headers: {
           'x-csrftoken': cookie?.value,
         },
-      }).then((resp) => {
-        const reports = resp.body;
-        for (const report of reports) {
-          ReportListPage.deleteReport(report.id);
-        }
       });
     });
   }
