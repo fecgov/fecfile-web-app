@@ -76,4 +76,15 @@ export class FeedbackOverlayComponent {
   tryAgain() {
     this.submitStatus = this.SubmissionStatesEnum.DRAFT;
   }
+
+  get anchorBottom(): string {
+    const vh = window.innerHeight;
+    let px = 860;
+    if (this.formSubmitted) {
+      px = Math.min(860, vh - 40);
+    } else {
+      px = Math.min(830, vh - 40);
+    }
+    return `${px}px`;
+  }
 }
