@@ -1,6 +1,6 @@
-import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
+import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 
 describe('Redesignation From', () => {
@@ -44,6 +44,8 @@ describe('Redesignation From', () => {
       expect(fromForm.get('expenditure_purpose_descrip')?.enabled).toBeTrue();
       RedesignationFromUtils.overlayForm(fromForm, transaction, toForm);
       expect(fromForm.get('expenditure_purpose_descrip')?.enabled).toBeFalse();
+      expect(fromForm.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+      expect(fromForm.get('memo_code')?.value).toBeTrue();
 
       toForm.get('expenditure_amount')?.setValue('5');
       expect(fromForm.get('expenditure_amount')?.value).toBe(-5);

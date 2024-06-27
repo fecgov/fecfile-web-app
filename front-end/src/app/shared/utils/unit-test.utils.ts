@@ -92,6 +92,7 @@ export const testActiveReport: Form3X = Form3X.fromJSON({
   form_type: 'F3XN',
   report_type: 'F3X',
   report_code: 'Q1',
+  report_status: 'In progress',
   report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
   upload_submission: UploadSubmission.fromJSON({}),
   webprint_submission: {
