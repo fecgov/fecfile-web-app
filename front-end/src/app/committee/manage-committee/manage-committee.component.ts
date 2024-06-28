@@ -16,7 +16,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   override item: CommitteeMember = this.getEmptyItem();
 
   public rowActions: TableAction[] = [
-    new TableAction('Delete', this.confirmDelete.bind(this), this.isNotCurrentUser.bind(this)),
+    new TableAction('Delete', this.confirmDelete.bind(this), undefined, this.isNotCurrentUser.bind(this)),
   ];
   currentUserEmail?: string;
 
