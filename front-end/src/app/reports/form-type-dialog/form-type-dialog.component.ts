@@ -37,16 +37,6 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
 
   @Output() refreshReports = new EventEmitter();
 
-  form24Options = [
-    {
-      value: '24',
-      label: '24 Hour',
-    },
-    {
-      value: '48',
-      label: '48 Hour',
-    },
-  ];
   selectedForm24Type: '24' | '48' | undefined;
 
   constructor(
@@ -120,5 +110,10 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
 
       this.selectedType = undefined;
     });
+  }
+
+  selectItem(item: '24' | '48') {
+    if (item === this.selectedForm24Type) this.selectedForm24Type = undefined;
+    else this.selectedForm24Type = item;
   }
 }
