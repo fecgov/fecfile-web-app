@@ -56,6 +56,8 @@ export class ReportListPage {
         cashOnHand: fd.cash_on_hand.toString(),
         date: fd.coverage_from_date,
       });
+      PageUtils.clickButton('Save & continue');
+      cy.contains('Transactions in this report').should('exist');
     }
   }
 
