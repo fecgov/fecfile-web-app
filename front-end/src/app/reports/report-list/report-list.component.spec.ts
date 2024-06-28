@@ -9,8 +9,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { F3xFormTypes, Form3X } from '../../shared/models/form-3x.model';
 import { Report, ReportTypes } from '../../shared/models/report.model';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
@@ -30,14 +29,21 @@ describe('ReportListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TableModule, ToolbarModule, RouterTestingModule.withRoutes([]), DialogModule],
+      imports: [HttpClientTestingModule, TableModule, ToolbarModule, DialogModule],
       declarations: [ReportListComponent, FormTypeDialogComponent, Dialog],
       providers: [
+        ReportService,
         ConfirmationService,
         MessageService,
         ApiService,
         provideMockStore(testMockStore),
         { provide: Actions, useValue: actions$ },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: of({}),
+          },
+        },
       ],
     }).compileComponents();
   });

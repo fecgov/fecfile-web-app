@@ -14,12 +14,6 @@
   margin-right: 24px;
 }
 
-@media (max-width: 767px) {
-  .responsive-container {
-    flex-direction: column;
-  }
-}
-
 .stacked-paginator {
   flex-direction: column !important;
 }
@@ -37,4 +31,20 @@
   font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   font-size: 1rem;
   font-weight: normal;
+}
+
+h1 {
+  line-height: 1;
+}
+
+@media (max-width: 767px) {
+  .responsive-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 992px) {
+  .left-container {
+    display: block;
+  }
 }

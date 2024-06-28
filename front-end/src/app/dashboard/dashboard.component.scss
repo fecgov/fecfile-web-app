@@ -1,0 +1,145 @@
+a {
+  font-family: karla, sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 0;
+  margin-top: 32px;
+  padding-left: 0;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.card-body {
+  background-color: #e8e8e8;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 8px 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-text {
+  background-color: white;
+  border-radius: 4px;
+  align-self: center;
+  padding: 0 8px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: end;
+  background-color: #e8e8e8;
+  border: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding: 0 20px 16px 20px;
+}
+
+#in-progress-card {
+  height: 404px;
+}
+
+#report-container {
+  height: 308px;
+  max-height: 308px;
+  overflow: auto;
+
+  .card-text {
+    height: 144px;
+    min-height: 100px;
+    max-height: 308px;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+#cash-on-hand-card {
+  height: 154px;
+
+  .card-text {
+    height: 86px !important;
+  }
+}
+
+#recently-submitted-card {
+  height: 578px;
+
+  .card-text {
+    height: 482px !important;
+  }
+}
+
+.card-title {
+  font-size: 24px;
+  font-family: 'gandhi-bold', serif;
+  color: #212121;
+  margin: 0;
+  padding-bottom: 8px;
+}
+
+a {
+  border-bottom: none;
+
+  span {
+    border-bottom: 2px dotted #112e51;
+  }
+  img {
+    padding-left: 5px;
+  }
+}
+
+.card,
+.card-body,
+.card-footer {
+  width: 512px;
+}
+
+.side {
+  width: 100%;
+}
+
+@media screen and (min-width: 992px) {
+  .card,
+  .card-body,
+  .card-footer {
+    width: 704px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .side {
+    width: fit-content;
+  }
+
+  .container {
+    flex-direction: row;
+  }
+
+  #recently-submitted-card {
+    margin-left: 20px;
+  }
+
+  .card,
+  .card-body,
+  .card-footer {
+    width: 454px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .card,
+  .card-body,
+  .card-footer {
+    width: 558px;
+  }
+}

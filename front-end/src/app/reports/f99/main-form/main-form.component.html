@@ -80,22 +80,19 @@
     <p-divider></p-divider>
   </form>
 </div>
-<div class="grid">
-  <div class="col-2">
+<div class="d-flex justify-content-between">
+  <div>
     <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
   </div>
-  <div class="col-6"></div>
-  <div class="col-1">
+  <div>
     <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
-  </div>
-  <div class="col-3">
     <button
       pButton
       pRipple
       appSingleClick
       label="Save and continue"
       (click)="save('continue')"
-      class="p-button-info"
+      class="p-button-info ml-4"
     ></button>
   </div>
 </div>

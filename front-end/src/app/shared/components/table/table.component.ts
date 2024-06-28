@@ -19,7 +19,7 @@ import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table } from 'primeng/ta
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges {
-  @Input() title = '';
+  @Input() title?: string;
   @Input() itemName = 'entries';
   @Input() items: T[] = [];
   @Input() globalFilterFields = [''];

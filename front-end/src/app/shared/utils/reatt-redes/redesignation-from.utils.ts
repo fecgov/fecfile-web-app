@@ -1,8 +1,8 @@
-import { ReattRedesTypes } from './reatt-redes.utils';
-import { FormGroup } from '@angular/forms';
-import { TemplateMapKeyType } from '../../models/transaction-type.model';
+import { FormGroup, Validators } from '@angular/forms';
 import { SchBTransaction } from '../../models/schb-transaction.model';
+import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
+import { ReattRedesTypes } from './reatt-redes.utils';
 
 export class RedesignationFromUtils {
   private static readOnlyFields = [
@@ -36,6 +36,7 @@ export class RedesignationFromUtils {
     'candidate_office',
     'candidate_state',
     'candidate_district',
+    'memo_code',
   ];
 
   public static overlayTransactionProperties(
@@ -85,6 +86,7 @@ export class RedesignationFromUtils {
     // Update purpose description for rules that are independent of the transaction date being in the report.
     purposeDescriptionControl?.clearValidators();
     fromForm.get('memo_code')?.clearValidators();
+    fromForm.get('memo_code')?.addValidators(Validators.requiredTrue);
     fromForm.get('memo_code')?.setValue(true);
 
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.

@@ -1,14 +1,14 @@
 <p-dialog
   [(visible)]="visible"
   [style]="{ width: '90%' }"
-  header="Restore deleted contact(s)"
+  header="Restore deleted contacts"
   [modal]="true"
   styleClass="p-fluid"
   (onHide)="hide()"
 >
   <ng-template pTemplate="content">
     <app-table
-      title="Restore deleted contact(s)"
+      title="Restore deleted contacts"
       [items]="items"
       [totalItems]="totalItems"
       [loading]="loading"

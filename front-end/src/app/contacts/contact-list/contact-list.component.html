@@ -1,5 +1,4 @@
 <app-table
-  title="Contacts"
   [items]="items"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
   [totalItems]="totalItems"
@@ -15,12 +14,20 @@
   (selectAllChange)="onSelectAllChange($event)"
   (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
-  <ng-template #toolbar>
+  <ng-template #caption>
     <p-toolbar>
       <ng-template pTemplate="left">
         <h1 class="m-0">Manage contacts</h1>
       </ng-template>
       <ng-template pTemplate="right">
+        <button
+          pButton
+          pRipple
+          label="Restore deleted contacts"
+          class="restore-contact-button"
+          (click)="onRestoreClick()"
+          *ngIf="restoreContactsButtonIsVisible"
+        ></button>
         <button
           id="button-contacts-new"
           pButton
@@ -41,16 +48,6 @@
         <!--      <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>-->
       </ng-template>
     </p-toolbar>
-  </ng-template>
-  <ng-template #caption>
-    <button
-      pButton
-      pRipple
-      label="Restore deleted contact(s)"
-      class="restore-contact-button"
-      (click)="onRestoreClick()"
-      *ngIf="restoreContactsButtonIsVisible"
-    ></button>
   </ng-template>
   <ng-template #header>
     <th id="actions" role="columnheader">Actions</th>

@@ -1,55 +1,43 @@
-<div class="grid">
-  <div class="col-12">
-    <p-panel header="Upcoming Reports"></p-panel>
+<div class="container">
+  <div class="side">
+    <div class="card" id="in-progress-card">
+      <div class="card-body">
+        <h1 class="card-title">In-progress reports</h1>
+        <div id="report-container">
+          <p class="card-text" #reportText *ngFor="let report of reports">{{ report.report_code_label }}</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a (click)="dialogVisible = true">
+          <span>Start a different report</span><img alt="next page icon" src="/assets/img/next_arrow.svg" />
+        </a>
+      </div>
+    </div>
+    <div class="card" id="cash-on-hand-card">
+      <div class="card-body">
+        <h1 class="card-title">Cash on-hand</h1>
+        <p class="card-text"></p>
+      </div>
+      <div class="card-footer"></div>
+    </div>
+  </div>
+  <div class="side">
+    <div class="card" id="recently-submitted-card">
+      <div class="card-body">
+        <h1 class="card-title">Recently submitted reports</h1>
+        <p class="card-text"></p>
+      </div>
+      <div class="card-footer">
+        <a routerLink="/reports">
+          <span>Manage reports</span><img alt="next page icon" src="/assets/img/next_arrow.svg" />
+        </a>
+      </div>
+    </div>
   </div>
 </div>
-<div class="grid">
-  <div class="col-6">
-    <p-panel header="Recent Saved Reports"></p-panel>
-  </div>
-  <div class="col-6">
-    <p-panel header="Submitted Reports"></p-panel>
-  </div>
-</div>
-<div class="grid">
-  <div class="col-4">
-    <p-panel header="Tips for Treasurers">
-      <ul>
-        <li>
-          <a href="https://www.fec.gov/updates/?update_type=tips-for-treasurers#feed" target="_blank" rel="noopener"
-            >Tips for Treasurers</a
-          >
-        </li>
-      </ul>
-    </p-panel>
-  </div>
-  <div class="col-4">
-    <p-panel header="Helpful Resources">
-      <ul>
-        <li>
-          <a href="https://www.fec.gov/data/committee/cmte_id/" target="_blank" rel="noopener"
-            >My Profile Page on fec.gov</a
-          >
-        </li>
-        <li>
-          <a href="https://www.fec.gov/help-candidates-and-committees/" target="_blank" rel="noopener"
-            >Contribution limits in special elections</a
-          >
-        </li>
-        <li><a href="https://www.fec.gov/efiling" target="_blank">Electronic Filing</a></li>
-        <li>
-          <a href="https://www.fec.gov/help-candidates-and-committees/question-rad/" target="_blank" rel="noopener"
-            >Submit a Question to Your Assigned Analyst</a
-          >
-        </li>
-      </ul>
-    </p-panel>
-  </div>
-  <div class="col-4">
-    <p-panel header="Tips for Treasurers">
-      <ul>
-        <li><a href="https://www.fec.gov/updates/" target="_blank" rel="noopener">Latest Updates</a></li>
-      </ul>
-    </p-panel>
-  </div>
-</div>
+
+<app-form-type-dialog
+  [noReports]="reports.length === 0"
+  (dialogClose)="dialogVisible = false"
+  [dialogVisible]="dialogVisible"
+></app-form-type-dialog>

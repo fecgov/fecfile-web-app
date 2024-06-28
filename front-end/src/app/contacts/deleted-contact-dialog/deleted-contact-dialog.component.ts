@@ -25,10 +25,10 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   sortableHeaders: { field: string; label: string }[] = [
-    { field: 'sort_name', label: 'Contact Name' },
-    { field: 'type', label: 'Contact Type' },
-    { field: 'employer', label: 'Contact Employer' },
-    { field: 'occupation', label: 'Contact Occupation' },
+    { field: 'sort_name', label: 'Name' },
+    { field: 'type', label: 'Type' },
+    { field: 'employer', label: 'Employer' },
+    { field: 'occupation', label: 'Occupation' },
   ];
 
   constructor(
