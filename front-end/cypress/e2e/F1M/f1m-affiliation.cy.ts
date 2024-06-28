@@ -5,7 +5,6 @@ import { PageUtils } from '../pages/pageUtils';
 import { ContactType, committeeFormData, createContact } from '../models/ContactFormModel';
 import { faker } from '@faker-js/faker';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
-import { ProfileAccountPage } from '../pages/profileAccountPage';
 
 describe('Manage reports', () => {
   beforeEach(() => {
