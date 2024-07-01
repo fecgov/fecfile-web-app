@@ -4,9 +4,5 @@ applications:
     memory: 1G
     buildpack: nginx_buildpack
     stack: cflinuxfs4
-
     routes:
-      - route: fecfile-web-app-prod.app.cloud.gov
-
-    env:
-      EXAMPLE: example
+      - route: fecfile.fec.gov

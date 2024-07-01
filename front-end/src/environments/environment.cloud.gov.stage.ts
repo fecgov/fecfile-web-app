@@ -2,7 +2,7 @@
 // `ng build --configuration=cloud.gov.stage` replaces `environment.ts` with `environment.cloud.gov.stage.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const apiBaseUrl = 'https://fecfile-web-api-stage.app.cloud.gov';
+const apiBaseUrl = 'https://stage-api.fecfile.fec.gov';
 export const environment = {
   production: false,
   name: 'stage',

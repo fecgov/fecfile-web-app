@@ -27,6 +27,9 @@ export class ApiService {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
     const baseHeaders = {
       'Content-Type': 'application/json',
+      // If using different cache headers,
+      // modify CORS_ALLOW_HEADERS in API settings
+      'cache-control': 'no-cache, no-store',
       ...(csrfToken && { 'x-csrftoken': `${csrfToken}` }),
     };
     return { ...baseHeaders, ...headersToAdd };
