@@ -330,9 +330,10 @@ workflows:
       - deploy-job: # Deploy job with requires dependencies which may not always run
           name: deploy-job-conditional
           requires:
+            - lint
             - test
             - dependency-check
-            # - e2e-test
+            - e2e-test
           filters:
             branches:
               only:
