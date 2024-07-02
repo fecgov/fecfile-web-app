@@ -93,6 +93,26 @@ describe('FormTypeDialogComponent', () => {
     });
   });
 
+  describe('selectItem', () => {
+    it('should set selectedForm24Type to undefined when item is already selected', () => {
+      component.selectedForm24Type = '24';
+      component.selectItem('24');
+      expect(component.selectedForm24Type).toBeUndefined();
+    });
+
+    it('should set selectedForm24Type to the item when a different item is selected', () => {
+      component.selectedForm24Type = '24';
+      component.selectItem('48');
+      expect(component.selectedForm24Type).toEqual('48');
+    });
+
+    it('should set selectedForm24Type to the item when no item is currently selected', () => {
+      expect(component.selectedForm24Type).toBeUndefined();
+      component.selectItem('24');
+      expect(component.selectedForm24Type).toEqual('24');
+    });
+  });
+
   it('should create Form24', () => {
     component.updateSelected(FormTypes.F24);
     expect(component.selectedType).toEqual(FormTypes.F24);
