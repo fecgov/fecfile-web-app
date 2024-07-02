@@ -67,7 +67,7 @@ describe('Loans', () => {
       .children()
       .last()
       .click();
-    cy.get(alias).contains('New loan agreement').click();
+    cy.get(alias).contains('New loan agreement').click({ force: true });
 
     PageUtils.urlCheck('/C1_LOAN_AGREEMENT');
     PageUtils.searchBoxInput(organizationFormData.name);
@@ -97,7 +97,7 @@ describe('Loans', () => {
       .children()
       .last()
       .click();
-    cy.contains('Review loan agreement').click();
+    cy.contains('Review loan agreement').click({ force: true });
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
     PageUtils.valueCheck('#date_incurred', '05/27/2024');

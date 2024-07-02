@@ -11,6 +11,8 @@ export default defineConfig({
   screenshotOnRunFailure: true,
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
+  viewportHeight: 768,
+  viewportWidth: 1366,
   videoUploadOnPasses: false,
   chromeWebSecurity: false,
   reporter: 'mochawesome',
