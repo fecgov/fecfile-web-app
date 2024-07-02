@@ -11,7 +11,7 @@ describe('Manage profile', () => {
     ProfileAccountPage.goToPage();
     cy.runLighthouse('profile', 'account-info');
 
-    cy.contains('C00601211').should('exist');
+    cy.contains('C99999999').should('exist');
   });
 
   it('Can view the Users table', () => {

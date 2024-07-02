@@ -23,12 +23,14 @@ export class StartTransaction {
 
   static Loans() {
     PageUtils.clickSidebarItem('Add loans and debts');
+    cy.contains('LOANS').should('exist');
     PageUtils.clickLink('LOANS');
     return Loans;
   }
 
   static Debts() {
     PageUtils.clickSidebarItem('Add loans and debts');
+    cy.contains('DEBTS').should('exist');
     PageUtils.clickLink('DEBTS');
     return Debts;
   }

@@ -8,6 +8,7 @@ export class F3xCreateReportFormData {
   coverage_through_date: Date;
   date_of_election: Date;
   state_of_election: string;
+  cash_on_hand?: number;
 
   constructor(formData: F3xCreateReportFormData) {
     this.filing_frequency = formData.filing_frequency;
@@ -17,6 +18,7 @@ export class F3xCreateReportFormData {
     this.coverage_from_date = formData.coverage_from_date;
     this.date_of_election = formData.date_of_election;
     this.state_of_election = formData.state_of_election;
+    this.cash_on_hand = formData.cash_on_hand;
   }
 }
 

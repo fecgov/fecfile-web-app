@@ -11,6 +11,7 @@ import { StartTransaction } from '../F3X/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
 import { F24Setup } from './f24-setup';
 import { ReportListPage } from '../pages/reportListPage';
+import { defaultForm3XData } from '../models/ReportFormModel';
 
 const independentExpenditureData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -29,7 +30,11 @@ describe('Form 24 Independent Expenditures', () => {
   });
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
-    F3XSetup({ individual: true, candidate: true });
+    const f3x_report_data = {
+      ...defaultForm3XData,
+      cash_on_hand: 500,
+    };
+    F3XSetup({ individual: true, candidate: true, report: f3x_report_data });
     F24Setup();
     StartTransaction.IndependentExpenditures().IndependentExpenditure();
 
