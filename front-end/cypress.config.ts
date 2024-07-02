@@ -5,10 +5,10 @@ import * as fs from 'fs';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: true,
+  video: false,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
-  screenshotOnRunFailure: true,
+  screenshotOnRunFailure: false,
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
   viewportHeight: 768,
@@ -27,7 +27,7 @@ export default defineConfig({
     options: ['--chrome-flags="--no-sandbox --headless --disable-gpu"'],
   },
   retries: {
-    runMode: 2,
+    runMode: 1,
     openMode: 0,
   },
   e2e: {
