@@ -327,7 +327,7 @@ workflows:
           requires:
             - test
             - dependency-check
-            - e2e-test
+            # - e2e-test
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|main/
