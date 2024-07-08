@@ -35,9 +35,13 @@
       </ul>
     </li>
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" routerLink="#">
+      <a class="nav-link disabled" routerLink="#" p-disabled>
+        <!--
+          The greying of the bell icon is handled by an scss filter
+          since the usual disabled class doesn't work on image files
+        -->
         <img
-          class="header-navbar-icon"
+          class="header-navbar-icon header-navbar-icon-disabled"
           ngSrc="assets/img/notification_bell_icon.svg"
           alt="Notifications"
           [height]="16 * ratio"
