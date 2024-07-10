@@ -70,7 +70,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       'Itemize',
       this.forceItemize.bind(this),
       (transaction: Transaction) =>
-        transaction.itemized === false &&
+        !transaction.itemized &&
         this.reportIsEditable &&
         this.report?.report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
