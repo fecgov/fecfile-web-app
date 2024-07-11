@@ -37,16 +37,6 @@ def _resolve_rule(repo, branch):
     return None
 
 
-def _resolve_environment_file(repo, branch):
-    """Get spacenvironment file associated with first matching rule."""
-    for file, rule in ENVIRONMENT_FILE_RULES:
-        if rule(repo, branch):
-            print(f"Using env file {file} due to matching branch name {branch}")
-            return file
-    print(f"Current branch {branch} does not match any deployment specifications.")
-    return None
-
-
 def _detect_branch(repo):
     try:
         return repo.active_branch.name

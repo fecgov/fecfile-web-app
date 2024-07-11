@@ -1,7 +1,19 @@
 .restore-contact-button {
   font-weight: 600 !important;
+  color: #212121;
+  background-color: #aeb0b5;
+  border-color: #aeb0b5;
+  margin-right: 20px;
 }
 
 .restore-contact-button:hover {
-  background-color: #164f85 !important;
+  background-color: #e8e8e8;
+  border-color: #e8e8e8;
+  color: #112e51;
+}
+
+@media (max-width: 992px) {
+  :host ::ng-deep h1 {
+    padding-bottom: 8px !important;
+  }
 }

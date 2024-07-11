@@ -311,6 +311,10 @@ parameters:
     type: boolean
     default: false
 
+  is-triggered-e2e-test:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
@@ -322,17 +326,33 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/
-      - deploy-job:
+              only: /develop|release\/sprint-[\.\d]+|main/
+      - deploy-job: # Deploy job with requires dependencies which may not always run
+          name: deploy-job-conditional
           requires:
             - test
             - dependency-check
             # - e2e-test
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|main/
+              only:
+                - develop
+      - deploy-job: # Deploy job with no requires dependencies which will always run
+          name: deploy-job-always
+          filters:
+            branches:
+              only: /release\/sprint-[\.\d]+|main/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
+    jobs:
+      - e2e-test
+
+  # This job is run when an e2e test is triggered with the
+  # is-triggered-e2e-test parameter via the fecfile-web-api
+  # circleci config file.  It is used to run the e2e tests
+  # when the fecfile-web-api is deployed to dev/stage/prod.
+  triggered-e2e-test:
+    when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
