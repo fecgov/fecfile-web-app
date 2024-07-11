@@ -3,7 +3,14 @@
     <div class="dialog-content">
       <div class="dialog-header">
         <h1 class="dialog-title" id="dialog-title">Create a new report</h1>
-        <button #firstElement type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
+        <button
+          #firstElement
+          type="button"
+          class="btn-close"
+          id="close-button"
+          (click)="dialog.close()"
+          aria-label="Cancel"
+        ></button>
       </div>
       <div class="dialog-body">
         <div class="dropdown">
@@ -53,6 +60,7 @@
               pRipple
               pAutoFocus
               class="p-ripple p-element p-button p-component"
+              id="48-button"
               [ngClass]="selectedForm24Type === '48' ? 'p-highlight' : ''"
               role="radio"
               tabindex="0"
@@ -73,6 +81,7 @@
       <div class="dialog-footer">
         <button
           #lastElement
+          id="submit-button"
           pButton
           pRipple
           [disabled]="isSubmitDisabled"
