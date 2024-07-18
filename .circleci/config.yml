@@ -308,7 +308,9 @@ parameters:
 workflows:
   primary:
     when:
-      not: << pipeline.parameters.is-nightly-run >>
+      and:
+        - not: << pipeline.parameters.is-nightly-run >>
+        - not: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - lint
       - test
@@ -317,8 +319,8 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|main/
-      - deploy-job: # Deploy job with requires dependencies which may not always run
-          name: deploy-job-conditional
+      - deploy-job: # All dependencies must pass before deploying
+          name: deploy-with-all-dependent-jobs-required
           requires:
             - lint
             - test
@@ -328,8 +330,12 @@ workflows:
             branches:
               only:
                 - develop
-      - deploy-job: # Deploy job with no requires dependencies which will always run
-          name: deploy-job-always
+      - deploy-job: # Deploy job even when e2e tests fail
+          name: deploy-even-if-e2e-job-fails
+          requires:
+            - lint
+            - test
+            - dependency-check
           filters:
             branches:
               only: /release\/sprint-[\.\d]+|main/
