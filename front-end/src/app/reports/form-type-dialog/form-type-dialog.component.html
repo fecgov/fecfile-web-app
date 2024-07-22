@@ -3,7 +3,14 @@
     <div class="dialog-content">
       <div class="dialog-header">
         <h1 class="dialog-title" id="dialog-title">Create a new report</h1>
-        <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
+        <button
+          #firstElement
+          type="button"
+          class="btn-close"
+          id="close-button"
+          (click)="dialog.close()"
+          aria-label="Cancel"
+        ></button>
       </div>
       <div class="dialog-body">
         <div class="dropdown">
@@ -15,6 +22,7 @@
             [autofocus]="true"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            #dropdownElement
             [innerHTML]="dropdownButtonText"
           ></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -29,20 +37,54 @@
         </div>
         <div class="modal-item-margin" *ngIf="selectedType === formTypes.F24">
           <label for="form24Options">REPORT TYPE</label>
-          <p-selectButton
-            id="form24Options"
-            [options]="form24Options"
-            [(ngModel)]="selectedForm24Type"
-          ></p-selectButton>
+
+          <div role="group" class="p-selectbutton p-buttonset p-component">
+            <div
+              pRipple
+              pAutoFocus
+              class="p-ripple p-element p-button p-component"
+              [ngClass]="selectedForm24Type === '24' ? 'p-highlight' : ''"
+              role="radio"
+              tabindex="0"
+              aria-label="24 Hour"
+              aria-checked="false"
+              aria-labelledby="label_24"
+              data-pc-section="button"
+              (click)="selectItem('24')"
+              (keydown.space)="selectItem('24')"
+              (keydown.enter)="selectItem('24')"
+            >
+              <span id="label_24" class="p-button-label">24 Hour</span>
+            </div>
+            <div
+              pRipple
+              pAutoFocus
+              class="p-ripple p-element p-button p-component"
+              id="48-button"
+              [ngClass]="selectedForm24Type === '48' ? 'p-highlight' : ''"
+              role="radio"
+              tabindex="0"
+              aria-label="48 Hour"
+              aria-checked="false"
+              aria-labelledby="label_48"
+              data-pc-section="button"
+              (click)="selectItem('48')"
+              (keydown.space)="selectItem('48')"
+              (keydown.enter)="selectItem('48')"
+              #form24FocusElement
+            >
+              <span id="label_48" class="p-button-label">48 Hour</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="dialog-footer">
         <button
+          #lastElement
+          id="submit-button"
           pButton
           pRipple
-          [disabled]="
-            !getFormType(selectedType)?.createRoute && (!(selectedType === formTypes.F24) || !selectedForm24Type)
-          "
+          [disabled]="isSubmitDisabled"
           label="Start building report"
           data-cy="start-report"
           class="p-button-primary"

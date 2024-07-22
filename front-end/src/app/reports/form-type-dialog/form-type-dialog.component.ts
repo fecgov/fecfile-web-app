@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnInit,
@@ -34,19 +35,13 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   @Input() dialogVisible = false;
   @Output() dialogClose = new EventEmitter<undefined>();
   @ViewChild('dialog') dialog?: ElementRef;
+  @ViewChild('firstElement') firstElement?: ElementRef;
+  @ViewChild('lastElement') _lastElement?: ElementRef;
+  @ViewChild('form24FocusElement') form24FocusElement?: ElementRef;
+  @ViewChild('dropdownElement') dropdownElement?: ElementRef;
 
   @Output() refreshReports = new EventEmitter();
 
-  form24Options = [
-    {
-      value: '24',
-      label: '24 Hour',
-    },
-    {
-      value: '48',
-      label: '48 Hour',
-    },
-  ];
   selectedForm24Type: '24' | '48' | undefined;
 
   constructor(
@@ -120,5 +115,48 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
 
       this.selectedType = undefined;
     });
+  }
+
+  selectItem(item: '24' | '48') {
+    if (item === this.selectedForm24Type) this.selectedForm24Type = undefined;
+    else this.selectedForm24Type = item;
+  }
+
+  @HostListener('keydown', ['$event'])
+  handleTabKey(event: KeyboardEvent) {
+    if (!this.firstElement) return;
+    if (event.key === 'Tab') {
+      if (event.shiftKey) {
+        if (document.activeElement === this.firstElement.nativeElement) {
+          event.preventDefault();
+          this.lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === this.lastElement) {
+          event.preventDefault();
+          this.firstElement.nativeElement.focus();
+        }
+      }
+    }
+  }
+
+  get lastElement() {
+    let lastElement = this._lastElement;
+    if (this.isSubmitDisabled) {
+      if (this.selectedType === this.formTypes.F24) {
+        lastElement = this.form24FocusElement;
+      } else {
+        lastElement = this.dropdownElement;
+      }
+    }
+
+    return lastElement?.nativeElement;
+  }
+
+  get isSubmitDisabled(): boolean {
+    return (
+      !this.getFormType(this.selectedType)?.createRoute &&
+      (!(this.selectedType === this.formTypes.F24) || !this.selectedForm24Type)
+    );
   }
 }
