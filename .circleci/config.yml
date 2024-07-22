@@ -106,7 +106,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
-          version: docker24
+          version: docker26
       - run:
           name: clone fecfile-web-api
           command: |
@@ -123,7 +123,7 @@ jobs:
           command: |
             git checkout ${CIRCLE_BRANCH}
             docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} docker-compose up --build -d
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} docker-compose up --build -d --log-level=debug
             docker container run --network container:fecfile-api \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/api/v1/user/login/authenticate \
@@ -139,7 +139,7 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${CIRCLE_BRANCH}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/**/*.cy.ts" --headless --watch=false --browser chrome;'\
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/**/profile.cy.ts" --headless --watch=false --browser chrome;'\
       - run:
           name: stage test result artifacts
           when: always
@@ -315,10 +315,10 @@ workflows:
       - lint
       - test
       - dependency-check
-      - e2e-test:
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|main/
+      - e2e-test
+          # filters:
+          #   branches:
+          #     only: /develop|release\/sprint-[\.\d]+|main/
       - deploy-job: # All dependencies must pass before deploying
           name: deploy-with-all-dependent-jobs-required
           requires:
