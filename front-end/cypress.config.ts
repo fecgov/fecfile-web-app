@@ -5,7 +5,7 @@ import * as fs from 'fs';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: false,
+  video: true,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   screenshotOnRunFailure: false,
@@ -13,7 +13,6 @@ export default defineConfig({
   trashAssetsBeforeRuns: false,
   viewportHeight: 768,
   viewportWidth: 1366,
-  videoUploadOnPasses: false,
   chromeWebSecurity: false,
   reporter: 'mochawesome',
   reporterOptions: {
