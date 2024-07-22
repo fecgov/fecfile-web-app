@@ -146,7 +146,9 @@ jobs:
           command: |
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results
+            mkdir -p /tmp/cypress/videos
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results
