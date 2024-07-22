@@ -153,6 +153,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
+      - store_artifacts:
+          path: /tmp/cypress/videos
+          destination: cypress/videos
   deploy-job:
     docker:
       - image: cimg/node:20.4.0-browsers
