@@ -37,7 +37,7 @@
   ></app-transaction-loans-and-debts>
 </div>
 
-<p-confirmDialog #cd [style]="{ width: '450px' }">
+<p-confirmDialog #cd [style]="{ width: '450px' }" key="transaction-itemization-dialog">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">
       <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
