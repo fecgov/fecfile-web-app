@@ -15,11 +15,12 @@ describe('Form-1M', () => {
     expect(form.formLabel).toEqual('FORM 1M');
   });
 
-  it('should display empty string for sub label', () => {
+  it('should display "NOTIFICATION OF MULTICANDIDATE STATUS" for sub label', () => {
     const data = {
       id: '999',
       form_type: F1MFormTypes.F1MN,
       committee_name: 'foo',
+      report_code_label: 'NOTIFICATION OF MULTICANDIDATE STATUS',
     };
     const form = Form1M.fromJSON(data);
     expect(form.formSubLabel).toEqual('NOTIFICATION OF MULTICANDIDATE STATUS');
