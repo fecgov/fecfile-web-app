@@ -74,7 +74,7 @@ function legacyLogin() {
   cy.visit('/');
   cy.request({
     method: 'GET',
-    url: 'http://localhost:8080/api/v1/status/',
+    url: 'http://localhost:1001/api/v1/status/',
   }).then((response) => {
     cy.log(response.status.toString());
   });
