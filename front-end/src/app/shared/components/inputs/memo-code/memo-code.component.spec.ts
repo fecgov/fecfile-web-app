@@ -32,15 +32,12 @@ describe('MemoCodeInputComponent', () => {
 
     fixture = TestBed.createComponent(MemoCodeInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contribution_date: new FormControl(''),
-        memo_code: new FormControl(''),
-        contribution_amount: new FormControl(''),
-        contribution_aggregate: new FormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
+    component.form = new FormGroup({
+      contribution_date: new FormControl(''),
+      memo_code: new FormControl(''),
+      contribution_amount: new FormControl(''),
+      contribution_aggregate: new FormControl(''),
+    });
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

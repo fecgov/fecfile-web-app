@@ -18,16 +18,13 @@ describe('AddressInputComponent', () => {
 
     fixture = TestBed.createComponent(AddressInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contributor_street_1: new FormControl(''),
-        contributor_street_2: new FormControl(''),
-        contributor_city: new FormControl(''),
-        contributor_state: new FormControl(''),
-        contributor_zip: new FormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
+    component.form = new FormGroup({
+      contributor_street_1: new FormControl(''),
+      contributor_street_2: new FormControl(''),
+      contributor_city: new FormControl(''),
+      contributor_state: new FormControl(''),
+      contributor_zip: new FormControl(''),
+    });
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

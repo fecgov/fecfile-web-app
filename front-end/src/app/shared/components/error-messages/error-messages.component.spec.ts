@@ -58,7 +58,6 @@ describe('ErrorMessagesComponent', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
       SchemaUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount']),
-      { updateOn: 'blur' },
     );
     SchemaUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
@@ -90,9 +89,7 @@ describe('ErrorMessagesComponent', () => {
   it('should present a unique error message when a negative contribution amount is required', () => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
     const fb: FormBuilder = new FormBuilder();
-    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(['exclusive_negative_amount']), {
-      updateOn: 'blur',
-    });
+    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(['exclusive_negative_amount']));
     SchemaUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
@@ -126,7 +123,7 @@ describe('ErrorMessagesComponent', () => {
 
   it('should use a form control passed to it before using a named one passed as Input', () => {
     const fb: FormBuilder = new FormBuilder();
-    const form = fb.group({}, { updateOn: 'blur' });
+    const form = fb.group({});
     component.form = form;
     component.control = new FormControl('my control');
     component.ngOnInit();

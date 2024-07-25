@@ -17,14 +17,11 @@ export class DebugLoginComponent {
     private loginService: LoginService,
     private router: Router,
   ) {
-    this.form = this.fb.group(
-      {
-        emailId: ['', [Validators.required, emailValidator]],
-        committeeId: ['', [Validators.required, committeeIdValidator]],
-        loginPassword: ['', Validators.required],
-      },
-      { updateOn: 'blur' },
-    );
+    this.form = this.fb.group({
+      emailId: ['', [Validators.required, emailValidator]],
+      committeeId: ['', [Validators.required, committeeIdValidator]],
+      loginPassword: ['', Validators.required],
+    });
   }
 
   /**

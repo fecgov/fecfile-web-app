@@ -9,7 +9,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
 })
 export abstract class BaseInputComponent extends DestroyerComponent {
   @Input() transaction?: Transaction;
-  @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
+  @Input() form: FormGroup = new FormGroup([]);
   @Input() formSubmitted = false;
   @Input() templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 }

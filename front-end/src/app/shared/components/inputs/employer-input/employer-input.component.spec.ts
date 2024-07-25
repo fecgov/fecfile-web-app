@@ -17,13 +17,10 @@ describe('EmployerInputComponent', () => {
 
     fixture = TestBed.createComponent(EmployerInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contributor_employer: new FormControl(''),
-        contributor_occupation: new FormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
+    component.form = new FormGroup({
+      contributor_employer: new FormControl(''),
+      contributor_occupation: new FormControl(''),
+    });
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

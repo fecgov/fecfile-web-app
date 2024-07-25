@@ -42,11 +42,7 @@
                 form.controls['cash_on_hand_date']?.hasError('required')
               "
             >
-              <app-error-messages
-                [form]="form"
-                fieldName="cash_on_hand_date"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <small class="p-error">This is a required field.</small>
             </ng-container>
           </div>
         </div>
