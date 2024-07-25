@@ -18,12 +18,15 @@ describe('LoanTermsInputComponent', () => {
     fixture = TestBed.createComponent(LoanTermsInputComponent);
     component = fixture.componentInstance;
     component.templateMap = testTemplateMap;
-    component.form = new FormGroup({
-      loan_incurred_date: new FormControl(''),
-      loan_interest_rate: new FormControl(''),
-      loan_due_date: new FormControl(''),
-      collateral: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        loan_incurred_date: new FormControl(''),
+        loan_interest_rate: new FormControl(''),
+        loan_due_date: new FormControl(''),
+        collateral: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.templateMap = {
       ...testTemplateMap,
       ...{

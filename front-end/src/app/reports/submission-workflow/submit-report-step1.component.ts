@@ -34,7 +34,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
 

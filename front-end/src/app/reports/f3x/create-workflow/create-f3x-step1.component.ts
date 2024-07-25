@@ -44,7 +44,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;

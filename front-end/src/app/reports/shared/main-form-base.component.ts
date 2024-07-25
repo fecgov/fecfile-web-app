@@ -24,7 +24,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
   abstract webprintURL: string;
 
   formSubmitted = false;
-  form: FormGroup = new FormGroup({});
+  form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   reportId?: string;
 
   constructor(
@@ -40,7 +40,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
     const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
 

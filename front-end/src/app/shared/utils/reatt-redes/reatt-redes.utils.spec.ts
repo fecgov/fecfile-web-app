@@ -46,17 +46,23 @@ describe('ReattRedesUtils', () => {
   });
 
   describe('overlayForms', () => {
-    const toForm = new FormGroup({
-      contribution_purpose_descip: new FormControl(''),
-      memo_code: new FormControl(''),
-    });
-    const fromForm = new FormGroup({
-      contribution_purpose_descrip: new FormControl(''),
-      memo_code: new FormControl(''),
-      contributor_organization_name: new FormControl(''),
-      contributor_last_name: new FormControl(''),
-      contributor_first_name: new FormControl(''),
-    });
+    const toForm = new FormGroup(
+      {
+        contribution_purpose_descip: new FormControl(''),
+        memo_code: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
+    const fromForm = new FormGroup(
+      {
+        contribution_purpose_descrip: new FormControl(''),
+        memo_code: new FormControl(''),
+        contributor_organization_name: new FormControl(''),
+        contributor_last_name: new FormControl(''),
+        contributor_first_name: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     let toTxn: SchATransaction;
     let fromTxn: SchATransaction;
 

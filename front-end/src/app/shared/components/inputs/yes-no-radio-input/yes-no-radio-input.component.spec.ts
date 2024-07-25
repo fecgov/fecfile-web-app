@@ -16,9 +16,12 @@ describe('YesNoRadioInputComponent', () => {
     component = fixture.componentInstance;
 
     // Set up component with form control
-    const form = new FormGroup({
-      test: new FormControl(),
-    });
+    const form = new FormGroup(
+      {
+        test: new FormControl(),
+      },
+      { updateOn: 'blur' },
+    );
     component.form = form;
     component.controlName = 'test';
     fixture.detectChanges();
