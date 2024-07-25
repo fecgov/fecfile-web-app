@@ -28,7 +28,7 @@ export class Form1M extends Report {
   }
 
   get formSubLabel() {
-    return 'NOTIFICATION OF MULTICANDIDATE STATUS';
+    return this.report_code_label ?? '';
   }
 
   committee_type?: CommitteeType;

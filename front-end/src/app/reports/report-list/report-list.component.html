@@ -38,11 +38,17 @@
   </ng-template>
   <ng-template #body let-item>
     <td>{{ item.formLabel }}</td>
-    <td>{{ item.report_code_label }}</td>
+    <td *ngIf="item.form_type === 'F99'; else default_report_label">
+      {{ (item.formSubLabel || 'Miscellaneous Report to the FEC').toUpperCase() }}
+    </td>
+    <ng-template #default_report_label>
+      <td>{{ item.report_code_label }}</td>
+    </ng-template>
     <td>
-      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
+      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date; else noCoverage"
         >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
       </ng-container>
+      <ng-template #noCoverage> N/A </ng-template>
     </td>
     <td>{{ item.report_status }}</td>
     <td>{{ item.version_label }}</td>
