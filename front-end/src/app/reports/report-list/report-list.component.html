@@ -45,9 +45,10 @@
       <td>{{ item.report_code_label }}</td>
     </ng-template>
     <td>
-      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
+      <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date; else noCoverage"
         >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
       </ng-container>
+      <ng-template #noCoverage> N/A </ng-template>
     </td>
     <td>{{ item.report_status }}</td>
     <td>{{ item.version_label }}</td>
