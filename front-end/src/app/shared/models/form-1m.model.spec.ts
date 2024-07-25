@@ -25,4 +25,15 @@ describe('Form-1M', () => {
     const form = Form1M.fromJSON(data);
     expect(form.formSubLabel).toEqual('NOTIFICATION OF MULTICANDIDATE STATUS');
   });
+
+  it('should display empty string for sub label', () => {
+    const data = {
+      id: '999',
+      form_type: F1MFormTypes.F1MN,
+      committee_name: 'foo',
+      report_code_label: undefined,
+    };
+    const form = Form1M.fromJSON(data);
+    expect(form.formSubLabel).toEqual('');
+  });
 });
