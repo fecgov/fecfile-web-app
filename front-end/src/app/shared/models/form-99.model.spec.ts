@@ -36,7 +36,7 @@ describe('Form99', () => {
         ['MST', 'Miscellaneous Report to the FEC'],
         [undefined, ''],
       ];
-      for (let [textCode, label] of valueLabelPairs) {
+      for (const [textCode, label] of valueLabelPairs) {
         const data = {
           id: '999',
           form_type: F99FormTypes.F99,
