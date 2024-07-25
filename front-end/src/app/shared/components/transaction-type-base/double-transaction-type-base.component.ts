@@ -39,7 +39,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  childForm: FormGroup = this.fb.group({});
+  childForm: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel$ = of('');
@@ -64,7 +64,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childTemplateMap = this.childTransactionType.templateMap;
     this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
     this.childFormProperties = this.childTransactionType.getFormControlNames();
-    this.childForm = this.fb.group(SchemaUtils.getFormGroupFields(this.childFormProperties));
+    this.childForm = this.fb.group(SchemaUtils.getFormGroupFields(this.childFormProperties), { updateOn: 'blur' });
 
     if (
       this.childTransactionType

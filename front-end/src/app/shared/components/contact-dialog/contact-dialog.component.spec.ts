@@ -92,9 +92,12 @@ describe('ContactDialogComponent', () => {
   it('should save contact', () => {
     component.formSubmitted = false;
     const fb: FormBuilder = new FormBuilder();
-    const form = fb.group({
-      test: new FormControl('', Validators.required),
-    });
+    const form = fb.group(
+      {
+        test: new FormControl('', Validators.required),
+      },
+      { updateOn: 'blur' },
+    );
     component.form = form;
     component.saveContact();
     expect(component.formSubmitted).toBeTrue();

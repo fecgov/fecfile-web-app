@@ -41,7 +41,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  form: FormGroup = this.fb.group({});
+  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   isEditable = true;
   memoCodeCheckboxLabel$ = of('');
   committeeAccount?: CommitteeAccount;
@@ -86,7 +86,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 

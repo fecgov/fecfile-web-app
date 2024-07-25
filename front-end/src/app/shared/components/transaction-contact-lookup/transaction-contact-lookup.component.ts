@@ -19,7 +19,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
 export class TransactionContactLookupComponent implements OnInit {
   @Input() contactProperty = 'contact_1';
   @Input() transaction?: Transaction;
-  @Input() form: FormGroup = new FormGroup({});
+  @Input() form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   @Input() formSubmitted = false;
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() excludeFecIds: string[] = [];

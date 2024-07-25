@@ -60,7 +60,7 @@ describe('TransactionInputComponent', () => {
 
   it('contactTypeSelected should update entity_type form control', () => {
     const fb = new FormBuilder();
-    const form = fb.group({ entity_type: new FormControl() });
+    const form = fb.group({ entity_type: new FormControl() }, { updateOn: 'blur' });
     component.form = form;
     component.contactTypeSelected(ContactTypes.ORGANIZATION);
     expect(component.form.get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);

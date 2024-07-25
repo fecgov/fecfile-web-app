@@ -23,13 +23,16 @@ describe('CandidateOfficeInputComponent', () => {
 
     fixture = TestBed.createComponent(CandidateOfficeInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      donor_candidate_last_name: new FormControl(''),
-      donor_candidate_first_name: new FormControl(''),
-      donor_candidate_middle_name: new FormControl(''),
-      donor_candidate_prefix: new FormControl(''),
-      donor_candidate_suffix: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        donor_candidate_last_name: new FormControl(''),
+        donor_candidate_first_name: new FormControl(''),
+        donor_candidate_middle_name: new FormControl(''),
+        donor_candidate_prefix: new FormControl(''),
+        donor_candidate_suffix: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
 
     component.form.addControl(testCandidateOfficeFormControlName, new FormControl());
     component.officeFormControlName = testCandidateOfficeFormControlName;
