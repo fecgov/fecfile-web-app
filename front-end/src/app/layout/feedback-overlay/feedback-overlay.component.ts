@@ -20,14 +20,11 @@ enum SubmissionStates {
 export class FeedbackOverlayComponent {
   @ViewChild(OverlayPanel) op!: OverlayPanel;
 
-  form: FormGroup = this.fb.group(
-    {
-      action: ['', [Validators.required, Validators.maxLength(2000)]],
-      feedback: ['', [Validators.maxLength(2000)]],
-      about: ['', Validators.maxLength(2000)],
-    },
-    { updateOn: 'blur' },
-  );
+  form: FormGroup = this.fb.group({
+    action: ['', [Validators.required, Validators.maxLength(2000)]],
+    feedback: ['', [Validators.maxLength(2000)]],
+    about: ['', Validators.maxLength(2000)],
+  });
   formSubmitted = false;
   SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;

@@ -99,7 +99,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('isInvalid', () => {
     beforeEach(() => {
-      component.childForm = new FormBuilder().group({}, { updateOn: 'blur' });
+      component.childForm = new FormBuilder().group({});
     });
 
     it('should return true if super.isInvalid would fail', () => {
@@ -109,7 +109,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
     });
 
     it('should return true if childForm_2 is invalid', () => {
-      component.childForm = new FormBuilder().group({}, { updateOn: 'blur' });
+      component.childForm = new FormBuilder().group({});
       expect(component.form.invalid).toBeFalse();
       expect(component.childForm.invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();

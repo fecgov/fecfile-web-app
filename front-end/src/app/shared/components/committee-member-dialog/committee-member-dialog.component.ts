@@ -27,7 +27,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
     };
   });
 
-  form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
+  form: FormGroup = new FormGroup({});
   formSubmitted = false;
 
   @ViewChild('dialog') dialog?: ElementRef;

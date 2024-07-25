@@ -19,7 +19,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   stateOptions: PrimeOptions = [];
-  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
+  form: FormGroup = this.fb.group({});
   formProperties: string[] = [
     'name',
     'committee_id',
@@ -72,7 +72,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
+    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   }
 
