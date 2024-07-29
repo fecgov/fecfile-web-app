@@ -9,6 +9,7 @@ import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -103,6 +104,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
 
   public submitClicked(): void {
     this.formSubmitted = true;
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       return;
     }

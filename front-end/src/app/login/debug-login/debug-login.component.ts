@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { committeeIdValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { LoginService } from '../../shared/services/login.service';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-debug-login',
@@ -32,6 +33,7 @@ export class DebugLoginComponent {
    *
    */
   public doSignIn(): void {
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       return;
     }

@@ -10,6 +10,7 @@ import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { map, takeUntil } from 'rxjs';
 import { UserLoginData } from '../../shared/models/user.model';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-update-current-user',
@@ -44,6 +45,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
 
   continue() {
     this.formSubmitted = true;
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;

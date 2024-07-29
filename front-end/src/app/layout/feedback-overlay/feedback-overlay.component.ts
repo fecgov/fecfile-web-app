@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Feedback } from 'app/shared/models/feedback.model';
 import { FeedbackService } from 'app/shared/services/feedback.service';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { OverlayPanel } from 'primeng/overlaypanel';
 
@@ -50,6 +51,7 @@ export class FeedbackOverlayComponent {
 
   save() {
     this.formSubmitted = true;
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;

@@ -18,6 +18,7 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -149,6 +150,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override isInvalid(): boolean {
+    blurActiveInput(this.childForm);
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
   }
 

@@ -25,6 +25,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -44,7 +45,9 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
+    updateOn: 'blur',
+  });
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;
@@ -180,6 +183,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
 
   public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
