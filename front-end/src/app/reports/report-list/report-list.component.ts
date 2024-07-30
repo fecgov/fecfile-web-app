@@ -15,7 +15,7 @@ import { DotFecService } from 'app/shared/services/dot-fec.service';
 @Component({
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
-  styleUrls: ['../styles.scss'],
+  styleUrls: ['./report-list.component.scss'],
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   dialogVisible = false;
