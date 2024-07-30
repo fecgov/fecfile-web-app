@@ -15,19 +15,20 @@ import { DotFecService } from 'app/shared/services/dot-fec.service';
 @Component({
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
+  styleUrls: ['../styles.scss'],
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   dialogVisible = false;
   committeeAccount?: CommitteeAccount;
   public rowActions: TableAction[] = [
     new TableAction(
-      'Edit report',
+      'Edit',
       this.editItem.bind(this),
       (report: Report) => report.report_status === ReportStatus.IN_PROGRESS,
     ),
     new TableAction('Amend', this.amendReport.bind(this), (report: Report) => report.canAmend),
     new TableAction(
-      'Review report',
+      'Review',
       this.editItem.bind(this),
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
