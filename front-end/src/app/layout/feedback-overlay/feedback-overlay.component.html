@@ -1,7 +1,7 @@
-<div class="anchor" [style]="{ bottom: formSubmitted ? '860px' : '830px' }" #anchor></div>
+<div class="anchor" #anchor></div>
 <p-overlayPanel
   #op
-  [style]="{ width: '500px', height: formSubmitted ? '850px' : '830px' }"
+  [style]="{ width: '500px', height: '95vh', overflow: 'auto' }"
   showTransitionOptions=".25s linear(0, 1)"
   [showCloseIcon]="true"
   [appendTo]="anchor"
