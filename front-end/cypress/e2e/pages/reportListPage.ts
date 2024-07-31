@@ -74,7 +74,7 @@ export class ReportListPage {
     cy.get('[data-cy="start-report"]').click();
   }
 
-  static editReport(reportName: string, fieldName = 'Edit report') {
+  static editReport(reportName: string, fieldName = 'Edit') {
     ReportListPage.goToPage();
     cy.wait(500);
     PageUtils.getKabob(reportName).contains(fieldName).first().click({ force: true });
