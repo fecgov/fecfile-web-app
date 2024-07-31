@@ -1,6 +1,11 @@
 <div
   class="grid"
-  *ngIf="isEditable && !transactionType?.getUseParentContact(transaction) && !transactionType?.hideContactLookup"
+  *ngIf="
+    isEditable &&
+    !transactionType?.getUseParentContact(transaction) &&
+    !transactionType?.hideContactLookup &&
+    transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE'
+  "
 >
   <div class="col-12">
     <div class="field">
