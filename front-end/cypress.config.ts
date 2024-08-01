@@ -5,15 +5,15 @@ import * as fs from 'fs';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: false,
+  video: true,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
-  screenshotOnRunFailure: false,
+  screenshotOnRunFailure: true,
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
   viewportHeight: 768,
   viewportWidth: 1366,
-  videoUploadOnPasses: false,
+  videoUploadOnPasses: true,
   chromeWebSecurity: false,
   reporter: 'mochawesome',
   reporterOptions: {
