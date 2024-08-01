@@ -148,6 +148,7 @@ jobs:
             mkdir -p /tmp/cypress/videos
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results
@@ -155,6 +156,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/videos
           destination: cypress/videos
+      - store_artifacts:
+          path: /tmp/cypress/screenshots
+          destination: cypress/screenshots
   deploy-job:
     docker:
       - image: cimg/node:20.4.0-browsers
