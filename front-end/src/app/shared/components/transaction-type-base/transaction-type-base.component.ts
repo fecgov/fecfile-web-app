@@ -27,6 +27,7 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   template: '',
@@ -86,7 +87,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
     this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), { updateOn: 'blur' });
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
@@ -204,6 +205,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   }
 
   isInvalid(): boolean {
+    blurActiveInput(this.form);
     return this.form.invalid || !this.transaction;
   }
 

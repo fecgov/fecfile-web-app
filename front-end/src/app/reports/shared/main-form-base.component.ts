@@ -13,6 +13,7 @@ import { Report } from 'app/shared/models/report.model';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ReportService } from 'app/shared/services/report.service';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   template: '',
@@ -40,7 +41,9 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
+      updateOn: 'blur',
+    });
     const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
 
@@ -72,7 +75,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
 
   public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
