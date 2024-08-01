@@ -13,7 +13,6 @@ export default defineConfig({
   trashAssetsBeforeRuns: false,
   viewportHeight: 768,
   viewportWidth: 1366,
-  videoUploadOnPasses: true,
   chromeWebSecurity: false,
   reporter: 'mochawesome',
   reporterOptions: {
@@ -27,7 +26,7 @@ export default defineConfig({
     options: ['--chrome-flags="--no-sandbox --headless --disable-gpu"'],
   },
   retries: {
-    runMode: 1,
+    runMode: 2,
     openMode: 0,
   },
   e2e: {
