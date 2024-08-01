@@ -26,13 +26,10 @@ describe('RedesignationToUtils', () => {
         report_id: '999',
         contribution_amount: 100,
       } as unknown as SchBTransaction;
-      const toForm = new FormGroup(
-        {
-          contribution_purpose_descrip: new FormControl(''),
-          memo_code: new FormControl(''),
-        },
-        { updateOn: 'blur' },
-      );
+      const toForm = new FormGroup({
+        contribution_purpose_descrip: new FormControl(''),
+        memo_code: new FormControl(''),
+      });
 
       RedesignationToUtils.overlayForm(toForm, transaction);
       expect(toForm.get('memo_code')?.value).toBeTrue();

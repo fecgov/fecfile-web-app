@@ -23,12 +23,9 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   formSubmitted = false;
   userLoginData?: UserLoginData;
 
-  form = new FormGroup(
-    {
-      'security-consent-annual': new FormControl(false),
-    },
-    { updateOn: 'blur' },
-  );
+  form = new FormGroup({
+    'security-consent-annual': new FormControl(false),
+  });
 
   constructor(
     private store: Store,

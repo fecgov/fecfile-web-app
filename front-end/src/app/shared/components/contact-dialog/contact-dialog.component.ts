@@ -99,7 +99,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
-    { updateOn: 'blur' },
   );
   formSubmitted = false;
 

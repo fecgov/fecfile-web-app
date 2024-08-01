@@ -25,7 +25,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
   abstract webprintURL: string;
 
   formSubmitted = false;
-  form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
+  form: FormGroup = new FormGroup({});
   reportId?: string;
 
   constructor(

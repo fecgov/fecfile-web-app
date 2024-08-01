@@ -17,18 +17,15 @@ describe('SignatureInputComponent', () => {
     component = fixture.componentInstance;
 
     // Set up component with form control
-    const form = new FormGroup(
-      {
-        authorized_last_name: new FormControl(),
-        authorized_first_name: new FormControl(),
-        authorized_middle_name: new FormControl(),
-        authorized_prefix: new FormControl(),
-        authorized_suffix: new FormControl(),
-        authorized_title: new FormControl(),
-        authorized_date_signed: new FormControl(),
-      },
-      { updateOn: 'blur' },
-    );
+    const form = new FormGroup({
+      authorized_last_name: new FormControl(),
+      authorized_first_name: new FormControl(),
+      authorized_middle_name: new FormControl(),
+      authorized_prefix: new FormControl(),
+      authorized_suffix: new FormControl(),
+      authorized_title: new FormControl(),
+      authorized_date_signed: new FormControl(),
+    });
     component.form = form;
     component.templateMapKeyPrefix = 'signatory_2';
     component.templateMap = {

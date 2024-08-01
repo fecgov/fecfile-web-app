@@ -256,6 +256,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public forceItemization(transaction: Transaction, itemized: boolean) {
     this.confirmationService.confirm({
+      key: 'transaction-itemization-dialog',
       message:
         'Changing the itemization status of this transaction will affect its associated transactions (such as memos).',
       header: 'Heads up!',

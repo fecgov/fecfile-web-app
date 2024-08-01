@@ -32,7 +32,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
   assignedMemoText: MemoText = new MemoText();
 
   formSubmitted = false;
-  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
+  form: FormGroup = this.fb.group({});
 
   constructor(
     private store: Store,
@@ -48,7 +48,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
+    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
 
     this.store
       .select(selectCommitteeAccount)

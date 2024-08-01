@@ -79,7 +79,7 @@ describe('Redesignations', () => {
     CreateContribution();
     ReportListPage.createF3X(reportFormDataJuly);
     ReportListPage.submitReport(APRIL_15);
-    ReportListPage.editReport(APRIL_15, 'Review report');
+    ReportListPage.editReport(APRIL_15, 'Review');
     PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
     cy.wait(500);
     Redesignate(true);

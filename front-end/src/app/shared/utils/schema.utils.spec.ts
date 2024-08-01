@@ -9,7 +9,6 @@ describe('ValidateUtils', () => {
     const formValidatorSchema = contactCandidateSchema;
     const formValidatorForm = fb.group(
       SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(contactCandidateSchema)),
-      { updateOn: 'blur' },
     );
     formValidatorForm.patchValue({
       telephone: '12345678910',
@@ -39,9 +38,7 @@ describe('ValidateUtils', () => {
   it('#formValidator should validate boolean properties correctly', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorSchema = f3xSchema;
-    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(f3xSchema)), {
-      updateOn: 'blur',
-    });
+    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(f3xSchema)));
     formValidatorForm.patchValue({
       change_of_address: 'A',
     });
@@ -68,9 +65,7 @@ describe('ValidateUtils', () => {
   it('#formValidator should validate min/max numeric properties correctly', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorSchema = f3xSchema;
-    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(f3xSchema)), {
-      updateOn: 'blur',
-    });
+    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(f3xSchema)));
     formValidatorForm.patchValue({
       L6a_cash_on_hand_jan_1_ytd: 1000000000.0,
     });

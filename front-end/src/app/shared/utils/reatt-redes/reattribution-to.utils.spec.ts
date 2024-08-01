@@ -26,13 +26,10 @@ describe('Reattribution To', () => {
         report_ids: ['999'],
         contribution_amount: 100,
       } as unknown as SchATransaction;
-      const toForm = new FormGroup(
-        {
-          contribution_purpose_descrip: new FormControl(''),
-          memo_code: new FormControl(''),
-        },
-        { updateOn: 'blur' },
-      );
+      const toForm = new FormGroup({
+        contribution_purpose_descrip: new FormControl(''),
+        memo_code: new FormControl(''),
+      });
 
       ReattributionToUtils.overlayForm(toForm, transaction);
       expect(toForm.get('memo_code')?.value).toBeTrue();
