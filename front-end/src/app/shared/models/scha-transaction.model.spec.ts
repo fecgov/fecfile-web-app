@@ -22,19 +22,6 @@ describe('SchATransaction', () => {
     expect(schATransaction.election_code).toBe(undefined);
   });
 
-  it('Updates the purpose description of a child transaction', () => {
-    const parentTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ) as SchATransaction;
-    const childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-    ) as SchATransaction;
-    parentTransaction.children = [childTransaction];
-    parentTransaction.contributor_organization_name = 'Test Committee';
-    parentTransaction.updateChildren();
-    expect(childTransaction.contribution_purpose_descrip).toContain('Test Committee');
-  });
-
   it('Creates a transaction object from JSON', () => {
     const json = {
       transaction_type_identifier: 'EARMARK_RECEIPT',

@@ -248,9 +248,6 @@ export class TransactionFormUtils {
       payload['report_ids'] = [activeReportId, secondaryReportId];
     }
 
-    if (payload.children) {
-      payload.children = payload.updateChildren();
-    }
     // Reorganize the payload if this transaction type can update its parent transaction
     // This will break the scenario where the user creates a grandparent, then child, then tries
     // to create a grandchild transaction because we won't know which child transaction of the grandparent
