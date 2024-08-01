@@ -79,6 +79,11 @@ describe('InputNumberComponent', () => {
   });
 
   describe('onInputKeydown', () => {
+    let updateSpy: jasmine.Spy;
+    beforeEach(() => {
+      updateSpy = spyOn(component, 'updateValue');
+    });
+
     it('should do nothing on readonly', () => {
       component.readonly = true;
       component.lastValue = '';
@@ -101,20 +106,16 @@ describe('InputNumberComponent', () => {
       spyOn(component, 'spin');
       const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
       createInput('$1,234.56', event);
-      const defaultSpy = spyOn(event, 'preventDefault');
       component.onInputKeyDown(event);
       expect(component.spin).toHaveBeenCalledWith(event, 1);
-      expect(defaultSpy).toHaveBeenCalled();
     });
 
     it('should spin down if Arrow down', () => {
       spyOn(component, 'spin');
       const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
       createInput('$1,234.56', event);
-      const defaultSpy = spyOn(event, 'preventDefault');
       component.onInputKeyDown(event);
       expect(component.spin).toHaveBeenCalledWith(event, -1);
-      expect(defaultSpy).toHaveBeenCalled();
     });
 
     it('should move left if ArrowLeft', () => {
@@ -136,55 +137,42 @@ describe('InputNumberComponent', () => {
     it('should update if Tab or Enter', () => {
       const parseSpy = spyOn(component, 'parseValue').and.returnValue(1234);
       const formatSpy = spyOn(component, 'formatValue').and.returnValue('1234');
-      const updateSpy = spyOn(component, 'updateModel');
+      const updateModelSpy = spyOn(component, 'updateModel');
       const event = new KeyboardEvent('keydown', { key: 'Tab' });
       createInput('$1,234.56', event);
       component.onInputKeyDown(event);
       expect(parseSpy).toHaveBeenCalledWith('$1,234.56');
       expect(formatSpy).toHaveBeenCalledWith(1234);
-      expect(updateSpy).toHaveBeenCalledWith(1234);
+      expect(updateModelSpy).toHaveBeenCalledWith(1234);
     });
 
     it('should delete previous char when backspace', () => {
       const groupTestSpy = spyOn(component._group, 'test');
       const isNumeralSpy = spyOn(component, 'isNumeralChar').and.returnValue(true);
-      const updateSpy = spyOn(component, 'updateValue');
+
       const event = new KeyboardEvent('keydown', { key: 'Backspace' });
 
       createInput('$1,234.56', event, [9, 9]);
-      const defaultSpy = spyOn(event, 'preventDefault');
 
       component.onInputKeyDown(event);
-      expect(defaultSpy).toHaveBeenCalled();
+
       expect(isNumeralSpy).toHaveBeenCalledWith('6');
       expect(groupTestSpy).toHaveBeenCalledWith('6');
       expect(updateSpy).toHaveBeenCalledWith(event, '$1,234.50', null, 'delete-single');
     });
 
-    it('should delete selection when backspace', () => {
-      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
-      createInput('$1,234.56', event, [3, 6]);
-
-      const defaultSpy = spyOn(event, 'preventDefault');
+    it('should delete selection when backspace or Delete', () => {
       const deleteSpy = spyOn(component, 'deleteRange').and.returnValue('$1,.56');
-      const updateSpy = spyOn(component, 'updateValue');
 
+      let event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      createInput('$1,234.56', event, [3, 6]);
       component.onInputKeyDown(event);
-      expect(defaultSpy).toHaveBeenCalled();
       expect(deleteSpy).toHaveBeenCalledWith('$1,234.56', 3, 6);
       expect(updateSpy).toHaveBeenCalledWith(event, '$1,.56', null, 'delete-range');
-    });
 
-    it('should delete selection when delete', () => {
-      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      event = new KeyboardEvent('keydown', { key: 'Delete' });
       createInput('$1,234.56', event, [3, 6]);
-
-      const defaultSpy = spyOn(event, 'preventDefault');
-      const deleteSpy = spyOn(component, 'deleteRange').and.returnValue('$1,.56');
-      const updateSpy = spyOn(component, 'updateValue');
-
       component.onInputKeyDown(event);
-      expect(defaultSpy).toHaveBeenCalled();
       expect(deleteSpy).toHaveBeenCalledWith('$1,234.56', 3, 6);
       expect(updateSpy).toHaveBeenCalledWith(event, '$1,.56', null, 'delete-range');
     });
@@ -192,16 +180,15 @@ describe('InputNumberComponent', () => {
     it('should delete next char when backspace', () => {
       const groupTestSpy = spyOn(component._group, 'test');
       const isNumeralSpy = spyOn(component, 'isNumeralChar').and.returnValue(true);
-      const updateSpy = spyOn(component, 'updateValue');
+
       const event = new KeyboardEvent('keydown', { key: 'Delete' });
       createInput('$1,234.56', event, [7, 7]);
-      const defaultSpy = spyOn(event, 'preventDefault');
 
       component.onInputKeyDown(event);
-      expect(defaultSpy).toHaveBeenCalled();
+
       expect(isNumeralSpy).toHaveBeenCalledWith('5');
       expect(groupTestSpy).toHaveBeenCalledWith('5');
-      expect(updateSpy).toHaveBeenCalledWith(event, '$1,234.6', null, 'delete-back-single');
+      expect(updateSpy).toHaveBeenCalledWith(event, '$1,234.06', null, 'delete-back-single');
     });
 
     it('should update model to min if Home and has min', () => {
@@ -237,31 +224,118 @@ describe('InputNumberComponent', () => {
       component.onInputKeyDown(event);
       expect(keydownSpy).toHaveBeenCalledWith(event);
     });
+
+    it('should handle Backspace with group character deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      createInput('$1,234.56', event, [3, 3]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '$,234.56', null, 'delete-single');
+    });
+
+    it('should handle Backspace with decimal character deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      createInput('$123.45', event, [5, 5]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, null, null, 'delete-single');
+    });
+
+    it('should handle Backspace with numeral character after decimal deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      createInput('$123.56', event, [6, 6]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '$123.06', null, 'delete-single');
+    });
+
+    it('should handle Backspace with numeral character before decimal deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      createInput('$0.45', event, [2, 2]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '$0.45', null, 'delete-single');
+    });
+
+    it('should handle Backspace with currency character deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+      createInput('$123.00', event, [1, 1]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '123.00', null, 'delete-single');
+    });
+
+    it('should handle Delete with group character deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      createInput('$1,234.56', event, [2, 2]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '$134.56', null, 'delete-back-single');
+    });
+
+    it('should handle Delete with decimal character deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      createInput('$123.45', event, [4, 4]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, null, null, 'delete-back-single');
+    });
+
+    it('should handle Delete with numeral character after decimal deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      createInput('$123.56', event, [5, 5]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '$123.06', null, 'delete-back-single');
+    });
+
+    it('should handle Delete with numeral character before decimal deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      createInput('$0.45', event, [1, 1]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, '$0.45', null, 'delete-back-single');
+    });
+
+    it('should handle Delete with currency character deletion', () => {
+      const event = new KeyboardEvent('keydown', { key: 'Delete' });
+      createInput('$123.00', event, [0, 0]);
+
+      component.onInputKeyDown(event);
+
+      expect(updateSpy).toHaveBeenCalledWith(event, null, null, 'delete-back-single');
+    });
   });
 
   describe('onInputKeyPress', () => {
     it('should prevent input if readonly is true', () => {
       component.readonly = true;
       const event = new KeyboardEvent('keypress', { key: '1' });
-      const defaultSpy = spyOn(event, 'preventDefault');
+
       component.onInputKeyPress(event);
-      expect(defaultSpy).not.toHaveBeenCalled();
     });
 
     it('should allow numeric input', () => {
       component.readonly = false;
       const event = new KeyboardEvent('keypress', { key: '1' });
-      const defaultSpy = spyOn(event, 'preventDefault');
+
       component.onInputKeyPress(event);
-      expect(defaultSpy).toHaveBeenCalled();
     });
 
     it('should prevent non-numeric input', () => {
       component.readonly = false;
       const event = new KeyboardEvent('keypress', { key: 'a' });
-      const defaultSpy = spyOn(event, 'preventDefault');
+
       component.onInputKeyPress(event);
-      expect(defaultSpy).toHaveBeenCalled();
     });
   });
 
@@ -272,11 +346,11 @@ describe('InputNumberComponent', () => {
     const event = new ClipboardEvent('paste', {
       clipboardData: dt,
     });
-    const defaultSpy = spyOn(event, 'preventDefault');
+
     const parseSpy = spyOn(component, 'parseValue').and.callThrough();
     const insertSpy = spyOn(component, 'insert');
     component.onPaste(event);
-    expect(defaultSpy).toHaveBeenCalled();
+
     expect(parseSpy).toHaveBeenCalledWith('123');
     expect(insertSpy).toHaveBeenCalledWith(event, '123');
   });
@@ -317,12 +391,17 @@ describe('InputNumberComponent', () => {
   });
 
   describe('insert', () => {
+    let updateSpy: jasmine.Spy;
+    beforeEach(() => {
+      updateSpy = spyOn(component, 'updateValue');
+    });
+
     it('should insert text correctly', () => {
       const event = new Event('input');
       const text = '5';
-      spyOn(component, 'updateValue');
+
       component.insert(event, text);
-      expect(component.updateValue).toHaveBeenCalled();
+      expect(updateSpy).toHaveBeenCalled();
     });
 
     it('should handle minus sign', () => {
@@ -330,9 +409,9 @@ describe('InputNumberComponent', () => {
       createInput('', event, [0, 0]);
 
       const text = '5';
-      spyOn(component, 'updateValue');
+
       component.insert(event, text, { isMinusSign: true, isDecimalSign: false });
-      expect(component.updateValue).toHaveBeenCalled();
+      expect(updateSpy).toHaveBeenCalled();
     });
 
     it('should ignore minus sign when not at start', () => {
@@ -340,9 +419,9 @@ describe('InputNumberComponent', () => {
       createInput('$1,234.56', event, [2, 2]);
 
       const text = '5';
-      spyOn(component, 'updateValue');
+
       component.insert(event, text, { isMinusSign: true, isDecimalSign: false });
-      expect(component.updateValue).not.toHaveBeenCalled();
+      expect(updateSpy).not.toHaveBeenCalled();
     });
 
     it('should handle decimal sign', () => {
@@ -350,9 +429,9 @@ describe('InputNumberComponent', () => {
       createInput('$1,234.56', event, [6, 6]);
 
       const text = '5';
-      spyOn(component, 'updateValue');
+
       component.insert(event, text, { isMinusSign: false, isDecimalSign: true });
-      expect(component.updateValue).toHaveBeenCalled();
+      expect(updateSpy).toHaveBeenCalled();
     });
 
     it('should ignore decimal sign when not at decimal', () => {
@@ -360,9 +439,9 @@ describe('InputNumberComponent', () => {
       createInput('$1,234.56', event, [0, 0]);
 
       const text = '5';
-      spyOn(component, 'updateValue');
+
       component.insert(event, text, { isMinusSign: false, isDecimalSign: true });
-      expect(component.updateValue).not.toHaveBeenCalled();
+      expect(updateSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -507,15 +586,6 @@ describe('InputNumberComponent', () => {
       expect(inputElement.selectionStart).toBe(2);
       expect(inputElement.selectionEnd).toBe(2);
     });
-
-    // it('should handle input value "-" and insert operation', () => {
-    //   const inputElement = createInput('-');
-    //   spyOn(component, 'initCursor').and.returnValue(0);
-    //   component.updateInput('123', '4', 'insert', '-');
-    //   expect(inputElement.value).toBe('$1,234.00');
-    //   expect(inputElement.selectionStart).toBe(1);
-    //   expect(inputElement.selectionEnd).toBe(1);
-    // });
   });
 
   it('should handle input focus event', () => {

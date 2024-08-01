@@ -460,7 +460,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
                 newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 1);
               }
             } else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
-              newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 1);
+              newValueStr = inputValue.slice(0, selectionStart) + 0 + inputValue.slice(selectionStart + 1);
             } else if (decimalCharIndexWithoutPrefix === 1) {
               newValueStr = inputValue.slice(0, selectionStart) + '0' + inputValue.slice(selectionStart + 1);
               newValueStr = (this.parseValue(newValueStr) as number) > 0 ? newValueStr : '';
@@ -519,15 +519,6 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
     if ((48 <= code && code <= 57) || isMinusSign || isDecimalSign) {
       this.insert(event, char, { isDecimalSign, isMinusSign });
     }
-  }
-
-  private getSelectedText() {
-    return (
-      window
-        ?.getSelection()
-        ?.toString()
-        .replaceAll(/[^0-9']/g, '') || ''
-    );
   }
 
   onPaste(event: ClipboardEvent) {
