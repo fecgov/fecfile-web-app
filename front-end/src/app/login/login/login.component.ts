@@ -12,7 +12,7 @@ import { LoginService } from '../../shared/services/login.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public loginDotGovAuthUrl: string | undefined;
-  public localLoginAvailable = false;
+  public localLoginAvailable = true;
   isDropdownOpen = false;
   isDebugOpen = false;
   private renderer: Renderer2;
