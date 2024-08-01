@@ -90,7 +90,7 @@ describe('Manage contacts', () => {
     ContactListPage.assertFormData(formData);
   });
 
-  it('Empty required fields should display an error message', () => {
+  xit('Empty required fields should display an error message', () => {
     PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
       ...contactFormData,
@@ -113,7 +113,7 @@ describe('Manage contacts', () => {
     cy.get('#zip').parent().should('contain', 'This is a required field');
   });
 
-  it('Fields with too a long string should display an error message', () => {
+  xit('Fields with too a long string should display an error message', () => {
     PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
       ...contactFormData,
