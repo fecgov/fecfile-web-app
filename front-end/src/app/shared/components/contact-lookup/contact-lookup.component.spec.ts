@@ -106,7 +106,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'candidateLookup').and.returnValue(Promise.resolve(testCandidateLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+        component.contactTypeFormControl.setValue('CAN');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(component.contactLookupList[1].items.length === 0).toBeTrue();
@@ -115,7 +115,7 @@ describe('ContactLookupComponent', () => {
       it('#onDropdownSearch CAN undefined fecfile_candidates', fakeAsync(() => {
         spyOn(testContactService, 'candidateLookup').and.returnValue(Promise.resolve(testCandidateLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+        component.contactTypeFormControl.setValue('CAN');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(component.contactLookupList[0].items.length === 0).toBeTrue();
@@ -132,7 +132,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'candidateLookup').and.returnValue(Promise.resolve(testCandidateLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+        component.contactTypeFormControl.setValue('CAN');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(
@@ -163,7 +163,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
+        component.contactTypeFormControl.setValue('COM');
         component.onDropdownSearch(testEvent);
         expect(component.contactLookupList[1].items.length === 0).toBeTrue();
       }));
@@ -178,7 +178,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
+        component.contactTypeFormControl.setValue('COM');
         component.onDropdownSearch(testEvent);
         expect(component.contactLookupList[0].items.length === 0).toBeTrue();
       }));
@@ -199,7 +199,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
+        component.contactTypeFormControl.setValue('COM');
         component.onDropdownSearch(testEvent);
         expect(
           JSON.stringify(component.contactLookupList) ===
@@ -223,7 +223,7 @@ describe('ContactLookupComponent', () => {
       it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
         spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+        component.contactTypeFormControl.setValue('IND');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(component.contactLookupList[0].items.length === 0).toBeTrue();
@@ -240,7 +240,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+        component.contactTypeFormControl.setValue('IND');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(
@@ -267,7 +267,7 @@ describe('ContactLookupComponent', () => {
       it('#onDropdownSearch ORG undefined fecfile_organizations', fakeAsync(() => {
         spyOn(testContactService, 'organizationLookup').and.returnValue(of(testOrganizationLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
+        component.contactTypeFormControl.setValue('ORG');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(component.contactLookupList[0].items.length === 0).toBeTrue();
@@ -283,7 +283,7 @@ describe('ContactLookupComponent', () => {
         ];
         spyOn(testContactService, 'organizationLookup').and.returnValue(of(testOrganizationLookupResponse));
         const testEvent = { query: 'hi' };
-        component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
+        component.contactTypeFormControl.setValue('ORG');
         component.onDropdownSearch(testEvent);
         tick(500);
         expect(

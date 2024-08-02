@@ -119,31 +119,6 @@ export abstract class Transaction extends BaseModel {
   }
 
   /**
-   * updateChildren()
-   * @returns
-   *    An array of Transaction objects whose contribution_purpose_descriptions
-   *    have been re-generated to account for changes to their parent
-   *
-   */
-  updateChildren(): Transaction[] {
-    const outChildren: Transaction[] = [];
-    if (this.children) {
-      for (const child of this.children as SchATransaction[]) {
-        // Modify the purpose description this to reflect the changes to child transactions
-        if (child?.transactionType?.generatePurposeDescription) {
-          child.parent_transaction = this;
-          const newDescrip = child.transactionType.generatePurposeDescriptionWrapper(child);
-          const key = child.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
-          ((child as ScheduleTransaction)[key] as string) = newDescrip;
-          child.updateChildren();
-        }
-        outChildren.push(child);
-      }
-    }
-    return outChildren;
-  }
-
-  /**
    * Returns a transaction payload with the parent of the original payload
    * swapped in as the main payload and the original main payload is a child
    * @returns
@@ -167,7 +142,6 @@ export abstract class Transaction extends BaseModel {
     if (!childDeleted) {
       payload.children.push(this);
     }
-    payload.children = payload.updateChildren();
 
     // Update the purpose description
     if (payload.transactionType?.generatePurposeDescription) {

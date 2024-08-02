@@ -11,7 +11,6 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-cash-on-hand',
@@ -49,7 +48,6 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
 
   public save(): void {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;

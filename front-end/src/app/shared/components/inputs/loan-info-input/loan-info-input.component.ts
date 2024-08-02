@@ -14,8 +14,11 @@ export class LoanInfoInputComponent extends BaseInputComponent implements OnInit
   ngOnInit(): void {
     // For new create transactions, the PAYMENT TO DATE is initialized to 0
     // It is a calculated field and not saved to the database
-    if (!this.transaction?.id) {
-      this.form.get(this.templateMap.payment_to_date)?.setValue(0);
+    const paymentControl = this.form.get(this.templateMap.payment_to_date);
+    if (paymentControl) {
+      if (!this.transaction?.id || !paymentControl.value) {
+        paymentControl.setValue(0);
+      }
     }
 
     // balance is a calculated field and not saved to the database
