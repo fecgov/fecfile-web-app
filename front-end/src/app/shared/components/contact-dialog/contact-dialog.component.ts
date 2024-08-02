@@ -32,7 +32,6 @@ import { TableLazyLoadEvent } from 'primeng/table';
 import { getReportFromJSON } from '../../services/report.service';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { QueryParams } from 'app/shared/services/api.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 export class TransactionData {
   id: string;
@@ -357,7 +356,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   public saveContact(closeDialog = true) {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
+
     if (this.form.invalid) {
       return;
     }

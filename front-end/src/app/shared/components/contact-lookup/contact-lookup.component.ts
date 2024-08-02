@@ -57,8 +57,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
 
-  contactTypeFormControl = new FormControl<ContactTypes | null>(null, { updateOn: 'change' });
-  searchBoxFormControl = new FormControl('', { updateOn: 'change' });
+  contactTypeFormControl = new FormControl();
+  searchBoxFormControl = new FormControl();
 
   searchTerm = '';
 
@@ -77,13 +77,10 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
     }
 
-    this.contactTypeFormControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((contactType: ContactTypes | null) => {
-        if (!contactType) return;
-        this.contactType = contactType;
-        this.contactTypeSelect.emit(contactType);
-      });
+    this.contactTypeFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((contactType: ContactTypes) => {
+      this.contactType = contactType;
+      this.contactTypeSelect.emit(contactType);
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

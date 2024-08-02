@@ -6,7 +6,6 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -35,9 +34,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
-    updateOn: 'blur',
-  });
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
 
@@ -96,7 +93,6 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
 
   public async continue(): Promise<void> {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
     if (this.form.invalid || this.report == undefined) {
       this.store.dispatch(singleClickEnableAction());
       return;
