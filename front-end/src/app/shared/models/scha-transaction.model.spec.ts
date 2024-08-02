@@ -1,5 +1,4 @@
-import { getTestTransactionByType } from '../utils/unit-test.utils';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+import { SchATransaction } from './scha-transaction.model';
 
 describe('SchATransaction', () => {
   it('should create an instance', () => {
