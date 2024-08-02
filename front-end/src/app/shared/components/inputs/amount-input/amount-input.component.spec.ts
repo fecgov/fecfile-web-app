@@ -14,7 +14,6 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { InputNumberComponent } from '../input-number/input-number.component';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -24,7 +23,7 @@ describe('AmountInputComponent', () => {
   beforeEach(async () => {
     store = provideMockStore(testMockStore);
     await TestBed.configureTestingModule({
-      declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe, Dialog, Tooltip, InputNumberComponent],
+      declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe, Dialog, Tooltip],
       imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule, TooltipModule],
       providers: [store, ConfirmationService],
     }).compileComponents();
@@ -51,9 +50,8 @@ describe('AmountInputComponent', () => {
   it('should not call updateInput when negativeAmountValueOnly is false', () => {
     component.negativeAmountValueOnly = false;
     const updateInputMethodFalse = spyOn(component.amountInput, 'updateInput');
-    expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
     component.onInputAmount();
-    // expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
+    expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
   });
 
   it('should call updateInput when negativeAmountValueOnly is true', () => {

@@ -60,15 +60,17 @@
     <div class="col-6">
       <div class="field">
         <label for="amount">{{ transaction?.transactionType?.amountLabel }}</label>
-        <app-input-number
+        <p-inputNumber
           #amountInput
           inputId="amount"
           [formControlName]="templateMap['amount']"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
-          (inputEvent)="onInputAmount()"
-        ></app-input-number>
-
+          (onInput)="onInputAmount()"
+        ></p-inputNumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -81,12 +83,15 @@
     <div class="col-6" *ngIf="showAggregate">
       <div class="field">
         <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
-        <app-input-number
+        <p-inputNumber
           inputId="aggregate"
           [formControlName]="templateMap['aggregate']"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></app-input-number>
+        ></p-inputNumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['aggregate']"
@@ -99,12 +104,15 @@
     <div class="col-6" *ngIf="showCalendarYTD">
       <div class="field">
         <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
-        <app-input-number
+        <p-inputNumber
           inputId="calendar_ytd"
           [formControlName]="templateMap['calendar_ytd']"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></app-input-number>
+        ></p-inputNumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['calendar_ytd']"

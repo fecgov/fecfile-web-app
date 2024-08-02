@@ -1,4 +1,4 @@
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -63,7 +63,6 @@ import { ToastModule } from 'primeng/toast';
 import { PaginatorModule } from 'primeng/paginator';
 import { DownloadTrayComponent } from './components/download-tray/download-tray.component';
 import { SidebarModule } from 'primeng/sidebar';
-import { InputNumberComponent } from './components/inputs/input-number/input-number.component';
 
 @NgModule({
   imports: [
@@ -137,7 +136,6 @@ import { InputNumberComponent } from './components/inputs/input-number/input-num
     SingleClickDirective,
     TableComponent,
     DownloadTrayComponent,
-    InputNumberComponent,
   ],
   exports: [
     FecDatePipe,
@@ -179,8 +177,7 @@ import { InputNumberComponent } from './components/inputs/input-number/input-num
     SingleClickDirective,
     TableComponent,
     DownloadTrayComponent,
-    InputNumberComponent,
   ],
-  providers: [DatePipe, CurrencyPipe],
+  providers: [DatePipe],
 })
 export class SharedModule {}
