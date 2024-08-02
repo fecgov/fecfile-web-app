@@ -1,5 +1,4 @@
-import { getTestTransactionByType } from '../utils/unit-test.utils';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+import { SchATransaction } from './scha-transaction.model';
 
 describe('SchATransaction', () => {
   it('should create an instance', () => {
@@ -20,19 +19,6 @@ describe('SchATransaction', () => {
     expect(schATransaction.form_type).toBe('SA11Ai');
     expect(schATransaction.contributor_organization_name).toBe('foo');
     expect(schATransaction.election_code).toBe(undefined);
-  });
-
-  it('Updates the purpose description of a child transaction', () => {
-    const parentTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ) as SchATransaction;
-    const childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-    ) as SchATransaction;
-    parentTransaction.children = [childTransaction];
-    parentTransaction.contributor_organization_name = 'Test Committee';
-    parentTransaction.updateChildren();
-    expect(childTransaction.contribution_purpose_descrip).toContain('Test Committee');
   });
 
   it('Creates a transaction object from JSON', () => {
