@@ -16,6 +16,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-main-form',
@@ -228,7 +229,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   public override save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-
+    blurActiveInput(this.form);
     if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;

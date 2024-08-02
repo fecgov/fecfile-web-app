@@ -12,7 +12,7 @@ export const defaultFormData: F3xCashOnHandFormData = {
 
 export class F3xCashOnHandPage {
   static enterFormData(formData: F3xCashOnHandFormData) {
-    cy.get('p-inputnumber[formcontrolname="L6a_cash_on_hand_jan_1_ytd"]').safeType(formData['cashOnHand']);
+    cy.get('app-input-number[formcontrolname="L6a_cash_on_hand_jan_1_ytd"]').safeType(formData['cashOnHand']);
     PageUtils.calendarSetValue('p-calendar[formcontrolname="cash_on_hand_date"]', formData['date']);
   }
 }
