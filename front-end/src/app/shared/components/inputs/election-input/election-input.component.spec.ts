@@ -20,10 +20,13 @@ describe('ElectionInputComponent', () => {
 
     fixture = TestBed.createComponent(ElectionInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      election_code: new FormControl(''),
-      election_other_description: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        election_code: new FormControl(''),
+        election_other_description: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
@@ -58,10 +61,13 @@ describe('ElectionInputComponent', () => {
   it('should disable all fields', () => {
     fixture = TestBed.createComponent(ElectionInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      election_code: new FormControl(''),
-      election_other_description: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        election_code: new FormControl(''),
+        election_other_description: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.form.disable();
     component.templateMap = testTemplateMap;
     fixture.detectChanges();

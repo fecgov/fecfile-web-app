@@ -31,15 +31,18 @@ describe('AmountInputComponent', () => {
 
     fixture = TestBed.createComponent(AmountInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      contribution_date: new FormControl(''),
-      memo_code: new FormControl(''),
-      contribution_amount: new FormControl(''),
-      contribution_aggregate: new FormControl(''),
-      disbursement_date: new FormControl(''),
-      dissemination_date: new FormControl(''),
-      expenditure_date: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        contribution_date: new FormControl(''),
+        memo_code: new FormControl(''),
+        contribution_amount: new FormControl(''),
+        contribution_aggregate: new FormControl(''),
+        disbursement_date: new FormControl(''),
+        dissemination_date: new FormControl(''),
+        expenditure_date: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

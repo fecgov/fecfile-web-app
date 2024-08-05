@@ -18,11 +18,14 @@ describe('CommitteeInputComponent', () => {
 
     fixture = TestBed.createComponent(CommitteeInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      contributor_organization_name: new FormControl(''),
-      donor_committee_fec_id: new FormControl(''),
-      donor_committee_name: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        contributor_organization_name: new FormControl(''),
+        donor_committee_fec_id: new FormControl(''),
+        donor_committee_name: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

@@ -19,10 +19,13 @@ describe('AdditionalInfoInputComponent', () => {
 
     fixture = TestBed.createComponent(AdditionalInfoInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      contribution_purpose_descrip: new FormControl(''),
-      text4000: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        contribution_purpose_descrip: new FormControl(''),
+        text4000: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.templateMap = testTemplateMap;
     component.transaction = testScheduleATransaction;
     if (component.transaction.transactionType)

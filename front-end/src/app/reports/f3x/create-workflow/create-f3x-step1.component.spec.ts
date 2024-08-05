@@ -170,10 +170,13 @@ describe('CreateF3XStep1Component', () => {
       expectedThroughMessage: string | null,
     ) => {
       const validator = buildNonOverlappingCoverageValidator(existingCoverage);
-      const group = new FormGroup({
-        coverage_from_date: new FormControl(controlFromDate),
-        coverage_through_date: new FormControl(controlThroughDate),
-      });
+      const group = new FormGroup(
+        {
+          coverage_from_date: new FormControl(controlFromDate),
+          coverage_through_date: new FormControl(controlThroughDate),
+        },
+        { updateOn: 'blur' },
+      );
       validator(group);
       console.log(group.get('coverage_from_date')?.errors);
       expect(group.get('coverage_from_date')?.errors).toEqual(
