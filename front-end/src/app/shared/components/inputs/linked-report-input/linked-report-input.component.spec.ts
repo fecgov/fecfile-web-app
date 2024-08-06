@@ -28,7 +28,7 @@ describe('LinkedReportInputComponent', () => {
     component.templateMap = Object.assign(testTemplateMap, {
       date2: 'other_date',
     });
-    component.form = new FormGroup({});
+    component.form = new FormGroup({}, { updateOn: 'blur' });
     component.form.addControl('other_date', new FormControl());
     component.form.addControl(testTemplateMap['date'], new FormControl());
     component.ngOnInit();

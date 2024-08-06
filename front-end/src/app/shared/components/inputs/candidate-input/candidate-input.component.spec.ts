@@ -19,17 +19,20 @@ describe('CandidateInputComponent', () => {
 
     fixture = TestBed.createComponent(CandidateInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup({
-      donor_candidate_fec_id: new FormControl(''),
-      donor_candidate_last_name: new FormControl(''),
-      donor_candidate_first_name: new FormControl(''),
-      donor_candidate_middle_name: new FormControl(''),
-      donor_candidate_prefix: new FormControl(''),
-      donor_candidate_suffix: new FormControl(''),
-      donor_candidate_office: new FormControl(''),
-      donor_candidate_state: new FormControl(''),
-      donor_candidate_district: new FormControl(''),
-    });
+    component.form = new FormGroup(
+      {
+        donor_candidate_fec_id: new FormControl(''),
+        donor_candidate_last_name: new FormControl(''),
+        donor_candidate_first_name: new FormControl(''),
+        donor_candidate_middle_name: new FormControl(''),
+        donor_candidate_prefix: new FormControl(''),
+        donor_candidate_suffix: new FormControl(''),
+        donor_candidate_office: new FormControl(''),
+        donor_candidate_state: new FormControl(''),
+        donor_candidate_district: new FormControl(''),
+      },
+      { updateOn: 'blur' },
+    );
     component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });

@@ -46,11 +46,14 @@ describe('FormUtils', () => {
   });
 
   it('should add the amount for refunds', () => {
-    const form = new FormGroup({
-      contribution_amount: new FormControl(),
-      aggregate_amount: new FormControl(),
-      expenditure_amount: new FormControl(),
-    });
+    const form = new FormGroup(
+      {
+        contribution_amount: new FormControl(),
+        aggregate_amount: new FormControl(),
+        expenditure_amount: new FormControl(),
+      },
+      { updateOn: 'blur' },
+    );
 
     const transaction = SchBTransaction.fromJSON({
       transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
@@ -80,10 +83,13 @@ describe('FormUtils', () => {
 });
 
 it('should add the amount for calendar YTD', () => {
-  const form = new FormGroup({
-    expenditure_amount: new FormControl(),
-    calendar_ytd_per_election_office: new FormControl(),
-  });
+  const form = new FormGroup(
+    {
+      expenditure_amount: new FormControl(),
+      calendar_ytd_per_election_office: new FormControl(),
+    },
+    { updateOn: 'blur' },
+  );
 
   const transaction = SchETransaction.fromJSON({
     transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
