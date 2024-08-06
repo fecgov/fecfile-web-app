@@ -47,7 +47,7 @@ export class FecApiService {
     }
 
     return this.apiService
-      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`)
+      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/?force_efo_target=PRODUCTION`)
       .pipe(map((response) => response.results[0] as CommitteeAccount));
   }
 
