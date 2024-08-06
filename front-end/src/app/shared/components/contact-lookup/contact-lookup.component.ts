@@ -11,7 +11,6 @@ import {
   FecApiLookupData,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';

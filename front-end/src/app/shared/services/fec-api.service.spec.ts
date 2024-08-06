@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
-import { Candidate } from '../models/candidate.model';
 import { FecFiling } from '../models/fec-filing.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { FecApiService } from './fec-api.service';

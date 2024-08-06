@@ -22,7 +22,6 @@ import {
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -52,14 +51,7 @@ describe('ContactLookupComponent', () => {
         AutoCompleteModule,
         SharedModule,
       ],
-      providers: [
-        FormBuilder,
-        ContactService,
-        FecApiService,
-        EventEmitter,
-        provideMockStore(testMockStore),
-        HttpClient,
-      ],
+      providers: [FormBuilder, ContactService, EventEmitter, provideMockStore(testMockStore), HttpClient],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
