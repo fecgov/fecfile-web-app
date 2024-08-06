@@ -16,6 +16,9 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 import { ContactService, DeletedContactService } from './contact.service';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { FecApiPaginatedResponse } from '../models/fec-api.model';
+import { Candidate } from '../models/candidate.model';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
@@ -268,6 +271,7 @@ describe('ContactService', () => {
       expect(isUnique).toBeTrue();
     });
   });
+
   it('#checkFecIdForUniqueness should return false if server comes back with differnt contact id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
@@ -280,6 +284,7 @@ describe('ContactService', () => {
       expect(isUnique).toBeFalse();
     });
   });
+
   it('#checkFecIdForUniqueness should return true if server comes back no id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
@@ -291,5 +296,47 @@ describe('ContactService', () => {
     service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
       expect(isUnique).toBeTrue();
     });
+  });
+
+  describe('#getCandidateDetails()', () => {
+    it('should return candidate details', () => {
+      const candidate: Candidate = new Candidate();
+
+      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
+        expect(candidateData).toEqual(candidate);
+      });
+
+      const req = httpTestingController.expectOne(
+        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678',
+      );
+
+      expect(req.request.method).toEqual('GET');
+      req.flush(candidate);
+    });
+  });
+
+  it('should return committee details', () => {
+    const committeeAccount: CommitteeAccount = new CommitteeAccount();
+    const response: FecApiPaginatedResponse = {
+      api_version: '1.0',
+      pagination: {
+        page: 1,
+        per_page: 20,
+        count: 1,
+        pages: 1,
+      },
+      results: [committeeAccount],
+    };
+
+    service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
+      expect(committeeAccountData).toEqual(committeeAccount);
+    });
+
+    const req = httpTestingController.expectOne(
+      `https://localhost/api/v1/openfec/C00601211/committee/?force_efo_target=PRODUCTION`,
+    );
+
+    expect(req.request.method).toEqual('GET');
+    req.flush(response);
   });
 });

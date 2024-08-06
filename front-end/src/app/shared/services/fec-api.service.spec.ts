@@ -25,23 +25,6 @@ describe('FecApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#getCandidateDetails()', () => {
-    it('should return candidate details', () => {
-      const candidate: Candidate = new Candidate();
-
-      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
-        expect(candidateData).toEqual(candidate);
-      });
-
-      const req = httpTestingController.expectOne(
-        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678',
-      );
-
-      expect(req.request.method).toEqual('GET');
-      req.flush(candidate);
-    });
-  });
-
   describe('#getCommitteeDetails()', () => {
     it('should return committee details', () => {
       const committeeAccount: CommitteeAccount = new CommitteeAccount();
@@ -60,9 +43,7 @@ describe('FecApiService', () => {
         expect(committeeAccountData).toEqual(committeeAccount);
       });
 
-      const req = httpTestingController.expectOne(
-        `https://localhost/api/v1/openfec/C00601211/committee/?force_efo_target=PRODUCTION`,
-      );
+      const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/committee/`);
 
       expect(req.request.method).toEqual('GET');
       req.flush(response);

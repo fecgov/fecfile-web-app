@@ -25,18 +25,6 @@ export class FecApiService {
   }
 
   /**
-   * Gets the candidate details.
-   *
-   * @return     {Observable}  The candidate details.
-   */
-  public getCandidateDetails(candidate_id: string | null): Observable<Candidate> {
-    if (!candidate_id) {
-      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
-    }
-    return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
-  }
-
-  /**
    * Gets the commitee account details.
    *
    * @return     {Observable}  The commitee details.
@@ -47,7 +35,7 @@ export class FecApiService {
     }
 
     return this.apiService
-      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/?force_efo_target=PRODUCTION`)
+      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`)
       .pipe(map((response) => response.results[0] as CommitteeAccount));
   }
 

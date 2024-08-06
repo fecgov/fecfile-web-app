@@ -321,7 +321,7 @@ describe('ContactLookupComponent', () => {
       name: 'BIDEN, JOSEPH R JR',
     });
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
+    const getCandidateDetailsSpy = spyOn(component.contactService, 'getCandidateDetails').and.returnValue(
       of(testCandidate),
     );
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
@@ -371,7 +371,7 @@ describe('ContactLookupComponent', () => {
       candidate_suffix: 'test_candidate_suffix',
     });
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
+    const getCandidateDetailsSpy = spyOn(component.contactService, 'getCandidateDetails').and.returnValue(
       of(testCandidate),
     );
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {

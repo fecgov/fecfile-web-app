@@ -19,6 +19,9 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
+import { Candidate } from '../models/candidate.model';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { FecApiPaginatedResponse } from '../models/fec-api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -74,6 +77,33 @@ export class ContactService implements TableListService<Contact> {
 
   public delete(contact: Contact): Observable<null> {
     return this.apiService.delete<null>(`/contacts/${contact.id}`);
+  }
+
+  /**
+   * Gets the candidate details.
+   *
+   * @return     {Observable}  The candidate details.
+   */
+  public getCandidateDetails(candidate_id: string | null): Observable<Candidate> {
+    if (!candidate_id) {
+      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
+    }
+    return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
+  }
+
+  /**
+   * Gets the commitee account details.
+   *
+   * @return     {Observable}  The commitee details.
+   */
+  public getCommitteeDetails(committeeId: string | null): Observable<CommitteeAccount> {
+    if (!committeeId) {
+      throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
+    }
+
+    return this.apiService
+      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/?force_efo_target=PRODUCTION`)
+      .pipe(map((response) => response.results[0] as CommitteeAccount));
   }
 
   public async candidateLookup(

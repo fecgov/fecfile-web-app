@@ -62,10 +62,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   searchTerm = '';
 
-  constructor(
-    private contactService: ContactService,
-    public fecApiService: FecApiService,
-  ) {
+  constructor(public contactService: ContactService) {
     super();
   }
 
@@ -167,7 +164,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
     if (data.candidate_id) {
-      this.fecApiService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
+      this.contactService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
           Contact.fromJSON({
@@ -202,7 +199,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
     if (data.id) {
-      this.fecApiService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
+      this.contactService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
         let phone;
         if (committeeAccount?.treasurer_phone) {
           phone = '+1 ' + committeeAccount.treasurer_phone;
