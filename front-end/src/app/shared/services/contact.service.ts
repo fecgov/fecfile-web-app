@@ -96,13 +96,12 @@ export class ContactService implements TableListService<Contact> {
    *
    * @return     {Observable}  The commitee details.
    */
-  public getCommitteeDetails(committeeId: string | null): Observable<CommitteeAccount> {
-    if (!committeeId) {
+  public getCommitteeDetails(committee_id: string | null): Observable<CommitteeAccount> {
+    if (!committee_id) {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
-
     return this.apiService
-      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/?force_efo_target=PRODUCTION`)
+      .get<FecApiPaginatedResponse>(`/contacts/committee/`, { committee_id })
       .pipe(map((response) => response.results[0] as CommitteeAccount));
   }
 

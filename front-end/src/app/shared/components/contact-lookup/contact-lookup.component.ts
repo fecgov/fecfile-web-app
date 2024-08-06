@@ -199,6 +199,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
     if (data.id) {
+      console.log('HJEEYYY');
       this.contactService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
         let phone;
         if (committeeAccount?.treasurer_phone) {
