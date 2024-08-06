@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
@@ -22,18 +21,6 @@ export class FecApiService {
     return {
       'Content-Type': 'application/json',
     };
-  }
-
-  /**
-   * Gets the candidate details.
-   *
-   * @return     {Observable}  The candidate details.
-   */
-  public getCandidateDetails(candidate_id: string | null): Observable<Candidate> {
-    if (!candidate_id) {
-      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
-    }
-    return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
   }
 
   /**
