@@ -332,9 +332,7 @@ describe('ContactService', () => {
       expect(committeeAccountData).toEqual(committeeAccount);
     });
 
-    const req = httpTestingController.expectOne(
-      `https://localhost/api/v1/openfec/C00601211/committee/?force_efo_target=PRODUCTION`,
-    );
+    const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/committee/?committee_id=C00601211`);
 
     expect(req.request.method).toEqual('GET');
     req.flush(response);
