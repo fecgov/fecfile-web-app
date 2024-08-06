@@ -337,4 +337,20 @@ describe('ContactService', () => {
     expect(req.request.method).toEqual('GET');
     req.flush(response);
   });
+
+  it('#getCommitteeDetails should raise an error when no id is provided', () => {
+    try {
+      service.getCommitteeDetails(null);
+    } catch (error) {
+      expect(error).toEqual(Error('Fecfile: No Committee Id provided in getCommitteeDetails()'));
+    }
+  });
+
+  it('#getCandidateDetails should raise an error when no id is provided', () => {
+    try {
+      service.getCandidateDetails(null);
+    } catch (error) {
+      expect(error).toEqual(Error('Fecfile: No Candidate Id provided in getCandidateDetails()'));
+    }
+  });
 });
