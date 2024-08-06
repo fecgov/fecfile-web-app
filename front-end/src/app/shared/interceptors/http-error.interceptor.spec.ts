@@ -49,7 +49,7 @@ describe('HttpErrorInterceptor', () => {
     const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
     const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
     const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
-    spyOn(window, 'alert');
+    spyOn(console, 'log');
     httpHandlerSpy.handle.and.returnValue(
       throwError(
         () =>
@@ -66,6 +66,6 @@ describe('HttpErrorInterceptor', () => {
       (x) => x,
       (y) => y,
     );
-    expect(window.alert).toHaveBeenCalledWith('Outgoing HTTP Error: ');
+    expect(console.log).toHaveBeenCalledWith('Outgoing HTTP Error: ');
   });
 });
