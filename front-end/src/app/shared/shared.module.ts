@@ -64,6 +64,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { DownloadTrayComponent } from './components/download-tray/download-tray.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { InputNumberComponent } from './components/inputs/input-number/input-number.component';
+import { SaveCancelComponent } from './components/save-cancel/save-cancel.component';
 
 @NgModule({
   imports: [
@@ -138,6 +139,7 @@ import { InputNumberComponent } from './components/inputs/input-number/input-num
     TableComponent,
     DownloadTrayComponent,
     InputNumberComponent,
+    SaveCancelComponent,
   ],
   exports: [
     FecDatePipe,
@@ -180,6 +182,7 @@ import { InputNumberComponent } from './components/inputs/input-number/input-num
     TableComponent,
     DownloadTrayComponent,
     InputNumberComponent,
+    SaveCancelComponent,
   ],
   providers: [DatePipe, CurrencyPipe],
 })

@@ -80,19 +80,4 @@
     <p-divider></p-divider>
   </form>
 </div>
-<div class="d-flex justify-content-between">
-  <div>
-    <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
-  </div>
-  <div>
-    <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
-    <button
-      pButton
-      pRipple
-      appSingleClick
-      label="Save and continue"
-      (click)="save('continue')"
-      class="p-button-info ml-4"
-    ></button>
-  </div>
-</div>
+<app-save-cancel (save)="save($event)" (cancel)="goBack()"></app-save-cancel>

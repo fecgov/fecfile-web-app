@@ -435,34 +435,7 @@
       </ng-container>
     </ng-container>
   </form>
-  <div class="grid">
-    <div class="col-2">
-      <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
-    </div>
-    <div class="col-5"></div>
-    <div class="col-2 align-right">
-      <button
-        pButton
-        pRipple
-        appSingleClick
-        label="Save"
-        (click)="save()"
-        data-cy="save-and-end"
-        class="p-button-primary"
-      ></button>
-    </div>
-    <div class="col-3 align-right">
-      <button
-        pButton
-        pRipple
-        appSingleClick
-        label="Save and continue"
-        (click)="save('continue')"
-        data-cy="save-and-continue"
-        class="p-button-info"
-      ></button>
-    </div>
-  </div>
 </div>
+<app-save-cancel (save)="save($event)" (cancel)="goBack()"></app-save-cancel>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
