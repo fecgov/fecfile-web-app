@@ -79,9 +79,11 @@ export class TransactionResolver {
   }
 
   resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
-    if (transaction.children && 
-      transaction.transaction_type_identifier && 
-      MultipleEntryTransactionTypes().includes(transaction.transaction_type_identifier)) {
+    if (
+      transaction.children &&
+      transaction.transaction_type_identifier &&
+      MultipleEntryTransactionTypes().includes(transaction.transaction_type_identifier)
+    ) {
       transaction.children = [];
       // tune page size
       const params = { parent: transaction.id ?? '', page_size: 100 };
