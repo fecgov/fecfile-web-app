@@ -4458,30 +4458,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 1rem 0 0 0;
 }
 
-.p-divider .p-divider-content {
-  background-color: #ffffff;
-}
-.p-divider.p-divider-horizontal {
-  margin: 1rem 0;
-  padding: 0 1rem;
-}
-.p-divider.p-divider-horizontal:before {
-  border-top: 1px #d6d7d9;
-}
-.p-divider.p-divider-horizontal .p-divider-content {
-  padding: 0 0.5rem;
-}
-.p-divider.p-divider-vertical {
-  margin: 0 1rem;
-  padding: 1rem 0;
-}
-.p-divider.p-divider-vertical:before {
-  border-left: 1px #d6d7d9;
-}
-.p-divider.p-divider-vertical .p-divider-content {
-  padding: 0.5rem 0;
-}
-
 .p-fieldset {
   border: 1px solid #d6d7d9;
   background: #ffffff;
