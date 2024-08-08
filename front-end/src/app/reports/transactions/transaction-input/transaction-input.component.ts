@@ -14,7 +14,7 @@ import { Report } from 'app/shared/models/report.model';
   styleUrls: ['../transaction.scss'],
 })
 export class TransactionInputComponent implements OnInit {
-  @Input() form: FormGroup = new FormGroup([]);
+  @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
   @Input() formSubmitted = false;
   @Input() activeReport$?: Observable<Report>;
   @Input() transaction?: Transaction;

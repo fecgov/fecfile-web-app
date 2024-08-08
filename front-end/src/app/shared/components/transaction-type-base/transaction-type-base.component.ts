@@ -42,7 +42,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   contactIdMap: ContactIdMapType = {};
   formSubmitted = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  form: FormGroup = this.fb.group({});
+  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   isEditable = true;
   memoCodeCheckboxLabel$ = of('');
   committeeAccount?: CommitteeAccount;

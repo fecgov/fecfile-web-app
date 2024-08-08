@@ -36,6 +36,7 @@ export class SchemaUtils {
     'report_code',
     'change_of_address',
     'support_oppose_code',
+    'userCertified',
   ];
   static getFormGroupFieldsNoBlur(properties: string[], fb: FormBuilder) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any

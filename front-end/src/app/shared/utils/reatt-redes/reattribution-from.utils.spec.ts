@@ -27,17 +27,23 @@ describe('Reattribution From', () => {
           contribution_amount: 100,
         } as SchATransaction,
       } as unknown as SchATransaction;
-      const fromForm = new FormGroup({
-        contribution_purpose_descrip: new FormControl(''),
-        memo_code: new FormControl(''),
-        contribution_amount: new FormControl(''),
-      });
-      const toForm = new FormGroup({
-        contributor_organization_name: new FormControl('a'),
-        contributor_last_name: new FormControl(''),
-        contributor_first_name: new FormControl(''),
-        contribution_amount: new FormControl('100'),
-      });
+      const fromForm = new FormGroup(
+        {
+          contribution_purpose_descrip: new FormControl(''),
+          memo_code: new FormControl(''),
+          contribution_amount: new FormControl(''),
+        },
+        { updateOn: 'blur' },
+      );
+      const toForm = new FormGroup(
+        {
+          contributor_organization_name: new FormControl('a'),
+          contributor_last_name: new FormControl(''),
+          contributor_first_name: new FormControl(''),
+          contribution_amount: new FormControl('100'),
+        },
+        { updateOn: 'blur' },
+      );
 
       expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeTrue();
       ReattributionFromUtils.overlayForm(fromForm, transaction, toForm);
