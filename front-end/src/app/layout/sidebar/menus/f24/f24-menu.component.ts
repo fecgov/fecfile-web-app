@@ -15,6 +15,7 @@ import { takeUntil } from 'rxjs';
 })
 export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
   formLabel?: string;
+  subLabel?: string;
 
   constructor(store: Store, reportService: ReportService, router: Router) {
     super(store, reportService, router);
@@ -26,6 +27,7 @@ export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
     if (!this.activeReport$) return;
     this.activeReport$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
       this.formLabel = report?.formLabel;
+      this.subLabel = report?.formSubLabel;
     });
   }
 
