@@ -15,9 +15,7 @@ export class PAC_JF_TRANSFER_MEMO extends SchATransactionType {
   override navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    return `Joint Fundraising Memo: ${
-      (transaction?.parent_transaction as SchATransaction).contributor_organization_name
-    }`;
+    return `JF Memo: ${(transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
   getNewTransaction() {
