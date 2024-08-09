@@ -1,6 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { SchCTransaction } from '../models/schc-transaction.model';
+import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
 import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { SchDTransaction } from '../models/schd-transaction.model';
@@ -492,6 +492,27 @@ export function PTYRestricted(): TransactionTypes[] {
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   ];
 }
+
+export function MultipleEntryTransactionTypes(): string[] {
+  return [
+    ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
+    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
+    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
+    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
+    ScheduleATransactionTypes.EARMARK_RECEIPT,
+    ScheduleATransactionTypes.IN_KIND_RECEIPT,
+    ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+    ScheduleATransactionTypes.IN_KIND_TRANSFER,
+    ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+    ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
+    ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
+    ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
+    ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
+    ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
+    ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+  ];
+}
+
 function getfromJsonByType(
   json: any, // eslint-disable-line @typescript-eslint/no-explicit-any
   transactionType: TransactionType | undefined,
