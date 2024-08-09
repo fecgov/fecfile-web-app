@@ -24,6 +24,6 @@ describe('PAC_JF_TRANSFER_MEMO', () => {
 
   it('#generatePurpotransaction.seDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Joint Fundraising Memo: Test Org');
+    expect(descrip).toBe('JF Memo: Test Org');
   });
 });

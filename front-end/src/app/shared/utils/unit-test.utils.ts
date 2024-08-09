@@ -202,7 +202,7 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   contribution_date: '2022-08-11',
   contribution_amount: 1,
   contribution_aggregate: 2,
-  contribution_purpose_descrip: 'Joint Fundraising Memo: test',
+  contribution_purpose_descrip: 'JF Memo: test',
   aggregation_group: AggregationGroups.GENERAL,
   memo_code: true,
   donor_committee_fec_id: 'C00000000',
