@@ -37,6 +37,7 @@ import { SubmitReportStep1Component } from './submission-workflow/submit-report-
 import { SubmitReportStep2Component } from './submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from './submission-workflow/submit-report-status.component';
 import { PasswordModule } from 'primeng/password';
+import { ReportUploadComponent } from './report-upload/report-upload.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { PasswordModule } from 'primeng/password';
     CashOnHandComponent,
     FormTypeDialogComponent,
     MainFormComponent,
+    ReportUploadComponent,
   ],
   imports: [
     CommonModule,

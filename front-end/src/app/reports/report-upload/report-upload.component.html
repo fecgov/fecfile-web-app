@@ -1,0 +1,10 @@
+<div>
+  <select [(ngModel)]="selectedReportId" (change)="loadPdfs(selectedReportId)">
+    <option *ngFor="let report of reports" [value]="report.id">{{ report.formLabel }}</option>
+  </select>
+  <input type="file" (change)="onFileSelected($event)" />
+  <button (click)="onUpload()">Upload</button>
+</div>
+<div *ngFor="let pdf of pdfs">
+  <button (click)="downloadFile(pdf)">{{ pdf.title }}</button>
+</div>

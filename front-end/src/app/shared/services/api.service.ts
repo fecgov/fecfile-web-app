@@ -104,6 +104,36 @@ export class ApiService {
     });
   }
 
+  public postPdf<T>(
+    endpoint: string,
+    payload: unknown,
+    queryParams?: QueryParams,
+    allowedErrorCodes?: number[],
+  ): Observable<T> | Observable<HttpResponse<T>> {
+    const csrfToken = `${this.cookieService.get('csrftoken')}`;
+    const headers = {
+      // If using different cache headers,
+      // modify CORS_ALLOW_HEADERS in API settings
+      'cache-control': 'no-cache, no-store',
+      ...(csrfToken && { 'x-csrftoken': `${csrfToken}` }),
+    };
+    const params = this.getQueryParams(queryParams);
+    if (allowedErrorCodes) {
+      return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+        headers,
+        params,
+        withCredentials: true,
+        observe: 'response',
+        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+      });
+    }
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+      headers,
+      params,
+      withCredentials: true,
+    });
+  }
+
   public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);

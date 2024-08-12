@@ -34,6 +34,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     ),
     new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
     new TableAction('Download as .fec', this.download.bind(this)),
+    new TableAction('Manage PDFs', this.managePdfs.bind(this)),
   ];
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -96,6 +97,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         await this.router.navigateByUrl(`/reports/f1m/edit/${item.id}`);
         break;
     }
+  }
+
+  public async managePdfs(report: Report) {
+    await this.router.navigateByUrl(`/reports/pdfs`);
   }
 
   public amendReport(report: Report): void {

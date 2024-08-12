@@ -7,6 +7,7 @@ import { Form99Service } from 'app/shared/services/form-99.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form1MService } from 'app/shared/services/form-1m.service';
+import { ReportUploadComponent } from './report-upload/report-upload.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,12 @@ const routes: Routes = [
     data: {
       showSidebar: false,
     },
+  },
+  {
+    path: 'pdfs',
+    title: 'Manage your pdfs',
+    component: ReportUploadComponent,
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'transactions',

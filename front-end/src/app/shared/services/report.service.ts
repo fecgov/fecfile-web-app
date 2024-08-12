@@ -107,6 +107,18 @@ export class ReportService implements TableListService<Report> {
   preparePayload(item: Report): Record<string, unknown> {
     const payload = item.toJson();
     delete payload['schema'];
+    payload['pdfs'] = [];
     return payload;
+  }
+
+  getPdfs(reportId: string): Observable<any> {
+    return this.apiService.get(`${this.apiEndpoint}/${reportId}/pdfs/`);
+  }
+
+  uploadPdf(reportId: string, file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    formData.append('report', reportId);
+    return this.apiService.postPdf(`${this.apiEndpoint}/pdfs/`, formData);
   }
 }
