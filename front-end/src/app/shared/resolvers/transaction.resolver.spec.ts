@@ -466,4 +466,53 @@ describe('TransactionResolver', () => {
       });
     });
   });
+
+  describe('resolveExistingReattribution', () => {
+    const route = {
+      queryParamMap: convertToParamMap({ reattribution: '1' }),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+    };
+    beforeEach(() => {
+      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+        return of(
+          SchATransaction.fromJSON({
+            id: id,
+            transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+            contact_id: '123',
+            contact_1: Contact.fromJSON({ id: 123 }),
+            report: {
+              report_type: 'F3X',
+              report_code: 'Q1',
+              reportCode: 'Q1',
+            },
+            reattribution_redesignation_tag: 'REATTRIBUTION_FROM',
+            reatt_redes: SchATransaction.fromJSON({
+              id: 1,
+              report_ids: [1],
+              transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+              transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+              contact_id: '123',
+              contact_1: Contact.fromJSON({ id: 123 }),
+            }),
+          }),
+        );
+      });
+    });
+
+    it('should resolve existing reattribution', () => {
+      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
+        expect(transaction).toBeTruthy();
+        if (transaction) {
+          expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
+          expect(
+            ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag,
+          ).toEqual('REATTRIBUTION_FROM');
+        }
+      });
+    });
+  });
 });
