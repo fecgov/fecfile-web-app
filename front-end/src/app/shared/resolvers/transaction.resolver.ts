@@ -19,7 +19,7 @@ import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
   providedIn: 'root',
 })
 export class TransactionResolver {
-  constructor(public transactionService: TransactionService) { }
+  constructor(public transactionService: TransactionService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -84,10 +84,10 @@ export class TransactionResolver {
         !(
           ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
           transaction?.id
-        )
-      ) ||
-      transaction.transaction_type_identifier &&
-      MultipleEntryTransactionTypes().includes(transaction.transaction_type_identifier)) {
+        )) ||
+      (transaction.transaction_type_identifier &&
+        MultipleEntryTransactionTypes().includes(transaction.transaction_type_identifier))
+    ) {
       transaction.children = [];
       // tune page size
       const params = { parent: transaction.id ?? '', page_size: 100 };
