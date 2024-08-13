@@ -80,7 +80,6 @@ export class TransactionResolver {
 
   resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
     if (
-      transaction.children &&
       transaction.transaction_type_identifier &&
       MultipleEntryTransactionTypes().includes(transaction.transaction_type_identifier)
     ) {

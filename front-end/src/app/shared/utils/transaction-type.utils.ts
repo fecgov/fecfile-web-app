@@ -495,7 +495,8 @@ export function PTYRestricted(): TransactionTypes[] {
 
 export function MultipleEntryTransactionTypes(): string[] {
   return [
-    ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
+    ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
+    ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
@@ -505,7 +506,8 @@ export function MultipleEntryTransactionTypes(): string[] {
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
     ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
-    ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
+    ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
+    ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
     ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
