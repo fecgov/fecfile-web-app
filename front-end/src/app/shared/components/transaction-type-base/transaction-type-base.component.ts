@@ -235,10 +235,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   navigateTo(event: NavigationEvent) {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
     const reportPath = `/reports/transactions/report/${reportId}`;
-    if (
-      event.destination === NavigationDestination.ANOTHER ||
-      event.destination === NavigationDestination.ANOTHER_CHILD
-    ) {
+    if (event.destination === NavigationDestination.ANOTHER) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -252,7 +249,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
       }
-    } else if (event.destination === NavigationDestination.CHILD) {
+    } else if (
+      event.destination === NavigationDestination.CHILD ||
+      event.destination === NavigationDestination.ANOTHER_CHILD
+    ) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
