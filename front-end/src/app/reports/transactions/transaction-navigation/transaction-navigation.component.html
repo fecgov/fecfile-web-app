@@ -1,13 +1,11 @@
 <ng-container *ngIf="transaction?.contact_1 && isEditable && getInlineControls().length > 0">
   <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
-    <div class="grid">
-      <div class="col-4">
-        <app-navigation-control
-          [navigationControl]="navigationControl"
-          [transaction]="transaction"
-          (navigate)="handleNavigate($event)"
-        ></app-navigation-control>
-      </div>
+    <div class="p-2">
+      <app-navigation-control
+        [navigationControl]="navigationControl"
+        [transaction]="transaction"
+        (navigate)="handleNavigate($event)"
+      ></app-navigation-control>
     </div>
   </ng-template>
 </ng-container>
