@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, firstValueFrom, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
