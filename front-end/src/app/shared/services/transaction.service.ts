@@ -156,18 +156,7 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public delete(transaction: Transaction): Observable<null> {
-    return this.apiService.delete<null>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}`).pipe(
-      tap(() => {
-        if (transaction.transactionType?.updateParentOnSave && transaction.parent_transaction?.children) {
-          // Remove deleted transaction from parent's list of children
-          transaction.parent_transaction.children = transaction.parent_transaction.children.filter(
-            (child) => child.id !== transaction.id,
-          );
-          const parentTransactionPayload = transaction.getUpdatedParent(true);
-          this.update(parentTransactionPayload).subscribe();
-        }
-      }),
-    );
+    return this.apiService.delete<null>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}`);
   }
 
   public multiSaveReattRedes(transactions: Transaction[]): Observable<Transaction[]> {
