@@ -236,7 +236,7 @@ export class TransactionFormUtils {
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
-    let payload: ScheduleTransaction = getFromJSON({
+    const payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
