@@ -23,8 +23,6 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionType } from '../../models/transaction-type.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from '../../models/transaction.model';
-import test from 'node:test';
-import { de } from '@faker-js/faker';
 
 let testTransaction: SchATransaction;
 
