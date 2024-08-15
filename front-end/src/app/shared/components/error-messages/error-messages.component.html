@@ -10,6 +10,7 @@
   <small class="p-error" *ngIf="control?.hasError('max')">{{ maxErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('exclusiveMax')">{{ exclusiveMaxErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('exclusiveMin')">{{ exclusiveMinErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('invalidPhoneNumber')">{{ invalidTelephoneErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('invaliddate')">{{ invalidDateErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('noDateProvided')">{{ noDateProvidedErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('noCorrespondingForm3X')">{{
@@ -32,6 +33,7 @@
       !control?.hasError('exclusiveMax') &&
       !control?.hasError('exclusiveMin') &&
       !control?.hasError('invaliddate') &&
+      !control?.hasError('invalidPhoneNumber') &&
       !control?.hasError('isAfter') &&
       control?.hasError('pattern')
     "

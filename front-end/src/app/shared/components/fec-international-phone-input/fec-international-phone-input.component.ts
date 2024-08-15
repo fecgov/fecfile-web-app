@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import intlTelInput, { Iti } from 'intl-tel-input';
+import { PhoneNumberUtil } from 'google-libphonenumber';
 
 @Component({
   selector: 'app-fec-international-phone-input',
@@ -21,6 +22,8 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   @Input() disabled = false;
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
+  phoneNumberUtil = PhoneNumberUtil.getInstance();
+
   private intlTelInput: Iti | undefined;
   private intlTelInputOptions = {
     separateDialCode: true,
@@ -28,10 +31,10 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
     preferredCountries: ['us'],
     allowDropdown: !this.disabled,
   };
-  private countryCode: string | undefined;
+  countryCode: string | undefined;
   private number = '';
 
-  constructor(@Optional() @Self() private ngControl: NgControl) {
+  constructor(@Optional() @Self() public ngControl: NgControl) {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
@@ -89,5 +92,30 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onChange(value: string) {
     // noop
+  }
+
+  validatePhoneNumber(phoneNumber: string): boolean {
+    try {
+      const number = this.phoneNumberUtil.parseAndKeepRawInput(phoneNumber, this.countryCode);
+      return this.phoneNumberUtil.isValidNumber(number);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  onBlur(event: FocusEvent) {
+    this.number = (event.target as HTMLInputElement).value;
+    const fullNumber = this.number ? '+' + this.countryCode + ' ' + this.number : '';
+    this.onChange(fullNumber);
+    this.ngControl.control?.setValue(fullNumber, { emitEvent: false });
+    // Validate the phone number
+    const isValid = this.validatePhoneNumber(fullNumber);
+    if (!isValid) {
+      this.ngControl.control?.setErrors({ invalidPhoneNumber: true });
+    } else {
+      this.ngControl.control?.setErrors(null);
+    }
+    this.ngControl.control?.markAsTouched();
+    this.ngControl.control?.markAsDirty();
   }
 }

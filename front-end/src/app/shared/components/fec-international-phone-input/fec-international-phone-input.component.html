@@ -1,3 +1,9 @@
 <div>
-  <input ngClass="{{ disabled ? 'p-disabled' : '' }}" #internationalPhoneInput type="tel" (keyup)="onKey($event)" />
+  <input
+    ngClass="{{ disabled ? 'p-disabled' : '' }}"
+    #internationalPhoneInput
+    type="tel"
+    (keyup)="onKey($event)"
+    (blur)="onBlur($event)"
+  />
 </div>

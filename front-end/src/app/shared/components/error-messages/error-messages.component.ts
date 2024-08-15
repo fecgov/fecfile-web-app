@@ -133,6 +133,18 @@ export class ErrorMessagesComponent implements OnInit {
     )}.`;
   }
 
+  private _invalidTelephoneErrorMessage = '';
+  @Input() set invalidTelephoneErrorMessage(value: string) {
+    this._invalidTelephoneErrorMessage = value;
+  }
+
+  get invalidTelephoneErrorMessage(): string {
+    if (this._invalidTelephoneErrorMessage) {
+      return this._invalidTelephoneErrorMessage;
+    }
+    return this.control?.errors?.['invalidPhoneNumber']?.msg ?? '';
+  }
+
   private _invalidDateErrorMessage = '';
   @Input() set invalidDateErrorMessage(value: string) {
     this._invalidDateErrorMessage = value;

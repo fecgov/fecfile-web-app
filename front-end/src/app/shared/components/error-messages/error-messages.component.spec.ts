@@ -129,4 +129,18 @@ describe('ErrorMessagesComponent', () => {
     component.ngOnInit();
     expect(component.control?.value).toBe('my control');
   });
+
+  it('should set and get invalidTelephoneErrorMessage correctly', () => {
+    // Test setter
+    component.invalidTelephoneErrorMessage = 'Custom error message';
+    expect(component.invalidTelephoneErrorMessage).toBe('Custom error message');
+
+    // Test getter with custom error message
+    component['_invalidTelephoneErrorMessage'] = 'Another custom error message';
+    expect(component.invalidTelephoneErrorMessage).toBe('Another custom error message');
+
+    // Test getter with control error message
+    component['_invalidTelephoneErrorMessage'] = '';
+    expect(component.invalidTelephoneErrorMessage).toBe('');
+  });
 });
