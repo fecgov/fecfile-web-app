@@ -60,7 +60,7 @@
         (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-        [buttonAriaLabel]="'edit ' + displayName(item)"
+        [buttonAriaLabel]="'edit ' + item.form_type"
       ></app-table-actions-button>
     </td>
   </ng-template>
