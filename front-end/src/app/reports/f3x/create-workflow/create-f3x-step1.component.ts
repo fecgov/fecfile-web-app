@@ -55,6 +55,8 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public thisYear = new Date().getFullYear();
   committeeAccount?: CommitteeAccount;
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
+  public reportCodes: F3xReportCodes[] = [];
+  public electionReport = false;
 
   constructor(
     private store: Store,
@@ -136,6 +138,8 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         );
         this.form.patchValue({ coverage_from_date, coverage_through_date });
       }
+      this.reportCodes = this.getReportCodes();
+      this.electionReport = this.isElectionReport();
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);

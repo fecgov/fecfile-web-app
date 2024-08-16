@@ -69,7 +69,7 @@
       <div class="col-6">
         <div class="field grid">
           <label for="type">(CHOOSE ONE)</label>
-          <div *ngFor="let reportCode of getReportCodes()" class="p-field-checkbox col-12">
+          <div *ngFor="let reportCode of reportCodes" class="p-field-checkbox col-12">
             <p-radioButton
               [inputId]="reportCode"
               name="report_code"
@@ -85,7 +85,7 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="isElectionReport()">
+      <ng-container *ngIf="electionReport">
         <div class="election-info col-6 grid">
           <div class="col-12">
             <div class="field">
