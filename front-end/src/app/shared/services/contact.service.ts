@@ -126,6 +126,9 @@ export class ContactService implements TableListService<Contact> {
 
   public getFecIdValidator = (contactId?: string) => {
     return (control: AbstractControl) => {
+      if (!control.dirty) {
+        return of(null);
+      }
       return of(control.value).pipe(
         switchMap((fecId) =>
           this.checkFecIdForUniqueness(fecId, contactId).pipe(

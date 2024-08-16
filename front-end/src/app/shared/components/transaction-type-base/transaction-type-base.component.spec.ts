@@ -25,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from '../../models/transaction.model';
 
 let testTransaction: SchATransaction;
+let testChildTransaction: SchATransaction;
 
 describe('TransactionTypeBaseComponent', () => {
   let component: TransactionTypeBaseComponent;
@@ -82,6 +83,10 @@ describe('TransactionTypeBaseComponent', () => {
     testConfirmationService = TestBed.inject(ConfirmationService);
     messageServiceSpy = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
     testTransaction = getTestIndividualReceipt();
+    testChildTransaction = getTestTransactionByType(
+      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+    ) as SchATransaction;
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
