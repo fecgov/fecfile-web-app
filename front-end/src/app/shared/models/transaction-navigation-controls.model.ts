@@ -10,7 +10,6 @@ export enum NavigationDestination {
   LIST,
   PARENT,
   ANOTHER,
-  ANOTHER_CHILD,
   CHILD,
 }
 
@@ -187,7 +186,7 @@ export const CHILD_CONTROLS = new TransactionNavigationControls(
   [
     new NavigationControl(
       NavigationAction.SAVE,
-      NavigationDestination.ANOTHER_CHILD,
+      NavigationDestination.ANOTHER,
       'Save & add memo',
       '',
       hasNoContact,

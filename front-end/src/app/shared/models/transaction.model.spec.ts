@@ -12,16 +12,6 @@ describe('Transaction', () => {
     expect(new ChildTransaction()).toBeTruthy();
   });
 
-  it('should update child purpose descriptions', () => {
-    const testTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
-      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
-    ) as SchATransaction;
-
-    const payload = testTransaction.getUpdatedParent();
-    expect(payload.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
-  });
-
   it('should formulate names correctly', () => {
     const testTransaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
     testTransaction.contributor_last_name = 'lname';

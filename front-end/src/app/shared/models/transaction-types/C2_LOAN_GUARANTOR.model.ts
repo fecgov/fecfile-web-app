@@ -32,7 +32,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.ANOTHER_CHILD,
+        NavigationDestination.ANOTHER,
         'Save & add loan guarantor',
         'add-button',
         hasNoContact,

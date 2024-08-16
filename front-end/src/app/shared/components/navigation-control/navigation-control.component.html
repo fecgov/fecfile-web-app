@@ -6,13 +6,14 @@
     [label]="navigationControl?.label || ''"
     [icon]="navigationControl?.icon || ''"
     [class]="navigationControl?.ngClass || ''"
-    (click)="click()"
+    (click)="clickButton()"
     [disabled]="isDisabled()"
     data-test="navigation-control-button"
     appSingleClick
   ></button>
-  <div *ngIf="controlType === 'dropdown'" class="dropdown" data-test="navigation-control-dropdown">
+  <div *ngIf="controlType === 'dropdown'" class="dropdown">
     <button
+      data-test="navigation-control-dropdown"
       [disabled]="isDisabled()"
       aria-expanded="false"
       aria-haspopup="true"

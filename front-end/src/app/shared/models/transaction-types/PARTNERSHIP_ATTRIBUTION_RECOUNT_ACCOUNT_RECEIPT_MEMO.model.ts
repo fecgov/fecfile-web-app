@@ -14,7 +14,6 @@ export class PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SchATr
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   );
   schema = schema;
-  override updateParentOnSave = true;
   override navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(): string {

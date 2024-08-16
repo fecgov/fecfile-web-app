@@ -55,7 +55,7 @@ describe('NavigationControlComponent', () => {
       component = fixture.componentInstance;
       component.navigationControl = new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.ANOTHER_CHILD,
+        NavigationDestination.ANOTHER,
         'Save & add memo',
         '',
         () => false,
