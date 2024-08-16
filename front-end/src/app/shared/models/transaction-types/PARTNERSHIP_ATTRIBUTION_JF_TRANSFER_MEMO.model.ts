@@ -13,7 +13,6 @@ export class PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO extends SchATransactionTyp
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
   );
-  override updateParentOnSave = true;
   schema = schema;
   override shortName = 'Partnership Attribution';
   override navigationControls = CHILD_CONTROLS;

@@ -11,7 +11,6 @@ export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   schema = schema;
-  override updateParentOnSave = true;
   override navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(): string {

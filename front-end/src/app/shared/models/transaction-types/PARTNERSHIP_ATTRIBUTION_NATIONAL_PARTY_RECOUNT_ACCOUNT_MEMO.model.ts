@@ -14,7 +14,6 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
   );
   schema = schema;
-  override updateParentOnSave = true;
   override navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(): string {
