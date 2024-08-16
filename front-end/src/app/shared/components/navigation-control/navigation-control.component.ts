@@ -19,6 +19,7 @@ import { FormControl } from '@angular/forms';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
+import { clone } from 'lodash';
 
 @Component({
   selector: 'app-navigation-control',
@@ -86,9 +87,9 @@ export class NavigationControlComponent implements OnInit {
 
   onDropdownChange(event: { value: NavigationEvent }): void {
     if (event.value.action) {
-      this.navigate.emit(event.value);
+      const navEvent = clone(event.value);
+      this.navigate.emit(navEvent);
     }
-    this.dropdownControl.reset(); // If the save fails, this clears the dropdown
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
