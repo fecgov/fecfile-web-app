@@ -118,41 +118,6 @@ export abstract class Transaction extends BaseModel {
     }
   }
 
-  /**
-   * Returns a transaction payload with the parent of the original payload
-   * swapped in as the main payload and the original main payload is a child
-   * @returns
-   */
-  getUpdatedParent(childDeleted = false): Transaction {
-    if (!this.parent_transaction?.transaction_type_identifier) {
-      throw new Error(
-        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`,
-      );
-    }
-
-    // The parent is the new payload
-    const payload = this.parent_transaction;
-    if (!payload.children) payload.children = [];
-
-    // Attach the original payload to the parent as a child, replacing an
-    // existing version if needed
-    if (this.id) {
-      payload.children = payload.children.filter((c) => c.id !== this.id);
-    }
-    if (!childDeleted) {
-      payload.children.push(this);
-    }
-
-    // Update the purpose description
-    if (payload.transactionType?.generatePurposeDescription) {
-      const key = payload.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
-      ((payload as ScheduleTransaction)[key] as string) =
-        payload.transactionType.generatePurposeDescriptionWrapper(payload);
-    }
-
-    return payload;
-  }
-
   getReport(reportType?: ReportTypes): Report | void {
     if (this.reports) {
       for (const report of this.reports) {
