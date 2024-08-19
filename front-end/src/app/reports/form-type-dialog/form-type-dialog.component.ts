@@ -27,10 +27,12 @@ import { Observable, filter, takeUntil } from 'rxjs';
 })
 export class FormTypeDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit, OnInit {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
-  formTypeOptionLabels = new Map(this.formTypeOptions.map((option) => {
-    const formType = this.getFormType(option);
-    return [option, `<span class="option"><b>${formType?.label}:</b> ${formType?.description}</span>`]
-  }));
+  formTypeOptionLabels = new Map(
+    this.formTypeOptions.map((option) => {
+      const formType = this.getFormType(option);
+      return [option, `<span class="option"><b>${formType?.label}:</b> ${formType?.description}</span>`];
+    }),
+  );
   formTypes = FormTypes;
   selectedType?: FormTypes;
   committeeAccount$?: Observable<CommitteeAccount>;
@@ -88,8 +90,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   }
 
   get dropdownButtonText(): string {
-    const label = this.selectedType ? this.formTypeOptionLabels.get(
-      this.selectedType) : undefined;
+    const label = this.selectedType ? this.formTypeOptionLabels.get(this.selectedType) : undefined;
     return label || '<span></span>';
   }
 

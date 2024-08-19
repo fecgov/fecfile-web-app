@@ -27,12 +27,12 @@
           ></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li *ngFor="let type of formTypeOptions" [attr.data-cy-form-type]="type">
-              <button 
-                class="dropdown-item" 
-                (click)="updateSelected(type)" 
+              <button
+                class="dropdown-item"
+                (click)="updateSelected(type)"
                 (select)="updateSelected(type)"
-                [innerHTML]="formTypeOptionLabels.get(type)">
-              </button>
+                [innerHTML]="formTypeOptionLabels.get(type)"
+              ></button>
             </li>
           </ul>
         </div>

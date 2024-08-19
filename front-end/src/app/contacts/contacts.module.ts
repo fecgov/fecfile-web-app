@@ -48,4 +48,4 @@ import { DeletedContactDialogComponent } from './deleted-contact-dialog/deleted-
   ],
   providers: [ContactDisplayNamePipe],
 })
-export class ContactsModule { }
+export class ContactsModule {}
