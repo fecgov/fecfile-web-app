@@ -1,12 +1,12 @@
 import { Component, ElementRef } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
-import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { firstValueFrom } from 'rxjs';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
+import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -83,19 +83,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
     super.editItem(item);
     this.isNewItem = false;
-  }
-
-  /**
-   * Get the display name for the contact to show in the table column.
-   * @param item
-   * @returns {string} Returns the appropriate name of the contact for display in the table.
-   */
-  public displayName(item: Contact): string {
-    if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
-      return `${item.last_name}, ${item.first_name}`;
-    } else {
-      return item.name || '';
-    }
   }
 
   public canDeleteItem(item: Contact): boolean {

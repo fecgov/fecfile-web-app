@@ -65,6 +65,7 @@ import { DownloadTrayComponent } from './components/download-tray/download-tray.
 import { SidebarModule } from 'primeng/sidebar';
 import { InputNumberComponent } from './components/inputs/input-number/input-number.component';
 import { SaveCancelComponent } from './components/save-cancel/save-cancel.component';
+import { ContactDisplayNamePipe } from './pipes/contact-display-name.pipe';
 
 @NgModule({
   imports: [
@@ -103,6 +104,7 @@ import { SaveCancelComponent } from './components/save-cancel/save-cancel.compon
     LongDatePipe,
     DefaultZeroPipe,
     HighlightTermsPipe,
+    ContactDisplayNamePipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -148,6 +150,7 @@ import { SaveCancelComponent } from './components/save-cancel/save-cancel.compon
     ErrorMessagesComponent,
     DefaultZeroPipe,
     HighlightTermsPipe,
+    ContactDisplayNamePipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,

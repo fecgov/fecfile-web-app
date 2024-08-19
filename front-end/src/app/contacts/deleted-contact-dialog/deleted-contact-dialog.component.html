@@ -20,7 +20,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
       [sortableHeaders]="sortableHeaders"
       [hasCheckbox]="true"
-      [checkboxLabel]="getCheckboxLabel.bind(this)"
+      [checkboxLabel]="contactDisplayNamePipe.transform"
       (loadTableItems)="loadTableItems($event)"
       (selectionChange)="onSelectionChange($event)"
       (selectAllChange)="onSelectAllChange($event)"
@@ -28,7 +28,7 @@
     >
       <ng-template #header> </ng-template>
       <ng-template #body let-item>
-        <td>{{ displayName(item) }}</td>
+        <td>{{ item | contactDisplayName }}</td>
         <td>{{ item.type | label: contactTypeLabels }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>

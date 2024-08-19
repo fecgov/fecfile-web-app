@@ -1,6 +1,6 @@
-import { RoleLabels } from './role.model';
-import { LabelUtils } from '../utils/label.utils';
 import { plainToInstance } from 'class-transformer';
+import { LabelUtils } from '../utils/label.utils';
+import { RoleLabels } from './role.model';
 
 export class CommitteeMember {
   id = '';
@@ -8,7 +8,8 @@ export class CommitteeMember {
   username = '';
   first_name = '';
   last_name = '';
-  role = '';
+  _role = '';
+  roleLabel = '';
   is_active = false;
 
   // prettier-ignore
@@ -16,8 +17,13 @@ export class CommitteeMember {
     return plainToInstance(CommitteeMember, json);
   }
 
-  public getRoleLabel(): string | undefined {
-    return LabelUtils.get(RoleLabels, this.role);
+  set role(role) {
+    this._role = role;
+    this.roleLabel = LabelUtils.get(RoleLabels, role);
+  }
+
+  get role() {
+    return this._role;
   }
 }
 

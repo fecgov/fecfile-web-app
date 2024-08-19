@@ -1,7 +1,9 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { DeletedContactService } from 'app/shared/services/contact.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -11,13 +13,12 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { Contact, ContactTypes } from '../../shared/models/contact.model';
+import { of } from 'rxjs';
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
+import { Contact } from '../../shared/models/contact.model';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { ContactListComponent } from './contact-list.component';
-import { of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { DeletedContactService } from 'app/shared/services/contact.service';
+import { ContactDisplayNamePipe } from 'app/shared/pipes/contact-display-name.pipe';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -64,6 +65,7 @@ describe('ContactListComponent', () => {
             snapshot: { params: { reportId: '99' } },
           },
         },
+        ContactDisplayNamePipe,
       ],
     }).compileComponents();
     deletedContactService = TestBed.inject(DeletedContactService);
@@ -97,19 +99,6 @@ describe('ContactListComponent', () => {
     component.isNewItem = true;
     component.editItem(contact);
     expect(component.isNewItem).toBe(false);
-  });
-
-  it('#displayName returns the contact name', () => {
-    let name = component.displayName(contact);
-    expect(name).toBe('Smith, Jane');
-
-    contact.type = ContactTypes.ORGANIZATION;
-    name = component.displayName(contact);
-    expect(name).toBe('ABC Inc');
-
-    contact.name = undefined;
-    name = component.displayName(contact);
-    expect(name).toBe('');
   });
 
   it('#canDeleteItem returns boolean status', () => {
