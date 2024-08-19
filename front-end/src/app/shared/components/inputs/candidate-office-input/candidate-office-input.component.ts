@@ -90,6 +90,9 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
         } else {
           this.candidateDistrictOptions = [];
         }
+        this.form
+          .get(this.districtFormControlName)
+          ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0].value : null);
       });
 
     // Run election_code, office, and state valueChange logic when initializing form elements
