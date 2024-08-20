@@ -58,7 +58,7 @@
           <label for="report_type_category">TIME PERIOD</label>
           <p-selectButton
             data-test="report-type-category"
-            [options]="getReportTypeCategories()"
+            [options]="[F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR]"
             [allowEmpty]="false"
             formControlName="report_type_category"
           ></p-selectButton>

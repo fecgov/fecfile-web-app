@@ -8,14 +8,14 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
+import { ReportService, getReportFromJSON } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { Observable, combineLatest, from, of, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-submit-report-step2',
@@ -33,6 +33,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     'userCertified',
   ];
   report?: Report;
+  submitBlocker?: string;
   formSubmitted = false;
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
     updateOn: 'blur',
@@ -64,6 +65,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
+      this.submitBlocker = this.report.getBlocker();
       this.committeeAccount = committeeAccount;
       SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
       this.initializeFormWithReport(this.report, committeeAccount);

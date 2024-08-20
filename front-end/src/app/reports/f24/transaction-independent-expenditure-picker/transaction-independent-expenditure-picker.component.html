@@ -7,7 +7,7 @@
     <hr type="solid" />
     <div class="grid">
       <div class="col-12" *ngFor="let transactionType of transactionTypes">
-        <a [routerLink]="getRouterLink(transactionType)">
+        <a routerLink="/reports/transactions/report/{{ this.report?.id }}/create/{{ transactionType }}">
           {{ transactionType | label: transactionTypeLabels }}
         </a>
       </div>

@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="components-wrapper">
-  <ng-container [ngSwitch]="transactionCardinality()">
+  <ng-container [ngSwitch]="transactionCardinality">
     <app-transaction-detail
       *ngSwitchCase="1"
       [transaction]="transaction"
