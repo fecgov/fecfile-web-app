@@ -3,15 +3,12 @@
     <div class="col-6">
       <div class="field">
         <label for="balance">BEGINNING BALANCE</label>
-        <p-inputNumber
+        <app-input-number
           inputId="balance"
           [formControlName]="templateMap['balance']"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></p-inputNumber>
+        ></app-input-number>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['balance']"
@@ -24,13 +21,7 @@
     <div class="col-6">
       <div class="field">
         <label for="amount">INCURRED AMOUNT</label>
-        <p-inputNumber
-          inputId="amount"
-          [formControlName]="templateMap['amount']"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-        ></p-inputNumber>
+        <app-input-number inputId="amount" [formControlName]="templateMap['amount']"></app-input-number>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -45,15 +36,12 @@
     <div class="col-6">
       <div class="field">
         <label for="payment_amount">PAYMENT AMOUNT</label>
-        <p-inputNumber
+        <app-input-number
           inputId="payment_amount"
           formControlName="payment_amount"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></p-inputNumber>
+        ></app-input-number>
         <app-error-messages
           [form]="form"
           fieldName="payment_amount"
@@ -66,15 +54,12 @@
     <div class="col-6">
       <div class="field">
         <label for="balance_at_close">BALANCE AT CLOSE</label>
-        <p-inputNumber
+        <app-input-number
           inputId="balance_at_close"
           formControlName="balance_at_close"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></p-inputNumber>
+        ></app-input-number>
         <app-error-messages
           [form]="form"
           fieldName="balance_at_close"

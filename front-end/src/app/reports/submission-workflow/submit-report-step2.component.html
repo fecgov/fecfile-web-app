@@ -4,7 +4,7 @@
 <h5>
   <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
 </h5>
-<p-divider></p-divider>
+<hr type="solid" />
 <div class="p-fluid">
   <p-card>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -74,7 +74,7 @@
           </div>
         </div>
       </div>
-      <p-divider></p-divider>
+      <hr type="solid" />
       <div class="grid">
         <div class="col-12">
           <h2>Enter password</h2>

@@ -12,13 +12,10 @@
         <div class="col-6">
           <div class="field">
             <label for="L6a_cash_on_hand_jan_1_ytd">BEGINNING CASH ON HAND</label>
-            <p-inputNumber
+            <app-input-number
               inputId="L6a_cash_on_hand_jan_1_ytd"
               formControlName="L6a_cash_on_hand_jan_1_ytd"
-              mode="currency"
-              currency="USD"
-              locale="en-US"
-            ></p-inputNumber>
+            ></app-input-number>
             <app-error-messages
               [form]="form"
               fieldName="L6a_cash_on_hand_jan_1_ytd"

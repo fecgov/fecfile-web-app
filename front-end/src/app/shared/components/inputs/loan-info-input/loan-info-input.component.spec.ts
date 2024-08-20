@@ -19,12 +19,15 @@ describe('LoanInfoInputComponent', () => {
     component = fixture.componentInstance;
 
     // Set up component with form control
-    const form = new FormGroup({
-      loan_amount: new FormControl(),
-      total_balance: new FormControl(),
-      loan_payment_to_date: new FormControl(),
-      memo_code: new FormControl(),
-    });
+    const form = new FormGroup(
+      {
+        loan_amount: new FormControl(),
+        total_balance: new FormControl(),
+        loan_payment_to_date: new FormControl(),
+        memo_code: new FormControl(),
+      },
+      { updateOn: 'blur' },
+    );
     component.form = form;
     component.templateMap = {
       ...testTemplateMap,

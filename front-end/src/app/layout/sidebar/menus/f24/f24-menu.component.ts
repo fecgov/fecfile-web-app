@@ -6,6 +6,7 @@ import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-f24-menu',
@@ -14,10 +15,20 @@ import { Router } from '@angular/router';
 })
 export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
   formLabel?: string;
+  subLabel?: string;
 
   constructor(store: Store, reportService: ReportService, router: Router) {
     super(store, reportService, router);
     this.reportString = 'f24';
+  }
+
+  override ngOnInit() {
+    super.ngOnInit();
+    if (!this.activeReport$) return;
+    this.activeReport$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
+      this.formLabel = report?.formLabel;
+      this.subLabel = report?.formSubLabel;
+    });
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {

@@ -88,3 +88,7 @@ caption {
 .p-inputtextarea {
   height: auto !important;
 }
+
+:host ::ng-deep .p-datatable-header {
+  padding-right: 0px;
+}

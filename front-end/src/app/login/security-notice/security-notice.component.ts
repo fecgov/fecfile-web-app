@@ -7,6 +7,7 @@ import { UserLoginData } from 'app/shared/models/user.model';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
@@ -22,9 +23,12 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   formSubmitted = false;
   userLoginData?: UserLoginData;
 
-  form = new FormGroup({
-    'security-consent-annual': new FormControl(false),
-  });
+  form = new FormGroup(
+    {
+      'security-consent-annual': new FormControl(false),
+    },
+    { updateOn: 'blur' },
+  );
 
   constructor(
     private store: Store,
@@ -49,6 +53,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
 
   signConsentForm() {
     this.formSubmitted = true;
+    blurActiveInput(this.form);
     if (this.form.invalid || !this.userLoginData) {
       this.store.dispatch(singleClickEnableAction());
       return;

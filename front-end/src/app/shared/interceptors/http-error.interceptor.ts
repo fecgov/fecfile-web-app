@@ -42,7 +42,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           this.loginService.logOut();
         } else {
           this.store.dispatch(singleClickEnableAction());
-          alert(errorMessage);
         }
         console.log(errorMessage);
         return throwError(() => errorMessage);

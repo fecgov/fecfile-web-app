@@ -18,6 +18,7 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -39,7 +40,7 @@ export abstract class TripleTransactionTypeBaseComponent
   childTransactionType_2?: TransactionType;
   childTransaction_2?: Transaction;
   childContactTypeOptions_2: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  childForm_2: FormGroup = this.fb.group({});
+  childForm_2: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   childContactIdMap_2: ContactIdMapType = {};
   childTemplateMap_2: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel_2$ = of('');
@@ -64,7 +65,7 @@ export abstract class TripleTransactionTypeBaseComponent
     this.childTemplateMap_2 = this.childTransactionType_2.templateMap;
     this.childContactTypeOptions_2 = getContactTypeOptions(this.childTransactionType_2.contactTypeOptions ?? []);
     this.childFormProperties_2 = this.childTransactionType_2.getFormControlNames();
-    this.childForm_2 = this.fb.group(SchemaUtils.getFormGroupFields(this.childFormProperties_2));
+    this.childForm_2 = this.fb.group(SchemaUtils.getFormGroupFields(this.childFormProperties_2), { updateOn: 'blur' });
 
     if (
       this.childTransactionType_2
@@ -138,6 +139,7 @@ export abstract class TripleTransactionTypeBaseComponent
   }
 
   override isInvalid(): boolean {
+    blurActiveInput(this.childForm_2);
     return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 

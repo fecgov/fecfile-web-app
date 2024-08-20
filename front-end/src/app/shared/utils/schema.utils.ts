@@ -1,4 +1,4 @@
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
@@ -26,6 +26,24 @@ export class SchemaUtils {
   static getFormGroupFields(properties: string[]) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     properties.forEach((property) => (group[property] = ['', null]));
+    return group;
+  }
+
+  static noBlur = [
+    'statusBy',
+    'committee_type',
+    'filing_frequency',
+    'report_code',
+    'change_of_address',
+    'support_oppose_code',
+    'userCertified',
+  ];
+  static getFormGroupFieldsNoBlur(properties: string[], fb: FormBuilder) {
+    const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    properties.forEach((property) => {
+      group[property] = fb.control('', SchemaUtils.noBlur.includes(property) ? { updateOn: 'change' } : {});
+    });
+
     return group;
   }
 

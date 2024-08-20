@@ -110,22 +110,6 @@ export class TransactionDetailPage {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find('#amount').safeType(formData.amount);
 
-    if (formData.date_incurred) {
-      this.enterDate('p-calendar[inputid="date_incurred"]', formData.date_incurred, alias);
-    }
-
-    if (formData.date_received) {
-      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
-    }
-
-    // Set due date dropdown & date
-    if (formData.due_date_setting) {
-      PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData.due_date_setting, alias);
-      if (formData.due_date) {
-        PageUtils.calendarSetValue('p-calendar[inputid="due_date"]', formData.due_date, alias);
-      }
-    }
-
     // set interest dropdown and rate
     if (formData.interest_rate_setting) {
       PageUtils.dropdownSetValue('[inputid="interest_rate_setting"]', formData.interest_rate_setting, alias);
@@ -136,6 +120,22 @@ export class TransactionDetailPage {
 
     if (formData.secured) {
       cy.get(alias).find('input[name="secured"]').first().click({ force: true });
+    }
+
+    // Set due date dropdown & date
+    if (formData.due_date_setting) {
+      PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData.due_date_setting, alias);
+      if (formData.due_date) {
+        PageUtils.calendarSetValue('p-calendar[inputid="due_date"]', formData.due_date, alias);
+      }
+    }
+
+    if (formData.date_incurred) {
+      this.enterDate('p-calendar[inputid="date_incurred"]', formData.date_incurred, alias);
+    }
+
+    if (formData.date_received) {
+      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
     }
 
     this.enterCommon(formData, alias);
