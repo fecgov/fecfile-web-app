@@ -104,6 +104,10 @@ export class ReportService implements TableListService<Report> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
   }
 
+  public startUnamendment(report: Report): Observable<string> {
+    return this.apiService.post(`${this.apiEndpoint}/${report.id}/unamend/`, {});
+  }
+
   preparePayload(item: Report): Record<string, unknown> {
     const payload = item.toJson();
     delete payload['schema'];

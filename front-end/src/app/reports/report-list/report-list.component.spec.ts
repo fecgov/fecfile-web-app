@@ -60,6 +60,19 @@ describe('ReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('rowActions', () => {
+    it('should have "Unamend" if report can_unamend', () => {
+      const report = testActiveReport;
+      report.can_unamend = false;
+      const action = component.rowActions.find((action) => action.label === 'Unamend');
+      if (action) {
+        expect(action.isAvailable(report)).toBeFalse();
+        report.can_unamend = true;
+        expect(action.isAvailable(report)).toBeTrue();
+      }
+    });
+  });
+
   it('#getEmptyItem should return a new Report instance', () => {
     const item = component['getEmptyItem']();
     expect(item.id).toBe(undefined);
@@ -85,6 +98,19 @@ describe('ReportListComponent', () => {
     expect(amendSpy).toHaveBeenCalled();
   });
 
+  describe('unamend', () => {
+    it('should call confirm', () => {
+      const confirmSpy = spyOn(component.confirmationService, 'confirm');
+      component.confirmUnamend(testActiveReport);
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should hit service', () => {
+      const unamendSpy = spyOn(reportService, 'startUnamendment').and.returnValue(of(''));
+      component.unamendReport({ id: '999' } as Report);
+      expect(unamendSpy).toHaveBeenCalled();
+    });
+  });
   it('#onActionClick should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onRowActionClick(new TableAction('', component.editItem.bind(component)), {

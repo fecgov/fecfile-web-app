@@ -82,4 +82,17 @@ describe('ReportService', () => {
     req.flush('amended 1');
     httpTestingController.verify();
   });
+
+  it('#startUnamendment() should call unamend', () => {
+    const report: Form3X = Form3X.fromJSON({ id: 1 });
+
+    service.startUnamendment(report).subscribe((response: string) => {
+      expect(response).toEqual('unamended 1');
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/unamend/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush('unamended 1');
+    httpTestingController.verify();
+  });
 });
