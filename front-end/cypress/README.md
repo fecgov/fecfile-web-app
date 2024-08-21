@@ -37,10 +37,6 @@ With the environment variables set, run `ng e2e` to execute the end-to-end tests
 
 To run in headless mode, run the command: ng e2e --headless
 
-## Running Lighthouse
-
-If running Lighthouse in headless mode, you must add the switch: --browser chrome
-
 ## E2E tests in CircleCI
 
 A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite nightly. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
