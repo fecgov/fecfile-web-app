@@ -36,7 +36,12 @@
     </div>
   </ng-container>
 
-  <div class="grid" *ngIf="hasMemoCodeFlag && !isDebtRepaymentFlag && !isLoanRepaymentFlag">
+  <div
+    class="grid"
+    *ngIf="
+      transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)
+    "
+  >
     <div class="col-12">
       <div class="field">
         <app-memo-code

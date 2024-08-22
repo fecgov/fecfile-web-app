@@ -1,11 +1,9 @@
-import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import { testMockStore, testTemplateMap, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -13,9 +11,10 @@ import { Dialog } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { InputNumberComponent } from '../input-number/input-number.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { InputNumberComponent } from '../input-number/input-number.component';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -45,17 +44,11 @@ describe('AmountInputComponent', () => {
       { updateOn: 'blur' },
     );
     component.templateMap = testTemplateMap;
-    component.transaction = testScheduleATransaction;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('ngOnChanges() should execute successfully', () => {
-    component.ngOnChanges({ transaction: {} as SimpleChange });
-    expect(true).toBeTrue();
   });
 
   it('should not call updateInput when negativeAmountValueOnly is false', () => {
