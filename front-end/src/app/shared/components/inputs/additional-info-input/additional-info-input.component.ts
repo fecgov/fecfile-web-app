@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
@@ -10,8 +10,13 @@ import { BaseInputComponent } from '../base-input.component';
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
 })
-export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
+export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
+
+  generatedPurposeDescriptionLabel?: string;
+  isDescriptionSystemGeneratedFlag?: boolean;
+  hasMemoTextFlag?: boolean;
+  hasCategoryCodeFlag?: boolean;
 
   ngOnInit(): void {
     SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
@@ -27,6 +32,15 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
 
     if (text_prefix && text_prefix.length > 0) {
       this.initPrefix(this.templateMap.text4000, text_prefix + ' ');
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['transaction'] && this.transaction) {
+      this.generatedPurposeDescriptionLabel = this.transaction.transactionType.generatePurposeDescriptionLabel();
+      this.isDescriptionSystemGeneratedFlag = this.isDescriptionSystemGenerated();
+      this.hasMemoTextFlag = this.transaction.transactionType.hasMemoText();
+      this.hasCategoryCodeFlag = this.transaction.transactionType.hasCategoryCode();
     }
   }
 

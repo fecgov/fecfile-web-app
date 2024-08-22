@@ -11,14 +11,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
-import { Form24Service } from 'app/shared/services/form-24.service';
-import { Form24 } from 'app/shared/models/form-24.model';
-import { Observable, filter, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form24 } from 'app/shared/models/form-24.model';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { Observable, filter, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-form-type-dialog',
@@ -27,6 +27,12 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 })
 export class FormTypeDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit, OnInit {
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
+  formTypeOptionLabels = new Map(
+    this.formTypeOptions.map((option) => {
+      const formType = this.getFormType(option);
+      return [option, `<span class="option"><b>${formType?.label}:</b> ${formType?.description}</span>`];
+    }),
+  );
   formTypes = FormTypes;
   selectedType?: FormTypes;
   committeeAccount$?: Observable<CommitteeAccount>;
@@ -43,6 +49,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   @Output() refreshReports = new EventEmitter();
 
   selectedForm24Type: '24' | '48' | undefined;
+  submitDisabled = true;
 
   constructor(
     public router: Router,
@@ -83,16 +90,13 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   }
 
   get dropdownButtonText(): string {
-    if (this.selectedType) {
-      const type = this.getFormType(this.selectedType);
-      return `<span class="option"><b>${type?.label}:</b> ${type?.description}</span>`;
-    } else {
-      return '<span></span>';
-    }
+    const label = this.selectedType ? this.formTypeOptionLabels.get(this.selectedType) : undefined;
+    return label || '<span></span>';
   }
 
   updateSelected(type: FormTypes) {
     this.selectedType = type;
+    this.submitDisabled = this.isSubmitDisabled;
   }
 
   createForm24() {
@@ -120,6 +124,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   selectItem(item: '24' | '48') {
     if (item === this.selectedForm24Type) this.selectedForm24Type = undefined;
     else this.selectedForm24Type = item;
+    this.submitDisabled = this.isSubmitDisabled;
   }
 
   @HostListener('keydown', ['$event'])

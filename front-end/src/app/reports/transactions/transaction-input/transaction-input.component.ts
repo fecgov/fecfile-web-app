@@ -36,10 +36,39 @@ export class TransactionInputComponent implements OnInit {
   candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
+  useParentContact?: boolean;
+  hasCommitteeFecId = false;
+  hasEmployeeFields?: boolean;
+  hasLoanFinanceFields?: boolean;
+  hasLoanTermsFields?: boolean;
+  hasSignature1?: boolean;
+  hasSignature2?: boolean;
+  footer?: string;
+  hasCommitteeOrCandidateInformation?: boolean;
+  hasSupportOpposeCode?: boolean;
+  hasCandidateInformation?: boolean;
+  contact2IsRequired?: boolean;
+  hasCandidateOffice = false;
+  hasElectionInformation?: boolean;
+
   ngOnInit(): void {
     if (this.transaction) {
       this.transactionType = this.transaction.transactionType;
       this.templateMap = this.transaction.transactionType.templateMap;
+      this.useParentContact = this.transactionType.getUseParentContact(this.transaction);
+      this.hasCommitteeFecId = this.transactionType.hasCommitteeFecId();
+      this.hasEmployeeFields = this.transactionType.hasEmployeeFields();
+      this.hasLoanFinanceFields = this.transactionType.hasLoanFinanceFields();
+      this.hasLoanTermsFields = this.transactionType.hasLoanTermsFields();
+      this.hasSignature1 = this.transactionType.hasSignature1();
+      this.hasSignature2 = this.transactionType.hasSignature2();
+      this.footer = this.transactionType.getFooter(this.transaction);
+      this.hasCommitteeOrCandidateInformation = this.transactionType.hasCommitteeOrCandidateInformation();
+      this.hasSupportOpposeCode = this.transactionType.hasSupportOpposeCode();
+      this.hasCandidateInformation = this.transactionType.hasCandidateInformation(this.form);
+      this.contact2IsRequired = this.transactionType.contact2IsRequired(this.form);
+      this.hasCandidateOffice = this.transactionType.hasCandidateOffice();
+      this.hasElectionInformation = this.transactionType.hasElectionInformation();
     } else {
       throw new Error('FECfile: No transaction passed to TransactionInputComponent');
     }

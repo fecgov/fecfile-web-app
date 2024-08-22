@@ -168,7 +168,7 @@
             (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
           ></button>
         </div>
-        <div class="col-8 submit-container" *ngIf="!report?.getBlocker()">
+        <div class="col-8 submit-container" *ngIf="!submitBlocker">
           <button
             *ngIf="form.value.userCertified === true"
             pButton
@@ -194,8 +194,8 @@
           </div>
         </ng-container>
       </div>
-      <div class="grid" *ngIf="report?.getBlocker()">
-        <div class="col-12">{{ report?.getBlocker() }}</div>
+      <div class="grid" *ngIf="submitBlocker">
+        <div class="col-12">{{ submitBlocker }}</div>
       </div>
     </form>
   </p-card>

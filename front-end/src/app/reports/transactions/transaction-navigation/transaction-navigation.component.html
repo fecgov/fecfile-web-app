@@ -1,5 +1,5 @@
-<ng-container *ngIf="transaction?.contact_1 && isEditable && getInlineControls().length > 0">
-  <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
+<ng-container *ngIf="transaction?.contact_1 && isEditable && inlineControls.length > 0">
+  <ng-template ngFor let-navigationControl [ngForOf]="inlineControls">
     <div class="p-2">
       <app-navigation-control
         [navigationControl]="navigationControl"
@@ -13,7 +13,7 @@
 <div class="p-fluid">
   <hr type="solid" />
   <app-navigation-control-bar
-    [navigationControls]="getNavigationControls()"
+    [navigationControls]="navigationControls"
     [transaction]="transaction"
     (navigate)="handleNavigate($event)"
     [class]="isEditable ? '' : 'flex-center'"

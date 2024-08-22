@@ -143,15 +143,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.dotFecService.checkFecFileTask(download);
   }
 
-  /**
-   * Get the display name for the contact to show in the table column.
-   * @param item
-   * @returns {string} Returns the appropriate name of the contact for display in the table.
-   */
-  public displayName(item: Report): string {
-    return item.form_type ?? '';
-  }
-
   public noCashOnHand(): boolean {
     const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
     return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;

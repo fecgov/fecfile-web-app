@@ -9,7 +9,8 @@ import {
   Output,
 } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels } from 'app/shared/models/contact.model';
+import { ContactDisplayNamePipe } from 'app/shared/pipes/contact-display-name.pipe';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -33,6 +34,7 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
+    public contactDisplayNamePipe: ContactDisplayNamePipe,
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
@@ -65,24 +67,7 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     });
   }
 
-  getCheckboxLabel(item: Contact): string {
-    return `'select ' + ${this.displayName(item)}`;
-  }
-
   protected getEmptyItem(): Contact {
     return new Contact();
-  }
-
-  /**
-   * Get the display name for the contact to show in the table column.
-   * @param item
-   * @returns {string} Returns the appropriate name of the contact for display in the table.
-   */
-  public displayName(item: Contact): string {
-    if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
-      return `${item.last_name}, ${item.first_name}`;
-    } else {
-      return item.name || '';
-    }
   }
 }

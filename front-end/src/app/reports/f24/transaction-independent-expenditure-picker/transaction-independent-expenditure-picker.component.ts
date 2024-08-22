@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report } from 'app/shared/models/report.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { Report } from 'app/shared/models/report.model';
 import {
   ScheduleETransactionGroups,
   ScheduleETransactionTypeLabels,
   ScheduleETransactionTypes,
 } from 'app/shared/models/sche-transaction.model';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-independent-expenditure-picker',
@@ -46,9 +46,5 @@ export class TransactionIndependentExpenditurePickerComponent extends DestroyerC
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report));
-  }
-
-  getRouterLink(transactionType: string): string | undefined {
-    return `/reports/transactions/report/${this.report?.id}/create/${transactionType}`;
   }
 }

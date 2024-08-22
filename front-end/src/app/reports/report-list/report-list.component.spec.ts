@@ -1,24 +1,24 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ApiService } from 'app/shared/services/api.service';
-import { ReportListComponent } from './report-list.component';
-import { F3xFormTypes, Form3X } from '../../shared/models/form-3x.model';
-import { Report, ReportTypes } from '../../shared/models/report.model';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UploadSubmission } from 'app/shared/models/upload-submission.model';
+import { Actions } from '@ngrx/effects';
+import { provideMockStore } from '@ngrx/store/testing';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { ReportService } from 'app/shared/services/report.service';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { Form24 } from 'app/shared/models/form-24.model';
+import { UploadSubmission } from 'app/shared/models/upload-submission.model';
+import { ApiService } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Dialog, DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
 import { of, Subject } from 'rxjs';
-import { Actions } from '@ngrx/effects';
+import { Form3X } from '../../shared/models/form-3x.model';
+import { Report, ReportTypes } from '../../shared/models/report.model';
+import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
+import { ReportListComponent } from './report-list.component';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -99,12 +99,6 @@ describe('ReportListComponent', () => {
     const report = { id: '888' } as Report;
     component.onRowActionClick(new TableAction('', component.download.bind(component)), report);
     expect(generateSpy).toHaveBeenCalledWith(report);
-  });
-
-  it('#displayName should display the item form_type code', () => {
-    const item: Report = Form3X.fromJSON({ form_type: F3xFormTypes.F3XT });
-    const name: string = component.displayName(item);
-    expect(name).toBe(F3xFormTypes.F3XT);
   });
 
   it('edit a F24 should go to F24 edit page', () => {
