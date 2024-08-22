@@ -1,6 +1,8 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
@@ -8,8 +10,6 @@ import { InputNumber } from 'primeng/inputnumber';
 import { Observable, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { Report, ReportTypes } from 'app/shared/models/report.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -32,6 +32,9 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
   reportTypes = ReportTypes;
+  hasMemoCodeFlag?: boolean;
+  isDebtRepaymentFlag?: boolean;
+  isLoanRepaymentFlag?: boolean;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -95,7 +98,12 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
   }
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['transaction'] && this.transaction) {
+      this.hasMemoCodeFlag = this.transaction.transactionType.hasMemoCode();
+      this.isDebtRepaymentFlag = isDebtRepayment(this.transaction);
+      this.isLoanRepaymentFlag = isLoanRepayment(this.transaction);
+    }
     this.changeDetectorRef.detectChanges();
   }
 
@@ -109,7 +117,4 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       }
     }
   }
-
-  protected readonly isLoanRepayment = isLoanRepayment;
-  protected readonly isDebtRepayment = isDebtRepayment;
 }

@@ -1,20 +1,28 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import {
   GO_BACK_CONTROL,
   NavigationControl,
   NavigationEvent,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-navigation',
   templateUrl: './transaction-navigation.component.html',
 })
-export class TransactionNavigationComponent {
+export class TransactionNavigationComponent implements OnChanges {
   @Input() isEditable = true;
   @Input() transaction?: Transaction;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
+
+  navigationControls = new TransactionNavigationControls([], [], []);
+  inlineControls: NavigationControl[] = [];
+
+  ngOnChanges(): void {
+    this.navigationControls = this.getNavigationControls();
+    this.inlineControls = this.getInlineControls();
+  }
 
   handleNavigate($event: NavigationEvent) {
     this.navigate.emit($event);

@@ -42,6 +42,7 @@ export class TransactionInputComponent implements OnInit {
   hasLoanFinanceFields?: boolean;
   hasLoanTermsFields?: boolean;
   hasSignature1?: boolean;
+  hasSignature2?: boolean;
   footer?: string;
   hasCommitteeOrCandidateInformation?: boolean;
   hasSupportOpposeCode?: boolean;
@@ -60,6 +61,7 @@ export class TransactionInputComponent implements OnInit {
       this.hasLoanFinanceFields = this.transactionType.hasLoanFinanceFields();
       this.hasLoanTermsFields = this.transactionType.hasLoanTermsFields();
       this.hasSignature1 = this.transactionType.hasSignature1();
+      this.hasSignature2 = this.transactionType.hasSignature2();
       this.footer = this.transactionType.getFooter(this.transaction);
       this.hasCommitteeOrCandidateInformation = this.transactionType.hasCommitteeOrCandidateInformation();
       this.hasSupportOpposeCode = this.transactionType.hasSupportOpposeCode();

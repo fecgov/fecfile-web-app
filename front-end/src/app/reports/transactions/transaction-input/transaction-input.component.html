@@ -135,7 +135,7 @@
       templateMapKeyPrefix="signatory_1"
     ></app-signature-input>
   </ng-container>
-  <ng-container *ngIf="transactionType?.hasSignature2()">
+  <ng-container *ngIf="transactionType?.hasSignature2">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.signatoryTwoHeader"></app-section-header>
     <app-signature-input

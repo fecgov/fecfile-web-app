@@ -3,7 +3,7 @@
     <div class="col-12">
       <label for="purpose_description">
         {{ transaction?.transactionType?.purposeDescripLabel }}
-        {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
+        {{ generatedPurposeDescriptionLabel }}
       </label>
       <em *ngIf="transaction?.transactionType?.purposeDescriptionLabelNotice">{{
         transaction?.transactionType?.purposeDescriptionLabelNotice
@@ -16,8 +16,8 @@
           pInputTextarea
           [autoResize]="true"
           [formControlName]="templateMap['purpose_description']"
-          [ngClass]="{ readonly: isDescriptionSystemGenerated() }"
-          [readonly]="isDescriptionSystemGenerated()"
+          [ngClass]="{ readonly: isDescriptionSystemGeneratedFlag }"
+          [readonly]="isDescriptionSystemGeneratedFlag"
         ></textarea>
         <app-error-messages
           [form]="form"
@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class="grid" *ngIf="transaction?.transactionType?.hasMemoText()">
+  <div class="grid" *ngIf="hasMemoTextFlag">
     <div class="col-12">
       <label for="text4000"
         >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
@@ -49,7 +49,7 @@
       </div>
     </div>
   </div>
-  <div class="grid" *ngIf="transaction?.transactionType?.hasCategoryCode()">
+  <div class="grid" *ngIf="hasCategoryCodeFlag">
     <div class="col-6">
       <div class="field">
         <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
