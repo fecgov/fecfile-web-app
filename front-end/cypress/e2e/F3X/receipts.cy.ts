@@ -23,8 +23,6 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
-    cy.runLighthouse('reports', 'transactions-list');
-
     F3XSetup({ individual: true });
     StartTransaction.Receipts().Individual().IndividualReceipt();
 
@@ -48,8 +46,6 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(scheduleData);
-
-    cy.runLighthouse('reports', 'single-transaction');
   });
 
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {

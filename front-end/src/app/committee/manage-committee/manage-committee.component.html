@@ -44,15 +44,6 @@
   </ng-template>
 </app-table>
 
-<p-confirmDialog #cd [style]="{ width: '450px' }">
-  <ng-template pTemplate="footer">
-    <span class="confirm-footer">
-      <button (click)="cd.reject()" class="p-button-secondary" label="Cancel" pButton type="button"></button>
-      <button (click)="cd.accept()" label="Confirm" pButton type="button"></button>
-    </span>
-  </ng-template>
-</p-confirmDialog>
-
 <app-committee-member-dialog
   (detailClose)="detailVisible = false"
   (saveMembership)="saveMembership($event)"

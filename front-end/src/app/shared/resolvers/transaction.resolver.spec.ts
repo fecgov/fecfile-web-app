@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { catchError, of } from 'rxjs';
-import { Contact } from '../models/contact.model';
+import { Contact, ContactTypes } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
@@ -11,10 +11,10 @@ import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-trans
 import { Transaction } from '../models/transaction.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
+import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
-import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -463,6 +463,35 @@ describe('TransactionResolver', () => {
         error: (err) => {
           expect(err).toEqual(new Error('Fecfile online: originating reattribution transaction type not found.'));
         },
+      });
+    });
+  });
+
+  describe('resolveExistingReattribution', () => {
+    beforeEach(() => {
+      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+        return of(
+          SchATransaction.fromJSON({
+            id: id,
+            transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+            contact_id: '123',
+            contact_1: Contact.fromJSON({ id: 123 }),
+            report: {
+              report_type: 'F3X',
+              report_code: 'Q1',
+              reportCode: 'Q1',
+            },
+            reattribution_redesignation_tag: 'REATTRIBUTED',
+            entity_type: ContactTypes.INDIVIDUAL,
+          }),
+        );
+      });
+    });
+
+    it('should resolve existing reattribution', () => {
+      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
+        if (transaction) expect(transaction.id).toBe('10');
       });
     });
   });

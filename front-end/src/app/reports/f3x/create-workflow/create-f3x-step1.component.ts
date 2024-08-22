@@ -30,6 +30,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
 @Component({
   selector: 'app-create-f3x-step1',
   templateUrl: './create-f3x-step1.component.html',
+  styleUrl: './create-f3x-step1.component.scss',
 })
 export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
