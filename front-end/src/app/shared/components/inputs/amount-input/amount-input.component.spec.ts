@@ -46,7 +46,6 @@ describe('AmountInputComponent', () => {
     );
     component.templateMap = testTemplateMap;
     component.transaction = testScheduleATransaction;
-    component.ngOnChanges({ transaction: {} as SimpleChange });
     fixture.detectChanges();
   });
 

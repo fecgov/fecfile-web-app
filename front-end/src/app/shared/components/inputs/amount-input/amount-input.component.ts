@@ -117,7 +117,4 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       }
     }
   }
-
-  protected readonly isLoanRepayment = isLoanRepayment;
-  protected readonly isDebtRepayment = isDebtRepayment;
 }
