@@ -14,6 +14,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs';
 
@@ -164,7 +165,8 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       password: this.form?.value['filingPassword'],
       backdoor_code: this.form?.value['backdoor_code'],
     };
-    return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
+
+    return this.apiService.post(`/web-services/submit-to-fec/?mock=${!environment.production}`, payload).pipe(
       switchMap(() => {
         this.loading = 0;
         from(this.router.navigateByUrl(this.getContinueUrl?.(this.report) || ''));
