@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { testMockStore, testTemplateMap, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
@@ -45,6 +45,7 @@ describe('AmountInputComponent', () => {
       { updateOn: 'blur' },
     );
     component.templateMap = testTemplateMap;
+    component.transaction = testScheduleATransaction;
     fixture.detectChanges();
   });
 
