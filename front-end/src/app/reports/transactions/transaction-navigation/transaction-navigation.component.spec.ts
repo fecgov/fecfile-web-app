@@ -18,9 +18,4 @@ describe('TransactionNavigationComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('ngOnChanges() should execute successfully', () => {
-    component.ngOnChanges();
-    expect(true).toBeTrue();
-  });
 });

@@ -30,7 +30,7 @@
   <ng-template let-item #body>
     <td>{{ item.name }}</td>
     <td>{{ item.email }}</td>
-    <td>{{ item.roleLabel }}</td>
+    <td>{{ item.getRoleLabel() }}</td>
     <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
     <td>
       <app-table-actions-button

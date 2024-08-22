@@ -54,7 +54,7 @@
   </ng-template>
   <ng-template #body let-item>
     <td>
-      <a (click)="editItem(item)">{{ item | contactDisplayName }}</a>
+      <a (click)="editItem(item)">{{ displayName(item) }}</a>
     </td>
     <td>{{ item.type | label: contactTypeLabels }}</td>
     <td>{{ item.candidate_id || item.committee_id }}</td>
@@ -67,7 +67,7 @@
         (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-        [buttonAriaLabel]="'edit ' + (item | contactDisplayName)"
+        [buttonAriaLabel]="'edit ' + displayName(item)"
       ></app-table-actions-button>
     </td>
   </ng-template>

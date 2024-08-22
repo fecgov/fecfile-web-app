@@ -1,16 +1,15 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { Contact } from 'app/shared/models/contact.model';
-import { ContactDisplayNamePipe } from 'app/shared/pipes/contact-display-name.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { DeletedContactDialogComponent } from './deleted-contact-dialog.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
-import { DeletedContactDialogComponent } from './deleted-contact-dialog.component';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 
 describe('DeletedContactDialogComponent', () => {
   let component: DeletedContactDialogComponent;
@@ -20,7 +19,7 @@ describe('DeletedContactDialogComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ToastModule, TableModule, DialogModule, ConfirmDialogModule, HttpClientTestingModule],
       declarations: [DeletedContactDialogComponent],
-      providers: [ConfirmationService, MessageService, provideMockStore(testMockStore), ContactDisplayNamePipe],
+      providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DeletedContactDialogComponent);
@@ -55,5 +54,12 @@ describe('DeletedContactDialogComponent', () => {
     component.restoreSelected();
 
     expect(component.selectedItems).toEqual([]);
+  });
+
+  it('should display name', () => {
+    const label = component.displayName(Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' }));
+    expect(label).toEqual('last, first');
+    const orglabel = component.displayName(Contact.fromJSON({ id: 1, name: 'name', type: ContactTypes.ORGANIZATION }));
+    expect(orglabel).toEqual('name');
   });
 });
