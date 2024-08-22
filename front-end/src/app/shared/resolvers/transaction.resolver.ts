@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { EMPTY, expand, map, mergeMap, Observable, of, reduce } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { TransactionTypeUtils, MultipleEntryTransactionTypes } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
@@ -79,7 +79,15 @@ export class TransactionResolver {
   }
 
   resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
-    if (transaction.children) {
+    if (
+      (ReattRedesUtils.isReattRedes(transaction) &&
+        !(
+          ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
+          transaction?.id
+        )) ||
+      (transaction.transaction_type_identifier &&
+        MultipleEntryTransactionTypes().includes(transaction.transaction_type_identifier))
+    ) {
       transaction.children = [];
       // tune page size
       const params = { parent: transaction.id ?? '', page_size: 100 };
