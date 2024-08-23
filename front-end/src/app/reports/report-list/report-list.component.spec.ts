@@ -92,18 +92,18 @@ describe('ReportListComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
   });
 
-  it('#amend should hit service', () => {
-    const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(of(''));
-    component.amendReport({ id: '999' } as Report);
+  it('#amend should hit service', fakeAsync(async () => {
+    const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(Promise.resolve(''));
+    await component.amendReport({ id: '999' } as Report);
     expect(amendSpy).toHaveBeenCalled();
-  });
+  }));
 
   describe('unamend', () => {
-    it('should hit service', () => {
-      const unamendSpy = spyOn(reportService, 'startUnamendment').and.returnValue(of(''));
-      component.unamendReport({ id: '999' } as Report);
+    it('should hit service', fakeAsync(async () => {
+      const unamendSpy = spyOn(reportService, 'startUnamendment').and.returnValue(Promise.resolve(''));
+      await component.unamendReport({ id: '999' } as Report);
       expect(unamendSpy).toHaveBeenCalled();
-    });
+    }));
   });
   it('#onActionClick should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
