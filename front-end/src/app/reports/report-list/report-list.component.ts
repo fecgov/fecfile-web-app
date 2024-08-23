@@ -33,7 +33,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
     new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
-    new TableAction('Unamend', this.confirmUnamend.bind(this), (report: Report) => report.can_unamend),
+    new TableAction('Unamend', this.unamendReport.bind(this), (report: Report) => report.can_unamend),
     new TableAction('Download as .fec', this.download.bind(this)),
   ];
 
@@ -108,25 +108,18 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       });
   }
 
-  public confirmUnamend(report: Report): void {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to unamend this amendent? This action cannot be undone.',
-      header: 'Hang on...',
-      rejectLabel: 'Cancel',
-      rejectIcon: 'none',
-      rejectButtonStyleClass: 'p-button-secondary',
-      acceptLabel: 'Confirm',
-      acceptIcon: 'none',
-      accept: async () => this.unamendReport(report),
-    });
-  }
-
   async unamendReport(report: Report) {
     this.itemService
       .startUnamendment(report)
       .pipe(take(1), takeUntil(this.destroy$))
       .subscribe(() => {
         this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Report Unamended',
+          life: 3000,
+        });
       });
   }
 

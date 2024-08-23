@@ -99,12 +99,6 @@ describe('ReportListComponent', () => {
   });
 
   describe('unamend', () => {
-    it('should call confirm', () => {
-      const confirmSpy = spyOn(component.confirmationService, 'confirm');
-      component.confirmUnamend(testActiveReport);
-      expect(confirmSpy).toHaveBeenCalledTimes(1);
-    });
-
     it('should hit service', () => {
       const unamendSpy = spyOn(reportService, 'startUnamendment').and.returnValue(of(''));
       component.unamendReport({ id: '999' } as Report);
