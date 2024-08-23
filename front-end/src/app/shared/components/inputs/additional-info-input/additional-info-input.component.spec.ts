@@ -1,12 +1,11 @@
-import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { MemoText } from 'app/shared/models/memo-text.model';
-import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 describe('AdditionalInfoInputComponent', () => {
   let component: AdditionalInfoInputComponent;
@@ -36,11 +35,6 @@ describe('AdditionalInfoInputComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('ngOnChanges() should execute successfully', () => {
-    component.ngOnChanges({ transaction: {} as SimpleChange });
-    expect(true).toBeTrue();
   });
 
   xit('should have a read-only cpd if system generated', () => {

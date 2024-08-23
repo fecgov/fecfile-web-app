@@ -2,7 +2,7 @@
   class="grid"
   *ngIf="
     isEditable &&
-    !useParentContact &&
+    !transactionType?.getUseParentContact(transaction) &&
     !transactionType?.hideContactLookup &&
     transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE'
   "
@@ -30,7 +30,7 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [entityRole]="this.form.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
-      [includeFecId]="hasCommitteeFecId"
+      [includeFecId]="transactionType.hasCommitteeFecId()"
     ></app-committee-input>
   </ng-container>
   <ng-container *ngIf="this.form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
@@ -39,7 +39,9 @@
   <hr class="solid" />
   <app-section-header [isSingle]="isSingle" text="Address"></app-section-header>
   <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
-  <ng-container *ngIf="hasEmployeeFields && form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+  <ng-container
+    *ngIf="transactionType?.hasEmployeeFields() && form.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
+  >
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Employer"></app-section-header>
     <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-employer-input>
@@ -79,7 +81,7 @@
       [transaction]="transaction"
     ></app-debt-input>
   </ng-container>
-  <ng-container *ngIf="hasLoanFinanceFields">
+  <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.amountInputHeader"></app-section-header>
     <app-loan-info-input
@@ -90,7 +92,7 @@
       [transaction]="transaction"
     ></app-loan-info-input>
   </ng-container>
-  <ng-container *ngIf="hasLoanTermsFields && !transactionType?.hasLoanAgreement">
+  <ng-container *ngIf="transactionType?.hasLoanTermsFields() && !transactionType?.hasLoanAgreement">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Terms"></app-section-header>
     <app-loan-terms-input
@@ -124,7 +126,7 @@
       [transaction]="transaction"
     ></app-additional-info-input>
   </ng-container>
-  <ng-container *ngIf="hasSignature1">
+  <ng-container *ngIf="transactionType?.hasSignature1()">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.signatoryOneHeader"></app-section-header>
     <app-signature-input
@@ -135,7 +137,7 @@
       templateMapKeyPrefix="signatory_1"
     ></app-signature-input>
   </ng-container>
-  <ng-container *ngIf="transactionType?.hasSignature2">
+  <ng-container *ngIf="transactionType?.hasSignature2()">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.signatoryTwoHeader"></app-section-header>
     <app-signature-input
@@ -146,18 +148,18 @@
       templateMapKeyPrefix="signatory_2"
     ></app-signature-input>
   </ng-container>
-  <ng-container *ngIf="footer">
+  <ng-container *ngIf="transactionType.getFooter(transaction)">
     <hr class="solid" />
     <div class="grid">
       <span style="font-style: italic">
-        <b>{{ footer }}</b>
+        <b>{{ transactionType.getFooter(transaction) }}</b>
       </span>
     </div>
   </ng-container>
 </ng-container>
 
 <ng-template #candidateInfo>
-  <ng-container *ngIf="hasCommitteeOrCandidateInformation">
+  <ng-container *ngIf="transactionType?.hasCommitteeOrCandidateInformation()">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType.committeeCandidateHeader"></app-section-header>
     <ng-container *ngIf="!transactionType?.contact3IsRequired">
@@ -193,14 +195,14 @@
         [tertiaryContact]="true"
       ></app-committee-input>
     </ng-container>
-    <ng-container *ngIf="hasSupportOpposeCode">
+    <ng-container *ngIf="transaction?.transactionType?.hasSupportOpposeCode()">
       <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted"></app-support-oppose-input>
     </ng-container>
-    <ng-container *ngIf="hasCandidateInformation">
+    <ng-container *ngIf="transaction?.transactionType?.hasCandidateInformation(form)">
       <ng-container *ngIf="!transactionType?.hideContactLookup">
         <label for="contact_2"
           >LOOKUP
-          <ng-container *ngIf="!contact2IsRequired">(OPTIONAL)</ng-container>
+          <ng-container *ngIf="!transaction?.transactionType?.contact2IsRequired(form)">(OPTIONAL)</ng-container>
         </label>
         <app-transaction-contact-lookup
           contactProperty="contact_2"
@@ -217,12 +219,12 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
-          [hasCandidateOfficeInput]="hasCandidateOffice"
+          [hasCandidateOfficeInput]="transactionType.hasCandidateOffice()"
         ></app-candidate-input>
       </ng-container>
     </ng-container>
   </ng-container>
-  <ng-container *ngIf="hasElectionInformation">
+  <ng-container *ngIf="transactionType?.hasElectionInformation()">
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Election information"></app-section-header>
     <app-election-input

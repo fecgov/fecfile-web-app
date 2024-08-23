@@ -25,17 +25,17 @@ describe('CommitteeMember', () => {
   it('should return the correct role label when role is not null', () => {
     const member = new CommitteeMember();
     member.role = 'COMMITTEE_ADMINISTRATOR';
-    expect(member.roleLabel).toBe('Committee Administrator');
+    expect(member.getRoleLabel()).toBe('Committee Administrator');
   });
 
   it('should return an empty string for a role label if role is null', () => {
-    expect(new CommitteeMember().roleLabel).toBe('');
+    expect(new CommitteeMember().getRoleLabel()).toBe('');
   });
 
   it('should return an empty string for a label if the role is not present in the LabelList', () => {
     const cUser = new CommitteeMember();
     cUser.role = "This Isn't a Real Role";
-    expect(cUser.roleLabel).toBe('');
+    expect(cUser.getRoleLabel()).toBe('');
   });
 
   it('should confirm if committee is PAC', () => {

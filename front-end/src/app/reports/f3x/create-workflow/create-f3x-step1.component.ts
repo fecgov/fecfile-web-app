@@ -56,8 +56,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public thisYear = new Date().getFullYear();
   committeeAccount?: CommitteeAccount;
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
-  public reportCodes: F3xReportCodes[] = [];
-  public electionReport = false;
 
   constructor(
     private store: Store,
@@ -90,7 +88,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
         this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
-        this.form?.patchValue({ report_type_category: F3xReportTypeCategories.ELECTION_YEAR });
+        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
         this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
         this.form
@@ -98,7 +96,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
             this.form.patchValue({
-              report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
+              report_type_category: this.getReportTypeCategories()[0],
             });
             this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
@@ -139,11 +137,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         );
         this.form.patchValue({ coverage_from_date, coverage_through_date });
       }
-      this.reportCodes = this.getReportCodes();
-      this.electionReport = this.isElectionReport();
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+  }
+
+  public getReportTypeCategories(): F3xReportTypeCategoryType[] {
+    return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   }
 
   public getReportCodes(): F3xReportCodes[] {
