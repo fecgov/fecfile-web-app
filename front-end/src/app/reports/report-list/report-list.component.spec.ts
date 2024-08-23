@@ -60,6 +60,19 @@ describe('ReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('rowActions', () => {
+    it('should have "Unamend" if report can_unamend', () => {
+      const report = testActiveReport;
+      report.can_unamend = false;
+      const action = component.rowActions.find((action) => action.label === 'Unamend');
+      if (action) {
+        expect(action.isAvailable(report)).toBeFalse();
+        report.can_unamend = true;
+        expect(action.isAvailable(report)).toBeTrue();
+      }
+    });
+  });
+
   it('#getEmptyItem should return a new Report instance', () => {
     const item = component['getEmptyItem']();
     expect(item.id).toBe(undefined);
@@ -79,12 +92,19 @@ describe('ReportListComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
   });
 
-  it('#amend should hit service', () => {
-    const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(of(''));
-    component.amendReport({ id: '999' } as Report);
+  it('#amend should hit service', fakeAsync(async () => {
+    const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(Promise.resolve(''));
+    await component.amendReport({ id: '999' } as Report);
     expect(amendSpy).toHaveBeenCalled();
-  });
+  }));
 
+  describe('unamend', () => {
+    it('should hit service', fakeAsync(async () => {
+      const unamendSpy = spyOn(reportService, 'startUnamendment').and.returnValue(Promise.resolve(''));
+      await component.unamendReport({ id: '999' } as Report);
+      expect(unamendSpy).toHaveBeenCalled();
+    }));
+  });
   it('#onActionClick should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onRowActionClick(new TableAction('', component.editItem.bind(component)), {

@@ -100,8 +100,12 @@ export class ReportService implements TableListService<Report> {
     return !uploadSubmission || fecStatus == 'REJECTED' || fecfileTaskState == 'FAILED';
   }
 
-  public startAmendment(report: Report): Observable<string> {
-    return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
+  public startAmendment(report: Report): Promise<string> {
+    return firstValueFrom(this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {}));
+  }
+
+  public startUnamendment(report: Report): Promise<string> {
+    return firstValueFrom(this.apiService.post(`${this.apiEndpoint}/${report.id}/unamend/`, {}));
   }
 
   preparePayload(item: Report): Record<string, unknown> {
