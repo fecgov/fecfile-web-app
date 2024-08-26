@@ -12,6 +12,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { RegisterCommitteeComponent } from './register-committee.component';
+import { AbstractControl } from '@angular/forms';
 
 describe('RegisterCommitteeComponent', () => {
   let component: RegisterCommitteeComponent;
@@ -35,14 +36,33 @@ describe('RegisterCommitteeComponent', () => {
   });
 
   it('should search filings', () => {
+    const field = component.form.get('committee-search') as AbstractControl;
     const testFecApiService = TestBed.inject(FecApiService);
     const spy = spyOn(testFecApiService, 'queryFilings').and.callFake(() =>
       Promise.resolve([new FecFiling()] as FecFiling[]),
     );
-    component.search({ query: 'query' });
+    field.setValue('C99999999');
+    field.updateValueAndValidity();
 
-    expect(spy).toHaveBeenCalledWith('query', 'F1');
+    component.search({ query: 'C99999999' });
+
+    expect(spy).toHaveBeenCalledWith('C99999999', 'F1');
   });
+
+  it('should not search with an invalid committee id', () => {
+    const field = component.form.get('committee-search') as AbstractControl;
+    const testFecApiService = TestBed.inject(FecApiService);
+    const spy = spyOn(testFecApiService, 'queryFilings').and.callFake(() =>
+      Promise.resolve([new FecFiling()] as FecFiling[]),
+    );
+    field.setValue('NOTVALID');
+    field.updateValueAndValidity();
+
+    component.search({ query: 'C99999999' });
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it('should select committee', () => {
     const filing = new FecFiling();
     filing.committee_id = 'C12345678';
