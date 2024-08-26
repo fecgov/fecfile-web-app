@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
+import { partialCommitteeIdValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
@@ -17,6 +19,9 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   selectedCommittee?: CommitteeAccount;
   explanationVisible = false;
   unableToCreateAccount = false;
+  form: FormGroup = new FormGroup({
+    'committee-search': new FormControl('', partialCommitteeIdValidator),
+  });
 
   constructor(
     protected fecApiService: FecApiService,
@@ -30,7 +35,8 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   search(event: any) {
     this.query = event.query;
-    if (new RegExp('^C[0-9]{1,8}$').test(this.query ?? '')) {
+    this.form.updateValueAndValidity();
+    if (this.form.valid) {
       this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
         this.suggestions = filings;
       });

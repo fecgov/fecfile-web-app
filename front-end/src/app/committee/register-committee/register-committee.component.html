@@ -16,35 +16,40 @@
         <i class="pi pi-question" (click)="showExplanation()"></i>
       </div>
 
-      <p-autoComplete
-        class="committee-search p-fluid"
-        id="searchBox"
-        field="label"
-        [(ngModel)]="query"
-        dropdownMode="current"
-        dropdownIcon="pi pi-search"
-        [suggestions]="suggestions ?? []"
-        [forceSelection]="true"
-        (completeMethod)="search($event)"
-        (onSelect)="select($event.value)"
-      >
-        <ng-template pTemplate="header">
-          <div class="search-header">Select a committee</div>
-        </ng-template>
-        <ng-template let-committee pTemplate="item">
-          <div [innerHTML]="committee.committee_name | highlightTerms: query" class="search-result">
-            {{ committee.committee_name }}
-          </div>
-          <div class="second-row">
-            &lpar;
-            <div [innerHTML]="committee.committee_id | highlightTerms: query">
-              {{ committee.committee_id }}
+      <form id="form" [formGroup]="form">
+        <p-autoComplete
+          class="committee-search p-fluid"
+          id="searchBox"
+          field="label"
+          [(ngModel)]="query"
+          dropdownMode="current"
+          dropdownIcon="pi pi-search"
+          [suggestions]="suggestions ?? []"
+          [forceSelection]="false"
+          formControlName="committee-search"
+          (completeMethod)="search($event)"
+          (onSelect)="select($event.value)"
+        >
+          <ng-template pTemplate="header">
+            <div class="search-header">Select a committee</div>
+          </ng-template>
+          <ng-template let-committee pTemplate="item">
+            <div [innerHTML]="committee.committee_name | highlightTerms: query" class="search-result">
+              {{ committee.committee_name }}
             </div>
-            &rpar;
-          </div>
-        </ng-template>
-      </p-autoComplete>
-      Examples: C00431445, C00343509
+            <div class="second-row">
+              &lpar;
+              <div [innerHTML]="committee.committee_id | highlightTerms: query">
+                {{ committee.committee_id }}
+              </div>
+              &rpar;
+            </div>
+          </ng-template>
+        </p-autoComplete>
+        Examples: C00431445, C00343509
+        <br />
+        <app-error-messages [form]="form" fieldName="committee-search"></app-error-messages>
+      </form>
     </div>
     <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
       <h2>Results</h2>

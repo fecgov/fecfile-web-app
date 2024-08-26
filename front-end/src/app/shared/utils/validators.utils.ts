@@ -20,6 +20,7 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 }
 
 export const committeeIdValidator = Validators.pattern('^[Cc]\\d{8}$');
+export const partialCommitteeIdValidator = Validators.pattern('^[Cc]\\d{0,8}$');
 
 export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
