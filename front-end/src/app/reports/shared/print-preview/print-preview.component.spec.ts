@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -16,7 +16,6 @@ describe('PrintPreviewComponent', () => {
   let fixture: ComponentFixture<PrintPreviewComponent>;
   let reportService: Form3XService;
   let webPrintService: WebPrintService;
-  let reportSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -111,9 +110,9 @@ describe('PrintPreviewComponent', () => {
   it('#submitPrintJob() sets failure state on failure', fakeAsync(() => {
     component.report = Form3X.fromJSON({ id: '123' });
     component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
+    spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
     const poll = spyOn(component, 'pollPrintStatus');
-    const update = spyOn(reportService, 'fecUpdate').and.returnValue(of(component.report));
+    spyOn(reportService, 'fecUpdate').and.returnValue(of(component.report));
     component.submitPrintJob();
 
     tick(100);
