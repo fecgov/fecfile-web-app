@@ -30,9 +30,11 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   search(event: any) {
     this.query = event.query;
-    this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
-      this.suggestions = filings;
-    });
+    if (new RegExp('^C[0-9]{1,8}$').test(this.query ?? '')) {
+      this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
+        this.suggestions = filings;
+      });
+    }
   }
   select(committee: FecFiling) {
     this.query = undefined;
