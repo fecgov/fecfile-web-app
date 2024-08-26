@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,15 +23,11 @@ export class WebPrintService {
     this.reportService.setActiveReportById(reportId).subscribe();
   }
 
-  public submitPrintJob(reportId: string): void {
-    const request = this.apiService.post('/web-services/submit-to-webprint/', {
-      report_id: reportId,
-    });
-
-    if (request) {
-      request.subscribe(() => {
-        this.getStatus(reportId);
-      });
-    }
+  public submitPrintJob(reportId: string): Promise<any> {
+    return firstValueFrom(
+      this.apiService.post('/web-services/submit-to-webprint/', {
+        report_id: reportId,
+      }),
+    );
   }
 }

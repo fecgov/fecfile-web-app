@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -16,6 +16,7 @@ describe('PrintPreviewComponent', () => {
   let fixture: ComponentFixture<PrintPreviewComponent>;
   let reportService: Form3XService;
   let webPrintService: WebPrintService;
+  let reportSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -27,7 +28,7 @@ describe('PrintPreviewComponent', () => {
     reportService = TestBed.inject(Form3XService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
+    reportSpy = spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
     spyOn(reportService, 'update').and.returnValue(of(Form3X.fromJSON({})));
     fixture.detectChanges();
   });
@@ -36,46 +37,16 @@ describe('PrintPreviewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Sets the status messages as expected', fakeAsync(() => {
-    const refresh = spyOn(component, 'refreshReportStatus');
-    component.pollPrintStatus();
-    tick(5001);
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(refresh).toHaveBeenCalled();
-      expect(component.pollingStatusMessage).toBe('This may take a while...');
-    });
-  }));
-
-  it('refreshes the active report', () => {
-    const refresh = spyOn(webPrintService, 'getStatus');
-    component.refreshReportStatus();
-    expect(refresh).toHaveBeenCalled();
-  });
-
-  it('Updates with a failed report', () => {
+  it('is not-submitted when there is no submission object', () => {
     const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: {
-        fec_status: 'FAILED',
-        fecfile_error: "Things didn't work out...",
-      },
-    });
-
-    component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe('failure');
-    expect(component.printError).toBe("Things didn't work out...");
-  });
-
-  it('Updates with an unsubmitted report', () => {
-    const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: null,
+      webprint_submission: undefined,
     });
 
     component.updatePrintStatus(testF3x);
     expect(component.webPrintStage).toBe('not-submitted');
   });
 
-  it('Updates with a processing report', () => {
+  it('is checking when the report is processing', () => {
     const testF3x: Form3X = Form3X.fromJSON({
       webprint_submission: {
         fec_status: 'PROCESSING',
@@ -84,20 +55,70 @@ describe('PrintPreviewComponent', () => {
 
     component.updatePrintStatus(testF3x);
     expect(component.webPrintStage).toBe('checking');
-    expect(component.pollingStatusMessage).toBe(
-      'Your report is still being processed. Please check back later to access your PDF',
-    );
+  });
+
+  it('is success when the report is complete', () => {
+    const testF3x: Form3X = Form3X.fromJSON({
+      webprint_submission: {
+        fec_status: 'COMPLETED',
+        fecfile_task_state: 'SUCCEEDED',
+        fec_image_url: 'http://example.com',
+      },
+    });
+    component.updatePrintStatus(testF3x);
+    expect(component.webPrintStage).toBe('success');
+    expect(component.downloadURL).toBe('http://example.com');
+  });
+
+  it('is failure when the report is failed', () => {
+    const testF3x: Form3X = Form3X.fromJSON({
+      webprint_submission: {
+        fec_status: 'FAILED',
+        fec_message: 'Something failed on efo.',
+      },
+    });
+    component.updatePrintStatus(testF3x);
+    expect(component.printError).toBe('Something failed on efo.');
+  });
+
+  it('Updates with a failed report', () => {
+    const testF3x: Form3X = Form3X.fromJSON({
+      webprint_submission: {
+        fecfile_task_state: 'FAILED',
+        fecfile_error: 'fecfile dropped the ball',
+      },
+    });
+
+    component.updatePrintStatus(testF3x);
+    expect(component.webPrintStage).toBe('failure');
+    expect(component.printError).toBe('fecfile dropped the ball');
   });
 
   it('#submitPrintJob() calls the service', fakeAsync(() => {
-    const submit = spyOn(webPrintService, 'submitPrintJob');
-    const refresh = spyOn(component, 'refreshReportStatus');
+    component.report = Form3X.fromJSON({ id: '123' });
+    component.pollingTime = 0;
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve());
+    const poll = spyOn(component, 'pollPrintStatus');
+    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => of(component.report));
     component.submitPrintJob();
-    tick(5001);
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(refresh).toHaveBeenCalled();
-      expect(submit).toHaveBeenCalled();
-    });
+
+    tick(100);
+    expect(update).toHaveBeenCalled();
+    expect(submit).toHaveBeenCalled();
+    expect(poll).toHaveBeenCalled();
+  }));
+
+  it('#submitPrintJob() sets failure state on failure', fakeAsync(() => {
+    component.report = Form3X.fromJSON({ id: '123' });
+    component.pollingTime = 0;
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
+    const poll = spyOn(component, 'pollPrintStatus');
+    const update = spyOn(reportService, 'fecUpdate').and.returnValue(of(component.report));
+    component.submitPrintJob();
+
+    tick(100);
+    expect(poll).not.toHaveBeenCalled();
+    expect(component.webPrintStage).toBe('failure');
+    expect(component.printError).toBe('Failed to compile PDF');
   }));
 });
