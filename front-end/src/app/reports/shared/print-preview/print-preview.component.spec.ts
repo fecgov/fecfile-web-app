@@ -16,6 +16,7 @@ describe('PrintPreviewComponent', () => {
   let fixture: ComponentFixture<PrintPreviewComponent>;
   let reportService: Form3XService;
   let webPrintService: WebPrintService;
+  let reportSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

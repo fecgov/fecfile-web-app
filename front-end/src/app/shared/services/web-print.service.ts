@@ -23,7 +23,7 @@ export class WebPrintService {
     this.reportService.setActiveReportById(reportId).subscribe();
   }
 
-  public submitPrintJob(reportId: string): Promise<any> {
+  public submitPrintJob(reportId: string): Promise<Object> {
     return firstValueFrom(
       this.apiService.post('/web-services/submit-to-webprint/', {
         report_id: reportId,
