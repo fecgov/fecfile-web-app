@@ -16,7 +16,6 @@ describe('PrintPreviewComponent', () => {
   let fixture: ComponentFixture<PrintPreviewComponent>;
   let reportService: Form3XService;
   let webPrintService: WebPrintService;
-  let reportSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,7 +27,7 @@ describe('PrintPreviewComponent', () => {
     reportService = TestBed.inject(Form3XService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
-    reportSpy = spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
+    spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
     spyOn(reportService, 'update').and.returnValue(of(Form3X.fromJSON({})));
     fixture.detectChanges();
   });
@@ -97,7 +96,7 @@ describe('PrintPreviewComponent', () => {
   it('#submitPrintJob() calls the service', fakeAsync(() => {
     component.report = Form3X.fromJSON({ id: '123' });
     component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve());
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
     const poll = spyOn(component, 'pollPrintStatus');
     const update = spyOn(reportService, 'fecUpdate').and.callFake(() => of(component.report));
     component.submitPrintJob();
