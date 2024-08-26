@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
@@ -70,10 +70,10 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
-  it('#startAmendment() should call amend', () => {
+  it('#startAmendment() should call amend', fakeAsync(async () => {
     const report: Form3X = Form3X.fromJSON({ id: 1 });
 
-    service.startAmendment(report).subscribe((response: string) => {
+    service.startAmendment(report).then((response) => {
       expect(response).toEqual('amended 1');
     });
 
@@ -81,5 +81,18 @@ describe('ReportService', () => {
     expect(req.request.method).toEqual('POST');
     req.flush('amended 1');
     httpTestingController.verify();
-  });
+  }));
+
+  it('#startUnamendment() should call unamend', fakeAsync(async () => {
+    const report: Form3X = Form3X.fromJSON({ id: 1 });
+
+    service.startUnamendment(report).then((response) => {
+      expect(response).toEqual('unamended 1');
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/unamend/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush('unamended 1');
+    httpTestingController.verify();
+  }));
 });
