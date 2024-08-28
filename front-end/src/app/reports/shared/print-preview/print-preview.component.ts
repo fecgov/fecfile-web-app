@@ -127,12 +127,11 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public async submitPrintJob() {
+    debugger;
     if (this.report.id) {
-      if (this.report instanceof Form3X) {
-        /** Update the report with the committee information
-         * this is a must because the .fec requires this information */
-        await firstValueFrom(this.reportService.fecUpdate(this.report, this.committeeAccount));
-      }
+      /** Update the report with the committee information
+       * this is a must because the .fec requires this information */
+      await firstValueFrom(this.reportService.fecUpdate(this.report, this.committeeAccount));
       return this.webPrintService.submitPrintJob(this.report.id).then(
         () => {
           // Start polling for a completed status
