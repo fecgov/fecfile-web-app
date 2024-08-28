@@ -3,6 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form99 } from 'app/shared/models/form-99.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { SharedModule } from 'app/shared/shared.module';
@@ -95,6 +96,20 @@ describe('PrintPreviewComponent', () => {
 
   it('#submitPrintJob() calls the service', fakeAsync(() => {
     component.report = Form3X.fromJSON({ id: '123' });
+    component.pollingTime = 0;
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
+    const poll = spyOn(component, 'pollPrintStatus');
+    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => of(component.report));
+    component.submitPrintJob();
+
+    tick(100);
+    expect(update).toHaveBeenCalled();
+    expect(submit).toHaveBeenCalled();
+    expect(poll).toHaveBeenCalled();
+  }));
+
+  it('#submitPrintJob() calls the service for a non-F3X report', fakeAsync(() => {
+    component.report = Form99.fromJSON({ id: '123' });
     component.pollingTime = 0;
     const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
     const poll = spyOn(component, 'pollPrintStatus');
