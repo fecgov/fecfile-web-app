@@ -11,44 +11,21 @@
     </div>
     <div class="right-side-box">
       <h2>Find your committee</h2>
-      <div class="search-label">
-        <h5 class="font-karla-bold">COMMITTEE ID</h5>
-        <i class="pi pi-question" (click)="showExplanation()"></i>
-      </div>
 
       <form id="form" [formGroup]="form">
-        <p-autoComplete
-          class="committee-search p-fluid"
-          id="searchBox"
-          field="label"
-          [(ngModel)]="query"
-          dropdownMode="current"
-          dropdownIcon="pi pi-search"
-          [suggestions]="suggestions ?? []"
-          [forceSelection]="false"
-          formControlName="committee-search"
-          (completeMethod)="search($event)"
-          (onSelect)="select($event.value)"
-        >
-          <ng-template pTemplate="header">
-            <div class="search-header">Select a committee</div>
-          </ng-template>
-          <ng-template let-committee pTemplate="item">
-            <div [innerHTML]="committee.committee_name | highlightTerms: query" class="search-result">
-              {{ committee.committee_name }}
-            </div>
-            <div class="second-row">
-              &lpar;
-              <div [innerHTML]="committee.committee_id | highlightTerms: query">
-                {{ committee.committee_id }}
-              </div>
-              &rpar;
-            </div>
-          </ng-template>
-        </p-autoComplete>
-        Examples: C00431445, C00343509
-        <br />
-        <app-error-messages [form]="form" fieldName="committee-search"></app-error-messages>
+        <div class="col-12">
+          <div class="search-label">
+            <h5 class="font-karla-bold" aria-label="committee-id">COMMITTEE ID</h5>
+            <i class="pi pi-question" (click)="showExplanation()"></i>
+          </div>
+          <div class="field">
+            <input type="text" pInputText id="committee-id" formControlName="committee-id" />
+            <app-error-messages [form]="form" fieldName="committee-id"></app-error-messages>
+          </div>
+          <div class="px-2">
+            <button pButton label="Register" class="p-button-secondary" (click)="this.registerMembership()"></button>
+          </div>
+        </div>
       </form>
     </div>
     <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
