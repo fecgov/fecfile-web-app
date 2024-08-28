@@ -57,7 +57,7 @@ export class Form3XService extends ReportService {
     );
   }
 
-  public fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {
+  public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {
     const payload: Form3X = Form3X.fromJSON({
       ...report,
       qualified_committee: this.isQualifiedCommittee(committeeAccount),
