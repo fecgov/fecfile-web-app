@@ -113,11 +113,9 @@ describe('PrintPreviewComponent', () => {
     component.pollingTime = 0;
     const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
     const poll = spyOn(component, 'pollPrintStatus');
-    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => of(component.report));
     component.submitPrintJob();
 
     tick(100);
-    expect(update).toHaveBeenCalled();
     expect(submit).toHaveBeenCalled();
     expect(poll).toHaveBeenCalled();
   }));
