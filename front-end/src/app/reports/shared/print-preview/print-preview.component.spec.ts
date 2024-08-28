@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -14,7 +14,7 @@ import { PrintPreviewComponent } from './print-preview.component';
 describe('PrintPreviewComponent', () => {
   let component: PrintPreviewComponent;
   let fixture: ComponentFixture<PrintPreviewComponent>;
-  let reportService: Form3XService;
+  let reportService: ReportService;
   let webPrintService: WebPrintService;
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('PrintPreviewComponent', () => {
       providers: [PrintPreviewComponent, provideMockStore(testMockStore)],
     }).compileComponents();
     fixture = TestBed.createComponent(PrintPreviewComponent);
-    reportService = TestBed.inject(Form3XService);
+    reportService = TestBed.inject(ReportService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
