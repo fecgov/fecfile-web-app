@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom, map, Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
+import { CommitteeAccount } from '../models/committee-account.model';
 import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -112,5 +113,18 @@ export class ReportService implements TableListService<Report> {
     const payload = item.toJson();
     delete payload['schema'];
     return payload;
+  }
+
+  public fecUpdate(report: Report, committeeAccount?: CommitteeAccount): Observable<Report> {
+    const payload: Report = getReportFromJSON({
+      ...report,
+      committee_name: committeeAccount?.name,
+      street_1: committeeAccount?.street_1,
+      street_2: committeeAccount?.street_2,
+      city: committeeAccount?.city,
+      state: committeeAccount?.state,
+      zip: committeeAccount?.zip,
+    });
+    return this.update(payload, ['committee_name', 'street_1', 'street_2', 'city', 'state', 'zip']);
   }
 }

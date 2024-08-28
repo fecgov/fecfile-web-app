@@ -5,7 +5,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -33,7 +33,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     public router: Router,
     public route: ActivatedRoute,
     private webPrintService: WebPrintService,
-    private form3XService: Form3XService,
+    private reportService: ReportService,
   ) {
     super();
   }
@@ -109,7 +109,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
      * if the status is not completed, poll again
      */
 
-    this.form3XService
+    this.reportService
       .get(this.report.id!)
       .pipe(
         tap((report) => {
@@ -128,11 +128,9 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
 
   public async submitPrintJob() {
     if (this.report.id) {
-      if (this.report instanceof Form3X) {
-        /** Update the report with the committee information
-         * this is a must because the .fec requires this information */
-        await firstValueFrom(this.form3XService.fecUpdate(this.report, this.committeeAccount));
-      }
+      /** Update the report with the committee information
+       * this is a must because the .fec requires this information */
+      await firstValueFrom(this.reportService.fecUpdate(this.report, this.committeeAccount));
       return this.webPrintService.submitPrintJob(this.report.id).then(
         () => {
           // Start polling for a completed status
