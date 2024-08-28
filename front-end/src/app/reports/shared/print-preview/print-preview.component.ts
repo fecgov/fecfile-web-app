@@ -127,7 +127,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public async submitPrintJob() {
-    debugger;
     if (this.report.id) {
       /** Update the report with the committee information
        * this is a must because the .fec requires this information */
