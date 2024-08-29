@@ -32,22 +32,13 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     super();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  search(event: any) {
-    this.query = event.query;
-    this.form.updateValueAndValidity();
-    if (this.form.valid) {
-      this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
-        this.suggestions = filings;
-      });
-    }
-  }
   select(committee: FecFiling) {
     this.query = undefined;
     this.selectedCommittee = new CommitteeAccount();
     this.selectedCommittee.name = committee.committee_name;
     this.selectedCommittee.committee_id = committee.committee_id;
   }
+
   createAccount() {
     this.unableToCreateAccount = false;
     this.committeeAccountService.registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
@@ -65,6 +56,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
       },
     );
   }
+
   registerMembership() {
     const committeeIdField = this.form.get('committee-id') as AbstractControl;
     committeeIdField.updateValueAndValidity();

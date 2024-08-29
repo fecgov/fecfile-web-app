@@ -35,34 +35,6 @@ describe('RegisterCommitteeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should search filings', () => {
-    const field = component.form.get('committee-search') as AbstractControl;
-    const testFecApiService = TestBed.inject(FecApiService);
-    const spy = spyOn(testFecApiService, 'queryFilings').and.callFake(() =>
-      Promise.resolve([new FecFiling()] as FecFiling[]),
-    );
-    field.setValue('C99999999');
-    field.updateValueAndValidity();
-
-    component.search({ query: 'C99999999' });
-
-    expect(spy).toHaveBeenCalledWith('C99999999', 'F1');
-  });
-
-  it('should not search with an invalid committee id', () => {
-    const field = component.form.get('committee-search') as AbstractControl;
-    const testFecApiService = TestBed.inject(FecApiService);
-    const spy = spyOn(testFecApiService, 'queryFilings').and.callFake(() =>
-      Promise.resolve([new FecFiling()] as FecFiling[]),
-    );
-    field.setValue('NOTVALID');
-    field.updateValueAndValidity();
-
-    component.search({ query: 'C99999999' });
-
-    expect(spy).not.toHaveBeenCalled();
-  });
-
   it('should select committee', () => {
     const filing = new FecFiling();
     filing.committee_id = 'C12345678';
@@ -72,6 +44,7 @@ describe('RegisterCommitteeComponent', () => {
     expect(component.selectedCommittee?.name).toEqual(filing.committee_name);
     expect(component.selectedCommittee?.committee_id).toBe(filing.committee_id);
   });
+
   it('should register committee', () => {
     const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
     const spy = spyOn(testCommitteeAccountService, 'registerCommitteeAccount').and.callFake(() =>
@@ -85,6 +58,7 @@ describe('RegisterCommitteeComponent', () => {
 
     expect(spy).toHaveBeenCalledWith(filing.committee_id);
   });
+
   it('should fail to register committee', waitForAsync(() => {
     const filing = new FecFiling();
     filing.committee_id = 'C12345678';
