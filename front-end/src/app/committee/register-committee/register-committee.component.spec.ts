@@ -53,12 +53,29 @@ describe('RegisterCommitteeComponent', () => {
     component.registerMembership();
     expect(spy).not.toHaveBeenCalled();
 
-    component.form.get('committee-id')?.setValue('C00000000');
+    committeeIdField.setValue('C00000000');
     expect(component.form.valid).toBeTrue();
 
     await component.registerMembership();
 
     expect(spy).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('/select-committee');
+  }));
+
+  it('should handle failed registration', waitForAsync(async () => {
+    const promisedEmpty = new Promise<CommitteeAccount>(() => {});
+    const spy = spyOn(committeeAccountService, 'registerCommitteeAccount').and.returnValue(promisedEmpty);
+    const routerSpy = spyOn(router, 'navigateByUrl');
+    const committeeIdField = component.form.get('committee-id') as AbstractControl;
+
+    committeeIdField.setValue('C00000000');
+    expect(component.form.valid).toBeTrue();
+    expect(component.unableToCreateAccount).toBeFalse();
+
+    await component.registerMembership();
+
+    expect(spy).toHaveBeenCalled();
+    expect(routerSpy).not.toHaveBeenCalled();
+    expect(component.unableToCreateAccount).toBeTrue();
   }));
 });
