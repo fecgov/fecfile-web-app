@@ -337,7 +337,7 @@ describe('ContactLookupComponent', () => {
     };
     component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
     tick(500);
-    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);  
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       Contact.fromJSON({
         type: ContactTypes.CANDIDATE,
@@ -387,7 +387,7 @@ describe('ContactLookupComponent', () => {
     };
     component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
     tick(500);
-    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);  
+    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       Contact.fromJSON({
         type: ContactTypes.CANDIDATE,
