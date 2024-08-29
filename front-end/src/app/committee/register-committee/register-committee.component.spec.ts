@@ -10,11 +10,13 @@ import { RegisterCommitteeComponent } from './register-committee.component';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 describe('RegisterCommitteeComponent', () => {
   let component: RegisterCommitteeComponent;
   let fixture: ComponentFixture<RegisterCommitteeComponent>;
   let committeeAccountService: CommitteeAccountService;
+  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,6 +27,7 @@ describe('RegisterCommitteeComponent', () => {
     fixture = TestBed.createComponent(RegisterCommitteeComponent);
     component = fixture.componentInstance;
     committeeAccountService = TestBed.inject(CommitteeAccountService);
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
@@ -32,11 +35,12 @@ describe('RegisterCommitteeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should validate committee ids properly', waitForAsync(() => {
+  it('should only submit with a valid committee id', waitForAsync(async () => {
     const promisedCommittee = new Promise<CommitteeAccount>(() => {
       CommitteeAccount.fromJSON({});
     });
     const spy = spyOn(committeeAccountService, 'registerCommitteeAccount').and.returnValue(promisedCommittee);
+    const routerSpy = spyOn(router, 'navigateByUrl');
     const committeeIdField = component.form.get('committee-id') as AbstractControl;
     component.registerMembership();
 
@@ -51,7 +55,10 @@ describe('RegisterCommitteeComponent', () => {
 
     component.form.get('committee-id')?.setValue('C00000000');
     expect(component.form.valid).toBeTrue();
-    component.registerMembership();
+
+    await component.registerMembership();
+
     expect(spy).toHaveBeenCalled();
+    expect(routerSpy).toHaveBeenCalledWith('/select-committee');
   }));
 });

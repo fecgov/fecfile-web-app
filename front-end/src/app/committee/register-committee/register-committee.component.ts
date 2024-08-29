@@ -32,7 +32,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     super();
   }
 
-  registerMembership() {
+  async registerMembership() {
     const committeeIdField = this.form.get('committee-id') as AbstractControl;
     committeeIdField.updateValueAndValidity();
 
@@ -40,7 +40,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     this.unableToCreateAccount = false;
 
     if (this.form.get('committee-id')?.valid) {
-      this.committeeAccountService.registerCommitteeAccount(committeeId).then(
+      return this.committeeAccountService.registerCommitteeAccount(committeeId).then(
         (committeeAccount) => {
           this.messageService.add({
             severity: 'success',
