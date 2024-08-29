@@ -5,9 +5,8 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { committeeIdValidator } from 'app/shared/utils/validators.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-register-committee',
@@ -23,10 +22,8 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   form: FormGroup = new FormGroup({ 'committee-id': new FormControl('', committeeIdValidator) }, { updateOn: 'blur' });
 
   constructor(
-    protected fecApiService: FecApiService,
     protected messageService: MessageService,
     protected committeeAccountService: CommitteeAccountService,
-    protected confirmationService: ConfirmationService,
     protected router: Router,
   ) {
     super();

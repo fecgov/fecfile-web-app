@@ -5,14 +5,12 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { RegisterCommitteeComponent } from './register-committee.component';
-import { AbstractControl } from '@angular/forms';
 
 describe('RegisterCommitteeComponent', () => {
   let component: RegisterCommitteeComponent;
@@ -23,7 +21,7 @@ describe('RegisterCommitteeComponent', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, ToastModule, DialogModule],
       declarations: [RegisterCommitteeComponent],
-      providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
+      providers: [MessageService, provideMockStore(testMockStore)],
     });
     fixture = TestBed.createComponent(RegisterCommitteeComponent);
     component = fixture.componentInstance;
