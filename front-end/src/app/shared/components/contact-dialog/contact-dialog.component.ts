@@ -171,6 +171,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       this.totalTransactions = transactionsPage.count;
       this.tableLoading = false;
       this.emptyMessage = 'No data available in table';
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       this.tableLoading = false;
       this.emptyMessage = 'Error loading transactions for contact';

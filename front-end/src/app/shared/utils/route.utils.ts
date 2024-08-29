@@ -18,7 +18,7 @@ export function collectRouteData(router: Router): RouteData {
   let data = {} as RouteData;
   const stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
   while (stack.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+     
     const route = stack.pop()!;
     data = { ...data, ...route.data };
     stack.push(...route.children);
