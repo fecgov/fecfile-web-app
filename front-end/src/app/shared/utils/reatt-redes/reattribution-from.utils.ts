@@ -80,7 +80,7 @@ export class ReattributionFromUtils {
       toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges ?? of(null),
     ]).subscribe(([orgName, firstName, lastName]) => {
       if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-        purposeDescriptionControl?.setValue(`Reattribution to ${lastName}, ${firstName}`);
+        purposeDescriptionControl?.setValue(`Reattribution to ${firstName} ${lastName}`);
       } else {
         purposeDescriptionControl?.setValue(`Reattribution to ${orgName}`);
       }

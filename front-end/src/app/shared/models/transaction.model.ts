@@ -145,7 +145,7 @@ export function getTransactionName(transaction: ScheduleTransaction): string {
     const lastName = transaction[
       transaction.transactionType.templateMap.last_name as keyof ScheduleTransaction
     ] as string;
-    return `${lastName}, ${firstName}`;
+    return `${firstName} ${lastName}`;
   }
 
   const orgName = transaction[
