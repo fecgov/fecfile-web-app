@@ -28,26 +28,8 @@
         </div>
       </form>
     </div>
-    <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
-      <h2>Results</h2>
-      <div class="committee-card" *ngIf="selectedCommittee">
-        <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-        <div class="committee-info">
-          <h3>{{ selectedCommittee.name }}</h3>
-          <h5 class="font-karla-bold">{{ selectedCommittee.committee_id }}</h5>
-
-          <p-button
-            class="register-button"
-            label="Create account"
-            styleClass="p-button-primary"
-            (click)="createAccount()"
-            icon="pi pi-angle-right"
-            iconPos="right"
-          >
-          </p-button>
-        </div>
-      </div>
-      <div class="committee-card unable-card" *ngIf="unableToCreateAccount">
+    <div class="right-side-box" *ngIf="unableToCreateAccount">
+      <div class="committee-card unable-card">
         <div class="unable-excl-img">
           <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
         </div>

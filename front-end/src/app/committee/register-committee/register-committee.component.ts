@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -19,7 +19,10 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   selectedCommittee?: CommitteeAccount;
   explanationVisible = false;
   unableToCreateAccount = false;
-  form: FormGroup = new FormGroup({ 'committee-id': new FormControl('', committeeIdValidator) }, { updateOn: 'blur' });
+  form: FormGroup = new FormGroup(
+    { 'committee-id': new FormControl('', [committeeIdValidator, Validators.required]) },
+    { updateOn: 'blur' },
+  );
 
   constructor(
     protected messageService: MessageService,
@@ -27,31 +30,6 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     protected router: Router,
   ) {
     super();
-  }
-
-  select(committee: FecFiling) {
-    this.query = undefined;
-    this.selectedCommittee = new CommitteeAccount();
-    this.selectedCommittee.name = committee.committee_name;
-    this.selectedCommittee.committee_id = committee.committee_id;
-  }
-
-  createAccount() {
-    this.unableToCreateAccount = false;
-    this.committeeAccountService.registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
-      (committeeAccount) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: `Committee Account ${committeeAccount.committee_id} Created`,
-          life: 3000,
-        });
-      },
-      () => {
-        this.unableToCreateAccount = true;
-        this.selectedCommittee = undefined;
-      },
-    );
   }
 
   registerMembership() {
