@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
@@ -26,6 +27,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     protected messageService: MessageService,
     protected committeeAccountService: CommitteeAccountService,
     protected confirmationService: ConfirmationService,
+    protected router: Router,
   ) {
     super();
   }
@@ -79,6 +81,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
             detail: `Committee Account ${committeeAccount.committee_id} Created`,
             life: 3000,
           });
+          this.router.navigateByUrl('/select-committee');
         },
         () => {
           this.unableToCreateAccount = true;
