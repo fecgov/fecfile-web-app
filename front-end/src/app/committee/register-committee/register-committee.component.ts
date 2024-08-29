@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -57,6 +57,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
       );
     }
   }
+
   showExplanation() {
     this.explanationVisible = true;
   }
