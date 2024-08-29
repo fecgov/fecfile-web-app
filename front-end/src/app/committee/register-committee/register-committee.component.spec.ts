@@ -14,7 +14,6 @@ import { AbstractControl } from '@angular/forms';
 describe('RegisterCommitteeComponent', () => {
   let component: RegisterCommitteeComponent;
   let fixture: ComponentFixture<RegisterCommitteeComponent>;
-  let httpTestingController: HttpTestingController;
   let committeeAccountService: CommitteeAccountService;
 
   beforeEach(() => {
@@ -25,7 +24,6 @@ describe('RegisterCommitteeComponent', () => {
     });
     fixture = TestBed.createComponent(RegisterCommitteeComponent);
     component = fixture.componentInstance;
-    httpTestingController = TestBed.inject(HttpTestingController);
     committeeAccountService = TestBed.inject(CommitteeAccountService);
     fixture.detectChanges();
   });
