@@ -20,6 +20,7 @@ import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transac
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
 import { clone } from 'lodash';
+import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 
 @Component({
   selector: 'app-navigation-control',
@@ -93,14 +94,14 @@ export class NavigationControlComponent implements OnInit {
       this.transaction,
       destinationTransactionType,
     );
-    this.navigate.emit(navigationEvent);
+    this.store.dispatch(navigationEventSetAction(navigationEvent));
   }
 
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
-      const navEvent = clone(event.value);
-      this.navigate.emit(navEvent);
+      const navigationEvent = clone(event.value);
+      this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }
 
