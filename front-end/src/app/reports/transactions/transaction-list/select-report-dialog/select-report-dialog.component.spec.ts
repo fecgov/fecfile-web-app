@@ -87,8 +87,7 @@ describe('SelectReportDialogComponent', () => {
       component.selectedReport = component.availableReports[0];
       try {
         await component.createReattribution();
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
+      } catch {
         console.log("shouldn't go here");
       }
       const route = `/reports/transactions/report/${component.selectedReport.id}/create/${testScheduleATransaction.transaction_type_identifier}?reattribution=${testScheduleATransaction.id}`;
