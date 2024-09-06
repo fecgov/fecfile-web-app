@@ -4,7 +4,6 @@ import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
-  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { JOINT_FUNDRAISING_TRANSFER } from 'app/shared/models/transaction-types/JOINT_FUNDRAISING_TRANSFER.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
