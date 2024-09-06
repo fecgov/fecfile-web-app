@@ -14,10 +14,12 @@ import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { testMockStore } from '../../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
+import { Store } from '@ngrx/store';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
   let fixture: ComponentFixture<NavigationControlComponent>;
+  let store: Store;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,6 +27,7 @@ describe('NavigationControlComponent', () => {
       declarations: [NavigationControlComponent, Dropdown],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
+    store = TestBed.inject(Store);
 
     fixture = TestBed.createComponent(NavigationControlComponent);
     component = fixture.componentInstance;
@@ -35,9 +38,9 @@ describe('NavigationControlComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit event', () => {
+  it('should dispatch a navigationEvent', () => {
     // spy on event emitter
-    spyOn(component.navigate, 'emit');
+    const storeSpy = spyOn(store, 'dispatch');
 
     // trigger the click
     const nativeElement = fixture.nativeElement;
@@ -46,7 +49,7 @@ describe('NavigationControlComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.navigate.emit).toHaveBeenCalledWith(new NavigationEvent());
+    expect(storeSpy).toHaveBeenCalled();
   });
 
   describe('with dropdown', () => {

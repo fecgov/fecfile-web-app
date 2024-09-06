@@ -85,10 +85,14 @@ describe('TransactionDetailComponent', () => {
   });
 
   it('#handleNavigate() should not save an invalid record', () => {
+    const navSpy = spyOn(component, 'navigateTo');
+    const saveSpy = spyOn(component, 'save');
+
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
+    console.log('HEY LISTEN', component.form);
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(`${environment.apiUrl}/transactions/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`);
-    httpTestingController.verify();
+    expect(navSpy).not.toHaveBeenCalled();
+    expect(saveSpy).not.toHaveBeenCalled();
   });
 });
