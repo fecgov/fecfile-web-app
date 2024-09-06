@@ -48,9 +48,11 @@ describe('Disbursements', () => {
     TransactionDetailPage.enterScheduleFormData(defaultTransactionFormData);
 
     PageUtils.clickButton('Save');
+    cy.contains('Transactions in this report').should('exist');
     PageUtils.clickLink('100% Federal Election Activity Payment');
-    cy.contains(individualContactFormData.first_name).should('exist');
-    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.contains('Address').should('exist');
+    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
+    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
   });
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
@@ -67,7 +69,8 @@ describe('Disbursements', () => {
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure - Void');
-    cy.contains(organizationFormData.name).should('exist');
+    cy.contains('Address').should('exist');
+    cy.get('#organization_name').should('have.value', organizationFormData.name);
   });
 
   it('should be able to link an Independent Expenditure to a Form 24', () => {
@@ -85,8 +88,8 @@ describe('Disbursements', () => {
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');
-    cy.contains(individualContactFormData.first_name).should('exist');
-    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
+    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
     PageUtils.clickSidebarItem('Manage your transactions');
 
     PageUtils.getKabob('Independent Expenditure').click();
@@ -98,8 +101,8 @@ describe('Disbursements', () => {
 
     ReportListPage.editReport('FORM 24');
     PageUtils.clickLink('Independent Expenditure');
-    cy.contains(individualContactFormData.first_name).should('exist');
-    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
+    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
   });
 
   it('Create an Other Disbursement transaction', () => {

@@ -48,13 +48,13 @@ describe('Form 24 Independent Expenditures', () => {
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');
-    cy.contains(individualContactFormData.first_name).should('exist');
-    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
+    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
 
     ReportListPage.editReport('12-DAY PRE-GENERAL');
     PageUtils.clickSidebarItem('Manage your transactions');
     PageUtils.clickLink('Independent Expenditure');
-    cy.contains(individualContactFormData.first_name).should('exist');
-    cy.contains(individualContactFormData.last_name).should('exist');
+    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
+    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
   });
 });
