@@ -126,7 +126,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.store.dispatch(navigationEventClearAction());
     this.navigationEvent$.subscribe((navEvent) => {
       if (navEvent) {
-        this.handleNavigate(navEvent);
+        const navigationEvent = { ...navEvent };
+        this.handleNavigate(navigationEvent);
         this.store.dispatch(navigationEventClearAction());
       }
     });
@@ -229,20 +230,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   handleNavigate(navigationEvent: NavigationEvent): void {
     this.formSubmitted = true;
-    const navEvent = { ...navigationEvent };
 
-    if (navEvent.action === NavigationAction.SAVE) {
+    if (navigationEvent.action === NavigationAction.SAVE) {
       if (this.isInvalid()) {
         this.store.dispatch(singleClickEnableAction());
         return;
       }
       this.confirmation$.subscribe((confirmed: boolean) => {
         // if every confirmation was accepted
-        if (confirmed) this.save(navEvent);
+        if (confirmed) this.save(navigationEvent);
         else this.store.dispatch(singleClickEnableAction());
       });
     } else {
-      this.navigateTo(navEvent);
+      this.navigateTo(navigationEvent);
     }
   }
 
