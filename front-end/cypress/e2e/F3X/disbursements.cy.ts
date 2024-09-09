@@ -88,6 +88,7 @@ describe('Disbursements', () => {
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');
+    cy.contains('Address').should('exist');
     cy.get('#first_name').should('have.value', individualContactFormData.first_name);
     cy.get('#last_name').should('have.value', individualContactFormData.last_name);
     PageUtils.clickSidebarItem('Manage your transactions');
@@ -101,6 +102,7 @@ describe('Disbursements', () => {
 
     ReportListPage.editReport('FORM 24');
     PageUtils.clickLink('Independent Expenditure');
+    cy.contains('Address').should('exist');
     cy.get('#first_name').should('have.value', individualContactFormData.first_name);
     cy.get('#last_name').should('have.value', individualContactFormData.last_name);
   });
