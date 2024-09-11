@@ -25,15 +25,18 @@
   </p-toolbar>
   <app-transaction-receipts
     [report]="report"
+    (reloadTables)="refreshTables()"
     *ngIf="report?.report_type !== reportTypes.F24"
   ></app-transaction-receipts>
   <app-transaction-disbursements
     [report]="report"
     [openReportSelectionDialog]="openReportSelectDialog"
+    (reloadTables)="refreshTables()"
   ></app-transaction-disbursements>
   <app-transaction-loans-and-debts
     [report]="report"
     *ngIf="report?.report_type !== reportTypes.F24"
+    (reloadTables)="refreshTables()"
   ></app-transaction-loans-and-debts>
 </div>
 

@@ -53,6 +53,7 @@ describe('TransactionReceiptsComponent', () => {
                 SchATransaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
+                  can_delete: true,
                 }),
               ),
             getTableData: () => of([]),
@@ -78,47 +79,68 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('should show the correct row actions', () => {
-    expect(component.rowActions[0].isAvailable()).toEqual(true);
-    expect(component.rowActions[1].isAvailable()).toEqual(false);
+    const viewAction = component.rowActions.find((ra) => ra.label === 'View');
+    const editAction = component.rowActions.find((ra) => ra.label === 'Edit');
+    const aggregateAction = component.rowActions.find((ra) => ra.label === 'Aggregate');
+    const unaggregateAction = component.rowActions.find((ra) => ra.label === 'Unaggregate');
+    const itemizeAction = component.rowActions.find((ra) => ra.label === 'Itemize');
+    const unitemizeAction = component.rowActions.find((ra) => ra.label === 'Unitemize');
+    const reattributeAction = component.rowActions.find((ra) => ra.label === 'Reattribute');
+    const deleteAction = component.rowActions.find((ra) => ra.label === 'Delete');
+    expect(viewAction?.isAvailable()).toEqual(true);
     expect(
-      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
+      deleteAction?.isAvailable({
+        can_delete: true,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
+    ).toEqual(false);
+    expect(editAction?.isAvailable()).toEqual(false);
+    expect(
+      aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(false);
     expect(
-      component.rowActions[3].isAvailable({
+      unaggregateAction?.isAvailable({
         force_unaggregated: false,
         transactionType: { scheduleId: ScheduleIds.A },
       }),
     ).toEqual(false);
-    expect(component.rowActions[4].isAvailable({ itemized: false })).toEqual(false);
-    expect(component.rowActions[5].isAvailable({ itemized: true })).toEqual(false);
+    expect(itemizeAction?.isAvailable({ itemized: false })).toEqual(false);
+    expect(unitemizeAction?.isAvailable({ itemized: true })).toEqual(false);
     component.reportIsEditable = true;
-    expect(component.rowActions[0].isAvailable()).toEqual(false);
-    expect(component.rowActions[1].isAvailable()).toEqual(true);
+    expect(viewAction?.isAvailable()).toEqual(false);
+    expect(editAction?.isAvailable()).toEqual(true);
     expect(
-      component.rowActions[2].isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
-    ).toEqual(true);
-    expect(
-      component.rowActions[3].isAvailable({
-        force_unaggregated: false,
+      deleteAction?.isAvailable({
+        can_delete: true,
         transactionType: { scheduleId: ScheduleIds.A },
       }),
     ).toEqual(true);
     expect(
-      component.rowActions[4].isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } }),
+      aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(true);
     expect(
-      component.rowActions[5].isAvailable({ itemized: true, transactionType: { scheduleId: ScheduleIds.A } }),
+      unaggregateAction?.isAvailable({
+        force_unaggregated: false,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
     ).toEqual(true);
-    expect(
-      component.rowActions[12].isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } }),
-    ).toEqual(true);
-    expect(component.rowActions[0].isEnabled({})).toEqual(true);
-    expect(component.rowActions[1].isEnabled({})).toEqual(true);
-    expect(component.rowActions[2].isEnabled({})).toEqual(true);
-    expect(component.rowActions[3].isEnabled({})).toEqual(true);
-    expect(component.rowActions[4].isEnabled({})).toEqual(true);
-    expect(component.rowActions[5].isEnabled({})).toEqual(true);
-    expect(component.rowActions[12].isEnabled({})).toEqual(true);
+    expect(itemizeAction?.isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
+      true,
+    );
+    expect(unitemizeAction?.isAvailable({ itemized: true, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
+      true,
+    );
+    expect(reattributeAction?.isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
+      true,
+    );
+    expect(viewAction?.isEnabled({})).toEqual(true);
+    expect(editAction?.isEnabled({})).toEqual(true);
+    expect(deleteAction?.isEnabled({})).toEqual(true);
+    expect(aggregateAction?.isEnabled({})).toEqual(true);
+    expect(unaggregateAction?.isEnabled({})).toEqual(true);
+    expect(itemizeAction?.isEnabled({})).toEqual(true);
+    expect(unitemizeAction?.isEnabled({})).toEqual(true);
+    expect(reattributeAction?.isEnabled({})).toEqual(true);
   });
 
   it('test forceAggregate', fakeAsync(() => {

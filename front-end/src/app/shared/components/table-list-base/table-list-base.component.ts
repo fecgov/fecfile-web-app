@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
@@ -24,6 +24,8 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   protected itemService!: TableListService<T>;
 
   protected caption?: string;
+
+  @Output() reloadTables = new EventEmitter();
 
   constructor(
     protected messageService: MessageService,
@@ -156,7 +158,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       accept: () => {
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
-          this.refreshTable();
+          this.refreshTable(true);
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },
@@ -185,8 +187,12 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     });
   }
 
-  public refreshTable() {
-    this.loadTableItems({} as TableLazyLoadEvent);
+  public refreshTable(allTables = false) {
+    if (allTables) {
+      this.reloadTables.emit();
+    } else {
+      this.loadTableItems({} as TableLazyLoadEvent);
+    }
   }
 
   /**

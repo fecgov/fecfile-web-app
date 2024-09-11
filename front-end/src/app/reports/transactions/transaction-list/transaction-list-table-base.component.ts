@@ -45,7 +45,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
-      (transaction: Transaction) => this.reportIsEditable && !!transaction.can_delete,
+      (transaction: Transaction) => this.reportIsEditable && !!transaction?.can_delete,
       () => true,
     ),
     new TableAction(
