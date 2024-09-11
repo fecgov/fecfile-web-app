@@ -69,5 +69,6 @@ sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e E2E_DJANGO_SECR
 ```
 
 ## Tips for Writing E2E Tests
-- Assertions made immediately after a page load will sometimes check the previous page before the new page loads.  Add checks to ensure that the new page has loaded where possible.
-- The `.contains()` Cypress method cannot find the value of a text input field.  For assertions, you can instead use the `.should('have.value', VALUE)` method.
+
+- Assertions made immediately after a page load will sometimes check the previous page before the new page loads. Add checks to ensure that the new page has loaded where possible.
+- The `.contains()` Cypress method cannot find the value of a text input field. For assertions, you can instead use the `.should('have.value', VALUE)` method.
