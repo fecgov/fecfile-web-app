@@ -19,6 +19,7 @@ import { FormControl } from '@angular/forms';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
+import { clone } from 'lodash';
 
 @Component({
   selector: 'app-navigation-control',
@@ -31,24 +32,28 @@ export class NavigationControlComponent implements OnInit {
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
+    /**
+     * If the navigation control is a dropdown, we need to extract
+     * the options from the config in the transaction type
+     */
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
       this.controlType = 'dropdown';
       this.dropdownOptions = this.getOptions(
         this.transaction?.transactionType,
         this.transaction?.parent_transaction?.transactionType,
       );
+      /**
+       * If the navigation control is a button, we'll just establish
+       * the destination in the click handler
+       */
     } else {
       this.controlType = 'button';
     }
-    this.isGroupedDropdown = !this.dropdownOptions?.find((option: Record<string, unknown>) =>
-      Object.prototype.hasOwnProperty.call(option, 'value'),
-    );
   }
 
   isVisible = true;
@@ -57,7 +62,14 @@ export class NavigationControlComponent implements OnInit {
     return !!this.navigationControl?.disabledCondition(this.transaction);
   }
 
-  click(): void {
+  clickButton(): void {
+    /** click handler for button version of control
+     * determine destination transaction type based on navigation destination
+     * if the navigation destination is CHILD, then the destination transaction
+     *    type is the first subTransactionType
+     * if the navigation destination is ANOTHER, then the destination transaction type is the
+     *    same as the current transaction
+     */
     let destinationTransactionType: TransactionTypes | undefined;
     // Handle CHILD case by determining child TransactionType
     if (
@@ -67,9 +79,9 @@ export class NavigationControlComponent implements OnInit {
       destinationTransactionType = (this.transaction.transactionType.subTransactionConfig as TransactionTypes[])[0];
     }
 
-    // Handle ANOTHER_CHILD case by determining child TransactionType
+    // Handle ANOTHER case by determining child TransactionType
     if (
-      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER_CHILD &&
+      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER &&
       this.transaction?.transaction_type_identifier
     ) {
       destinationTransactionType = this.transaction.transaction_type_identifier as TransactionTypes;
@@ -85,14 +97,21 @@ export class NavigationControlComponent implements OnInit {
   }
 
   onDropdownChange(event: { value: NavigationEvent }): void {
+    // Handle click event for dropdown version of control
     if (event.value.action) {
-      this.navigate.emit(event.value);
+      const navEvent = clone(event.value);
+      this.navigate.emit(navEvent);
     }
-    this.dropdownControl.reset(); // If the save fails, this clears the dropdown
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig = false): any => {
+    /** Interpret config to return either a group of navigation options or a single navigation option
+     * If the config is a group, return a group of options, recursively calling getOptionFromConfig
+     * If the config is a single transaction type, return a single navigation option
+     * If the transaction type is not implemented, return just a label for the transaction type (unclickable)
+     */
+    // Return a group of options
     if ((config as SubTransactionGroup).subTransactionTypes) {
       const group = config as SubTransactionGroup;
       return {
@@ -101,10 +120,14 @@ export class NavigationControlComponent implements OnInit {
       };
     }
     const typeId = config as TransactionTypes;
+
+    // Return an unclicable label if the transaction type is not implemented
     if (!getTransactionTypeClass(typeId)) {
       return { label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId) };
     }
     const type = TransactionTypeUtils.factory(typeId);
+
+    // return a single navigation option
     return {
       label:
         type.shortName ||
@@ -114,7 +137,8 @@ export class NavigationControlComponent implements OnInit {
         LabelUtils.get(ScheduleETransactionTypeLabels, typeId),
       value: new NavigationEvent(
         NavigationAction.SAVE,
-        isParentConfig ? NavigationDestination.ANOTHER_CHILD : NavigationDestination.CHILD,
+        // If this control came from the parent, the desination is ANOTHER
+        isParentConfig ? NavigationDestination.ANOTHER : NavigationDestination.CHILD,
         this.transaction,
         typeId,
       ),
@@ -123,14 +147,25 @@ export class NavigationControlComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): any {
+    /** Get options for dropdown based on transactionType and parentTransactionType
+     * If parentTransactionType is provided, include options from parentTransactionType
+     *    options from parent transaction will have the destionaion of ANOTHER
+     * Options from the current transaction type will have the destination of CHILD
+     *
+     * Sub transaction config can be an array or a single config.
+     *    A single config can contain a group of transaction types or just be a single
+     *    transaction type
+     */
     const config = transactionType?.subTransactionConfig;
     const parentConfig = parentTransactionType?.subTransactionConfig;
     const options = [];
+    // either flatten an array or add a single config
     if (Array.isArray(parentConfig)) {
       options.push(...parentConfig.map((type) => this.getOptionFromConfig(type, true)));
     } else if (parentConfig) {
       options.push(this.getOptionFromConfig(parentConfig, true));
     }
+    // either flatten an array or add a single config
     if (Array.isArray(config)) {
       options.push(...config.map((type) => this.getOptionFromConfig(type)));
     } else if (config) {

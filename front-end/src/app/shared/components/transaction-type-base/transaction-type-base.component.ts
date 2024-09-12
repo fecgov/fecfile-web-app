@@ -19,7 +19,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MessageService, SelectItem, Message } from 'primeng/api';
 import { concatAll, from, map, Observable, of, reduce, startWith, Subject, takeUntil } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
@@ -49,6 +49,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   activeReport$: Observable<Report>;
   activeReportId: string;
   reportTypes = ReportTypes;
+
+  saveSuccessMessage: Message = {
+    severity: 'success',
+    summary: 'Successful',
+    detail: 'Transaction Saved',
+    life: 3000,
+  };
 
   constructor(
     protected messageService: MessageService,
@@ -154,7 +161,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   processPayload(payload: Transaction, navigationEvent: NavigationEvent) {
     if (payload.transaction_type_identifier) {
       this.writeToApi(payload).subscribe((transaction) => {
-        navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
+        navigationEvent.transaction = transaction;
         this.navigateTo(navigationEvent);
       });
     } else {
@@ -233,32 +240,30 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy,
   }
 
   navigateTo(event: NavigationEvent) {
+    /**
+     * Interpret event to navigate to correct destination.
+     *  - If the destination is ANOTHER, navigate to create another transaction of the same type
+     *      (a child of the current transaction's parent if it exists)
+     *  - If the destination is CHILD, navigate to create a sub-transaction of the current transaction
+     */
     const reportId = this.activatedRoute.snapshot.params['reportId'];
     const reportPath = `/reports/transactions/report/${reportId}`;
-    if (
-      event.destination === NavigationDestination.ANOTHER ||
-      event.destination === NavigationDestination.ANOTHER_CHILD
-    ) {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Transaction Saved',
-        life: 3000,
-      });
+    // If the transaction is saved, display a success message
+    if (event.action === NavigationAction.SAVE) {
+      this.messageService.add(this.saveSuccessMessage);
+    }
+    if (event.destination === NavigationDestination.ANOTHER) {
+      // If the transaction has a parent, navigate to create another sub-transaction of it
       if (event.transaction?.parent_transaction_id) {
         this.router.navigateByUrl(
           `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`,
         );
+        // Otherwise, navigate to create another tier 1 transaction
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
       }
     } else if (event.destination === NavigationDestination.CHILD) {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Parent Transaction Saved',
-        life: 3000,
-      });
+      // Navigate to create a sub-transaction of the current transaction
       this.router.navigateByUrl(
         `${reportPath}/list/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`,
       );

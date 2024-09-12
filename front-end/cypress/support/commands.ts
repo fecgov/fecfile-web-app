@@ -1,5 +1,3 @@
-import '@cypress-audit/lighthouse/commands';
-
 function safeString(stringVal: string | number | undefined | null): string {
   if (stringVal === null || stringVal === undefined) {
     return '';
@@ -25,30 +23,4 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
   const outString = safeString(stringVal);
 
   return safeType(prevSubject, '{selectall}{del}' + outString);
-}
-
-export function runLighthouse(directory: string, filename: string) {
-  return; // Temporarily suspend lighthouse while we trouble-shoot CircleCI
-  cy.lighthouse(
-    {
-      performance: 0,
-      accessibility: 90,
-      'best-practices': 0,
-      seo: 0,
-      pwa: 0,
-    },
-    {
-      output: 'html',
-      formFactor: 'desktop',
-      screenEmulation: {
-        mobile: false,
-        disable: false,
-        width: Cypress.config('viewportWidth'),
-        height: Cypress.config('viewportHeight'),
-        deviceScaleRatio: 1,
-      },
-    },
-  ).then(() => {
-    cy.exec(`mv lighthouse.html cypress/lighthouse/${directory}/${filename}.html`);
-  });
 }

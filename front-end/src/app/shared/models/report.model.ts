@@ -38,6 +38,7 @@ export abstract class Report extends BaseModel {
   @Transform(BaseModel.dateTransform)
   updated: Date | undefined;
   can_delete = false;
+  can_unamend = false;
   version_label?: string;
   report_code?: string;
   report_code_label?: string;

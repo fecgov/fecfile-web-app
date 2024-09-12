@@ -164,29 +164,21 @@
             pButton
             pRipple
             label="Back"
-            class="p-button-secondary p-button-outlined"
+            type="button"
+            class="p-button-secondary"
             (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
           ></button>
         </div>
         <div class="col-8 submit-container" *ngIf="!report?.getBlocker()">
           <button
-            *ngIf="form.value.userCertified === true"
             pButton
             pRipple
-            [disabled]="loading > 0"
             label="Submit"
+            type="submit"
             class="p-button"
             (click)="submitClicked()"
+            [disabled]="!form.value.userCertified || loading > 0"
           ></button>
-          <button
-            *ngIf="form.value.userCertified === false"
-            pButton
-            pRipple
-            label="Submit"
-            class="p-button"
-            disabled
-          ></button>
-          <p-confirmDialog [style]="{ width: '60vw' }"></p-confirmDialog>
         </div>
         <ng-container *ngIf="loading > 0">
           <div class="col-4">
