@@ -59,4 +59,10 @@ describe('CommitteeMemberDialogComponent', () => {
 
     expect(component.form.valid).toBeFalse();
   });
+
+  it('should default role to first in list', () => {
+    component.detailVisible = true;
+    component.ngOnChanges();
+    expect(component.form.get('role')?.value).toBe('COMMITTEE_ADMINISTRATOR');
+  });
 });
