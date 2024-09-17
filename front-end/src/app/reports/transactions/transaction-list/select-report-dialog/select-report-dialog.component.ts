@@ -23,14 +23,6 @@ export class SelectReportDialogComponent implements OnInit {
     private service: Form3XService,
   ) {}
 
-  get reattRedes(): string {
-    return ReattRedesUtils.isReattribute(this.type) ? 'reattribute' : 'redesignate';
-  }
-
-  get reattRedesignation(): string {
-    return ReattRedesUtils.isReattribute(this.type) ? 'reattribution' : 'redesignation';
-  }
-
   ngOnInit() {
     ReattRedesUtils.selectReportDialogSubject.subscribe((data) => {
       this.transaction = data[0];
@@ -48,7 +40,7 @@ export class SelectReportDialogComponent implements OnInit {
   async createReattribution() {
     if (!this.transaction) throw new Error('No base transaction');
     await this.router.navigateByUrl(
-      `/reports/transactions/report/${this.selectedReport?.id}/create/${this.transaction.transaction_type_identifier}?${this.reattRedesignation}=${this.transaction.id}`,
+      `/reports/transactions/report/${this.selectedReport?.id}/create/${this.transaction.transaction_type_identifier}?${this.urlParameter}=${this.transaction.id}`,
     );
   }
 
@@ -57,7 +49,18 @@ export class SelectReportDialogComponent implements OnInit {
     this.selectReportDialog?.nativeElement.close();
   }
 
-  get electContrib(): string {
+  // Label for action the user is trying to perform
+  get actionLabel(): string {
+    return ReattRedesUtils.isReattribute(this.type) ? 'reattribute' : 'redesignate';
+  }
+
+  // URL parameter to set the action type
+  get urlParameter(): string {
+    return ReattRedesUtils.isReattribute(this.type) ? 'reattribution' : 'redesignation';
+  }
+
+  // Label for the target of the action
+  get actionTargetLabel(): string {
     return ReattRedesUtils.isReattribute(this.type) ? 'contributor' : 'election';
   }
 }
