@@ -56,4 +56,8 @@ export class SelectReportDialogComponent implements OnInit {
     this.transaction = undefined;
     this.selectReportDialog?.nativeElement.close();
   }
+
+  get electContrib(): string {
+    return ReattRedesUtils.isReattribute(this.type) ? 'contributor' : 'election';
+  }
 }
