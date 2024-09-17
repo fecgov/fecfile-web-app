@@ -47,8 +47,6 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
         updateOn: 'change',
       }),
     );
-
-    this.form.get('role')?.setValue(this.roleOptions[0]);
   }
 
   ngAfterViewInit() {
