@@ -252,7 +252,8 @@ workflows:
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
   # circleci config file.  It is used to run the e2e tests
-  # when the fecfile-web-api is deployed to dev/stage/prod.
+  # when the fecfile-web-api is deployed to dev, stage,
+  # test, or prod.
   triggered-e2e-test:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
