@@ -242,7 +242,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: feature\/1572-test-environment-b
+              only: /feature\/1572-test-environment-b/
               # only: /release\/sprint-[\.\d]+|main/
 
   nightly-run:
