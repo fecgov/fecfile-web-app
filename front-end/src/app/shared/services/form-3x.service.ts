@@ -53,7 +53,11 @@ export class Form3XService extends ReportService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
-    return true; // Committee Qualificaiton Logic is being overriden until a future ticket
+    return true;
+    // Committee Qualificaiton Logic is being overriden until a future ticket.
+    // When this is reenabled, we should consider expanding the unit tests for it,
+    // since having it always return true didn't cause any tests to fail.
+
     // return (
     //   !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
     // );
