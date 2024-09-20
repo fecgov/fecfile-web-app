@@ -1,3 +1,5 @@
+import { DateUtils } from './date.utils';
+
 export enum F3xReportCodes {
   Q1 = 'Q1',
   Q2 = 'Q2',
@@ -95,12 +97,13 @@ function createCoverageFunction(
 }
 
 function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFrequency: string): [Date, Date] {
+  year = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
   if (isElectionYear) {
-    return [new Date(year - 1, 9, 1), new Date(year - 1, 11, 31)];
+    return [new Date(year, 9, 1), new Date(year, 11, 31)];
   } else if (filingFrequency === 'Q') {
-    return [new Date(year - 1, 6, 1), new Date(year - 1, 11, 31)];
+    return [new Date(year, 6, 1), new Date(year, 11, 31)];
   }
-  return [new Date(year - 1, 11, 1), new Date(year - 1, 11, 31)];
+  return [new Date(year, 11, 1), new Date(year, 11, 31)];
 }
 
 export const monthlyElectionYearReportCodes: F3xReportCodes[] = [

@@ -4,7 +4,6 @@
       <app-navigation-control
         [navigationControl]="navigationControl"
         [transaction]="transaction"
-        (navigate)="handleNavigate($event)"
       ></app-navigation-control>
     </div>
   </ng-template>
@@ -15,7 +14,6 @@
   <app-navigation-control-bar
     [navigationControls]="getNavigationControls()"
     [transaction]="transaction"
-    (navigate)="handleNavigate($event)"
     [class]="isEditable ? '' : 'flex-center'"
   ></app-navigation-control-bar>
 </div>

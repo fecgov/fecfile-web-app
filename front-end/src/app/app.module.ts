@@ -15,6 +15,7 @@ import { AppState } from './store/app-state.model';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { singleClickReducer } from './store/single-click.reducer';
 import { loginReducer } from './store/user-login-data.reducer';
+import { navigationEventReducer } from './store/navigation-event.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -112,6 +113,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         singleClickDisabled: singleClickReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
+        navigationEvent: navigationEventReducer,
       },
       { metaReducers },
     ),
