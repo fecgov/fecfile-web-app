@@ -48,6 +48,14 @@
     </span>
   </ng-template>
 </p-confirmDialog>
+<p-confirmDialog #cd [style]="{ width: '450px' }" key="transaction-deletion-dialog" header="Are you sure?">
+  <ng-template pTemplate="footer">
+    <span class="confirm-footer">
+      <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
+      <button type="button" pButton label="Confirm" (click)="cd.accept()"></button>
+    </span>
+  </ng-template>
+</p-confirmDialog>
 
 <app-select-report-dialog></app-select-report-dialog>
 

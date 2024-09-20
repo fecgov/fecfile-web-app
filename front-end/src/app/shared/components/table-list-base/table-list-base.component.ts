@@ -158,7 +158,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       accept: () => {
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
-          this.refreshTable(true);
+          this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },

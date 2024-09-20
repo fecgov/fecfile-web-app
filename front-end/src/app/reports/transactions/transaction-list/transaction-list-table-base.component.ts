@@ -334,4 +334,25 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
     return '';
   }
+
+  public override deleteItem(item: Transaction): void | Promise<void> {
+    this.confirmationService.confirm({
+      key: 'transaction-deletion-dialog',
+      message:
+        'Deleting this transaction will also delete any linked transactions ' +
+        '(such as memos, in-kinds, and transfers). Please note that you cannot undo this action.',
+      accept: () => {
+        this.itemService.delete(item).subscribe(() => {
+          this.item = this.getEmptyItem();
+          this.refreshTable(true);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Transaction Deleted',
+            life: 3000,
+          });
+        });
+      },
+    });
+  }
 }
