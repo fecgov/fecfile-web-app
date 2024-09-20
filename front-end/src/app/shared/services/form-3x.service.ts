@@ -51,10 +51,12 @@ export class Form3XService extends ReportService {
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
-    return (
-      !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
-    );
+    return true; // Committee Qualificaiton Logic is being overriden until a future ticket
+    // return (
+    //   !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
+    // );
   }
 
   public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {
