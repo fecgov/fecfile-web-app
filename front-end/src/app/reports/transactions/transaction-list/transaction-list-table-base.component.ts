@@ -9,7 +9,6 @@ import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.mo
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -338,8 +337,18 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   private canDelete(transaction: Transaction): boolean {
     if (
-      transaction.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
-      (transaction.loan_id || transaction.debt_id)
+      transaction.transaction_type_identifier === undefined ||
+      (!(
+        transaction.transaction_type_identifier in
+        [
+          'LOAN_RECEIVED_FROM_INDIVIDUAL',
+          'LOAN_RECEIVED_FROM_BANK',
+          'LOAN_BY_COMMITTEE',
+          'DEBT_OWED_BY_COMMITTEE',
+          'DEBT_OWED_TO_COMMITTEE',
+        ]
+      ) &&
+        (transaction.loan_id || transaction.debt_id))
     ) {
       return false;
     }
