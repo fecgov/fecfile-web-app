@@ -34,7 +34,9 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   ];
   report?: Report;
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
+    updateOn: 'blur',
+  });
   loading: 0 | 1 | 2 = 0;
   backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';

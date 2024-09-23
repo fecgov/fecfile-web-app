@@ -292,108 +292,147 @@ describe('TransactionTypeBaseComponent', () => {
     beforeEach(() => {
       navigateToSpy.and.callThrough();
     });
-    describe('NavigationDestination.ANOTHER or NavigationDestination.ANOTHER_CHILD', () => {
+
+    function testMessage(navEvent: NavigationEvent) {
+      component.navigateTo(navEvent);
+      expect(messageServiceSpy.add).toHaveBeenCalledWith({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Transaction Saved',
+        life: 3000,
+      });
+    }
+
+    function testNoMessage(navEvent: NavigationEvent) {
+      component.navigateTo(navEvent);
+      expect(messageServiceSpy.add).toHaveBeenCalledTimes(0);
+    }
+
+    function testNavigate(navEvent: NavigationEvent, route: string) {
+      component.navigateTo(navEvent);
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
+    }
+
+    // ANOTHER //
+    describe('NavigationDestination.ANOTHER', () => {
       it('should send success to message service', () => {
         testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.ANOTHER,
-            component.transaction,
-            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
-          ),
-        );
-        testMessage(
-          new NavigationEvent(
-            NavigationAction.SAVE,
-            NavigationDestination.ANOTHER_CHILD,
-            component.transaction,
+            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
       });
 
-      it('should route based on whether it is has a parent_transaction_id', () => {
-        testParent(
+      it('should route to the same transaction type', () => {
+        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+        testNavigate(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.ANOTHER,
-            component.transaction,
-            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+            transaction,
+            ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
           ),
-        );
-        testParent(
-          new NavigationEvent(
-            NavigationAction.SAVE,
-            NavigationDestination.ANOTHER_CHILD,
-            component.transaction,
-            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
-          ),
+          '/reports/transactions/report/999/create/PARTNERSHIP_JF_TRANSFER_MEMO',
         );
       });
-
-      function testMessage(navEvent: NavigationEvent) {
-        component.navigateTo(navEvent);
-        expect(messageServiceSpy.add).toHaveBeenCalledWith({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Transaction Saved',
-          life: 3000,
-        });
-      }
-
-      function testParent(navEvent: NavigationEvent) {
-        component.navigateTo(navEvent);
-        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(
-          '/reports/transactions/report/999/create/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT',
+      it('should route to create a sub transaction of the current parent', () => {
+        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+        transaction.parent_transaction_id = '1';
+        testNavigate(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.ANOTHER,
+            transaction,
+            ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
+          ),
+          '/reports/transactions/report/999/list/1/create-sub-transaction/PARTNERSHIP_JF_TRANSFER_MEMO',
         );
-        if (navEvent.transaction) navEvent.transaction.parent_transaction_id = '1';
-        component.navigateTo(navEvent);
-        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(
-          '/reports/transactions/report/999/list/1/create-sub-transaction/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT',
-        );
-      }
+      });
     });
 
+    // CHILD //
     describe('NavigationDestination.CHILD', () => {
-      beforeEach(() => {
-        navEvent = new NavigationEvent(
-          NavigationAction.SAVE,
-          NavigationDestination.CHILD,
-          component.transaction,
-          ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+      it('should send success to message service', () => {
+        testMessage(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.CHILD,
+            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+          ),
         );
       });
-      it('should send success to message service', () => {
-        component.navigateTo(navEvent);
-        expect(messageServiceSpy.add).toHaveBeenCalledWith({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Parent Transaction Saved',
-          life: 3000,
-        });
-      });
-
-      it('should route properly', () => {
-        if (navEvent.transaction) navEvent.transaction.parent_transaction_id = '123';
-        component.navigateTo(navEvent);
-        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(
-          '/reports/transactions/report/999/list/123/create-sub-transaction/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT',
+      it('should route to child of current transaction if CHILD', () => {
+        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+        transaction.id = '1';
+        testNavigate(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.CHILD,
+            transaction,
+            ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+          ),
+          '/reports/transactions/report/999/list/1/create-sub-transaction/PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO',
         );
       });
     });
 
-    describe('NavigationDestination.', () => {
-      beforeEach(() => {
-        navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+    // PARENT //
+    describe('NavigationDestination.PARENT', () => {
+      it('should not send success to message service', () => {
+        testNoMessage(
+          new NavigationEvent(
+            NavigationAction.CANCEL,
+            NavigationDestination.PARENT,
+            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+          ),
+        );
       });
-      it('should route properly', () => {
-        component.navigateTo(navEvent);
-        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/transactions/report/999/list');
+      it('should route to the parent if PARENT', () => {
+        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+        transaction.parent_transaction_id = '1';
+        testNavigate(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.PARENT,
+            transaction,
+            ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
+          ),
+          '/reports/transactions/report/999/list/1',
+        );
+      });
+    });
+
+    // LIST //
+    describe('NavigationDestination.LIST', () => {
+      it('should not send success to message service if SAVE', () => {
+        testMessage(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.LIST,
+            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+          ),
+        );
+      });
+      it('should send success to message service if CANCEL', () => {
+        testNoMessage(
+          new NavigationEvent(
+            NavigationAction.CANCEL,
+            NavigationDestination.LIST,
+            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+          ),
+        );
       });
     });
   });
 
-  describe('NavigationDestination', () => {
+  describe('updateFormWithCandidateContact', () => {
     it('should call updateFormWithCandidateContact', () => {
       const spy = spyOn(TransactionContactUtils, 'updateFormWithCandidateContact');
       const selectItem: SelectItem<Contact> = { value: new Contact() };

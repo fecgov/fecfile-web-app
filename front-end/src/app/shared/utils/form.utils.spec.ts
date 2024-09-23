@@ -5,7 +5,7 @@ describe('blurActiveInput', () => {
   let form: FormGroup;
 
   beforeEach(() => {
-    form = new FormGroup({});
+    form = new FormGroup({}, { updateOn: 'blur' });
     spyOn(form, 'updateValueAndValidity');
   });
 

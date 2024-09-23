@@ -40,16 +40,27 @@
     <div class="col-3">
       <div class="field">
         <label for="candidate_district">CANDIDATE DISTRICT</label>
-        <p-dropdown
-          inputId="candidate_district"
-          [formControlName]="this.districtFormControlName"
-          [options]="candidateDistrictOptions"
-          [ngClass]="{
-            disabled: this.form.get(this.stateFormControlName)?.disabled,
-          }"
-          appendTo="body"
-          [autoDisplayFirst]="false"
-        ></p-dropdown>
+        <ng-container *ngIf="this.candidateDistrictOptions.length === 1">
+          <input
+            type="text"
+            pInputText
+            id="candidate_district"
+            [formControlName]="this.districtFormControlName"
+            class="p-disabled"
+          />
+        </ng-container>
+        <ng-container *ngIf="this.candidateDistrictOptions.length !== 1">
+          <p-dropdown
+            inputId="candidate_district"
+            [formControlName]="this.districtFormControlName"
+            [options]="candidateDistrictOptions"
+            [ngClass]="{
+              disabled: this.form.get(this.stateFormControlName)?.disabled,
+            }"
+            appendTo="body"
+            [autoDisplayFirst]="false"
+          ></p-dropdown>
+        </ng-container>
         <app-error-messages
           [form]="form"
           [fieldName]="this.districtFormControlName"

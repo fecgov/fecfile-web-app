@@ -28,7 +28,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  FormGroup = this.fb.group({});
+  FormGroup = this.fb.group({}, { updateOn: 'blur' });
   pullForward = false;
   reattributedData = {} as AccordionData;
 
@@ -104,7 +104,9 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       reatRedes.transactionType.contactTypeOptions ?? [],
     );
 
-    this.reattributedData.form = this.fb.group(SchemaUtils.getFormGroupFields(this.reattributedData.formProperties));
+    this.reattributedData.form = this.fb.group(SchemaUtils.getFormGroupFields(this.reattributedData.formProperties), {
+      updateOn: 'blur',
+    });
     this.reattributedData.contactIdMap = {};
     this.reattributedData.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
       this.reattributedData.form,

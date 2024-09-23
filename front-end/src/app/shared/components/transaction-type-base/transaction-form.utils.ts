@@ -236,7 +236,7 @@ export class TransactionFormUtils {
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
-    let payload: ScheduleTransaction = getFromJSON({
+    const payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
@@ -248,14 +248,6 @@ export class TransactionFormUtils {
       payload['report_ids'] = [activeReportId, secondaryReportId];
     }
 
-    // Reorganize the payload if this transaction type can update its parent transaction
-    // This will break the scenario where the user creates a grandparent, then child, then tries
-    // to create a grandchild transaction because we won't know which child transaction of the grandparent
-    // was the original transaction it's id was generated on the api.  the middle child's
-    // id is necessary to generate the url for creating the grandchild.
-    if (transaction.transactionType?.updateParentOnSave) {
-      payload = payload.getUpdatedParent() as ScheduleTransaction;
-    }
     return payload;
   }
 

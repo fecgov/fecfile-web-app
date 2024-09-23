@@ -30,6 +30,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
 @Component({
   selector: 'app-create-f3x-step1',
   templateUrl: './create-f3x-step1.component.html',
+  styleUrl: './create-f3x-step1.component.scss',
 })
 export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
@@ -83,7 +84,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       .pipe(takeUntil(this.destroy$))
       .subscribe(([committeeAccount, existingCoverage]) => {
         this.committeeAccount = committeeAccount;
-        const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
+        const filingFrequency = committeeAccount?.filing_frequency === 'M' ? 'M' : 'Q';
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
         this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });

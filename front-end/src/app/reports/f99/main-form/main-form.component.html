@@ -2,7 +2,7 @@
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
-        <h1>FEC Form 99</h1>
+        <h1>Form 99</h1>
         <h5>MISCELLANEOUS REPORT TO THE FEC</h5>
       </div>
     </div>
@@ -44,11 +44,11 @@
         <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
-    <p-divider></p-divider>
+    <hr type="solid" />
 
     <h3>Address</h3>
     <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
-    <p-divider></p-divider>
+    <hr type="solid" />
 
     <h3>Text Information</h3>
     <div class="grid">
@@ -77,7 +77,7 @@
         <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
-    <p-divider></p-divider>
+    <hr type="solid" />
   </form>
 </div>
 <app-save-cancel (save)="save($event)" (cancel)="goBack()"></app-save-cancel>

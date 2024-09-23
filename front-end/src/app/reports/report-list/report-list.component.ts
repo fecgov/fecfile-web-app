@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { firstValueFrom, lastValueFrom, take, takeUntil } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
@@ -33,6 +33,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       (report: Report) => report.report_status !== ReportStatus.IN_PROGRESS,
     ),
     new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
+    new TableAction('Unamend', this.unamendReport.bind(this), (report: Report) => report.can_unamend),
     new TableAction('Download as .fec', this.download.bind(this)),
   ];
 
@@ -98,13 +99,20 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     }
   }
 
-  public amendReport(report: Report): void {
-    this.itemService
-      .startAmendment(report)
-      .pipe(take(1), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.loadTableItems({});
-      });
+  async amendReport(report: Report) {
+    await this.itemService.startAmendment(report);
+    this.loadTableItems({});
+  }
+
+  async unamendReport(report: Report) {
+    await this.itemService.startUnamendment(report);
+    this.loadTableItems({});
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Report Unamended',
+      life: 3000,
+    });
   }
 
   public confirmDelete(report: Report): void {
