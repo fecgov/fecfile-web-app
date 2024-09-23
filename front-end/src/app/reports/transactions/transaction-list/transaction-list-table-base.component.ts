@@ -338,17 +338,14 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   private canDelete(transaction: Transaction): boolean {
     if (
       transaction.transaction_type_identifier === undefined ||
-      (!(
-        transaction.transaction_type_identifier in
-        [
+      ((transaction.loan_id || transaction.debt_id) &&
+        ![
           'LOAN_RECEIVED_FROM_INDIVIDUAL',
           'LOAN_RECEIVED_FROM_BANK',
           'LOAN_BY_COMMITTEE',
           'DEBT_OWED_BY_COMMITTEE',
           'DEBT_OWED_TO_COMMITTEE',
-        ]
-      ) &&
-        (transaction.loan_id || transaction.debt_id))
+        ].includes(transaction.transaction_type_identifier || ''))
     ) {
       return false;
     }

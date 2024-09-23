@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -65,6 +65,9 @@ describe('TransactionReceiptsComponent', () => {
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
+    testItemService.delete = (): Observable<null> => {
+      return of(null);
+    };
     testConfirmationService = TestBed.inject(ConfirmationService);
     component = fixture.componentInstance;
     confirmSpy = spyOn(testConfirmationService, 'confirm');
@@ -112,9 +115,18 @@ describe('TransactionReceiptsComponent', () => {
     expect(
       deleteAction?.isAvailable({
         can_delete: true,
+        transaction_type_identifier: '',
         transactionType: { scheduleId: ScheduleIds.A },
       }),
-    ).toEqual(true);
+    ).toBeTrue();
+    expect(
+      deleteAction?.isAvailable({
+        can_delete: true,
+        transaction_type_identifier: 'LOAN_REPAYMENT_MADE',
+        loan_id: 'test',
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
+    ).toBeFalse();
     expect(
       aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
     ).toEqual(true);
@@ -180,6 +192,13 @@ describe('TransactionReceiptsComponent', () => {
     const testTransaction: Transaction = { id: 'testId', report_ids: ['test'] } as unknown as Transaction;
     component.editItem(testTransaction);
     expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('test deleteItem', () => {
+    const deleteSpy = spyOn(testItemService, 'delete').and.callThrough();
+    const testTransaction: Transaction = { id: 'testId', report_ids: ['test'] } as unknown as Transaction;
+    component.deleteItem(testTransaction);
+    expect(deleteSpy).toHaveBeenCalled();
   });
 
   describe('format id', () => {
