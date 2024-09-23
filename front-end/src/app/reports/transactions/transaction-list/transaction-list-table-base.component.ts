@@ -9,6 +9,7 @@ import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.mo
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -45,7 +46,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
-      (transaction: Transaction) => this.reportIsEditable && !!transaction?.can_delete,
+      (transaction: Transaction) => this.reportIsEditable && this.canDelete(transaction),
       () => true,
     ),
     new TableAction(
@@ -333,6 +334,17 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       return id.substring(0, 8).toUpperCase();
     }
     return '';
+  }
+
+  private canDelete(transaction: Transaction): boolean {
+    if (
+      transaction.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
+      (transaction.loan_id || transaction.debt_id)
+    ) {
+      return false;
+    }
+
+    return !!transaction?.can_delete;
   }
 
   public override deleteItem(item: Transaction): void | Promise<void> {
