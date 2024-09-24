@@ -242,7 +242,8 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/
+              only: /feature\/1572-test-environment-b/
+              # only: /release\/sprint-[\.\d]+|main/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
