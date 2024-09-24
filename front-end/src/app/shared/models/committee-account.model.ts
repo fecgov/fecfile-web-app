@@ -71,13 +71,10 @@ export class CommitteeAccount extends BaseModel {
 
 export function isPAC(committee_type?: string): boolean {
   if (!committee_type) return false;
-  return PAC.includes(committee_type);
+  return !isPTY(committee_type);
 }
 
-export function isPTY(committee_type?: string, designation?: string): boolean {
-  if (!committee_type || !designation) return false;
-  if (committee_type === 'Y') return true;
-  return committee_type === 'X' && designation !== 'U';
+export function isPTY(committee_type?: string): boolean {
+  if (!committee_type) return false;
+  return committee_type === 'D';
 }
-
-const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];

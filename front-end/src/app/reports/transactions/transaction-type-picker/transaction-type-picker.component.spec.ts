@@ -120,10 +120,9 @@ describe('TransactionTypePickerComponent', () => {
       component.ngOnInit();
       tick(500);
       if (component.committeeAccount) {
-        component.committeeAccount.committee_type = 'X';
-        component.committeeAccount.designation = 'J';
+        component.committeeAccount.committee_type = 'D';
       }
-      expect(isPTY(component.committeeAccount?.committee_type, component.committeeAccount?.designation)).toBeTrue();
+      expect(isPTY(component.committeeAccount?.committee_type)).toBeTrue();
       const types = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
       expect(types.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
     }));

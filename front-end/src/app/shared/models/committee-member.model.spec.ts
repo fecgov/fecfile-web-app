@@ -40,20 +40,19 @@ describe('CommitteeMember', () => {
 
   it('should confirm if committee is PAC', () => {
     expect(isPAC()).toBeFalse();
-    const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];
+    const PAC = ['O', 'U', 'N', 'Q', 'V', 'W', 'X'];
     PAC.forEach((entry) => {
       expect(isPAC(entry)).toBeTrue();
     });
-    expect(isPAC('X')).toBeFalse();
+    expect(isPAC('D')).toBeFalse();
   });
 
   it('should confirm if committee is PTY', () => {
     expect(isPTY()).toBeFalse();
     expect(isPTY('Y')).toBeFalse();
-    expect(isPTY('Y', 'U')).toBeTrue();
-    expect(isPTY('Y', 'J')).toBeTrue();
-    expect(isPTY('X', 'U')).toBeFalse();
-    expect(isPTY('X', 'J')).toBeTrue();
-    expect(isPTY('O', 'U')).toBeFalse();
+    expect(isPTY('D')).toBeTrue();
+    expect(isPTY('J')).toBeFalse();
+    expect(isPTY('X')).toBeFalse();
+    expect(isPTY('O')).toBeFalse();
   });
 });
