@@ -58,6 +58,7 @@ import { UsersModule } from './users/users.module';
 import { SchedulerAction, asyncScheduler } from 'rxjs';
 import { ReportsModule } from './reports/reports.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -131,6 +132,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     SharedModule,
     ReportsModule,
     ConfirmDialogModule,
+    ToastModule,
   ],
   providers: [
     CookieService,

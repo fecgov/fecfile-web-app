@@ -62,9 +62,14 @@ describe('SelectReportDialogComponent', () => {
   describe('reattRedes', () => {
     it("should determine if it's a reattribution of redesignation", () => {
       component.type = ReattRedesTypes.REATTRIBUTED;
-      expect(component.reattRedes).toBe('reattribute');
+      expect(component.actionLabel).toBe('reattribute');
+      expect(component.urlParameter).toBe('reattribution');
+      expect(component.actionTargetLabel).toBe('contributor');
 
-      expect(component.reattRedesignation).toBe('reattribution');
+      component.type = ReattRedesTypes.REDESIGNATED;
+      expect(component.actionLabel).toBe('redesignate');
+      expect(component.urlParameter).toBe('redesignation');
+      expect(component.actionTargetLabel).toBe('election');
     });
   });
 
@@ -87,7 +92,7 @@ describe('SelectReportDialogComponent', () => {
       component.selectedReport = component.availableReports[0];
       try {
         await component.createReattribution();
-      } catch (error) {
+      } catch {
         console.log("shouldn't go here");
       }
       const route = `/reports/transactions/report/${component.selectedReport.id}/create/${testScheduleATransaction.transaction_type_identifier}?reattribution=${testScheduleATransaction.id}`;
