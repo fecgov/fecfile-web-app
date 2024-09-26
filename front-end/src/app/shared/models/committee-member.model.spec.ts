@@ -1,5 +1,7 @@
-import { isPAC, isPTY } from './committee-account.model';
+import { environment } from 'environments/environment';
+import { PRODUCTION_PAC_TYPES, isPAC, isPTY } from './committee-account.model';
 import { CommitteeMember } from './committee-member.model';
+import { en } from 'intl-tel-input/i18n';
 
 describe('CommitteeMember', () => {
   it('should create an instance', () => {
@@ -39,20 +41,53 @@ describe('CommitteeMember', () => {
   });
 
   it('should confirm if committee is PAC', () => {
+    const committee_data_source = environment.committee_data_source;
+
+    // TEST version
+    environment.committee_data_source = 'test';
     expect(isPAC()).toBeFalse();
-    const PAC = ['O', 'U', 'N', 'Q', 'V', 'W', 'X'];
+    const PAC = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'J'];
     PAC.forEach((entry) => {
       expect(isPAC(entry)).toBeTrue();
     });
     expect(isPAC('D')).toBeFalse();
+
+    // PRODUCTION version
+    environment.committee_data_source = 'production';
+    expect(isPAC()).toBeFalse();
+    const PAC_PRODUCTION = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];
+    PAC_PRODUCTION.forEach((entry) => {
+      expect(isPAC(entry)).toBeTrue();
+    });
+    expect(isPAC('X')).toBeFalse();
+
+    environment.committee_data_source = committee_data_source;
   });
 
   it('should confirm if committee is PTY', () => {
+    const committee_data_source = environment.committee_data_source;
+
+    // TEST version
+    environment.committee_data_source = 'test';
     expect(isPTY()).toBeFalse();
     expect(isPTY('Y')).toBeFalse();
     expect(isPTY('D')).toBeTrue();
     expect(isPTY('J')).toBeFalse();
     expect(isPTY('X')).toBeFalse();
     expect(isPTY('O')).toBeFalse();
+
+    // PRODUCTION version
+    environment.committee_data_source = 'production';
+    expect(isPTY()).toBeFalse();
+    expect(isPTY('Y')).toBeFalse();
+    expect(isPTY('X')).toBeFalse();
+    expect(isPTY('Y', 'U')).toBeTrue();
+    expect(isPTY('Y', 'J')).toBeTrue();
+    expect(isPTY('X', 'U')).toBeFalse();
+    expect(isPTY('X', 'J')).toBeTrue();
+    expect(isPTY('O', 'U')).toBeFalse();
+
+    // reset committee_data_source
+    environment.committee_data_source = committee_data_source;
   });
 });
