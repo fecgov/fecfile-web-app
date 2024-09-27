@@ -12,6 +12,7 @@ import { ScheduleIds } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-candidate-office-input',
+  styleUrls: ['./candidate-office-input.component.scss'],
   templateUrl: './candidate-office-input.component.html',
 })
 export class CandidateOfficeInputComponent extends BaseInputComponent implements OnInit {
