@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -247,8 +247,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /feature\/1572-test-environment-b/
-              # only: /release\/sprint-[\.\d]+|main/
+              only: /release\/sprint-[\.\d]+|main/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
