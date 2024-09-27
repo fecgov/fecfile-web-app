@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReattRedesTransactionTypeBaseComponent } from '../../../shared/components/transaction-type-base/reatt-redes-transaction-type-base.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../../shared/services/transaction.service';
@@ -14,10 +14,7 @@ import { ReportService } from '../../../shared/services/report.service';
   templateUrl: './reatt-redes-transaction-type-detail.component.html',
   styleUrls: ['../transaction.scss', './reatt-redes-transaction-type-detail.component.scss'],
 })
-export class ReattRedesTransactionTypeDetailComponent
-  extends ReattRedesTransactionTypeBaseComponent
-  implements OnInit, OnChanges
-{
+export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransactionTypeBaseComponent implements OnInit {
   constructor(
     protected override messageService: MessageService,
     public override transactionService: TransactionService,

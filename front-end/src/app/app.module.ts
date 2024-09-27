@@ -15,6 +15,7 @@ import { AppState } from './store/app-state.model';
 import { committeeAccountReducer } from './store/committee-account.reducer';
 import { singleClickReducer } from './store/single-click.reducer';
 import { loginReducer } from './store/user-login-data.reducer';
+import { navigationEventReducer } from './store/navigation-event.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -57,6 +58,7 @@ import { UsersModule } from './users/users.module';
 import { SchedulerAction, asyncScheduler } from 'rxjs';
 import { ReportsModule } from './reports/reports.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -112,6 +114,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         singleClickDisabled: singleClickReducer,
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
+        navigationEvent: navigationEventReducer,
       },
       { metaReducers },
     ),
@@ -129,6 +132,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     SharedModule,
     ReportsModule,
     ConfirmDialogModule,
+    ToastModule,
   ],
   providers: [
     CookieService,

@@ -9,7 +9,8 @@ export class LoginPage {
       `Login Through ${intervalString}`,
       () => {
         //apiLogin();
-        legacyLogin();
+        //legacyLogin();
+        loginDotGovLogin();
       },
       {
         cacheAcrossSpecs: true,
@@ -54,18 +55,10 @@ function getLoginIntervalString(sessionDur: number): string {
   }
 }
 
-function legacyLogin() {
-  //Dummy login information
-  const email = Cypress.env('EMAIL');
+function loginDotGovLogin() {
   const committeeID = Cypress.env('COMMITTEE_ID');
-  const testPassword = Cypress.env('PASSWORD');
 
-  //login page form-fields' id's (or classes where elements have no id's)
-  const fieldEmail = '#emailId';
-  const fieldCommittee = '#committeeId';
-  const fieldPassword = '#loginPassword';
-
-  cy.intercept('POST', 'http://localhost:8080/api/v1/user/login/authenticate').as('GetLoggedIn');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
   cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee`, {
     fixture: 'FEC_Get_Committee_Account',
   }).as('GetCommitteeAccounts');
@@ -73,10 +66,7 @@ function legacyLogin() {
 
   cy.visit('/');
   cy.get('#dropdownMenuButton').click();
-  cy.get('[data-test="debug-login-button"]').click();
-  cy.get(fieldEmail).type(email);
-  cy.get(fieldCommittee).type(committeeID);
-  cy.get(fieldPassword).type(testPassword).type('{enter}');
+  cy.get('[data-test="login-dot-gov-login-button"]').click();
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('.p-checkbox-box').click();
