@@ -87,6 +87,9 @@ function isPTYProduction(committee_type?: string, designation?: string): boolean
   return !!designation && (committee_type === 'Y' || (committee_type === 'X' && designation !== 'U'));
 }
 
+/* Rules differ between production and test environments.
+we maintain both sets of rules and toggle between them based on the environment.
+*/
 export function isPAC(committee_type?: string): boolean {
   if (environment.committee_data_source === 'production') {
     return isPACProduction(committee_type);
