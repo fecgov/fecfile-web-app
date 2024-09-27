@@ -112,7 +112,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       this.reattributedData.form,
       reatRedes.transactionType,
     );
-
+    reatRedes.can_delete = true;
     this.reattributedData.form.patchValue({ ...reatRedes });
     this.reattributedData.form.get(reatRedes.transactionType.templateMap['memo_code'])?.setValue(true);
     TransactionFormUtils.patchMemoText(reatRedes, this.reattributedData.form);

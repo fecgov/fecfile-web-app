@@ -12,6 +12,7 @@ import { ScheduleIds } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-candidate-office-input',
+  styleUrls: ['./candidate-office-input.component.scss'],
   templateUrl: './candidate-office-input.component.html',
 })
 export class CandidateOfficeInputComponent extends BaseInputComponent implements OnInit {
@@ -89,6 +90,12 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
           this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
         } else {
           this.candidateDistrictOptions = [];
+        }
+        const currentDistrictValue = this.form.get(this.districtFormControlName)?.value;
+        if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
+          this.form
+            .get(this.districtFormControlName)
+            ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0].value : null);
         }
       });
 

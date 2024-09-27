@@ -104,4 +104,18 @@ describe('DateUtils', () => {
       expect(control.valid).toBeTrue();
     });
   });
+
+  describe('isCurrentMonthJanuary', () => {
+    it('should return true if the current month is January', () => {
+      spyOn(Date.prototype, 'getMonth').and.returnValue(0); // January
+      const result = DateUtils.isCurrentMonthJanuary();
+      expect(result).toBe(true);
+    });
+
+    it('should return false if the current month is not January', () => {
+      spyOn(Date.prototype, 'getMonth').and.returnValue(1); // February
+      const result = DateUtils.isCurrentMonthJanuary();
+      expect(result).toBe(false);
+    });
+  });
 });

@@ -8,7 +8,6 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { ReattRedesTypes, ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportService } from '../../../shared/services/report.service';
-import { NavigationEvent } from '../../../shared/models/transaction-navigation-controls.model';
 
 @Component({
   selector: 'app-transaction-container',
@@ -19,7 +18,6 @@ export class TransactionContainerComponent extends DestroyerComponent implements
   transaction: Transaction | undefined;
   isEditableReport = true;
   isEditableTransaction = true;
-  navigationEvent?: NavigationEvent;
 
   constructor(
     private activatedRoute: ActivatedRoute,

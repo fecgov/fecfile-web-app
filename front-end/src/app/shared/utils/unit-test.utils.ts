@@ -3,6 +3,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
+import { initialState as initNavigationEvent } from 'app/store/navigation-event.reducer';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
@@ -15,6 +16,12 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from '../models/transaction-navigation-controls.model';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -110,16 +117,23 @@ export const testActiveReport: Form3X = Form3X.fromJSON({
   },
 });
 
+export const testNavigationEvent: NavigationEvent = {
+  action: NavigationAction.SAVE,
+  destination: NavigationDestination.LIST,
+};
+
 export const testMockStore = {
   initialState: {
     fecfile_online_committeeAccount: initCommitteeAccount,
     fecfile_online_userLoginData: initUserLoginData,
     fecfile_online_activeReport: initActiveReport,
+    fecfile_online_navigationEvent: initNavigationEvent,
   },
   selectors: [
     { selector: selectCommitteeAccount, value: testCommitteeAccount },
     { selector: selectUserLoginData, value: testUserLoginData },
     { selector: selectActiveReport, value: testActiveReport },
+    { selector: selectNavigationEvent, value: testNavigationEvent },
   ],
 };
 

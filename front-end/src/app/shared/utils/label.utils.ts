@@ -60,7 +60,7 @@ export class LabelUtils {
    */
   public static getCongressionalDistrictLabels(state: string): LabelList {
     const numberOfDistricts: number = CongressionalDistricts[state];
-    if (numberOfDistricts === 0) {
+    if (numberOfDistricts < 2) {
       return [['00', '00']];
     }
 

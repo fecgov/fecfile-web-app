@@ -762,7 +762,9 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
     if (this.isValueChanged(currentValue, newValue)) {
       (this.input as ElementRef).nativeElement.value = this.formatValue(newValue);
       this.input?.nativeElement.setAttribute('aria-valuenow', newValue?.toString() ?? '');
-      !this.isBlurUpdateOnMode && this.updateModel(newValue);
+      if (!this.isBlurUpdateOnMode) {
+        this.updateModel(newValue);
+      }
       this.inputEvent.emit({
         originalEvent: event,
         value: newValue?.toString() ?? '',

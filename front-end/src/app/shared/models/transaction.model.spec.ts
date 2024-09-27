@@ -18,7 +18,7 @@ describe('Transaction', () => {
     testTransaction.contributor_first_name = 'fname';
     testTransaction.entity_type = ContactTypes.INDIVIDUAL;
     let name = getTransactionName(testTransaction);
-    expect(name).toBe('lname, fname');
+    expect(name).toBe('fname lname');
 
     testTransaction.contributor_organization_name = 'orgname';
     testTransaction.entity_type = ContactTypes.ORGANIZATION;

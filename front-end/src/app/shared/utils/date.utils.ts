@@ -48,4 +48,9 @@ export class DateUtils {
   public static isWithin(date?: Date, from?: Date, through?: Date): boolean {
     return !!(date && from && through) && from <= date && date <= through;
   }
+
+  public static isCurrentMonthJanuary(): boolean {
+    const currentMonth = new Date().getMonth();
+    return currentMonth === 0;
+  }
 }

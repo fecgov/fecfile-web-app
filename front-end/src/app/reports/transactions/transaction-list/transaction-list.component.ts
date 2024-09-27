@@ -6,8 +6,10 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
-import { ReportService } from '../../../shared/services/report.service';
 import { Transaction } from '../../../shared/models/transaction.model';
+import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
+import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
+import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
 
 @Component({
   selector: 'app-transaction-list',
@@ -73,10 +75,13 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   ];
   transaction?: Transaction;
 
+  @ViewChild(TransactionReceiptsComponent) receipts!: TransactionReceiptsComponent;
+  @ViewChild(TransactionDisbursementsComponent) disbursements!: TransactionDisbursementsComponent;
+  @ViewChild(TransactionLoansAndDebtsComponent) loans!: TransactionLoansAndDebtsComponent;
+
   constructor(
     private router: Router,
     private store: Store,
-    private reportService: ReportService,
   ) {
     super();
   }
@@ -105,6 +110,12 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
 
   public onTableActionClick(action: TableAction, report?: Report) {
     action.action(report);
+  }
+
+  refreshTables() {
+    this.receipts.refreshTable();
+    this.disbursements.refreshTable();
+    this.loans.refreshTable();
   }
 }
 

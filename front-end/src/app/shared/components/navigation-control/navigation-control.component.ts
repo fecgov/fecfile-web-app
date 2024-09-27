@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   ControlType,
@@ -19,7 +19,8 @@ import { FormControl } from '@angular/forms';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
-import { clone } from 'lodash';
+import { clone, cloneDeep } from 'lodash';
+import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 
 @Component({
   selector: 'app-navigation-control',
@@ -29,7 +30,6 @@ import { clone } from 'lodash';
 export class NavigationControlComponent implements OnInit {
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
-  @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   dropdownControl = new FormControl('');
@@ -90,17 +90,17 @@ export class NavigationControlComponent implements OnInit {
     const navigationEvent = new NavigationEvent(
       this.navigationControl?.navigationAction,
       this.navigationControl?.navigationDestination,
-      this.transaction,
+      cloneDeep(this.transaction),
       destinationTransactionType,
     );
-    this.navigate.emit(navigationEvent);
+    this.store.dispatch(navigationEventSetAction(navigationEvent));
   }
 
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
-      const navEvent = clone(event.value);
-      this.navigate.emit(navEvent);
+      const navigationEvent = clone(event.value);
+      this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }
 

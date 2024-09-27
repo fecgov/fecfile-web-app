@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DestroyerComponent } from '../app-destroyer.component';
-import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
+import { ConfirmationService } from 'primeng/api';
+import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
   selector: 'app-committee-member-dialog',
@@ -47,8 +47,6 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
         updateOn: 'change',
       }),
     );
-
-    this.form.get('role')?.setValue(this.roleOptions[0]);
   }
 
   ngAfterViewInit() {
@@ -58,6 +56,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
   ngOnChanges(): void {
     if (this.detailVisible) {
       this.form.reset();
+      this.form.get('role')?.setValue(this.roleOptions[0].value);
       this.formSubmitted = false;
       this.dialog?.nativeElement.showModal();
     }

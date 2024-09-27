@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { F3xCoverageDates, F3xQualifiedCommitteeTypeCodes, Form3X } from '../models/form-3x.model';
+import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
 import { Report } from '../models/report.model';
@@ -51,10 +51,16 @@ export class Form3XService extends ReportService {
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
-    return (
-      !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
-    );
+    return true;
+    // Committee Qualificaiton Logic is being overriden until a future ticket.
+    // When this is reenabled, we should consider expanding the unit tests for it,
+    // since having it always return true didn't cause any tests to fail.
+
+    // return (
+    //   !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
+    // );
   }
 
   public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {

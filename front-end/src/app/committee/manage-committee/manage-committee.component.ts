@@ -64,7 +64,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
           life: 3000,
         });
       }
-    } catch (error) {
+    } catch {
       return;
     }
   }
@@ -92,7 +92,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
         life: 3000,
       });
       this.confirmationService.close();
-    } catch (error) {
+    } catch {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',

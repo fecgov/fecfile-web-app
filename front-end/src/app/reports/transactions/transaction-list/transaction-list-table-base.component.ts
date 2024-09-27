@@ -43,6 +43,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       () => true,
     ),
     new TableAction(
+      'Delete',
+      this.deleteItem.bind(this),
+      (transaction: Transaction) => this.reportIsEditable && this.canDelete(transaction),
+      () => true,
+    ),
+    new TableAction(
       'Aggregate',
       this.forceAggregate.bind(this),
       (transaction: Transaction) =>
@@ -327,5 +333,44 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       return id.substring(0, 8).toUpperCase();
     }
     return '';
+  }
+
+  private canDelete(transaction: Transaction): boolean {
+    if (
+      transaction.transaction_type_identifier === undefined ||
+      ((transaction.loan_id || transaction.debt_id) &&
+        ![
+          'LOAN_RECEIVED_FROM_INDIVIDUAL',
+          'LOAN_RECEIVED_FROM_BANK',
+          'LOAN_BY_COMMITTEE',
+          'DEBT_OWED_BY_COMMITTEE',
+          'DEBT_OWED_TO_COMMITTEE',
+        ].includes(transaction.transaction_type_identifier || ''))
+    ) {
+      return false;
+    }
+
+    return !!transaction?.can_delete;
+  }
+
+  public override deleteItem(item: Transaction): void | Promise<void> {
+    this.confirmationService.confirm({
+      key: 'transaction-deletion-dialog',
+      message:
+        'Deleting this transaction will also delete any linked transactions ' +
+        '(such as memos, in-kinds, and transfers). Please note that you cannot undo this action.',
+      accept: () => {
+        this.itemService.delete(item).subscribe(() => {
+          this.item = this.getEmptyItem();
+          this.refreshTable(true);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Transaction Deleted',
+            life: 3000,
+          });
+        });
+      },
+    });
   }
 }
