@@ -144,6 +144,9 @@ describe('TransactionTypePickerComponent', () => {
       expect(
         productionTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT),
       ).toBeFalse();
+
+      // Reset environment
+      environment.committee_data_source = committee_data_source;
     }));
   });
 });

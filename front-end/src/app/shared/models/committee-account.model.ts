@@ -1,7 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { environment } from 'environments/environment';
-import { env } from 'process';
 
 export class CommitteeAccount extends BaseModel {
   id: string | undefined;

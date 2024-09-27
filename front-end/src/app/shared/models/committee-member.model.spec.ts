@@ -1,7 +1,6 @@
 import { environment } from 'environments/environment';
-import { PRODUCTION_PAC_TYPES, isPAC, isPTY } from './committee-account.model';
+import { isPAC, isPTY } from './committee-account.model';
 import { CommitteeMember } from './committee-member.model';
-import { en } from 'intl-tel-input/i18n';
 
 describe('CommitteeMember', () => {
   it('should create an instance', () => {
