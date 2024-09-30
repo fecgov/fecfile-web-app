@@ -30,13 +30,23 @@ p + ul {
   width: 50%;
 }
 
-:host ::ng-deep .p-card {
-  box-shadow: none;
-  margin-top: 0px;
-  border-radius: 8px;
-  border-width: 1px;
-  border-color: #000000;
-  border-style: solid;
+:host ::ng-deep {
+  .p-card {
+    box-shadow: none;
+    margin-top: 0px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: #000000;
+    border-style: solid;
+  }
+
+  .p-card .p-card-body {
+    padding: 20px;
+  }
+
+  .p-card .p-card-body .p-card-content {
+    padding: 0px;
+  }
 }
 
 .logout-button {
@@ -51,7 +61,7 @@ p + ul {
 }
 
 .decline-button {
-  margin-right: 32px;
+  margin-right: 20px;
 }
 
 ul li {
