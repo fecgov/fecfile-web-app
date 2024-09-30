@@ -6,7 +6,8 @@
   top: 40px;
 }
 
-p, li {
+p,
+li {
   margin-bottom: 20px;
   padding-top: 0;
 }
@@ -40,7 +41,8 @@ p + ul {
     border-style: solid;
   }
 
-  .p-card-content, .p-card-footer {
+  .p-card-content,
+  .p-card-footer {
     padding: 0px;
   }
 
