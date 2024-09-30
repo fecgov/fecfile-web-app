@@ -20,7 +20,6 @@
         This version of the application is for testing new features and functionality and gathering user feedback. Any
         submitted reports do not constitute official filings with the Federal Election Commission (FEC). Any
         information you enter at this time is subject to deletion and will not be retained.
-        <br /><br />
       </p>
       <strong>DISCLAIMER</strong>
       <p>
@@ -32,13 +31,13 @@
       <p>While using this system please do not:</p>
       <ul>
         <p>
-          <li>prevent other users from accessing FECFile Online;<br /><br /></li>
-          <li>overload FECFile Online;<br /><br /></li>
-          <li>share committee or user accounts;<br /><br /></li>
+          <li>prevent other users from accessing FECFile Online;</li>
+          <li>overload FECFile Online;</li>
+          <li>share committee or user accounts;</li>
           <li>
             attempt to gain unauthorized access to FECFile Online or related systems or networks or to defeat, avoid,
             bypass, remove, deactivate, or otherwise circumvent any software protection or monitoring mechanisms of
-            FECFile Online;<br /><br />
+            FECFile Online;
           </li>
           <li>create committee or user accounts in bulk.</li>
         </p>
@@ -47,12 +46,11 @@
       <p>
         This is a U.S. Federal Government system that is for official use only. Unauthorized use is strictly
         prohibited.
-        <br /><br />
       </p>
 
       <ng-template pTemplate="footer">
-        <hr type="solid" style="margin-top: 0px" />
-        <form class="flex align-items-center gap-1" [formGroup]="form">
+        <hr type="solid" />
+        <form [formGroup]="form">
           <div class="field">
             <p-checkbox
               formControlName="security-consent-annual"

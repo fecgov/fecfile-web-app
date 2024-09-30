@@ -6,8 +6,8 @@
   top: 40px;
 }
 
-p {
-  margin-bottom: 1rem;
+p, li {
+  margin-bottom: 20px;
   padding-top: 0;
 }
 
@@ -40,12 +40,21 @@ p + ul {
     border-style: solid;
   }
 
-  .p-card .p-card-body {
+  .p-card-content, .p-card-footer {
+    padding: 0px;
+  }
+
+  .p-card-body {
     padding: 20px;
   }
 
-  .p-card .p-card-body .p-card-content {
-    padding: 0px;
+  .p-checkbox {
+    margin-left: 30px;
+  }
+
+  .p-checkbox-label {
+    font-style: italic;
+    font-family: gandhi-regular, serif;
   }
 }
 
