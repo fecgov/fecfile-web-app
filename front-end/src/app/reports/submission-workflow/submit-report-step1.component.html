@@ -1,89 +1,88 @@
-<p-toast></p-toast>
-
-<h1>Confirm information</h1>
-<h5>
-  <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
-</h5>
-<hr type="solid" />
-<div class="p-fluid">
-  <p-card>
-    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-      <div class="grid">
-        <div class="col-12">
-          <div class="field">
-            <h2>Verify confirmation email addresses</h2>
-          </div>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12 md:col-6">
-          <div class="field">
-            <label for="confirmation_email_1"><strong>EMAIL #1</strong></label>
-            <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
-            <app-error-messages
-              [form]="form"
-              fieldName="confirmation_email_1"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-12 md:col-6">
-          <div class="field">
-            <label for="confirmation_email_2"><strong>EMAIL #2</strong> (Optional)</label>
-            <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
-            <app-error-messages
-              [form]="form"
-              fieldName="confirmation_email_2"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="report?.hasChangeOfAddress">
-        <hr type="solid" />
+<div class="confirm-information">
+  <h1>Confirm information</h1>
+  <h5>
+    <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
+  </h5>
+  <hr type="solid" />
+  <div class="p-fluid">
+    <p-card>
+      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <h2>Verify physical address</h2>
-              <br />
-              <div>Has your address changed in the last 10 days?</div>
+              <h2>Verify confirmation email addresses</h2>
             </div>
           </div>
         </div>
         <div class="grid">
-          <div class="col-12 field">
-            <div class="flex flex-wrap gap-3">
-              <div class="flex align-items-center">
-                <p-radioButton
-                  name="change_of_address"
-                  [value]="true"
-                  label="YES"
-                  formControlName="change_of_address"
-                  ariaLabel="Address has changed in the last 10 days"
-                ></p-radioButton>
-              </div>
-              <div class="flex align-items-center">
-                <p-radioButton
-                  name="change_of_address"
-                  [value]="false"
-                  label="NO"
-                  formControlName="change_of_address"
-                  ariaLabel="Address has not changed in the last 10 days"
-                ></p-radioButton>
-              </div>
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="confirmation_email_1"><strong>EMAIL #1</strong></label>
+              <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
               <app-error-messages
                 [form]="form"
-                fieldName="change_of_address"
+                fieldName="confirmation_email_1"
                 [formSubmitted]="formSubmitted"
-                patternErrorMessage="Please select 'Yes' or 'No'"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="field">
+              <label for="confirmation_email_2"><strong>EMAIL #2</strong> (Optional)</label>
+              <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
+              <app-error-messages
+                [form]="form"
+                fieldName="confirmation_email_2"
+                [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
         </div>
-      </div>
+        <div *ngIf="report?.hasChangeOfAddress">
+          <hr type="solid" />
+          <div class="grid">
+            <div class="col-12">
+              <div class="field">
+                <h2>Verify physical address</h2>
+                <br />
+                <div>Has your address changed in the last 10 days?</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12 field">
+              <div class="flex flex-wrap gap-3">
+                <div class="flex align-items-center">
+                  <p-radioButton
+                    name="change_of_address"
+                    [value]="true"
+                    label="YES"
+                    formControlName="change_of_address"
+                    ariaLabel="Address has changed in the last 10 days"
+                  ></p-radioButton>
+                </div>
+                <div class="flex align-items-center">
+                  <p-radioButton
+                    name="change_of_address"
+                    [value]="false"
+                    label="NO"
+                    formControlName="change_of_address"
+                    ariaLabel="Address has not changed in the last 10 days"
+                  ></p-radioButton>
+                </div>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="change_of_address"
+                  [formSubmitted]="formSubmitted"
+                  patternErrorMessage="Please select 'Yes' or 'No'"
+                ></app-error-messages>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <ng-container *ngIf="form.get('change_of_address')?.value">
-        <!--
+        <ng-container *ngIf="form.get('change_of_address')?.value">
+          <!--
 
         Per a discussion with Mitchell, this section is commented out 
         pending a later review of the requirements.
@@ -96,77 +95,82 @@
         >.
       </div>
       -->
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="street_1" formControlName="street_1" />
-              <app-error-messages
-                [form]="form"
-                fieldName="street_1"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+          <div class="grid">
+            <div class="col-6">
+              <div class="field">
+                <label for="street_1">STREET ADDRESS</label>
+                <input type="text" pInputText id="street_1" formControlName="street_1" />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="street_1"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="field">
+                <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+                <input type="text" pInputText id="street_2" formControlName="street_2" />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="street_2"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="street_2" formControlName="street_2" />
-              <app-error-messages
-                [form]="form"
-                fieldName="street_2"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+          <div class="grid">
+            <div class="col-6">
+              <div class="field">
+                <label for="city">CITY</label>
+                <input type="text" pInputText id="city" formControlName="city" />
+                <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="field">
+                <label for="state">STATE/PROVINCE</label>
+                <p-dropdown
+                  inputId="state"
+                  formControlName="state"
+                  [options]="stateOptions"
+                  [autoDisplayFirst]="false"
+                  appendTo="body"
+                ></p-dropdown>
+                <app-error-messages
+                  [form]="form"
+                  fieldName="state"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="field">
+                <label for="zip">ZIP/POSTAL CODE</label>
+                <input type="text" pInputText id="zip" formControlName="zip" />
+                <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
+              </div>
             </div>
           </div>
+        </ng-container>
+        <div class="flex justify-content-between flex-wrap">
+          <button
+            pButton
+            pRipple
+            label="Back"
+            class="p-button-secondary"
+            (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
+          ></button>
+          <button
+            pButton
+            pRipple
+            appSingleClick
+            label="Confirm information"
+            class="p-button-primary"
+            (click)="continue()"
+          ></button>
         </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="city">CITY</label>
-              <input type="text" pInputText id="city" formControlName="city" />
-              <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="state">STATE/PROVINCE</label>
-              <p-dropdown
-                inputId="state"
-                formControlName="state"
-                [options]="stateOptions"
-                [autoDisplayFirst]="false"
-                appendTo="body"
-              ></p-dropdown>
-              <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="zip" formControlName="zip" />
-              <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <div class="flex justify-content-between flex-wrap">
-        <button
-          pButton
-          pRipple
-          label="Back"
-          class="p-button-secondary"
-          (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
-        ></button>
-        <button
-          pButton
-          pRipple
-          appSingleClick
-          label="Confirm information"
-          class="p-button-primary"
-          (click)="continue()"
-        ></button>
-      </div>
-    </form>
-  </p-card>
+      </form>
+    </p-card>
+  </div>
 </div>

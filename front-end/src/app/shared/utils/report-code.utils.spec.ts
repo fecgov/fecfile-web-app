@@ -1,3 +1,4 @@
+import { DateUtils } from './date.utils';
 import { getCoverageDatesFunction, F3xReportCodes } from './report-code.utils';
 
 describe('ReportCodeUtils', () => {
@@ -38,10 +39,11 @@ describe('ReportCodeUtils', () => {
       }
     });
 
-    it('should return correct function for YE', () => {
+    it('should return correct function for YE when current month is January', () => {
       const result = getCoverageDatesFunction(F3xReportCodes.YE);
       if (result) {
         expect(typeof result).toBe('function');
+        spyOn(DateUtils, 'isCurrentMonthJanuary').and.returnValue(true);
 
         // Test for election year
         let [startDate, endDate] = result(2024, true, 'Q');
@@ -67,6 +69,41 @@ describe('ReportCodeUtils', () => {
         expect(startDate.getMonth()).toBe(11);
         expect(startDate.getDate()).toBe(1);
         expect(endDate.getFullYear()).toBe(2023);
+        expect(endDate.getMonth()).toBe(11);
+        expect(endDate.getDate()).toBe(31);
+      }
+    });
+
+    it('should return correct function for YE when current month is not January', () => {
+      const result = getCoverageDatesFunction(F3xReportCodes.YE);
+      if (result) {
+        expect(typeof result).toBe('function');
+        spyOn(DateUtils, 'isCurrentMonthJanuary').and.returnValue(false);
+
+        // Test for election year
+        let [startDate, endDate] = result(2024, true, 'Q');
+        expect(startDate.getFullYear()).toBe(2024);
+        expect(startDate.getMonth()).toBe(9);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getFullYear()).toBe(2024);
+        expect(endDate.getMonth()).toBe(11);
+        expect(endDate.getDate()).toBe(31);
+
+        // Test for non-election year with filingFrequency 'Q'
+        [startDate, endDate] = result(2024, false, 'Q');
+        expect(startDate.getFullYear()).toBe(2024);
+        expect(startDate.getMonth()).toBe(6);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getFullYear()).toBe(2024);
+        expect(endDate.getMonth()).toBe(11);
+        expect(endDate.getDate()).toBe(31);
+
+        // Test for non-election year with filingFrequency other than 'Q'
+        [startDate, endDate] = result(2024, false, 'M');
+        expect(startDate.getFullYear()).toBe(2024);
+        expect(startDate.getMonth()).toBe(11);
+        expect(startDate.getDate()).toBe(1);
+        expect(endDate.getFullYear()).toBe(2024);
         expect(endDate.getMonth()).toBe(11);
         expect(endDate.getDate()).toBe(31);
       }

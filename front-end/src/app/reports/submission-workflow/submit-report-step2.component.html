@@ -1,5 +1,3 @@
-<p-toast></p-toast>
-
 <h1>Submit report</h1>
 <h5>
   <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
@@ -164,27 +162,20 @@
             pButton
             pRipple
             label="Back"
-            class="p-button-secondary p-button-outlined"
+            type="button"
+            class="p-button-secondary"
             (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
           ></button>
         </div>
         <div class="col-8 submit-container" *ngIf="!report?.getBlocker()">
           <button
-            *ngIf="form.value.userCertified === true"
             pButton
             pRipple
-            [disabled]="loading > 0"
             label="Submit"
+            type="submit"
             class="p-button"
             (click)="submitClicked()"
-          ></button>
-          <button
-            *ngIf="form.value.userCertified === false"
-            pButton
-            pRipple
-            label="Submit"
-            class="p-button"
-            disabled
+            [disabled]="!form.value.userCertified || loading > 0"
           ></button>
         </div>
         <ng-container *ngIf="loading > 0">

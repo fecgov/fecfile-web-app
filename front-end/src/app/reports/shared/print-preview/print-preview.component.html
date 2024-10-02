@@ -18,44 +18,38 @@
         <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
       </div>
     </ng-container>
-    <div class="col-12 flex justify-content-center">
-      <img
-        class="image-max-width image-centered-horiz"
-        ngSrc="assets/img/image-placeholder.png"
-        draggable="false"
-        alt="Print success image"
-        [ngClass]="{ 'disabled-pages-banner': webPrintStage === 'checking' && !report.webprint_submission?.fec_status }"
-        height="271"
-        width="450"
-      />
-      <ng-container *ngIf="webPrintStage === 'checking' && !report.webprint_submission?.fec_status">
-        <div class="fec-loader-div col-12">
-          <img
-            class="image-max-width fec-loader-image top-30"
-            ngSrc="assets/img/fec-loading-flag.gif"
-            draggable="false"
-            alt="The report's web print status is loading..."
-            height="103"
-            width="114"
-          />
-          <h1 class="align-center super-header">
-            <br /><br />
-            <strong>Compiling your preview</strong>
-            <br />
-          </h1>
-        </div>
-      </ng-container>
-    </div>
-    <ng-container *ngIf="webPrintStage === 'checking' && report.webprint_submission?.fec_status === 'PROCESSING'">
-      <div class="col-12">
-        <h1 class="align-center">
+    <ng-container
+      *ngIf="webPrintStage === 'checking'; else imagePlaceholder"
+      class="col-12 flex justify-content-center"
+    >
+      <div class="fec-loader-div col-12">
+        <img
+          class="image-max-width fec-loader-image top-30"
+          ngSrc="assets/img/fec-loading-flag.gif"
+          draggable="false"
+          alt="The report's web print status is loading..."
+          height="103"
+          width="114"
+        />
+        <h1 class="align-center super-header">
           <br /><br />
-          <strong>Your report is still being processed...</strong>
+          <strong>Compiling your preview</strong>
           <br />
         </h1>
-        <h3 class="align-center">PLEASE CHECK BACK LATER TO ACCESS YOUR PDF</h3>
       </div>
     </ng-container>
+    <ng-template #imagePlaceholder>
+      <div class="col-12 align-center">
+        <img
+          class="image-max-width image-centered-horiz"
+          ngSrc="assets/img/image-placeholder.png"
+          draggable="false"
+          alt="Print success image"
+          height="271"
+          width="450"
+        />
+      </div>
+    </ng-template>
   </div>
   <div class="grid">
     <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
