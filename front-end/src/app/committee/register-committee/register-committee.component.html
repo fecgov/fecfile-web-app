@@ -13,20 +13,39 @@
       <h2>Find your committee</h2>
 
       <form id="form" [formGroup]="form">
-        <div class="col-12">
+        <div>
           <div class="search-label">
             <h5 class="font-karla-bold" aria-label="committee-id">COMMITTEE ID</h5>
             <i class="pi pi-question" (click)="showExplanation()"></i>
           </div>
-          <div class="field">
-            <input type="text" pInputText id="committee-id" formControlName="committee-id" />
-            <app-error-messages [form]="form" fieldName="committee-id"></app-error-messages>
-          </div>
-          <div class="px-2">
-            <button pButton label="Register" class="p-button-secondary" (click)="this.registerMembership()"></button>
+          <div class="row">
+            <div class="field col-9 committee-id">
+              <input
+                type="text"
+                pInputText
+                id="committee-id"
+                formControlName="committee-id"
+                (submit)="this.registerMembership()"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="committee-id"
+                patternErrorMessage="Must be a valid Committee ID."
+              ></app-error-messages>
+            </div>
+            <div class="col-3 no-horz-padding">
+              <button
+                id="register-button"
+                pButton
+                label="Register"
+                class="p-button-secondary register-button"
+                (click)="this.registerMembership()"
+              ></button>
+            </div>
           </div>
         </div>
       </form>
+      <i>Examples: C00431445, C00343509</i>
     </div>
     <div class="right-side-box" *ngIf="unableToCreateAccount">
       <div class="committee-card unable-card">
@@ -56,7 +75,7 @@
     <span class="explanation-header">What am I searching?</span>
   </ng-template>
   <p>
-    The committee name and ID lookup searches FEC's global lookup of all committees registered with the Federal Election
+    The committee ID lookup searches FEC's global lookup of all committees registered with the Federal Election
     Commission.
   </p>
   <p>This lookup is not searching FECFile's database of committees with a FECFile account.</p>

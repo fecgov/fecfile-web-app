@@ -34,7 +34,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
 
   async registerMembership() {
     const committeeIdField = this.form.get('committee-id') as AbstractControl;
-    committeeIdField.updateValueAndValidity();
+    committeeIdField.updateValueAndValidity({ emitEvent: true });
 
     const committeeId = committeeIdField.value;
     this.unableToCreateAccount = false;
