@@ -12,7 +12,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: cimg/node:20.4.0-browsers
+      - image: cimg/node:22.9.0-browsers
     resource_class: large
     steps:
       - checkout
@@ -37,7 +37,7 @@ jobs:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
-      - image: cimg/node:20.4.0-browsers
+      - image: cimg/node:22.9.0-browsers
     resource_class: large
     steps:
       - checkout
@@ -102,7 +102,7 @@ jobs:
 
   e2e-test:
     docker:
-      - image: cimg/node:20.4.0-browsers
+      - image: cimg/node:22.9.0-browsers
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -157,7 +157,7 @@ jobs:
           destination: cypress/results
   deploy-job:
     docker:
-      - image: cimg/node:20.4.0-browsers
+      - image: cimg/node:22.9.0-browsers
     resource_class: large
     steps:
       - checkout
@@ -181,7 +181,7 @@ jobs:
 
   dependency-check:
     docker:
-      - image: cimg/node:20.4.0-browsers
+      - image: cimg/node:22.9.0-browsers
       - image: cimg/python:3.10-node
 
     steps:
