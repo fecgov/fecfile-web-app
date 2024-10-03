@@ -12,6 +12,7 @@
         "build-dev": "npm install && ng build --configuration=cloud.gov.dev",
         "build-stage": "npm install && ng build --configuration=cloud.gov.stage",
         "build-prod": "npm install && ng build --configuration=cloud.gov.prod",
+        "build-test": "npm install && ng build --configuration=cloud.gov.test",
         "build-local": "npm install && ng build --configuration=local",
         "test": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test",
         "e2e": "ng e2e",
