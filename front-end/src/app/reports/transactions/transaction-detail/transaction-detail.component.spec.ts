@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -13,7 +13,6 @@ import {
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -31,7 +30,6 @@ import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/
 import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
 
 describe('TransactionDetailComponent', () => {
-  let httpTestingController: HttpTestingController;
   let component: TransactionDetailComponent;
   let fixture: ComponentFixture<TransactionDetailComponent>;
   let reportService: ReportService;
@@ -69,7 +67,6 @@ describe('TransactionDetailComponent', () => {
   });
 
   beforeEach(() => {
-    httpTestingController = TestBed.inject(HttpTestingController);
     reportService = TestBed.inject(ReportService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     fixture = TestBed.createComponent(TransactionDetailComponent);
@@ -85,10 +82,14 @@ describe('TransactionDetailComponent', () => {
   });
 
   it('#handleNavigate() should not save an invalid record', () => {
+    const navSpy = spyOn(component, 'navigateTo');
+    const saveSpy = spyOn(component, 'save');
+
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
+    console.log('HEY LISTEN', component.form);
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(`${environment.apiUrl}/transactions/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`);
-    httpTestingController.verify();
+    expect(navSpy).not.toHaveBeenCalled();
+    expect(saveSpy).not.toHaveBeenCalled();
   });
 });

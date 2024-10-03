@@ -46,9 +46,13 @@ export class FecApiService {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
 
-    return this.apiService
-      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`)
-      .pipe(map((response) => response.results[0] as CommitteeAccount));
+    return this.apiService.get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`).pipe(
+      map((response) => {
+        const ca = response.results[0] as CommitteeAccount;
+        if (!ca.filing_frequency) ca.filing_frequency = 'Q';
+        return ca;
+      }),
+    );
   }
 
   /**

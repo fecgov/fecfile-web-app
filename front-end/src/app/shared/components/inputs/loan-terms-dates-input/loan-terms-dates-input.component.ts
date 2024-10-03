@@ -144,7 +144,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
         if (newInterestRate.length > 0) {
           if (!newInterestRate.endsWith('%')) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             interestField.setValue(newInterestRate + '%');
 
             textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
