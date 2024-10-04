@@ -13,7 +13,6 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEM
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   );
-  override updateParentOnSave = true;
   schema = schema;
   override shortName = 'Partnership Attribution';
   override navigationControls = CHILD_CONTROLS;

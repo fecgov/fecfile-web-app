@@ -37,10 +37,6 @@ With the environment variables set, run `ng e2e` to execute the end-to-end tests
 
 To run in headless mode, run the command: ng e2e --headless
 
-## Running Lighthouse
-
-If running Lighthouse in headless mode, you must add the switch: --browser chrome
-
 ## E2E tests in CircleCI
 
 A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite nightly. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
@@ -71,3 +67,8 @@ export CYPRESS_COMMITTEE_ID=''
 export CYPRESS_PASSWORD=''
 sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e E2E_DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} -e E2E_DATABASE_URL=${E2E_DATABASE_URL} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --job e2e-test
 ```
+
+## Tips for Writing E2E Tests
+
+- Assertions made immediately after a page load will sometimes check the previous page before the new page loads. Add checks to ensure that the new page has loaded where possible.
+- The `.contains()` Cypress method cannot find the value of a text input field. For assertions, you can instead use the `.should('have.value', VALUE)` method.

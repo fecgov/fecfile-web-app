@@ -1,113 +1,115 @@
-<p-card>
-  <div class="summary-header">
-    <h1>Summary page</h1>
-    <div>
-      <strong>{{ report.formLabel }}</strong
-      >{{ report.formSubLabel }}
-    </div>
-  </div>
-
-  <div *ngIf="(calculationFinished$ | async) === false" class="fec-loader-div col-12">
-    <img
-      class="image-max-width fec-loader-image"
-      src="assets/img/fec-loading-flag.gif"
-      draggable="false"
-      alt="The report's summary is loading..."
-    />
-  </div>
-  <div *ngIf="calculationFinished$ | async">
-    <table>
-      <caption>
-        Report Summary
-      </caption>
-      <tr>
-        <th class="right-border">LINE NUMBER</th>
-        <th class="justify-left right-border">LINE DESCRIPTION</th>
-        <th class="right-border">THIS PERIOD</th>
-        <th>CALENDAR YEAR-TO-DATE</th>
-      </tr>
-      <tr>
-        <td class="right-border">6(a)</td>
-        <td class="justify-left right-border">Cash on hand January 1, {{ report.L6a_year_for_above_ytd }}</td>
-        <td class="right-border"></td>
-        <td>{{ report.L6a_cash_on_hand_jan_1_ytd | defaultZero | currency }}</td>
-      </tr>
-      <tr class="gray">
-        <td class="right-border">6(b)</td>
-        <td class="justify-left right-border">Cash on hand at beginning of reporting period</td>
-        <td class="right-border">{{ report.L6b_cash_on_hand_beginning_period | defaultZero | currency }}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td class="right-border">6(c)</td>
-        <td class="justify-left right-border">Total receipts (from Line 19)</td>
-        <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
-        <td>{{ report.L19_total_receipts_ytd | defaultZero | currency }}</td>
-      </tr>
-      <tr class="gray">
-        <td class="right-border">6(d)</td>
-        <td class="justify-left right-border">
-          Subtotal (add Lines 6(b) and 6(c) for Column A and Lines 6(a) and 6(c) from Column B)
-        </td>
-        <td class="right-border">{{ report.L6d_subtotal_period | defaultZero | currency }}</td>
-        <td>{{ report.L6d_subtotal_ytd | defaultZero | currency }}</td>
-      </tr>
-      <tr>
-        <td class="right-border">7</td>
-        <td class="justify-left right-border">Total disbursements (from Line 31)</td>
-        <td class="right-border">{{ report.L7_total_disbursements_period | defaultZero | currency }}</td>
-        <td>{{ report.L7_total_disbursements_ytd | defaultZero | currency }}</td>
-      </tr>
-      <tr class="gray">
-        <td class="right-border">8</td>
-        <td class="justify-left right-border">
-          Cash on hand at close of reporting period (subtract Line 7 from Line 6(d))
-        </td>
-        <td class="right-border">{{ report.L8_cash_on_hand_at_close_period | defaultZero | currency }}</td>
-        <td>{{ report.L8_cash_on_hand_close_ytd | defaultZero | currency }}</td>
-      </tr>
-      <tr>
-        <td class="right-border">9</td>
-        <td class="justify-left right-border">
-          Debts and obligations owed <strong>TO</strong> the committee (Itemize all on Schedule C and/or Schedule D)
-        </td>
-        <td class="right-border">{{ report.L9_debts_to_period | defaultZero | currency }}</td>
-        <td></td>
-      </tr>
-      <tr class="gray last">
-        <td class="right-border">10</td>
-        <td class="justify-left right-border">
-          Debts and obligations owed <strong>BY</strong> the committee (Itemized all on Schedule C and/or Schedule D)
-        </td>
-        <td class="right-border">{{ report.L10_debts_by_period | defaultZero | currency }}</td>
-        <td></td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="grid">
-    <div class="col-4">
+<div class="summary-container">
+  <p-card>
+    <div class="summary-header">
+      <h1>Summary page</h1>
       <div>
-        <button
-          pButton
-          pRipple
-          label="Back"
-          class="p-button-secondary"
-          (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
-        ></button>
+        <strong>{{ report.formLabel }}</strong
+        >{{ report.formSubLabel }}
       </div>
     </div>
-    <div class="col-4"></div>
-    <div class="col-4 align-right">
-      <div>
-        <button
-          pButton
-          pRipple
-          label="Review detailed summary page"
-          class="p-button-primary"
-          (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
-        ></button>
+
+    <div *ngIf="(calculationFinished$ | async) === false" class="fec-loader-div col-12">
+      <img
+        class="image-max-width fec-loader-image"
+        src="assets/img/fec-loading-flag.gif"
+        draggable="false"
+        alt="The report's summary is loading..."
+      />
+    </div>
+    <div *ngIf="calculationFinished$ | async">
+      <table>
+        <caption>
+          Report Summary
+        </caption>
+        <tr>
+          <th class="right-border">LINE NUMBER</th>
+          <th class="justify-left right-border">LINE DESCRIPTION</th>
+          <th class="right-border">THIS PERIOD</th>
+          <th>CALENDAR YEAR-TO-DATE</th>
+        </tr>
+        <tr>
+          <td class="right-border">6(a)</td>
+          <td class="justify-left right-border">Cash on hand January 1, {{ report.L6a_year_for_above_ytd }}</td>
+          <td class="right-border"></td>
+          <td>{{ report.L6a_cash_on_hand_jan_1_ytd | defaultZero | currency }}</td>
+        </tr>
+        <tr class="gray">
+          <td class="right-border">6(b)</td>
+          <td class="justify-left right-border">Cash on hand at beginning of reporting period</td>
+          <td class="right-border">{{ report.L6b_cash_on_hand_beginning_period | defaultZero | currency }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="right-border">6(c)</td>
+          <td class="justify-left right-border">Total receipts (from Line 19)</td>
+          <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
+          <td>{{ report.L19_total_receipts_ytd | defaultZero | currency }}</td>
+        </tr>
+        <tr class="gray">
+          <td class="right-border">6(d)</td>
+          <td class="justify-left right-border">
+            Subtotal (add Lines 6(b) and 6(c) for Column A and Lines 6(a) and 6(c) from Column B)
+          </td>
+          <td class="right-border">{{ report.L6d_subtotal_period | defaultZero | currency }}</td>
+          <td>{{ report.L6d_subtotal_ytd | defaultZero | currency }}</td>
+        </tr>
+        <tr>
+          <td class="right-border">7</td>
+          <td class="justify-left right-border">Total disbursements (from Line 31)</td>
+          <td class="right-border">{{ report.L7_total_disbursements_period | defaultZero | currency }}</td>
+          <td>{{ report.L7_total_disbursements_ytd | defaultZero | currency }}</td>
+        </tr>
+        <tr class="gray">
+          <td class="right-border">8</td>
+          <td class="justify-left right-border">
+            Cash on hand at close of reporting period (subtract Line 7 from Line 6(d))
+          </td>
+          <td class="right-border">{{ report.L8_cash_on_hand_at_close_period | defaultZero | currency }}</td>
+          <td>{{ report.L8_cash_on_hand_close_ytd | defaultZero | currency }}</td>
+        </tr>
+        <tr>
+          <td class="right-border">9</td>
+          <td class="justify-left right-border">
+            Debts and obligations owed <strong>TO</strong> the committee (Itemize all on Schedule C and/or Schedule D)
+          </td>
+          <td class="right-border">{{ report.L9_debts_to_period | defaultZero | currency }}</td>
+          <td></td>
+        </tr>
+        <tr class="gray last">
+          <td class="right-border">10</td>
+          <td class="justify-left right-border">
+            Debts and obligations owed <strong>BY</strong> the committee (Itemized all on Schedule C and/or Schedule D)
+          </td>
+          <td class="right-border">{{ report.L10_debts_by_period | defaultZero | currency }}</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="grid">
+      <div class="col-4">
+        <div>
+          <button
+            pButton
+            pRipple
+            label="Back"
+            class="p-button-secondary"
+            (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
+          ></button>
+        </div>
+      </div>
+      <div class="col-4"></div>
+      <div class="col-4 align-right">
+        <div>
+          <button
+            pButton
+            pRipple
+            label="Review detailed summary page"
+            class="p-button-primary"
+            (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+          ></button>
+        </div>
       </div>
     </div>
-  </div>
-</p-card>
+  </p-card>
+</div>

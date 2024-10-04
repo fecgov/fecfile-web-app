@@ -16,6 +16,8 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
+import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -130,5 +132,19 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[1].isEnabled({})).toEqual(true);
     expect(component.tableActions[2].isEnabled({})).toEqual(true);
     expect(component.tableActions[3].isEnabled({})).toEqual(false);
+  });
+
+  it('should call refreshTable on receipts, disbursements, and loans', () => {
+    component.receipts = { refreshTable: jasmine.createSpy('refreshTable') } as unknown as TransactionReceiptsComponent;
+    component.disbursements = {
+      refreshTable: jasmine.createSpy('refreshTable'),
+    } as unknown as TransactionDisbursementsComponent;
+    component.loans = {
+      refreshTable: jasmine.createSpy('refreshTable'),
+    } as unknown as TransactionLoansAndDebtsComponent;
+    component.refreshTables();
+    expect(component.receipts.refreshTable).toHaveBeenCalled();
+    expect(component.disbursements.refreshTable).toHaveBeenCalled();
+    expect(component.loans.refreshTable).toHaveBeenCalled();
   });
 });

@@ -4,6 +4,6 @@ import { ReportDetailedSummaryComponent } from '../report-detailed-summary/repor
 @Component({
   selector: 'app-report-summary',
   templateUrl: './report-summary.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../../styles.scss', './report-summary.component.scss'],
 })
 export class ReportSummaryComponent extends ReportDetailedSummaryComponent implements OnInit {}

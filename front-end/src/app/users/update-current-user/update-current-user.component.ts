@@ -18,7 +18,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   styleUrls: ['./update-current-user.component.scss'],
 })
 export class UpdateCurrentUserComponent extends DestroyerComponent implements OnInit {
-  form: FormGroup = this.fb.group({});
+  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   formSubmitted = false;
 
   constructor(

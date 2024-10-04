@@ -13,12 +13,8 @@ describe('Manage reports', () => {
   });
 
   it('Create a Quarterly Election Year report', () => {
-    cy.runLighthouse('reports', 'list');
-
     ReportListPage.createF3X();
     ReportListPage.goToPage();
-    cy.runLighthouse('reports', 'create-report');
-
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'GENERAL (12G)');
     cy.get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
@@ -107,8 +103,6 @@ describe('Manage reports', () => {
     F3xCashOnHandPage.enterFormData(cohFormData);
     PageUtils.clickButton('Save & continue');
     cy.contains('Cash on hand').should('exist');
-
-    cy.runLighthouse('reports', 'cash-on-hand');
   });
 
   xit('Check values on the Summary Page', () => {
@@ -133,8 +127,6 @@ describe('Manage reports', () => {
     PageUtils.clickSidebarSection('REVIEW A REPORT');
     PageUtils.clickSidebarItem('Add a report level memo');
     cy.get('[id="text4000"]').should('have.value', memoText);
-
-    cy.runLighthouse('reports', 'report-level-memo');
   });
 
   xit('Confirm report information', () => {

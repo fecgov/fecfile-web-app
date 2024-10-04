@@ -90,4 +90,12 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   private onChange(value: string) {
     // noop
   }
+
+  onBlur(event: FocusEvent) {
+    const value = `+${this.countryCode} ${(event.target as HTMLInputElement).value}`;
+    this.ngControl.control?.setValue(value, { emitEvent: false });
+    this.ngControl.control?.updateValueAndValidity();
+    this.ngControl.control?.markAsTouched();
+    this.ngControl.control?.markAsDirty();
+  }
 }

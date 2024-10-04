@@ -8,6 +8,12 @@
   width: fit-content;
 }
 
+.sidebar-content-container > .main-content {
+  margin-left: 32px;
+  margin-right: 0;
+  width: 100%;
+}
+
 .header-container {
   padding: 0 32px 64px 32px;
 }

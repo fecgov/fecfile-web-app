@@ -1185,7 +1185,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
   font-size: 1rem;
-  color: #5b616b;
+  color: #212121;
   background: #ffffff;
   padding: 10px 15px;
   border: 2px solid #aeb0b5;
@@ -4456,30 +4456,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-card .p-card-footer {
   padding: 1rem 0 0 0;
-}
-
-.p-divider .p-divider-content {
-  background-color: #ffffff;
-}
-.p-divider.p-divider-horizontal {
-  margin: 1rem 0;
-  padding: 0 1rem;
-}
-.p-divider.p-divider-horizontal:before {
-  border-top: 1px #d6d7d9;
-}
-.p-divider.p-divider-horizontal .p-divider-content {
-  padding: 0 0.5rem;
-}
-.p-divider.p-divider-vertical {
-  margin: 0 1rem;
-  padding: 1rem 0;
-}
-.p-divider.p-divider-vertical:before {
-  border-left: 1px #d6d7d9;
-}
-.p-divider.p-divider-vertical .p-divider-content {
-  padding: 0.5rem 0;
 }
 
 .p-fieldset {

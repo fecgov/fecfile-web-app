@@ -5,12 +5,12 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { firstValueFrom, takeUntil } from 'rxjs';
+import { firstValueFrom, takeUntil, take, timer, concatMap, tap, map } from 'rxjs';
 
 @Component({
   selector: 'app-print-preview',
@@ -24,10 +24,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   downloadURL = '';
   printError = '';
   pollingTime = 2000;
-  pollingStatusMessage:
-    | 'This may take a while...'
-    | 'Your report is still being processed. Please check back later to access your PDF'
-    | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'not-submitted';
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
@@ -37,7 +33,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     public router: Router,
     public route: ActivatedRoute,
     private webPrintService: WebPrintService,
-    private form3XService: Form3XService,
+    private reportService: ReportService,
   ) {
     super();
   }
@@ -50,6 +46,9 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
         if (report) {
           this.report = report;
           this.updatePrintStatus(report);
+          if (this.webPrintStage === 'checking') {
+            this.pollPrintStatus();
+          }
         }
       });
 
@@ -67,61 +66,82 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   }
 
   public updatePrintStatus(report: Report) {
+    this.report = report;
     if (!report.webprint_submission) {
+      // If there is no submission object, the preview has not been submitted
       this.webPrintStage = 'not-submitted';
     } else {
-      const status = report.webprint_submission.fec_status ?? report.webprint_submission.fecfile_task_state;
-      switch (status) {
-        case 'COMPLETED':
-          this.store.dispatch(singleClickEnableAction());
-          this.webPrintStage = 'success';
-          this.downloadURL = report.webprint_submission.fec_image_url;
-          this.submitDate = report.webprint_submission.created;
-          break;
-        case 'FAILED':
-          this.store.dispatch(singleClickEnableAction());
-          this.webPrintStage = 'failure';
-          this.printError = report.webprint_submission.fecfile_error;
-          break;
-        case 'PROCESSING':
-          this.webPrintStage = 'checking';
-          this.pollingStatusMessage =
-            'Your report is still being processed. Please check back later to access your PDF';
-          break;
+      // Determine the status of the submission
+      const fecfile_task_state = report.webprint_submission.fecfile_task_state;
+      const fec_status = report.webprint_submission.fec_status;
+      if (fecfile_task_state === 'FAILED' || fec_status === 'FAILED') {
+        /** If the submission failed, display the error message
+         * 'FAILED' in fec_status means that the EFO service failed to create the print preview
+         * 'FAILED' in fecfile_task_state means the task failed (which could be because of
+         * a failure in the EFO service or a failure on our side while creating the .fec,
+         * for example)
+         * */
+        this.store.dispatch(singleClickEnableAction());
+        this.webPrintStage = 'failure';
+        this.printError = report.webprint_submission.fec_message || report.webprint_submission.fecfile_error;
+        return;
       }
+      if (fec_status === 'COMPLETED' && fecfile_task_state === 'SUCCEEDED') {
+        /** If the submission is complete, display the download button
+         * we want to see a completed status from EFO and a succeeded
+         * task state from our celery task.
+         */
+        this.store.dispatch(singleClickEnableAction());
+        this.webPrintStage = 'success';
+        this.downloadURL = report.webprint_submission.fec_image_url;
+        this.submitDate = report.webprint_submission.created;
+        return;
+      }
+      // Otherwise the submission is still processing
+      this.webPrintStage = 'checking';
     }
   }
 
-  public pollPrintStatus() {
-    this.pollingStatusMessage = 'This may take a while...';
-    this.webPrintStage = 'checking';
+  public pollPrintStatus(): void {
+    /** Request the status of the report
+     * tap into observable to update ui with status
+     * delay polling again
+     * if the status is not completed, poll again
+     */
 
-    setTimeout(() => {
-      this.refreshReportStatus();
-    }, this.pollingTime);
-  }
-
-  public refreshReportStatus() {
-    if (this.report.id) {
-      this.webPrintService.getStatus(this.report.id);
-      if (
-        !this.report.webprint_submission?.fec_status ||
-        this.report.webprint_submission?.fec_status === 'PROCESSING'
-      ) {
-        setTimeout(() => {
-          this.refreshReportStatus();
-        }, this.pollingTime);
-      }
-    }
+    this.reportService
+      .get(this.report.id!)
+      .pipe(
+        tap((report) => {
+          this.updatePrintStatus(report);
+        }),
+      )
+      .pipe(concatMap((report) => timer(this.pollingTime).pipe(map(() => report))))
+      .pipe(take(1))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
+          this.pollPrintStatus();
+        }
+      });
   }
 
   public async submitPrintJob() {
     if (this.report.id) {
-      if (this.report instanceof Form3X) {
-        await firstValueFrom(this.form3XService.fecUpdate(this.report, this.committeeAccount));
-      }
-      this.webPrintService.submitPrintJob(this.report.id);
-      this.pollPrintStatus();
+      /** Update the report with the committee information
+       * this is a must because the .fec requires this information */
+      await firstValueFrom(this.reportService.fecUpdate(this.report, this.committeeAccount));
+      return this.webPrintService.submitPrintJob(this.report.id).then(
+        () => {
+          // Start polling for a completed status
+          this.pollPrintStatus();
+        },
+        () => {
+          // Handles any failure when submitting the print request
+          this.webPrintStage = 'failure';
+          this.printError = 'Failed to compile PDF';
+        },
+      );
     }
   }
 

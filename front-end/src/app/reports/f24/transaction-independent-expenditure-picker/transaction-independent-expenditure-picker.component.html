@@ -1,10 +1,10 @@
 <div class="grid">
   <h1 class="col-12 reduce-vert-spacing">{{ this.title }}</h1>
   <h3 class="col-12 reduce-vert-spacing">Form 24</h3>
-  <p-divider class="col-12 reduce-vert-spacing"></p-divider>
+  <hr class="col-12 reduce-vert-spacing" />
   <p-card>
     <h2 class="reduce-vert-spacing">Disbursements</h2>
-    <p-divider></p-divider>
+    <hr type="solid" />
     <div class="grid">
       <div class="col-12" *ngFor="let transactionType of transactionTypes">
         <a [routerLink]="getRouterLink(transactionType)">

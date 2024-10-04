@@ -99,6 +99,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
         ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
+    { updateOn: 'blur' },
   );
   formSubmitted = false;
 
@@ -170,7 +171,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       this.totalTransactions = transactionsPage.count;
       this.tableLoading = false;
       this.emptyMessage = 'No data available in table';
-    } catch (error) {
+    } catch {
       this.tableLoading = false;
       this.emptyMessage = 'Error loading transactions for contact';
     }
