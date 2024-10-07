@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegisterCommitteeComponent } from 'app/committee/register-committee/register-committee.component';
+import { CreateCommitteeComponent } from 'app/committee/create-committee/create-committee.component';
 import { SelectCommitteeComponent } from 'app/committee/select-committee/select-committee.component';
 import { HeaderStyles } from 'app/layout/header/header.component';
 import { BackgroundStyles } from 'app/layout/layout.component';
@@ -48,9 +48,9 @@ const routes: Routes = [
     },
   },
   {
-    path: 'register-committee',
-    title: 'Register Committee',
-    component: RegisterCommitteeComponent,
+    path: 'create-committee',
+    title: 'Create Committee',
+    component: CreateCommitteeComponent,
     canActivate: [loggedInGuard, nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,

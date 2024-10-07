@@ -11,20 +11,20 @@ import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { RegisterCommitteeComponent } from './register-committee.component';
+import { CreateCommitteeComponent } from './create-committee.component';
 
-describe('RegisterCommitteeComponent', () => {
-  let component: RegisterCommitteeComponent;
-  let fixture: ComponentFixture<RegisterCommitteeComponent>;
+describe('CreateCommitteeComponent', () => {
+  let component: CreateCommitteeComponent;
+  let fixture: ComponentFixture<CreateCommitteeComponent>;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, ToastModule, DialogModule],
-      declarations: [RegisterCommitteeComponent],
+      declarations: [CreateCommitteeComponent],
       providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     });
-    fixture = TestBed.createComponent(RegisterCommitteeComponent);
+    fixture = TestBed.createComponent(CreateCommitteeComponent);
     component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
@@ -52,9 +52,9 @@ describe('RegisterCommitteeComponent', () => {
     expect(component.selectedCommittee?.name).toEqual(filing.committee_name);
     expect(component.selectedCommittee?.committee_id).toBe(filing.committee_id);
   });
-  it('should register committee', () => {
+  it('should create committee', () => {
     const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-    const spy = spyOn(testCommitteeAccountService, 'registerCommitteeAccount').and.callFake(() =>
+    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
       Promise.resolve(new CommitteeAccount()),
     );
     const filing = new FecFiling();
@@ -65,13 +65,13 @@ describe('RegisterCommitteeComponent', () => {
 
     expect(spy).toHaveBeenCalledWith(filing.committee_id);
   });
-  it('should fail to register committee', waitForAsync(() => {
+  it('should fail to create committee', waitForAsync(() => {
     const filing = new FecFiling();
     filing.committee_id = 'C12345678';
     filing.committee_name = 'test name';
     component.select(filing);
     component.createAccount();
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/register/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/create/`);
     expect(req.request.method).toEqual('POST');
     req.flush(null);
     httpTestingController.verify();

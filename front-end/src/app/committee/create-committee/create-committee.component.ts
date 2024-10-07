@@ -7,11 +7,11 @@ import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-register-committee',
-  templateUrl: './register-committee.component.html',
-  styleUrls: ['./register-committee.component.scss'],
+  selector: 'app-create-committee',
+  templateUrl: './create-committee.component.html',
+  styleUrls: ['./create-committee.component.scss'],
 })
-export class RegisterCommitteeComponent extends DestroyerComponent {
+export class CreateCommitteeComponent extends DestroyerComponent {
   query?: string;
   suggestions?: FecFiling[];
   selectedCommittee?: CommitteeAccount;
@@ -42,7 +42,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   }
   createAccount() {
     this.unableToCreateAccount = false;
-    this.committeeAccountService.registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
+    this.committeeAccountService.createCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
       (committeeAccount) => {
         this.messageService.add({
           severity: 'success',

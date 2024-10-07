@@ -73,12 +73,12 @@ describe('CommitteeAccountService', () => {
     httpTestingController.verify();
   }));
 
-  it('should calle api to register committee', waitForAsync(() => {
+  it('should calle api to create committee account', waitForAsync(() => {
     const committeeId = '123';
-    service.registerCommitteeAccount(committeeId).then((committee) => {
+    service.createCommitteeAccount(committeeId).then((committee) => {
       expect(committee.committee_id).toBe(committeeId);
     });
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/register/`);
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/create/`);
     expect(request.request.method).toEqual('POST');
     expect(request.request.body).toEqual({ committee_id: '123' });
     request.flush({ id: 1, committee_id: committeeId });
