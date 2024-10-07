@@ -24,12 +24,7 @@ import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
-  declarations: [
-    ManageCommitteeComponent,
-    SelectCommitteeComponent,
-    CommitteeInfoComponent,
-    CreateCommitteeComponent,
-  ],
+  declarations: [ManageCommitteeComponent, SelectCommitteeComponent, CommitteeInfoComponent, CreateCommitteeComponent],
   imports: [
     AutoCompleteModule,
     CommonModule,
