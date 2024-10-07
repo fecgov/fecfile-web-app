@@ -28,7 +28,7 @@ export class CommitteeAccountService {
   public createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
     return firstValueFrom(
       this.apiService
-        .post<CommitteeAccount>('/committees/create/', { committee_id: committeeId }, {}, [HttpStatusCode.BadRequest])
+        .post<CommitteeAccount>('/committees/create_account/', { committee_id: committeeId }, {}, [HttpStatusCode.BadRequest])
         .pipe(
           map((response) => {
             if (!response.body) {

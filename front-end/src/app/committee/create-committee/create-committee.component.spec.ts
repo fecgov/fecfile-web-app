@@ -71,7 +71,7 @@ describe('CreateCommitteeComponent', () => {
     filing.committee_name = 'test name';
     component.select(filing);
     component.createAccount();
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/create/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/create_account/`);
     expect(req.request.method).toEqual('POST');
     req.flush(null);
     httpTestingController.verify();

@@ -78,7 +78,7 @@ describe('CommitteeAccountService', () => {
     service.createCommitteeAccount(committeeId).then((committee) => {
       expect(committee.committee_id).toBe(committeeId);
     });
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/create/`);
+    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/create_account/`);
     expect(request.request.method).toEqual('POST');
     expect(request.request.body).toEqual({ committee_id: '123' });
     request.flush({ id: 1, committee_id: committeeId });
