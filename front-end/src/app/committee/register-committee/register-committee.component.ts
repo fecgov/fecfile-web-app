@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { committeeIdValidator } from 'app/shared/utils/validators.utils';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-register-committee',
@@ -17,46 +19,45 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
   selectedCommittee?: CommitteeAccount;
   explanationVisible = false;
   unableToCreateAccount = false;
+  form: FormGroup = new FormGroup(
+    { 'committee-id': new FormControl('', [committeeIdValidator, Validators.required]) },
+    { updateOn: 'blur' },
+  );
 
   constructor(
-    protected fecApiService: FecApiService,
     protected messageService: MessageService,
     protected committeeAccountService: CommitteeAccountService,
-    protected confirmationService: ConfirmationService,
+    protected router: Router,
   ) {
     super();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  search(event: any) {
-    this.query = event.query;
-    this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
-      this.suggestions = filings;
-    });
-  }
-  select(committee: FecFiling) {
-    this.query = undefined;
-    this.selectedCommittee = new CommitteeAccount();
-    this.selectedCommittee.name = committee.committee_name;
-    this.selectedCommittee.committee_id = committee.committee_id;
-  }
-  createAccount() {
+  async registerMembership() {
+    const committeeIdField = this.form.get('committee-id') as AbstractControl;
+    committeeIdField.updateValueAndValidity({ emitEvent: true });
+
+    const committeeId = committeeIdField.value;
     this.unableToCreateAccount = false;
-    this.committeeAccountService.registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
-      (committeeAccount) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: `Committee Account ${committeeAccount.committee_id} Created`,
-          life: 3000,
-        });
-      },
-      () => {
-        this.unableToCreateAccount = true;
-        this.selectedCommittee = undefined;
-      },
-    );
+
+    if (this.form.get('committee-id')?.valid) {
+      return this.committeeAccountService.registerCommitteeAccount(committeeId).then(
+        (committeeAccount) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: `Committee Account ${committeeAccount.committee_id} Created`,
+            life: 3000,
+          });
+          this.router.navigateByUrl('/select-committee');
+        },
+        () => {
+          this.unableToCreateAccount = true;
+          this.selectedCommittee = undefined;
+        },
+      );
+    }
   }
+
   showExplanation() {
     this.explanationVisible = true;
   }
