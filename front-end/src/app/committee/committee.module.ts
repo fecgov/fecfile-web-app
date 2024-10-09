@@ -18,18 +18,13 @@ import { SelectCommitteeComponent } from './select-committee/select-committee.co
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
-import { RegisterCommitteeComponent } from './register-committee/register-committee.component';
+import { CreateCommitteeComponent } from './create-committee/create-committee.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
-  declarations: [
-    ManageCommitteeComponent,
-    SelectCommitteeComponent,
-    CommitteeInfoComponent,
-    RegisterCommitteeComponent,
-  ],
+  declarations: [ManageCommitteeComponent, SelectCommitteeComponent, CommitteeInfoComponent, CreateCommitteeComponent],
   imports: [
     AutoCompleteModule,
     CommonModule,
