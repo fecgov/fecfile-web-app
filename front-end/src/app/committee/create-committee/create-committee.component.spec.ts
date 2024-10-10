@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
@@ -15,7 +15,6 @@ import { CreateCommitteeComponent } from './create-committee.component';
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
   let fixture: ComponentFixture<CreateCommitteeComponent>;
-  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +24,6 @@ describe('CreateCommitteeComponent', () => {
     });
     fixture = TestBed.createComponent(CreateCommitteeComponent);
     component = fixture.componentInstance;
-    httpTestingController = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });
 
