@@ -43,7 +43,7 @@ describe('FecApiService', () => {
   });
 
   describe('#getCommitteeDetails()', () => {
-    it('should return committee details', () => {
+    it('should return committee details for case insensitive search', () => {
       const committeeAccount: CommitteeAccount = new CommitteeAccount();
       const response: FecApiPaginatedResponse = {
         api_version: '1.0',
@@ -56,7 +56,7 @@ describe('FecApiService', () => {
         results: [committeeAccount],
       };
 
-      service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
+      service.getCommitteeDetails('c00601211').subscribe((committeeAccountData) => {
         expect(committeeAccountData).toEqual(committeeAccount);
       });
 

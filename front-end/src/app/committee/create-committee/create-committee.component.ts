@@ -34,7 +34,7 @@ export class CreateCommitteeComponent extends DestroyerComponent {
     this.selectedCommittee = undefined;
     this.unableToCreateAccount = false;
     if (committeeId) {
-      firstValueFrom(this.fecApiService.getCommitteeDetails(committeeId)).then(
+      firstValueFrom(this.fecApiService.getCommitteeDetails(committeeId, true)).then(
         (filing) => {
           if (filing) {
             this.handleSuccessfulSearch(filing);
