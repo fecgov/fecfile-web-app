@@ -81,20 +81,4 @@ describe('FecApiService', () => {
       req.flush(f1Filing);
     });
   });
-  describe('#queryFilings()', () => {
-    it('should call api with query for f1 filings', () => {
-      const f1Filings = [FecFiling.fromJSON({ form_type: 'F1N', pdf_url: 'go here' })];
-
-      service.queryFilings('foo', 'F1').then((filings) => {
-        expect(filings[0]).toEqual(f1Filings[0]);
-      });
-
-      const req = httpTestingController.expectOne(
-        `https://localhost/api/v1/openfec/query_filings/?query=foo&form_type=F1`,
-      );
-
-      expect(req.request.method).toEqual('GET');
-      req.flush({ results: f1Filings });
-    });
-  });
 });

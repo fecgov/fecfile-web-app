@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
@@ -73,11 +73,5 @@ export class FecApiService {
     return this.apiService
       .get<FecFiling>(`/openfec/${committeeId}/f1_filing/`)
       .pipe(map((response) => FecFiling.fromJSON(response)));
-  }
-
-  public queryFilings(query: string, formType: string): Promise<FecFiling[]> {
-    return firstValueFrom(
-      this.apiService.get<FecApiPaginatedResponse>(`/openfec/query_filings/`, { query, form_type: formType }),
-    ).then((pagingatedFilings: FecApiPaginatedResponse) => pagingatedFilings['results'] as FecFiling[]);
   }
 }
