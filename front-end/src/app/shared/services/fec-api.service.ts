@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
@@ -25,18 +24,6 @@ export class FecApiService {
   }
 
   /**
-   * Gets the candidate details.
-   *
-   * @return     {Observable}  The candidate details.
-   */
-  public getCandidateDetails(candidate_id: string | null): Observable<Candidate> {
-    if (!candidate_id) {
-      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
-    }
-    return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
-  }
-
-  /**
    * Gets the commitee account details.
    *
    * @return     {Observable}  The commitee details.
@@ -49,7 +36,7 @@ export class FecApiService {
     return this.apiService.get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`).pipe(
       map((response) => {
         const ca = response.results[0] as CommitteeAccount;
-        if (!ca.filing_frequency) ca.filing_frequency = 'Q';
+        if (ca && !ca.filing_frequency) ca.filing_frequency = 'Q';
         return ca;
       }),
     );

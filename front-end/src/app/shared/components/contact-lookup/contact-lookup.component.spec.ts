@@ -22,7 +22,6 @@ import {
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -52,14 +51,7 @@ describe('ContactLookupComponent', () => {
         AutoCompleteModule,
         SharedModule,
       ],
-      providers: [
-        FormBuilder,
-        ContactService,
-        FecApiService,
-        EventEmitter,
-        provideMockStore(testMockStore),
-        HttpClient,
-      ],
+      providers: [FormBuilder, ContactService, EventEmitter, provideMockStore(testMockStore), HttpClient],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
@@ -321,7 +313,7 @@ describe('ContactLookupComponent', () => {
       name: 'BIDEN, JOSEPH R JR',
     });
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
+    const getCandidateDetailsSpy = spyOn(component.contactService, 'getCandidateDetails').and.returnValue(
       of(testCandidate),
     );
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
@@ -371,7 +363,7 @@ describe('ContactLookupComponent', () => {
       candidate_suffix: 'test_candidate_suffix',
     });
     const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
+    const getCandidateDetailsSpy = spyOn(component.contactService, 'getCandidateDetails').and.returnValue(
       of(testCandidate),
     );
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {

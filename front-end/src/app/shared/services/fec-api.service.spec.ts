@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
-import { Candidate } from '../models/candidate.model';
 import { FecFiling } from '../models/fec-filing.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { FecApiService } from './fec-api.service';
@@ -23,23 +22,6 @@ describe('FecApiService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  describe('#getCandidateDetails()', () => {
-    it('should return candidate details', () => {
-      const candidate: Candidate = new Candidate();
-
-      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
-        expect(candidateData).toEqual(candidate);
-      });
-
-      const req = httpTestingController.expectOne(
-        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678',
-      );
-
-      expect(req.request.method).toEqual('GET');
-      req.flush(candidate);
-    });
   });
 
   describe('#getCommitteeDetails()', () => {
