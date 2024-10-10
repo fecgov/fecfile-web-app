@@ -36,11 +36,7 @@ export class CreateCommitteeComponent extends DestroyerComponent {
     if (committeeId) {
       firstValueFrom(this.fecApiService.getCommitteeDetails(committeeId, true)).then(
         (filing) => {
-          if (filing) {
-            this.handleSuccessfulSearch(filing);
-          } else {
-            this.handleFailedSearch();
-          }
+          this.handleSuccessfulSearch(filing);
         },
         () => {
           this.handleFailedSearch();

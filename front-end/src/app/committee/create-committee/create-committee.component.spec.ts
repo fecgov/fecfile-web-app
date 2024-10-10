@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
+import { of } from 'rxjs';
 import { CreateCommitteeComponent } from './create-committee.component';
 
 describe('CreateCommitteeComponent', () => {
@@ -35,48 +34,53 @@ describe('CreateCommitteeComponent', () => {
   });
 
   it('should search filings', () => {
+    const testCommitteeId = 'C12345678';
+    const testCommittee = new CommitteeAccount();
+    testCommittee.committee_id = testCommitteeId;
     const testFecApiService = TestBed.inject(FecApiService);
-    const spy = spyOn(testFecApiService, 'queryFilings').and.callFake(() =>
-      Promise.resolve([new FecFiling()] as FecFiling[]),
-    );
-    component.search({ query: 'query' });
+    const spy = spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(testCommittee));
 
-    expect(spy).toHaveBeenCalledWith('query', 'F1');
+    expect(component.selectedCommittee).toBeFalsy();
+    component.search(testCommitteeId);
+    expect(spy).toHaveBeenCalledWith(testCommitteeId, true);
   });
-  it('should select committee', () => {
-    const filing = new FecFiling();
-    filing.committee_id = 'C12345678';
-    filing.committee_name = 'test name';
-    component.select(filing);
 
-    expect(component.selectedCommittee?.name).toEqual(filing.committee_name);
-    expect(component.selectedCommittee?.committee_id).toBe(filing.committee_id);
+  it('should handle successful search', () => {
+    const testCommitteeId = 'C12345678';
+    const testCommittee = new CommitteeAccount();
+    testCommittee.committee_id = testCommitteeId;
+
+    expect(component.unableToCreateAccount).toBeFalse();
+    expect(component.selectedCommittee).toBeFalsy();
+    component.handleSuccessfulSearch(testCommittee);
+    expect(component.unableToCreateAccount).toBeFalse();
+    expect(component.selectedCommittee?.committee_id).toEqual(testCommitteeId);
   });
+
+  it('should handle failed search', () => {
+    const testCommitteeId = 'C12345678';
+    const testCommittee = new CommitteeAccount();
+    testCommittee.committee_id = testCommitteeId;
+
+    expect(component.unableToCreateAccount).toBeFalse();
+    expect(component.selectedCommittee).toBeFalsy();
+    component.handleFailedSearch();
+    expect(component.unableToCreateAccount).toBeTrue();
+    expect(component.selectedCommittee).toBeFalsy();
+  });
+
   it('should create committee', () => {
     const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
     const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
       Promise.resolve(new CommitteeAccount()),
     );
-    const filing = new FecFiling();
-    filing.committee_id = 'C12345678';
-    filing.committee_name = 'test name';
-    component.select(filing);
+    const testCommitteeId = 'C12345678';
+    const testCommittee = new CommitteeAccount();
+    testCommittee.committee_id = testCommitteeId;
+
+    component.selectedCommittee = testCommittee;
     component.createAccount();
 
-    expect(spy).toHaveBeenCalledWith(filing.committee_id);
+    expect(spy).toHaveBeenCalledWith(testCommitteeId);
   });
-  it('should fail to create committee', waitForAsync(() => {
-    const filing = new FecFiling();
-    filing.committee_id = 'C12345678';
-    filing.committee_name = 'test name';
-    component.select(filing);
-    component.createAccount();
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/create_account/`);
-    expect(req.request.method).toEqual('POST');
-    req.flush(null);
-    httpTestingController.verify();
-    setTimeout(() => {
-      expect(component.unableToCreateAccount).toBeTrue();
-    }, 500);
-  }));
 });

@@ -60,7 +60,9 @@ describe('FecApiService', () => {
         expect(committeeAccountData).toEqual(committeeAccount);
       });
 
-      const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/committee/`);
+      const req = httpTestingController.expectOne(
+        `https://localhost/api/v1/openfec/C00601211/committee?check_can_create=false`,
+      );
 
       expect(req.request.method).toEqual('GET');
       req.flush(response);
