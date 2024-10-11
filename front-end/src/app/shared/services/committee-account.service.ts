@@ -17,6 +17,10 @@ export class CommitteeAccountService {
       .pipe(map((response) => response.results as CommitteeAccount[]));
   }
 
+  public getUncreatedCommittee(committeeId: string): Observable<CommitteeAccount> {
+    return this.apiService.get(`/committees/get-uncreated-committee/${committeeId}/`);
+  }
+
   public activateCommittee(committeeUUID?: string): Observable<boolean> {
     return this.apiService.post(`/committees/${committeeUUID}/activate/`, {});
   }

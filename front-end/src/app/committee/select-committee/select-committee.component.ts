@@ -26,21 +26,7 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.committeeAccountService
-      .getCommittees()
-      .pipe(
-        concatMap((committees: CommitteeAccount[]) => {
-          const augmented = committees.map((committee) => {
-            return this.fecApiService.getCommitteeDetails(committee.committee_id || '').pipe(
-              map((fecCommittee: CommitteeAccount) => {
-                return { ...committee, ...fecCommittee } as CommitteeAccount;
-              }),
-            );
-          });
-          return augmented.length ? forkJoin(augmented) : of([]);
-        }),
-      )
-      .subscribe((committees) => (this.committees = committees));
+    this.committeeAccountService.getCommittees().subscribe((committees) => (this.committees = committees));
   }
 
   activateCommittee(committee: CommitteeAccount): void {
