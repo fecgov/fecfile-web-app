@@ -53,12 +53,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
-      this.fecApiService
-        .getCommitteeRecentF1Filing(committee.committee_id)
-        .subscribe((mostRecentFiling: FecFiling | undefined) => {
-          this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
-        });
-
+      this.mostRecentFilingPdfUrl = undefined; //Undefined until requirements can be established
       this.form.enable();
       const entries = Object.entries(committee);
       for (const [key, value] of entries) {

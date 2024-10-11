@@ -4,7 +4,6 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
 
@@ -34,9 +33,9 @@ export class CreateCommitteeComponent extends DestroyerComponent {
     this.selectedCommittee = undefined;
     this.unableToCreateAccount = false;
     if (committeeId) {
-      firstValueFrom(this.fecApiService.getCommitteeDetails(committeeId, true)).then(
-        (filing) => {
-          this.handleSuccessfulSearch(filing);
+      firstValueFrom(this.committeeAccountService.getUncreatedCommittee(committeeId)).then(
+        (committee) => {
+          this.handleSuccessfulSearch(committee);
         },
         () => {
           this.handleFailedSearch();
