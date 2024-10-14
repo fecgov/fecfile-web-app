@@ -1,0 +1,8 @@
+applications:
+  - name: fecfile-web-app
+    instances: 2
+    memory: 1G
+    buildpack: nginx_buildpack
+    stack: cflinuxfs4
+    routes:
+      - route: test.fecfile.fec.gov
