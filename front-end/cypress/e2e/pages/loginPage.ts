@@ -59,7 +59,7 @@ function loginDotGovLogin() {
   const committeeID = Cypress.env('COMMITTEE_ID');
 
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee`, {
+  cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee/?check_can_create=false`, {
     fixture: 'FEC_Get_Committee_Account',
   }).as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');

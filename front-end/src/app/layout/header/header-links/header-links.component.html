@@ -79,9 +79,6 @@
   </ng-container>
   <ng-container *ngIf="headerStyle === headerStyles.LOGIN">
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" [routerLink]=""><span [ngStyle]="{ 'font-size': fontSize }">Sign Up</span></a>
-    </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" (click)="navigateToLoginDotGov()">
         <span [ngStyle]="{ 'font-size': fontSize }">Log In</span>
       </a>

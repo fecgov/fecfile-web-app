@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+<<<<<<< HEAD
 import { firstValueFrom, map, Observable } from 'rxjs';
+=======
+import { map, Observable } from 'rxjs';
+import { Candidate } from '../models/candidate.model';
+>>>>>>> develop
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
@@ -28,18 +33,22 @@ export class FecApiService {
    *
    * @return     {Observable}  The commitee details.
    */
-  public getCommitteeDetails(committeeId: string | null): Observable<CommitteeAccount> {
+  public getCommitteeDetails(committeeId: string | null, checkCanCreate = false): Observable<CommitteeAccount> {
     if (!committeeId) {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
 
-    return this.apiService.get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`).pipe(
-      map((response) => {
-        const ca = response.results[0] as CommitteeAccount;
-        if (ca && !ca.filing_frequency) ca.filing_frequency = 'Q';
-        return ca;
-      }),
-    );
+    return this.apiService
+      .get<FecApiPaginatedResponse>(
+        `/openfec/${committeeId.toUpperCase()}/committee?check_can_create=${checkCanCreate}`,
+      )
+      .pipe(
+        map((response) => {
+          const ca = response.results[0] as CommitteeAccount;
+          if (ca && !ca.filing_frequency) ca.filing_frequency = 'Q';
+          return ca;
+        }),
+      );
   }
 
   /**
@@ -60,11 +69,5 @@ export class FecApiService {
     return this.apiService
       .get<FecFiling>(`/openfec/${committeeId}/f1_filing/`)
       .pipe(map((response) => FecFiling.fromJSON(response)));
-  }
-
-  public queryFilings(query: string, formType: string): Promise<FecFiling[]> {
-    return firstValueFrom(
-      this.apiService.get<FecApiPaginatedResponse>(`/openfec/query_filings/`, { query, form_type: formType }),
-    ).then((pagingatedFilings: FecApiPaginatedResponse) => pagingatedFilings['results'] as FecFiling[]);
   }
 }

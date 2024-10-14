@@ -22,6 +22,7 @@ import { CreateCommitteeComponent } from './create-committee/create-committee.co
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { RippleModule } from 'primeng/ripple';
 import { DialogModule } from 'primeng/dialog';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 @NgModule({
   declarations: [ManageCommitteeComponent, SelectCommitteeComponent, CommitteeInfoComponent, CreateCommitteeComponent],
@@ -42,6 +43,7 @@ import { DialogModule } from 'primeng/dialog';
     SharedModule,
     RippleModule,
     DialogModule,
+    InputGroupModule,
   ],
 })
 export class CommitteeModule {}
