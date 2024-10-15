@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PollerService } from 'app/shared/services/poller.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
-import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-poller',
@@ -10,13 +9,11 @@ import { ConfirmationService } from 'primeng/api';
   styleUrl: './poller.component.scss',
 })
 export class PollerComponent implements OnInit, OnDestroy {
-  isNewVersionAvailable = false;
   private subscription!: Subscription;
 
   constructor(
     private pollerService: PollerService,
     private location: Location,
-    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit() {
@@ -27,17 +24,9 @@ export class PollerComponent implements OnInit, OnDestroy {
     deploymentUrl += deploymentUrl.endsWith('/') ? 'index.html' : '/index.html';
 
     this.pollerService.startPolling(deploymentUrl);
-    this.subscription = this.pollerService.isNewVersionAvailable$.subscribe((isNex) => {
-      this.isNewVersionAvailable = isNex;
-      if (this.isNewVersionAvailable) {
-        this.confirmationService.confirm({
-          key: 'refresh',
-          message:
-            'A new version of the application has been deployed! Would you like to refresh the page to receive the new app?',
-          header: 'App Update',
-          accept: () => this.reload(),
-          reject: () => this.stopPolling(),
-        });
+    this.subscription = this.pollerService.isNewVersionAvailable$.subscribe((isNewVersionAvailable) => {
+      if (isNewVersionAvailable) {
+        this.reload();
       }
     });
   }

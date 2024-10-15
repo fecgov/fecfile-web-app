@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PollerComponent } from './poller.component';
 import { Location } from '@angular/common';
-import { ConfirmationService } from 'primeng/api'; // Adjust if using different confirmation library
 import { PollerService } from 'app/shared/services/poller.service';
 
 describe('PollerComponent', () => {
@@ -14,7 +13,6 @@ describe('PollerComponent', () => {
     isNewVersionAvailable$: Observable<boolean>;
   };
   let locationMock: { path: jasmine.Spy };
-  let confirmationServiceMock: { confirm: jasmine.Spy };
   let isNewVersionAvailableSubject: BehaviorSubject<boolean>;
 
   beforeEach(async () => {
@@ -32,17 +30,11 @@ describe('PollerComponent', () => {
       path: jasmine.createSpy('path').and.returnValue('/current-path'),
     };
 
-    // Mocking ConfirmationService
-    confirmationServiceMock = {
-      confirm: jasmine.createSpy('confirm'),
-    };
-
     await TestBed.configureTestingModule({
       declarations: [PollerComponent],
       providers: [
         { provide: PollerService, useValue: pollerServiceMock },
         { provide: Location, useValue: locationMock },
-        { provide: ConfirmationService, useValue: confirmationServiceMock },
       ],
     }).compileComponents();
 
@@ -54,33 +46,13 @@ describe('PollerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show confirmation dialog when new version is available', () => {
-    // Simulate a new version being available
-    isNewVersionAvailableSubject.next(true);
-
-    fixture.detectChanges(); // Trigger change detection
-
-    expect(confirmationServiceMock.confirm).toHaveBeenCalledWith(
-      jasmine.objectContaining({
-        message:
-          'A new version of the application has been deployed! Would you like to refresh the page to receive the new app?',
-        header: 'App Update',
-      }),
-    );
-  });
-
-  it('should call reload when confirmation is accepted', () => {
+  it('should call reload when new version', () => {
     spyOn(component, 'reload');
 
     // Simulate new version being available
     isNewVersionAvailableSubject.next(true);
 
     fixture.detectChanges();
-
-    // Simulate user accepting the confirmation
-    const confirmArgs = confirmationServiceMock.confirm.calls.mostRecent().args[0];
-    confirmArgs.accept();
-
     expect(component['reload']).toHaveBeenCalled();
   });
 
