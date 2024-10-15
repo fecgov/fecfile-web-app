@@ -1,11 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
-import { firstValueFrom, map, Observable } from 'rxjs';
-=======
 import { map, Observable } from 'rxjs';
-import { Candidate } from '../models/candidate.model';
->>>>>>> develop
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
