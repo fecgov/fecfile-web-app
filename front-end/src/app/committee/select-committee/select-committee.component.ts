@@ -4,9 +4,7 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
-import { concatMap, forkJoin, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-select-committee',
@@ -18,7 +16,6 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
 
   constructor(
     protected committeeAccountService: CommitteeAccountService,
-    protected fecApiService: FecApiService,
     protected store: Store,
     protected router: Router,
   ) {
@@ -26,21 +23,7 @@ export class SelectCommitteeComponent extends DestroyerComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.committeeAccountService
-      .getCommittees()
-      .pipe(
-        concatMap((committees: CommitteeAccount[]) => {
-          const augmented = committees.map((committee) => {
-            return this.fecApiService.getCommitteeDetails(committee.committee_id || '').pipe(
-              map((fecCommittee: CommitteeAccount) => {
-                return { ...committee, ...fecCommittee } as CommitteeAccount;
-              }),
-            );
-          });
-          return augmented.length ? forkJoin(augmented) : of([]);
-        }),
-      )
-      .subscribe((committees) => (this.committees = committees));
+    this.committeeAccountService.getCommittees().subscribe((committees) => (this.committees = committees));
   }
 
   activateCommittee(committee: CommitteeAccount): void {

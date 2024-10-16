@@ -4,7 +4,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
@@ -35,12 +34,12 @@ describe('CreateCommitteeComponent', () => {
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
-    const testFecApiService = TestBed.inject(FecApiService);
-    const spy = spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(testCommittee));
+    const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
+    const spy = spyOn(testCommitteeAccountService, 'getUncreatedCommittee').and.returnValue(of(testCommittee));
 
     expect(component.selectedCommittee).toBeFalsy();
     component.search(testCommitteeId);
-    expect(spy).toHaveBeenCalledWith(testCommitteeId, true);
+    expect(spy).toHaveBeenCalledWith(testCommitteeId);
   });
 
   it('should handle successful search', () => {
