@@ -100,9 +100,7 @@ export class ContactService implements TableListService<Contact> {
     if (!committee_id) {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
-    return this.apiService
-      .get<FecApiPaginatedResponse>(`/contacts/committee/`, { committee_id })
-      .pipe(map((response) => response.results[0] as CommitteeAccount));
+    return this.apiService.get<CommitteeAccount>(`/contacts/committee/`, { committee_id });
   }
 
   public async candidateLookup(
