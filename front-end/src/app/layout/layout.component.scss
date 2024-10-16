@@ -1,5 +1,8 @@
 #sidebar-container {
   min-height: calc(100vh - 2rem);
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
 }
 
 .main-content {
@@ -11,7 +14,7 @@
 .sidebar-content-container > .main-content {
   margin-left: 32px;
   margin-right: 0;
-  width: 100%;
+  width: calc(100% - 64px);
 }
 
 .header-container {
@@ -38,7 +41,7 @@ app-footer {
 
 .sidebar-content-container {
   min-height: calc(100vh - 2rem);
-  width: 100%;
+  width: calc(100% - 250px);
   display: flex;
   flex-direction: column;
 }
