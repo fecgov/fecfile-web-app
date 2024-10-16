@@ -35,7 +35,7 @@ describe('CreateCommitteeComponent', () => {
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
     const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-    const spy = spyOn(testCommitteeAccountService, 'getUncreatedCommittee').and.returnValue(of(testCommittee));
+    const spy = spyOn(testCommitteeAccountService, 'getAvailableCommittee').and.returnValue(of(testCommittee));
 
     expect(component.selectedCommittee).toBeFalsy();
     component.search(testCommitteeId);

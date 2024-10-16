@@ -32,7 +32,7 @@ export class CreateCommitteeComponent extends DestroyerComponent {
     this.selectedCommittee = undefined;
     this.unableToCreateAccount = false;
     if (committeeId) {
-      firstValueFrom(this.committeeAccountService.getUncreatedCommittee(committeeId)).then(
+      firstValueFrom(this.committeeAccountService.getAvailableCommittee(committeeId)).then(
         this.handleSuccessfulSearch.bind(this),
         this.handleFailedSearch.bind(this),
       );
