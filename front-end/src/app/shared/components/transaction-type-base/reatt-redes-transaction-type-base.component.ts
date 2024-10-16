@@ -104,9 +104,12 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       reatRedes.transactionType.contactTypeOptions ?? [],
     );
 
-    this.reattributedData.form = this.fb.group(SchemaUtils.getFormGroupFields(this.reattributedData.formProperties), {
-      updateOn: 'blur',
-    });
+    this.reattributedData.form = this.fb.group(
+      SchemaUtils.getFormGroupFieldsNoBlur(this.reattributedData.formProperties, this.fb),
+      {
+        updateOn: 'blur',
+      },
+    );
     this.reattributedData.contactIdMap = {};
     this.reattributedData.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
       this.reattributedData.form,
