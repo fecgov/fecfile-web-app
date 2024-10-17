@@ -4,10 +4,10 @@ import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
-import { ApiService } from './api.service';
-import { ReportService } from './report.service';
 import { Report } from '../models/report.model';
 import { F3xReportCodes } from '../utils/report-code.utils';
+import { ApiService } from './api.service';
+import { ReportService } from './report.service';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +49,29 @@ export class Form3XService extends ReportService {
     return this.apiService
       .get<Form3X[]>(`${this.apiEndpoint}/future?after=${coverage_through_date}`)
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
+  }
+
+  public getJan1CashOnHand(year: number): Promise<number> {
+    return firstValueFrom(
+      this.apiService
+        .get<number>(`${this.apiEndpoint}/jan1_cash_on_hand?year=${year}`)
+        .pipe(
+          map((response) => response),
+        ),
+    );
+  }
+
+  public updateJan1CashOnHand(year: number, amount: number): Promise<void> {
+    return firstValueFrom(
+      this.apiService
+        .put<void>(`${this.apiEndpoint}/jan1_cash_on_hand`, {
+          "year": year,
+          "amount": amount,
+        })
+        .pipe(
+          map((response) => response),
+        ),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

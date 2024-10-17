@@ -65,6 +65,19 @@ describe('Form3XService', () => {
     httpTestingController.verify();
   });
 
+  it('#delete() should DELETE a record2', () => {
+    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
+
+    service.delete(form3X).subscribe((response: null) => {
+      expect(response).toBeTrue();
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/999`);
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+    httpTestingController.verify();
+  });
+
   describe('getFutureReports', () => {
     it('should return a list of Form3X reports whose coverage through is after the submitted value', () => {
       service.getFutureReports('2024-01-20').subscribe((reports) => {

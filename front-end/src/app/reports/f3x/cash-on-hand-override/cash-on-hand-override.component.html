@@ -1,0 +1,65 @@
+<h1>Line 6a override</h1>
+<hr type="solid" />
+<form [formGroup]="form">
+  <div class="col-6 left-side">
+    <strong>WHAT IS A LINE 6A OVERRIDE?</strong>
+    <p>
+      When there is a discrepancy between the reported (FECFile-calculated) cash on hand and the correct
+      (committee-calculated) cash on hand, committees filing a Form 3X can override the reported cash on hand by
+      manually entering an amount for Line 6(a). If your committee overrides Line 6(a), it will adjust the cash on hand
+      for any reports in that calendar year (submitted or in-progress) and amendments may need to be submitted. Further,
+      if the cash on hand is overridden on a report from a prior year, reports in subsequent years will also be adjusted
+      and amendments may be needed.
+    </p>
+    <strong>NEED HELP?</strong>
+    <p>
+      If you’re unsure whether an override is the right choice for your committee, please reach out to your assigned campaign finance analyst for guidance.
+    </p>
+  </div>
+  <div class="col-6 right-side">
+    <div class="grid">
+      <div class="col-3">
+        <div class="field">
+          <label for="year">UPDATING CASH ON HAND JANUARY, 1</label>
+          <p-dropdown inputId="year" formControlName="year" [options]="yearOptions"></p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <div class="field">
+          <label for="currentAmount">CURRENT LINE 6A, COLUMN B AMOUNT</label>
+          <app-input-number
+            inputId="currentAmount"
+            [formControlName]="currentAmount"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          ></app-input-number>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="newAmount">NEW AMOUNT</label>
+          <app-input-number
+            inputId="newAmount"
+            [formControlName]="newAmount"
+          ></app-input-number>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <button
+          type="button"
+          pButton
+          pRipple
+          [disabled]="!form.valid"
+          label="Update LINE 6a"
+          class="p-button-primary"
+          (click)="updateLine6a()"
+        ></button>
+      </div>
+    </div>
+  </div>
+  <hr type="solid" />
+</form>
