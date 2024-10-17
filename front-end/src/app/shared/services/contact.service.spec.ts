@@ -17,7 +17,6 @@ import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 import { ContactService, DeletedContactService } from './contact.service';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { FecApiPaginatedResponse } from '../models/fec-api.model';
 import { Candidate } from '../models/candidate.model';
 
 describe('ContactService', () => {
