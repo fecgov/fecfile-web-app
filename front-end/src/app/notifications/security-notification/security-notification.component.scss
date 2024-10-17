@@ -1,0 +1,51 @@
+p,
+li {
+  margin-bottom: 32px;
+  padding-top: 0;
+}
+
+p + ul {
+  margin-top: 0;
+}
+
+ul li {
+  list-style-type: disc;
+  margin-left: 16px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 28px;
+  margin: 0;
+}
+
+.top-line {
+  margin: 20px 0;
+}
+
+p {
+  font-size: 18px;
+}
+
+.notice-box {
+  max-width: min(648px, 100vw);
+  margin: 0;
+}
+@media screen and (max-width: 767px) {
+  .notice-box {
+    margin: 0 32px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .notice-box {
+    width: 66.666666666667vw;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .notice-box {
+    width: 50vw;
+  }
+}
