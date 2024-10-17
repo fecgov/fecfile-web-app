@@ -5,7 +5,6 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
@@ -36,7 +35,6 @@ describe('TransactionContactLookupComponent', () => {
       providers: [
         ConfirmationService,
         FormBuilder,
-        FecApiService,
         EventEmitter,
         provideMockStore(testMockStore),
         DatePipe,
