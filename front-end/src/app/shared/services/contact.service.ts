@@ -21,7 +21,6 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
 import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { FecApiPaginatedResponse } from '../models/fec-api.model';
 
 @Injectable({
   providedIn: 'root',

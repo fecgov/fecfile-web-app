@@ -317,16 +317,7 @@ describe('ContactService', () => {
 
   it('should return committee details', () => {
     const committeeAccount: CommitteeAccount = new CommitteeAccount();
-    const response: FecApiPaginatedResponse = {
-      api_version: '1.0',
-      pagination: {
-        page: 1,
-        per_page: 20,
-        count: 1,
-        pages: 1,
-      },
-      results: [committeeAccount],
-    };
+    const response: CommitteeAccount = committeeAccount;
 
     service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
       expect(committeeAccountData).toEqual(committeeAccount);
