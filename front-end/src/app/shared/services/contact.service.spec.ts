@@ -16,6 +16,8 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 import { ContactService, DeletedContactService } from './contact.service';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { Candidate } from '../models/candidate.model';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
@@ -268,6 +270,7 @@ describe('ContactService', () => {
       expect(isUnique).toBeTrue();
     });
   });
+
   it('#checkFecIdForUniqueness should return false if server comes back with differnt contact id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
@@ -280,6 +283,7 @@ describe('ContactService', () => {
       expect(isUnique).toBeFalse();
     });
   });
+
   it('#checkFecIdForUniqueness should return true if server comes back no id', () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
@@ -291,5 +295,52 @@ describe('ContactService', () => {
     service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
       expect(isUnique).toBeTrue();
     });
+  });
+
+  describe('#getCandidateDetails()', () => {
+    it('should return candidate details', () => {
+      const candidate: Candidate = new Candidate();
+
+      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
+        expect(candidateData).toEqual(candidate);
+      });
+
+      const req = httpTestingController.expectOne(
+        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678',
+      );
+
+      expect(req.request.method).toEqual('GET');
+      req.flush(candidate);
+    });
+  });
+
+  it('should return committee details', () => {
+    const committeeAccount: CommitteeAccount = new CommitteeAccount();
+    const response: CommitteeAccount = committeeAccount;
+
+    service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
+      expect(committeeAccountData).toEqual(committeeAccount);
+    });
+
+    const req = httpTestingController.expectOne(`https://localhost/api/v1/contacts/committee/?committee_id=C00601211`);
+
+    expect(req.request.method).toEqual('GET');
+    req.flush(response);
+  });
+
+  it('#getCommitteeDetails should raise an error when no id is provided', () => {
+    try {
+      service.getCommitteeDetails(null);
+    } catch (error) {
+      expect(error).toEqual(Error('Fecfile: No Committee Id provided in getCommitteeDetails()'));
+    }
+  });
+
+  it('#getCandidateDetails should raise an error when no id is provided', () => {
+    try {
+      service.getCandidateDetails(null);
+    } catch (error) {
+      expect(error).toEqual(Error('Fecfile: No Candidate Id provided in getCandidateDetails()'));
+    }
   });
 });
