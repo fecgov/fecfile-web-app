@@ -17,6 +17,10 @@ export class CommitteeAccountService {
       .pipe(map((response) => response.results as CommitteeAccount[]));
   }
 
+  public getAvailableCommittee(committeeId: string): Observable<CommitteeAccount> {
+    return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
+  }
+
   public activateCommittee(committeeUUID?: string): Observable<boolean> {
     return this.apiService.post(`/committees/${committeeUUID}/activate/`, {});
   }
@@ -25,10 +29,12 @@ export class CommitteeAccountService {
     return this.apiService.get(`/committees/active/`);
   }
 
-  public registerCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
+  public createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
     return firstValueFrom(
       this.apiService
-        .post<CommitteeAccount>('/committees/register/', { committee_id: committeeId }, {}, [HttpStatusCode.BadRequest])
+        .post<CommitteeAccount>('/committees/create_account/', { committee_id: committeeId }, {}, [
+          HttpStatusCode.BadRequest,
+        ])
         .pipe(
           map((response) => {
             if (!response.body) {

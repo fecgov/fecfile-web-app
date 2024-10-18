@@ -36,7 +36,7 @@ describe('Disbursements', () => {
 
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
     F3XSetup({ individual: true });
-    setCommitteeType('X');
+    setCommitteeType('D');
     StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
@@ -150,7 +150,7 @@ describe('Disbursements', () => {
 
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
     F3XSetup({ organization: true });
-    setCommitteeType('X');
+    setCommitteeType('D');
     StartTransaction.Disbursements().Federal().CreditCardPayment();
 
     cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));

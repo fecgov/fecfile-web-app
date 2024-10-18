@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectCommitteeComponent } from './select-committee.component';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -16,7 +15,7 @@ describe('SelectCommitteeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SelectCommitteeComponent],
       imports: [HttpClientTestingModule],
-      providers: [CommitteeAccountService, FecApiService, provideMockStore(testMockStore), HttpClient],
+      providers: [CommitteeAccountService, provideMockStore(testMockStore), HttpClient],
     });
     fixture = TestBed.createComponent(SelectCommitteeComponent);
     component = fixture.componentInstance;

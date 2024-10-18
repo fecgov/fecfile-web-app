@@ -15,6 +15,7 @@ export const environment = {
   loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
+  committee_data_source: 'test',
 };
 
 /*

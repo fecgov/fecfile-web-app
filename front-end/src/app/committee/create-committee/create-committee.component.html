@@ -1,4 +1,4 @@
-<div class="flex register-committee-columns">
+<div class="flex create-committee-columns">
   <div class="col-6 left-side">
     <h1>Create an account</h1>
     <hr type="solid" />
@@ -10,52 +10,38 @@
       <a routerLink="/select-committee"><i class="pi pi-angle-left"></i> GO BACK</a>
     </div>
     <div class="right-side-box">
-      <h2>Find your committee</h2>
+      <h2 class="m-0">Find your committee</h2>
       <div class="search-label">
-        <h5 class="font-karla-bold">COMMITTEE NAME OR ID</h5>
+        <h5 class="font-karla-bold mb-0 mr-1">COMMITTEE ID</h5>
         <i class="pi pi-question" (click)="showExplanation()"></i>
       </div>
-
-      <p-autoComplete
-        class="committee-search p-fluid"
-        id="searchBox"
-        field="label"
-        [(ngModel)]="query"
-        dropdownMode="current"
-        dropdownIcon="pi pi-search"
-        [suggestions]="suggestions ?? []"
-        [forceSelection]="true"
-        (completeMethod)="search($event)"
-        (onSelect)="select($event.value)"
-      >
-        <ng-template pTemplate="header">
-          <div class="search-header">Select a committee</div>
-        </ng-template>
-        <ng-template let-committee pTemplate="item">
-          <div [innerHTML]="committee.committee_name | highlightTerms: query" class="search-result">
-            {{ committee.committee_name }}
-          </div>
-          <div class="second-row">
-            &lpar;
-            <div [innerHTML]="committee.committee_id | highlightTerms: query">
-              {{ committee.committee_id }}
+      <p-inputGroup class="search-group">
+        <input type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
+        <p-button pButton class="search-button" (click)="search(searchBoxFormControl.value)">
+          <ng-template pTemplate="iconTemplate">
+            <div class="p-fluid">
+              <img
+                alt="Magnifying lens"
+                src="assets/img/contact_lookup_magnifying_glass.svg"
+                width="35px"
+                height="35px"
+              />
             </div>
-            &rpar;
-          </div>
-        </ng-template>
-      </p-autoComplete>
-      Examples: Obama for America; C00431445; Bush for President Inc.; C00343509
+          </ng-template>
+        </p-button>
+      </p-inputGroup>
+      <p class="search-examples font-karla mt-1">Examples: C00431445, C00343509</p>
     </div>
     <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
-      <h2>Results</h2>
+      <h2 class="m-0">Result</h2>
       <div class="committee-card" *ngIf="selectedCommittee">
         <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
         <div class="committee-info">
           <h3>{{ selectedCommittee.name }}</h3>
-          <h5 class="font-karla-bold">{{ selectedCommittee.committee_id }}</h5>
+          <h5 class="font-karla-bold mb-0">{{ selectedCommittee.committee_id }}</h5>
 
           <p-button
-            class="register-button"
+            class="create-button"
             label="Create account"
             styleClass="p-button-primary"
             (click)="createAccount()"
@@ -92,7 +78,7 @@
     <span class="explanation-header">What am I searching?</span>
   </ng-template>
   <p>
-    The committee name and ID lookup searches FEC's global lookup of all committees registered with the Federal Election
+    The committee ID lookup searches FEC's global lookup of all committees registered with the Federal Election
     Commission.
   </p>
   <p>This lookup is not searching FECFile's database of committees with a FECFile account.</p>
