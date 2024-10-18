@@ -55,22 +55,18 @@ export class Form3XService extends ReportService {
     return firstValueFrom(
       this.apiService
         .get<number>(`${this.apiEndpoint}/jan1_cash_on_hand?year=${year}`)
-        .pipe(
-          map((response) => response),
-        ),
+        .pipe(map((response) => response)),
     );
   }
 
   public updateJan1CashOnHand(year: number, amount: number): Promise<void> {
     return firstValueFrom(
       this.apiService
-        .put<void>(`${this.apiEndpoint}/jan1_cash_on_hand`, {
-          "year": year,
-          "amount": amount,
+        .put<void>(`${this.apiEndpoint}/jan1_cash_on_hand/`, {
+          year: year,
+          amount: amount,
         })
-        .pipe(
-          map((response) => response),
-        ),
+        .pipe(map((response) => response)),
     );
   }
 

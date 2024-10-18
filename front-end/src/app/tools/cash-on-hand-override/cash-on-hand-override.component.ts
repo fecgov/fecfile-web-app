@@ -14,7 +14,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   currentAmountFormControl = new FormControl<number | null>(null, Validators.required);
   newAmountFormControl = new FormControl<number | null>(null, Validators.required);
   yearOptions: number[] = [];
-  numberOfYearOptions = 25
+  numberOfYearOptions = 25;
 
   form: FormGroup = new FormGroup({
     year: this.yearFormControl,
@@ -22,21 +22,18 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
     newAmount: this.newAmountFormControl,
   });
 
-  constructor(
-    public form3XService: Form3XService,
-  ) {
+  constructor(public form3XService: Form3XService) {
     super();
   }
 
   ngOnInit(): void {
-    this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((year) => {
-        if (year) {
-          this.form3XService.getJan1CashOnHand(year).then(cashOnHandForYear => {
-            this.currentAmountFormControl.setValue(cashOnHandForYear);
-          });
-        }
-      });
+    this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((year) => {
+      if (year) {
+        this.form3XService.getJan1CashOnHand(year).then((cashOnHandForYear) => {
+          this.currentAmountFormControl.setValue(cashOnHandForYear);
+        });
+      }
+    });
 
     const currentYear = new Date().getFullYear();
     this.yearOptions = Array.from(
@@ -48,8 +45,11 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
 
   updateLine6a(): void {
     if (this.form.valid) {
-      this.form3XService.updateJan1CashOnHand(this.form.get('year')?.value,
-        this.form.get('amount')?.value).then(() => { });
+      if (this.yearFormControl.value && this.newAmountFormControl.value) {
+        this.form3XService
+          .updateJan1CashOnHand(this.yearFormControl.value, this.newAmountFormControl.value)
+          .then(() => {});
+      }
     }
   }
 }

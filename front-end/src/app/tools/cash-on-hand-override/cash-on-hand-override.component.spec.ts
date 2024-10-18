@@ -16,10 +16,7 @@ describe('CashOnHandOverrideComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CashOnHandOverrideComponent],
-      imports: [
-        HttpClientTestingModule,
-        ReportsModule,
-      ],
+      imports: [HttpClientTestingModule, ReportsModule],
       providers: [Form3XService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
@@ -41,12 +38,11 @@ describe('CashOnHandOverrideComponent', () => {
   it('should call updateJan1CashOnHand', () => {
     spyOn(component.form3XService, 'updateJan1CashOnHand').and.resolveTo();
     component.yearFormControl.setValue(2024);
-    component.currentAmountFormControl.setValue(0.00);
-    component.newAmountFormControl.setValue(25.00);
+    component.currentAmountFormControl.setValue(0.0);
+    component.newAmountFormControl.setValue(25.0);
 
     component.updateLine6a();
 
     expect(component.form3XService.updateJan1CashOnHand).toHaveBeenCalledTimes(1);
   });
-
 });

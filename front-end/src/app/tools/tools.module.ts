@@ -5,11 +5,11 @@ import { SharedModule } from 'app/shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override/cash-on-hand-override.component';
 import { ToolsRoutingModule } from './tools-routing.module';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
-  declarations: [
-    CashOnHandOverrideComponent,
-  ],
+  declarations: [CashOnHandOverrideComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -17,6 +17,8 @@ import { ToolsRoutingModule } from './tools-routing.module';
     DropdownModule,
     SharedModule,
     ToolsRoutingModule,
+    CardModule,
+    ButtonModule,
   ],
 })
-export class ToolsModule { }
+export class ToolsModule {}
