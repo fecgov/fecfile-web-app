@@ -23,7 +23,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   });
 
   constructor(
-    private form3XService: Form3XService,
+    public form3XService: Form3XService,
   ) {
     super();
   }
@@ -41,7 +41,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
     const currentYear = new Date().getFullYear();
     this.yearOptions = Array.from(
       { length: this.numberOfYearOptions },
-      (value, index) => currentYear - this.numberOfYearOptions + index
+      (value, index) => currentYear - this.numberOfYearOptions + index + 1,
     );
     this.yearFormControl.setValue(this.yearOptions[this.yearOptions.length - 1]);
   }

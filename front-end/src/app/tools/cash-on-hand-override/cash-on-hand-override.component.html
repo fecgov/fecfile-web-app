@@ -1,6 +1,6 @@
 <h1>Line 6a override</h1>
 <hr type="solid" />
-<form [formGroup]="form">
+<form id="form" [formGroup]="form" class="p-fluid">
   <div class="col-6 left-side">
     <strong>WHAT IS A LINE 6A OVERRIDE?</strong>
     <p>
@@ -31,7 +31,7 @@
           <label for="currentAmount">CURRENT LINE 6A, COLUMN B AMOUNT</label>
           <app-input-number
             inputId="currentAmount"
-            [formControlName]="currentAmount"
+            formControlName="currentAmount"
             [readonly]="true"
             inputStyleClass="readonly"
           ></app-input-number>
@@ -42,7 +42,7 @@
           <label for="newAmount">NEW AMOUNT</label>
           <app-input-number
             inputId="newAmount"
-            [formControlName]="newAmount"
+            formControlName="newAmount"
           ></app-input-number>
         </div>
       </div>
