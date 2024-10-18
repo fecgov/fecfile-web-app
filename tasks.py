@@ -45,7 +45,7 @@ def _detect_branch(repo):
 
 
 DEPLOY_RULES = (
-    ("test", lambda _, branch: branch == "main"),
+    ("test", lambda _, branch: branch == "deploy-to-test"),
     ("stage", lambda _, branch: branch.startswith("release")),
     ("dev", lambda _, branch: branch == "develop"),
 )
@@ -134,7 +134,9 @@ def _do_deploy(ctx, space):
     print("\n")
     cmd = "push --strategy rolling" if existing_deploy.ok else "push"
     new_deploy = ctx.run(
-        f"cf {cmd} {APP_NAME} -f {manifest_filename}", echo=True, warn=True,
+        f"cf {cmd} {APP_NAME} -f {manifest_filename}",
+        echo=True,
+        warn=True,
     )
 
     os.chdir(orig_directory)

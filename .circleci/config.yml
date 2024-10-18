@@ -246,7 +246,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/
+              only: /release\/sprint-[\.\d]+|main|deploy-to-test/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
