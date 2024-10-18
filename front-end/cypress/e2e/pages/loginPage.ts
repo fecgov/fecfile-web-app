@@ -70,7 +70,7 @@ function loginDotGovLogin() {
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
-  //cy.visit('/dashboard');
+  cy.visit('/dashboard');
 }
 
 function retrieveAuthToken() {
