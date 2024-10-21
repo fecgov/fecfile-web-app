@@ -17,6 +17,10 @@ export class CommitteeAccountService {
       .pipe(map((response) => response.results as CommitteeAccount[]));
   }
 
+  public getAvailableCommittee(committeeId: string): Observable<CommitteeAccount> {
+    return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
+  }
+
   public activateCommittee(committeeUUID?: string): Observable<boolean> {
     return this.apiService.post(`/committees/${committeeUUID}/activate/`, {});
   }
