@@ -65,7 +65,7 @@ describe('Form3XService', () => {
     httpTestingController.verify();
   });
 
-  it('#delete() should DELETE a record2', () => {
+  it('#delete() should DELETE a record', () => {
     const form3X: Form3X = Form3X.fromJSON({ id: '999' });
 
     service.delete(form3X).subscribe((response: null) => {

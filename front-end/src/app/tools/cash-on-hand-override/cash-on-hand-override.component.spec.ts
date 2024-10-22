@@ -5,6 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { ReportsModule } from 'app/reports/reports.module';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { MessageService } from 'primeng/api';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override.component';
 
 describe('CashOnHandOverrideComponent', () => {
@@ -17,7 +18,7 @@ describe('CashOnHandOverrideComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CashOnHandOverrideComponent],
       imports: [HttpClientTestingModule, ReportsModule],
-      providers: [Form3XService, provideMockStore(testMockStore)],
+      providers: [Form3XService, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
@@ -35,14 +36,26 @@ describe('CashOnHandOverrideComponent', () => {
     expect(form3XService).toBeTruthy();
   });
 
-  it('should call updateJan1CashOnHand', () => {
-    spyOn(component.form3XService, 'updateJan1CashOnHand').and.resolveTo();
-    component.yearFormControl.setValue(2024);
+  it('should call createF3xLine6aOverride', () => {
+    spyOn(component.form3XService, 'createF3xLine6aOverride').and.resolveTo();
+    component.yearFormControl.setValue('2024');
     component.currentAmountFormControl.setValue(0.0);
     component.newAmountFormControl.setValue(25.0);
 
     component.updateLine6a();
 
-    expect(component.form3XService.updateJan1CashOnHand).toHaveBeenCalledTimes(1);
+    expect(component.form3XService.createF3xLine6aOverride).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call updateF3xLine6aOverride', () => {
+    spyOn(component.form3XService, 'updateF3xLine6aOverride').and.resolveTo();
+    component.yearFormControl.setValue('2024');
+    component.currentAmountFormControl.setValue(0.0);
+    component.newAmountFormControl.setValue(25.0);
+    component.selectedF3xLine6aOverrideId = 'test_id';
+
+    component.updateLine6a();
+
+    expect(component.form3XService.updateF3xLine6aOverride).toHaveBeenCalledTimes(1);
   });
 });
