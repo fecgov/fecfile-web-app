@@ -5,8 +5,9 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import {
+  ADDRESS_FIELDS,
+  COM_FIELDS,
   COMMITTEE,
-  COMMITTEE_FORM_FIELDS,
   ORGANIZATION_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { TemplateMapKeyType } from '../transaction-type.model';
@@ -17,7 +18,7 @@ export class LOAN_REPAYMENT_RECEIVED extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override inheritedFields = [...COMMITTEE_FORM_FIELDS] as TemplateMapKeyType[];
+  override inheritedFields = [...COM_FIELDS, ...ADDRESS_FIELDS] as TemplateMapKeyType[];
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
