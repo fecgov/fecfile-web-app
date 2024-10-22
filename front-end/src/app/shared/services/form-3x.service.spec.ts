@@ -1,8 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { Form3X } from '../models/form-3x.model';
+import { F3xLine6aOverride, Form3X } from '../models/form-3x.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3XService } from './form-3x.service';
 
@@ -64,6 +64,82 @@ describe('Form3XService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
+
+  it('#getF3xLine6aOverride() should get a record', fakeAsync(() => {
+    let retval = new F3xLine6aOverride();
+    service.getF3xLine6aOverride('2024').then((response) => {
+      if (response) {
+        retval = response;
+      }
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x_line6a_overrides/?year=2024`);
+    expect(req.request.method).toEqual('GET');
+    const apiRetval = new F3xLine6aOverride();
+    apiRetval.id = 'test_id';
+    req.flush([apiRetval]);
+    httpTestingController.verify();
+    tick(500);
+
+    expect(retval.id).toEqual('test_id');
+  }));
+
+  it('#getF3xLine6aOverride() should get a record', fakeAsync(() => {
+    let retval = new F3xLine6aOverride();
+    service.getF3xLine6aOverride('2024').then((response) => {
+      if (response) {
+        retval = response;
+      }
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x_line6a_overrides/?year=2024`);
+    expect(req.request.method).toEqual('GET');
+    const apiRetval = new F3xLine6aOverride();
+    apiRetval.id = 'test_id';
+    req.flush([apiRetval]);
+    httpTestingController.verify();
+    tick(500);
+
+    expect(retval.id).toEqual('test_id');
+  }));
+
+  it('#createF3xLine6aOverride() should get a record', fakeAsync(() => {
+    const payload = new F3xLine6aOverride();
+    let retval: F3xLine6aOverride | undefined;
+    payload.id = 'test_id';
+    service.createF3xLine6aOverride(payload).then((response) => {
+      retval = response;
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x_line6a_overrides/`);
+    expect(req.request.method).toEqual('POST');
+    const apiRetval = new F3xLine6aOverride();
+    apiRetval.id = 'test_id';
+    req.flush(apiRetval);
+    httpTestingController.verify();
+    tick(500);
+
+    expect(retval?.id).toEqual('test_id');
+  }));
+
+  it('#updateF3xLine6aOverride() should get a record', fakeAsync(() => {
+    const payload = new F3xLine6aOverride();
+    let retval: F3xLine6aOverride | undefined;
+    payload.id = 'test_id';
+    service.updateF3xLine6aOverride(payload).then((response) => {
+      retval = response;
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x_line6a_overrides/test_id/`);
+    expect(req.request.method).toEqual('PUT');
+    const apiRetval = new F3xLine6aOverride();
+    apiRetval.id = 'test_id';
+    req.flush(apiRetval);
+    httpTestingController.verify();
+    tick(500);
+
+    expect(retval?.id).toEqual('test_id');
+  }));
 
   describe('getFutureReports', () => {
     it('should return a list of Form3X reports whose coverage through is after the submitted value', () => {
