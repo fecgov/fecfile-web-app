@@ -1,5 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
+import { environment } from 'environments/environment';
 
 export class CommitteeAccount extends BaseModel {
   id: string | undefined;
@@ -69,15 +70,38 @@ export class CommitteeAccount extends BaseModel {
   }
 }
 
-export function isPAC(committee_type?: string): boolean {
+function isPACTest(committee_type?: string): boolean {
   if (!committee_type) return false;
-  return PAC.includes(committee_type);
+  return !isPTYTest(committee_type);
+}
+
+function isPTYTest(committee_type?: string): boolean {
+  return committee_type === 'D';
+}
+
+function isPACProduction(committee_type?: string): boolean {
+  return PRODUCTION_PAC_TYPES.includes(committee_type || '');
+}
+
+function isPTYProduction(committee_type?: string, designation?: string): boolean {
+  return !!designation && (committee_type === 'Y' || (committee_type === 'X' && designation !== 'U'));
+}
+
+/* Rules differ between production and test environments.
+we maintain both sets of rules and toggle between them based on the environment.
+*/
+export function isPAC(committee_type?: string): boolean {
+  if (environment.committee_data_source === 'production') {
+    return isPACProduction(committee_type);
+  }
+  return isPACTest(committee_type);
 }
 
 export function isPTY(committee_type?: string, designation?: string): boolean {
-  if (!committee_type || !designation) return false;
-  if (committee_type === 'Y') return true;
-  return committee_type === 'X' && designation !== 'U';
+  if (environment.committee_data_source === 'production') {
+    return isPTYProduction(committee_type, designation);
+  }
+  return isPTYTest(committee_type);
 }
 
-const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];
+export const PRODUCTION_PAC_TYPES = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];

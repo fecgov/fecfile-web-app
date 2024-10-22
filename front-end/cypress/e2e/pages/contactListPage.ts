@@ -50,7 +50,8 @@ export class ContactListPage {
       if (formData['candidate_office'] != 'Presidential') {
         PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_state']", formData['candidate_state'], alias);
 
-        if (formData['candidate_office'] == 'House') {
+        const singleDistrictStates = ['Alaska', 'Delaware', 'North Dakota', 'South Dakota', 'Vermont', 'Wyoming'];
+        if (formData['candidate_office'] == 'House' && !singleDistrictStates.includes(formData['candidate_state'])) {
           PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_district']", formData['candidate_district'], alias);
         }
       }
