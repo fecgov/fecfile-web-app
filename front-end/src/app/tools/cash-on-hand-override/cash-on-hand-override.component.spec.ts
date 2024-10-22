@@ -6,6 +6,7 @@ import { ReportsModule } from 'app/reports/reports.module';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
+import { of } from 'rxjs';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override.component';
 
 describe('CashOnHandOverrideComponent', () => {
@@ -37,18 +38,18 @@ describe('CashOnHandOverrideComponent', () => {
   });
 
   it('should call createF3xLine6aOverride', () => {
-    spyOn(component.form3XService, 'createF3xLine6aOverride').and.resolveTo();
+    spyOn(component.form3XService.apiService, 'post').and.returnValue(of());
     component.yearFormControl.setValue('2024');
     component.currentAmountFormControl.setValue(0.0);
     component.newAmountFormControl.setValue(25.0);
 
     component.updateLine6a();
 
-    expect(component.form3XService.createF3xLine6aOverride).toHaveBeenCalledTimes(1);
+    expect(component.form3XService.apiService.post).toHaveBeenCalledTimes(1);
   });
 
   it('should call updateF3xLine6aOverride', () => {
-    spyOn(component.form3XService, 'updateF3xLine6aOverride').and.resolveTo();
+    spyOn(component.form3XService.apiService, 'put').and.returnValue(of());
     component.yearFormControl.setValue('2024');
     component.currentAmountFormControl.setValue(0.0);
     component.newAmountFormControl.setValue(25.0);
@@ -56,6 +57,6 @@ describe('CashOnHandOverrideComponent', () => {
 
     component.updateLine6a();
 
-    expect(component.form3XService.updateF3xLine6aOverride).toHaveBeenCalledTimes(1);
+    expect(component.form3XService.apiService.put).toHaveBeenCalledTimes(1);
   });
 });

@@ -10,7 +10,6 @@ import { takeUntil } from 'rxjs';
 @Component({
   selector: 'app-cash-on-hand-override',
   templateUrl: './cash-on-hand-override.component.html',
-  styleUrls: ['./cash-on-hand-override.component.scss'],
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
   yearFormControl = new FormControl<string | null>(null, Validators.required);
@@ -27,8 +26,8 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   });
 
   constructor(
-    private router: Router,
-    private messageService: MessageService,
+    private readonly router: Router,
+    private readonly messageService: MessageService,
     public form3XService: Form3XService,
   ) {
     super();
@@ -39,7 +38,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
       if (selectedYear) {
         this.form3XService.getF3xLine6aOverride(selectedYear).then((f3xLine6aOverride) => {
           this.selectedF3xLine6aOverrideId = f3xLine6aOverride?.id;
-          this.currentAmountFormControl.setValue(f3xLine6aOverride?.cash_on_hand || 0);
+          this.currentAmountFormControl.setValue(f3xLine6aOverride?.cash_on_hand ?? 0);
           this.newAmountFormControl.setValue(0);
         });
       }
