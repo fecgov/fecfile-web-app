@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { environment } from '../../../environments/environment';
+import { Form3X } from '../models/form-3x.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3XService } from './form-3x.service';
-import { Form3X } from '../models/form-3x.model';
-import { environment } from '../../../environments/environment';
 
 describe('Form3XService', () => {
   let service: Form3XService;
@@ -57,19 +57,6 @@ describe('Form3XService', () => {
 
     service.delete(form3X).subscribe((response: null) => {
       expect(response).toBeNull();
-    });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/999`);
-    expect(req.request.method).toEqual('DELETE');
-    req.flush(null);
-    httpTestingController.verify();
-  });
-
-  it('#delete() should DELETE a record', () => {
-    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
-
-    service.delete(form3X).subscribe((response: null) => {
-      expect(response).toBeTrue();
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/999`);
