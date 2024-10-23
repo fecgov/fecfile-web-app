@@ -238,7 +238,7 @@ workflows:
             branches:
               only:
                 # - develop
-                - feature\/cache-control
+                - /feature\/cache-control/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
