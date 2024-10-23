@@ -53,7 +53,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
 
   updateLine6a(): void {
     if (this.form.valid) {
-      if (this.yearFormControl.value !== null && this.newAmountFormControl.value) {
+      if (this.yearFormControl.value !== null && this.newAmountFormControl.value !== null) {
         const payload = new F3xLine6aOverride();
         payload.id = this.selectedF3xLine6aOverrideId;
         payload.year = this.yearFormControl.value;
