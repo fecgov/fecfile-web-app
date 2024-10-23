@@ -37,7 +37,7 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   }
 
   getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {
-    let transactionItems = [
+    const transactionItems = [
       {
         label: 'Manage your transactions',
         routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
