@@ -3,11 +3,11 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
-import { ApiService } from './api.service';
-import { ReportService } from './report.service';
+import { F3xCoverageDates, F3xLine6aOverride, Form3X } from '../models/form-3x.model';
 import { Report } from '../models/report.model';
 import { F3xReportCodes } from '../utils/report-code.utils';
+import { ApiService } from './api.service';
+import { ReportService } from './report.service';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +49,30 @@ export class Form3XService extends ReportService {
     return this.apiService
       .get<Form3X[]>(`${this.apiEndpoint}/future?after=${coverage_through_date}`)
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
+  }
+
+  public getF3xLine6aOverride(year: string): Promise<F3xLine6aOverride | undefined> {
+    return firstValueFrom(
+      this.apiService
+        .get<F3xLine6aOverride[]>(`/f3x_line6a_overrides/?year=${year}`)
+        .pipe(map((response) => (response.length === 1 ? response[0] : undefined))),
+    );
+  }
+
+  public createF3xLine6aOverride(f3xLine6aOverride: F3xLine6aOverride): Promise<F3xLine6aOverride> {
+    return firstValueFrom(
+      this.apiService
+        .post<F3xLine6aOverride>(`/f3x_line6a_overrides/`, f3xLine6aOverride)
+        .pipe(map((response) => response)),
+    );
+  }
+
+  public updateF3xLine6aOverride(f3xLine6aOverride: F3xLine6aOverride): Promise<F3xLine6aOverride> {
+    return firstValueFrom(
+      this.apiService
+        .put<F3xLine6aOverride>(`/f3x_line6a_overrides/${f3xLine6aOverride.id}/`, f3xLine6aOverride)
+        .pipe(map((response) => response)),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

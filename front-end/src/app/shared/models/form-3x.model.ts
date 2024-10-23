@@ -1,8 +1,8 @@
 import { plainToClass, plainToInstance, Transform } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { F3xReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
-import { F3xReportCodes } from '../utils/report-code.utils';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -12,6 +12,12 @@ export enum F3xFormTypes {
 
 export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
+export class F3xLine6aOverride {
+  id?: string;
+  year?: string;
+  cash_on_hand?: number;
+}
+
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
@@ -20,9 +26,9 @@ export class F3xCoverageDates {
 
   // prettier-ignore
   static fromJSON(json: any, reportCodeLabel: string): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
-        json.report_code_label = reportCodeLabel;
-        return plainToClass(F3xCoverageDates, json);
-    }
+    json.report_code_label = reportCodeLabel;
+    return plainToClass(F3xCoverageDates, json);
+  }
 }
 
 export const F3xQualifiedCommitteeTypeCodes = ['Q', 'W', 'Y'];
