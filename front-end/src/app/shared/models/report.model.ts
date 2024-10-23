@@ -23,7 +23,6 @@ export abstract class Report extends BaseModel {
   report_id: string | undefined; // FEC assigned report ID
   confirmation_email_1: string | undefined;
   confirmation_email_2: string | undefined;
-  is_first: boolean | undefined;
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission: UploadSubmission | undefined;

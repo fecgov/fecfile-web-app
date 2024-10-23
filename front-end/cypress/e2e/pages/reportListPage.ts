@@ -1,7 +1,6 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
-import { defaultFormData as cohFormData, F3xCashOnHandPage } from './f3xCashOnHandPage';
 
 export class ReportListPage {
   static goToPage() {
@@ -51,14 +50,7 @@ export class ReportListPage {
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
-    if (fd.cash_on_hand) {
-      F3xCashOnHandPage.enterFormData({
-        cashOnHand: fd.cash_on_hand.toString(),
-        date: fd.coverage_from_date,
-      });
-      PageUtils.clickButton('Save & continue');
-      cy.contains('Transactions in this report').should('exist');
-    }
+    cy.contains('Transactions in this report').should('exist');
   }
 
   static createF1M() {
@@ -81,10 +73,8 @@ export class ReportListPage {
     cy.wait(500);
   }
 
-  static submitReport(reportName: string, fd = cohFormData) {
+  static submitReport(reportName: string) {
     ReportListPage.editReport(reportName);
-    F3xCashOnHandPage.enterFormData(fd);
-    PageUtils.clickButton('Save & continue');
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickSidebarItem('Submit report');
     const alias = PageUtils.getAlias('');

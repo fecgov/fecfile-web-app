@@ -56,15 +56,6 @@ export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
       },
       { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
     ];
-    if (activeReport?.is_first) {
-      transactionItems = [
-        {
-          label: 'Cash on hand',
-          routerLink: `/reports/f3x/create/cash-on-hand/${activeReport?.id}`,
-        },
-        ...transactionItems,
-      ];
-    }
     const reviewReport = this.reviewReport(sidebarState);
     reviewReport.items = [
       {

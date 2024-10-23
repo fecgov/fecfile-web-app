@@ -45,7 +45,6 @@ export class Form3X extends Report {
   treasurer_prefix: string | undefined;
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-  @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | undefined;
   L6b_cash_on_hand_beginning_period: number | undefined;
   L6c_total_receipts_period: number | undefined;
   L6d_subtotal_period: number | undefined;

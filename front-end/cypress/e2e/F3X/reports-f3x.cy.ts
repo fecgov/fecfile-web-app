@@ -1,6 +1,5 @@
 import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
-import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { defaultForm3XData } from '../models/ReportFormModel';
@@ -67,7 +66,6 @@ describe('Manage reports', () => {
   it('Create a report error for overlapping coverage dates', () => {
     // Create report #1
     ReportListPage.createF3X();
-    F3xCashOnHandPage.enterFormData(cohFormData);
     PageUtils.clickButton('Save & continue');
     ReportListPage.goToPage();
 
@@ -97,12 +95,8 @@ describe('Manage reports', () => {
     cy.get('label[for="12G"]').should('have.class', 'p-disabled');
   });
 
-  it('Create report and save cash on hand', () => {
+  it('Create report and save', () => {
     ReportListPage.createF3X();
-
-    F3xCashOnHandPage.enterFormData(cohFormData);
-    PageUtils.clickButton('Save & continue');
-    cy.contains('Cash on hand').should('exist');
   });
 
   xit('Check values on the Summary Page', () => {
