@@ -42,10 +42,10 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
     const height = contentOffset.offsetHeight;
     let headerFooterOffset = window.innerWidth < 768 ? 332 : 265;
     if (this.layoutControls.showUpperFooter) headerFooterOffset += 80;
-    const marginBottom = Math.max(64, window.innerHeight - height - headerFooterOffset);
+    const paddingBottom = Math.max(64, window.innerHeight - height - headerFooterOffset);
 
     // Apply the margin-bottom to the div
-    contentOffset.style.marginBottom = marginBottom + 'px';
+    contentOffset.style.paddingBottom = paddingBottom + 'px';
   }
 
   ngOnInit(): void {
