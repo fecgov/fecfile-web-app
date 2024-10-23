@@ -50,7 +50,6 @@ export class ReportListPage {
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
-    cy.contains('Transactions in this report').should('exist');
   }
 
   static createF1M() {

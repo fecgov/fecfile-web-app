@@ -66,8 +66,6 @@ describe('Manage reports', () => {
   it('Create a report error for overlapping coverage dates', () => {
     // Create report #1
     ReportListPage.createF3X();
-    PageUtils.clickButton('Save & continue');
-    ReportListPage.goToPage();
 
     // Create report #2
     const formData = {
