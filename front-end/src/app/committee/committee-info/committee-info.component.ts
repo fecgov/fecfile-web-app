@@ -7,6 +7,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-committee-info',
@@ -40,12 +41,17 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     'custodian_name_full',
   ];
 
+  link: string;
+
   constructor(
     private store: Store,
     private fb: FormBuilder,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
+    this.link = environment.production
+      ? 'https://webforms.stage.gov/webforms/form1/index.htm'
+      : 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm';
   }
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
@@ -81,6 +87,6 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank', 'noopener');
+    window.open(this.link, '_blank', 'noopener');
   }
 }
