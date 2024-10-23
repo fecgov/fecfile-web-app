@@ -57,7 +57,7 @@
             type="button"
             pButton
             pRipple
-            [disabled]="!form.valid"
+            [disabled]="!newAmountFormControl.dirty"
             label="Update LINE 6a"
             class="p-button-primary"
             (click)="updateLine6a()"

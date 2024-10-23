@@ -39,7 +39,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
         this.form3XService.getF3xLine6aOverride(selectedYear).then((f3xLine6aOverride) => {
           this.selectedF3xLine6aOverrideId = f3xLine6aOverride?.id;
           this.currentAmountFormControl.setValue(f3xLine6aOverride?.cash_on_hand ?? 0);
-          this.newAmountFormControl.setValue(0);
+          this.newAmountFormControl.reset();
         });
       }
     });
@@ -53,7 +53,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
 
   updateLine6a(): void {
     if (this.form.valid) {
-      if (this.yearFormControl.value && this.newAmountFormControl.value) {
+      if (this.yearFormControl.value !== null && this.newAmountFormControl.value) {
         const payload = new F3xLine6aOverride();
         payload.id = this.selectedF3xLine6aOverrideId;
         payload.year = this.yearFormControl.value;

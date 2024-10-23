@@ -22,11 +22,7 @@
         <span [ngStyle]="{ 'font-size': fontSize }">Tools</span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-        <!-- Converted <a> tag to <span> for next 4 dead links so page doesn't route away -->
-        <span class="dropdown-item" href="#"><span class="dead-link">Import</span></span>
-        <span class="dropdown-item" href="#"><span class="dead-link">Export</span></span>
         <a class="dropdown-item" routerLink="/tools/update-cash-on-hand">Update cash on hand</a>
-        <span class="dropdown-item" href="#"><span class="dead-link">FECFile Help</span></span>
       </ul>
     </li>
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
