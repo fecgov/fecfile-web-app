@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { UserLoginData } from 'app/shared/models/user.model';
@@ -21,6 +21,7 @@ import { map, takeUntil } from 'rxjs';
 export class SecurityNoticeComponent extends DestroyerComponent implements OnInit {
   public localLoginAvailable = false;
   formSubmitted = false;
+  showForm = true;
   userLoginData?: UserLoginData;
 
   form = new FormGroup(
@@ -35,8 +36,12 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     private router: Router,
     public loginService: LoginService,
     private usersService: UsersService,
+    private activatedRoute: ActivatedRoute,
   ) {
     super();
+    this.activatedRoute.data.subscribe((d) => {
+      this.showForm = !!d['backgroundStyle'];
+    });
   }
 
   ngOnInit() {

@@ -22,7 +22,7 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
   @ViewChild(FeedbackOverlayComponent) feedbackOverlay!: FeedbackOverlayComponent;
 
   layoutControls = new LayoutControls();
-  private renderer: Renderer2;
+  renderer: Renderer2;
 
   constructor(
     private router: Router,
@@ -35,17 +35,25 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
     this.updateContentOffset();
   }
 
+  contentOffset = {
+    offsetHeight: 0,
+    style: { paddingBottom: '' },
+  };
+  FOOTER_OFFSET_LARGE = 332;
+  FOOTER_OFFSET_SMALL = 266;
   updateContentOffset() {
     if (this.layoutControls.showSidebar) return;
-    const contentOffset = this.renderer.selectRootElement('#content-offset', true);
-    if (!contentOffset) return;
-    const height = contentOffset.offsetHeight;
-    let headerFooterOffset = window.innerWidth < 768 ? 332 : 265;
+    this.contentOffset = this.renderer.selectRootElement('#content-offset', true);
+    if (!this.contentOffset) return;
+    const height = this.contentOffset.offsetHeight;
+    let headerFooterOffset = window.innerWidth < 768 ? this.FOOTER_OFFSET_LARGE : this.FOOTER_OFFSET_SMALL;
     if (this.layoutControls.showUpperFooter) headerFooterOffset += 80;
-    const marginBottom = Math.max(64, window.innerHeight - height - headerFooterOffset);
+    const currentPadding =
+      this.contentOffset.style.paddingBottom === '' ? 0 : parseInt(this.contentOffset.style.paddingBottom, 10);
+    const paddingBottom = Math.max(64, window.innerHeight - height - headerFooterOffset + currentPadding);
 
     // Apply the margin-bottom to the div
-    contentOffset.style.marginBottom = marginBottom + 'px';
+    this.contentOffset.style.paddingBottom = paddingBottom + 'px';
   }
 
   ngOnInit(): void {

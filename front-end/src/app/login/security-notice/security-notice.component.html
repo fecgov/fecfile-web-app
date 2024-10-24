@@ -1,83 +1,78 @@
-<!-- prettier-ignore -->
-<img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
+<div [ngClass]="{ 'security-container': showForm }">
+  <div *ngIf="showForm">
+    <img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
 
-<a class="logout-button" (click)="loginService.logOut()">
-  <span>Log Out</span>
-</a>
-
-<div class="security-notice p-fluid">
-  <div class="notice-box">
-    <p-card>
-      <ng-template pTemplate="header">
-        <div class="notice-header">
-          <h1>Security notification</h1>
-          <hr type="solid" style="margin-bottom: 0px; margin-right: 20px" />
-        </div>
-      </ng-template>
-
-      <strong>WARNING</strong>
-      <p>
-        This version of the application is for testing new features and functionality and gathering user feedback. Any
-        submitted reports do not constitute official filings with the Federal Election Commission (FEC). Any information
-        you enter at this time is subject to deletion and will not be retained.
-      </p>
-      <strong>DISCLAIMER</strong>
-      <p>
-        If you need to file a statement or report to meet your disclosure requirements, please use your normal method of
-        submitting that information to the FEC. Submitting a report or statement through this system during the testing
-        phase of this software release does not constitute an official filing with the Federal Election Commission.
-      </p>
-      <p>While using this system please do not:</p>
-      <ul>
-        <p>
-          <li>prevent other users from accessing FECFile Online;</li>
-          <li>overload FECFile Online;</li>
-          <li>share committee or user accounts;</li>
-          <li>
-            attempt to gain unauthorized access to FECFile Online or related systems or networks or to defeat, avoid,
-            bypass, remove, deactivate, or otherwise circumvent any software protection or monitoring mechanisms of
-            FECFile Online;
-          </li>
-          <li>create committee or user accounts in bulk.</li>
-        </p>
-      </ul>
-      <strong>LEGAL DISCLOSURE</strong>
-      <p>
-        This is a U.S. Federal Government system that is for official use only. Unauthorized use is strictly prohibited.
-      </p>
-
-      <ng-template pTemplate="footer">
-        <hr type="solid" />
-        <form [formGroup]="form">
-          <div class="field">
-            <p-checkbox
-              formControlName="security-consent-annual"
-              [binary]="true"
-              inputId="security-consent-annual"
-              label="You consent to the security notification for one year"
-              ariaLabel="You consent to the security notification for one year"
-            ></p-checkbox>
-          </div>
-        </form>
-        <div class="align-center">
-          <button
-            pButton
-            pRipple
-            class="p-button-secondary decline-button"
-            label="Decline and exit"
-            (click)="loginService.logOut()"
-          ></button>
-          <button
-            pButton
-            pRipple
-            class="p-button-primary"
-            data-test="consent-button"
-            label="Consent"
-            (click)="signConsentForm()"
-          ></button>
-        </div>
-      </ng-template>
-    </p-card>
+    <a class="logout-button" (click)="loginService.logOut()">
+      <span>Log Out</span>
+    </a>
   </div>
-  <div class="consent-box"></div>
+
+  <div class="notice-box">
+    <h1>Security notification</h1>
+    <hr type="solid" class="top-line" />
+
+    <h2>Warning</h2>
+    <p>
+      This version of the application is for testing new features and functionality and gathering user feedback. Any
+      submitted reports do not constitute official filings with the Federal Election Commission (FEC). Any information
+      you enter at this time is subject to deletion and will not be retained.
+    </p>
+    <h2>Disclaimer</h2>
+    <p>
+      If you need to file a statement or report to meet your disclosure requirements, please use your normal method of
+      submitting that information to the FEC. Submitting a report or statement through this system during the testing
+      phase of this software release does not constitute an official filing with the Federal Election Commission.
+    </p>
+    <p>While using this system please do not:</p>
+    <ul>
+      <p>
+        <li>prevent other users from accessing FECFile Online;</li>
+        <li>overload FECFile Online;</li>
+        <li>share committee or user accounts;</li>
+        <li>
+          attempt to gain unauthorized access to FECFile Online or related systems or networks or to defeat, avoid,
+          bypass, remove, deactivate, or otherwise circumvent any software protection or monitoring mechanisms of
+          FECFile Online;
+        </li>
+        <li>create committee or user accounts in bulk.</li>
+      </p>
+    </ul>
+    <h2>Legal disclosure</h2>
+    <p>
+      This is a U.S. Federal Government system that is for official use only. Unauthorized use is strictly prohibited.
+    </p>
+  </div>
+
+  <div class="footer" *ngIf="showForm">
+    <hr type="solid" />
+    <form [formGroup]="form">
+      <div class="field">
+        <p-checkbox
+          formControlName="security-consent-annual"
+          [binary]="true"
+          inputId="security-consent-annual"
+          label="You consent to the security notification for one year"
+          ariaLabel="You consent to the security notification for one year"
+        ></p-checkbox>
+      </div>
+    </form>
+    <div class="align-center">
+      <button
+        pButton
+        pRipple
+        class="p-button-secondary decline-button"
+        label="Decline and exit"
+        (click)="loginService.logOut()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        class="p-button-primary"
+        data-test="consent-button"
+        label="Consent"
+        (click)="signConsentForm()"
+      ></button>
+    </div>
+  </div>
+  <div class="consent-box" *ngIf="showForm"></div>
 </div>
