@@ -13,6 +13,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
 import { CommitteeMember } from 'app/shared/models/committee-member.model';
 import { of } from 'rxjs';
+import { CommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/committee-member-dialog.component';
 
 describe('ManageCommitteeComponent', () => {
   let component: ManageCommitteeComponent;
@@ -39,7 +40,7 @@ describe('ManageCommitteeComponent', () => {
         FileUploadModule,
         ConfirmDialogModule,
       ],
-      declarations: [ManageCommitteeComponent],
+      declarations: [ManageCommitteeComponent, CommitteeMemberDialogComponent],
       providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });

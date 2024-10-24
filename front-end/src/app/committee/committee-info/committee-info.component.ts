@@ -7,6 +7,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-committee-info',
@@ -81,6 +82,6 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank', 'noopener');
+    window.open(environment.form1m_link, '_blank', 'noopener');
   }
 }
