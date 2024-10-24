@@ -26,21 +26,12 @@ describe('CommitteeInfoComponent', () => {
     ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
     sessionIdCookieName: 'sessionid',
     committee_data_source: 'test',
+    form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
   };
 
-  beforeAll(() => {
-    // Save the original environment to restore after the tests
-    originalEnvironment = { ...environment };
-  });
-
-  afterAll(() => {
-    // Restore the original environment after all tests
-    Object.assign(environment, originalEnvironment);
-  });
-
   // This method sets the environment before TestBed.configureTestingModule() is called
-  async function setEnvironment(production: boolean) {
-    Object.assign(environment, { production });
+  async function setEnvironment(form1m_link?: string) {
+    if (form1m_link) Object.assign(environment, { form1m_link });
     // Now configure and compile TestBed with the updated environment
     await TestBed.configureTestingModule({
       providers: [provideMockStore(testMockStore)],
@@ -54,11 +45,25 @@ describe('CommitteeInfoComponent', () => {
     fixture.detectChanges();
   }
 
-  it('should use the production link in production environment', async () => {
-    await setEnvironment(true);
+  beforeAll(() => {
+    // Save the original environment to restore after the tests
+    originalEnvironment = { ...environment };
+  });
 
+  afterAll(() => {
+    // Restore the original environment after all tests
+    Object.assign(environment, originalEnvironment);
+  });
+
+  it('should create', () => {
+    setEnvironment();
+    expect(component).toBeTruthy();
+  });
+
+  it('should use the production link in production environment', async () => {
     const link = 'https://webforms.stage.gov/webforms/form1/index.htm';
-    expect(component.link).toBe(link);
+    await setEnvironment(link);
+
     spyOn(window, 'open');
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();
@@ -66,10 +71,8 @@ describe('CommitteeInfoComponent', () => {
   });
 
   it('should use the staging link in non-production environment', async () => {
-    await setEnvironment(false);
-
     const link = 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm';
-    expect(component.link).toBe(link);
+    await setEnvironment(link);
     spyOn(window, 'open');
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();

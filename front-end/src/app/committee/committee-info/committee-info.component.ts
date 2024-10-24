@@ -41,17 +41,12 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     'custodian_name_full',
   ];
 
-  link: string;
-
   constructor(
     private store: Store,
     private fb: FormBuilder,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
-    this.link = environment.production
-      ? 'https://webforms.stage.gov/webforms/form1/index.htm'
-      : 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm';
   }
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
@@ -87,6 +82,6 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open(this.link, '_blank', 'noopener');
+    window.open(environment.form1m_link, '_blank', 'noopener');
   }
 }
