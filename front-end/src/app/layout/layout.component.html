@@ -32,7 +32,11 @@
 
   <!-- Begin No Sidebar section -->
   <div *ngIf="!layoutControls.showSidebar" id="content-offset">
-    <div class="header-container" *ngIf="layoutControls.showHeader">
+    <div
+      class="header-container"
+      style="max-width: 1320px; margin-left: auto; margin-right: auto"
+      *ngIf="layoutControls.showHeader"
+    >
       <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
     </div>
     <div class="main-content">
