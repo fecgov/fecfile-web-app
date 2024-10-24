@@ -31,13 +31,7 @@ describe('Amendments', () => {
     F3xCreateReportPage.enterFormData(reportFormData);
     PageUtils.clickButton('Save and continue');
 
-    // Cash on hand
-    PageUtils.clickSidebarItem('Cash on hand');
     const alias = PageUtils.getAlias('');
-    PageUtils.enterValue('#L6a_cash_on_hand_jan_1_ytd', 60000);
-    PageUtils.calendarSetValue('p-calendar', new Date('05/27/2024'), alias);
-    PageUtils.clickButton('Save & continue');
-
     PageUtils.urlCheck('/list');
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickLink('Submit report');

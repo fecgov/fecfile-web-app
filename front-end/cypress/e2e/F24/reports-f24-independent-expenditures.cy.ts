@@ -32,7 +32,6 @@ describe('Form 24 Independent Expenditures', () => {
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
     const f3x_report_data = {
       ...defaultForm3XData,
-      cash_on_hand: 500,
     };
     F3XSetup({ individual: true, candidate: true, report: f3x_report_data });
     F24Setup();

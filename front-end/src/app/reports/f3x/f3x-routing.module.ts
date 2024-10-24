@@ -6,8 +6,6 @@ import { ReportDetailedSummaryComponent } from './report-detailed-summary/report
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
-import { CashOnHandComponent } from './create-workflow/cash-on-hand.component';
-import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
@@ -23,14 +21,6 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 const routes: Routes = [
-  {
-    path: 'create/cash-on-hand/:reportId',
-    title: 'Cash on hand',
-    component: CashOnHandComponent,
-    canActivate: [ReportIsEditableGuard, CashOnHandGuard],
-    data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
-    runGuardsAndResolvers: 'always',
-  },
   {
     path: 'create/step1',
     title: 'Create a report',

@@ -22,7 +22,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SharedModule } from 'app/shared/shared.module';
-import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportLevelMemoComponent } from './shared/report-level-memo/report-level-memo.component';
@@ -49,7 +48,6 @@ import { PasswordModule } from 'primeng/password';
     ReportDetailedSummaryComponent,
     ReportLevelMemoComponent,
     PrintPreviewComponent,
-    CashOnHandComponent,
     FormTypeDialogComponent,
     MainFormComponent,
   ],
