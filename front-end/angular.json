@@ -178,9 +178,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "buildTarget": "fecfile-web:build"
-            // "headers": {
-            //   "Cache-Control": "no-cache"
-            // }
           },
           "configurations": {
             "local": {
