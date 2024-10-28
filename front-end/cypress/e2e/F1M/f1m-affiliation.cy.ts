@@ -13,9 +13,8 @@ describe('Manage reports', () => {
 
   it('should create form 1m by affiliation', () => {
     ContactListPage.createCommittee();
-    const committeeID = Cypress.env('COMMITTEE_ID');
     ReportListPage.createF1M();
-    PageUtils.valueCheck('[data-cy="committee-id-input"]', committeeID);
+    PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
     cy.get('[data-cy="state-party-radio"]').click();
     cy.get('[data-cy="affiliation-radio"').click();
     cy.get('[id="searchBox"]').type(committeeFormData.committee_id.slice(0, 3));
