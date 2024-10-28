@@ -40,24 +40,25 @@
       <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
     </div>
     <div class="main-content">
-      <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
-        <div>
-          <app-committee-banner></app-committee-banner>
-        </div>
+      <div class="grid container" *ngIf="layoutControls.showCommitteeBanner; else no_container">
+        <app-committee-banner></app-committee-banner>
+        <router-outlet></router-outlet>
       </div>
-      <router-outlet></router-outlet>
+      <ng-template #no_container>
+        <router-outlet></router-outlet>
+      </ng-template>
     </div>
+    <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
+    <!-- End No Sidebar section -->
+    <button
+      type="button"
+      *ngIf="layoutControls.showFeedbackButton"
+      pButton
+      pRipple
+      label="Feedback"
+      class="p-button-info feedback-button"
+      (click)="this.feedbackOverlay.show($event)"
+    ></button>
+    <app-feedback-overlay></app-feedback-overlay>
   </div>
-  <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
-  <!-- End No Sidebar section -->
-  <button
-    type="button"
-    *ngIf="layoutControls.showFeedbackButton"
-    pButton
-    pRipple
-    label="Feedback"
-    class="p-button-info feedback-button"
-    (click)="this.feedbackOverlay.show($event)"
-  ></button>
-  <app-feedback-overlay></app-feedback-overlay>
 </div>
