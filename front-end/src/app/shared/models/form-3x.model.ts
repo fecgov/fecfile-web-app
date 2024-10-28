@@ -175,9 +175,4 @@ export class Form3X extends Report {
     return plainToInstance(Form3X, json);
   }
 
-  override getBlocker() {
-    if (!this.L6a_cash_on_hand_jan_1_ytd)
-      return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
-    return;
-  }
 }

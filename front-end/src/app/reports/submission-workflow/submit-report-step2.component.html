@@ -167,7 +167,7 @@
             (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
           ></button>
         </div>
-        <div class="col-8 submit-container" *ngIf="!report?.getBlocker()">
+        <div class="col-8 submit-container">
           <button
             pButton
             pRipple
@@ -184,9 +184,6 @@
             <p *ngIf="loading === 2">Submitting report to the FEC...</p>
           </div>
         </ng-container>
-      </div>
-      <div class="grid" *ngIf="report?.getBlocker()">
-        <div class="col-12">{{ report?.getBlocker() }}</div>
       </div>
     </form>
   </p-card>
