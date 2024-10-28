@@ -143,7 +143,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     if (report instanceof Form3X) {
       const payload: Form3X = Form3X.fromJSON({
         ...report,
-        qualified_committee: this.form3XService.isQualifiedCommittee(this.committeeAccount),
+        qualified_committee: this.committeeAccount?.qualified,
       });
       await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
     }
