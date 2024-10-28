@@ -174,5 +174,4 @@ export class Form3X extends Report {
     // json['form_type'] = F3xFormTypes.F3XT;
     return plainToInstance(Form3X, json);
   }
-
 }
