@@ -31,5 +31,6 @@ import { DialogModule } from 'primeng/dialog';
     PasswordModule,
     DialogModule,
   ],
+  exports: [SecurityNoticeComponent],
 })
 export class LoginModule {}
