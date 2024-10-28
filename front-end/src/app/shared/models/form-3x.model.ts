@@ -51,7 +51,6 @@ export class Form3X extends Report {
   treasurer_prefix: string | undefined;
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-  @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | undefined;
   L6b_cash_on_hand_beginning_period: number | undefined;
   L6c_total_receipts_period: number | undefined;
   L6d_subtotal_period: number | undefined;
@@ -174,11 +173,5 @@ export class Form3X extends Report {
   static fromJSON(json: unknown): Form3X {
     // json['form_type'] = F3xFormTypes.F3XT;
     return plainToInstance(Form3X, json);
-  }
-
-  override getBlocker() {
-    if (!this.L6a_cash_on_hand_jan_1_ytd)
-      return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
-    return;
   }
 }

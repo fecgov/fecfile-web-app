@@ -55,8 +55,8 @@ describe('CommitteeInfoComponent', () => {
     Object.assign(environment, originalEnvironment);
   });
 
-  it('should create', () => {
-    setEnvironment();
+  it('should create', async () => {
+    await setEnvironment();
     expect(component).toBeTruthy();
   });
 

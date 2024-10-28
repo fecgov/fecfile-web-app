@@ -203,11 +203,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     //Create the report
     create$.subscribe((report) => {
       if (jump === 'continue') {
-        if (report.is_first) {
-          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
-        } else {
-          this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-        }
+        this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({
