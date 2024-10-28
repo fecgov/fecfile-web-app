@@ -25,8 +25,6 @@ export class F3xCoverageDates {
     }
 }
 
-export const F3xQualifiedCommitteeTypeCodes = ['Q', 'W', 'Y'];
-
 export class Form3X extends Report {
   schema = f3xSchema;
   report_type = ReportTypes.F3X;

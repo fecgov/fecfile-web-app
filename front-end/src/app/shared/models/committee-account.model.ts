@@ -11,6 +11,8 @@ export class CommitteeAccount extends BaseModel {
   fax: string | undefined;
   first_f1_date: string | undefined;
   committee_type: string | undefined;
+  committee_type_label: string | undefined;
+  qualified: boolean | undefined;
   custodian_state: string | undefined;
   custodian_name_suffix: string | undefined;
   treasurer_name_suffix: string | undefined;

@@ -15,25 +15,6 @@ const committeeStatusCodes: { [key: string]: string } = {
 
 const activeStatusCodes = ['M', 'Q', 'W', 'D'];
 
-const committeeTypeCodes: { [key: string]: string } = {
-  C: 'communication cost',
-  D: 'delegate',
-  E: 'electioneering communication',
-  H: 'House',
-  I: 'independent expenditure filer (not a committee)',
-  N: 'PAC - nonqualified',
-  O: 'independent expenditure-only (super PACs)',
-  P: 'presidential',
-  Q: 'PAC - qualified',
-  S: 'Senate',
-  U: 'single candidate independent expenditure',
-  V: 'PAC with non-contribution account, nonqualified',
-  W: 'PAC with non-contribution account, qualified',
-  X: 'party, nonqualified',
-  Y: 'party, qualified',
-  Z: 'national party non-federal account',
-};
-
 @Component({
   selector: 'app-committee-banner',
   templateUrl: './committee-banner.component.html',
@@ -43,7 +24,7 @@ export class CommitteeBannerComponent extends DestroyerComponent implements OnIn
   committeeName?: string;
   committeeStatus?: string;
   committeeFrequency?: string;
-  committeeType?: string;
+  committeeTypeLabel?: string;
   committeeID?: string;
 
   constructor(private store: Store) {
@@ -64,10 +45,7 @@ export class CommitteeBannerComponent extends DestroyerComponent implements OnIn
           this.committeeStatus = activeStatusCodes.includes(frequencyCode) ? 'Active' : 'Inactive';
         }
 
-        const committeeTypeCode = committeeAccount.committee_type;
-        if (committeeTypeCode) {
-          this.committeeType = committeeTypeCodes[committeeTypeCode] ?? '';
-        }
+        this.committeeTypeLabel = committeeAccount.committee_type_label ?? '';
       });
   }
 }

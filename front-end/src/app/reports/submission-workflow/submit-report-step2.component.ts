@@ -144,7 +144,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       ...SchemaUtils.getFormValues(this.form, this.report.schema, this.formProperties),
     });
     if (payload instanceof Form3X) {
-      payload.qualified_committee = this.form3XService.isQualifiedCommittee(this.committeeAccount);
+      payload.qualified_committee = this.committeeAccount?.qualified;
       payload.committee_name = this.committeeAccount?.name;
       payload.street_1 = this.committeeAccount?.street_1;
       payload.street_2 = this.committeeAccount?.street_2;

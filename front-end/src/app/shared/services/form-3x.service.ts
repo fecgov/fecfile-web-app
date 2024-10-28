@@ -51,22 +51,10 @@ export class Form3XService extends ReportService {
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
-    return true;
-    // Committee Qualificaiton Logic is being overriden until a future ticket.
-    // When this is reenabled, we should consider expanding the unit tests for it,
-    // since having it always return true didn't cause any tests to fail.
-
-    // return (
-    //   !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
-    // );
-  }
-
   public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {
     const payload: Form3X = Form3X.fromJSON({
       ...report,
-      qualified_committee: this.isQualifiedCommittee(committeeAccount),
+      qualified_committee: committeeAccount?.qualified,
       committee_name: committeeAccount?.name,
       street_1: committeeAccount?.street_1,
       street_2: committeeAccount?.street_2,
