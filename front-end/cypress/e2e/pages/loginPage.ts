@@ -1,4 +1,5 @@
 import { ContactListPage } from './contactListPage';
+import { PageUtils } from './pageUtils';
 import { ReportListPage } from './reportListPage';
 
 export class LoginPage {
@@ -56,12 +57,8 @@ function getLoginIntervalString(sessionDur: number): string {
 }
 
 function loginDotGovLogin() {
-  const committeeID = Cypress.env('COMMITTEE_ID');
-
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee/?check_can_create=false`, {
-    fixture: 'FEC_Get_Committee_Account',
-  }).as('GetCommitteeAccounts');
+  cy.intercept('GET', `http://localhost:8080/api/v1/committees`).as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
 
   cy.visit('/');
@@ -71,6 +68,7 @@ function loginDotGovLogin() {
   cy.visit('/login/security-notice');
   cy.get('.p-checkbox-box').click();
   cy.get('[data-test="consent-button"]').click();
+  cy.get(PageUtils.getAlias('')).should('contain', 'Get started now');
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
