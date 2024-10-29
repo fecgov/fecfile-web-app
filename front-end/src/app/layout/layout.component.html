@@ -2,32 +2,32 @@
   <app-banner></app-banner>
 
   <!--  Begin Sidebar section -->
-  <div *ngIf="layoutControls.showSidebar">
-    <div class="inline-flex w-100">
-      <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
-        <app-sidebar></app-sidebar>
+
+  <div class="inline-flex w-100" *ngIf="layoutControls.showSidebar">
+    <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="sidebar-content-container">
+      <div class="header-container" *ngIf="layoutControls.showHeader">
+        <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
       </div>
-      <div class="sidebar-content-container">
-        <div class="header-container" *ngIf="layoutControls.showHeader">
-          <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
-        </div>
-        <div class="main-content">
-          <div class="grid">
-            <div *ngIf="layoutControls.showCommitteeBanner">
-              <app-committee-banner></app-committee-banner>
-            </div>
-          </div>
-          <div class="router-outlet">
-            <router-outlet></router-outlet>
+      <div class="main-content">
+        <div class="grid">
+          <div *ngIf="layoutControls.showCommitteeBanner">
+            <app-committee-banner></app-committee-banner>
           </div>
         </div>
-        <div class="flex-grow-1 d-flex flex-column">
-          <div class="flex-grow-1"></div>
-          <app-footer [showSidebar]="true"></app-footer>
+        <div class="router-outlet">
+          <router-outlet></router-outlet>
         </div>
+      </div>
+      <div class="flex-grow-1 d-flex flex-column">
+        <div class="flex-grow-1"></div>
+        <app-footer [showSidebar]="true"></app-footer>
       </div>
     </div>
   </div>
+
   <!--  End Sidebar section -->
 
   <!-- Begin No Sidebar section -->
@@ -40,12 +40,13 @@
       <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
     </div>
     <div class="main-content">
-      <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
-        <div>
-          <app-committee-banner></app-committee-banner>
-        </div>
+      <app-committee-banner *ngIf="layoutControls.showCommitteeBanner"></app-committee-banner>
+      <div class="container" *ngIf="layoutControls.backgroundStyle === BackgroundStyles.DEFAULT; else no_container">
+        <router-outlet></router-outlet>
       </div>
-      <router-outlet></router-outlet>
+      <ng-template #no_container>
+        <router-outlet></router-outlet>
+      </ng-template>
     </div>
   </div>
   <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>

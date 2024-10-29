@@ -23,6 +23,7 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
 
   layoutControls = new LayoutControls();
   renderer: Renderer2;
+  BackgroundStyles = BackgroundStyles;
 
   constructor(
     private router: Router,
