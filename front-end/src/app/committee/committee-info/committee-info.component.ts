@@ -22,7 +22,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   formProperties: string[] = [
     'name',
     'committee_id',
-    'committee_type_full',
+    'committee_type_label',
     'street_1',
     'street_2',
     'city',
