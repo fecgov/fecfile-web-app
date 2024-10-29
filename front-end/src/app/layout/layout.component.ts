@@ -40,18 +40,21 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
     offsetHeight: 0,
     style: { paddingBottom: '' },
   };
-  FOOTER_OFFSET_LARGE = 332;
-  FOOTER_OFFSET_SMALL = 266;
+
   updateContentOffset() {
     if (this.layoutControls.showSidebar) return;
     this.contentOffset = this.renderer.selectRootElement('#content-offset', true);
     if (!this.contentOffset) return;
     const height = this.contentOffset.offsetHeight;
-    let headerFooterOffset = window.innerWidth < 768 ? this.FOOTER_OFFSET_LARGE : this.FOOTER_OFFSET_SMALL;
-    if (this.layoutControls.showUpperFooter) headerFooterOffset += 80;
+
+    const footerElement = this.renderer.selectRootElement('footer', true);
+    const footerHeight = footerElement ? footerElement.offsetHeight : 0;
+    const usaBanner = this.renderer.selectRootElement('.usa-banner', true);
+    const bannerHeight = usaBanner ? usaBanner.offsetHeight : 0;
+
     const currentPadding =
       this.contentOffset.style.paddingBottom === '' ? 0 : parseInt(this.contentOffset.style.paddingBottom, 10);
-    const paddingBottom = Math.max(64, window.innerHeight - height - headerFooterOffset + currentPadding);
+    const paddingBottom = Math.max(64, window.innerHeight - height - footerHeight - bannerHeight + currentPadding);
 
     // Apply the margin-bottom to the div
     this.contentOffset.style.paddingBottom = paddingBottom + 'px';

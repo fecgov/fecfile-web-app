@@ -20,16 +20,10 @@ footer label {
 }
 
 #footer-lower {
-  height: 300px;
+  height: fit-content;
   background-color: #164f85;
   padding: 5px;
   padding-left: 28px;
-}
-
-@media (min-width: 768px) {
-  #footer-lower {
-    height: 234px;
-  }
 }
 
 #fec-seal {
