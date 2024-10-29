@@ -27,7 +27,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;
 
-  @Input() maxFecCommitteeResults = 5;
+  @Input() maxFecCommitteeResults = 10;
   @Input() maxFecfileCommitteeResults = 5;
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
