@@ -7,7 +7,7 @@ import {
   DisbursementFormData,
 } from '../models/TransactionFormModel';
 import { F3XSetup } from '../F3X/f3x-setup';
-import { StartTransaction } from '../F3X/start-transaction/start-transaction';
+import { StartTransaction } from '../F3X/utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
 import { F24Setup } from './f24-setup';
 import { ReportListPage } from '../pages/reportListPage';

@@ -9,10 +9,10 @@ import {
   createContact,
   defaultFormData as individualContactFormData,
 } from '../models/ContactFormModel';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
 import { ScheduleFormData } from '../models/TransactionFormModel';
-import { Individual } from './start-transaction/receipts';
+import { Individual } from './utils/start-transaction/receipts';
 import { faker } from '@faker-js/faker';
 
 const APRIL_15 = 'APRIL 15';
