@@ -227,17 +227,6 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|main/
-      - deploy-job: # All dependencies must pass before deploying
-          name: deploy-with-all-dependent-jobs-required
-          requires:
-            - lint
-            - test
-            - dependency-check
-            # - e2e-test
-          filters:
-            branches:
-              only:
-                - develop
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
@@ -246,7 +235,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /release\/sprint-[\.\d]+|main/
+              only: /develop|release\/sprint-[\.\d]+|main/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
