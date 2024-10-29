@@ -73,6 +73,27 @@
               ],
               "outputHashing": "all"
             },
+            "cloud.gov.test": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "200kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.cloud.gov.test.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "cloud.gov.stage": {
               "budgets": [
                 {

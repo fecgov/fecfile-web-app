@@ -1,25 +1,26 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-register-committee',
-  templateUrl: './register-committee.component.html',
-  styleUrls: ['./register-committee.component.scss'],
+  selector: 'app-create-committee',
+  templateUrl: './create-committee.component.html',
+  styleUrls: ['./create-committee.component.scss'],
 })
-export class RegisterCommitteeComponent extends DestroyerComponent {
-  query?: string;
+export class CreateCommitteeComponent extends DestroyerComponent {
   suggestions?: FecFiling[];
   selectedCommittee?: CommitteeAccount;
   explanationVisible = false;
   unableToCreateAccount = false;
 
+  searchBoxFormControl = new FormControl('');
+
   constructor(
-    protected fecApiService: FecApiService,
     protected messageService: MessageService,
     protected committeeAccountService: CommitteeAccountService,
     protected confirmationService: ConfirmationService,
@@ -27,22 +28,29 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
     super();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  search(event: any) {
-    this.query = event.query;
-    this.fecApiService.queryFilings(this.query ?? '', 'F1').then((filings) => {
-      this.suggestions = filings;
-    });
+  search(committeeId: string | null) {
+    this.selectedCommittee = undefined;
+    this.unableToCreateAccount = false;
+    if (committeeId) {
+      firstValueFrom(this.committeeAccountService.getAvailableCommittee(committeeId)).then(
+        this.handleSuccessfulSearch.bind(this),
+        this.handleFailedSearch.bind(this),
+      );
+    }
   }
-  select(committee: FecFiling) {
-    this.query = undefined;
-    this.selectedCommittee = new CommitteeAccount();
-    this.selectedCommittee.name = committee.committee_name;
-    this.selectedCommittee.committee_id = committee.committee_id;
+
+  handleSuccessfulSearch(committee: CommitteeAccount) {
+    this.selectedCommittee = committee;
   }
+
+  handleFailedSearch() {
+    this.unableToCreateAccount = true;
+    this.selectedCommittee = undefined;
+  }
+
   createAccount() {
     this.unableToCreateAccount = false;
-    this.committeeAccountService.registerCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
+    this.committeeAccountService.createCommitteeAccount(this.selectedCommittee?.committee_id ?? '').then(
       (committeeAccount) => {
         this.messageService.add({
           severity: 'success',
@@ -52,8 +60,7 @@ export class RegisterCommitteeComponent extends DestroyerComponent {
         });
       },
       () => {
-        this.unableToCreateAccount = true;
-        this.selectedCommittee = undefined;
+        this.handleFailedSearch();
       },
     );
   }

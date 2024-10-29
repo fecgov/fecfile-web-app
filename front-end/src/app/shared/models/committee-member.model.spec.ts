@@ -1,4 +1,3 @@
-import { isPAC, isPTY } from './committee-account.model';
 import { CommitteeMember } from './committee-member.model';
 
 describe('CommitteeMember', () => {
@@ -36,24 +35,5 @@ describe('CommitteeMember', () => {
     const cUser = new CommitteeMember();
     cUser.role = "This Isn't a Real Role";
     expect(cUser.getRoleLabel()).toBe('');
-  });
-
-  it('should confirm if committee is PAC', () => {
-    expect(isPAC()).toBeFalse();
-    const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];
-    PAC.forEach((entry) => {
-      expect(isPAC(entry)).toBeTrue();
-    });
-    expect(isPAC('X')).toBeFalse();
-  });
-
-  it('should confirm if committee is PTY', () => {
-    expect(isPTY()).toBeFalse();
-    expect(isPTY('Y')).toBeFalse();
-    expect(isPTY('Y', 'U')).toBeTrue();
-    expect(isPTY('Y', 'J')).toBeTrue();
-    expect(isPTY('X', 'U')).toBeFalse();
-    expect(isPTY('X', 'J')).toBeTrue();
-    expect(isPTY('O', 'U')).toBeFalse();
   });
 });

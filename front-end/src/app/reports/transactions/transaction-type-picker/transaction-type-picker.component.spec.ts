@@ -16,7 +16,6 @@ import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.mo
 import { ReportTypes } from 'app/shared/models/report.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.model';
-import { isPAC, isPTY } from 'app/shared/models/committee-account.model';
 import { ScheduleATransactionGroups, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
@@ -110,8 +109,10 @@ describe('TransactionTypePickerComponent', () => {
     it('should limit by PACRestricted if Committee type is PAC', fakeAsync(() => {
       component.ngOnInit();
       tick(500);
-      if (component.committeeAccount) component.committeeAccount.committee_type = 'O';
-      expect(isPAC(component.committeeAccount?.committee_type)).toBeTrue();
+      if (component.committeeAccount) {
+        component.committeeAccount.isPAC = true;
+        component.committeeAccount.isPTY = false;
+      }
       const types = component.getTransactionTypes(ScheduleATransactionGroups.TRANSFERS);
       expect(types.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
     }));
@@ -120,12 +121,11 @@ describe('TransactionTypePickerComponent', () => {
       component.ngOnInit();
       tick(500);
       if (component.committeeAccount) {
-        component.committeeAccount.committee_type = 'X';
-        component.committeeAccount.designation = 'J';
+        component.committeeAccount.isPAC = false;
+        component.committeeAccount.isPTY = true;
       }
-      expect(isPTY(component.committeeAccount?.committee_type, component.committeeAccount?.designation)).toBeTrue();
-      const types = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
-      expect(types.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
+      const testTypes = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
+      expect(testTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
     }));
   });
 });

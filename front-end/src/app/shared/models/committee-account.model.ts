@@ -10,6 +10,10 @@ export class CommitteeAccount extends BaseModel {
   fax: string | undefined;
   first_f1_date: string | undefined;
   committee_type: string | undefined;
+  committee_type_label: string | undefined;
+  qualified: boolean | undefined;
+  isPAC: boolean | undefined;
+  isPTY: boolean | undefined;
   custodian_state: string | undefined;
   custodian_name_suffix: string | undefined;
   treasurer_name_suffix: string | undefined;
@@ -68,16 +72,3 @@ export class CommitteeAccount extends BaseModel {
     return plainToClass(CommitteeAccount, json);
   }
 }
-
-export function isPAC(committee_type?: string): boolean {
-  if (!committee_type) return false;
-  return PAC.includes(committee_type);
-}
-
-export function isPTY(committee_type?: string, designation?: string): boolean {
-  if (!committee_type || !designation) return false;
-  if (committee_type === 'Y') return true;
-  return committee_type === 'X' && designation !== 'U';
-}
-
-const PAC = ['O', 'U', 'D', 'N', 'Q', 'V', 'W'];

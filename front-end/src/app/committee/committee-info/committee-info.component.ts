@@ -2,8 +2,6 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/co
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { FecFiling } from 'app/shared/models/fec-filing.model';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -23,7 +21,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   formProperties: string[] = [
     'name',
     'committee_id',
-    'committee_type_full',
+    'committee_type_label',
     'street_1',
     'street_2',
     'city',
@@ -44,7 +42,6 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
 
   constructor(
     private store: Store,
-    private fecApiService: FecApiService,
     private fb: FormBuilder,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
@@ -53,12 +50,7 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
-      this.fecApiService
-        .getCommitteeRecentF1Filing(committee.committee_id)
-        .subscribe((mostRecentFiling: FecFiling | undefined) => {
-          this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
-        });
-
+      this.mostRecentFilingPdfUrl = undefined; // undefined until requirements are defined https://fecgov.atlassian.net/browse/FECFILE-1704
       this.form.enable();
       const entries = Object.entries(committee);
       for (const [key, value] of entries) {
