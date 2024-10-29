@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewChecked, RendererFactory2, Renderer2 } from '@angular/core';
-
+import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { filter, takeUntil } from 'rxjs';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderStyles } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { BannerComponent } from './banner/banner.component';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -22,42 +23,34 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
   @ViewChild(FeedbackOverlayComponent) feedbackOverlay!: FeedbackOverlayComponent;
 
   layoutControls = new LayoutControls();
-  renderer: Renderer2;
   BackgroundStyles = BackgroundStyles;
 
-  constructor(
-    private router: Router,
-    rendererFactory: RendererFactory2,
-  ) {
+  @ViewChild('footerRef') footer!: FooterComponent;
+  @ViewChild('contentOffset') contentOffset!: ElementRef;
+  @ViewChild('bannerRef') banner!: BannerComponent;
+
+  constructor(public router: Router) {
     super();
-    this.renderer = rendererFactory.createRenderer(null, null);
   }
   ngAfterViewChecked(): void {
     this.updateContentOffset();
   }
 
-  contentOffset = {
-    offsetHeight: 0,
-    style: { paddingBottom: '' },
-  };
-
   updateContentOffset() {
     if (this.layoutControls.showSidebar) return;
-    this.contentOffset = this.renderer.selectRootElement('#content-offset', true);
     if (!this.contentOffset) return;
-    const height = this.contentOffset.offsetHeight;
-
-    const footerElement = this.renderer.selectRootElement('footer', true);
-    const footerHeight = footerElement ? footerElement.offsetHeight : 0;
-    const usaBanner = this.renderer.selectRootElement('.usa-banner', true);
-    const bannerHeight = usaBanner ? usaBanner.offsetHeight : 0;
+    const height = this.contentOffset.nativeElement.offsetHeight;
+    const footerHeight = this.footer ? this.footer.getFooterElement().offsetHeight : 0;
+    const bannerHeight = this.banner ? this.banner.getBannerElement().offsetHeight : 0;
 
     const currentPadding =
-      this.contentOffset.style.paddingBottom === '' ? 0 : parseInt(this.contentOffset.style.paddingBottom, 10);
+      this.contentOffset.nativeElement.style.paddingBottom === ''
+        ? 0
+        : parseInt(this.contentOffset.nativeElement.style.paddingBottom, 10);
     const paddingBottom = Math.max(64, window.innerHeight - height - footerHeight - bannerHeight + currentPadding);
 
     // Apply the margin-bottom to the div
-    this.contentOffset.style.paddingBottom = paddingBottom + 'px';
+    this.contentOffset.nativeElement.style.paddingBottom = paddingBottom + 'px';
   }
 
   ngOnInit(): void {
