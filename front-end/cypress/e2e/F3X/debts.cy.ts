@@ -4,7 +4,7 @@ import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultDebtFormData as debtFormData } from '../models/TransactionFormModel';
 import { committeeFormData } from '../models/ContactFormModel';
 import { F3XSetup } from './f3x-setup';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 
 describe('Debts', () => {
   beforeEach(() => {
