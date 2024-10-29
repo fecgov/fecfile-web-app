@@ -7,11 +7,6 @@
       <a class="nav-link" routerLink="/reports"><span [ngStyle]="{ 'font-size': fontSize }">Reports</span></a>
     </li>
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link disabled" routerLink="/transactions"
-        ><span [ngStyle]="{ 'font-size': fontSize }">Transactions</span></a
-      >
-    </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" routerLink="/contacts"><span [ngStyle]="{ 'font-size': fontSize }">Contacts</span></a>
     </li>
     <li class="nav-item dropdown" [ngClass]="full ? 'full-width' : ''">
@@ -27,27 +22,8 @@
         <span [ngStyle]="{ 'font-size': fontSize }">Tools</span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-        <!-- Converted <a> tag to <span> for next 4 dead links so page doesn't route away -->
-        <span class="dropdown-item" href="#"><span class="dead-link">Import</span></span>
-        <span class="dropdown-item" href="#"><span class="dead-link">Export</span></span>
-        <span class="dropdown-item" href="#"><span class="dead-link">Update cash on hand</span></span>
-        <span class="dropdown-item" href="#"><span class="dead-link">FECFile Help</span></span>
+        <a class="dropdown-item" routerLink="/tools/update-cash-on-hand">Update cash on hand</a>
       </ul>
-    </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link disabled" routerLink="#" p-disabled>
-        <!--
-          The greying of the bell icon is handled by an scss filter
-          since the usual disabled class doesn't work on image files
-        -->
-        <img
-          class="header-navbar-icon header-navbar-icon-disabled"
-          ngSrc="assets/img/notification_bell_icon.svg"
-          alt="Notifications"
-          [height]="16 * ratio"
-          [width]="12 * ratio"
-        />
-      </a>
     </li>
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a
@@ -70,9 +46,7 @@
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarProfileDropdownMenuLink">
         <a class="dropdown-item" routerLink="/committee/">Account</a>
         <a class="dropdown-item" routerLink="/committee/members">Users</a>
-        <!-- Converted <a> tag to <span> for next 2 dead links so page doesn't route away -->
         <a class="dropdown-item" routerLink="/login/select-committee/">Switch Committees</a>
-        <span class="dropdown-item" href="#"><span class="dead-link">User Profile</span></span>
         <a class="dropdown-item" (click)="loginService.logOut()">Logout</a>
       </ul>
     </li>
@@ -80,7 +54,7 @@
   <ng-container *ngIf="headerStyle === headerStyles.LOGIN">
     <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
       <a class="nav-link" (click)="navigateToLoginDotGov()">
-        <span [ngStyle]="{ 'font-size': fontSize }">Log In</span>
+        <span [ngStyle]="{ 'font-size': fontSize }">SIGN IN</span>
       </a>
     </li>
   </ng-container>

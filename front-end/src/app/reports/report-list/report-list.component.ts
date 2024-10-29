@@ -1,16 +1,16 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { DotFecService } from 'app/shared/services/dot-fec.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { DotFecService } from 'app/shared/services/dot-fec.service';
 
 @Component({
   selector: 'app-report-list',
@@ -81,11 +81,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
     switch (item.report_type) {
       case ReportTypes.F3X:
-        if (item.is_first) {
-          await this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-        } else {
-          await this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-        }
+        await this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
         break;
       case ReportTypes.F99:
         await this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
@@ -158,11 +154,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    */
   public displayName(item: Report): string {
     return item.form_type ?? '';
-  }
-
-  public noCashOnHand(): boolean {
-    const f3xItems = this.items.filter((i) => i.report_type === ReportTypes.F3X);
-    return f3xItems.length === 1 && !(f3xItems[0] as Form3X).cash_on_hand_date;
   }
 
   public showDialog(): void {

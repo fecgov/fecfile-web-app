@@ -34,7 +34,6 @@ describe('CreateF3XStep1Component', () => {
     coverage_through_date: '2022-06-25',
     form_type: 'F3XN',
     report_code: 'Q1',
-    is_first: true,
   });
 
   const first = new Date('01/01/2024');
@@ -144,7 +143,7 @@ describe('CreateF3XStep1Component', () => {
     navigateSpy.calls.reset();
     component.form.patchValue({ ...f3x });
     component.save('continue');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 
   it('#save should not save with invalid f3x record', () => {

@@ -6,7 +6,6 @@ import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly, Setup } from './f3x-setup';
-import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -21,12 +20,8 @@ const formData = {
   },
 };
 
-function setupLoanFromBank(setup: Setup, addCoh = false) {
+function setupLoanFromBank(setup: Setup) {
   F3XSetup(setup);
-  if (addCoh) {
-    F3xCashOnHandPage.enterFormData(cohFormData);
-    PageUtils.clickButton('Save & continue');
-  }
   StartTransaction.Loans().FromBank();
 
   PageUtils.searchBoxInput(organizationFormData.name);

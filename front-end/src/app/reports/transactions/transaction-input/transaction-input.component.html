@@ -4,7 +4,8 @@
     isEditable &&
     !transactionType?.getUseParentContact(transaction) &&
     !transactionType?.hideContactLookup &&
-    transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE'
+    transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
+    transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_RECEIVED'
   "
 >
   <div class="col-12">

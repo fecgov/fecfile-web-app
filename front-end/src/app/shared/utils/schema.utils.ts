@@ -41,7 +41,11 @@ export class SchemaUtils {
   static getFormGroupFieldsNoBlur(properties: string[], fb: FormBuilder) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     properties.forEach((property) => {
-      group[property] = fb.control('', SchemaUtils.noBlur.includes(property) ? { updateOn: 'change' } : {});
+      if (property.includes('date')) {
+        group[property] = fb.control(null, { updateOn: 'change' });
+      } else {
+        group[property] = fb.control('', SchemaUtils.noBlur.includes(property) ? { updateOn: 'change' } : {});
+      }
     });
 
     return group;

@@ -17,10 +17,8 @@
               <app-committee-banner></app-committee-banner>
             </div>
           </div>
-          <div class="grid">
-            <div class="router-outlet">
-              <router-outlet></router-outlet>
-            </div>
+          <div class="router-outlet">
+            <router-outlet></router-outlet>
           </div>
         </div>
         <div class="flex-grow-1 d-flex flex-column">
@@ -34,22 +32,20 @@
 
   <!-- Begin No Sidebar section -->
   <div *ngIf="!layoutControls.showSidebar" id="content-offset">
-    <div class="container">
-      <div class="header-container" *ngIf="layoutControls.showHeader">
-        <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
-      </div>
-      <div class="main-content">
-        <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
-          <div>
-            <app-committee-banner></app-committee-banner>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12 router-outlet p-0">
-            <router-outlet></router-outlet>
-          </div>
+    <div
+      class="header-container"
+      style="max-width: 1320px; margin-left: auto; margin-right: auto"
+      *ngIf="layoutControls.showHeader"
+    >
+      <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
+    </div>
+    <div class="main-content">
+      <div class="grid" *ngIf="layoutControls.showCommitteeBanner">
+        <div>
+          <app-committee-banner></app-committee-banner>
         </div>
       </div>
+      <router-outlet></router-outlet>
     </div>
   </div>
   <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>

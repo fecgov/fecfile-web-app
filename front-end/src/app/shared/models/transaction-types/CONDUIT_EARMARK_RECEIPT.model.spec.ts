@@ -34,4 +34,17 @@ describe('CONDUIT_EARMARK_RECEIPT', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Earmarked for Joe (Committee)');
   });
+
+  it('#generatePurposeDescription() should not yield too long of a description', () => {
+    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT) as SchBTransaction;
+    childTransaction.entity_type = ContactTypes.COMMITTEE;
+    childTransaction.payee_organization_name =
+      'Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesback Adilade Dourson Schmoe IV';
+    transaction.children = [childTransaction];
+
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(descrip).toBe(
+      'Earmarked for Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesback ... (Committee)',
+    );
+  });
 });

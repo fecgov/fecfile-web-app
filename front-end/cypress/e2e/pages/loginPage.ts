@@ -56,12 +56,8 @@ function getLoginIntervalString(sessionDur: number): string {
 }
 
 function loginDotGovLogin() {
-  const committeeID = Cypress.env('COMMITTEE_ID');
-
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', `http://localhost:8080/api/v1/openfec/${committeeID}/committee/?check_can_create=false`, {
-    fixture: 'FEC_Get_Committee_Account',
-  }).as('GetCommitteeAccounts');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
 
   cy.visit('/');
@@ -74,7 +70,7 @@ function loginDotGovLogin() {
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
-  cy.visit('/dashboard');
+  //cy.visit('/dashboard');
 }
 
 function retrieveAuthToken() {

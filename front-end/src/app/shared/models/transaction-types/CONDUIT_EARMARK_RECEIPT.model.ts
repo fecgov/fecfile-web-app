@@ -20,7 +20,12 @@ export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
     if (earmarkMemo.payee_organization_name) {
       const conduit = earmarkMemo.payee_organization_name;
-      return `Earmarked for ${conduit} (Committee)`;
+      let conduitClause = `Earmarked for ${conduit}`;
+      const parenthetical = ' (Committee)';
+      if ((conduitClause + parenthetical).length > 100) {
+        conduitClause = conduitClause.slice(0, 97 - parenthetical.length) + '...';
+      }
+      return conduitClause + parenthetical;
     }
     return '';
   }
