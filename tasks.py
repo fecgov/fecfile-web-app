@@ -47,7 +47,7 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("test", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "feature/test-deploy-installs"),
 )
 
 
@@ -55,7 +55,7 @@ def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
     os.chdir(os.path.join(orig_directory, "front-end"))
 
-    ctx.run("npm install", warn=True, echo=True)
+    # ctx.run("npm install", warn=True, echo=True)
     print(f"Starting build: npm run build-{space}")
     result = ctx.run(f"npm run build-{space}", warn=True, echo=True)
 
