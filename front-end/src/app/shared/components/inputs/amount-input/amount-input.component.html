@@ -9,7 +9,16 @@
       <div class="col-4" *ngIf="templateMap['date2']">
         <div class="field">
           <label for="date2">{{ transaction?.transactionType?.date2Label }}</label>
-          <p-calendar inputId="date2" name="date2" [formControlName]="templateMap['date2']"></p-calendar>
+          <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="
+              calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['date2']), calendarOpened)
+            "
+            (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['date2']), calendarOpened)"
+            inputId="date2"
+            name="date2"
+            [formControlName]="templateMap['date2']"
+          ></p-calendar>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['date2']"
@@ -21,7 +30,16 @@
       <div class="col-4">
         <div class="field">
           <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
-          <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
+          <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="
+              calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)
+            "
+            (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)"
+            inputId="date"
+            name="date"
+            [formControlName]="templateMap['date']"
+          ></p-calendar>
           <app-error-messages
             *ngIf="!templateMap['date2']"
             [form]="form"

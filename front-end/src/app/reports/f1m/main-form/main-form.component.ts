@@ -23,6 +23,8 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   templateUrl: './main-form.component.html',
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
+  SchemaUtils = SchemaUtils;
+  calendarOpened = false;
   formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',

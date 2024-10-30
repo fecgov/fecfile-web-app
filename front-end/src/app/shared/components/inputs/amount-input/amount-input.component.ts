@@ -10,6 +10,7 @@ import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 @Component({
   selector: 'app-amount-input',
@@ -30,8 +31,10 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @ViewChild('memoCode') memoCode!: MemoCodeInputComponent;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
+  calendarOpened = false;
   contributionAmountInputStyleClass = '';
   reportTypes = ReportTypes;
+  SchemaUtils = SchemaUtils;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,

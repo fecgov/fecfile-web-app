@@ -10,6 +10,7 @@ import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -23,6 +24,8 @@ enum LoanTermsFieldSettings {
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
+  calendarOpened = false;
+  SchemaUtils = SchemaUtils;
   constructor(private store: Store) {
     super();
   }

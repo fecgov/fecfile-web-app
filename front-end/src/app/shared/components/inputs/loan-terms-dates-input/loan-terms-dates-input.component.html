@@ -3,7 +3,16 @@
     <div class="col-6">
       <div class="field">
         <label for="date">DATE INCURRED</label>
-        <p-calendar inputId="date_incurred" name="date" [formControlName]="templateMap['date']"></p-calendar>
+        <p-calendar
+          (onFocus)="calendarOpened = true"
+          (onClose)="
+            calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)
+          "
+          (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)"
+          inputId="date_incurred"
+          name="date"
+          [formControlName]="templateMap['date']"
+        ></p-calendar>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['date']"
@@ -46,7 +55,16 @@
       <div class="col-6">
         <div class="field">
           <label for="due_date">SPECIFIC DATE</label>
-          <p-calendar inputId="due_date" name="due_date" [formControlName]="templateMap['due_date']"></p-calendar>
+          <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="
+              calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['due_date']), calendarOpened)
+            "
+            (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['due_date']), calendarOpened)"
+            inputId="due_date"
+            name="due_date"
+            [formControlName]="templateMap['due_date']"
+          ></p-calendar>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['due_date']"

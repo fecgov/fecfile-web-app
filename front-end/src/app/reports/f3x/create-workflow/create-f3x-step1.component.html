@@ -90,7 +90,16 @@
           <div class="col-12">
             <div class="field">
               <label for="date_of_election">ELECTION ON</label>
-              <p-calendar id="date_of_election" name="date_of_election" formControlName="date_of_election"></p-calendar>
+              <p-calendar
+                (onFocus)="calendarOpened = true"
+                (onClose)="
+                  calendarOpened = false; SchemaUtils.onBlurValidation(form.get('date_of_election'), calendarOpened)
+                "
+                (onBlur)="SchemaUtils.onBlurValidation(form.get('date_of_election'), calendarOpened)"
+                id="date_of_election"
+                name="date_of_election"
+                formControlName="date_of_election"
+              ></p-calendar>
               <app-error-messages fieldName="date_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
@@ -125,6 +134,11 @@
         <div class="field">
           <label for="coverage_from_date">FROM</label>
           <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="
+              calendarOpened = false; SchemaUtils.onBlurValidation(form.get('coverage_from_date'), calendarOpened)
+            "
+            (onBlur)="SchemaUtils.onBlurValidation(form.get('coverage_from_date'), calendarOpened)"
             inputId="coverage_from_date"
             name="coverage_from_date"
             formControlName="coverage_from_date"
@@ -140,6 +154,11 @@
         <div class="field">
           <label for="coverage_through_date">TO</label>
           <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="
+              calendarOpened = false; SchemaUtils.onBlurValidation(form.get('coverage_through_date'), calendarOpened)
+            "
+            (onBlur)="SchemaUtils.onBlurValidation(form.get('coverage_through_date'), calendarOpened)"
             inputId="coverage_through_date"
             name="coverage_through_date"
             formControlName="coverage_through_date"
