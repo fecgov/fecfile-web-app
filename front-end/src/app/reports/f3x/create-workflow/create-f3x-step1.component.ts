@@ -33,6 +33,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   styleUrl: './create-f3x-step1.component.scss',
 })
 export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
+  SchemaUtils = SchemaUtils;
   formProperties: string[] = [
     'filing_frequency',
     'report_type_category',
@@ -49,6 +50,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
     updateOn: 'blur',
   });
+  calendarOpened = false;
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;

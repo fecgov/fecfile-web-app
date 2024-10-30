@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 @Component({
   selector: 'app-signature-input',
@@ -7,7 +8,8 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class SignatureInputComponent extends BaseInputComponent implements OnInit {
   @Input() templateMapKeyPrefix = 'signatory_1';
-
+  SchemaUtils = SchemaUtils;
+  calendarOpened = false;
   titleFieldName = '';
   dateSignedFieldName = '';
 
