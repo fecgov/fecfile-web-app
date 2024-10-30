@@ -10,10 +10,16 @@ import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { CreateCommitteeComponent } from './create-committee.component';
+import { NavigationBehaviorOptions, Router, UrlTree } from '@angular/router';
+import { UsersService } from 'app/shared/services/users.service';
 
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
   let fixture: ComponentFixture<CreateCommitteeComponent>;
+  let testCommitteeAccountService: CommitteeAccountService;
+  let testUserService: UsersService;
+  let router: Router;
+  let routerSpy: jasmine.Spy<(url: string | UrlTree, extras?: NavigationBehaviorOptions) => Promise<boolean>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,6 +27,10 @@ describe('CreateCommitteeComponent', () => {
       declarations: [CreateCommitteeComponent],
       providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     });
+    testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
+    testUserService = TestBed.inject(UsersService);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigateByUrl');
     fixture = TestBed.createComponent(CreateCommitteeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -30,54 +40,102 @@ describe('CreateCommitteeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should search filings', () => {
-    const testCommitteeId = 'C12345678';
-    const testCommittee = new CommitteeAccount();
-    testCommittee.committee_id = testCommitteeId;
-    const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-    const spy = spyOn(testCommitteeAccountService, 'getAvailableCommittee').and.returnValue(of(testCommittee));
+  describe('search', () => {
+    it('should search filings', () => {
+      const testCommitteeId = 'C12345678';
+      const testCommittee = new CommitteeAccount();
+      testCommittee.committee_id = testCommitteeId;
+      const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
+      const spy = spyOn(testCommitteeAccountService, 'getAvailableCommittee').and.returnValue(of(testCommittee));
 
-    expect(component.selectedCommittee).toBeFalsy();
-    component.search(testCommitteeId);
-    expect(spy).toHaveBeenCalledWith(testCommitteeId);
+      expect(component.selectedCommittee).toBeFalsy();
+      component.search(testCommitteeId);
+      expect(spy).toHaveBeenCalledWith(testCommitteeId);
+    });
+
+    it('should handle successful search', () => {
+      const testCommitteeId = 'C12345678';
+      const testCommittee = new CommitteeAccount();
+      testCommittee.committee_id = testCommitteeId;
+
+      expect(component.unableToCreateAccount).toBeFalse();
+      expect(component.selectedCommittee).toBeFalsy();
+      component.handleSuccessfulSearch(testCommittee);
+      expect(component.unableToCreateAccount).toBeFalse();
+      expect(component.selectedCommittee?.committee_id).toEqual(testCommitteeId);
+    });
+
+    it('should handle failed search', () => {
+      const testCommitteeId = 'C12345678';
+      const testCommittee = new CommitteeAccount();
+      testCommittee.committee_id = testCommitteeId;
+
+      expect(component.unableToCreateAccount).toBeFalse();
+      expect(component.selectedCommittee).toBeFalsy();
+      component.handleFailedSearch();
+      expect(component.unableToCreateAccount).toBeTrue();
+      expect(component.selectedCommittee).toBeFalsy();
+    });
   });
 
-  it('should handle successful search', () => {
-    const testCommitteeId = 'C12345678';
-    const testCommittee = new CommitteeAccount();
-    testCommittee.committee_id = testCommitteeId;
-
-    expect(component.unableToCreateAccount).toBeFalse();
-    expect(component.selectedCommittee).toBeFalsy();
-    component.handleSuccessfulSearch(testCommittee);
-    expect(component.unableToCreateAccount).toBeFalse();
-    expect(component.selectedCommittee?.committee_id).toEqual(testCommitteeId);
-  });
-
-  it('should handle failed search', () => {
-    const testCommitteeId = 'C12345678';
-    const testCommittee = new CommitteeAccount();
-    testCommittee.committee_id = testCommitteeId;
-
-    expect(component.unableToCreateAccount).toBeFalse();
-    expect(component.selectedCommittee).toBeFalsy();
-    component.handleFailedSearch();
-    expect(component.unableToCreateAccount).toBeTrue();
-    expect(component.selectedCommittee).toBeFalsy();
-  });
-
-  it('should create committee', () => {
-    const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
+  it('should create committee and redirect to reports page if consent 1 year', async () => {
     const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
       Promise.resolve(new CommitteeAccount()),
     );
+    const userSpy = spyOn(testUserService, 'getCurrentUser').and.callFake(() => {
+      return Promise.resolve({
+        first_name: 'first',
+        last_name: 'last',
+        email: 'email',
+        security_consent_exp_date: '123',
+      });
+    });
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
 
     component.selectedCommittee = testCommittee;
-    component.createAccount();
+    await component.createAccount();
 
     expect(spy).toHaveBeenCalledWith(testCommitteeId);
+    expect(userSpy).toHaveBeenCalled();
+    expect(routerSpy).toHaveBeenCalledWith('');
+  });
+
+  it('should create committee and redirect to consent page if NOT consent 1 year', async () => {
+    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
+      Promise.resolve(new CommitteeAccount()),
+    );
+    const userSpy = spyOn(testUserService, 'getCurrentUser').and.callFake(() => {
+      return Promise.resolve({
+        first_name: 'first',
+        last_name: 'last',
+        email: 'email',
+      });
+    });
+    const testCommitteeId = 'C12345678';
+    const testCommittee = new CommitteeAccount();
+    testCommittee.committee_id = testCommitteeId;
+
+    component.selectedCommittee = testCommittee;
+    await component.createAccount();
+
+    expect(spy).toHaveBeenCalledWith(testCommitteeId);
+    expect(userSpy).toHaveBeenCalled();
+    expect(routerSpy).toHaveBeenCalledWith('/login/security-notice');
+  });
+
+  it('should handle failed create', async () => {
+    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
+      Promise.reject(new Error()),
+    );
+
+    expect(component.unableToCreateAccount).toBeFalse();
+    expect(component.selectedCommittee).toBeFalsy();
+    await component.createAccount();
+    expect(component.unableToCreateAccount).toBeTrue();
+    expect(component.selectedCommittee).toBeFalsy();
+    expect(spy).toHaveBeenCalledWith('');
+    expect(routerSpy).not.toHaveBeenCalled();
   });
 });
