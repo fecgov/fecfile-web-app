@@ -52,14 +52,12 @@ export class SchemaUtils {
   }
 
   static onBlurValidation(control: AbstractControl | null, calendarOpened: boolean) {
-    if (!calendarOpened) {
-      if (control) {
-        control.markAsTouched();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const pendingValue = (control as any)._pendingValue;
-        control.setValue(pendingValue);
-        control.updateValueAndValidity();
-      }
+    if (!calendarOpened && control) {
+      control.markAsTouched();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pendingValue = (control as any)._pendingValue;
+      control.setValue(pendingValue);
+      control.updateValueAndValidity();
     }
   }
 
