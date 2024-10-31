@@ -92,3 +92,12 @@ export function setCommitteeType(committeeType = 'O') {
   json.committee_type = committeeType;
   localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
 }
+
+export function setCommitteeToPTY() {
+  const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
+  if (!fecfile_online_committeeAccount) return;
+  const json = JSON.parse(fecfile_online_committeeAccount);
+  json.isPAC = false;
+  json.isPTY = true;
+  localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
+}

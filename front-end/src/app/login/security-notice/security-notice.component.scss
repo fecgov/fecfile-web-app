@@ -32,28 +32,6 @@ p + ul {
 }
 
 :host ::ng-deep {
-  .p-card {
-    box-shadow: none;
-    margin-top: 0px;
-    border-radius: 8px;
-    border-width: 1px;
-    border-color: #000000;
-    border-style: solid;
-  }
-
-  .p-card-content,
-  .p-card-footer {
-    padding: 0px;
-  }
-
-  .p-card-body {
-    padding: 20px;
-  }
-
-  .p-checkbox {
-    margin-left: 30px;
-  }
-
   .p-checkbox-label {
     font-style: italic;
     font-family: gandhi-regular, serif;
@@ -78,4 +56,53 @@ p + ul {
 ul li {
   list-style-type: disc;
   margin-left: 16px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 28px;
+  margin: 0;
+}
+
+.top-line {
+  margin: 20px 0;
+}
+
+p {
+  font-size: 18px;
+}
+
+.notice-box-form {
+  width: 80vw;
+  margin: 0 32px;
+}
+
+.notice-box {
+  max-width: min(648px, 100vw);
+  margin: 0;
+}
+@media screen and (max-width: 767px) {
+  .notice-box {
+    margin: 0 32px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .notice-box {
+    width: 66.666666666667vw;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .notice-box {
+    width: 50vw;
+  }
+}
+
+.security-container {
+  background-color: white;
+  margin-top: 80px;
+  padding: 32px;
+  border-radius: 8px;
 }

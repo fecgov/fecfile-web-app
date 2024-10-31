@@ -154,22 +154,4 @@
     </div>
   </form>
 </div>
-<div class="grid">
-  <div class="col-2">
-    <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
-  </div>
-  <div class="col-6"></div>
-  <div class="col-1">
-    <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
-  </div>
-  <div class="col-3">
-    <button
-      pButton
-      pRipple
-      appSingleClick
-      label="Save and continue"
-      (click)="save('continue')"
-      class="p-button-info"
-    ></button>
-  </div>
-</div>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>

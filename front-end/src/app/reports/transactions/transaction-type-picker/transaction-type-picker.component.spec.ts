@@ -16,9 +16,7 @@ import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.mo
 import { ReportTypes } from 'app/shared/models/report.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.model';
-import { isPAC, isPTY } from 'app/shared/models/committee-account.model';
 import { ScheduleATransactionGroups, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { environment } from 'environments/environment';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -111,42 +109,23 @@ describe('TransactionTypePickerComponent', () => {
     it('should limit by PACRestricted if Committee type is PAC', fakeAsync(() => {
       component.ngOnInit();
       tick(500);
-      if (component.committeeAccount) component.committeeAccount.committee_type = 'O';
-      expect(isPAC(component.committeeAccount?.committee_type)).toBeTrue();
+      if (component.committeeAccount) {
+        component.committeeAccount.isPAC = true;
+        component.committeeAccount.isPTY = false;
+      }
       const types = component.getTransactionTypes(ScheduleATransactionGroups.TRANSFERS);
       expect(types.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
     }));
 
     it('should limit by PTYRestricted if Committee type is PTY', fakeAsync(() => {
-      const committee_data_source = environment.committee_data_source;
-
-      // TEST version
-      environment.committee_data_source = 'test';
       component.ngOnInit();
       tick(500);
       if (component.committeeAccount) {
-        component.committeeAccount.committee_type = 'D';
+        component.committeeAccount.isPAC = false;
+        component.committeeAccount.isPTY = true;
       }
-      expect(isPTY(component.committeeAccount?.committee_type)).toBeTrue();
       const testTypes = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
       expect(testTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
-
-      // PRODUCTION version
-      environment.committee_data_source = 'production';
-      component.ngOnInit();
-      tick(500);
-      if (component.committeeAccount) {
-        component.committeeAccount.committee_type = 'X';
-        component.committeeAccount.designation = 'J';
-      }
-      expect(isPTY(component.committeeAccount?.committee_type, component.committeeAccount?.designation)).toBeTrue();
-      const productionTypes = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
-      expect(
-        productionTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT),
-      ).toBeFalse();
-
-      // Reset environment
-      environment.committee_data_source = committee_data_source;
     }));
   });
 });

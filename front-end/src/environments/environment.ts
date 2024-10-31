@@ -15,6 +15,7 @@ export const environment = {
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
   committee_data_source: 'test',
+  form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
 };
 
 /*

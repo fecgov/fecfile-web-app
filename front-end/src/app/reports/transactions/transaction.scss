@@ -1,10 +1,26 @@
-:host ::ng-deep .sub-transaction-dropdown {
-  background-color: #fdb838;
-}
+:host ::ng-deep {
+  .sub-transaction-dropdown {
+    background-color: #fdb838;
+  }
 
-:host ::ng-deep .sub-transaction-dropdown-panel {
-  background-color: #f1f1f1;
-  color: #000000;
+  .sub-transaction-dropdown-panel {
+    background-color: #f1f1f1;
+    color: #000000;
+  }
+
+  .p-toolbar {
+    border-bottom: 2px solid !important;
+    padding-bottom: 8px;
+  }
+
+  .p-datatable-wrapper {
+    box-shadow: -10px 0 20px -10px #d6d7d9 inset;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th,
+  .p-datatable .p-datatable-tbody > tr {
+    background-color: transparent;
+  }
 }
 
 .gandhi-bold {
@@ -63,9 +79,4 @@ hr {
   border: 0;
   border-top: 2px solid;
   opacity: 1;
-}
-
-:host::ng-deep.p-toolbar {
-  border-bottom: 2px solid !important;
-  padding-bottom: 8px;
 }
