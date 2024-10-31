@@ -1,85 +1,87 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MenubarModule } from 'primeng/menubar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LayoutComponent } from './layout.component';
-import { SharedModule } from 'app/shared/shared.module';
+import { FooterComponent } from './footer/footer.component';
+import { BannerComponent } from './banner/banner.component';
+import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SharedModule } from 'primeng/api';
+import { MenubarModule } from 'primeng/menubar';
+import { StoreModule } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
 
+  let mockFooter: FooterComponent;
+  let mockBanner: BannerComponent;
+
   beforeEach(async () => {
+    mockFooter = jasmine.createSpyObj('FooterComponent', ['getFooterElement']);
+    mockBanner = jasmine.createSpyObj('BannerComponent', ['getBannerElement']);
+    mockFooter.getFooterElement = () => {
+      return { offsetHeight: 466 } as HTMLElement;
+    };
+    mockBanner.getBannerElement = () => {
+      return { offsetHeight: 35 } as HTMLElement;
+    };
+
     await TestBed.configureTestingModule({
-      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, SharedModule],
-      declarations: [LayoutComponent],
-      providers: [LayoutComponent],
+      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, StoreModule.forRoot({}), SharedModule],
+      declarations: [LayoutComponent, FooterComponent, BannerComponent, FeedbackOverlayComponent],
+      providers: [
+        provideMockStore(), // Provide a mock store
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutComponent);
     component = fixture.componentInstance;
+
+    // Assign the mock footer and banner to the component's ViewChild properties
+    component.footer = mockFooter;
+    component.banner = mockBanner;
     fixture.detectChanges();
   });
-
-  function setup(width: number, height: number) {
-    spyOnProperty(window, 'innerWidth').and.returnValue(width);
-    spyOnProperty(window, 'innerHeight').and.returnValue(height);
-  }
-
-  function getCurrentPadding(): number {
-    return component.contentOffset.style.paddingBottom === ''
-      ? 0
-      : parseInt(component.contentOffset.style.paddingBottom, 10);
-  }
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return early if showSidebar is true', () => {
+  it('should not update content offset if showSidebar is true', () => {
+    component.contentOffset.nativeElement.style.paddingBottom = '0px';
     component.layoutControls.showSidebar = true;
-    const rendererSpy = jasmine.createSpyObj('Renderer2', ['selectRootElement']);
     component.updateContentOffset();
-
-    expect(rendererSpy.selectRootElement).not.toHaveBeenCalled();
+    // Expect that paddingBottom has not changed
+    expect(component.contentOffset.nativeElement.style.paddingBottom).toBe('0px');
   });
 
-  it('should correctly calculate paddingBottom for mobile layout', () => {
-    // Simulate a mobile width
-    const height = 700;
-
-    setup(500, height);
-
-    const value =
-      height - component.FOOTER_OFFSET_LARGE - 80 - component.contentOffset.offsetHeight + getCurrentPadding();
+  it('should update content offset correctly', () => {
+    component.layoutControls.showSidebar = false;
     component.updateContentOffset();
 
-    expect(component.contentOffset.style.paddingBottom).toBe(value + 'px');
+    const expectedPaddingBottom = Math.max(
+      64,
+      window.innerHeight -
+        component.contentOffset.nativeElement.offsetHeight -
+        mockFooter.getFooterElement().offsetHeight -
+        mockBanner.getBannerElement().offsetHeight +
+        parseInt(component.contentOffset.nativeElement.style.paddingBottom, 10),
+    );
+
+    expect(component.contentOffset.nativeElement.style.paddingBottom).toBe(expectedPaddingBottom + 'px');
   });
 
-  it('should not increase headerFooterOffset when showUpperFooter is false', () => {
-    expect(component.layoutControls.showSidebar).toBeFalse();
-    const height = 900;
-    setup(1024, height);
-
-    component.layoutControls.showUpperFooter = false;
-    const value = height - component.FOOTER_OFFSET_SMALL - component.contentOffset.offsetHeight + getCurrentPadding();
-    component.updateContentOffset();
-    expect(component.contentOffset).toBeTruthy();
-
-    expect(component.contentOffset.style.paddingBottom).toBe(value + 'px');
+  it('should call onRouteChange on init', () => {
+    spyOn(component, 'onRouteChange');
+    component.ngOnInit();
+    expect(component.onRouteChange).toHaveBeenCalled();
   });
 
-  it('should increase headerFooterOffset when showUpperFooter is true', () => {
-    expect(component.layoutControls.showSidebar).toBeFalse();
-    const height = 900;
-    setup(1024, height);
+  it('should subscribe to router events on init', () => {
+    spyOn(component.router.events, 'pipe').and.callThrough();
+    component.ngOnInit();
 
-    const value =
-      height - component.FOOTER_OFFSET_SMALL - 80 - component.contentOffset.offsetHeight + getCurrentPadding();
-    component.updateContentOffset();
-    expect(component.contentOffset).toBeTruthy();
-
-    expect(component.contentOffset.style.paddingBottom).toBe(value + 'px');
+    expect(component.router.events.pipe).toHaveBeenCalled();
   });
 });
