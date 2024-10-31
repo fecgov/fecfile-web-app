@@ -65,10 +65,9 @@ export class CreateCommitteeComponent extends DestroyerComponent {
         detail: `Committee Account ${committeeAccount.committee_id} Created`,
         life: 3000,
       });
-      this.committeeAccountService.activateCommittee(committeeAccount.id).subscribe(async () => {
-        this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
-        await this.router.navigateByUrl(``);
-      });
+      await this.committeeAccountService.activateCommittee(committeeAccount.id);
+      this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
+      await this.router.navigateByUrl(``);
     } catch {
       this.handleFailedSearch();
     }
