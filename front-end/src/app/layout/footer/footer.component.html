@@ -1,16 +1,17 @@
 <footer #footerElement [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
   <div id="footer-upper" *ngIf="showUpperFooter">
-    <div class="grid">
-      <div class="col-6">
-        <a href="https://www.fec.gov/efiling/getting-started-fecfile-pilot" target="_blank" rel="noopener">
-          <p class="footer-upper-text font-karla-bold">Need help? Contact us</p>
-        </a>
-      </div>
-      <div class="col-6">
-        <a routerLink="/notifications/security">
-          <p class="footer-upper-text font-karla-bold">Security notification</p>
-        </a>
-      </div>
+    <div class="upper-footer-section">
+      <a
+        href="https://www.fec.gov/efiling/getting-started-fecfile-pilot"
+        class="footer-upper-text font-karla-bold"
+        target="_blank"
+        rel="noopener"
+      >
+        Need help? Contact us
+      </a>
+    </div>
+    <div class="upper-footer-section">
+      <a routerLink="/notifications/security" class="footer-upper-text font-karla-bold">Security notification </a>
     </div>
   </div>
   <div id="footer-lower" class="grid">
