@@ -21,6 +21,7 @@ import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { firstValueFrom, of } from 'rxjs';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -211,5 +212,14 @@ describe('CreateF3XStep1Component', () => {
 
     //FC--TC--[1--1]--[2--2]
     foo([thirdThroughFifth, seventhThroughNinth], first, second, null, null);
+  });
+
+  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
+    const formField = 'dateField';
+    const calendarOpened = true;
+    spyOn(SchemaUtils, 'onBlurValidation');
+    component.validateDate(formField, calendarOpened);
+    expect(component.calendarOpened).toBe(calendarOpened);
+    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

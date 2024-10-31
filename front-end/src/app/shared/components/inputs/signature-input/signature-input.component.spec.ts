@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { SharedModule } from 'app/shared/shared.module';
 import { SignatureInputComponent } from './signature-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('SignatureInputComponent', () => {
   let component: SignatureInputComponent;
@@ -48,5 +49,14 @@ describe('SignatureInputComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
+    const formField = 'dateField';
+    const calendarOpened = true;
+    spyOn(SchemaUtils, 'onBlurValidation');
+    component.validateDate(formField, calendarOpened);
+    expect(component.calendarOpened).toBe(calendarOpened);
+    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

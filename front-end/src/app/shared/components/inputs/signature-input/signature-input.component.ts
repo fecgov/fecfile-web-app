@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 @Component({
   selector: 'app-signature-input',
@@ -7,7 +8,7 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class SignatureInputComponent extends BaseInputComponent implements OnInit {
   @Input() templateMapKeyPrefix = 'signatory_1';
-
+  calendarOpened = false;
   titleFieldName = '';
   dateSignedFieldName = '';
 
@@ -21,5 +22,10 @@ export class SignatureInputComponent extends BaseInputComponent implements OnIni
         this.dateSignedFieldName = this.templateMap['signatory_2_date'];
         break;
     }
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }

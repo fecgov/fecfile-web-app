@@ -15,6 +15,7 @@ import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumberComponent } from '../input-number/input-number.component';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -107,5 +108,14 @@ describe('AmountInputComponent', () => {
 
     const msg = dateFormControl?.errors?.['invaliddate'].msg;
     expect(msg).toEqual('Date must fall within the report date range.');
+  });
+
+  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
+    const formField = 'dateField';
+    const calendarOpened = true;
+    spyOn(SchemaUtils, 'onBlurValidation');
+    component.validateDate(formField, calendarOpened);
+    expect(component.calendarOpened).toBe(calendarOpened);
+    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

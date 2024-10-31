@@ -251,6 +251,9 @@
             <div class="field">
               <label for="name">AFFILIATED DATE</label>
               <p-calendar
+                (onFocus)="calendarOpened = true"
+                (onClose)="validateDate('affiliated_date_form_f1_filed', false)"
+                (onBlur)="validateDate('affiliated_date_form_f1_filed', calendarOpened)"
                 inputId="affiliated_date_form_f1_filed"
                 name="affiliated_date_form_f1_filed"
                 formControlName="affiliated_date_form_f1_filed"
@@ -283,6 +286,9 @@
           <div class="field">
             <label for="date_of_51st_contributor">DATE OF 51<sup>st</sup> CONTRIBUTION</label>
             <p-calendar
+              (onFocus)="calendarOpened = true"
+              (onClose)="validateDate('date_of_51st_contributor', false)"
+              (onBlur)="validateDate('date_of_51st_contributor', calendarOpened)"
               inputId="date_of_51st_contributor"
               name="date_of_51st_contributor"
               formControlName="date_of_51st_contributor"
@@ -299,6 +305,9 @@
           <div class="field">
             <label for="date_of_original_registration">DATE OF ORIGINAL REGISTRATION</label>
             <p-calendar
+              (onFocus)="calendarOpened = true"
+              (onClose)="validateDate('date_of_original_registration', false)"
+              (onBlur)="validateDate('date_of_original_registration', calendarOpened)"
               inputId="date_of_original_registration"
               name="date_of_original_registration"
               formControlName="date_of_original_registration"
@@ -315,6 +324,9 @@
           <div class="field">
             <label for="date_committee_met_requirements">DATE COMMITTEE MET REQUIREMENTS</label>
             <p-calendar
+              (onFocus)="calendarOpened = true"
+              (onClose)="validateDate('date_committee_met_requirements', false)"
+              (onBlur)="validateDate('date_committee_met_requirements', calendarOpened)"
               inputId="date_committee_met_requirements"
               name="date_committee_met_requirements"
               formControlName="date_committee_met_requirements"
