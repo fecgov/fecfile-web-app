@@ -34,6 +34,9 @@
         <div class="field">
           <label for="loan_originally_incurred_date">DATE OF ORIGINAL LOAN</label>
           <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="validateDate('loan_originally_incurred_date', false)"
+            (onBlur)="validateDate('loan_originally_incurred_date', calendarOpened)"
             inputId="loan_originally_incurred_date"
             name="date_signed"
             formControlName="loan_originally_incurred_date"
@@ -208,6 +211,9 @@
         <div class="field">
           <label for="depository_account_established_date">DEPOSITORY ACCOUNT ESTABLISHED</label>
           <p-calendar
+            (onFocus)="calendarOpened = true"
+            (onClose)="validateDate('depository_account_established_date', false)"
+            (onBlur)="validateDate('depository_account_established_date', calendarOpened)"
             inputId="depository_account_established_date"
             name="date_signed"
             formControlName="depository_account_established_date"

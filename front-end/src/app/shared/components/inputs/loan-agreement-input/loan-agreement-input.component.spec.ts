@@ -4,6 +4,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { LoanAgreementInputComponent } from './loan-agreement-input.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('LoanAgreementInputComponent', () => {
   let component: LoanAgreementInputComponent;
@@ -115,5 +116,14 @@ describe('LoanAgreementInputComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
+    const formField = 'dateField';
+    const calendarOpened = true;
+    spyOn(SchemaUtils, 'onBlurValidation');
+    component.validateDate(formField, calendarOpened);
+    expect(component.calendarOpened).toBe(calendarOpened);
+    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

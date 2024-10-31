@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { SchemaUtils } from './schema.utils';
@@ -94,5 +94,42 @@ describe('ValidateUtils', () => {
   it('#getSchemaProperties() should return empty array when no schema', () => {
     const properties: string[] = SchemaUtils.getSchemaProperties(undefined);
     expect(properties.length).toBe(0);
+  });
+
+  describe('onBlurValidation', () => {
+    let control: AbstractControl;
+
+    beforeEach(() => {
+      control = new FormControl('');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (control as any)._pendingValue = 'testValue'; // Mock the _pendingValue property
+    });
+
+    it('should mark control as touched, set value to _pendingValue, and update validity when calendar is closed', () => {
+      spyOn(control, 'markAsTouched');
+      spyOn(control, 'setValue');
+      spyOn(control, 'updateValueAndValidity');
+
+      SchemaUtils.onBlurValidation(control, false);
+      expect(control.markAsTouched).toHaveBeenCalled();
+      expect(control.setValue).toHaveBeenCalledWith('testValue');
+      expect(control.updateValueAndValidity).toHaveBeenCalled();
+    });
+
+    it('should not modify control when calendar is open', () => {
+      spyOn(control, 'markAsTouched');
+      spyOn(control, 'setValue');
+      spyOn(control, 'updateValueAndValidity');
+
+      SchemaUtils.onBlurValidation(control, true);
+      expect(control.markAsTouched).not.toHaveBeenCalled();
+      expect(control.setValue).not.toHaveBeenCalled();
+      expect(control.updateValueAndValidity).not.toHaveBeenCalled();
+    });
+
+    it('should handle null control gracefully', () => {
+      const action = () => SchemaUtils.onBlurValidation(null, false);
+      expect(action).not.toThrow();
+    });
   });
 });

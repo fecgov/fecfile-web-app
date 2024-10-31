@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
@@ -42,13 +42,23 @@ export class SchemaUtils {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     properties.forEach((property) => {
       if (property.includes('date')) {
-        group[property] = fb.control(null, { updateOn: 'change' });
+        group[property] = fb.control(null, { updateOn: 'submit' });
       } else {
         group[property] = fb.control('', SchemaUtils.noBlur.includes(property) ? { updateOn: 'change' } : {});
       }
     });
 
     return group;
+  }
+
+  static onBlurValidation(control: AbstractControl | null, calendarOpened: boolean) {
+    if (!calendarOpened && control) {
+      control.markAsTouched();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pendingValue = (control as any)._pendingValue;
+      control.setValue(pendingValue);
+      control.updateValueAndValidity();
+    }
   }
 
   /**
