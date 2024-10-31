@@ -1,5 +1,5 @@
 <div id="page-container" [ngClass]="[layoutControls.backgroundStyle]">
-  <app-banner></app-banner>
+  <app-banner #bannerRef></app-banner>
 
   <!--  Begin Sidebar section -->
 
@@ -31,7 +31,7 @@
   <!--  End Sidebar section -->
 
   <!-- Begin No Sidebar section -->
-  <div *ngIf="!layoutControls.showSidebar" id="content-offset">
+  <div *ngIf="!layoutControls.showSidebar" id="content-offset" #contentOffset>
     <div
       class="header-container"
       style="max-width: 1320px; margin-left: auto; margin-right: auto"
@@ -49,7 +49,11 @@
       </ng-template>
     </div>
   </div>
-  <app-footer *ngIf="!layoutControls.showSidebar" [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
+  <app-footer
+    #footerRef
+    *ngIf="!layoutControls.showSidebar"
+    [showUpperFooter]="layoutControls.showUpperFooter"
+  ></app-footer>
   <!-- End No Sidebar section -->
   <button
     type="button"
