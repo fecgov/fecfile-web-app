@@ -5,10 +5,8 @@
         <label for="date">DATE INCURRED</label>
         <p-calendar
           (onFocus)="calendarOpened = true"
-          (onClose)="
-            calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)
-          "
-          (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)"
+          (onClose)="validateDate(templateMap['date'], false)"
+          (onBlur)="validateDate(templateMap['date'], calendarOpened)"
           inputId="date_incurred"
           name="date"
           [formControlName]="templateMap['date']"
@@ -57,10 +55,9 @@
           <label for="due_date">SPECIFIC DATE</label>
           <p-calendar
             (onFocus)="calendarOpened = true"
-            (onClose)="
-              calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['due_date']), calendarOpened)
-            "
-            (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['due_date']), calendarOpened)"
+            (onFocus)="calendarOpened = true"
+            (onClose)="validateDate(templateMap['due_date'], false)"
+            (onBlur)="validateDate(templateMap['due_date'], calendarOpened)"
             inputId="due_date"
             name="due_date"
             [formControlName]="templateMap['due_date']"

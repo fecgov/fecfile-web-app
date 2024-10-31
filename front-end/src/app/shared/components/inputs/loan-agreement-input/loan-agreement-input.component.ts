@@ -23,7 +23,6 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   showLocationOfAccount = false;
   calendarOpened = false;
 
-  SchemaUtils = SchemaUtils;
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION); // Options for contact lookup component
 
   locationOfAccountHelpText =
@@ -124,5 +123,10 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
 
   updateFormWithLocationOfAccountContact(selectItem: SelectItem<Contact>) {
     this.contactSelect.emit(selectItem);
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }

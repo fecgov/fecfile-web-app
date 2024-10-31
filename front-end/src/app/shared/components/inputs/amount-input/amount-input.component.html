@@ -11,10 +11,8 @@
           <label for="date2">{{ transaction?.transactionType?.date2Label }}</label>
           <p-calendar
             (onFocus)="calendarOpened = true"
-            (onClose)="
-              calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['date2']), calendarOpened)
-            "
-            (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['date2']), calendarOpened)"
+            (onClose)="validateDate(templateMap['date2'], false)"
+            (onBlur)="validateDate(templateMap['date2'], calendarOpened)"
             inputId="date2"
             name="date2"
             [formControlName]="templateMap['date2']"
@@ -32,10 +30,8 @@
           <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
           <p-calendar
             (onFocus)="calendarOpened = true"
-            (onClose)="
-              calendarOpened = false; SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)
-            "
-            (onBlur)="SchemaUtils.onBlurValidation(form.get(templateMap['date']), calendarOpened)"
+            (onClose)="validateDate(templateMap['date'], false)"
+            (onBlur)="validateDate(templateMap['date'], calendarOpened)"
             inputId="date"
             name="date"
             [formControlName]="templateMap['date']"

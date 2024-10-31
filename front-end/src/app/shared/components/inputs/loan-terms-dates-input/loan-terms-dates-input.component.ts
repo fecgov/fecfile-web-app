@@ -25,7 +25,6 @@ enum LoanTermsFieldSettings {
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
   calendarOpened = false;
-  SchemaUtils = SchemaUtils;
   constructor(private store: Store) {
     super();
   }
@@ -181,5 +180,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       }
       due_date_field.markAsTouched();
     }
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }

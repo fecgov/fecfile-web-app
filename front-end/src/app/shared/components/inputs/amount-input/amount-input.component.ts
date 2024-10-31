@@ -34,7 +34,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   calendarOpened = false;
   contributionAmountInputStyleClass = '';
   reportTypes = ReportTypes;
-  SchemaUtils = SchemaUtils;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -111,6 +110,11 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         this.amountInput.updateInput(-1 * value, undefined, 'insert', undefined);
       }
     }
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 
   protected readonly isLoanRepayment = isLoanRepayment;

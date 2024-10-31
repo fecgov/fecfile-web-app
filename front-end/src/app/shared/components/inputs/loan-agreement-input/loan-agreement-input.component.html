@@ -35,11 +35,8 @@
           <label for="loan_originally_incurred_date">DATE OF ORIGINAL LOAN</label>
           <p-calendar
             (onFocus)="calendarOpened = true"
-            (onClose)="
-              calendarOpened = false;
-              SchemaUtils.onBlurValidation(form.get('loan_originally_incurred_date'), calendarOpened)
-            "
-            (onBlur)="SchemaUtils.onBlurValidation(form.get('loan_originally_incurred_date'), calendarOpened)"
+            (onClose)="validateDate('loan_originally_incurred_date', false)"
+            (onBlur)="validateDate('loan_originally_incurred_date', calendarOpened)"
             inputId="loan_originally_incurred_date"
             name="date_signed"
             formControlName="loan_originally_incurred_date"
@@ -215,11 +212,8 @@
           <label for="depository_account_established_date">DEPOSITORY ACCOUNT ESTABLISHED</label>
           <p-calendar
             (onFocus)="calendarOpened = true"
-            (onClose)="
-              calendarOpened = false;
-              SchemaUtils.onBlurValidation(form.get('depository_account_established_date'), calendarOpened)
-            "
-            (onBlur)="SchemaUtils.onBlurValidation(form.get('depository_account_established_date'), calendarOpened)"
+            (onClose)="validateDate('depository_account_established_date', false)"
+            (onBlur)="validateDate('depository_account_established_date', calendarOpened)"
             inputId="depository_account_established_date"
             name="date_signed"
             formControlName="depository_account_established_date"

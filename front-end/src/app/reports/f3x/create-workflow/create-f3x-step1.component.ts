@@ -33,7 +33,6 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   styleUrl: './create-f3x-step1.component.scss',
 })
 export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
-  SchemaUtils = SchemaUtils;
   formProperties: string[] = [
     'filing_frequency',
     'report_type_category',
@@ -216,6 +215,11 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         });
       }
     });
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }
 

@@ -22,10 +22,8 @@
         <label for="date_signed">DATE SIGNED</label>
         <p-calendar
           (onFocus)="calendarOpened = true"
-          (onClose)="
-            calendarOpened = false; SchemaUtils.onBlurValidation(form.get('dateSignedFieldName'), calendarOpened)
-          "
-          (onBlur)="SchemaUtils.onBlurValidation(form.get('dateSignedFieldName'), calendarOpened)"
+          (onClose)="validateDate('dateSignedFieldName', false)"
+          (onBlur)="validateDate('dateSignedFieldName', calendarOpened)"
           inputId="date_signed"
           name="date_signed"
           [formControlName]="dateSignedFieldName"
