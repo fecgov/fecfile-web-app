@@ -11,13 +11,11 @@ import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { CreateCommitteeComponent } from './create-committee.component';
 import { NavigationBehaviorOptions, Router, UrlTree } from '@angular/router';
-import { UsersService } from 'app/shared/services/users.service';
 
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
   let fixture: ComponentFixture<CreateCommitteeComponent>;
   let testCommitteeAccountService: CommitteeAccountService;
-  let testUserService: UsersService;
   let router: Router;
   let routerSpy: jasmine.Spy<(url: string | UrlTree, extras?: NavigationBehaviorOptions) => Promise<boolean>>;
 
@@ -28,7 +26,6 @@ describe('CreateCommitteeComponent', () => {
       providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
     });
     testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-    testUserService = TestBed.inject(UsersService);
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigateByUrl');
     fixture = TestBed.createComponent(CreateCommitteeComponent);
@@ -82,14 +79,7 @@ describe('CreateCommitteeComponent', () => {
     const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
       Promise.resolve(new CommitteeAccount()),
     );
-    const userSpy = spyOn(testUserService, 'getCurrentUser').and.callFake(() => {
-      return Promise.resolve({
-        first_name: 'first',
-        last_name: 'last',
-        email: 'email',
-        security_consent_exp_date: '123',
-      });
-    });
+
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
@@ -98,31 +88,7 @@ describe('CreateCommitteeComponent', () => {
     await component.createAccount();
 
     expect(spy).toHaveBeenCalledWith(testCommitteeId);
-    expect(userSpy).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('');
-  });
-
-  it('should create committee and redirect to consent page if NOT consent 1 year', async () => {
-    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
-      Promise.resolve(new CommitteeAccount()),
-    );
-    const userSpy = spyOn(testUserService, 'getCurrentUser').and.callFake(() => {
-      return Promise.resolve({
-        first_name: 'first',
-        last_name: 'last',
-        email: 'email',
-      });
-    });
-    const testCommitteeId = 'C12345678';
-    const testCommittee = new CommitteeAccount();
-    testCommittee.committee_id = testCommitteeId;
-
-    component.selectedCommittee = testCommittee;
-    await component.createAccount();
-
-    expect(spy).toHaveBeenCalledWith(testCommitteeId);
-    expect(userSpy).toHaveBeenCalled();
-    expect(routerSpy).toHaveBeenCalledWith('/login/security-notice');
   });
 
   it('should handle failed create', async () => {

@@ -5,7 +5,6 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { UsersService } from 'app/shared/services/users.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
 
@@ -26,7 +25,6 @@ export class CreateCommitteeComponent extends DestroyerComponent {
     protected messageService: MessageService,
     protected committeeAccountService: CommitteeAccountService,
     protected confirmationService: ConfirmationService,
-    private userService: UsersService,
     private router: Router,
   ) {
     super();
@@ -64,8 +62,7 @@ export class CreateCommitteeComponent extends DestroyerComponent {
         detail: `Committee Account ${committeeAccount.committee_id} Created`,
         life: 3000,
       });
-      const user = await this.userService.getCurrentUser();
-      await this.router.navigateByUrl(user.security_consent_exp_date ? '' : '/login/security-notice');
+      await this.router.navigateByUrl('');
     } catch {
       this.handleFailedSearch();
     }
