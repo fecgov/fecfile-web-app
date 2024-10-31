@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
+import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
 
@@ -26,6 +28,7 @@ export class CreateCommitteeComponent extends DestroyerComponent {
     protected committeeAccountService: CommitteeAccountService,
     protected confirmationService: ConfirmationService,
     private router: Router,
+    protected store: Store,
   ) {
     super();
   }
@@ -62,7 +65,10 @@ export class CreateCommitteeComponent extends DestroyerComponent {
         detail: `Committee Account ${committeeAccount.committee_id} Created`,
         life: 3000,
       });
-      await this.router.navigateByUrl('');
+      this.committeeAccountService.activateCommittee(committeeAccount.id).subscribe(async () => {
+        this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
+        await this.router.navigateByUrl(``);
+      });
     } catch {
       this.handleFailedSearch();
     }
