@@ -329,7 +329,7 @@ export class CandidateLookupResponse {
             {
               label: fecfileSelectItems.length
                 ? 'Select an existing candidate contact:'
-                : 'There are no matching candidates',
+                : 'There are no matching candidate contacts',
               items: fecfileSelectItems,
             },
           ]
@@ -396,7 +396,7 @@ export class CommitteeLookupResponse {
             {
               label: fecfileSelectItems.length
                 ? 'Select an existing committee contact:'
-                : 'There are no matching committees',
+                : 'There are no matching committee contacts',
               items: fecfileSelectItems,
             },
           ]

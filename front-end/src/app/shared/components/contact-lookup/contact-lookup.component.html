@@ -53,11 +53,9 @@
       </ng-template>
     </p-autoComplete>
   </div>
-  <div *ngIf="showCreateNewContactButton" class="col">
-    <div class="add-contact-container">
-      or
-      <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px" /></span>
-      <a (click)="onCreateNewContactSelect()">Create a new contact</a>
-    </div>
+  <div class="add-contact-container" *ngIf="showCreateNewContactButton">
+    or
+    <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px" /></span>
+    <a (click)="onCreateNewContactSelect()">Create a new contact</a>
   </div>
 </div>

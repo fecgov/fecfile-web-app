@@ -1,7 +1,6 @@
 :host ::ng-deep {
   mark {
-    opacity: 50%;
-    background-color: #36bdbb;
+    background-color: #c9ebea;
   }
   .dropdown-with-search .p-dropdown {
     border-radius: 4px 0 0 4px;
@@ -111,9 +110,10 @@
 }
 
 .add-contact-container {
-  padding-top: 0.6em;
+  padding: 0 0 0 10px;
   font-size: 1.2em;
   font-family: karla-bold, sans-serif;
+  align-content: center;
 }
 
 .add-contact-container span {
