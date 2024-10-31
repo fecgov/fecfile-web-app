@@ -133,7 +133,7 @@ describe('ContactLookupComponent', () => {
         ).toBeTrue();
         expect(
           JSON.stringify([
-            { label: 'There are no matching candidates', items: [] },
+            { label: 'There are no matching candidate contacts', items: [] },
             { label: 'There are no matching registered candidates', items: [] },
           ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true)),
         ).toBeTrue();
@@ -199,7 +199,7 @@ describe('ContactLookupComponent', () => {
         ).toBeTrue();
         expect(
           JSON.stringify([
-            { label: 'There are no matching committees', items: [] },
+            { label: 'There are no matching committee contacts', items: [] },
             { label: 'There are no matching registered committees', items: [] },
           ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true)),
         ).toBeTrue();
