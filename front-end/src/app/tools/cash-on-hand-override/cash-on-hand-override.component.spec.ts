@@ -7,7 +7,6 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
-import { of } from 'rxjs';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override.component';
 
 describe('CashOnHandOverrideComponent', () => {
@@ -38,6 +37,7 @@ describe('CashOnHandOverrideComponent', () => {
     expect(component).toBeTruthy();
     expect(router).toBeTruthy();
     expect(form3XService).toBeTruthy();
+    expect(cashOnHandService).toBeTruthy();
   });
 
   it('should call setCashOnHand', () => {

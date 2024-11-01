@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { MessageService } from 'primeng/api';
