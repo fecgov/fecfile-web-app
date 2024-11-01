@@ -36,9 +36,16 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   ngOnInit(): void {
     this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((selectedYear) => {
       if (selectedYear) {
-        this.form3XService.getF3xLine6aOverride(selectedYear).then((f3xLine6aOverride) => {
+        const override = this.form3XService.getF3xLine6aOverride(selectedYear);
+        const previousYear = this.form3XService.getFinalReport(parseInt(String(selectedYear)) - 1);
+        // reset while waiting for api response
+        this.currentAmountFormControl.reset();
+        this.newAmountFormControl.reset();
+        Promise.all([override, previousYear]).then(([f3xLine6aOverride, previousYear]) => {
           this.selectedF3xLine6aOverrideId = f3xLine6aOverride?.id;
-          this.currentAmountFormControl.setValue(f3xLine6aOverride?.cash_on_hand ?? 0);
+          this.currentAmountFormControl.setValue(
+            f3xLine6aOverride?.cash_on_hand ?? previousYear?.L8_cash_on_hand_close_ytd ?? 0,
+          );
           this.newAmountFormControl.reset();
         });
       }

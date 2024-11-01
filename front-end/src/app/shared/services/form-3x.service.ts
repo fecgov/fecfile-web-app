@@ -51,6 +51,10 @@ export class Form3XService extends ReportService {
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
   }
 
+  public getFinalReport(year: number): Promise<Form3X | undefined> {
+    return firstValueFrom(this.apiService.get<Form3X | undefined>(`${this.apiEndpoint}/final?year=${year}`));
+  }
+
   public getF3xLine6aOverride(year: string): Promise<F3xLine6aOverride | undefined> {
     return firstValueFrom(
       this.apiService
