@@ -8,6 +8,7 @@ import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override.component';
+import { Form3X } from 'app/shared/models/form-3x.model';
 
 describe('CashOnHandOverrideComponent', () => {
   let component: CashOnHandOverrideComponent;
@@ -50,5 +51,13 @@ describe('CashOnHandOverrideComponent', () => {
 
     expect(component.cashOnHandService.setCashOnHand).toHaveBeenCalledTimes(1);
     expect(component.cashOnHandService.setCashOnHand).toHaveBeenCalledWith(2024, 25.0);
+  });
+
+  it('should update form', () => {
+    const cashOnHandOverride = { cash_on_hand: 25.0 };
+    const previousYear = Form3X.fromJSON({ L8_cash_on_hand_close_ytd: 0 });
+    component.updateForm([cashOnHandOverride, previousYear]);
+
+    expect(component.currentAmountFormControl.value).toEqual(25.0);
   });
 });

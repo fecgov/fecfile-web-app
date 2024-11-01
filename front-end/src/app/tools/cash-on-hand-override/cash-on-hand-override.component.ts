@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { MessageService } from 'primeng/api';
@@ -42,12 +44,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
         // reset while waiting for api response
         this.currentAmountFormControl.reset();
         this.newAmountFormControl.reset();
-        Promise.all([override, previousYear]).then(([cashOnHandOverride, previousYear]) => {
-          this.currentAmountFormControl.setValue(
-            cashOnHandOverride?.cash_on_hand ?? previousYear?.L8_cash_on_hand_close_ytd ?? 0,
-          );
-          this.newAmountFormControl.reset();
-        });
+        Promise.all([override, previousYear]).then(this.updateForm);
       }
     });
 
@@ -57,6 +54,13 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
     );
     this.yearFormControl.setValue(this.yearOptions[0]);
   }
+
+  updateForm = ([cashOnHandOverride, previousYear]: [CashOnHand | undefined, Form3X | undefined]): void => {
+    this.currentAmountFormControl.setValue(
+      cashOnHandOverride?.cash_on_hand ?? previousYear?.L8_cash_on_hand_close_ytd ?? 0,
+    );
+    this.newAmountFormControl.reset();
+  };
 
   updateLine6a(): void {
     if (this.form.valid) {
