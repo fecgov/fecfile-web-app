@@ -1,5 +1,3 @@
-import { DateUtils } from './date.utils';
-
 export enum F3xReportCodes {
   Q1 = 'Q1',
   Q2 = 'Q2',
@@ -40,9 +38,6 @@ export function getCoverageDatesFunction(
     }
     case F3xReportCodes.Q3: {
       return createCoverageFunction(6, 1, 8, 30);
-    }
-    case F3xReportCodes.YE: {
-      return getYearEndCoverageDates;
     }
     case F3xReportCodes.MY: {
       return createCoverageFunction(0, 1, 5, 30);
@@ -94,16 +89,6 @@ function createCoverageFunction(
   return (year: number) => {
     return [new Date(year, startMonth, startDayOfMonth), new Date(year, endMonth, endDayOfMonth)];
   };
-}
-
-function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFrequency: string): [Date, Date] {
-  year = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
-  if (isElectionYear) {
-    return [new Date(year, 9, 1), new Date(year, 11, 31)];
-  } else if (filingFrequency === 'Q') {
-    return [new Date(year, 6, 1), new Date(year, 11, 31)];
-  }
-  return [new Date(year, 11, 1), new Date(year, 11, 31)];
 }
 
 export const monthlyElectionYearReportCodes: F3xReportCodes[] = [
