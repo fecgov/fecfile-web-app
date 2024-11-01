@@ -40,7 +40,7 @@ export class ApiService {
   }
 
   public get<T>(endpoint: string, params?: QueryParams): Observable<T>;
-  public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Observable<HttpResponse<T>>;
+  public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Observable<T>;
   public get<T>(
     endpoint: string,
     params: QueryParams = {},
