@@ -50,15 +50,15 @@ describe('CommitteeAccountService', () => {
     httpTestingController.verify();
   });
 
-  it('should call api to activate', () => {
+  it('should call api to activate', async () => {
     const committeeId = '123';
-    service.activateCommittee(committeeId).subscribe((result) => {
-      expect(result).toBeTrue();
-    });
-
+    const resultPromise = service.activateCommittee(committeeId);
     const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/${committeeId}/activate/`);
     expect(request.request.method).toEqual('POST');
     request.flush(true);
+    const result = await resultPromise;
+    expect(result).toBeTrue();
+
     httpTestingController.verify();
   });
 
