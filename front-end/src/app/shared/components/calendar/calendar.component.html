@@ -1,0 +1,20 @@
+<div class="field">
+  <label [for]="fieldName" [innerHTML]="label"></label>
+  <p-calendar
+    (onFocus)="calendarOpened = true"
+    (onClose)="validateDate(false)"
+    (onBlur)="validateDate(calendarOpened)"
+    [inputId]="fieldName"
+    [name]="fieldName"
+    [formControl]="control"
+    [attr.data-cy]="fieldName"
+  ></p-calendar>
+  <ng-container *ngIf="control">
+    <app-error-messages
+      [attr.data-cy]="fieldName + '-error'"
+      [form]="form"
+      [control]="control"
+      [formSubmitted]="formSubmitted"
+    ></app-error-messages>
+  </ng-container>
+</div>

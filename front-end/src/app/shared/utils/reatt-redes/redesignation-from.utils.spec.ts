@@ -1,7 +1,8 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
 import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
+import { SubscriptionFormControl } from '../subscription-form-control';
 
 describe('Redesignation From', () => {
   describe('overlayTransactionProperties', () => {
@@ -30,19 +31,19 @@ describe('Redesignation From', () => {
 
       const fromForm = new FormGroup(
         {
-          expenditure_amount: new FormControl<number | null>(null),
-          memo_code: new FormControl(''),
-          expenditure_purpose_descrip: new FormControl(''),
+          expenditure_amount: new SubscriptionFormControl<number | null>(null),
+          memo_code: new SubscriptionFormControl(''),
+          expenditure_purpose_descrip: new SubscriptionFormControl(''),
         },
         { updateOn: 'blur' },
       );
       const toForm = new FormGroup(
         {
-          payee_organization_name: new FormControl('a'),
-          payee_last_name: new FormControl(''),
-          payee_first_name: new FormControl(''),
-          expenditure_amount: new FormControl('100'),
-          expenditure_purpose_descrip: new FormControl(''),
+          payee_organization_name: new SubscriptionFormControl('a'),
+          payee_last_name: new SubscriptionFormControl(''),
+          payee_first_name: new SubscriptionFormControl(''),
+          expenditure_amount: new SubscriptionFormControl('100'),
+          expenditure_purpose_descrip: new SubscriptionFormControl(''),
         },
         { updateOn: 'blur' },
       );

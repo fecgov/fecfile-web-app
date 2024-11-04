@@ -1,7 +1,8 @@
 import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
+import { SubscriptionFormControl } from '../subscription-form-control';
 
 describe('RedesignationToUtils', () => {
   describe('overlayTransactionProperties', () => {
@@ -28,8 +29,8 @@ describe('RedesignationToUtils', () => {
       } as unknown as SchBTransaction;
       const toForm = new FormGroup(
         {
-          contribution_purpose_descrip: new FormControl(''),
-          memo_code: new FormControl(''),
+          contribution_purpose_descrip: new SubscriptionFormControl(''),
+          memo_code: new SubscriptionFormControl(''),
         },
         { updateOn: 'blur' },
       );

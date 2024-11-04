@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -17,6 +17,7 @@ import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
 import { Report } from 'app/shared/models/report.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
@@ -79,7 +80,7 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.rec_type = 'test_rec_type';
     testMemoText.transaction_id_number = 'test_tin';
     testMemoText.text4000 = 'test_text4k';
-    component.form.addControl('text4000', new FormControl());
+    component.form.addControl('text4000', new SubscriptionFormControl());
     component.form.get('text4000')?.setValue(testText4kValue);
     spyOn(testMemoTextService, 'getForReportId').and.returnValue(of([testMemoText]));
     component.ngOnInit();

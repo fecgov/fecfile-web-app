@@ -15,12 +15,13 @@ import {
 } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { FormControl } from '@angular/forms';
+
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
 import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-navigation-control',
@@ -32,7 +33,7 @@ export class NavigationControlComponent implements OnInit {
   @Input() transaction?: Transaction;
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  dropdownControl = new FormControl('');
+  dropdownControl = new SubscriptionFormControl('');
 
   constructor(private store: Store) {}
 

@@ -18,22 +18,12 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="field">
-        <label for="date_signed">DATE SIGNED</label>
-        <p-calendar
-          (onFocus)="calendarOpened = true"
-          (onClose)="validateDate(dateSignedFieldName, false)"
-          (onBlur)="validateDate(dateSignedFieldName, calendarOpened)"
-          inputId="date_signed"
-          name="date_signed"
-          [formControlName]="dateSignedFieldName"
-        ></p-calendar>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="dateSignedFieldName"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
+      <app-calendar
+        [fieldName]="dateSignedFieldName"
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        label="DATE SIGNED"
+      ></app-calendar>
     </div>
   </div>
 </div>

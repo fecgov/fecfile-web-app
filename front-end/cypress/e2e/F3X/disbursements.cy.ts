@@ -65,7 +65,13 @@ describe('Disbursements', () => {
     cy.contains(organizationFormData.name).should('exist');
     cy.contains(organizationFormData.name).click();
 
-    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independentExpVoidData, candidateFormData);
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpVoidData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure - Void');
@@ -84,7 +90,13 @@ describe('Disbursements', () => {
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
-    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independentExpVoidData, candidateFormData);
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpVoidData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');

@@ -95,7 +95,7 @@ describe('Loans', () => {
     cy.contains('Review loan agreement').click({ force: true });
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
-    PageUtils.valueCheck('#date_incurred', '05/27/2024');
+    PageUtils.valueCheck('#loan_incurred_date', '05/27/2024');
   });
 
   it('should test: Loan Received from Bank', () => {
@@ -118,7 +118,7 @@ describe('Loans', () => {
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
-    PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
+    PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(formData.date_received));
     PageUtils.enterValue('#amount', formData.amount);
     PageUtils.clickButton('Save');
     PageUtils.urlCheck('/list');

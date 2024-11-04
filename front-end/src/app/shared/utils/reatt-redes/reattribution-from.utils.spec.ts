@@ -1,7 +1,8 @@
 import { ReattributionFromUtils } from './reattribution-from.utils';
 import { getTestTransactionByType, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SubscriptionFormControl } from '../subscription-form-control';
 
 describe('Reattribution From', () => {
   describe('overlayTransactionProperties', () => {
@@ -29,18 +30,18 @@ describe('Reattribution From', () => {
       } as unknown as SchATransaction;
       const fromForm = new FormGroup(
         {
-          contribution_purpose_descrip: new FormControl(''),
-          memo_code: new FormControl(''),
-          contribution_amount: new FormControl(''),
+          contribution_purpose_descrip: new SubscriptionFormControl(''),
+          memo_code: new SubscriptionFormControl(''),
+          contribution_amount: new SubscriptionFormControl(''),
         },
         { updateOn: 'blur' },
       );
       const toForm = new FormGroup(
         {
-          contributor_organization_name: new FormControl('a'),
-          contributor_last_name: new FormControl(''),
-          contributor_first_name: new FormControl(''),
-          contribution_amount: new FormControl('100'),
+          contributor_organization_name: new SubscriptionFormControl('a'),
+          contributor_last_name: new SubscriptionFormControl(''),
+          contributor_first_name: new SubscriptionFormControl(''),
+          contribution_amount: new SubscriptionFormControl('100'),
         },
         { updateOn: 'blur' },
       );

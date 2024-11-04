@@ -1,5 +1,5 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import { SubscriptionFormControl } from '../subscription-form-control';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -48,18 +49,18 @@ describe('ReattRedesUtils', () => {
   describe('overlayForms', () => {
     const toForm = new FormGroup(
       {
-        contribution_purpose_descip: new FormControl(''),
-        memo_code: new FormControl(''),
+        contribution_purpose_descip: new SubscriptionFormControl(''),
+        memo_code: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
     const fromForm = new FormGroup(
       {
-        contribution_purpose_descrip: new FormControl(''),
-        memo_code: new FormControl(''),
-        contributor_organization_name: new FormControl(''),
-        contributor_last_name: new FormControl(''),
-        contributor_first_name: new FormControl(''),
+        contribution_purpose_descrip: new SubscriptionFormControl(''),
+        memo_code: new SubscriptionFormControl(''),
+        contributor_organization_name: new SubscriptionFormControl(''),
+        contributor_last_name: new SubscriptionFormControl(''),
+        contributor_first_name: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
@@ -114,14 +115,14 @@ describe('ReattRedesUtils', () => {
   });
 
   describe('amountValidator', () => {
-    let control: FormControl;
+    let control: SubscriptionFormControl;
     const txn = { ...testScheduleATransaction } as SchATransaction;
     txn.reatt_redes = { ...testScheduleATransaction } as SchATransaction;
     (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
     (txn.reatt_redes as SchATransaction).contribution_amount = 100;
 
     beforeEach(() => {
-      control = new FormControl();
+      control = new SubscriptionFormControl();
     });
 
     it('should limit max value to negative when mustBeNegative is true', () => {
