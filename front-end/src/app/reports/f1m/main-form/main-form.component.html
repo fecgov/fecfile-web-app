@@ -424,6 +424,9 @@
                 <div class="field">
                   <label for="name">DATE OF CONTRIBUTION</label>
                   <p-calendar
+                    (onFocus)="calendarOpened = true"
+                    (onClose)="validateDate(candidateContact.dateOfContributionField, false)"
+                    (onBlur)="validateDate(candidateContact.dateOfContributionField, calendarOpened)"
                     [inputId]="candidateContact.dateOfContributionField"
                     [name]="candidateContact.dateOfContributionField"
                     [formControlName]="candidateContact.dateOfContributionField"
