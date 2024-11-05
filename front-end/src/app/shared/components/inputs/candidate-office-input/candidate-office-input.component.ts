@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
-  STANDARD_AND_CANDIDATE,
-  STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY,
+  CANDIDATE_CONFIG,
+  CANDIDATE_CONFIG_PRESIDENTIAL,
 } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { combineLatest, of, takeUntil } from 'rxjs';
@@ -35,18 +35,28 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
       this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
       this.transaction?.transactionType.templateMap.election_code
     ) {
-      electionCodeValue$ =
-        this.form
-          ?.get(this.transaction.transactionType.templateMap.election_code)
-          ?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
+      electionCodeValue$ = (
+        this.form?.get(this.transaction.transactionType.templateMap.election_code)?.valueChanges ?? of('')
+      ).pipe(takeUntil(this.destroy$));
     }
 
-    const officeValue$ =
-      this.form?.get(this.officeFormControlName)?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
+    const officeValue$ = (this.form?.get(this.officeFormControlName)?.valueChanges ?? of('')).pipe(
+      takeUntil(this.destroy$),
+    );
+
+    setInterval(() => {
+      console.log(this.form.get(this.officeFormControlName));
+    }, 500);
 
     combineLatest([electionCodeValue$, officeValue$]).subscribe(([electionCode, officeValue]) => {
       if (this.transaction) {
-        this.transaction.transactionType.contactConfig = STANDARD_AND_CANDIDATE;
+        console.log(
+          'Called',
+          this.transaction?.transactionType.contactConfig,
+          this.transaction?.transactionType.contactConfig['contact_2'],
+          this.transaction?.transactionType.contactConfig,
+        );
+        this.transaction.transactionType.contactConfig['contact_2'] = { ...CANDIDATE_CONFIG };
       }
       if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
         // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
@@ -61,7 +71,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
           this.form.get(this.stateFormControlName)?.enable();
           this.form.get(this.districtFormControlName)?.disable();
           // Do not save the candidate_state to the candidate contact record.
-          this.transaction.transactionType.contactConfig = STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY;
+          this.transaction.transactionType.contactConfig['contact_2'] = { ...CANDIDATE_CONFIG_PRESIDENTIAL };
         } else {
           this.form.patchValue({
             [this.stateFormControlName]: null,
