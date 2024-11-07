@@ -93,7 +93,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), { updateOn: 'blur' });
-
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
