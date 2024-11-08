@@ -158,41 +158,6 @@ export const STANDARD_AND_CANDIDATE = {
   },
 };
 
-// For Schedule E transactions whose candidate is in a presidential
-// primary, we allow the user to save the candidate_state to the transaction
-// record but do not update the contact record of the candidate with the
-// candidate_state selected. The definition below is the same as the
-// STANDARD_AND_CANDIDATE except the candidate_state has been removed.
-export const STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY = {
-  contact_1: {
-    organization_name: 'name',
-    committee_name: 'name',
-    committee_fec_id: 'committee_id',
-    last_name: 'last_name',
-    first_name: 'first_name',
-    middle_name: 'middle_name',
-    prefix: 'prefix',
-    suffix: 'suffix',
-    street_1: 'street_1',
-    street_2: 'street_2',
-    city: 'city',
-    state: 'state',
-    zip: 'zip',
-    employer: 'employer',
-    occupation: 'occupation',
-  },
-  contact_2: {
-    candidate_fec_id: 'candidate_id',
-    candidate_last_name: 'last_name',
-    candidate_first_name: 'first_name',
-    candidate_middle_name: 'middle_name',
-    candidate_prefix: 'prefix',
-    candidate_suffix: 'suffix',
-    candidate_office: 'candidate_office',
-    candidate_district: 'candidate_district',
-  },
-};
-
 export const STANDARD_AND_SECONDARY = {
   contact_1: {
     organization_name: 'name',
