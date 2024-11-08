@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -20,51 +19,30 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
 
-  electionCodeField = '';
+  electionCodeField: string | undefined = undefined;
 
   ngOnInit(): void {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+    this.electionCodeField = this.transaction?.transactionType.templateMap.election_code;
 
-    if (this.transaction?.transactionType) {
-      this.electionCodeField = this.transaction.transactionType.templateMap.election_code;
-
-      // For Schedule E transactions, we need to track the election code so that we
-      // can make the candidate state required for presidential primaries.
-      if (
-        this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
-        this.transaction?.transactionType.templateMap.election_code
-      ) {
-        (
-          this.form.get(this.transaction.transactionType.templateMap.election_code) as SubscriptionFormControl
-        )?.addSubscription(() => {
-          this.updateForms();
-        });
-      }
-    }
-
-    const officeFormControl = this.form?.get(this.officeFormControlName) as SubscriptionFormControl;
-    console.log(officeFormControl);
-    officeFormControl.addSubscription(() => {
-      this.updateForms();
+    // Update the enabled/disabled state on candidate fields whenever the candidate office changes.
+    (this.form?.get(this.officeFormControlName) as SubscriptionFormControl).addSubscription(() => {
+      this.updateCandidateFieldAvailability();
     });
 
-    this.form
-      ?.get(this.stateFormControlName)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!!value && this.form.get(this.officeFormControlName)?.value === CandidateOfficeTypes.HOUSE) {
-          this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
-        } else {
-          this.candidateDistrictOptions = [];
-        }
-        const currentDistrictValue = this.form.get(this.districtFormControlName)?.value;
-        if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
-          this.form
-            .get(this.districtFormControlName)
-            ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0].value : null);
-        }
+    // For Schedule E transactions, update the enabled/disabled state on the
+    // candidate fields whenever the election code changes value.
+    if (this.transaction?.transactionType.scheduleId === ScheduleIds.E && this.electionCodeField) {
+      (this.form.get(this.electionCodeField) as SubscriptionFormControl)?.addSubscription(() => {
+        this.updateCandidateFieldAvailability();
       });
+    }
+
+    // Update the candidate district options and value every time the candidate state field changes.
+    (this.form.get(this.stateFormControlName) as SubscriptionFormControl).addSubscription(() => {
+      this.updateCandidateDistrict();
+    });
 
     // Run election_code, office, and state valueChange logic when initializing form elements
     if (
@@ -77,7 +55,25 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     this.form.get(this.stateFormControlName)?.updateValueAndValidity();
   }
 
-  updateForms() {
+  /**
+   * updateCandidateFieldStatus()
+   *
+   * toggles the candidate_state and candidate_office fields between enabled and disabled
+   * based on a variety of factors.
+   *
+   * For PRESIDENTIAL candidates:
+   * - District is disabled
+   * - State is disabled EXCEPT for Primary elections on Schedule E transactions
+   *
+   * For SENATE candidates:
+   * - District is disabled
+   * - State is enabled
+   *
+   * For HOUSE candidates:
+   * - District is enabled
+   * - State is enabled
+   */
+  updateCandidateFieldAvailability() {
     const officeValue = (this.form.get(this.officeFormControlName)?.value ?? '') as string;
     let electionCode: string = '';
     if (this.electionCodeField) {
@@ -113,6 +109,22 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     } else if (!this.transaction?.reatt_redes) {
       this.form.get(this.stateFormControlName)?.enable();
       this.form.get(this.districtFormControlName)?.enable();
+    }
+  }
+
+  updateCandidateDistrict() {
+    const state = this.form.get(this.stateFormControlName)?.value as string | undefined;
+
+    if (!!state && this.form.get(this.officeFormControlName)?.value === CandidateOfficeTypes.HOUSE) {
+      this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(state));
+    } else {
+      this.candidateDistrictOptions = [];
+    }
+    const currentDistrictValue = this.form.get(this.districtFormControlName)?.value;
+    if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
+      this.form
+        .get(this.districtFormControlName)
+        ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0].value : null);
     }
   }
 }

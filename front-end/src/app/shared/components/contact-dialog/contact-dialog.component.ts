@@ -178,16 +178,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    const formGroupFields = SchemaUtils.getFormGroupFields([
-      ...new Set([
-        ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
-        ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
-        ...SchemaUtils.getSchemaProperties(contactCommitteeSchema),
-        ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
-      ]),
-    ]);
-    console.log(formGroupFields);
-
     if (this.contactTypeOptions.length === 0) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     }
