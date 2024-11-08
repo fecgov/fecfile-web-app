@@ -133,7 +133,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
       this.form
         .get(this.districtFormControlName)
-        ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0].value : null);
+        ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0]?.value : null);
     }
   }
 }
