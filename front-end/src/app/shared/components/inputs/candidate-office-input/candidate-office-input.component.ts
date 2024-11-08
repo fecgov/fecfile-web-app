@@ -115,7 +115,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
   /**
    * updateCandidateDistrict()
    *
-   * Set the candidate district field's options to the state's available districts.
+   * Sets the candidate district field's options to the state's available districts.
    *
    * If the currently selected district is not available in the newly selected state,
    * set the district to the topmost value in the dropdown or to null if the state has
