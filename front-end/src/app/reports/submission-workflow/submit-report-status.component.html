@@ -71,13 +71,24 @@
     </div>
     <div class="col-8">
       <img
+        *ngIf="report?.upload_submission?.fec_status === 'ACCEPTED'; else submittedImage"
         class="image-max-width"
-        ngSrc="assets/img/image-placeholder.png"
+        ngSrc="assets/img/report-accepted.svg"
         draggable="false"
         alt="Form submitted success image"
         height="271"
         width="450"
       />
+      <ng-template #submittedImage>
+        <img
+          class="image-max-width"
+          ngSrc="assets/img/report-submitted.svg"
+          draggable="false"
+          alt="Form submitted success image"
+          height="271"
+          width="450"
+        />
+      </ng-template>
     </div>
   </div>
   <div class="grid">
