@@ -39,7 +39,7 @@ To run in headless mode, run the command: ng e2e --headless
 
 ## E2E tests in CircleCI
 
-A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite nightly. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
+A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite when triggered. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
 
 For security reasons, CircleCI's remote docker [does not allow mounting volumes](https://circleci.com/docs/building-docker-images/#mounting-folders), and thus our compose `volumes` commands fail. To get around this, we had to create two new E2E Dockerfiles for the API/Worker to add these filesystem resources to the images directly.
 

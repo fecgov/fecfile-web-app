@@ -205,10 +205,6 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 parameters:
-  is-nightly-run:
-    type: boolean
-    default: false
-
   is-triggered-e2e-test:
     type: boolean
     default: false
@@ -216,9 +212,7 @@ parameters:
 workflows:
   primary:
     when:
-      and:
-        - not: << pipeline.parameters.is-nightly-run >>
-        - not: << pipeline.parameters.is-triggered-e2e-test >>
+      not: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - lint
       - test
@@ -236,11 +230,6 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|main/
-
-  nightly-run:
-    when: << pipeline.parameters.is-nightly-run >>
-    jobs:
-      - e2e-test
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
