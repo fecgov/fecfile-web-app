@@ -137,6 +137,8 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           filingFrequency,
         );
         this.form.patchValue({ coverage_from_date, coverage_through_date });
+      } else {
+        this.form.patchValue({ coverage_from_date: null, coverage_through_date: null });
       }
     });
 
