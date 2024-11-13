@@ -329,17 +329,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   updateContact(contact: Contact) {
     this.contact = contact;
-    if (
-      this.contact.candidate_office === CandidateOfficeTypes.HOUSE &&
-      this.contact.candidate_state &&
-      this.contact.candidate_district === ''
-    ) {
-      this.candidateDistrictOptions = LabelUtils.getPrimeOptions(
-        LabelUtils.getCongressionalDistrictLabels(this.contact.candidate_state),
-      );
-      this.contact.candidate_district = '00';
-    }
-
     this.form.patchValue(contact);
   }
 
