@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" style="max-width: 1500px">
   <p-toolbar>
     <ng-template pTemplate="left">
       <div class="flex flex-column">
@@ -23,6 +23,7 @@
       ></app-table-actions-button>
     </ng-template>
   </p-toolbar>
+
   <app-transaction-receipts
     [report]="report"
     (reloadTables)="refreshTables()"

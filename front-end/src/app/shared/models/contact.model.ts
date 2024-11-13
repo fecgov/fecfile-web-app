@@ -289,7 +289,7 @@ export class FecApiCandidateLookupData extends FecApiLookupData {
     return {
       // TODO: Will need to update this to last/first name fields
       // when FEC updates their candidate API to add those fields
-      label: `${this.name} (${this.candidate_id})`,
+      label: `${this.name}<br>(${this.candidate_id})`,
       value: this,
     };
   }
@@ -303,7 +303,7 @@ export class FecfileCandidateLookupData extends Contact {
 
   toSelectItem(): SelectItem<Contact> {
     return {
-      label: `${this.last_name}, ${this.first_name} (${this.candidate_id})`,
+      label: `${this.last_name}, ${this.first_name}<br>(${this.candidate_id})`,
       value: this,
     };
   }
@@ -329,7 +329,7 @@ export class CandidateLookupResponse {
             {
               label: fecfileSelectItems.length
                 ? 'Select an existing candidate contact:'
-                : 'There are no matching candidates',
+                : 'There are no matching candidate contacts',
               items: fecfileSelectItems,
             },
           ]
@@ -356,7 +356,7 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
 
   toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
     return {
-      label: `${this.name} (${this.id})`,
+      label: `${this.name}<br>(${this.id})`,
       value: this,
     };
   }
@@ -370,7 +370,7 @@ export class FecfileCommitteeLookupData extends Contact {
 
   toSelectItem(): SelectItem<Contact> {
     return {
-      label: `${this.name} (${this.committee_id})`,
+      label: `${this.name}<br>(${this.committee_id})`,
       value: this,
     };
   }
@@ -396,7 +396,7 @@ export class CommitteeLookupResponse {
             {
               label: fecfileSelectItems.length
                 ? 'Select an existing committee contact:'
-                : 'There are no matching committees',
+                : 'There are no matching committee contacts',
               items: fecfileSelectItems,
             },
           ]

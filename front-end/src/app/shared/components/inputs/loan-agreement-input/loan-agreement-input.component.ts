@@ -5,6 +5,7 @@ import { SelectItem } from 'primeng/api';
 import { Contact } from 'app/shared/models/contact.model';
 import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 @Component({
   selector: 'app-loan-agreement-input',
@@ -20,6 +21,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   showSecured = false;
   showFutureIncome = false;
   showLocationOfAccount = false;
+  calendarOpened = false;
 
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION); // Options for contact lookup component
 
@@ -121,5 +123,10 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
 
   updateFormWithLocationOfAccountContact(selectItem: SelectItem<Contact>) {
     this.contactSelect.emit(selectItem);
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }

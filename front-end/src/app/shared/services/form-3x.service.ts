@@ -4,10 +4,10 @@ import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
-import { ApiService } from './api.service';
-import { ReportService } from './report.service';
 import { Report } from '../models/report.model';
 import { F3xReportCodes } from '../utils/report-code.utils';
+import { ApiService } from './api.service';
+import { ReportService } from './report.service';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +49,10 @@ export class Form3XService extends ReportService {
     return this.apiService
       .get<Form3X[]>(`${this.apiEndpoint}/future?after=${coverage_through_date}`)
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
+  }
+
+  public getFinalReport(year: number): Promise<Form3X | undefined> {
+    return firstValueFrom(this.apiService.get<Form3X | undefined>(`${this.apiEndpoint}/final?year=${year}`));
   }
 
   public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {

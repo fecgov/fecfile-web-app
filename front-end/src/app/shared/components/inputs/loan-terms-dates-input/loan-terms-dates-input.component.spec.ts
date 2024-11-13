@@ -5,6 +5,7 @@ import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils
 import { LoanTermsDatesInputComponent } from './loan-terms-dates-input.component';
 import { SharedModule } from 'app/shared/shared.module';
 import { percentageValidator } from 'app/shared/utils/validators.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('LoanTermsDatesInputComponent', () => {
   let component: LoanTermsDatesInputComponent;
@@ -123,5 +124,14 @@ describe('LoanTermsDatesInputComponent', () => {
     dateField?.setValue('Not a Date instance');
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
     expect(dateField?.value).toBeUndefined();
+  });
+
+  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
+    const formField = 'dateField';
+    const calendarOpened = true;
+    spyOn(SchemaUtils, 'onBlurValidation');
+    component.validateDate(formField, calendarOpened);
+    expect(component.calendarOpened).toBe(calendarOpened);
+    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

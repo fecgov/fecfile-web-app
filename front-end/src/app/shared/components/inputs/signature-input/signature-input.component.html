@@ -20,7 +20,14 @@
     <div class="col-4">
       <div class="field">
         <label for="date_signed">DATE SIGNED</label>
-        <p-calendar inputId="date_signed" name="date_signed" [formControlName]="dateSignedFieldName"></p-calendar>
+        <p-calendar
+          (onFocus)="calendarOpened = true"
+          (onClose)="validateDate(dateSignedFieldName, false)"
+          (onBlur)="validateDate(dateSignedFieldName, calendarOpened)"
+          inputId="date_signed"
+          name="date_signed"
+          [formControlName]="dateSignedFieldName"
+        ></p-calendar>
         <app-error-messages
           [form]="form"
           [fieldName]="dateSignedFieldName"

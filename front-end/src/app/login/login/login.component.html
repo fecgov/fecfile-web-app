@@ -15,7 +15,7 @@
     </p>
     <div class="button-container">
       <button *ngIf="!this.localLoginAvailable" (click)="navigateToLoginDotGov()" class="login-button" type="button">
-        Log into FECFile
+        Sign in with Login.gov
       </button>
       <div *ngIf="this.localLoginAvailable" class="dropdown d-inline-flex">
         <button
@@ -39,7 +39,7 @@
             type="button"
             data-test="login-dot-gov-login-button"
           >
-            Log into FECFile
+            Sign in with Login.gov
           </button>
           <button class="dropdown-item" (click)="showDebugLogin()" type="button" data-test="debug-login-button">
             Debug Login

@@ -21,6 +21,7 @@ import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { firstValueFrom, of } from 'rxjs';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -34,7 +35,6 @@ describe('CreateF3XStep1Component', () => {
     coverage_through_date: '2022-06-25',
     form_type: 'F3XN',
     report_code: 'Q1',
-    is_first: true,
   });
 
   const first = new Date('01/01/2024');
@@ -144,7 +144,7 @@ describe('CreateF3XStep1Component', () => {
     navigateSpy.calls.reset();
     component.form.patchValue({ ...f3x });
     component.save('continue');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 
   it('#save should not save with invalid f3x record', () => {
@@ -212,5 +212,14 @@ describe('CreateF3XStep1Component', () => {
 
     //FC--TC--[1--1]--[2--2]
     foo([thirdThroughFifth, seventhThroughNinth], first, second, null, null);
+  });
+
+  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
+    const formField = 'dateField';
+    const calendarOpened = true;
+    spyOn(SchemaUtils, 'onBlurValidation');
+    component.validateDate(formField, calendarOpened);
+    expect(component.calendarOpened).toBe(calendarOpened);
+    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

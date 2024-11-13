@@ -19,7 +19,12 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
     const conduit = earmarkMemo.payee_organization_name;
     if (conduit) {
-      return `Earmarked for ${conduit} (Committee)`;
+      let conduitClause = `Earmarked for ${conduit}`;
+      const parenthetical = ' (Committee)';
+      if ((conduitClause + parenthetical).length > 100) {
+        conduitClause = conduitClause.slice(0, 97 - parenthetical.length) + '...';
+      }
+      return conduitClause + parenthetical;
     }
     return '';
   }

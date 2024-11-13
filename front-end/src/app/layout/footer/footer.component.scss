@@ -17,19 +17,21 @@ footer label {
   background-color: #e8e8e8;
   padding: 5px;
   padding-left: 28px;
+  display: flex;
+}
+
+.upper-footer-section {
+  display: flex;
+  width: 50%;
+  align-items: center;
+  padding: 8px;
 }
 
 #footer-lower {
-  height: 300px;
+  height: fit-content;
   background-color: #164f85;
   padding: 5px;
   padding-left: 28px;
-}
-
-@media (min-width: 768px) {
-  #footer-lower {
-    height: 234px;
-  }
 }
 
 #fec-seal {
@@ -57,6 +59,7 @@ footer label {
 .footer-upper-text {
   font-size: 18px;
   color: #212121;
+  border-bottom: none;
 }
 
 .footer-item {

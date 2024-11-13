@@ -1,3 +1,4 @@
+import { ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from './FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
 
@@ -23,5 +24,9 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
 
   it('#generatePurposeDescription() should be the correct value', () => {
     expect(transactionType.generatePurposeDescription()).toBe('Payroll: See Below');
+  });
+
+  it('#contextTypeOptions should be org', () => {
+    expect(transactionType.contactTypeOptions).toEqual(ORGANIZATION);
   });
 });

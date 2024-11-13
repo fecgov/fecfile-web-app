@@ -49,6 +49,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
     updateOn: 'blur',
   });
+  calendarOpened = false;
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;
@@ -203,11 +204,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     //Create the report
     create$.subscribe((report) => {
       if (jump === 'continue') {
-        if (report.is_first) {
-          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
-        } else {
-          this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-        }
+        this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({
@@ -218,6 +215,11 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         });
       }
     });
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }
 

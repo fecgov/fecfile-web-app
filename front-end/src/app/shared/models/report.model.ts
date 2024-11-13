@@ -1,9 +1,9 @@
 import { Transform, Type } from 'class-transformer';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
-import { JsonSchema } from '../interfaces/json-schema.interface';
-import { LabelList } from '../utils/label.utils';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -23,7 +23,6 @@ export abstract class Report extends BaseModel {
   report_id: string | undefined; // FEC assigned report ID
   confirmation_email_1: string | undefined;
   confirmation_email_2: string | undefined;
-  is_first: boolean | undefined;
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission: UploadSubmission | undefined;
@@ -53,10 +52,6 @@ export abstract class Report extends BaseModel {
 
   get canAmend() {
     return false;
-  }
-
-  getBlocker(): string | undefined {
-    return;
   }
 
   getLongLabel(): string {

@@ -1,4 +1,7 @@
 :host ::ng-deep {
+  mark {
+    background-color: #c9ebea;
+  }
   .dropdown-with-search .p-dropdown {
     border-radius: 4px 0 0 4px;
   }
@@ -8,18 +11,31 @@
   }
 
   .p-dropdown {
-    border-color: #aeb0b5;
-    background-color: #eeeeee;
+    border: 2px solid #aeb0b5;
+    background-color: #f1f1f1;
   }
 
   .p-dropdown-label {
-    color: black;
+    color: #212121;
+    font-family: karla-bold, sans-serif;
+    font-size: 16px;
+    width: 132px;
+    height: 42px;
   }
 
   .p-autocomplete-input {
-    border-radius: 0 4px 4px 0;
-    border-left: 0px;
-    border-color: #aeb0b5;
+    background-color: white;
+    border: 2px solid #aeb0b5;
+    border-left: 0;
+    border-radius: 0;
+    color: #212121;
+    font-family: karla, sans-serif;
+    font-size: 16px;
+    width: 342px;
+  }
+
+  .p-autocomplete-input::placeholder {
+    opacity: 0.5;
   }
 
   .p-button-icon-only {
@@ -32,8 +48,33 @@
     border: none;
   }
 
+  .p-autocomplete-panel {
+    border: 1px solid #5b616b;
+    border-radius: 0;
+  }
+
+  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item-group {
+    padding: 10px 0 10px 10px;
+  }
+
+  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
+    padding: 10px 0 20px 10px;
+    border-bottom: 0.5px solid #e8e8e8;
+    border-left: 4px solid transparent;
+  }
+
+  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item:hover {
+    background-color: #f1f1f1;
+    border-left: 4px solid #36bdbb;
+  }
+
   .readonly {
     pointer-events: none;
+  }
+
+  .dropdownIcon {
+    color: #212121;
+    background-color: white;
   }
 }
 
@@ -45,26 +86,34 @@
   border: 2px solid #aeb0b5;
 }
 
+.contact-label-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .contact-label {
-  float: left;
-  width: 50%;
+  width: 75%;
+  font-size: 12px;
   white-space: normal;
 }
 
 .in-contacts {
-  float: right;
+  float: 25%;
+  font-size: 12px;
   font-style: italic;
 }
 
 .try-another-search-text {
   font-weight: lighter;
+  font-size: 12px;
   font-style: italic;
 }
 
 .add-contact-container {
-  padding-top: 0.6em;
+  padding: 0 0 0 10px;
   font-size: 1.2em;
   font-family: karla-bold, sans-serif;
+  align-content: center;
 }
 
 .add-contact-container span {
@@ -77,4 +126,10 @@
 
 .contact-lookup-container {
   max-width: 65em;
+}
+
+.option-group-header {
+  font-family: karla, sans-serif;
+  font-size: 12px;
+  color: #112e51;
 }

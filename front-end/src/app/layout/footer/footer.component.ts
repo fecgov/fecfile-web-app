@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -8,4 +8,9 @@ import { Component, Input } from '@angular/core';
 export class FooterComponent {
   @Input() showSidebar = false;
   @Input() showUpperFooter = true;
+
+  @ViewChild('footerElement') footerElement!: ElementRef;
+  getFooterElement(): HTMLElement {
+    return this.footerElement.nativeElement;
+  }
 }

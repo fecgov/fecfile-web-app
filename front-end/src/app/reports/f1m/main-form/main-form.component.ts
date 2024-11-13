@@ -23,6 +23,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   templateUrl: './main-form.component.html',
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
+  calendarOpened = false;
   formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',
@@ -309,5 +310,10 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
       .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
       .filter((id) => !!id);
+  }
+
+  validateDate(formField: string, calendarOpened: boolean) {
+    this.calendarOpened = calendarOpened;
+    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }
