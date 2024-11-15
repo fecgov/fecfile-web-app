@@ -75,11 +75,16 @@ describe('CreateCommitteeComponent', () => {
     });
   });
 
-  it('should create committee and redirect to reports page if consent 1 year', async () => {
-    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
-      Promise.resolve(new CommitteeAccount()),
+  it('should create committee and redirect to reports page', async () => {
+    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() => {
+      const committeeAccount = new CommitteeAccount();
+      committeeAccount.committee_id = 'C12345678';
+      committeeAccount.id = '123';
+      return Promise.resolve(committeeAccount);
+    });
+    const activateSpy = spyOn(testCommitteeAccountService, 'activateCommittee').and.callFake(() =>
+      Promise.resolve(true),
     );
-
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
@@ -88,6 +93,7 @@ describe('CreateCommitteeComponent', () => {
     await component.createAccount();
 
     expect(spy).toHaveBeenCalledWith(testCommitteeId);
+    expect(activateSpy).toHaveBeenCalledWith('123');
     expect(routerSpy).toHaveBeenCalledWith('');
   });
 

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { F3xLine6aOverride } from 'app/shared/models/form-3x.model';
+import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
@@ -17,7 +19,6 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   newAmountFormControl = new FormControl<number | null>(null, Validators.required);
   yearOptions: string[] = [];
   numberOfYearOptions = 25;
-  selectedF3xLine6aOverrideId?: string;
 
   form: FormGroup = new FormGroup({
     year: this.yearFormControl,
@@ -28,6 +29,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   constructor(
     private readonly router: Router,
     private readonly messageService: MessageService,
+    public cashOnHandService: CashOnHandService,
     public form3XService: Form3XService,
   ) {
     super();
@@ -36,11 +38,13 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   ngOnInit(): void {
     this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((selectedYear) => {
       if (selectedYear) {
-        this.form3XService.getF3xLine6aOverride(selectedYear).then((f3xLine6aOverride) => {
-          this.selectedF3xLine6aOverrideId = f3xLine6aOverride?.id;
-          this.currentAmountFormControl.setValue(f3xLine6aOverride?.cash_on_hand ?? 0);
-          this.newAmountFormControl.reset();
-        });
+        const year = parseInt(String(selectedYear));
+        const override = this.cashOnHandService.getCashOnHand(year);
+        const previousYear = this.form3XService.getFinalReport(year - 1);
+        // reset while waiting for api response
+        this.currentAmountFormControl.reset();
+        this.newAmountFormControl.reset();
+        Promise.all([override, previousYear]).then(this.updateForm);
       }
     });
 
@@ -51,39 +55,31 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
     this.yearFormControl.setValue(this.yearOptions[0]);
   }
 
+  updateForm = ([cashOnHandOverride, previousYear]: [CashOnHand | undefined, Form3X | undefined]): void => {
+    this.currentAmountFormControl.setValue(
+      cashOnHandOverride?.cash_on_hand ?? previousYear?.L8_cash_on_hand_close_ytd ?? 0,
+    );
+    this.newAmountFormControl.reset();
+  };
+
   updateLine6a(): void {
     if (this.form.valid) {
       if (this.yearFormControl.value !== null && this.newAmountFormControl.value !== null) {
-        const payload = new F3xLine6aOverride();
-        payload.id = this.selectedF3xLine6aOverrideId;
-        payload.year = this.yearFormControl.value;
-        payload.cash_on_hand = this.newAmountFormControl.value;
-        this.savePayload(payload).then(() => {
-          this.router.navigate(['reports']);
-        });
+        const year = parseInt(String(this.yearFormControl.value));
+        this.cashOnHandService
+          .setCashOnHand(year, this.newAmountFormControl.value)
+          .then(() => {
+            return this.messageService.add({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Cash On Hand Updated',
+              life: 3000,
+            });
+          })
+          .then(() => {
+            this.router.navigate(['reports']);
+          });
       }
-    }
-  }
-
-  savePayload(payload: F3xLine6aOverride) {
-    if (payload.id) {
-      return this.form3XService.updateF3xLine6aOverride(payload).then(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Cash On Hand Updated',
-          life: 3000,
-        });
-      });
-    } else {
-      return this.form3XService.createF3xLine6aOverride(payload).then(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Cash On Hand Created',
-          life: 3000,
-        });
-      });
     }
   }
 }

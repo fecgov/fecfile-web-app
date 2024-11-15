@@ -1,6 +1,6 @@
 applications:
   - name: fecfile-web-app
-    instances: 2
+    instances: 4
     memory: 1G
     buildpack: nginx_buildpack
     stack: cflinuxfs4

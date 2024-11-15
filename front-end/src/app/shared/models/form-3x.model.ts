@@ -12,12 +12,6 @@ export enum F3xFormTypes {
 
 export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
-export class F3xLine6aOverride {
-  id?: string;
-  year?: string;
-  cash_on_hand?: number;
-}
-
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
