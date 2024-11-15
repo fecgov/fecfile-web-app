@@ -13,11 +13,16 @@ export class TransactionDetailPage {
     PageUtils.calendarSetValue(dateFieldName, dateFieldValue, alias);
   }
 
-  static enterScheduleFormDataForContribution(formData: ContributionFormData, readOnlyAmount = false, alias = '') {
+  static enterScheduleFormDataForContribution(
+    formData: ContributionFormData,
+    readOnlyAmount = false,
+    alias = '',
+    dateField = 'enterLoanFormData',
+  ) {
     alias = PageUtils.getAlias(alias);
 
     if (formData.date_received) {
-      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
+      this.enterDate(`[data-cy="${dateField}"]`, formData.date_received, alias);
     }
 
     if (formData.candidate) {
@@ -38,14 +43,15 @@ export class TransactionDetailPage {
     contactData: ContactFormData,
     readOnlyAmount = false,
     alias = '',
+    dateSigned = 'treasurer_date_signed',
   ) {
     alias = PageUtils.getAlias(alias);
 
     if (formData.date_received) {
-      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
+      this.enterDate('[data-cy="disbursement_date"]', formData.date_received, alias);
     }
     if (formData.date2) {
-      this.enterDate('p-calendar[inputid="date2"]', formData.date2, alias);
+      this.enterDate('[data-cy="dissemination_date"]', formData.date2, alias);
     }
 
     if (formData.supportOpposeCode) {
@@ -82,7 +88,7 @@ export class TransactionDetailPage {
         .children()
         .find('div.grid')
         .children()
-        .find("p-calendar[inputid='date_signed']")
+        .find(`[data-cy='${dateSigned}']`)
         .type('04/27/2024');
     }
   }
@@ -92,11 +98,17 @@ export class TransactionDetailPage {
     this.enterLoanFormDataStepTwo(formData);
   }
 
-  static enterScheduleFormData(formData: ScheduleFormData, readOnlyAmount = false, alias = '', includeMemo = true) {
+  static enterScheduleFormData(
+    formData: ScheduleFormData,
+    readOnlyAmount = false,
+    alias = '',
+    includeMemo = true,
+    dateField = 'expenditure_date',
+  ) {
     alias = PageUtils.getAlias(alias);
 
     if (formData.date_received) {
-      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
+      this.enterDate(`[data-cy="${dateField}"]`, formData.date_received, alias);
     }
 
     this.enterCommon(formData, alias, includeMemo);
@@ -106,7 +118,14 @@ export class TransactionDetailPage {
     this.enterElection(formData, alias);
   }
 
-  static enterLoanFormData(formData: LoanFormData, readOnlyAmount = false, alias = '') {
+  static enterLoanFormData(
+    formData: LoanFormData,
+    readOnlyAmount = false,
+    alias = '',
+    dateField = 'expenditure_date',
+    dueDateField = 'loan_due_date',
+    dateIncurredField = 'loan_incurred_date',
+  ) {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find('#amount').safeType(formData.amount);
 
@@ -126,22 +145,28 @@ export class TransactionDetailPage {
     if (formData.due_date_setting) {
       PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData.due_date_setting, alias);
       if (formData.due_date) {
-        PageUtils.calendarSetValue('p-calendar[inputid="due_date"]', formData.due_date, alias);
+        PageUtils.calendarSetValue(`[data-cy="${dueDateField}"]`, formData.due_date, alias);
       }
     }
 
     if (formData.date_incurred) {
-      this.enterDate('p-calendar[inputid="date_incurred"]', formData.date_incurred, alias);
+      this.enterDate(`[data-cy="${dateIncurredField}"]`, formData.date_incurred, alias);
     }
 
     if (formData.date_received) {
-      this.enterDate('p-calendar[inputid="date"]', formData.date_received, alias);
+      this.enterDate(`[data-cy="${dateField}"]`, formData.date_received, alias);
     }
 
     this.enterCommon(formData, alias);
   }
 
-  static enterLoanFormDataStepTwo(formData: LoanFormData, readOnlyAmount = false, alias = '') {
+  static enterLoanFormDataStepTwo(
+    formData: LoanFormData,
+    readOnlyAmount = false,
+    alias = '',
+    dateSigned1 = 'treasurer_date_signed',
+    dateSigned2 = 'authorized_date_signed',
+  ) {
     alias = PageUtils.getAlias(alias);
 
     if (formData.loan_restructured) {
@@ -173,7 +198,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.date_signed) {
-      PageUtils.calendarSetValue('p-calendar[inputid="date_signed"]', formData.date_signed);
+      PageUtils.calendarSetValue(`[data-cy="${dateSigned1}"]`, formData.date_signed);
     }
 
     if (formData.authorized_first_name) {
@@ -203,15 +228,15 @@ export class TransactionDetailPage {
         .children()
         .find('div.grid')
         .children()
-        .find("p-calendar[inputid='date_signed']")
+        .find(`[data-cy='${dateSigned2}']`)
         .type('04/27/2024');
     }
   }
 
-  static assertFormData(formData: ScheduleFormData, alias = '') {
+  static assertFormData(formData: ScheduleFormData, alias = '', id = '#expenditure_date') {
     alias = PageUtils.getAlias(alias);
     if (formData.date_received) {
-      cy.get(alias).find('#date').should('have.value', PageUtils.dateToString(formData.date_received));
+      cy.get(alias).find(id).should('have.value', PageUtils.dateToString(formData.date_received));
     }
 
     cy.get(alias)

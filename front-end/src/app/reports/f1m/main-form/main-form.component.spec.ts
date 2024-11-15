@@ -19,7 +19,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ActivatedRoute } from '@angular/router';
 import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -237,14 +236,5 @@ describe('MainFormComponent', () => {
     component.ngOnInit();
     expect(component.excludeFecIds[0]).toEqual('C000000005');
     expect(component.excludeIds[0]).toEqual('22222-22222-22222-2222222');
-  });
-
-  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
-    const formField = 'dateField';
-    const calendarOpened = true;
-    spyOn(SchemaUtils, 'onBlurValidation');
-    component.validateDate(formField, calendarOpened);
-    expect(component.calendarOpened).toBe(calendarOpened);
-    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

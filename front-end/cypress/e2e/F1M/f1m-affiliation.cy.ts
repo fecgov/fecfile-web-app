@@ -23,8 +23,8 @@ describe('Manage reports', () => {
     cy.contains(committeeFormData.name).click();
     PageUtils.valueCheck('[id="affiliated_committee_name"', committeeFormData.name);
     PageUtils.clickButton('Save');
-    cy.get('[data-cy="date-of-affiliation-error"]').contains('This is a required field.');
-    PageUtils.calendarSetValue('[data-cy="date-of-affiliation"]');
+    cy.get('[data-cy="affiliated_date_form_f1_filed-error"]').contains('This is a required field.');
+    PageUtils.calendarSetValue('[data-cy="affiliated_date_form_f1_filed"]');
     PageUtils.clickButton('Save');
     cy.get('[data-cy="report-list-component').should('exist');
   });
@@ -40,9 +40,9 @@ describe('Manage reports', () => {
     cy.get('[data-cy="state-party-radio"]').click();
     cy.get('[data-cy="qualification-radio"').click();
     cy.get('[data-cy="qualification-radio"').click();
-    PageUtils.calendarSetValue('[data-cy="date-of-contribution"]');
-    PageUtils.calendarSetValue('[data-cy="date-of-registration"]');
-    PageUtils.calendarSetValue('[data-cy="date-of-requirements"]');
+    PageUtils.calendarSetValue('[data-cy="date_of_51st_contributor"]');
+    PageUtils.calendarSetValue('[data-cy="date_of_original_registration"]');
+    PageUtils.calendarSetValue('[data-cy="date_committee_met_requirements"]');
     for (let index = 0; index < candidates.length; index++) {
       const candidateSection = cy.get(`[data-cy="candidate-${index}"]`);
       candidateSection.find('[id="searchBox"]').type(candidates[index].first_name.slice(0, 3));
@@ -50,7 +50,7 @@ describe('Manage reports', () => {
       cy.get(`[data-cy="candidate-${index}"]`)
         .find('[data-cy="last-name"]')
         .should('have.value', candidates[index].last_name);
-      PageUtils.calendarSetValue('[data-cy="candidate-date"]', new Date(), `[data-cy="candidate-${index}"]`);
+      PageUtils.calendarSetValue(getId(index), new Date(), `[data-cy="candidate-${index}"]`);
     }
     PageUtils.clickButton('Save and continue');
     cy.get('[data-cy="print-preview"]').should('exist');
@@ -67,3 +67,14 @@ describe('Manage reports', () => {
     cy.get('[id="text4000"]').should('have.value', memoText);
   });
 });
+
+const romanMap: { [key: number]: string } = {
+  1: 'I',
+  2: 'II',
+  3: 'III',
+  4: 'IV',
+  5: 'V',
+};
+function getId(num: any) {
+  return `[data-cy="${romanMap[num + 1]}_date_of_contribution"]`;
+}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -11,6 +11,7 @@ import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { map, takeUntil } from 'rxjs';
 import { UserLoginData } from '../../shared/models/user.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-update-current-user',
@@ -36,9 +37,9 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
       .select(selectUserLoginData)
       .pipe(takeUntil(this.destroy$))
       .subscribe((userLoginData: UserLoginData) => {
-        this.form.setControl('last_name', new FormControl(userLoginData.last_name, Validators.required));
-        this.form.setControl('first_name', new FormControl(userLoginData.first_name, Validators.required));
-        this.form.setControl('email', new FormControl(userLoginData.email, Validators.required));
+        this.form.setControl('last_name', new SubscriptionFormControl(userLoginData.last_name, Validators.required));
+        this.form.setControl('first_name', new SubscriptionFormControl(userLoginData.first_name, Validators.required));
+        this.form.setControl('email', new SubscriptionFormControl(userLoginData.email, Validators.required));
         this.formSubmitted = false;
       });
   }

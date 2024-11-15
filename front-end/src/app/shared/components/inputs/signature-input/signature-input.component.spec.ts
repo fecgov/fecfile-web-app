@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SharedModule } from 'app/shared/shared.module';
 import { SignatureInputComponent } from './signature-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('SignatureInputComponent', () => {
   let component: SignatureInputComponent;
@@ -20,13 +20,13 @@ describe('SignatureInputComponent', () => {
     // Set up component with form control
     const form = new FormGroup(
       {
-        authorized_last_name: new FormControl(),
-        authorized_first_name: new FormControl(),
-        authorized_middle_name: new FormControl(),
-        authorized_prefix: new FormControl(),
-        authorized_suffix: new FormControl(),
-        authorized_title: new FormControl(),
-        authorized_date_signed: new FormControl(),
+        authorized_last_name: new SubscriptionFormControl(),
+        authorized_first_name: new SubscriptionFormControl(),
+        authorized_middle_name: new SubscriptionFormControl(),
+        authorized_prefix: new SubscriptionFormControl(),
+        authorized_suffix: new SubscriptionFormControl(),
+        authorized_title: new SubscriptionFormControl(),
+        authorized_date_signed: new SubscriptionFormControl(),
       },
       { updateOn: 'blur' },
     );
@@ -49,14 +49,5 @@ describe('SignatureInputComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
-    const formField = 'dateField';
-    const calendarOpened = true;
-    spyOn(SchemaUtils, 'onBlurValidation');
-    component.validateDate(formField, calendarOpened);
-    expect(component.calendarOpened).toBe(calendarOpened);
-    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

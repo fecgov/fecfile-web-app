@@ -10,22 +10,12 @@ export class F3xCreateReportPage {
     cy.get("p-radiobutton[FormControlName='report_code']").contains(formData['report_code']).click();
 
     if (['12G', '30G', '12P', '12R', '12S', '12C', '30R', '30S'].includes(formData['report_code'])) {
-      PageUtils.calendarSetValue(
-        "p-calendar[FormControlName='date_of_election']",
-        new Date(formData['date_of_election']),
-      );
-
+      PageUtils.calendarSetValue('[data-cy="date_of_election"]', new Date(formData['date_of_election']));
       PageUtils.dropdownSetValue("p-dropdown[FormControlName='state_of_election']", formData['state_of_election']);
     }
 
-    PageUtils.calendarSetValue(
-      "p-calendar[FormControlName='coverage_from_date']",
-      new Date(formData['coverage_from_date']),
-    );
-    PageUtils.calendarSetValue(
-      "p-calendar[FormControlName='coverage_through_date']",
-      new Date(formData['coverage_through_date']),
-    );
+    PageUtils.calendarSetValue('[data-cy="coverage_from_date"]', new Date(formData['coverage_from_date']));
+    PageUtils.calendarSetValue('[data-cy="coverage_through_date"]', new Date(formData['coverage_through_date']));
   }
 
   static coverageCall() {

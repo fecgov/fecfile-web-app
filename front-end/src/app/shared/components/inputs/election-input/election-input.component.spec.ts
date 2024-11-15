@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -7,6 +7,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ElectionInputComponent } from './election-input.component';
 import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('ElectionInputComponent', () => {
   let component: ElectionInputComponent;
@@ -22,8 +23,8 @@ describe('ElectionInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        election_code: new FormControl(''),
-        election_other_description: new FormControl(''),
+        election_code: new SubscriptionFormControl(''),
+        election_other_description: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
@@ -63,8 +64,8 @@ describe('ElectionInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        election_code: new FormControl(''),
-        election_other_description: new FormControl(''),
+        election_code: new SubscriptionFormControl(''),
+        election_other_description: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );

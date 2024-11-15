@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
@@ -11,6 +11,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { firstValueFrom, of } from 'rxjs';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('LinkedReportInputComponent', () => {
   let component: LinkedReportInputComponent;
@@ -29,8 +30,8 @@ describe('LinkedReportInputComponent', () => {
       date2: 'other_date',
     });
     component.form = new FormGroup({}, { updateOn: 'blur' });
-    component.form.addControl('other_date', new FormControl());
-    component.form.addControl(testTemplateMap['date'], new FormControl());
+    component.form.addControl('other_date', new SubscriptionFormControl());
+    component.form.addControl(testTemplateMap['date'], new SubscriptionFormControl());
     component.ngOnInit();
     fixture.detectChanges();
   });

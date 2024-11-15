@@ -50,7 +50,7 @@ function CreateReceipt() {
   cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
   cy.contains(individualContactFormData.last_name).should('exist');
   cy.contains(individualContactFormData.last_name).click();
-  TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData));
+  TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData), false, '', true, 'contribution_date');
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
@@ -70,7 +70,13 @@ function Reattribute(old = false) {
   cy.get('[id="searchBox"]').type(assignee.last_name.slice(0, 1));
   cy.contains(assignee.last_name).should('exist');
   cy.contains(assignee.last_name).click();
-  TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(reattributeData));
+  TransactionDetailPage.enterScheduleFormData(
+    new ScheduleFormData(reattributeData),
+    false,
+    '',
+    true,
+    'contribution_date',
+  );
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');

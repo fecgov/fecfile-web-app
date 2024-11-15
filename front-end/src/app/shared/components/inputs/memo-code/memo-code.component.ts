@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-memo-code',
@@ -26,7 +27,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   report?: Form3X;
 
-  memoControl: FormControl = new FormControl();
+  memoControl: SubscriptionFormControl = new SubscriptionFormControl();
   outOfDateDialogVisible = false;
   memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -45,18 +46,15 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
         this.report = report as Form3X;
       });
 
-    this.form
-      .get(this.templateMap.date)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((date: Date) => {
-        this.coverageDate = date;
-        this.updateMemoItemWithDate(date);
-      });
+    (this.form.get(this.templateMap.date) as SubscriptionFormControl)?.addSubscription((date: Date) => {
+      this.coverageDate = date;
+      this.updateMemoItemWithDate(date);
+    }, this.destroy$);
 
     this.memoCodeReadOnly = TransactionFormUtils.isMemoCodeReadOnly(this.transaction?.transactionType);
     if (this.overrideMemoItemHelpText) this.memoItemHelpText = this.overrideMemoItemHelpText;
 
-    this.memoControl = (this.form.get(this.templateMap.memo_code) as FormControl) || this.memoControl;
+    this.memoControl = (this.form.get(this.templateMap.memo_code) as SubscriptionFormControl) || this.memoControl;
     const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;
     if (savedDate) {
       this.updateMemoItemWithDate(savedDate);
