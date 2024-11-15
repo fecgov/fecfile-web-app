@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
@@ -101,28 +101,34 @@ describe('LoanTermsDatesInputComponent', () => {
     expect(rateField?.hasValidator(percentageValidator)).toBeTrue();
   });
 
-  it('should handle due_date inputs correctly', () => {
+  it('should handle due_date inputs correctly', fakeAsync(() => {
     const settingField = component.form.get(component.templateMap.due_date_setting);
-    const dateField = component.form.get(component.templateMap.due_date);
+    let dateField = component.form.get(component.templateMap.due_date);
 
     // Changing the due_date setting to USER_DEFINED should change a date object
     // to its FECDate formatted value
     dateField?.setValue(new Date('10/31/2010 00:00'));
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
+    dateField = component.form.get(component.templateMap.due_date);
     expect(dateField?.value).toEqual('2010-10-31');
 
     // When changing to the SPECIFIC_DATE setting with an FECDate formatted value
     // the value should be converted to a Date instance
     settingField?.setValue(component.termFieldSettings.SPECIFIC_DATE);
+    dateField = component.form.get(component.templateMap.due_date);
     expect(dateField?.value instanceof Date).toBeTrue();
 
     // When switch settings, it will fall back to clearing the date field
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
+    dateField = component.form.get(component.templateMap.due_date);
     dateField?.setValue('A user-entered string');
     settingField?.setValue(component.termFieldSettings.SPECIFIC_DATE);
-    expect(dateField?.value).toBeUndefined();
+    fixture.detectChanges();
+    dateField = component.form.get(component.templateMap.due_date);
+    expect(dateField?.value).toBeNull();
     dateField?.setValue('Not a Date instance');
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    expect(dateField?.value).toBeUndefined();
-  });
+    dateField = component.form.get(component.templateMap.due_date);
+    expect(dateField?.value).toEqual('');
+  }));
 });

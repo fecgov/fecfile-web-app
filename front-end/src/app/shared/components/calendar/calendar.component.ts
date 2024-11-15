@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DestroyerComponent } from '../app-destroyer.component';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-calendar',
@@ -19,7 +20,8 @@ export class CalendarComponent extends DestroyerComponent implements OnInit {
 
   ngOnInit(): void {
     const originalControl = this.form?.get(this.fieldName) as SubscriptionFormControl;
-    this.control = new SubscriptionFormControl(originalControl.value, {
+    const date = DateUtils.parseDate(originalControl.value);
+    this.control = new SubscriptionFormControl(date, {
       validators: originalControl.validator,
       asyncValidators: originalControl.asyncValidator,
       updateOn: 'submit',
@@ -29,7 +31,8 @@ export class CalendarComponent extends DestroyerComponent implements OnInit {
     originalControl.subscriptions.forEach((sub) => {
       this.control.addSubscription(sub, this.destroy$);
     });
-
+    if (originalControl.touched) this.control.markAsTouched();
+    if (originalControl.dirty) this.control.markAsDirty();
     this.form.setControl(this.fieldName, this.control);
   }
 

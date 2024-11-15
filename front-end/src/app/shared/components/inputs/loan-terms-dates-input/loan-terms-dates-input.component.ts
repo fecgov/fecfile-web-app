@@ -10,6 +10,7 @@ import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -141,24 +142,30 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
             initialSelectionStart - lengthDifference,
             initialSelectionEnd - lengthDifference,
           );
+          interestField.markAsTouched();
         }
 
         if (newInterestRate.length > 0) {
           if (!newInterestRate.endsWith('%')) {
             interestField.setValue(newInterestRate + '%');
-
             textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
+            interestField.markAsTouched();
           }
         }
         if (interestField.value === '%') {
           interestField.setValue('');
         }
       }
-
-      interestField.markAsTouched();
     }
   }
 
+  /**
+   * Alternates between a date form control and a string form control.
+   * The new CalendarComponent replaces the string form control with a Date control.
+   * This happens on Init, which means when the ngIf condition is met.
+   * This means when returning to the string control we need to recreate the control.
+   * @param newDueDateSetting
+   */
   convertDueDate(newDueDateSetting: string) {
     const due_date_field = this.form.get(this.templateMap['due_date']);
     const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
@@ -167,17 +174,24 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
         if (previous_due_date.search(fecDateFormat) !== -1) {
           due_date_field.setValue(DateUtils.convertFecFormatToDate(previous_due_date));
-        } else {
-          due_date_field.setValue(undefined);
         }
       } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
+        const stringDueDate = new SubscriptionFormControl<string>('', {
+          validators: due_date_field.validator,
+          asyncValidators: due_date_field.asyncValidator,
+          updateOn: 'blur',
+        });
+
         if (previous_due_date instanceof Date) {
-          due_date_field.setValue(DateUtils.convertDateToFecFormat(previous_due_date));
-        } else {
-          due_date_field.setValue(undefined);
+          stringDueDate.setValue(DateUtils.convertDateToFecFormat(previous_due_date));
         }
+        if (due_date_field.touched) {
+          stringDueDate.markAsTouched();
+          stringDueDate.updateValueAndValidity();
+        }
+
+        this.form.setControl(this.templateMap['due_date'], stringDueDate);
       }
-      due_date_field.markAsTouched();
     }
   }
 }
