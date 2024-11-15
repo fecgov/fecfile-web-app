@@ -303,8 +303,8 @@ export class TransactionFormUtils {
 
       if (transaction?.transactionType?.populateSignatoryOneWithTreasurer && committeeAccount) {
         form.patchValue({
-          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_1,
-          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_1,
           [transaction.transactionType.templateMap.signatory_1_middle_name]: committeeAccount.treasurer_name_middle,
           [transaction.transactionType.templateMap.signatory_1_prefix]: committeeAccount.treasurer_name_prefix,
           [transaction.transactionType.templateMap.signatory_1_suffix]: committeeAccount.treasurer_name_suffix,
