@@ -189,7 +189,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             occupation: '',
             candidate_office: candidate.office,
             candidate_state: candidate.state === 'US' ? '' : candidate.state,
-            candidate_district: candidate.district === '00' ? '' : candidate.district,
+            candidate_district: candidate.state === 'US' ? '' : candidate.district,
           }),
         );
       });
