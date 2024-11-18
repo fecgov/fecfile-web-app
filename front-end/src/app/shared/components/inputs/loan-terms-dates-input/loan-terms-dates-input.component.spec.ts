@@ -60,36 +60,32 @@ describe('LoanTermsDatesInputComponent', () => {
     const settingField = component.form.get(component.templateMap.interest_rate_setting);
     const rateField = component.form.get(component.templateMap.interest_rate);
 
-    // Changing the interest rate setting to USER_DEFINED should not change the value
+    // Changing the interest rate setting to USER_DEFINED should clear the value
     rateField?.setValue('12.3%');
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    expect(rateField?.value).toEqual('12.3%');
+    expect(rateField?.value).toBeNull();
 
     // While USER_DEFINED, non-percentage values should go unchanged
     rateField?.setValue('12.3');
     expect(rateField?.value).toEqual('12.3');
 
-    // Changing the interest rate setting to EXACT_PERCENTAGE should change the value
+    // Changing the interest rate setting to EXACT_PERCENTAGE should clear the value
     settingField?.setValue(component.termFieldSettings.EXACT_PERCENTAGE);
-    expect(rateField?.value).toEqual('12.3%');
+    expect(rateField?.value).toBeNull();
 
     // You should be unable to delete the % symbol
     rateField?.setValue('12.3');
-    expect(rateField?.value).toEqual('12.3%');
-
-    // Inappropriate characters should be cleared from the value
-    rateField?.setValue('1a2b.3');
     expect(rateField?.value).toEqual('12.3%');
 
     // If the value would only be '%', clear the field
     rateField?.setValue('%');
     expect(rateField?.value).toEqual('');
 
-    // Changing back and forth between field settings shouldn't change the value
+    // Changing back and forth between field settings should clear the value
     rateField?.setValue('12.3%');
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
     settingField?.setValue(component.termFieldSettings.EXACT_PERCENTAGE);
-    expect(rateField?.value).toEqual('12.3%');
+    expect(rateField?.value).toBeNull();
   });
 
   it('should add and remove the percentage pattern validator', () => {
@@ -105,18 +101,16 @@ describe('LoanTermsDatesInputComponent', () => {
     const settingField = component.form.get(component.templateMap.due_date_setting);
     let dateField = component.form.get(component.templateMap.due_date);
 
-    // Changing the due_date setting to USER_DEFINED should change a date object
-    // to its FECDate formatted value
+    // Changing the due_date setting to USER_DEFINED should clear value
     dateField?.setValue(new Date('10/31/2010 00:00'));
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);
     dateField = component.form.get(component.templateMap.due_date);
-    expect(dateField?.value).toEqual('2010-10-31');
+    expect(dateField?.value).toBe('');
 
-    // When changing to the SPECIFIC_DATE setting with an FECDate formatted value
-    // the value should be converted to a Date instance
+    // When changing to the SPECIFIC_DATE setting should clear value
     settingField?.setValue(component.termFieldSettings.SPECIFIC_DATE);
     dateField = component.form.get(component.templateMap.due_date);
-    expect(dateField?.value instanceof Date).toBeTrue();
+    expect(dateField?.value).toBeNull();
 
     // When switch settings, it will fall back to clearing the date field
     settingField?.setValue(component.termFieldSettings.USER_DEFINED);

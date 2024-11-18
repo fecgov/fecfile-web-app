@@ -38,7 +38,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       (this.form.get(this.templateMap['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
     const date2Control =
       (this.form.get(this.templateMap['date2']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
-    this.linkedF3xControl.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
+    this.linkedF3xControl.addValidators(buildCorrespondingForm3XValidator(this.form, 'date', 'date2'));
 
     dateControl.valueChanges
       .pipe(

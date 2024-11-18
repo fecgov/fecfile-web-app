@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
@@ -76,7 +75,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           interestRateField.removeValidators(percentageValidator);
         }
       }
-      this.onInterestRateInput(interestRateSetting);
+      this.form.get(this.templateMap['interest_rate'])?.setValue(null);
     });
 
     // Watch changes to purpose description to make sure prefix is maintained
@@ -168,13 +167,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
    */
   convertDueDate(newDueDateSetting: string) {
     const due_date_field = this.form.get(this.templateMap['due_date']);
-    const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
     if (due_date_field) {
-      const previous_due_date = due_date_field.value ?? '';
       if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
-        if (previous_due_date.search(fecDateFormat) !== -1) {
-          due_date_field.setValue(DateUtils.convertFecFormatToDate(previous_due_date));
-        }
+        due_date_field.setValue(null);
       } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
         const stringDueDate = new SubscriptionFormControl<string>('', {
           validators: due_date_field.validator,
@@ -182,9 +177,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           updateOn: 'blur',
         });
 
-        if (previous_due_date instanceof Date) {
-          stringDueDate.setValue(DateUtils.convertDateToFecFormat(previous_due_date));
-        }
         if (due_date_field.touched) {
           stringDueDate.markAsTouched();
           stringDueDate.updateValueAndValidity();

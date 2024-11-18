@@ -11,10 +11,12 @@
   ></p-calendar>
   <ng-container *ngIf="control">
     <app-error-messages
+      *ngIf="showErrors"
       [attr.data-cy]="fieldName + '-error'"
       [form]="form"
       [control]="control"
       [formSubmitted]="formSubmitted"
+      [requiredErrorMessage]="requiredErrorMessage"
     ></app-error-messages>
   </ng-container>
 </div>

@@ -14,6 +14,8 @@ export class CalendarComponent extends DestroyerComponent implements OnInit {
   @Input() formSubmitted = false;
   @Input() fieldName!: string;
   @Input() label!: string;
+  @Input() showErrors = true;
+  @Input() requiredErrorMessage = 'This is a required field.';
 
   calendarOpened = false;
   control!: SubscriptionFormControl;
@@ -22,7 +24,8 @@ export class CalendarComponent extends DestroyerComponent implements OnInit {
     const originalControl = this.form?.get(this.fieldName) as SubscriptionFormControl;
     const date = DateUtils.parseDate(originalControl.value);
     this.control = new SubscriptionFormControl(date, {
-      validators: originalControl.validator,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      validators: (originalControl as any)._rawValidators,
       asyncValidators: originalControl.asyncValidator,
       updateOn: 'submit',
     });

@@ -12,6 +12,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [label]="transaction?.transactionType?.date2Label || ''"
+          requiredErrorMessage="At least ONE date field must be entered."
         ></app-calendar>
       </div>
       <div class="col-4">
@@ -20,6 +21,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [label]="transaction?.transactionType?.dateLabel || ''"
+          [showErrors]="!!templateMap['date2']"
         ></app-calendar>
       </div>
       <div class="col-4" *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24">

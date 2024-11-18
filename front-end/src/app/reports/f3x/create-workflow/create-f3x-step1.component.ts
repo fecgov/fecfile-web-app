@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -26,7 +26,6 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
@@ -58,9 +57,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public thisYear = new Date().getFullYear();
   committeeAccount?: CommitteeAccount;
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
-
-  @ViewChild('coverageFromDate') coverageFromDate!: CalendarComponent;
-  @ViewChild('coverageThroughDate') coverageThroughDate!: CalendarComponent;
 
   constructor(
     private store: Store,
@@ -113,7 +109,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
-      buildAfterDateValidator(this.form.controls['coverage_from_date']),
+      buildAfterDateValidator(this.form, 'coverage_from_date'),
     ]);
     (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
@@ -134,9 +130,9 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           isElectionYear,
           filingFrequency,
         );
-
-        this.coverageFromDate.control.setValue(coverage_from_date);
-        this.coverageThroughDate.control.setValue(coverage_through_date);
+        this.form.patchValue({ coverage_from_date, coverage_through_date });
+      } else {
+        this.form.patchValue({ coverage_from_date: null, coverage_through_date: null });
       }
     });
 

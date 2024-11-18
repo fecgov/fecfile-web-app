@@ -2,6 +2,7 @@ import { DateUtils } from './date.utils';
 
 import { buildAfterDateValidator } from './validators.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
+import { FormGroup } from '@angular/forms';
 
 describe('DateUtils', () => {
   it('should create an instance', () => {
@@ -79,8 +80,10 @@ describe('DateUtils', () => {
 
   describe('dateBefore', () => {
     it('should not check if either date is null', () => {
+      const form = new FormGroup({});
       const otherControl = new SubscriptionFormControl<Date>(new Date());
-      const control = new SubscriptionFormControl<Date>(new Date(), [buildAfterDateValidator(otherControl)]);
+      form.addControl('other', otherControl);
+      const control = new SubscriptionFormControl<Date>(new Date(), [buildAfterDateValidator(form, 'other')]);
       otherControl.setValue(null);
       control.updateValueAndValidity();
       expect(control.valid).toBeTrue();
@@ -92,9 +95,11 @@ describe('DateUtils', () => {
     });
 
     it("should verify that the control's date comes after the date of the other control", () => {
+      const form = new FormGroup({});
       const otherControl = new SubscriptionFormControl<Date>(new Date(2024, 1, 2));
+      form.addControl('other', otherControl);
       const control = new SubscriptionFormControl<Date>(new Date(2024, 1, 1), {
-        validators: [buildAfterDateValidator(otherControl)],
+        validators: [buildAfterDateValidator(form, 'other')],
         nonNullable: true,
       });
       control.updateValueAndValidity();
