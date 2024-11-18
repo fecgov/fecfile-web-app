@@ -7,12 +7,12 @@ import {
   TransactionTemplateMapType,
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactTypes } from '../../models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
 import { MemoText } from 'app/shared/models/memo-text.model';
@@ -247,6 +247,19 @@ export class TransactionFormUtils {
     const secondaryReportId = form.get('linkedF3xId')?.value;
     if (secondaryReportId) {
       payload['report_ids'] = [activeReportId, secondaryReportId];
+    }
+
+    // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
+    // This value needs to be saved on the transaction *but not* on the contact.
+    if (
+      payload['contact_2'] &&
+      transaction.transactionType.scheduleId === ScheduleIds.E &&
+      transaction.contact_2?.candidate_office === CandidateOfficeTypes.PRESIDENTIAL
+    ) {
+      const electionCode = form.get(transaction.transactionType.templateMap.election_code)?.value ?? '';
+      if ((electionCode as string)?.startsWith('P')) {
+        payload['contact_2']['candidate_state'] = undefined;
+      }
     }
 
     return payload;
