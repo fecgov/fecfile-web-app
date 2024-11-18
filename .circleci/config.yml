@@ -235,8 +235,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              # only: /develop|release\/sprint-[\.\d]+|main/
-              only: /feature\/cache-control/
+              only: /develop|release\/sprint-[\.\d]+|main/
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
