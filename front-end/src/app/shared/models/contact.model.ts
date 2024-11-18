@@ -127,28 +127,6 @@ export const STANDARD_SINGLE_CONTACT = {
   },
 };
 
-export const CANDIDATE_CONFIG = {
-  candidate_fec_id: 'candidate_id',
-  candidate_last_name: 'last_name',
-  candidate_first_name: 'first_name',
-  candidate_middle_name: 'middle_name',
-  candidate_prefix: 'prefix',
-  candidate_suffix: 'suffix',
-  candidate_office: 'candidate_office',
-  candidate_district: 'candidate_district',
-};
-
-export const CANDIDATE_CONFIG_PRESIDENTIAL = {
-  candidate_fec_id: 'candidate_id',
-  candidate_last_name: 'last_name',
-  candidate_first_name: 'first_name',
-  candidate_middle_name: 'middle_name',
-  candidate_prefix: 'prefix',
-  candidate_suffix: 'suffix',
-  candidate_office: 'candidate_office',
-  candidate_district: 'candidate_district',
-};
-
 export const STANDARD_AND_CANDIDATE = {
   contact_1: {
     organization_name: 'name',
@@ -167,7 +145,17 @@ export const STANDARD_AND_CANDIDATE = {
     employer: 'employer',
     occupation: 'occupation',
   },
-  contact_2: CANDIDATE_CONFIG,
+  contact_2: {
+    candidate_fec_id: 'candidate_id',
+    candidate_last_name: 'last_name',
+    candidate_first_name: 'first_name',
+    candidate_middle_name: 'middle_name',
+    candidate_prefix: 'prefix',
+    candidate_suffix: 'suffix',
+    candidate_office: 'candidate_office',
+    candidate_state: 'candidate_state',
+    candidate_district: 'candidate_district',
+  },
 };
 
 // For Schedule E transactions whose candidate is in a presidential
@@ -193,7 +181,16 @@ export const STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY = {
     employer: 'employer',
     occupation: 'occupation',
   },
-  contact_2: CANDIDATE_CONFIG_PRESIDENTIAL,
+  contact_2: {
+    candidate_fec_id: 'candidate_id',
+    candidate_last_name: 'last_name',
+    candidate_first_name: 'first_name',
+    candidate_middle_name: 'middle_name',
+    candidate_prefix: 'prefix',
+    candidate_suffix: 'suffix',
+    candidate_office: 'candidate_office',
+    candidate_district: 'candidate_district',
+  },
 };
 
 export const STANDARD_AND_SECONDARY = {
