@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -11,6 +11,7 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -34,7 +35,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   ];
   report?: Report;
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });
   loading: 0 | 1 | 2 = 0;
@@ -69,7 +70,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       this.initializeFormWithReport(this.report, committeeAccount);
     });
 
-    this.form.addControl('backdoorYesNo', new FormControl());
+    this.form.addControl('backdoorYesNo', new SubscriptionFormControl());
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['filingPassword'].addValidators(passwordValidator);
@@ -80,7 +81,10 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       .subscribe((value) => {
         this.showBackdoorCode = value;
         if (value) {
-          this.form.addControl('backdoor_code', new FormControl('', [Validators.required, Validators.maxLength(16)]));
+          this.form.addControl(
+            'backdoor_code',
+            new SubscriptionFormControl('', [Validators.required, Validators.maxLength(16)]),
+          );
         } else {
           this.form.removeControl('backdoor_code');
         }

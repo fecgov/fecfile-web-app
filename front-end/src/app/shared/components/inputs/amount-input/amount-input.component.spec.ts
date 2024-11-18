@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
@@ -15,7 +15,7 @@ import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputNumberComponent } from '../input-number/input-number.component';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -34,13 +34,13 @@ describe('AmountInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        contribution_date: new FormControl(''),
-        memo_code: new FormControl(''),
-        contribution_amount: new FormControl(''),
-        contribution_aggregate: new FormControl(''),
-        disbursement_date: new FormControl(''),
-        dissemination_date: new FormControl(''),
-        expenditure_date: new FormControl(''),
+        contribution_date: new SubscriptionFormControl(''),
+        memo_code: new SubscriptionFormControl(''),
+        contribution_amount: new SubscriptionFormControl(''),
+        contribution_aggregate: new SubscriptionFormControl(''),
+        disbursement_date: new SubscriptionFormControl(''),
+        dissemination_date: new SubscriptionFormControl(''),
+        expenditure_date: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
@@ -108,14 +108,5 @@ describe('AmountInputComponent', () => {
 
     const msg = dateFormControl?.errors?.['invaliddate'].msg;
     expect(msg).toEqual('Date must fall within the report date range.');
-  });
-
-  it('should update calendarOpened and call SchemaUtils.onBlurValidation with correct arguments', () => {
-    const formField = 'dateField';
-    const calendarOpened = true;
-    spyOn(SchemaUtils, 'onBlurValidation');
-    component.validateDate(formField, calendarOpened);
-    expect(component.calendarOpened).toBe(calendarOpened);
-    expect(SchemaUtils.onBlurValidation).toHaveBeenCalledWith(component.form.get(formField), calendarOpened);
   });
 });

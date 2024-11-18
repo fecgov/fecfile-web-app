@@ -43,7 +43,13 @@ describe('Form 24 Independent Expenditures', () => {
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
-    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independentExpenditureData, candidateFormData);
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpenditureData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');

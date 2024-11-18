@@ -48,7 +48,7 @@ describe('Loans', () => {
 
     PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
     formData.date_received = new Date(currentYear, 4 - 1, 27);
-    PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
+    PageUtils.calendarSetValue('[data-cy="contribution_date"]', formData.date_received);
     PageUtils.enterValue('#amount', formData.amount);
     PageUtils.clickButton('Save');
     PageUtils.urlCheck('/list');

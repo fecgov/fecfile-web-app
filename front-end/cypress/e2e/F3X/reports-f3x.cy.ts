@@ -78,8 +78,8 @@ describe('Manage reports', () => {
 
     // Check for error messages caused by the overlapping dates
     const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
-    cy.get('app-error-messages[fieldname="coverage_from_date"]').should('contain', errorMessage);
-    cy.get('app-error-messages[fieldname="coverage_through_date"]').should('contain', errorMessage);
+    cy.get('app-error-messages[data-cy="coverage_from_date-error"]').should('contain', errorMessage);
+    cy.get('app-error-messages[data-cy="coverage_through_date-error"]').should('contain', errorMessage);
   });
 
   xit('Create report with previous existing report types disabled', () => {

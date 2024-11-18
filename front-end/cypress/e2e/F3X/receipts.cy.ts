@@ -31,7 +31,7 @@ describe('Receipt Transactions', () => {
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click({ force: true });
 
-    TransactionDetailPage.enterScheduleFormData(scheduleData);
+    TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');
     PageUtils.clickButton('Save');
     scheduleData.date_received = new Date(currentYear, 4 - 1, 27);
     cy.get('tr').should('contain', 'Individual Receipt');
@@ -45,7 +45,7 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
-    TransactionDetailPage.assertFormData(scheduleData);
+    TransactionDetailPage.assertFormData(scheduleData, '', '#contribution_date');
   });
 
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
@@ -63,7 +63,7 @@ describe('Receipt Transactions', () => {
         category_code: '',
       },
     };
-    TransactionDetailPage.enterScheduleFormData(negativeAmountFormData);
+    TransactionDetailPage.enterScheduleFormData(negativeAmountFormData, false, '', true, 'contribution_date');
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -82,7 +82,7 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
-    TransactionDetailPage.assertFormData(negativeAmountFormData);
+    TransactionDetailPage.assertFormData(negativeAmountFormData, '', '#contribution_date');
   });
 
   it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
@@ -111,7 +111,7 @@ describe('Receipt Transactions', () => {
       ...formTransactionDataForSchedule,
       ...{ purpose_description: '', category_code: '' },
     };
-    TransactionDetailPage.enterScheduleFormData(formTransactionData);
+    TransactionDetailPage.enterScheduleFormData(formTransactionData, false, '', true, 'contribution_date');
     const alias = PageUtils.getAlias('');
     cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
     cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
@@ -128,7 +128,7 @@ describe('Receipt Transactions', () => {
       ...{ memo_code: true, purpose_description: '', category_code: '' },
     };
 
-    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
+    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
     cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -142,7 +142,7 @@ describe('Receipt Transactions', () => {
     cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
-    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData);
+    TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
 
     cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
 
@@ -156,10 +156,14 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData({
-      ...formTransactionData,
-      ...{ purpose_description: 'See Partnership Attribution(s) below' },
-    });
+    TransactionDetailPage.assertFormData(
+      {
+        ...formTransactionData,
+        ...{ purpose_description: 'See Partnership Attribution(s) below' },
+      },
+      '',
+      '#contribution_date',
+    );
     PageUtils.clickButton('Cancel');
     PageUtils.urlCheck('/list');
     // Check form values of memo form
@@ -167,10 +171,14 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
-    TransactionDetailPage.assertFormData({
-      ...memoFormTransactionData,
-      ...{ purpose_description: 'Partnership Attribution' },
-    });
+    TransactionDetailPage.assertFormData(
+      {
+        ...memoFormTransactionData,
+        ...{ purpose_description: 'Partnership Attribution' },
+      },
+      '',
+      '#contribution_date',
+    );
   });
 
   it('Create a Party Receipt transaction', () => {
@@ -193,7 +201,7 @@ describe('Receipt Transactions', () => {
       },
     };
 
-    TransactionDetailPage.enterScheduleFormData(localFormTransactionData);
+    TransactionDetailPage.enterScheduleFormData(localFormTransactionData, false, '', true, 'contribution_date');
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -209,7 +217,7 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData(localFormTransactionData);
+    TransactionDetailPage.assertFormData(localFormTransactionData, '', '#contribution_date');
   });
 
   it('Create a Group I transaction', () => {
@@ -231,7 +239,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(transactionFormData);
+    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', true, 'contribution_date');
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -247,7 +255,7 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
-    TransactionDetailPage.assertFormData(transactionFormData);
+    TransactionDetailPage.assertFormData(transactionFormData, '', '#contribution_date');
   });
 
   it('Create a dual-entry Earmark Receipt transaction', () => {
@@ -267,7 +275,13 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '@stepOneAccordion');
+    TransactionDetailPage.enterScheduleFormData(
+      transactionFormData,
+      false,
+      '@stepOneAccordion',
+      true,
+      'contribution_date',
+    );
 
     // Enter STEP TWO transaction
     PageUtils.clickLink('STEP TWO');
@@ -276,7 +290,13 @@ describe('Receipt Transactions', () => {
     const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
     ContactListPage.enterFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
-    TransactionDetailPage.enterScheduleFormData(transactionFormData, true, '@stepTwoAccordion');
+    TransactionDetailPage.enterScheduleFormData(
+      transactionFormData,
+      true,
+      '@stepTwoAccordion',
+      true,
+      'contribution_date',
+    );
 
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
@@ -311,6 +331,7 @@ describe('Receipt Transactions', () => {
         ...{ purpose_description: `Earmarked through ${defaultContactFormData['name']}` },
       },
       '@stepOneAccordion',
+      '#contribution_date',
     );
 
     // Check form values of memo edit form
@@ -324,6 +345,7 @@ describe('Receipt Transactions', () => {
         ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
       },
       '@stepTwoAccordion',
+      '#contribution_date',
     );
   });
 
@@ -346,7 +368,13 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '@stepOneAccordion');
+    TransactionDetailPage.enterScheduleFormData(
+      transactionFormData,
+      false,
+      '@stepOneAccordion',
+      true,
+      'contribution_date',
+    );
 
     // Enter STEP TWO transaction
     PageUtils.clickLink('STEP TWO');
@@ -355,7 +383,13 @@ describe('Receipt Transactions', () => {
     PageUtils.clickLink('Create a new contact', '@stepTwoAccordion');
     ContactListPage.enterFormData(defaultContactFormData, true, '@stepTwoAccordion');
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
-    TransactionDetailPage.enterScheduleFormData(transactionFormData, true, '@stepTwoAccordion');
+    TransactionDetailPage.enterScheduleFormData(
+      transactionFormData,
+      true,
+      '@stepTwoAccordion',
+      true,
+      'contribution_date',
+    );
 
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
@@ -393,6 +427,7 @@ describe('Receipt Transactions', () => {
         },
       },
       '@stepOneAccordion',
+      '#contribution_date',
     );
 
     // Check form values of memo edit form
@@ -406,6 +441,7 @@ describe('Receipt Transactions', () => {
         ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
       },
       '@stepTwoAccordion',
+      '#contribution_date',
     );
   });
 
@@ -431,7 +467,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(tier1TransactionData);
+    TransactionDetailPage.enterScheduleFormData(tier1TransactionData, false, '', true, 'contribution_date');
     const alias = PageUtils.getAlias('');
     cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
     cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Partnership Receipt').click();
@@ -455,7 +491,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(tier2TransactionData);
+    TransactionDetailPage.enterScheduleFormData(tier2TransactionData, false, '', true, 'contribution_date');
     cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
     cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Individual').click();
     cy.contains('Confirm').should('exist');
@@ -478,7 +514,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       },
     };
-    TransactionDetailPage.enterScheduleFormData(tier3TransactionData);
+    TransactionDetailPage.enterScheduleFormData(tier3TransactionData, false, '', true, 'contribution_date');
     cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
@@ -514,10 +550,14 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(committeeFormContactData, true);
-    TransactionDetailPage.assertFormData({
-      ...tier1TransactionData,
-      ...{ purpose_description: 'Transfer of Joint Fundraising Proceeds' },
-    });
+    TransactionDetailPage.assertFormData(
+      {
+        ...tier1TransactionData,
+        ...{ purpose_description: 'Transfer of Joint Fundraising Proceeds' },
+      },
+      '',
+      '#contribution_date',
+    );
     PageUtils.clickButton('Cancel');
   });
 });

@@ -105,7 +105,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     );
 
     this.reattributedData.form = this.fb.group(
-      SchemaUtils.getFormGroupFieldsNoBlur(this.reattributedData.formProperties, this.fb),
+      SchemaUtils.getFormGroupFieldsNoBlur(this.reattributedData.formProperties),
       {
         updateOn: 'blur',
       },

@@ -65,7 +65,7 @@ export abstract class TripleTransactionTypeBaseComponent
     this.childTemplateMap_2 = this.childTransactionType_2.templateMap;
     this.childContactTypeOptions_2 = getContactTypeOptions(this.childTransactionType_2.contactTypeOptions ?? []);
     this.childFormProperties_2 = this.childTransactionType_2.getFormControlNames();
-    this.childForm_2 = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties_2, this.fb), {
+    this.childForm_2 = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties_2), {
       updateOn: 'blur',
     });
 

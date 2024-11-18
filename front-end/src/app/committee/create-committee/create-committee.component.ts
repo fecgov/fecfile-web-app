@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { firstValueFrom } from 'rxjs';
@@ -21,7 +21,7 @@ export class CreateCommitteeComponent extends DestroyerComponent {
   explanationVisible = false;
   unableToCreateAccount = false;
 
-  searchBoxFormControl = new FormControl('');
+  searchBoxFormControl = new SubscriptionFormControl('');
 
   constructor(
     protected messageService: MessageService,

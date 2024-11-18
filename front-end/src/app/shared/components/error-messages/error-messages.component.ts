@@ -1,6 +1,7 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-error-messages',
@@ -10,7 +11,7 @@ export class ErrorMessagesComponent implements OnInit {
   // Pass the form and fieldName OR pass the formControl itself.
   @Input() form?: FormGroup;
   @Input() fieldName = '';
-  @Input() control?: FormControl;
+  @Input() control?: SubscriptionFormControl;
 
   // We need the submitted status of the parent form to control the hide/show
   // of the error message
@@ -173,7 +174,7 @@ export class ErrorMessagesComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.control) {
-      this.control = this.form?.get(this.fieldName) as FormControl;
+      this.control = this.form?.get(this.fieldName) as SubscriptionFormControl;
     }
   }
 }

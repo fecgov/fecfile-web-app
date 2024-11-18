@@ -53,4 +53,11 @@ export class DateUtils {
     const currentMonth = new Date().getMonth();
     return currentMonth === 0;
   }
+
+  public static parseDate(dateString: string): Date | null {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    // Check if the date is valid
+    return isNaN(date.getTime()) ? null : date;
+  }
 }

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
   NavigationAction,
@@ -23,6 +23,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionType } from '../../models/transaction-type.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from '../../models/transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 let testTransaction: SchATransaction;
 
@@ -173,7 +174,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should set processing to false if no transaction type identifier on payload', () => {
-      component.form.addControl('linkedF3xId', new FormControl());
+      component.form.addControl('linkedF3xId', new SubscriptionFormControl());
       component.form.get('linkedF3xId')?.setValue('321');
 
       const payload = TransactionFormUtils.getPayloadTransaction(
@@ -248,7 +249,7 @@ describe('TransactionTypeBaseComponent', () => {
       });
 
       it('should exit if form is invalid', () => {
-        component.form.addControl('test', new FormControl(undefined, Validators.required));
+        component.form.addControl('test', new SubscriptionFormControl(undefined, Validators.required));
         expect(component.form.invalid).toBeTruthy();
         component.handleNavigate(navEvent);
         expect(navigateToSpy).toHaveBeenCalledTimes(0);

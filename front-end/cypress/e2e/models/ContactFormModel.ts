@@ -85,7 +85,7 @@ export function createContact(contact_type: ContactType): ContactFormData {
     zip: faker.location.zipCode('#####'),
     phone: faker.string.numeric(10),
     employer: faker.company.name(),
-    occupation: faker.person.jobTitle(),
+    occupation: faker.person.jobTitle().slice(0, 37),
     candidate_id: candidateId,
     candidate_office: office,
     candidate_state: faker.location.state(),

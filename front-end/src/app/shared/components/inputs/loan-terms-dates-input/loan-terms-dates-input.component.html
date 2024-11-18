@@ -1,22 +1,12 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
-        <label for="date">DATE INCURRED</label>
-        <p-calendar
-          (onFocus)="calendarOpened = true"
-          (onClose)="validateDate(templateMap['date'], false)"
-          (onBlur)="validateDate(templateMap['date'], calendarOpened)"
-          inputId="date_incurred"
-          name="date"
-          [formControlName]="templateMap['date']"
-        ></p-calendar>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['date']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
+      <app-calendar
+        [fieldName]="templateMap['date']"
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        label="DATE INCURRED"
+      ></app-calendar>
     </div>
     <div class="col-6"></div>
     <div class="col-6">
@@ -51,23 +41,12 @@
     </ng-container>
     <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.SPECIFIC_DATE">
       <div class="col-6">
-        <div class="field">
-          <label for="due_date">SPECIFIC DATE</label>
-          <p-calendar
-            (onFocus)="calendarOpened = true"
-            (onFocus)="calendarOpened = true"
-            (onClose)="validateDate(templateMap['due_date'], false)"
-            (onBlur)="validateDate(templateMap['due_date'], calendarOpened)"
-            inputId="due_date"
-            name="due_date"
-            [formControlName]="templateMap['due_date']"
-          ></p-calendar>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['due_date']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          [fieldName]="templateMap['due_date']"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="SPECIFIC DATE"
+        ></app-calendar>
       </div>
     </ng-container>
     <ng-container *ngIf="!this.form.get(templateMap['due_date_setting'])?.value">

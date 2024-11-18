@@ -123,12 +123,11 @@ function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors 
   return { invaliddate: { msg: message } };
 }
 
-export function buildCorrespondingForm3XValidator(
-  dateControl: AbstractControl,
-  date2Control: AbstractControl,
-): ValidatorFn {
+export function buildCorrespondingForm3XValidator(form: FormGroup, dateField: string, date2Field: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    if (!dateControl.value && !date2Control.value) {
+    const date = form.get(dateField)?.value;
+    const date2 = form.get(date2Field)?.value;
+    if (!date && !date2) {
       return {
         noDateProvided: true,
       };
@@ -157,10 +156,10 @@ export function buildWithinReportDatesValidator(coverage_from_date?: Date, cover
   };
 }
 
-export function buildAfterDateValidator(otherDateControl: AbstractControl<Date | null>): ValidatorFn {
+export function buildAfterDateValidator(form: FormGroup, field: string): ValidatorFn {
   return (control: AbstractControl<Date | null>): ValidationErrors | null => {
     const controlDate = control.value;
-    const otherDate = otherDateControl.value;
+    const otherDate = form.get(field)?.value;
     if (!otherDate || !controlDate) {
       return null;
     }

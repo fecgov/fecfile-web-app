@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
@@ -10,7 +9,7 @@ import { take, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -24,7 +23,7 @@ enum LoanTermsFieldSettings {
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
-  calendarOpened = false;
+
   constructor(private store: Store) {
     super();
   }
@@ -75,8 +74,11 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
           interestRateField.removeValidators(percentageValidator);
         }
+
+        interestRateField.setValue(null);
+        interestRateField.markAsPristine();
+        interestRateField.markAsUntouched();
       }
-      this.onInterestRateInput(interestRateSetting);
     });
 
     // Watch changes to purpose description to make sure prefix is maintained
@@ -142,48 +144,46 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
             initialSelectionStart - lengthDifference,
             initialSelectionEnd - lengthDifference,
           );
+          interestField.markAsTouched();
         }
 
         if (newInterestRate.length > 0) {
           if (!newInterestRate.endsWith('%')) {
             interestField.setValue(newInterestRate + '%');
-
             textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
+            interestField.markAsTouched();
           }
         }
         if (interestField.value === '%') {
           interestField.setValue('');
         }
       }
-
-      interestField.markAsTouched();
     }
   }
 
+  /**
+   * Alternates between a date form control and a string form control.
+   * The new CalendarComponent replaces the string form control with a Date control.
+   * This happens on Init, which means when the ngIf condition is met.
+   * This means when returning to the string control we need to recreate the control.
+   * @param newDueDateSetting
+   */
   convertDueDate(newDueDateSetting: string) {
     const due_date_field = this.form.get(this.templateMap['due_date']);
-    const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
     if (due_date_field) {
-      const previous_due_date = due_date_field.value ?? '';
       if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
-        if (previous_due_date.search(fecDateFormat) !== -1) {
-          due_date_field.setValue(DateUtils.convertFecFormatToDate(previous_due_date));
-        } else {
-          due_date_field.setValue(undefined);
-        }
+        due_date_field.setValue(null);
+        due_date_field.markAsPristine();
+        due_date_field.markAsUntouched();
       } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-        if (previous_due_date instanceof Date) {
-          due_date_field.setValue(DateUtils.convertDateToFecFormat(previous_due_date));
-        } else {
-          due_date_field.setValue(undefined);
-        }
+        const stringDueDate = new SubscriptionFormControl<string>('', {
+          validators: due_date_field.validator,
+          asyncValidators: due_date_field.asyncValidator,
+          updateOn: 'blur',
+        });
+        stringDueDate.markAsPristine();
+        this.form.setControl(this.templateMap['due_date'], stringDueDate);
       }
-      due_date_field.markAsTouched();
     }
-  }
-
-  validateDate(formField: string, calendarOpened: boolean) {
-    this.calendarOpened = calendarOpened;
-    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }
