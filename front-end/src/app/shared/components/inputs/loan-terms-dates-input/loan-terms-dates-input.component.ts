@@ -74,8 +74,11 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
           interestRateField.removeValidators(percentageValidator);
         }
+
+        interestRateField.setValue(null);
+        interestRateField.markAsPristine();
+        interestRateField.markAsUntouched();
       }
-      this.form.get(this.templateMap['interest_rate'])?.setValue(null);
     });
 
     // Watch changes to purpose description to make sure prefix is maintained
@@ -170,18 +173,15 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     if (due_date_field) {
       if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
         due_date_field.setValue(null);
+        due_date_field.markAsPristine();
+        due_date_field.markAsUntouched();
       } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
         const stringDueDate = new SubscriptionFormControl<string>('', {
           validators: due_date_field.validator,
           asyncValidators: due_date_field.asyncValidator,
           updateOn: 'blur',
         });
-
-        if (due_date_field.touched) {
-          stringDueDate.markAsTouched();
-          stringDueDate.updateValueAndValidity();
-        }
-
+        stringDueDate.markAsPristine();
         this.form.setControl(this.templateMap['due_date'], stringDueDate);
       }
     }
