@@ -34,6 +34,7 @@ export class SchemaUtils {
     'committee_type',
     'filing_frequency',
     'report_code',
+    'report_type_category',
     'change_of_address',
     'support_oppose_code',
     'userCertified',
