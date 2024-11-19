@@ -80,18 +80,18 @@ export class TransactionContactUtils {
         // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
         // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
         // as the value for the contact.
-        if (
-          field === 'candidate_state' &&
-          transaction?.transactionType.scheduleId === ScheduleIds.E &&
-          transaction.contact_2?.candidate_office === CandidateOfficeTypes.PRESIDENTIAL
-        ) {
-          const electionCode = form.get(templateMap.election_code)?.value ?? '';
-          if ((electionCode as string)?.startsWith('P')) {
+        if (field === 'candidate_state' && transaction?.transactionType.scheduleId === ScheduleIds.E) {
+          const candidateOfficeField = form.get(templateMap.candidate_office);
+          const electionCodeField = form.get(templateMap.election_code);
+          const candidateOffice = candidateOfficeField?.value ?? '';
+          const electionCode = electionCodeField?.value ?? '';
+
+          if (electionCode?.startsWith('P') && candidateOffice === CandidateOfficeTypes.PRESIDENTIAL) {
             formFieldValue = null;
           }
         }
 
-        if (!!formField && formFieldValue !== contactValue) {
+        if (formField && formFieldValue !== contactValue) {
           return [property, formFieldValue];
         }
         return undefined;
