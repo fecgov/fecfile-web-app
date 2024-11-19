@@ -208,7 +208,7 @@ export const STANDARD_AND_TERTIARY = {
   },
 };
 
-export const STANDARD_AND_SECONDARY_AND_TERTIARY = {
+export const STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE = {
   contact_1: {
     organization_name: 'name',
     last_name: 'last_name',
@@ -225,12 +225,15 @@ export const STANDARD_AND_SECONDARY_AND_TERTIARY = {
     occupation: 'occupation',
   },
   contact_2: {
-    secondary_name: 'name',
-    secondary_street_1: 'street_1',
-    secondary_street_2: 'street_2',
-    secondary_city: 'city',
-    secondary_state: 'state',
-    secondary_zip: 'zip',
+    candidate_fec_id: 'candidate_id',
+    candidate_last_name: 'last_name',
+    candidate_first_name: 'first_name',
+    candidate_middle_name: 'middle_name',
+    candidate_prefix: 'prefix',
+    candidate_suffix: 'suffix',
+    candidate_office: 'candidate_office',
+    candidate_state: 'candidate_state',
+    candidate_district: 'candidate_district',
   },
   contact_3: {
     committee_name: 'name',
