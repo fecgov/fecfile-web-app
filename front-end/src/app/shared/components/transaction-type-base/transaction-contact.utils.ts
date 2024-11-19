@@ -75,7 +75,7 @@ export class TransactionContactUtils {
       .map(([field, property]: string[]) => {
         const contactValue = contact[property as keyof Contact];
         const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
-        let formFieldValue = formField?.value ?? undefined;
+        let formFieldValue = formField?.value;
 
         // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
         // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
@@ -87,11 +87,11 @@ export class TransactionContactUtils {
         ) {
           const electionCode = form.get(templateMap.election_code)?.value ?? '';
           if ((electionCode as string)?.startsWith('P')) {
-            formFieldValue = undefined;
+            formFieldValue = null;
           }
         }
 
-        if (formField && formField?.value !== contactValue) {
+        if (!!formField && formFieldValue !== contactValue) {
           return [property, formFieldValue];
         }
         return undefined;
@@ -166,6 +166,7 @@ export class TransactionContactUtils {
             config,
             transaction,
           );
+          console.log(contactChanges);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
             contact[property] = value as never;
