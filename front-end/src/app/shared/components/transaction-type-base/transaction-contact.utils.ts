@@ -1,9 +1,9 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Observable, Subject, delay } from 'rxjs';
-import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
 export class TransactionContactUtils {
   /**
@@ -68,14 +68,31 @@ export class TransactionContactUtils {
     contact: Contact,
     templateMap: TransactionTemplateMapType,
     contactConfig: { [formField: string]: string },
+    transaction?: Transaction,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any[] {
     return Object.entries(contactConfig)
       .map(([field, property]: string[]) => {
         const contactValue = contact[property as keyof Contact];
         const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
+        let formFieldValue = formField?.value ?? undefined;
+
+        // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
+        // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
+        // as the value for the contact.
+        if (
+          field === 'candidate_state' &&
+          transaction?.transactionType.scheduleId === ScheduleIds.E &&
+          transaction.contact_2?.candidate_office === CandidateOfficeTypes.PRESIDENTIAL
+        ) {
+          const electionCode = form.get(templateMap.election_code)?.value ?? '';
+          if ((electionCode as string)?.startsWith('P')) {
+            formFieldValue = undefined;
+          }
+        }
+
         if (formField && formField?.value !== contactValue) {
-          return [property, formField.value];
+          return [property, formFieldValue];
         }
         return undefined;
       })
@@ -142,7 +159,13 @@ export class TransactionContactUtils {
       ([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
           const contact = transaction[contactKey as keyof Transaction] as Contact;
-          const contactChanges = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
+          const contactChanges = TransactionContactUtils.getContactChanges(
+            form,
+            contact,
+            templateMap,
+            config,
+            transaction,
+          );
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
             contact[property] = value as never;

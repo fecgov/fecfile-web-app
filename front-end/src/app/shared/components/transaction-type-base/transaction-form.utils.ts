@@ -7,12 +7,12 @@ import {
   TransactionTemplateMapType,
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
-import { ScheduleIds, ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
 import { MemoText } from 'app/shared/models/memo-text.model';
@@ -249,19 +249,6 @@ export class TransactionFormUtils {
       payload['report_ids'] = [activeReportId, secondaryReportId];
     }
 
-    // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
-    // This value needs to be saved on the transaction *but not* on the contact.
-    if (
-      payload['contact_2'] &&
-      transaction.transactionType.scheduleId === ScheduleIds.E &&
-      transaction.contact_2?.candidate_office === CandidateOfficeTypes.PRESIDENTIAL
-    ) {
-      const electionCode = form.get(transaction.transactionType.templateMap.election_code)?.value ?? '';
-      if ((electionCode as string)?.startsWith('P')) {
-        payload['contact_2']['candidate_state'] = undefined;
-      }
-    }
-
     return payload;
   }
 
@@ -317,8 +304,8 @@ export class TransactionFormUtils {
 
       if (transaction?.transactionType?.populateSignatoryOneWithTreasurer && committeeAccount) {
         form.patchValue({
-          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_1,
-          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_1,
           [transaction.transactionType.templateMap.signatory_1_middle_name]: committeeAccount.treasurer_name_middle,
           [transaction.transactionType.templateMap.signatory_1_prefix]: committeeAccount.treasurer_name_prefix,
           [transaction.transactionType.templateMap.signatory_1_suffix]: committeeAccount.treasurer_name_suffix,
