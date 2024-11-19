@@ -14,38 +14,7 @@
       </span>
     </p>
     <div class="button-container">
-      <button *ngIf="!this.localLoginAvailable" (click)="navigateToLoginDotGov()" class="login-button" type="button">
-        Sign in with Login.gov
-      </button>
-      <div *ngIf="this.localLoginAvailable" class="dropdown d-inline-flex">
-        <button
-          class="btn btn-secondary dropdown-toggle login-button"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Login
-        </button>
-        <div
-          [style.display]="isDropdownOpen ? 'block' : 'none'"
-          class="dropdown-menu"
-          aria-labelledby="dropdownMenuButton"
-        >
-          <button
-            class="dropdown-item"
-            (click)="navigateToLoginDotGov()"
-            type="button"
-            data-test="login-dot-gov-login-button"
-          >
-            Sign in with Login.gov
-          </button>
-          <button class="dropdown-item" (click)="showDebugLogin()" type="button" data-test="debug-login-button">
-            Debug Login
-          </button>
-        </div>
-      </div>
+      <button (click)="navigateToLoginDotGov()" class="login-button" type="button">Sign in with Login.gov</button>
     </div>
     <div class="">
       <a class="learn-more-link" href="https://www.login.gov/what-is-login/">Learn more about Login.gov</a>
@@ -81,9 +50,3 @@
     </div>
   </div>
 </div>
-
-<p-dialog [(visible)]="isDebugOpen" [style]="{ width: '90%' }" header="Debug Login" [modal]="true">
-  <ng-template pTemplate="content">
-    <app-debug-login></app-debug-login>
-  </ng-template>
-</p-dialog>

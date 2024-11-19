@@ -1,12 +1,12 @@
+import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { F3xCoverageDates } from '../models/form-3x.model';
-import { DateUtils } from './date.utils';
-import { FecDatePipe } from '../pipes/fec-date.pipe';
 import * as _ from 'lodash';
+import { F3xCoverageDates } from '../models/form-3x.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
-import { Injectable } from '@angular/core';
+import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
+import { DateUtils } from './date.utils';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;
@@ -18,8 +18,6 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
       }
     : null;
 }
-
-export const committeeIdValidator = Validators.pattern('^[Cc]\\d{8}$');
 
 export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
