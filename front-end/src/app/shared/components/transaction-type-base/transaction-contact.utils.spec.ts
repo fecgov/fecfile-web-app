@@ -1,5 +1,5 @@
-import { FormGroup } from '@angular/forms';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
 import {
   testTemplateMap,
   testContact,
@@ -12,6 +12,8 @@ import { SelectItem } from 'primeng/api';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -196,5 +198,68 @@ describe('ContactUtils', () => {
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
     expect(transaction.contact_3).toBeTruthy();
+  });
+
+  it('corrects contact changes for IE Presidential Races', () => {
+    const transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE) as SchETransaction;
+    const formProperties = transaction.transactionType.getFormControlNames();
+    const formBuilder = new FormBuilder();
+    const form = formBuilder.group(SchemaUtils.getFormGroupFields(formProperties));
+    transaction.contact_2 = Contact.fromJSON({
+      first_name: 'Changed',
+      candidate_state: 'GA',
+    });
+
+    form.patchValue({
+      // Form fields
+      payee_street_1: 'Street 1',
+      payee_street_2: 'Street 2',
+      payee_city: 'City',
+      payee_state: 'AK',
+      payee_zip: '54321',
+      payee_organization_name: 'Org Name',
+      so_candidate_id_number: 'P000000000',
+      so_candidate_last_name: 'Last',
+      so_candidate_first_name: 'First',
+      so_candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
+      so_candidate_state: 'AK',
+      election_code: 'P1912',
+    });
+
+    const changes = TransactionContactUtils.getContactChanges(
+      form,
+      transaction.contact_2,
+      transaction.transactionType.templateMap,
+      transaction.transactionType.contactConfig['contact_2'],
+      transaction,
+    );
+
+    expect(Object.values(changes)).toContain(['candidate_state', null]);
+
+    // By changing the election code, the candidate_state should no longer be excluded from the contact data
+    form.patchValue({ election_code: 'S1912' });
+    const changesB = TransactionContactUtils.getContactChanges(
+      form,
+      transaction.contact_2,
+      transaction.transactionType.templateMap,
+      transaction.transactionType.contactConfig['contact_2'],
+      transaction,
+    );
+
+    expect(Object.values(changesB)).toContain(['candidate_state', 'AK']);
+
+    form.patchValue({
+      so_candidate_office: CandidateOfficeTypes.SENATE,
+      election_code: 'P1912',
+    });
+    const changesC = TransactionContactUtils.getContactChanges(
+      form,
+      transaction.contact_2,
+      transaction.transactionType.templateMap,
+      transaction.transactionType.contactConfig['contact_2'],
+      transaction,
+    );
+
+    expect(Object.values(changesC)).toContain(['candidate_state', 'AK']);
   });
 });
