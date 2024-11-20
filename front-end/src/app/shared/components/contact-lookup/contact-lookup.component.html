@@ -2,7 +2,7 @@
   <em>{{ candidateOfficeLabel }} candidates only</em>
 </div>
 <div class="grid contact-lookup-container">
-  <div class="col-3 pl-0 pr-0" [ngClass]="showSearchBoxCallback() ? 'dropdown-with-search' : ''">
+  <div class="px-0" [ngClass]="showSearchBoxCallback() ? 'dropdown-with-search' : ''">
     <p-dropdown
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
@@ -22,7 +22,7 @@
       </ng-template>
     </p-dropdown>
   </div>
-  <div *ngIf="showSearchBoxCallback()" class="col-4 pl-0">
+  <div *ngIf="showSearchBoxCallback()" class="pl-0">
     <p-autoComplete
       id="searchBox"
       [formControl]="searchBoxFormControl"
@@ -34,27 +34,28 @@
       [forceSelection]="true"
       (completeMethod)="onDropdownSearch($event)"
       (onSelect)="onContactLookupSelect($event.value)"
+      scrollHeight="30vh"
     >
       <ng-template let-group pTemplate="group">
-        <div>{{ group.label }}</div>
+        <div class="option-group-header">{{ group.label }}</div>
         <div class="try-another-search-text" *ngIf="!group.items || !group.items.length">
           Try another search or create a new contact
         </div>
       </ng-template>
       <ng-template let-contact pTemplate="item">
-        <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
-        <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
+        <div class="contact-label-container">
+          <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
+          <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
+        </div>
       </ng-template>
       <ng-template pTemplate="dropdownicon">
         <img alt="Magnifying lens" src="assets/img/contact_lookup_magnifying_glass.svg" height="20px" width="20px" />
       </ng-template>
     </p-autoComplete>
   </div>
-  <div *ngIf="showCreateNewContactButton" class="col">
-    <div class="add-contact-container">
-      or
-      <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px" /></span>
-      <a (click)="onCreateNewContactSelect()">Create a new contact</a>
-    </div>
+  <div class="add-contact-container" *ngIf="showCreateNewContactButton">
+    or
+    <span><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px" /></span>
+    <a (click)="onCreateNewContactSelect()">Create a new contact</a>
   </div>
 </div>

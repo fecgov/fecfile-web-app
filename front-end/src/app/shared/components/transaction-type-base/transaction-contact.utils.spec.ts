@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import {
   testTemplateMap,
@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 import { SelectItem } from 'primeng/api';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -20,38 +21,38 @@ describe('ContactUtils', () => {
   beforeEach(() => {
     form = new FormGroup(
       {
-        contributor_last_name: new FormControl('test_ln'),
-        contributor_first_name: new FormControl('test_fn'),
-        contributor_middle_name: new FormControl(''),
-        contributor_prefix: new FormControl(''),
-        contributor_suffix: new FormControl(''),
-        contributor_street_1: new FormControl(''),
-        contributor_street_2: new FormControl(''),
-        contributor_city: new FormControl(''),
-        contributor_state: new FormControl(''),
-        contributor_zip: new FormControl(''),
-        contributor_employer: new FormControl(''),
-        contributor_occupation: new FormControl(''),
-        contributor_organization_name: new FormControl('test_org_name'),
-        donor_candidate_last_name: new FormControl('test_candidate_ln'),
-        donor_candidate_first_name: new FormControl('test_candidate_fn'),
-        donor_committee_fec_id: new FormControl(''),
-        donor_committee_name: new FormControl('test_com_name'),
-        donor_candidate_fec_id: new FormControl(''),
-        donor_candidate_middle_name: new FormControl(''),
-        donor_candidate_prefix: new FormControl(''),
-        donor_candidate_suffix: new FormControl(''),
-        donor_candidate_office: new FormControl(''),
-        donor_candidate_state: new FormControl(''),
-        donor_candidate_district: new FormControl(''),
-        ind_name_account_location: new FormControl('secondary_org_name'),
-        account_street_1: new FormControl(''),
-        account_street_2: new FormControl(''),
-        account_city: new FormControl(''),
-        account_state: new FormControl(''),
-        account_zip: new FormControl(''),
-        beneficiary_committee_fec_id: new FormControl(''),
-        beneficiary_committee_name: new FormControl(''),
+        contributor_last_name: new SubscriptionFormControl('test_ln'),
+        contributor_first_name: new SubscriptionFormControl('test_fn'),
+        contributor_middle_name: new SubscriptionFormControl(''),
+        contributor_prefix: new SubscriptionFormControl(''),
+        contributor_suffix: new SubscriptionFormControl(''),
+        contributor_street_1: new SubscriptionFormControl(''),
+        contributor_street_2: new SubscriptionFormControl(''),
+        contributor_city: new SubscriptionFormControl(''),
+        contributor_state: new SubscriptionFormControl(''),
+        contributor_zip: new SubscriptionFormControl(''),
+        contributor_employer: new SubscriptionFormControl(''),
+        contributor_occupation: new SubscriptionFormControl(''),
+        contributor_organization_name: new SubscriptionFormControl('test_org_name'),
+        donor_candidate_last_name: new SubscriptionFormControl('test_candidate_ln'),
+        donor_candidate_first_name: new SubscriptionFormControl('test_candidate_fn'),
+        donor_committee_fec_id: new SubscriptionFormControl(''),
+        donor_committee_name: new SubscriptionFormControl('test_com_name'),
+        donor_candidate_fec_id: new SubscriptionFormControl(''),
+        donor_candidate_middle_name: new SubscriptionFormControl(''),
+        donor_candidate_prefix: new SubscriptionFormControl(''),
+        donor_candidate_suffix: new SubscriptionFormControl(''),
+        donor_candidate_office: new SubscriptionFormControl(''),
+        donor_candidate_state: new SubscriptionFormControl(''),
+        donor_candidate_district: new SubscriptionFormControl(''),
+        ind_name_account_location: new SubscriptionFormControl('secondary_org_name'),
+        account_street_1: new SubscriptionFormControl(''),
+        account_street_2: new SubscriptionFormControl(''),
+        account_city: new SubscriptionFormControl(''),
+        account_state: new SubscriptionFormControl(''),
+        account_zip: new SubscriptionFormControl(''),
+        beneficiary_committee_fec_id: new SubscriptionFormControl(''),
+        beneficiary_committee_name: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );

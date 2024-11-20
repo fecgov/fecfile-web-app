@@ -40,7 +40,7 @@ import {
   ScheduleETransactionTypes,
 } from 'app/shared/models/sche-transaction.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount, isPAC, isPTY } from 'app/shared/models/committee-account.model';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -304,10 +304,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         break;
     }
 
-    if (isPAC(this.committeeAccount?.committee_type))
-      transactionTypes = transactionTypes.filter((tt) => !PACRestricted().includes(tt));
-    if (isPTY(this.committeeAccount?.committee_type, this.committeeAccount?.designation))
-      transactionTypes = transactionTypes.filter((tt) => !PTYRestricted().includes(tt));
+    if (this.committeeAccount?.isPAC) transactionTypes = transactionTypes.filter((tt) => !PACRestricted().includes(tt));
+    if (this.committeeAccount?.isPTY) transactionTypes = transactionTypes.filter((tt) => !PTYRestricted().includes(tt));
 
     if (this.debtId) {
       const debtPaymentLines = [

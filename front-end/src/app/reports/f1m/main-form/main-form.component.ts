@@ -17,6 +17,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-main-form',
@@ -174,7 +175,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
     f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-      this.form.get(`${tag}_candidate_id_number`)?.valueChanges.subscribe(() => {
+      (this.form.get(`${tag}_candidate_id_number`) as SubscriptionFormControl)?.addSubscription(() => {
         f1mCandidateTags
           .filter((t) => t !== tag)
           .forEach((t) => {
@@ -186,30 +187,32 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       });
     });
 
-    this.form.get('statusBy')?.valueChanges.subscribe((value: 'affiliation' | 'qualification') => {
-      SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
-      if (value === 'affiliation') {
-        this.enableValidation([this.affiliatedContact]);
-        this.disableValidation(this.candidateContacts);
-        this.form.get('date_of_original_registration')?.clearValidators();
-        this.form.get('date_of_51st_contributor')?.clearValidators();
-        this.form.get('date_committee_met_requirements')?.clearValidators();
-        this.form.get('date_of_original_registration')?.setValue(undefined);
-        this.form.get('date_of_51st_contributor')?.setValue(undefined);
-        this.form.get('date_committee_met_requirements')?.setValue(undefined);
-      } else {
-        this.enableValidation(this.candidateContacts);
-        this.form.get('date_of_original_registration')?.addValidators(Validators.required);
-        this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
-        this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
-        this.disableValidation([this.affiliatedContact]);
-      }
-      this.excludeIds = [];
-      this.excludeFecIds = [];
-      this.form.get('date_of_original_registration')?.updateValueAndValidity();
-      this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
-      this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
-    });
+    (this.form.get('statusBy') as SubscriptionFormControl)?.addSubscription(
+      (value: 'affiliation' | 'qualification') => {
+        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
+        if (value === 'affiliation') {
+          this.enableValidation([this.affiliatedContact]);
+          this.disableValidation(this.candidateContacts);
+          this.form.get('date_of_original_registration')?.clearValidators();
+          this.form.get('date_of_51st_contributor')?.clearValidators();
+          this.form.get('date_committee_met_requirements')?.clearValidators();
+          this.form.get('date_of_original_registration')?.setValue(undefined);
+          this.form.get('date_of_51st_contributor')?.setValue(undefined);
+          this.form.get('date_committee_met_requirements')?.setValue(undefined);
+        } else {
+          this.enableValidation(this.candidateContacts);
+          this.form.get('date_of_original_registration')?.addValidators(Validators.required);
+          this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
+          this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
+          this.disableValidation([this.affiliatedContact]);
+        }
+        this.excludeIds = [];
+        this.excludeFecIds = [];
+        this.form.get('date_of_original_registration')?.updateValueAndValidity();
+        this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
+        this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
+      },
+    );
     this.form.get('statusBy')?.updateValueAndValidity();
   }
 

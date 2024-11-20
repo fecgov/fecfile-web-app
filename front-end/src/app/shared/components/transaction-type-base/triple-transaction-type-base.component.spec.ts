@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
@@ -21,6 +21,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
@@ -103,7 +104,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
     });
 
     it('should return true if super.isInvalid would fail', () => {
-      component.form.addControl('Test', new FormControl(undefined, Validators.required));
+      component.form.addControl('Test', new SubscriptionFormControl(undefined, Validators.required));
       expect(component.form.invalid).toBeTrue();
       expect(component.isInvalid()).toBeTrue();
     });
@@ -114,7 +115,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       expect(component.childForm.invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
-      component.childForm_2.addControl('Test', new FormControl(undefined, Validators.required));
+      component.childForm_2.addControl('Test', new SubscriptionFormControl(undefined, Validators.required));
       expect(component.childForm_2.invalid).toBeTrue();
       expect(component.isInvalid()).toBeTrue();
     });

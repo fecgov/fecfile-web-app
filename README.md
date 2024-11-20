@@ -26,10 +26,14 @@ A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN e
 
 ### Running the Front-End locally
 
-From within the front-end directory, run the command:
-`
-    ng serve
-	`
+From within the front-end directory, install packages with 
+```
+npm install
+````
+and run the application with the command:
+```
+npx -p @angular/cli ng serve
+```
 to start a local server for the application. The front-end can then be accessed through your browser at port 4200.
 
 ### Running end-to-end (E2E) tests

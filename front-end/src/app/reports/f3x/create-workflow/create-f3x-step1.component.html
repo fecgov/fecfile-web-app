@@ -88,11 +88,12 @@
       <ng-container *ngIf="isElectionReport()">
         <div class="election-info col-6 grid">
           <div class="col-12">
-            <div class="field">
-              <label for="date_of_election">ELECTION ON</label>
-              <p-calendar id="date_of_election" name="date_of_election" formControlName="date_of_election"></p-calendar>
-              <app-error-messages fieldName="date_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
+            <app-calendar
+              fieldName="date_of_election"
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              label="ELECTION ON"
+            ></app-calendar>
           </div>
           <div class="col-12">
             <div class="field">
@@ -117,59 +118,28 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <h3>Covering period</h3>
+        <h3 class="m-0">Covering period</h3>
+        <span>Please verify coverage dates since the dates cannot be changed once the report is created.</span>
       </div>
     </div>
     <div class="grid">
       <div class="col-6">
-        <div class="field">
-          <label for="coverage_from_date">FROM</label>
-          <p-calendar
-            inputId="coverage_from_date"
-            name="coverage_from_date"
-            formControlName="coverage_from_date"
-          ></p-calendar>
-          <app-error-messages
-            [form]="form"
-            fieldName="coverage_from_date"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          fieldName="coverage_from_date"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="FROM"
+        ></app-calendar>
       </div>
       <div class="col-6">
-        <div class="field">
-          <label for="coverage_through_date">TO</label>
-          <p-calendar
-            inputId="coverage_through_date"
-            name="coverage_through_date"
-            formControlName="coverage_through_date"
-          ></p-calendar>
-          <app-error-messages
-            [form]="form"
-            fieldName="coverage_through_date"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          fieldName="coverage_through_date"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="TO"
+        ></app-calendar>
       </div>
     </div>
   </form>
 </div>
-<div class="grid">
-  <div class="col-2">
-    <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
-  </div>
-  <div class="col-6"></div>
-  <div class="col-1">
-    <button pButton pRipple appSingleClick label="Save" (click)="save()" class="p-button-primary"></button>
-  </div>
-  <div class="col-3">
-    <button
-      pButton
-      pRipple
-      appSingleClick
-      label="Save and continue"
-      (click)="save('continue')"
-      class="p-button-info"
-    ></button>
-  </div>
-</div>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>

@@ -1,7 +1,8 @@
-import { FormBuilder, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { SchemaUtils } from './schema.utils';
+import { SubscriptionFormControl } from './subscription-form-control';
 
 describe('ValidateUtils', () => {
   it('#formValidator should validate properties correctly', () => {
@@ -17,21 +18,21 @@ describe('ValidateUtils', () => {
     });
 
     let validator: ValidatorFn = SchemaUtils.jsonSchemaValidator('telephone', formValidatorForm, formValidatorSchema);
-    let result: ValidationErrors | null = validator(formValidatorForm.get('telephone') as FormControl);
+    let result: ValidationErrors | null = validator(formValidatorForm.get('telephone') as SubscriptionFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
     }
 
     validator = SchemaUtils.jsonSchemaValidator('candidate_state', formValidatorForm, formValidatorSchema);
-    result = validator(formValidatorForm.get('candidate_state') as FormControl);
+    result = validator(formValidatorForm.get('candidate_state') as SubscriptionFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['required']).toBe(true);
     }
 
     validator = SchemaUtils.jsonSchemaValidator('last_name', formValidatorForm, formValidatorSchema);
-    result = validator(formValidatorForm.get('last_name') as FormControl);
+    result = validator(formValidatorForm.get('last_name') as SubscriptionFormControl);
     expect(result).toBe(null);
   });
 
@@ -48,7 +49,9 @@ describe('ValidateUtils', () => {
       formValidatorForm,
       formValidatorSchema,
     );
-    let result: ValidationErrors | null = validator(formValidatorForm.get('change_of_address') as FormControl);
+    let result: ValidationErrors | null = validator(
+      formValidatorForm.get('change_of_address') as SubscriptionFormControl,
+    );
     expect(result).not.toBe(null);
     if (result) {
       expect(result['pattern'].requiredPattern).toBe('must be boolean,null');
@@ -58,7 +61,7 @@ describe('ValidateUtils', () => {
       change_of_address: true,
     });
     validator = SchemaUtils.jsonSchemaValidator('change_of_address', formValidatorForm, formValidatorSchema);
-    result = validator(formValidatorForm.get('change_of_address') as FormControl);
+    result = validator(formValidatorForm.get('change_of_address') as SubscriptionFormControl);
     expect(result).toBe(null);
   });
 
@@ -75,7 +78,9 @@ describe('ValidateUtils', () => {
       formValidatorForm,
       formValidatorSchema,
     );
-    let result: ValidationErrors | null = validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl);
+    let result: ValidationErrors | null = validator(
+      formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl,
+    );
     expect(result).not.toEqual(null);
     if (result) {
       expect(result['max'].max).toBe(999999999.99);
@@ -85,7 +90,7 @@ describe('ValidateUtils', () => {
       L6a_cash_on_hand_jan_1_ytd: -200.0,
     });
     validator = SchemaUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd', formValidatorForm, formValidatorSchema);
-    result = validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl);
+    result = validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl);
     if (result) {
       expect(result['min'].min).toBe(0);
     }

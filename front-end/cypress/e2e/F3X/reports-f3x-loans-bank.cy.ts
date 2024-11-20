@@ -6,7 +6,6 @@ import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly, Setup } from './f3x-setup';
-import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -21,12 +20,8 @@ const formData = {
   },
 };
 
-function setupLoanFromBank(setup: Setup, addCoh = false) {
+function setupLoanFromBank(setup: Setup) {
   F3XSetup(setup);
-  if (addCoh) {
-    F3xCashOnHandPage.enterFormData(cohFormData);
-    PageUtils.clickButton('Save & continue');
-  }
   StartTransaction.Loans().FromBank();
 
   PageUtils.searchBoxInput(organizationFormData.name);
@@ -100,7 +95,7 @@ describe('Loans', () => {
     cy.contains('Review loan agreement').click({ force: true });
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
-    PageUtils.valueCheck('#date_incurred', '05/27/2024');
+    PageUtils.valueCheck('#loan_incurred_date', '05/27/2024');
   });
 
   it('should test: Loan Received from Bank', () => {
@@ -123,7 +118,7 @@ describe('Loans', () => {
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE');
 
     formData.date_received = new Date(currentYear, 4 - 1, 27);
-    PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
+    PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(formData.date_received));
     PageUtils.enterValue('#amount', formData.amount);
     PageUtils.clickButton('Save');
     PageUtils.urlCheck('/list');

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
@@ -18,6 +18,7 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('MemoCodeInputComponent', () => {
   let component: MemoCodeInputComponent;
@@ -34,10 +35,10 @@ describe('MemoCodeInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        contribution_date: new FormControl(''),
-        memo_code: new FormControl(''),
-        contribution_amount: new FormControl(''),
-        contribution_aggregate: new FormControl(''),
+        contribution_date: new SubscriptionFormControl(''),
+        memo_code: new SubscriptionFormControl(''),
+        contribution_amount: new SubscriptionFormControl(''),
+        contribution_aggregate: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );

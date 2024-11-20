@@ -22,7 +22,6 @@ import {
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { SharedModule } from 'app/shared/shared.module';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -52,14 +51,7 @@ describe('ContactLookupComponent', () => {
         AutoCompleteModule,
         SharedModule,
       ],
-      providers: [
-        FormBuilder,
-        ContactService,
-        FecApiService,
-        EventEmitter,
-        provideMockStore(testMockStore),
-        HttpClient,
-      ],
+      providers: [FormBuilder, ContactService, EventEmitter, provideMockStore(testMockStore), HttpClient],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
@@ -141,7 +133,7 @@ describe('ContactLookupComponent', () => {
         ).toBeTrue();
         expect(
           JSON.stringify([
-            { label: 'There are no matching candidates', items: [] },
+            { label: 'There are no matching candidate contacts', items: [] },
             { label: 'There are no matching registered candidates', items: [] },
           ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true)),
         ).toBeTrue();
@@ -207,7 +199,7 @@ describe('ContactLookupComponent', () => {
         ).toBeTrue();
         expect(
           JSON.stringify([
-            { label: 'There are no matching committees', items: [] },
+            { label: 'There are no matching committee contacts', items: [] },
             { label: 'There are no matching registered committees', items: [] },
           ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true)),
         ).toBeTrue();
@@ -315,15 +307,8 @@ describe('ContactLookupComponent', () => {
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testContact);
   }));
 
-  it('#onFecApiCandidateLookupDataSelect candidate name only', fakeAsync(() => {
-    const testCandidate = Candidate.fromJSON({
-      candidate_id: 'P80000722',
-      name: 'BIDEN, JOSEPH R JR',
-    });
-    const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
-      of(testCandidate),
-    );
+  describe('onFecApiCandidateLookupDataSelect', () => {
+    let eventEmitterEmitSpy: jasmine.Spy<(value?: Contact | undefined) => void>;
     const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
       candidate_id: 'P80000722',
       office: 'P',
@@ -335,81 +320,135 @@ describe('ContactLookupComponent', () => {
         };
       },
     };
-    component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
-    tick(500);
-    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);
-    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
-      Contact.fromJSON({
-        type: ContactTypes.CANDIDATE,
-        candidate_id: 'P80000722',
-        last_name: 'BIDEN',
-        first_name: 'JOSEPH R JR',
-        middle_name: undefined,
-        prefix: undefined,
-        suffix: undefined,
-        street_1: undefined,
-        street_2: undefined,
-        city: undefined,
-        state: undefined,
-        zip: undefined,
-        employer: '',
-        occupation: '',
-        candidate_office: undefined,
-        candidate_state: undefined,
-        candidate_district: undefined,
-      }),
-    );
-  }));
 
-  it('#onFecApiCandidateLookupDataSelect candidate last_name and first_name', fakeAsync(() => {
-    const testCandidate = Candidate.fromJSON({
+    const baseCandidate = {
       candidate_id: 'P80000722',
       candidate_first_name: 'test_candidate_first_name',
       candidate_last_name: 'test_candidate_last_name',
       candidate_middle_name: 'test_candidate_middle_name',
       candidate_prefix: 'test_candidate_prefix',
       candidate_suffix: 'test_candidate_suffix',
-    });
-    const eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
-    const getCandidateDetailsSpy = spyOn(component.fecApiService, 'getCandidateDetails').and.returnValue(
-      of(testCandidate),
-    );
-    const testFecApiCandidateLookupData: FecApiCandidateLookupData = {
-      candidate_id: 'P80000722',
-      office: 'P',
-      name: 'BIDEN, JOSEPH R JR',
-      toSelectItem(): SelectItem<FecApiCandidateLookupData> {
-        return {
-          label: `${this.name} (${this.candidate_id})`,
-          value: this,
-        };
-      },
     };
-    component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
-    tick(500);
-    expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);
-    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
-      Contact.fromJSON({
-        type: ContactTypes.CANDIDATE,
-        candidate_id: 'P80000722',
-        last_name: 'test_candidate_last_name',
-        first_name: 'test_candidate_first_name',
-        middle_name: 'test_candidate_middle_name',
-        prefix: 'test_candidate_prefix',
-        suffix: 'test_candidate_suffix',
-        street_1: undefined,
-        street_2: undefined,
-        city: undefined,
-        state: undefined,
-        zip: undefined,
-        employer: '',
-        occupation: '',
-        candidate_office: undefined,
-        candidate_state: undefined,
-        candidate_district: undefined,
-      }),
-    );
-  }));
+
+    const baseContact = {
+      type: ContactTypes.CANDIDATE,
+      candidate_id: 'P80000722',
+      last_name: 'test_candidate_last_name',
+      first_name: 'test_candidate_first_name',
+      middle_name: 'test_candidate_middle_name',
+      prefix: 'test_candidate_prefix',
+      suffix: 'test_candidate_suffix',
+      street_1: undefined,
+      street_2: undefined,
+      city: undefined,
+      state: undefined,
+      zip: undefined,
+      employer: '',
+      occupation: '',
+    };
+
+    beforeEach(() => {
+      eventEmitterEmitSpy = spyOn(component.contactLookupSelect, 'emit');
+    });
+
+    async function testCandidate(candidate: Candidate) {
+      const getCandidateDetailsSpy = spyOn(component.contactService, 'getCandidateDetails').and.returnValue(
+        of(candidate),
+      );
+
+      component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
+      tick(500);
+      expect(getCandidateDetailsSpy).toHaveBeenCalledOnceWith(testFecApiCandidateLookupData.candidate_id!);
+    }
+
+    it('should work with candidate name only', fakeAsync(() => {
+      testCandidate(
+        Candidate.fromJSON({
+          candidate_id: 'P80000722',
+          name: 'BIDEN, JOSEPH R JR',
+        }),
+      );
+
+      expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+        Contact.fromJSON({
+          type: ContactTypes.CANDIDATE,
+          candidate_id: 'P80000722',
+          last_name: 'BIDEN',
+          first_name: 'JOSEPH R JR',
+          middle_name: undefined,
+          prefix: undefined,
+          suffix: undefined,
+          street_1: undefined,
+          street_2: undefined,
+          city: undefined,
+          state: undefined,
+          zip: undefined,
+          employer: '',
+          occupation: '',
+          candidate_office: undefined,
+          candidate_state: undefined,
+          candidate_district: undefined,
+        }),
+      );
+    }));
+
+    it('should work with candidate last_name and first_name', fakeAsync(() => {
+      testCandidate(Candidate.fromJSON(baseCandidate));
+
+      expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+        Contact.fromJSON({
+          ...baseContact,
+          candidate_office: undefined,
+          candidate_state: undefined,
+          candidate_district: undefined,
+        }),
+      );
+    }));
+
+    it('should populate house district if state is not US', fakeAsync(() => {
+      testCandidate(
+        Candidate.fromJSON(
+          Candidate.fromJSON({
+            ...baseCandidate,
+            office: 'H',
+            state: 'WY',
+            district: '00',
+          }),
+        ),
+      );
+
+      expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+        Contact.fromJSON({
+          ...baseContact,
+          candidate_office: 'H',
+          candidate_state: 'WY',
+          candidate_district: '00',
+        }),
+      );
+    }));
+
+    it('should not populate state or district if state is US', fakeAsync(() => {
+      testCandidate(
+        Candidate.fromJSON(
+          Candidate.fromJSON({
+            ...baseCandidate,
+            office: 'H',
+            state: 'US',
+            district: '00',
+          }),
+        ),
+      );
+
+      expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+        Contact.fromJSON({
+          ...baseContact,
+          candidate_office: 'H',
+          candidate_state: '',
+          candidate_district: '',
+        }),
+      );
+    }));
+  });
 
   it('#onCreateNewContactSelect Contact happy path', fakeAsync(() => {
     const eventEmitterEmitSpy = spyOn(component.createNewContactSelect, 'emit');

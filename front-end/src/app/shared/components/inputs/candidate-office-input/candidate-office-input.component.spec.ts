@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from './candidate-office-input.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('CandidateOfficeInputComponent', () => {
   let component: CandidateOfficeInputComponent;
@@ -25,22 +26,22 @@ describe('CandidateOfficeInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        donor_candidate_last_name: new FormControl(''),
-        donor_candidate_first_name: new FormControl(''),
-        donor_candidate_middle_name: new FormControl(''),
-        donor_candidate_prefix: new FormControl(''),
-        donor_candidate_suffix: new FormControl(''),
+        donor_candidate_last_name: new SubscriptionFormControl(''),
+        donor_candidate_first_name: new SubscriptionFormControl(''),
+        donor_candidate_middle_name: new SubscriptionFormControl(''),
+        donor_candidate_prefix: new SubscriptionFormControl(''),
+        donor_candidate_suffix: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
 
-    component.form.addControl(testCandidateOfficeFormControlName, new FormControl());
+    component.form.addControl(testCandidateOfficeFormControlName, new SubscriptionFormControl());
     component.officeFormControlName = testCandidateOfficeFormControlName;
 
-    component.form.addControl(testCandidateStateFormControlName, new FormControl());
+    component.form.addControl(testCandidateStateFormControlName, new SubscriptionFormControl());
     component.stateFormControlName = testCandidateStateFormControlName;
 
-    component.form.addControl(districtFormControlName, new FormControl());
+    component.form.addControl(districtFormControlName, new SubscriptionFormControl());
     component.districtFormControlName = districtFormControlName;
 
     fixture.detectChanges();

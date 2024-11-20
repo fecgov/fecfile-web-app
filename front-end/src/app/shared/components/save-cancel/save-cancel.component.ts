@@ -6,5 +6,5 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class SaveCancelComponent {
   @Output() save = new EventEmitter<'continue' | undefined>();
-  @Output() cancel = new EventEmitter();
+  @Output() cancelForm = new EventEmitter();
 }

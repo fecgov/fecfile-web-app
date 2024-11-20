@@ -47,9 +47,8 @@ describe('Loans', () => {
     cy.contains('Receive loan repayment').click({ force: true });
 
     PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
-    PageUtils.searchBoxInput(committeeFormData.committee_id);
     formData.date_received = new Date(currentYear, 4 - 1, 27);
-    PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData.date_received);
+    PageUtils.calendarSetValue('[data-cy="contribution_date"]', formData.date_received);
     PageUtils.enterValue('#amount', formData.amount);
     PageUtils.clickButton('Save');
     PageUtils.urlCheck('/list');

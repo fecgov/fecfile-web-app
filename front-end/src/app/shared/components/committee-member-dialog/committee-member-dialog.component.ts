@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService } from 'primeng/api';
 import { DestroyerComponent } from '../app-destroyer.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-committee-member-dialog',
@@ -38,10 +39,10 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
     protected uniqueEmailValidator: CommitteeMemberEmailValidator,
   ) {
     super();
-    this.form.addControl('role', new FormControl());
+    this.form.addControl('role', new SubscriptionFormControl());
     this.form.addControl(
       'email',
-      new FormControl('', {
+      new SubscriptionFormControl('', {
         validators: [Validators.required, emailValidator],
         asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
         updateOn: 'change',

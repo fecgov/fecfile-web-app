@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+
 import {
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
@@ -11,12 +11,12 @@ import {
   FecApiLookupData,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -28,7 +28,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;
 
-  @Input() maxFecCommitteeResults = 5;
+  @Input() maxFecCommitteeResults = 10;
   @Input() maxFecfileCommitteeResults = 5;
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
@@ -57,15 +57,12 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
 
-  contactTypeFormControl = new FormControl<ContactTypes | null>(null, { updateOn: 'change' });
-  searchBoxFormControl = new FormControl('', { updateOn: 'change' });
+  contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
+  searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   searchTerm = '';
 
-  constructor(
-    private contactService: ContactService,
-    public fecApiService: FecApiService,
-  ) {
+  constructor(public contactService: ContactService) {
     super();
   }
 
@@ -167,7 +164,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
     if (data.candidate_id) {
-      this.fecApiService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
+      this.contactService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
           Contact.fromJSON({
@@ -193,7 +190,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             occupation: '',
             candidate_office: candidate.office,
             candidate_state: candidate.state === 'US' ? '' : candidate.state,
-            candidate_district: candidate.district === '00' ? '' : candidate.district,
+            candidate_district: candidate.state === 'US' ? '' : candidate.district,
           }),
         );
       });
@@ -202,7 +199,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
     if (data.id) {
-      this.fecApiService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
+      this.contactService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
         let phone;
         if (committeeAccount?.treasurer_phone) {
           phone = '+1 ' + committeeAccount.treasurer_phone;

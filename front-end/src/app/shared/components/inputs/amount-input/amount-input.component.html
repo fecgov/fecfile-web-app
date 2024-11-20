@@ -7,28 +7,22 @@
     </div>
     <div class="grid">
       <div class="col-4" *ngIf="templateMap['date2']">
-        <div class="field">
-          <label for="date2">{{ transaction?.transactionType?.date2Label }}</label>
-          <p-calendar inputId="date2" name="date2" [formControlName]="templateMap['date2']"></p-calendar>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['date2']"
-            [formSubmitted]="formSubmitted"
-            requiredErrorMessage="At least ONE date field must be entered."
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          [fieldName]="templateMap['date2']"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [label]="transaction?.transactionType?.date2Label || ''"
+          requiredErrorMessage="At least ONE date field must be entered."
+        ></app-calendar>
       </div>
       <div class="col-4">
-        <div class="field">
-          <label for="date">{{ transaction?.transactionType?.dateLabel }}</label>
-          <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
-          <app-error-messages
-            *ngIf="!templateMap['date2']"
-            [form]="form"
-            [fieldName]="templateMap['date']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          [fieldName]="templateMap['date']"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [label]="transaction?.transactionType?.dateLabel || ''"
+          [showErrors]="!!templateMap['date2']"
+        ></app-calendar>
       </div>
       <div class="col-4" *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24">
         <app-linked-report-input [form]="this.form" [templateMap]="this.templateMap"></app-linked-report-input>

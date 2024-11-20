@@ -3,6 +3,7 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
+import { SubscriptionFormControl } from '../subscription-form-control';
 
 export class RedesignationFromUtils {
   private static readOnlyFields = [
@@ -90,10 +91,11 @@ export class RedesignationFromUtils {
     fromForm.get('memo_code')?.setValue(true);
 
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
-    toForm.get(templateMap.amount)?.valueChanges.subscribe((amount) => {
+    (toForm.get(templateMap.amount) as SubscriptionFormControl)?.addSubscription((amount) => {
       fromForm.get(templateMap.amount)?.setValue(-1 * parseFloat(amount));
     });
-    toForm.get(templateMap.date)?.valueChanges.subscribe((date) => {
+
+    (toForm.get(templateMap.date) as SubscriptionFormControl)?.addSubscription((date) => {
       fromForm.get(templateMap.date)?.setValue(date);
     });
 

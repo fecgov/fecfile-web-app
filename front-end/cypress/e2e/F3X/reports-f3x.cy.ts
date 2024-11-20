@@ -1,6 +1,5 @@
 import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
-import { defaultFormData as cohFormData, F3xCashOnHandPage } from '../pages/f3xCashOnHandPage';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { defaultForm3XData } from '../models/ReportFormModel';
@@ -67,9 +66,6 @@ describe('Manage reports', () => {
   it('Create a report error for overlapping coverage dates', () => {
     // Create report #1
     ReportListPage.createF3X();
-    F3xCashOnHandPage.enterFormData(cohFormData);
-    PageUtils.clickButton('Save & continue');
-    ReportListPage.goToPage();
 
     // Create report #2
     const formData = {
@@ -82,8 +78,8 @@ describe('Manage reports', () => {
 
     // Check for error messages caused by the overlapping dates
     const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
-    cy.get('app-error-messages[fieldname="coverage_from_date"]').should('contain', errorMessage);
-    cy.get('app-error-messages[fieldname="coverage_through_date"]').should('contain', errorMessage);
+    cy.get('app-error-messages[data-cy="coverage_from_date-error"]').should('contain', errorMessage);
+    cy.get('app-error-messages[data-cy="coverage_through_date-error"]').should('contain', errorMessage);
   });
 
   xit('Create report with previous existing report types disabled', () => {
@@ -97,12 +93,8 @@ describe('Manage reports', () => {
     cy.get('label[for="12G"]').should('have.class', 'p-disabled');
   });
 
-  it('Create report and save cash on hand', () => {
+  it('Create report and save', () => {
     ReportListPage.createF3X();
-
-    F3xCashOnHandPage.enterFormData(cohFormData);
-    PageUtils.clickButton('Save & continue');
-    cy.contains('Cash on hand').should('exist');
   });
 
   xit('Check values on the Summary Page', () => {

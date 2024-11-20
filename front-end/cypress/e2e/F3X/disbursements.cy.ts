@@ -1,4 +1,4 @@
-import { Initialize, setCommitteeType } from '../pages/loginPage';
+import { Initialize, setCommitteeToPTY } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import {
@@ -36,7 +36,7 @@ describe('Disbursements', () => {
 
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
     F3XSetup({ individual: true });
-    setCommitteeType('D');
+    setCommitteeToPTY();
     StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
@@ -65,7 +65,13 @@ describe('Disbursements', () => {
     cy.contains(organizationFormData.name).should('exist');
     cy.contains(organizationFormData.name).click();
 
-    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independentExpVoidData, candidateFormData);
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpVoidData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure - Void');
@@ -84,7 +90,13 @@ describe('Disbursements', () => {
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
-    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(independentExpVoidData, candidateFormData);
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpVoidData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
 
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');
@@ -150,7 +162,7 @@ describe('Disbursements', () => {
 
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
     F3XSetup({ organization: true });
-    setCommitteeType('D');
+    setCommitteeToPTY();
     StartTransaction.Disbursements().Federal().CreditCardPayment();
 
     cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));

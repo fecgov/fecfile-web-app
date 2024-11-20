@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
   getTestTransactionByType,
@@ -26,6 +26,7 @@ import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -52,7 +53,7 @@ describe('ContactDialogComponent', () => {
     component = fixture.componentInstance;
     component.contact = { ...testContact } as Contact;
     component.contactLookup = {
-      contactTypeFormControl: new FormControl(),
+      contactTypeFormControl: new SubscriptionFormControl(),
     } as ContactLookupComponent;
     component.ngOnInit();
   });
@@ -93,7 +94,7 @@ describe('ContactDialogComponent', () => {
     component.formSubmitted = false;
     const fb: FormBuilder = new FormBuilder();
     const form = fb.group({
-      test: new FormControl('', Validators.required),
+      test: new SubscriptionFormControl('', Validators.required),
     });
     component.form = form;
     component.saveContact();

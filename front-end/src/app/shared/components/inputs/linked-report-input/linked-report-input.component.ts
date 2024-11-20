@@ -5,8 +5,9 @@ import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { FormControl } from '@angular/forms';
+
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-linked-report-input',
@@ -14,7 +15,7 @@ import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.u
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
   committeeF3xReports: Promise<Report[]>;
-  linkedF3xControl = new FormControl();
+  linkedF3xControl = new SubscriptionFormControl();
 
   tooltipText =
     'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
@@ -32,10 +33,14 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
 
   ngOnInit(): void {
     this.form.addControl('linkedF3x', this.linkedF3xControl);
-    this.form.addControl('linkedF3xId', new FormControl());
-    const dateControl = this.form.get(this.templateMap['date']) ?? new FormControl();
-    const date2Control = this.form.get(this.templateMap['date2']) ?? new FormControl();
-    this.linkedF3xControl.addValidators(buildCorrespondingForm3XValidator(dateControl, date2Control));
+    this.form.addControl('linkedF3xId', new SubscriptionFormControl());
+    const dateControl =
+      (this.form.get(this.templateMap['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
+    const date2Control =
+      (this.form.get(this.templateMap['date2']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
+    this.linkedF3xControl.addValidators(
+      buildCorrespondingForm3XValidator(this.form, this.templateMap['date'], this.templateMap['date2']),
+    );
 
     dateControl.valueChanges
       .pipe(

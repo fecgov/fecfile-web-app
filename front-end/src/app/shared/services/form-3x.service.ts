@@ -4,10 +4,10 @@ import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
-import { ApiService } from './api.service';
-import { ReportService } from './report.service';
 import { Report } from '../models/report.model';
 import { F3xReportCodes } from '../utils/report-code.utils';
+import { ApiService } from './api.service';
+import { ReportService } from './report.service';
 
 @Injectable({
   providedIn: 'root',
@@ -51,22 +51,14 @@ export class Form3XService extends ReportService {
       .pipe(map((response) => response.map((r) => Form3X.fromJSON(r))));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isQualifiedCommittee(committeeAccount?: CommitteeAccount) {
-    return true;
-    // Committee Qualificaiton Logic is being overriden until a future ticket.
-    // When this is reenabled, we should consider expanding the unit tests for it,
-    // since having it always return true didn't cause any tests to fail.
-
-    // return (
-    //   !!committeeAccount?.committee_type && F3xQualifiedCommitteeTypeCodes.includes(committeeAccount.committee_type)
-    // );
+  public getFinalReport(year: number): Promise<Form3X | undefined> {
+    return firstValueFrom(this.apiService.get<Form3X | undefined>(`${this.apiEndpoint}/final?year=${year}`));
   }
 
   public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Observable<Report> {
     const payload: Form3X = Form3X.fromJSON({
       ...report,
-      qualified_committee: this.isQualifiedCommittee(committeeAccount),
+      qualified_committee: committeeAccount?.qualified,
       committee_name: committeeAccount?.name,
       street_1: committeeAccount?.street_1,
       street_2: committeeAccount?.street_2,

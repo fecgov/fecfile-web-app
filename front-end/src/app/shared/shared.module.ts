@@ -66,6 +66,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { InputNumberComponent } from './components/inputs/input-number/input-number.component';
 import { SaveCancelComponent } from './components/save-cancel/save-cancel.component';
 import { PollerComponent } from './components/poller/poller.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 
 @NgModule({
   imports: [
@@ -142,6 +143,7 @@ import { PollerComponent } from './components/poller/poller.component';
     InputNumberComponent,
     SaveCancelComponent,
     PollerComponent,
+    CalendarComponent,
   ],
   exports: [
     FecDatePipe,
@@ -186,6 +188,7 @@ import { PollerComponent } from './components/poller/poller.component';
     InputNumberComponent,
     SaveCancelComponent,
     PollerComponent,
+    CalendarComponent,
   ],
   providers: [DatePipe, CurrencyPipe],
 })

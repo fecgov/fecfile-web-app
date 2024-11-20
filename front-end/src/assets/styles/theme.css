@@ -3827,6 +3827,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-paginator {
   background: #ffffff;
   color: #112e51;
+  min-width: 167px;
 }
 
 .p-paginator .p-paginator-first,

@@ -26,7 +26,12 @@ export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
     const earmark: SchATransaction = transaction.parent_transaction as SchATransaction;
     const conduit = earmark.contributor_organization_name;
     if (conduit) {
-      return `Earmarked from ${conduit} (Committee)`;
+      let conduitClause = `Earmarked from ${conduit}`;
+      const parenthetical = ' (Committee)';
+      if ((conduitClause + parenthetical).length > 100) {
+        conduitClause = conduitClause.slice(0, 97 - parenthetical.length) + '...';
+      }
+      return conduitClause + parenthetical;
     }
     return '';
   }

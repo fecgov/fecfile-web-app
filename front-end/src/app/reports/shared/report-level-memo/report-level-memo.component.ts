@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -13,6 +13,7 @@ import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 import { Report } from 'app/shared/models/report.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -43,7 +44,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
     private messageService: MessageService,
   ) {
     super();
-    this.form.addControl(this.recTypeFormProperty, new FormControl());
+    this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
   }
 
   ngOnInit(): void {

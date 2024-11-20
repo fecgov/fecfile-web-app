@@ -1,8 +1,8 @@
 import { plainToClass, plainToInstance, Transform } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { F3xReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
-import { F3xReportCodes } from '../utils/report-code.utils';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -20,12 +20,10 @@ export class F3xCoverageDates {
 
   // prettier-ignore
   static fromJSON(json: any, reportCodeLabel: string): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
-        json.report_code_label = reportCodeLabel;
-        return plainToClass(F3xCoverageDates, json);
-    }
+    json.report_code_label = reportCodeLabel;
+    return plainToClass(F3xCoverageDates, json);
+  }
 }
-
-export const F3xQualifiedCommitteeTypeCodes = ['Q', 'W', 'Y'];
 
 export class Form3X extends Report {
   schema = f3xSchema;
@@ -45,7 +43,6 @@ export class Form3X extends Report {
   treasurer_prefix: string | undefined;
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-  @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | undefined;
   L6b_cash_on_hand_beginning_period: number | undefined;
   L6c_total_receipts_period: number | undefined;
   L6d_subtotal_period: number | undefined;
@@ -168,11 +165,5 @@ export class Form3X extends Report {
   static fromJSON(json: unknown): Form3X {
     // json['form_type'] = F3xFormTypes.F3XT;
     return plainToInstance(Form3X, json);
-  }
-
-  override getBlocker() {
-    if (!this.L6a_cash_on_hand_jan_1_ytd)
-      return '*** You may not submit a report until you have entered an amount for Cash on Hand ***';
-    return;
   }
 }

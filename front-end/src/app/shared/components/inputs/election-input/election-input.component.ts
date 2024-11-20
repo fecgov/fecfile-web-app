@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-election-input',
@@ -33,10 +34,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     const electionYear = election_code?.value?.slice(1, 5) || '';
 
     // Create two additional form controls that will join values to populate the composit election_code form control value
-    this.form.addControl('electionType', new FormControl(electionType, Validators.required));
+    this.form.addControl('electionType', new SubscriptionFormControl(electionType, Validators.required));
     this.form.addControl(
       'electionYear',
-      new FormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')]),
+      new SubscriptionFormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')]),
     );
 
     if (election_code?.disabled) {

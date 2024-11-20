@@ -7,7 +7,6 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class SignatureInputComponent extends BaseInputComponent implements OnInit {
   @Input() templateMapKeyPrefix = 'signatory_1';
-
   titleFieldName = '';
   dateSignedFieldName = '';
 

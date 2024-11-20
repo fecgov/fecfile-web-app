@@ -1,15 +1,17 @@
-<footer [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
+<footer #footerElement [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
   <div id="footer-upper" *ngIf="showUpperFooter">
-    <div class="grid">
-      <div class="col-6">
-        <p class="footer-upper-text font-karla-bold">Need help? Contact us</p>
-      </div>
-      <div class="col-3">
-        <p class="footer-upper-text font-karla-bold">Feedback</p>
-      </div>
-      <div class="col-3">
-        <p class="footer-upper-text font-karla-bold">Legal Disclaimer</p>
-      </div>
+    <div class="upper-footer-section">
+      <a
+        href="https://www.fec.gov/efiling/getting-started-fecfile-pilot"
+        class="footer-upper-text font-karla-bold"
+        target="_blank"
+        rel="noopener"
+      >
+        Need help? Contact us
+      </a>
+    </div>
+    <div class="upper-footer-section">
+      <a routerLink="/notifications/security" class="footer-upper-text font-karla-bold">Security notification </a>
     </div>
   </div>
   <div id="footer-lower" class="grid">
@@ -40,6 +42,11 @@
             Strategy, budget, and performance
           </a>
         </div>
+        <div class="col-12 footer-item font-karla">
+          <a href="https://www.fec.gov/accessibility-statement/" target="_blank" rel="noopener">
+            Accessibility statement
+          </a>
+        </div>
       </div>
     </div>
     <div class="col-3">
@@ -65,6 +72,9 @@
         </div>
         <div class="col-12 footer-item font-karla">
           <a href="https://www.fec.gov/freedom-information-act/" target="_blank" rel="noopener">FOIA</a>
+        </div>
+        <div class="col-12 footer-item font-karla">
+          <a href="https://github.com/fecgov/fec" target="_blank" rel="noopener">Github repository</a>
         </div>
       </div>
     </div>
