@@ -121,7 +121,7 @@ describe('TransactionReceiptsComponent', () => {
     ).toBeTrue();
     expect(
       deleteAction?.isAvailable({
-        can_delete: true,
+        can_delete: false,
         transaction_type_identifier: 'LOAN_REPAYMENT_MADE',
         loan_id: 'test',
         transactionType: { scheduleId: ScheduleIds.A },
