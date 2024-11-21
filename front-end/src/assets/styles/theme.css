@@ -4713,8 +4713,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-radius: 4px;
   box-shadow: none;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  width: 80%;
-  max-width: 600px;
 }
 .p-dialog .p-dialog-header {
   border-bottom: 1px solid #e8e8e8;
