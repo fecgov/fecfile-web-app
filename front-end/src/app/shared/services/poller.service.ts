@@ -45,8 +45,6 @@ export class PollerService {
       this.isNewVersionAvailable.next(
         !!currentMainScript && !!remoteMainScript && currentMainScript !== remoteMainScript,
       );
-      console.log('Current main script: ', currentMainScript);
-      console.log('Remote main script: ', remoteMainScript);
     } catch (error) {
       console.error('Error fetching deployment URL', error);
       this.isNewVersionAvailable.next(false);

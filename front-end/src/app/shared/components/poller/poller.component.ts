@@ -32,7 +32,6 @@ export class PollerComponent implements OnInit, OnDestroy {
   }
 
   reload() {
-    console.log('Reload');
     window.location.reload();
   }
 
