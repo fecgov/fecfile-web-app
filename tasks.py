@@ -134,7 +134,9 @@ def _do_deploy(ctx, space):
     print("\n")
     cmd = "push --strategy rolling" if existing_deploy.ok else "push"
     new_deploy = ctx.run(
-        f"cf {cmd} {APP_NAME} -f {manifest_filename}", echo=True, warn=True,
+        f"cf {cmd} {APP_NAME} -f {manifest_filename}",
+        echo=True,
+        warn=True,
     )
 
     os.chdir(orig_directory)
