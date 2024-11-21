@@ -69,26 +69,34 @@
         </ng-container>
       </div>
     </div>
-    <div class="col-8">
+    <div class="col-8" [ngSwitch]="report?.upload_submission?.fec_status">
       <img
-        *ngIf="report?.upload_submission?.fec_status === 'ACCEPTED'; else submittedImage"
+        *ngSwitchCase="'ACCEPTED'"
         class="image-max-width"
-        ngSrc="assets/img/report-accepted.svg"
+        ngSrc="assets/img/Report-status--Congratulations.png"
         draggable="false"
         alt="Form submitted success image"
         height="271"
         width="450"
       />
-      <ng-template #submittedImage>
-        <img
-          class="image-max-width"
-          ngSrc="assets/img/report-submitted.svg"
-          draggable="false"
-          alt="Form submitted success image"
-          height="271"
-          width="450"
-        />
-      </ng-template>
+      <img
+        *ngSwitchCase="'PROCESSING'"
+        class="image-max-width"
+        ngSrc="assets/img/Report-status--Submitted.png"
+        draggable="false"
+        alt="Form submitted success image"
+        height="271"
+        width="450"
+      />
+      <img
+        *ngSwitchCase="'REJECTED'"
+        class="image-max-width"
+        ngSrc="assets/img/Report-status--Rejected.png"
+        draggable="false"
+        alt="Form submitted success image"
+        height="271"
+        width="450"
+      />
     </div>
   </div>
   <div class="grid">
