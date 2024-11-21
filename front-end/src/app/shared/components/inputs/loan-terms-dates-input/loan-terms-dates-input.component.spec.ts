@@ -43,6 +43,13 @@ describe('LoanTermsDatesInputComponent', () => {
     fixture.detectChanges();
   });
 
+  function testInterest(value: string, expectedValue: string, startSetting: string, toggleSetting?: string): void {
+    if (component.interestRateSetting !== startSetting) component.interestRateSetting = startSetting;
+    component.interestRate = value;
+    if (toggleSetting && startSetting !== toggleSetting) component.interestRateSetting = toggleSetting;
+    expect(component.interestRate).toBe(expectedValue);
+  }
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -58,60 +65,41 @@ describe('LoanTermsDatesInputComponent', () => {
 
   it('should handle interest_rate inputs correctly when clearValuesOnChange is true', () => {
     // Changing the interest rate setting to USER_DEFINED should clear the value
-    component.interestRate = '12.3%';
-
-    component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
-    expect(component.interestRate).toBe('');
-
+    testInterest('12.3%', '', component.termFieldSettings.EXACT_PERCENTAGE, component.termFieldSettings.USER_DEFINED);
     // While USER_DEFINED, non-percentage values should go unchanged
-    component.interestRate = '12.3';
-    expect(component.interestRate).toEqual('12.3');
-
+    testInterest('12.3', '12.3', component.termFieldSettings.USER_DEFINED);
     // Changing the interest rate setting to EXACT_PERCENTAGE should clear the value
-    component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    expect(component.interestRate).toBe('');
-
-    // You should be unable to delete the % symbol
-    component.interestRate = '12.3';
-    expect(component.interestRate).toEqual('12.3%');
-
+    testInterest('12.3', '', component.termFieldSettings.USER_DEFINED, component.termFieldSettings.EXACT_PERCENTAGE);
+    // You should be unable to delete the % symbol on EXACT_PERCENTAGE
+    testInterest('12.3', '12.3%', component.termFieldSettings.EXACT_PERCENTAGE);
     // If the value would only be '%', clear the field
-    component.interestRate = '%';
-    expect(component.interestRate).toEqual('');
-
-    // Changing back and forth between field settings should clear the value
-    component.interestRate = '12.3%';
-    component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
-    component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    expect(component.interestRate).toBe('');
+    testInterest('%', '', component.termFieldSettings.EXACT_PERCENTAGE);
   });
 
   it('should handle interest_rate inputs correctly when clearValuesOnChange is false ', () => {
     component.clearValuesOnChange = false;
 
-    // Changing the interest rate setting to USER_DEFINED should clear the value
-    component.interestRate = '12.3%';
-    component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
-
-    expect(component.interestRate).toBe('12.3%');
+    // Changing the interest rate setting to USER_DEFINED should NOT clear the value
+    testInterest(
+      '12.3%',
+      '12.3%',
+      component.termFieldSettings.EXACT_PERCENTAGE,
+      component.termFieldSettings.USER_DEFINED,
+    );
 
     // While USER_DEFINED, non-percentage values should go unchanged
-    component.interestRate = '12.3';
-    expect(component.interestRate).toEqual('12.3');
+    testInterest('12.3', '12.3', component.termFieldSettings.USER_DEFINED);
 
-    // Changing the interest rate setting to EXACT_PERCENTAGE should clear the value
+    // Changing the interest rate setting to EXACT_PERCENTAGE should NOT clear the value and add %
+    testInterest(
+      '12.3',
+      '12.3%',
+      component.termFieldSettings.USER_DEFINED,
+      component.termFieldSettings.EXACT_PERCENTAGE,
+    );
+
+    // Changing back and forth between field settings should NOT clear the value
     component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    expect(component.interestRate).toBe('12.3%');
-
-    // You should be unable to delete the % symbol
-    component.interestRate = '12.3';
-    expect(component.interestRate).toEqual('12.3%');
-
-    // If the value would only be '%', clear the field
-    component.interestRate = '%';
-    expect(component.interestRate).toEqual('');
-
-    // Changing back and forth between field settings should clear the value
     component.interestRate = '12.3%';
     component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
     component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
