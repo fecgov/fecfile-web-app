@@ -69,10 +69,29 @@
         </ng-container>
       </div>
     </div>
-    <div class="col-8">
+    <div class="col-8" [ngSwitch]="report?.upload_submission?.fec_status">
       <img
+        *ngSwitchCase="'ACCEPTED'"
         class="image-max-width"
-        ngSrc="assets/img/image-placeholder.png"
+        ngSrc="assets/img/Report-status--Congratulations.png"
+        draggable="false"
+        alt="Form submitted success image"
+        height="271"
+        width="450"
+      />
+      <img
+        *ngSwitchCase="'PROCESSING'"
+        class="image-max-width"
+        ngSrc="assets/img/Report-status--Submitted.png"
+        draggable="false"
+        alt="Form submitted success image"
+        height="271"
+        width="450"
+      />
+      <img
+        *ngSwitchCase="'REJECTED'"
+        class="image-max-width"
+        ngSrc="assets/img/Report-status--Rejected.png"
         draggable="false"
         alt="Form submitted success image"
         height="271"
