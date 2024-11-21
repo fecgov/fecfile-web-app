@@ -8,6 +8,7 @@ import { TransactionFormUtils } from '../../transaction-type-base/transaction-fo
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { DomHandler } from 'primeng/dom';
 
 @Component({
   selector: 'app-memo-code',
@@ -101,6 +102,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   closeOutOfDateDialog() {
     this.outOfDateDialogVisible = false;
+    DomHandler.unblockBodyScroll();
   }
 
   onMemoItemClick() {
