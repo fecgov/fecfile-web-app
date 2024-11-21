@@ -41,7 +41,7 @@ export class PollerService {
           break;
         }
       }
-
+      console.log('Current main script:', currentMainScript);
       this.isNewVersionAvailable.next(
         !!currentMainScript && !!remoteMainScript && currentMainScript !== remoteMainScript,
       );

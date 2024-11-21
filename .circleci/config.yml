@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -227,9 +227,6 @@ workflows:
             - lint
             - test
             - dependency-check
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
