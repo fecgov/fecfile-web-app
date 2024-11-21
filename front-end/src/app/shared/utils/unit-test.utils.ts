@@ -22,6 +22,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../models/transaction-navigation-controls.model';
+import { ScheduleETransactionTypes, SchETransaction } from '../models/sche-transaction.model';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -252,6 +253,10 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
       report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
     },
   ],
+});
+
+export const testIndependentExpenditure = SchETransaction.fromJSON({
+  transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
 });
 
 export function getTestTransactionByType(

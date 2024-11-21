@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from './candidate-office-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { testScheduleATransaction, testIndependentExpenditure } from 'app/shared/utils/unit-test.utils';
 
 describe('CandidateOfficeInputComponent', () => {
   let component: CandidateOfficeInputComponent;
@@ -24,16 +25,15 @@ describe('CandidateOfficeInputComponent', () => {
 
     fixture = TestBed.createComponent(CandidateOfficeInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        donor_candidate_last_name: new SubscriptionFormControl(''),
-        donor_candidate_first_name: new SubscriptionFormControl(''),
-        donor_candidate_middle_name: new SubscriptionFormControl(''),
-        donor_candidate_prefix: new SubscriptionFormControl(''),
-        donor_candidate_suffix: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
+    component.transaction = testScheduleATransaction;
+    component.form = new FormGroup({
+      donor_candidate_last_name: new SubscriptionFormControl(''),
+      donor_candidate_first_name: new SubscriptionFormControl(''),
+      donor_candidate_middle_name: new SubscriptionFormControl(''),
+      donor_candidate_prefix: new SubscriptionFormControl(''),
+      donor_candidate_suffix: new SubscriptionFormControl(''),
+      election_code: new SubscriptionFormControl(''),
+    });
 
     component.form.addControl(testCandidateOfficeFormControlName, new SubscriptionFormControl());
     component.officeFormControlName = testCandidateOfficeFormControlName;
@@ -94,5 +94,59 @@ describe('CandidateOfficeInputComponent', () => {
     expect(component.candidateDistrictOptions).toEqual(
       LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels('FL')),
     );
+  });
+
+  it('adds subscription to election_code for Schedule E transactions', () => {
+    component.transaction = testIndependentExpenditure;
+    component.ngOnInit();
+
+    const electionCodeControl = component.form.get(
+      component.transaction.transactionType.templateMap.election_code,
+    ) as SubscriptionFormControl;
+    expect(electionCodeControl.subscriptions).toHaveSize(1);
+  });
+
+  it('updates state availability for SchE transactions in Presidential Primary elections', () => {
+    component.transaction = testIndependentExpenditure;
+    component.ngOnInit();
+
+    component.form.patchValue({ [component.officeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL });
+    component.form.patchValue({ election_code: 'P2025' });
+    expect(component.form.get(component.stateFormControlName)?.disabled).toBeFalse();
+
+    component.form.patchValue({ election_code: 'G2025' });
+    expect(component.form.get(component.stateFormControlName)?.disabled).toBeTrue();
+  });
+
+  it('updates the district field correctly while switching between states', () => {
+    const stateField = component.form.get(component.stateFormControlName) as SubscriptionFormControl;
+    const districtField = component.form.get(component.districtFormControlName) as SubscriptionFormControl;
+    const officeField = component.form.get(component.officeFormControlName) as SubscriptionFormControl;
+
+    officeField.setValue(CandidateOfficeTypes.HOUSE);
+    expect(districtField.disabled).toBeFalse();
+
+    stateField.setValue('AK');
+    expect(districtField.value).toEqual('00');
+
+    stateField.setValue('CA');
+    expect(districtField.value).toEqual(null);
+
+    districtField.setValue('20');
+    expect(districtField.value).toEqual('20');
+
+    stateField.setValue('AR');
+    expect(districtField.value).toEqual(null);
+
+    stateField.setValue('CA');
+    districtField.setValue('02');
+    stateField.setValue('AR');
+    expect(districtField.value).toEqual('02');
+
+    stateField.setValue('AK');
+    expect(districtField.value).toEqual('00');
+
+    stateField.setValue('INVALID');
+    expect(districtField.value).toEqual(null);
   });
 });

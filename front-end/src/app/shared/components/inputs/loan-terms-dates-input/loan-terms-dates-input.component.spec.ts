@@ -43,6 +43,13 @@ describe('LoanTermsDatesInputComponent', () => {
     fixture.detectChanges();
   });
 
+  function testInterest(value: string, expectedValue: string, startSetting: string, toggleSetting?: string): void {
+    if (component.interestRateSetting !== startSetting) component.interestRateSetting = startSetting;
+    component.interestRate = value;
+    if (toggleSetting && startSetting !== toggleSetting) component.interestRateSetting = toggleSetting;
+    expect(component.interestRate).toBe(expectedValue);
+  }
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -56,73 +63,94 @@ describe('LoanTermsDatesInputComponent', () => {
     expect(control?.status).toBe('VALID');
   });
 
-  it('should handle interest_rate inputs correctly', () => {
-    const settingField = component.form.get(component.templateMap.interest_rate_setting);
-    const rateField = component.form.get(component.templateMap.interest_rate);
-
+  it('should handle interest_rate inputs correctly when clearValuesOnChange is true', () => {
     // Changing the interest rate setting to USER_DEFINED should clear the value
-    rateField?.setValue('12.3%');
-    settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    expect(rateField?.value).toBeNull();
+    testInterest('12.3%', '', component.termFieldSettings.EXACT_PERCENTAGE, component.termFieldSettings.USER_DEFINED);
+    // While USER_DEFINED, non-percentage values should go unchanged
+    testInterest('12.3', '12.3', component.termFieldSettings.USER_DEFINED);
+    // Changing the interest rate setting to EXACT_PERCENTAGE should clear the value
+    testInterest('12.3', '', component.termFieldSettings.USER_DEFINED, component.termFieldSettings.EXACT_PERCENTAGE);
+    // You should be unable to delete the % symbol on EXACT_PERCENTAGE
+    testInterest('12.3', '12.3%', component.termFieldSettings.EXACT_PERCENTAGE);
+    // If the value would only be '%', clear the field
+    testInterest('%', '', component.termFieldSettings.EXACT_PERCENTAGE);
+  });
+
+  it('should handle interest_rate inputs correctly when clearValuesOnChange is false ', () => {
+    component.clearValuesOnChange = false;
+
+    // Changing the interest rate setting to USER_DEFINED should NOT clear the value
+    testInterest(
+      '12.3%',
+      '12.3%',
+      component.termFieldSettings.EXACT_PERCENTAGE,
+      component.termFieldSettings.USER_DEFINED,
+    );
 
     // While USER_DEFINED, non-percentage values should go unchanged
-    rateField?.setValue('12.3');
-    expect(rateField?.value).toEqual('12.3');
+    testInterest('12.3', '12.3', component.termFieldSettings.USER_DEFINED);
 
-    // Changing the interest rate setting to EXACT_PERCENTAGE should clear the value
-    settingField?.setValue(component.termFieldSettings.EXACT_PERCENTAGE);
-    expect(rateField?.value).toBeNull();
+    // Changing the interest rate setting to EXACT_PERCENTAGE should NOT clear the value and add %
+    testInterest(
+      '12.3',
+      '12.3%',
+      component.termFieldSettings.USER_DEFINED,
+      component.termFieldSettings.EXACT_PERCENTAGE,
+    );
 
-    // You should be unable to delete the % symbol
-    rateField?.setValue('12.3');
-    expect(rateField?.value).toEqual('12.3%');
-
-    // If the value would only be '%', clear the field
-    rateField?.setValue('%');
-    expect(rateField?.value).toEqual('');
-
-    // Changing back and forth between field settings should clear the value
-    rateField?.setValue('12.3%');
-    settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    settingField?.setValue(component.termFieldSettings.EXACT_PERCENTAGE);
-    expect(rateField?.value).toBeNull();
+    // Changing back and forth between field settings should NOT clear the value
+    component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
+    component.interestRate = '12.3%';
+    component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
+    component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
+    expect(component.interestRate).toBe('12.3%');
   });
 
   it('should add and remove the percentage pattern validator', () => {
-    const settingField = component.form.get(component.templateMap.interest_rate_setting);
-    const rateField = component.form.get(component.templateMap.interest_rate);
-    settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    expect(rateField?.hasValidator(percentageValidator)).toBeFalse();
-    settingField?.setValue(component.termFieldSettings.EXACT_PERCENTAGE);
-    expect(rateField?.hasValidator(percentageValidator)).toBeTrue();
+    component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
+    expect(component.interestRateField?.hasValidator(percentageValidator)).toBeFalse();
+    component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
+    expect(component.interestRateField?.hasValidator(percentageValidator)).toBeTrue();
   });
 
-  it('should handle due_date inputs correctly', fakeAsync(() => {
-    const settingField = component.form.get(component.templateMap.due_date_setting);
-    let dateField = component.form.get(component.templateMap.due_date);
-
+  it('should handle due_date inputs correctly when clearValuesOnChange is true', fakeAsync(() => {
     // Changing the due_date setting to USER_DEFINED should clear value
-    dateField?.setValue(new Date('10/31/2010 00:00'));
-    settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    dateField = component.form.get(component.templateMap.due_date);
-    expect(dateField?.value).toBe('');
+    component.dueDate = new Date('10/31/2010 00:00');
+    component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
+    expect(component.dueDate as unknown as string).toBe('');
 
     // When changing to the SPECIFIC_DATE setting should clear value
-    settingField?.setValue(component.termFieldSettings.SPECIFIC_DATE);
-    dateField = component.form.get(component.templateMap.due_date);
-    expect(dateField?.value).toBeNull();
+    component.dueDateSetting = component.termFieldSettings.SPECIFIC_DATE;
+    expect(component.dueDate).toBeNull();
 
     // When switch settings, it will fall back to clearing the date field
-    settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    dateField = component.form.get(component.templateMap.due_date);
-    dateField?.setValue('A user-entered string');
-    settingField?.setValue(component.termFieldSettings.SPECIFIC_DATE);
-    fixture.detectChanges();
-    dateField = component.form.get(component.templateMap.due_date);
-    expect(dateField?.value).toBeNull();
-    dateField?.setValue('Not a Date instance');
-    settingField?.setValue(component.termFieldSettings.USER_DEFINED);
-    dateField = component.form.get(component.templateMap.due_date);
-    expect(dateField?.value).toEqual('');
+    component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
+    component.dueDate = 'A user-entered string';
+    component.dueDateSetting = component.termFieldSettings.SPECIFIC_DATE;
+    expect(component.dueDate).toBeNull();
+    component.dueDate = 'Not a Date instance';
+    component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
+    expect(component.dueDate).toEqual('');
+  }));
+
+  it('should handle due_date inputs correctly when clearValuesOnChange is false', fakeAsync(() => {
+    component.clearValuesOnChange = false;
+    // Changing the due_date setting to USER_DEFINED should clear value
+    component.dueDate = new Date('10/31/2010 00:00');
+    component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
+    expect(component.dueDate as unknown as string).toBe('2010-10-31');
+
+    // When changing to the SPECIFIC_DATE setting should clear value
+    component.dueDateSetting = component.termFieldSettings.SPECIFIC_DATE;
+    expect(component.dueDate instanceof Date).toBeTrue();
+
+    // When switch settings, it will fall back to clearing the date field
+    component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
+    component.dueDate = 'A user-entered string';
+    component.dueDateSetting = component.termFieldSettings.SPECIFIC_DATE;
+    expect(component.dueDate).toBeNull();
+    component.dueDate = 'Not a Date instance';
+    component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
+    expect(component.dueDate).toEqual('Not a Date instance');
   }));
 });

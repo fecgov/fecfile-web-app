@@ -1,14 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  CandidateOfficeTypeLabels,
-  CandidateOfficeTypes,
-  STANDARD_AND_CANDIDATE,
-  STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY,
-} from 'app/shared/models/contact.model';
+import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { combineLatest, of, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-candidate-office-input',
@@ -24,80 +19,30 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
 
+  electionCodeField: string | undefined = undefined;
+
   ngOnInit(): void {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+    this.electionCodeField = this.transaction?.transactionType.templateMap.election_code;
 
-    // For Schedule E transactions, we need to track the election code so that we
-    // can make the candidate state required for presidential primaries.
-    let electionCodeValue$ = of('');
-    if (
-      this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
-      this.transaction?.transactionType.templateMap.election_code
-    ) {
-      electionCodeValue$ =
-        this.form
-          ?.get(this.transaction.transactionType.templateMap.election_code)
-          ?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
-    }
-
-    const officeValue$ =
-      this.form?.get(this.officeFormControlName)?.valueChanges.pipe(takeUntil(this.destroy$)) ?? of('');
-
-    combineLatest([electionCodeValue$, officeValue$]).subscribe(([electionCode, officeValue]) => {
-      if (this.transaction) {
-        this.transaction.transactionType.contactConfig = STANDARD_AND_CANDIDATE;
-      }
-      if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
-        // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
-        if (
-          this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
-          electionCode &&
-          electionCode.startsWith('P')
-        ) {
-          this.form.patchValue({
-            [this.districtFormControlName]: null,
-          });
-          this.form.get(this.stateFormControlName)?.enable();
-          this.form.get(this.districtFormControlName)?.disable();
-          // Do not save the candidate_state to the candidate contact record.
-          this.transaction.transactionType.contactConfig = STANDARD_AND_CANDIDATE_PRESIDENTIAL_PRIMARY;
-        } else {
-          this.form.patchValue({
-            [this.stateFormControlName]: null,
-            [this.districtFormControlName]: null,
-          });
-          this.form.get(this.stateFormControlName)?.disable();
-          this.form.get(this.districtFormControlName)?.disable();
-        }
-      } else if (officeValue === CandidateOfficeTypes.SENATE) {
-        this.form.patchValue({
-          [this.districtFormControlName]: null,
-        });
-        this.form.get(this.stateFormControlName)?.enable();
-        this.form.get(this.districtFormControlName)?.disable();
-      } else if (!this.transaction?.reatt_redes) {
-        this.form.get(this.stateFormControlName)?.enable();
-        this.form.get(this.districtFormControlName)?.enable();
-      }
+    // Update the enabled/disabled state on candidate fields whenever the candidate office changes.
+    (this.form?.get(this.officeFormControlName) as SubscriptionFormControl).addSubscription(() => {
+      this.updateCandidateFieldAvailability();
     });
 
-    this.form
-      ?.get(this.stateFormControlName)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!!value && this.form.get(this.officeFormControlName)?.value === CandidateOfficeTypes.HOUSE) {
-          this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
-        } else {
-          this.candidateDistrictOptions = [];
-        }
-        const currentDistrictValue = this.form.get(this.districtFormControlName)?.value;
-        if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
-          this.form
-            .get(this.districtFormControlName)
-            ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0].value : null);
-        }
+    // For Schedule E transactions, update the enabled/disabled state on the
+    // candidate fields whenever the election code changes value.
+    if (this.transaction?.transactionType.scheduleId === ScheduleIds.E && this.electionCodeField) {
+      (this.form.get(this.electionCodeField) as SubscriptionFormControl)?.addSubscription(() => {
+        this.updateCandidateFieldAvailability();
       });
+    }
+
+    // Update the candidate district options and value every time the candidate state field changes.
+    (this.form.get(this.stateFormControlName) as SubscriptionFormControl).addSubscription(() => {
+      this.updateCandidateDistrict();
+    });
 
     // Run election_code, office, and state valueChange logic when initializing form elements
     if (
@@ -108,5 +53,87 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     }
     this.form.get(this.officeFormControlName)?.updateValueAndValidity();
     this.form.get(this.stateFormControlName)?.updateValueAndValidity();
+  }
+
+  /**
+   * updateCandidateFieldStatus()
+   *
+   * toggles the candidate_state and candidate_office fields between enabled and disabled
+   * based on a variety of factors.
+   *
+   * For PRESIDENTIAL candidates:
+   * - District is disabled
+   * - State is disabled EXCEPT for Primary elections on Schedule E transactions
+   *
+   * For SENATE candidates:
+   * - District is disabled
+   * - State is enabled
+   *
+   * For HOUSE candidates:
+   * - District is enabled
+   * - State is enabled
+   */
+  updateCandidateFieldAvailability() {
+    const officeValue = (this.form.get(this.officeFormControlName)?.value ?? '') as string;
+    let electionCode: string = '';
+    if (this.electionCodeField) {
+      electionCode = (this.form.get(this.electionCodeField)?.value ?? '') as string;
+    }
+
+    if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
+      // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
+      if (
+        this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
+        electionCode &&
+        electionCode.startsWith('P')
+      ) {
+        this.form.patchValue({
+          [this.districtFormControlName]: null,
+        });
+        this.form.get(this.stateFormControlName)?.enable();
+        this.form.get(this.districtFormControlName)?.disable();
+      } else {
+        this.form.patchValue({
+          [this.stateFormControlName]: null,
+          [this.districtFormControlName]: null,
+        });
+        this.form.get(this.stateFormControlName)?.disable();
+        this.form.get(this.districtFormControlName)?.disable();
+      }
+    } else if (officeValue === CandidateOfficeTypes.SENATE) {
+      this.form.patchValue({
+        [this.districtFormControlName]: null,
+      });
+      this.form.get(this.stateFormControlName)?.enable();
+      this.form.get(this.districtFormControlName)?.disable();
+    } else if (!this.transaction?.reatt_redes) {
+      this.form.get(this.stateFormControlName)?.enable();
+      this.form.get(this.districtFormControlName)?.enable();
+    }
+  }
+
+  /**
+   * updateCandidateDistrict()
+   *
+   * Sets the candidate district field's options to the state's available districts.
+   *
+   * If the currently selected district is not available in the newly selected state,
+   * set the district to the topmost value in the dropdown or to null if the state has
+   * no districts.
+   */
+  updateCandidateDistrict() {
+    const state = this.form.get(this.stateFormControlName)?.value as string | undefined;
+
+    if (!!state && this.form.get(this.officeFormControlName)?.value === CandidateOfficeTypes.HOUSE) {
+      this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(state));
+    } else {
+      this.candidateDistrictOptions = [];
+    }
+    const currentDistrictValue = this.form.get(this.districtFormControlName)?.value;
+    if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
+      this.form
+        .get(this.districtFormControlName)
+        ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0]?.value : null);
+    }
   }
 }

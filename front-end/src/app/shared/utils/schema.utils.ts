@@ -26,7 +26,7 @@ export class SchemaUtils {
    */
   static getFormGroupFields(properties: string[]) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    properties.forEach((property) => (group[property] = ['', null]));
+    properties.forEach((property) => (group[property] = new SubscriptionFormControl('')));
     return group;
   }
 
@@ -39,6 +39,7 @@ export class SchemaUtils {
     'change_of_address',
     'support_oppose_code',
     'userCertified',
+    'secured',
   ];
 
   static getFormGroupFieldsNoBlur(properties: string[]) {

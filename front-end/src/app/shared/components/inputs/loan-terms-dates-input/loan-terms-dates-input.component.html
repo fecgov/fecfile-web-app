@@ -26,8 +26,8 @@
         ></app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.USER_DEFINED">
-      <div class="col-6">
+    <div class="col-6" [ngSwitch]="dueDateSetting">
+      <ng-container *ngSwitchCase="termFieldSettings.USER_DEFINED">
         <div class="field">
           <label for="due_date">DATE DUE (USER DEFINED)</label>
           <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
@@ -37,21 +37,18 @@
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="this.form.get(templateMap['due_date_setting'])?.value === termFieldSettings.SPECIFIC_DATE">
-      <div class="col-6">
+      </ng-container>
+      <ng-container *ngSwitchCase="termFieldSettings.SPECIFIC_DATE">
         <app-calendar
           [fieldName]="templateMap['due_date']"
           [form]="form"
           [formSubmitted]="formSubmitted"
           label="SPECIFIC DATE"
         ></app-calendar>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="!this.form.get(templateMap['due_date_setting'])?.value">
-      <div class="col-6"></div>
-    </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchDefault> </ng-container>
+    </div>
+
     <div class="col-6">
       <div class="field">
         <label for="interest_rate_setting">INTEREST RATE</label>
@@ -70,8 +67,8 @@
         </app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === termFieldSettings.USER_DEFINED">
-      <div class="col-6">
+    <div class="col-6" [ngSwitch]="interestRateSetting">
+      <ng-container *ngSwitchCase="termFieldSettings.USER_DEFINED">
         <div class="field">
           <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
           <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
@@ -81,12 +78,8 @@
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
-      </div>
-    </ng-container>
-    <ng-container
-      *ngIf="this.form.get(templateMap['interest_rate_setting'])?.value === termFieldSettings.EXACT_PERCENTAGE"
-    >
-      <div class="col-6">
+      </ng-container>
+      <ng-container *ngSwitchCase="termFieldSettings.EXACT_PERCENTAGE">
         <div class="field">
           <label for="interest_rate">EXACT PERCENTAGE (%)</label>
           <input
@@ -103,10 +96,8 @@
             patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
           ></app-error-messages>
         </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="!this.form.get(templateMap['interest_rate_setting'])?.value">
-      <div class="col-6"></div>
-    </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchDefault> </ng-container>
+    </div>
   </div>
 </div>
