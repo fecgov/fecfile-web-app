@@ -39,6 +39,7 @@ export class SchemaUtils {
     'change_of_address',
     'support_oppose_code',
     'userCertified',
+    'secured',
   ];
 
   static getFormGroupFieldsNoBlur(properties: string[]) {
