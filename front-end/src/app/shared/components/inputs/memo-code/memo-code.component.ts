@@ -46,10 +46,13 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
         this.report = report as Form3X;
       });
 
-    (this.form.get(this.templateMap.date) as SubscriptionFormControl)?.addSubscription((date: Date) => {
-      this.coverageDate = date;
-      this.updateMemoItemWithDate(date);
-    }, this.destroy$);
+    const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
+    if (dateControl?.enabled) {
+      dateControl.addSubscription((date: Date) => {
+        this.coverageDate = date;
+        this.updateMemoItemWithDate(date);
+      }, this.destroy$);
+    }
 
     this.memoCodeReadOnly = TransactionFormUtils.isMemoCodeReadOnly(this.transaction?.transactionType);
     if (this.overrideMemoItemHelpText) this.memoItemHelpText = this.overrideMemoItemHelpText;
@@ -118,6 +121,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       if (date && (date < this.report.coverage_from_date || date > this.report.coverage_through_date)) {
         this.memoControl.addValidators(Validators.requiredTrue);
         this.memoControl.markAsTouched();
+        this.memoControl.markAsDirty();
         this.memoControl.updateValueAndValidity();
         this.dateIsOutsideReport = true;
         if (!this.memoControl.value) {
