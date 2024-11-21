@@ -182,11 +182,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
       this.dueDate = null;
     } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-      this.dueDateField = new SubscriptionFormControl<string>('', {
-        validators: this.dueDateField?.validator,
-        asyncValidators: this.dueDateField?.asyncValidator,
-        updateOn: 'blur',
-      });
+      this.dueDateField = this.dueDateField!.copy<string>('');
     }
   }
 
@@ -207,11 +203,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
       const value =
         previous_due_date instanceof Date ? DateUtils.convertDateToFecFormat(previous_due_date) : previous_due_date;
-      this.dueDateField = new SubscriptionFormControl<string>(value ?? '', {
-        validators: this.dueDateField?.validator,
-        asyncValidators: this.dueDateField?.asyncValidator,
-        updateOn: 'blur',
-      });
+      this.dueDateField = this.dueDateField!.copy<string>(value ?? '');
     }
   }
 

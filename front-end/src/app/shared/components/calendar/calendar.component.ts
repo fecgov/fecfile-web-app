@@ -18,24 +18,12 @@ export class CalendarComponent extends DestroyerComponent implements OnInit {
   @Input() requiredErrorMessage = 'This is a required field.';
 
   calendarOpened = false;
-  control!: SubscriptionFormControl;
+  control!: SubscriptionFormControl<Date | null>;
 
   ngOnInit(): void {
     const originalControl = this.form?.get(this.fieldName) as SubscriptionFormControl;
     const date = DateUtils.parseDate(originalControl.value);
-    this.control = new SubscriptionFormControl(date, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      validators: (originalControl as any)._rawValidators,
-      asyncValidators: originalControl.asyncValidator,
-      updateOn: 'submit',
-    });
-
-    if (originalControl.disabled) this.control.disable();
-    originalControl.subscriptions.forEach((sub) => {
-      this.control.addSubscription(sub, this.destroy$);
-    });
-    if (originalControl.touched) this.control.markAsTouched();
-    if (originalControl.dirty) this.control.markAsDirty();
+    this.control = originalControl.copy<Date | null>(date, 'submit');
     this.form.setControl(this.fieldName, this.control);
   }
 
