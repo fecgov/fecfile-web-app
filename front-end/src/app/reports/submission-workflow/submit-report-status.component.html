@@ -6,13 +6,13 @@
 <p-card>
   <div class="grid">
     <div class="col-12">
-      <h1 *ngIf="report?.upload_submission?.fec_status === 'ACCEPTED'" class="super-header">
+      <h2 *ngIf="report?.upload_submission?.fec_status === 'ACCEPTED'" class="super-header">
         Congratulations. Your report was accepted by the FEC.
-      </h1>
-      <h1 *ngIf="report?.upload_submission?.fec_status === 'REJECTED'" class="super-header">
+      </h2>
+      <h2 *ngIf="report?.upload_submission?.fec_status === 'REJECTED'" class="super-header">
         Your report has been rejected.
-      </h1>
-      <h1
+      </h2>
+      <h2
         *ngIf="
           report?.upload_submission?.fec_status === 'PROCESSING' ||
           (!report?.upload_submission?.fec_status &&
@@ -22,7 +22,7 @@
         class="super-header"
       >
         Thank you for submitting your report. It is currently being processed.
-      </h1>
+      </h2>
     </div>
   </div>
   <div class="grid">
