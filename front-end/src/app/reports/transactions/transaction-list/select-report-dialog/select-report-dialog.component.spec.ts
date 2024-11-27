@@ -92,11 +92,10 @@ describe('SelectReportDialogComponent', () => {
       component.selectedReport = component.availableReports[0];
       try {
         await component.createReattribution();
-      } catch {
-        console.log("shouldn't go here");
+      } finally {
+        const route = `/reports/transactions/report/${component.selectedReport.id}/create/${testScheduleATransaction.transaction_type_identifier}?reattribution=${testScheduleATransaction.id}`;
+        expect(routerSpy).toHaveBeenCalledWith(route);
       }
-      const route = `/reports/transactions/report/${component.selectedReport.id}/create/${testScheduleATransaction.transaction_type_identifier}?reattribution=${testScheduleATransaction.id}`;
-      expect(routerSpy).toHaveBeenCalledWith(route);
     });
   });
 });
