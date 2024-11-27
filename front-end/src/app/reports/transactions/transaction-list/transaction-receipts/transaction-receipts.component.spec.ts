@@ -90,28 +90,28 @@ describe('TransactionReceiptsComponent', () => {
     const unitemizeAction = component.rowActions.find((ra) => ra.label === 'Unitemize');
     const reattributeAction = component.rowActions.find((ra) => ra.label === 'Reattribute');
     const deleteAction = component.rowActions.find((ra) => ra.label === 'Delete');
-    expect(viewAction?.isAvailable()).toEqual(true);
+    expect(viewAction?.isAvailable()).toBeTrue();
     expect(
       deleteAction?.isAvailable({
         can_delete: true,
         transactionType: { scheduleId: ScheduleIds.A },
       }),
-    ).toEqual(false);
-    expect(editAction?.isAvailable()).toEqual(false);
+    ).toBeFalse();
+    expect(editAction?.isAvailable()).toBeFalse();
     expect(
       aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
-    ).toEqual(false);
+    ).toBeFalse();
     expect(
       unaggregateAction?.isAvailable({
         force_unaggregated: false,
         transactionType: { scheduleId: ScheduleIds.A },
       }),
-    ).toEqual(false);
-    expect(itemizeAction?.isAvailable({ itemized: false })).toEqual(false);
-    expect(unitemizeAction?.isAvailable({ itemized: true })).toEqual(false);
+    ).toBeFalse();
+    expect(itemizeAction?.isAvailable({ itemized: false })).toBeFalse();
+    expect(unitemizeAction?.isAvailable({ itemized: true })).toBeFalse();
     component.reportIsEditable = true;
-    expect(viewAction?.isAvailable()).toEqual(false);
-    expect(editAction?.isAvailable()).toEqual(true);
+    expect(viewAction?.isAvailable()).toBeFalse();
+    expect(editAction?.isAvailable()).toBeTrue();
     expect(
       deleteAction?.isAvailable({
         can_delete: true,
@@ -126,16 +126,38 @@ describe('TransactionReceiptsComponent', () => {
         loan_id: 'test',
         transactionType: { scheduleId: ScheduleIds.A },
       }),
+    ).toBeTrue();
+    expect(
+      deleteAction?.isAvailable({
+        can_delete: true,
+        transaction_type_identifier: 'LOAN_RECEIVED_FROM_BANK_RECEIPT',
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
     ).toBeFalse();
     expect(
+      deleteAction?.isAvailable({
+        can_delete: true,
+        transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
+        loan_id: 'test',
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
+    ).toBeFalse();
+    expect(
+      deleteAction?.isAvailable({
+        can_delete: true,
+        transaction_type_identifier: undefined,
+        transactionType: { scheduleId: ScheduleIds.A },
+      }),
+    ).toBeTrue();
+    expect(
       aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
-    ).toEqual(true);
+    ).toBeTrue();
     expect(
       unaggregateAction?.isAvailable({
         force_unaggregated: false,
         transactionType: { scheduleId: ScheduleIds.A },
       }),
-    ).toEqual(true);
+    ).toBeTrue();
     expect(itemizeAction?.isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
       true,
     );
@@ -145,14 +167,14 @@ describe('TransactionReceiptsComponent', () => {
     expect(reattributeAction?.isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
       true,
     );
-    expect(viewAction?.isEnabled({})).toEqual(true);
-    expect(editAction?.isEnabled({})).toEqual(true);
-    expect(deleteAction?.isEnabled({})).toEqual(true);
-    expect(aggregateAction?.isEnabled({})).toEqual(true);
-    expect(unaggregateAction?.isEnabled({})).toEqual(true);
-    expect(itemizeAction?.isEnabled({})).toEqual(true);
-    expect(unitemizeAction?.isEnabled({})).toEqual(true);
-    expect(reattributeAction?.isEnabled({})).toEqual(true);
+    expect(viewAction?.isEnabled({})).toBeTrue();
+    expect(editAction?.isEnabled({})).toBeTrue();
+    expect(deleteAction?.isEnabled({})).toBeTrue();
+    expect(aggregateAction?.isEnabled({})).toBeTrue();
+    expect(unaggregateAction?.isEnabled({})).toBeTrue();
+    expect(itemizeAction?.isEnabled({})).toBeTrue();
+    expect(unitemizeAction?.isEnabled({})).toBeTrue();
+    expect(reattributeAction?.isEnabled({})).toBeTrue();
   });
 
   it('test forceAggregate', fakeAsync(() => {
