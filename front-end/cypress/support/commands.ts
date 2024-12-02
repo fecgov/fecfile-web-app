@@ -12,8 +12,6 @@ export function safeType(prevSubject: any, stringVal: string | number) {
 
   if (outString.length != 0) {
     subject.type(outString);
-  } else {
-    console.log(`Skipped typing into ${subject.toString()}} because the string was empty`);
   }
 
   return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
