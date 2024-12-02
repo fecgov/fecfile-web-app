@@ -1,4 +1,4 @@
-import { PageUtils } from '../../pages/pageUtils';
+import { PageUtils } from '../../../pages/pageUtils';
 import { Receipts } from './receipts';
 import { Disbursements, Independent } from './disbursements';
 import { Loans } from './loans';
