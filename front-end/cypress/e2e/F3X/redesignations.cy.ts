@@ -38,7 +38,7 @@ function CreateContribution() {
   cy.contains(committeeFormData.name).should('exist');
   cy.contains(committeeFormData.name).click();
 
-  TransactionDetailPage.enterScheduleFormDataForContribution(contributionData);
+  TransactionDetailPage.enterScheduleFormDataForContribution(contributionData, false, '', 'expenditure_date');
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
@@ -55,7 +55,12 @@ function Redesignate(old = false) {
   }
   cy.wait(500);
 
-  TransactionDetailPage.enterScheduleFormDataForContribution(new ContributionFormData(redesignationData));
+  TransactionDetailPage.enterScheduleFormDataForContribution(
+    new ContributionFormData(redesignationData),
+    false,
+    '',
+    'expenditure_date',
+  );
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');

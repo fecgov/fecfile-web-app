@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
@@ -17,6 +17,7 @@ import { ContactIdMapType } from './transaction-contact.utils';
 import { ContactService } from 'app/shared/services/contact.service';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 export class TransactionFormUtils {
   /**
@@ -126,12 +127,12 @@ export class TransactionFormUtils {
       if (!transaction.transactionType.inheritCalendarYTD) {
         const previous_election$: Observable<Transaction | undefined> =
           merge(
-            (form.get(templateMap.date) as AbstractControl).valueChanges,
-            (form.get(templateMap.date2) as AbstractControl).valueChanges,
-            (form.get(templateMap.election_code) as AbstractControl).valueChanges,
-            (form.get(templateMap.candidate_office) as AbstractControl).valueChanges,
-            (form.get(templateMap.candidate_state) as AbstractControl).valueChanges,
-            (form.get(templateMap.candidate_district) as AbstractControl).valueChanges,
+            (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
+            (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
+            (form.get(templateMap.election_code) as SubscriptionFormControl).valueChanges,
+            (form.get(templateMap.candidate_office) as SubscriptionFormControl).valueChanges,
+            (form.get(templateMap.candidate_state) as SubscriptionFormControl).valueChanges,
+            (form.get(templateMap.candidate_district) as SubscriptionFormControl).valueChanges,
           ).pipe(
             switchMap(() => {
               const disbursement_date = form.get(templateMap.date)?.value as Date | undefined;
@@ -241,6 +242,8 @@ export class TransactionFormUtils {
       ...formValues,
     });
 
+    console.log(payload);
+
     // The linkedF3xId form control is only present on the linked report input component
     // If this is present, we add its value as an ID to the payload's report ids
     const secondaryReportId = form.get('linkedF3xId')?.value;
@@ -303,8 +306,8 @@ export class TransactionFormUtils {
 
       if (transaction?.transactionType?.populateSignatoryOneWithTreasurer && committeeAccount) {
         form.patchValue({
-          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_1,
-          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_last_name]: committeeAccount.treasurer_name_2,
+          [transaction.transactionType.templateMap.signatory_1_first_name]: committeeAccount.treasurer_name_1,
           [transaction.transactionType.templateMap.signatory_1_middle_name]: committeeAccount.treasurer_name_middle,
           [transaction.transactionType.templateMap.signatory_1_prefix]: committeeAccount.treasurer_name_prefix,
           [transaction.transactionType.templateMap.signatory_1_suffix]: committeeAccount.treasurer_name_suffix,

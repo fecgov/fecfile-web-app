@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SharedModule } from 'app/shared/shared.module';
 import { LoanInfoInputComponent } from './loan-info-input.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('LoanInfoInputComponent', () => {
   let component: LoanInfoInputComponent;
@@ -21,10 +22,10 @@ describe('LoanInfoInputComponent', () => {
     // Set up component with form control
     const form = new FormGroup(
       {
-        loan_amount: new FormControl(),
-        total_balance: new FormControl(),
-        loan_payment_to_date: new FormControl(),
-        memo_code: new FormControl(),
+        loan_amount: new SubscriptionFormControl(),
+        total_balance: new SubscriptionFormControl(),
+        loan_payment_to_date: new SubscriptionFormControl(),
+        memo_code: new SubscriptionFormControl(),
       },
       { updateOn: 'blur' },
     );

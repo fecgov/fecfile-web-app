@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 import { NameInputComponent } from './name-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('NameInputComponent', () => {
   let component: NameInputComponent;
@@ -21,16 +22,16 @@ describe('NameInputComponent', () => {
     component.templateMap = testTemplateMap;
     component.form = new FormGroup(
       {
-        contributor_last_name: new FormControl(''),
-        contributor_first_name: new FormControl(''),
-        contributor_middle_name: new FormControl(''),
-        contributor_prefix: new FormControl(''),
-        contributor_suffix: new FormControl(''),
-        treasurer_last_name: new FormControl(''),
-        treasurer_first_name: new FormControl(''),
-        treasurer_middle_name: new FormControl(''),
-        treasurer_prefix: new FormControl(''),
-        treasurer_suffix: new FormControl(''),
+        contributor_last_name: new SubscriptionFormControl(''),
+        contributor_first_name: new SubscriptionFormControl(''),
+        contributor_middle_name: new SubscriptionFormControl(''),
+        contributor_prefix: new SubscriptionFormControl(''),
+        contributor_suffix: new SubscriptionFormControl(''),
+        treasurer_last_name: new SubscriptionFormControl(''),
+        treasurer_first_name: new SubscriptionFormControl(''),
+        treasurer_middle_name: new SubscriptionFormControl(''),
+        treasurer_prefix: new SubscriptionFormControl(''),
+        treasurer_suffix: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );

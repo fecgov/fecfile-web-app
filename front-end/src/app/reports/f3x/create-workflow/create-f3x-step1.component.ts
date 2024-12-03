@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
@@ -26,6 +26,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -46,10 +47,9 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), {
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });
-  calendarOpened = false;
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;
@@ -86,27 +86,21 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       .subscribe(([committeeAccount, existingCoverage]) => {
         this.committeeAccount = committeeAccount;
         const filingFrequency = committeeAccount?.filing_frequency === 'M' ? 'M' : 'Q';
-        this.form.addControl('filing_frequency', new FormControl());
-        this.form.addControl('report_type_category', new FormControl());
+        this.form.addControl('filing_frequency', new SubscriptionFormControl());
+        this.form.addControl('report_type_category', new SubscriptionFormControl());
         this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
         this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
         this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        this.form
-          ?.get('filing_frequency')
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe(() => {
-            this.form.patchValue({
-              report_type_category: this.getReportTypeCategories()[0],
-            });
-            this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
+          this.form.patchValue({
+            report_type_category: this.getReportTypeCategories()[0],
           });
-        this.form
-          ?.get('report_type_category')
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe(() => {
-            this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
-          });
+          this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        }, this.destroy$);
+        (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+          this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        }, this.destroy$);
 
         this.existingCoverage = existingCoverage;
         this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
@@ -115,9 +109,9 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
-      buildAfterDateValidator(this.form.controls['coverage_from_date']),
+      buildAfterDateValidator(this.form, 'coverage_from_date'),
     ]);
-    this.form.controls['coverage_from_date'].valueChanges.subscribe(() => {
+    (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
     });
     // Prepopulate coverage dates if the report code has rules to do so
@@ -137,6 +131,8 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
           filingFrequency,
         );
         this.form.patchValue({ coverage_from_date, coverage_through_date });
+      } else {
+        this.form.patchValue({ coverage_from_date: null, coverage_through_date: null });
       }
     });
 
@@ -215,11 +211,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
         });
       }
     });
-  }
-
-  validateDate(formField: string, calendarOpened: boolean) {
-    this.calendarOpened = calendarOpened;
-    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
   }
 }
 

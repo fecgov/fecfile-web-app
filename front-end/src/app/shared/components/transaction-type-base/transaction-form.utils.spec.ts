@@ -1,9 +1,10 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -14,9 +15,9 @@ describe('FormUtils', () => {
 
   it('should add the amount for not-refunds', () => {
     const form = new FormGroup({
-      contribution_amount: new FormControl(),
-      contribution_aggregate: new FormControl(),
-      expenditure_amount: new FormControl(),
+      contribution_amount: new SubscriptionFormControl(),
+      contribution_aggregate: new SubscriptionFormControl(),
+      expenditure_amount: new SubscriptionFormControl(),
     });
 
     const transaction = SchATransaction.fromJSON({
@@ -41,16 +42,16 @@ describe('FormUtils', () => {
       transaction.contribution_amount as number,
     );
 
-    const aggregateFormControl = form.get('contribution_aggregate') as FormControl;
+    const aggregateFormControl = form.get('contribution_aggregate') as SubscriptionFormControl;
     expect(aggregateFormControl.value).toEqual(150);
   });
 
   it('should add the amount for refunds', () => {
     const form = new FormGroup(
       {
-        contribution_amount: new FormControl(),
-        aggregate_amount: new FormControl(),
-        expenditure_amount: new FormControl(),
+        contribution_amount: new SubscriptionFormControl(),
+        aggregate_amount: new SubscriptionFormControl(),
+        expenditure_amount: new SubscriptionFormControl(),
       },
       { updateOn: 'blur' },
     );
@@ -77,7 +78,7 @@ describe('FormUtils', () => {
       transaction.expenditure_amount as number,
     );
 
-    const aggregateFormControl = form.get('aggregate_amount') as FormControl;
+    const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
     expect(aggregateFormControl.value).toEqual(50);
   });
 });
@@ -85,8 +86,8 @@ describe('FormUtils', () => {
 it('should add the amount for calendar YTD', () => {
   const form = new FormGroup(
     {
-      expenditure_amount: new FormControl(),
-      calendar_ytd_per_election_office: new FormControl(),
+      expenditure_amount: new SubscriptionFormControl(),
+      calendar_ytd_per_election_office: new SubscriptionFormControl(),
     },
     { updateOn: 'blur' },
   );
@@ -113,6 +114,6 @@ it('should add the amount for calendar YTD', () => {
     transaction.expenditure_amount as number,
   );
 
-  const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as FormControl;
+  const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as SubscriptionFormControl;
   expect(calendarYTDFormControl.value).toEqual(150);
 });

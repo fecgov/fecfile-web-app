@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -11,6 +11,7 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
@@ -42,7 +43,7 @@ export class TransactionContactLookupComponent implements OnInit {
       ]),
     ]),
   );
-  errorMessageFormControl?: FormControl;
+  errorMessageFormControl?: SubscriptionFormControl;
   currentContactLabel = 'Individual';
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
@@ -81,7 +82,7 @@ export class TransactionContactLookupComponent implements OnInit {
     // new form control to the parent form so that a validation check occurs
     // when the parent form is submitted and blocks submit if validation fails.
     if (this.contactProperty === 'contact_2') {
-      this.errorMessageFormControl = new FormControl(null, () => {
+      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
         if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired(this.form)) {
           return { required: true };
         }
@@ -90,7 +91,7 @@ export class TransactionContactLookupComponent implements OnInit {
       this.form.addControl('contact_2_lookup', this.errorMessageFormControl);
     }
     if (this.contactProperty === 'contact_3') {
-      this.errorMessageFormControl = new FormControl(null, () => {
+      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
         if (!this.transaction?.contact_3 && this.transaction?.transactionType?.contact3IsRequired) {
           return { required: true };
         }

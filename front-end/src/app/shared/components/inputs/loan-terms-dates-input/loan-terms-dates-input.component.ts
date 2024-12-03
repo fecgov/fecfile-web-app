@@ -2,15 +2,15 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
-import { take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -24,7 +24,8 @@ enum LoanTermsFieldSettings {
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   @ViewChild('interestRatePercentage') interestInput!: InputText;
-  calendarOpened = false;
+  clearValuesOnChange = true;
+
   constructor(private store: Store) {
     super();
   }
@@ -42,6 +43,11 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   ]);
 
   ngOnInit(): void {
+    this.addValidators();
+    this.addSubscriptions();
+  }
+
+  addValidators() {
     // Add the date range validation check to the DATE INCURRED input
     if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
       this.store
@@ -59,131 +65,202 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         });
     }
 
-    this.form.get(this.templateMap.interest_rate_setting)?.addValidators([Validators.required]);
-    this.form.get(this.templateMap.due_date_setting)?.addValidators([Validators.required]);
+    this.interestRateSettingField?.addValidators([Validators.required]);
+    this.dueDateSettingField?.addValidators([Validators.required]);
+  }
 
-    this.form.get(this.templateMap['due_date_setting'])?.valueChanges?.subscribe((dueDateSetting) => {
+  addSubscriptions() {
+    this.dueDateSettingField?.addSubscription((dueDateSetting) => {
       this.convertDueDate(dueDateSetting);
     });
 
-    this.onInterestRateInput(this.form.get(this.templateMap.interest_rate)?.value);
-    this.form.get(this.templateMap['interest_rate_setting'])?.valueChanges?.subscribe((interestRateSetting) => {
-      const interestRateField = this.form.get(this.templateMap['interest_rate']);
-      if (interestRateField) {
-        if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-          interestRateField.addValidators(percentageValidator);
-        } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-          interestRateField.removeValidators(percentageValidator);
-        }
+    this.onInterestRateInput(this.interestRate);
+    this.interestRateSettingField?.addSubscription((interestRateSetting) => {
+      if (!this.interestRateField) return;
+      if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
+        this.interestRateField.addValidators(percentageValidator);
+      } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
+        this.interestRateField.removeValidators(percentageValidator);
       }
-      this.onInterestRateInput(interestRateSetting);
+      if (this.clearValuesOnChange) {
+        this.interestRate = '';
+        this.interestRateField.markAsPristine();
+        this.interestRateField.markAsUntouched();
+      } else {
+        this.onInterestRateInput(interestRateSetting);
+      }
     });
 
     // Watch changes to purpose description to make sure prefix is maintained
-    this.form
-      .get(this.templateMap['interest_rate'])
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.onInterestRateInput(this.form.get(this.templateMap.interest_rate_setting)?.value);
-      });
+    this.interestRateField?.addSubscription(() => this.onInterestRateInput(this.interestRateSetting), this.destroy$);
   }
 
   ngAfterViewInit(): void {
-    const interest_rate_field = this.form.get(this.templateMap['interest_rate']);
-    const interest_rate_setting_field = this.form.get(this.templateMap['interest_rate_setting']);
+    this.clearValuesOnChange = false;
     // If the interest rate converts nicely to a percentage field, then do so
-    if (!interest_rate_setting_field?.value && interest_rate_field?.value) {
-      const starting_interest_rate = interest_rate_field?.value;
-      interest_rate_setting_field?.setValue(LoanTermsFieldSettings.EXACT_PERCENTAGE);
+    if (!this.interestRateSetting && this.interestRate) {
+      const starting_interest_rate = this.interestRate;
+
+      this.interestRateSetting = LoanTermsFieldSettings.EXACT_PERCENTAGE;
       // Otherwise, set the field setting to user-defined and restore the original value
-      if (starting_interest_rate !== interest_rate_field?.value) {
-        interest_rate_setting_field?.setValue(LoanTermsFieldSettings.USER_DEFINED);
-        interest_rate_field.setValue(starting_interest_rate);
+      if (starting_interest_rate !== this.interestRate) {
+        this.interestRateSetting = LoanTermsFieldSettings.USER_DEFINED;
+        this.interestRate = starting_interest_rate;
       }
     }
 
-    const due_date_field = this.form.get(this.templateMap['due_date']);
-    const due_date_setting_field = this.form.get(this.templateMap['due_date_setting']);
     // If the due date converts nicely to a Date object, then do so
-    if (!due_date_setting_field?.value && due_date_field?.value) {
-      const starting_due_date = due_date_field?.value;
-      due_date_setting_field?.setValue(LoanTermsFieldSettings.SPECIFIC_DATE);
+    if (!this.dueDateSetting && this.dueDate) {
+      const starting_due_date = this.dueDate;
+      this.dueDateSetting = LoanTermsFieldSettings.SPECIFIC_DATE;
       // Otherwise, set the field setting to user-defined and restore the original value
-      if (!(due_date_field?.value instanceof Date)) {
-        due_date_setting_field?.setValue(LoanTermsFieldSettings.USER_DEFINED);
-        due_date_field?.setValue(starting_due_date);
+      if (!(this.dueDate instanceof Date)) {
+        this.dueDateSetting = LoanTermsFieldSettings.USER_DEFINED;
+        this.dueDate = starting_due_date;
       }
     }
+    this.clearValuesOnChange = true;
   }
 
-  onInterestRateInput(newInterestRateSetting: string) {
-    const interestField = this.form.get(this.templateMap.interest_rate);
-    if (interestField) {
-      const previousInterestRate = interestField.value;
+  private onInterestRateInput(newInterestRateSetting: string) {
+    const previousInterestRate = this.interestRate;
+    if (newInterestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
       let newInterestRate = previousInterestRate ?? '';
-      if (newInterestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-        let textInput!: HTMLInputElement;
-        let initialSelectionStart = 0;
-        let initialSelectionEnd = 0;
-        if (this.interestInput) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          textInput = (this.interestInput as any).nativeElement as HTMLInputElement;
-          initialSelectionStart = textInput.selectionStart ?? 0;
-          initialSelectionEnd = textInput.selectionEnd ?? 0;
-        }
-
-        const validNumber = newInterestRate.replaceAll(/[^0-9.%]/g, '');
-        if (validNumber !== newInterestRate) {
-          interestField.setValue(validNumber);
-          const lengthDifference = newInterestRate.length - validNumber.length;
-          newInterestRate = validNumber;
-
-          textInput?.setSelectionRange(
-            initialSelectionStart - lengthDifference,
-            initialSelectionEnd - lengthDifference,
-          );
-        }
-
-        if (newInterestRate.length > 0) {
-          if (!newInterestRate.endsWith('%')) {
-            interestField.setValue(newInterestRate + '%');
-
-            textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
-          }
-        }
-        if (interestField.value === '%') {
-          interestField.setValue('');
-        }
+      let textInput!: HTMLInputElement;
+      let initialSelectionStart = 0;
+      let initialSelectionEnd = 0;
+      if (this.interestInput) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        textInput = (this.interestInput as any).nativeElement as HTMLInputElement;
+        initialSelectionStart = textInput.selectionStart ?? 0;
+        initialSelectionEnd = textInput.selectionEnd ?? 0;
       }
 
-      interestField.markAsTouched();
+      const validNumber = newInterestRate.replaceAll(/[^0-9.%]/g, '');
+      if (validNumber !== newInterestRate) {
+        this.interestRate = validNumber;
+        const lengthDifference = newInterestRate.length - validNumber.length;
+        newInterestRate = validNumber;
+
+        textInput?.setSelectionRange(initialSelectionStart - lengthDifference, initialSelectionEnd - lengthDifference);
+        this.interestRateField?.markAsTouched();
+      }
+
+      if (newInterestRate.length > 0) {
+        if (!newInterestRate.endsWith('%')) {
+          this.interestRate = newInterestRate + '%';
+          textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
+          this.interestRateField?.markAsTouched();
+        }
+      }
+      if (this.interestRate === '%') {
+        this.interestRate = '';
+      }
     }
   }
 
+  /**
+   * Alternates between a date form control and a string form control.
+   * The new CalendarComponent replaces the string form control with a Date control.
+   * This happens on Init, which means when the ngIf condition is met.
+   * This means when returning to the string control we need to recreate the control.
+   * @param newDueDateSetting
+   */
   convertDueDate(newDueDateSetting: string) {
-    const due_date_field = this.form.get(this.templateMap['due_date']);
-    const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
-    if (due_date_field) {
-      const previous_due_date = due_date_field.value ?? '';
-      if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
-        if (previous_due_date.search(fecDateFormat) !== -1) {
-          due_date_field.setValue(DateUtils.convertFecFormatToDate(previous_due_date));
-        } else {
-          due_date_field.setValue(undefined);
-        }
-      } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-        if (previous_due_date instanceof Date) {
-          due_date_field.setValue(DateUtils.convertDateToFecFormat(previous_due_date));
-        } else {
-          due_date_field.setValue(undefined);
-        }
-      }
-      due_date_field.markAsTouched();
+    if (this.clearValuesOnChange) {
+      this.clearDueDate(newDueDateSetting);
+    } else {
+      this.convertDueDateProper(newDueDateSetting);
     }
   }
 
-  validateDate(formField: string, calendarOpened: boolean) {
-    this.calendarOpened = calendarOpened;
-    SchemaUtils.onBlurValidation(this.form.get(formField), this.calendarOpened);
+  /**
+   * If clearValuesOnChange is true, values are set to null or empty string
+   * @param newDueDateSetting
+   */
+  private clearDueDate(newDueDateSetting: string) {
+    if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
+      this.dueDate = null;
+    } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
+      this.dueDateField = this.dueDateField!.copy<string>('');
+    }
+  }
+
+  /**
+   * If clearValuesOnChange is false, values are converted properly
+   * clearValuesOnChange is false when loading from backend, otherwise always true
+   * @param newDueDateSetting
+   */
+  private convertDueDateProper(newDueDateSetting: string) {
+    const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
+    const previous_due_date = this.dueDate;
+    if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
+      if (typeof previous_due_date === 'string' && previous_due_date.search(fecDateFormat) !== -1) {
+        this.dueDate = DateUtils.convertFecFormatToDate(previous_due_date);
+      } else {
+        this.dueDate = null;
+      }
+    } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
+      const value =
+        previous_due_date instanceof Date ? DateUtils.convertDateToFecFormat(previous_due_date) : previous_due_date;
+      this.dueDateField = this.dueDateField!.copy<string>(value ?? '');
+    }
+  }
+
+  get dueDateField(): SubscriptionFormControl | null {
+    return this.form.get(this.templateMap['due_date']) as SubscriptionFormControl;
+  }
+
+  set dueDateField(control: SubscriptionFormControl) {
+    control.markAsPristine();
+    this.form.setControl(this.templateMap['due_date'], control);
+  }
+
+  get dueDate(): Date | string | null {
+    return this.dueDateField?.value ?? null;
+  }
+
+  set dueDate(value: Date | string | null) {
+    this.dueDateField?.setValue(value);
+    if (value === null) {
+      this.dueDateField?.markAsPristine();
+      this.dueDateField?.markAsUntouched();
+    }
+  }
+
+  get dueDateSettingField(): SubscriptionFormControl | null {
+    return this.form.get(this.templateMap.due_date_setting) as SubscriptionFormControl;
+  }
+
+  get dueDateSetting(): string {
+    return this.dueDateSettingField?.value ?? '';
+  }
+
+  set dueDateSetting(value: string) {
+    this.dueDateSettingField?.setValue(value);
+  }
+
+  get interestRateField(): SubscriptionFormControl | null {
+    return this.form.get(this.templateMap['interest_rate']) as SubscriptionFormControl;
+  }
+
+  get interestRate(): string {
+    return this.interestRateField?.value ?? '';
+  }
+
+  set interestRate(value: string) {
+    this.interestRateField?.setValue(value);
+  }
+
+  get interestRateSettingField(): SubscriptionFormControl | null {
+    return this.form.get(this.templateMap['interest_rate_setting']) as SubscriptionFormControl;
+  }
+
+  get interestRateSetting(): string {
+    return this.interestRateSettingField?.value ?? '';
+  }
+
+  set interestRateSetting(value: string) {
+    this.interestRateSettingField?.setValue(value);
   }
 }

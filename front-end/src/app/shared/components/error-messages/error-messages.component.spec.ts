@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 
 import { ErrorMessagesComponent } from './error-messages.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('ErrorMessagesComponent', () => {
   let component: ErrorMessagesComponent;
@@ -125,7 +126,7 @@ describe('ErrorMessagesComponent', () => {
     const fb: FormBuilder = new FormBuilder();
     const form = fb.group({});
     component.form = form;
-    component.control = new FormControl('my control');
+    component.control = new SubscriptionFormControl('my control');
     component.ngOnInit();
     expect(component.control?.value).toBe('my control');
   });

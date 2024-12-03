@@ -1,12 +1,12 @@
+import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { F3xCoverageDates } from '../models/form-3x.model';
-import { DateUtils } from './date.utils';
-import { FecDatePipe } from '../pipes/fec-date.pipe';
 import * as _ from 'lodash';
+import { F3xCoverageDates } from '../models/form-3x.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
-import { Injectable } from '@angular/core';
+import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
+import { DateUtils } from './date.utils';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;
@@ -18,8 +18,6 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
       }
     : null;
 }
-
-export const committeeIdValidator = Validators.pattern('^[Cc]\\d{8}$');
 
 export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
@@ -123,12 +121,11 @@ function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors 
   return { invaliddate: { msg: message } };
 }
 
-export function buildCorrespondingForm3XValidator(
-  dateControl: AbstractControl,
-  date2Control: AbstractControl,
-): ValidatorFn {
+export function buildCorrespondingForm3XValidator(form: FormGroup, dateField: string, date2Field: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    if (!dateControl.value && !date2Control.value) {
+    const date = form.get(dateField)?.value;
+    const date2 = form.get(date2Field)?.value;
+    if (!date && !date2) {
       return {
         noDateProvided: true,
       };
@@ -157,10 +154,10 @@ export function buildWithinReportDatesValidator(coverage_from_date?: Date, cover
   };
 }
 
-export function buildAfterDateValidator(otherDateControl: AbstractControl<Date | null>): ValidatorFn {
+export function buildAfterDateValidator(form: FormGroup, field: string): ValidatorFn {
   return (control: AbstractControl<Date | null>): ValidationErrors | null => {
     const controlDate = control.value;
-    const otherDate = otherDateControl.value;
+    const otherDate = form.get(field)?.value;
     if (!otherDate || !controlDate) {
       return null;
     }

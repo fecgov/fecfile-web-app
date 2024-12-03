@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 
@@ -14,9 +15,9 @@ import { takeUntil } from 'rxjs';
   templateUrl: './cash-on-hand-override.component.html',
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
-  yearFormControl = new FormControl<string | null>(null, Validators.required);
-  currentAmountFormControl = new FormControl<number | null>(null, Validators.required);
-  newAmountFormControl = new FormControl<number | null>(null, Validators.required);
+  yearFormControl = new SubscriptionFormControl<string | null>(null, Validators.required);
+  currentAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
+  newAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
   yearOptions: string[] = [];
   numberOfYearOptions = 25;
 

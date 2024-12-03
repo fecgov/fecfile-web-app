@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { CommitteeInputComponent } from './committee-input.component';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('CommitteeInputComponent', () => {
   let component: CommitteeInputComponent;
@@ -20,9 +21,9 @@ describe('CommitteeInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        contributor_organization_name: new FormControl(''),
-        donor_committee_fec_id: new FormControl(''),
-        donor_committee_name: new FormControl(''),
+        contributor_organization_name: new SubscriptionFormControl(''),
+        donor_committee_fec_id: new SubscriptionFormControl(''),
+        donor_committee_name: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );

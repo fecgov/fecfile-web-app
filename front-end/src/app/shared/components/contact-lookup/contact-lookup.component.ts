@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+
 import {
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
@@ -16,6 +16,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -56,8 +57,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
 
-  contactTypeFormControl = new FormControl<ContactTypes | null>(null, { updateOn: 'change' });
-  searchBoxFormControl = new FormControl('', { updateOn: 'change' });
+  contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
+  searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   searchTerm = '';
 
@@ -189,7 +190,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
             occupation: '',
             candidate_office: candidate.office,
             candidate_state: candidate.state === 'US' ? '' : candidate.state,
-            candidate_district: candidate.district === '00' ? '' : candidate.district,
+            candidate_district: candidate.state === 'US' ? '' : candidate.district,
           }),
         );
       });

@@ -92,7 +92,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.fb), { updateOn: 'blur' });
+    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
@@ -200,7 +200,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
               contactKey,
             );
           }
-          const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
+          const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config, transaction);
           if (changes.length > 0) {
             return TransactionContactUtils.getContactChangesMessage(contact, changes);
           }

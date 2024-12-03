@@ -88,18 +88,12 @@
       <ng-container *ngIf="isElectionReport()">
         <div class="election-info col-6 grid">
           <div class="col-12">
-            <div class="field">
-              <label for="date_of_election">ELECTION ON</label>
-              <p-calendar
-                (onFocus)="calendarOpened = true"
-                (onClose)="validateDate('date_of_election', false)"
-                (onBlur)="validateDate('date_of_election', calendarOpened)"
-                id="date_of_election"
-                name="date_of_election"
-                formControlName="date_of_election"
-              ></p-calendar>
-              <app-error-messages fieldName="date_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
+            <app-calendar
+              fieldName="date_of_election"
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              label="ELECTION ON"
+            ></app-calendar>
           </div>
           <div class="col-12">
             <div class="field">
@@ -124,45 +118,26 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <h3>Covering period</h3>
+        <h3 class="m-0">Covering period</h3>
+        <span>Please verify coverage dates since the dates cannot be changed once the report is created.</span>
       </div>
     </div>
     <div class="grid">
       <div class="col-6">
-        <div class="field">
-          <label for="coverage_from_date">FROM</label>
-          <p-calendar
-            (onFocus)="calendarOpened = true"
-            (onClose)="validateDate('coverage_from_date', false)"
-            (onBlur)="validateDate('coverage_from_date', calendarOpened)"
-            inputId="coverage_from_date"
-            name="coverage_from_date"
-            formControlName="coverage_from_date"
-          ></p-calendar>
-          <app-error-messages
-            [form]="form"
-            fieldName="coverage_from_date"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          fieldName="coverage_from_date"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="FROM"
+        ></app-calendar>
       </div>
       <div class="col-6">
-        <div class="field">
-          <label for="coverage_through_date">TO</label>
-          <p-calendar
-            (onFocus)="calendarOpened = true"
-            (onClose)="validateDate('coverage_through_date', false)"
-            (onBlur)="validateDate('coverage_through_date', calendarOpened)"
-            inputId="coverage_through_date"
-            name="coverage_through_date"
-            formControlName="coverage_through_date"
-          ></p-calendar>
-          <app-error-messages
-            [form]="form"
-            fieldName="coverage_through_date"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-calendar
+          fieldName="coverage_through_date"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="TO"
+        ></app-calendar>
       </div>
     </div>
   </form>

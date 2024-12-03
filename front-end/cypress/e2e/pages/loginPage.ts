@@ -61,8 +61,7 @@ function loginDotGovLogin() {
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
 
   cy.visit('/');
-  cy.get('#dropdownMenuButton').click();
-  cy.get('[data-test="login-dot-gov-login-button"]').click();
+  cy.get('#loginButton').click();
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('.p-checkbox-box').click();

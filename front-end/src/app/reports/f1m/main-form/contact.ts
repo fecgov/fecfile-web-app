@@ -1,4 +1,4 @@
-import { AbstractControl, FormControl, Validators } from '@angular/forms';
+import { AbstractControl, Validators } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
@@ -6,6 +6,7 @@ import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
@@ -24,7 +25,7 @@ export abstract class F1MContact {
   constructor(contactKey: keyof Form1M, component: MainFormComponent) {
     this.contactKey = contactKey;
     this.component = component;
-    component.form.addControl(this.contactLookupKey, new FormControl(''));
+    component.form.addControl(this.contactLookupKey, new SubscriptionFormControl(''));
     this.control = component.form.get(this.contactLookupKey);
   }
 

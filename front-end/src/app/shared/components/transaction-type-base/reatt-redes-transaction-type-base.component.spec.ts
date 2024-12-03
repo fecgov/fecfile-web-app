@@ -14,7 +14,7 @@ import { ReportService } from '../../services/report.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DatePipe } from '@angular/common';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getTestTransactionByType, testActiveReport, testMockStore } from '../../utils/unit-test.utils';
 import { FecDatePipe } from '../../pipes/fec-date.pipe';
@@ -23,6 +23,7 @@ import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-fr
 import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { ReattributedUtils } from '../../utils/reatt-redes/reattributed.utils';
 import { ActivatedRoute } from '@angular/router';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -147,23 +148,23 @@ describe('ReattTransactionTypeBaseComponent', () => {
       expect(component.transaction.transactionType.templateMap).toBeTruthy();
       component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
       component.childTransaction.reatt_redes = SchBTransaction.fromJSON(data);
-      component.childForm.addControl('election_code', new FormControl(''));
-      component.childForm.addControl('election_other_description', new FormControl(''));
-      component.childForm.addControl('category_code', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_fec_id', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_last_name', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_first_name', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_office', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_state', new FormControl(''));
-      component.childForm.addControl('beneficiary_candidate_district', new FormControl(''));
+      component.childForm.addControl('election_code', new SubscriptionFormControl(''));
+      component.childForm.addControl('election_other_description', new SubscriptionFormControl(''));
+      component.childForm.addControl('category_code', new SubscriptionFormControl(''));
+      component.childForm.addControl('beneficiary_candidate_fec_id', new SubscriptionFormControl(''));
+      component.childForm.addControl('beneficiary_candidate_last_name', new SubscriptionFormControl(''));
+      component.childForm.addControl('beneficiary_candidate_first_name', new SubscriptionFormControl(''));
+      component.childForm.addControl('beneficiary_candidate_office', new SubscriptionFormControl(''));
+      component.childForm.addControl('beneficiary_candidate_state', new SubscriptionFormControl(''));
+      component.childForm.addControl('beneficiary_candidate_district', new SubscriptionFormControl(''));
 
-      component.form.addControl('category_code', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_fec_id', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_last_name', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_first_name', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_office', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_state', new FormControl(''));
-      component.form.addControl('beneficiary_candidate_district', new FormControl(''));
+      component.form.addControl('category_code', new SubscriptionFormControl(''));
+      component.form.addControl('beneficiary_candidate_fec_id', new SubscriptionFormControl(''));
+      component.form.addControl('beneficiary_candidate_last_name', new SubscriptionFormControl(''));
+      component.form.addControl('beneficiary_candidate_first_name', new SubscriptionFormControl(''));
+      component.form.addControl('beneficiary_candidate_office', new SubscriptionFormControl(''));
+      component.form.addControl('beneficiary_candidate_state', new SubscriptionFormControl(''));
+      component.form.addControl('beneficiary_candidate_district', new SubscriptionFormControl(''));
 
       expect(Object.keys(component.childForm.controls)).toContain('election_code');
 

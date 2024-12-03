@@ -1,8 +1,9 @@
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
+import { SubscriptionFormControl } from './subscription-form-control';
 
 export class SchemaUtils {
   /**
@@ -25,7 +26,7 @@ export class SchemaUtils {
    */
   static getFormGroupFields(properties: string[]) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    properties.forEach((property) => (group[property] = ['', null]));
+    properties.forEach((property) => (group[property] = new SubscriptionFormControl('')));
     return group;
   }
 
@@ -34,31 +35,23 @@ export class SchemaUtils {
     'committee_type',
     'filing_frequency',
     'report_code',
+    'report_type_category',
     'change_of_address',
     'support_oppose_code',
     'userCertified',
+    'secured',
   ];
-  static getFormGroupFieldsNoBlur(properties: string[], fb: FormBuilder) {
+
+  static getFormGroupFieldsNoBlur(properties: string[]) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     properties.forEach((property) => {
-      if (property.includes('date') && !property.includes('due_date_field_setting')) {
-        group[property] = fb.control(null, { updateOn: 'submit' });
-      } else {
-        group[property] = fb.control('', SchemaUtils.noBlur.includes(property) ? { updateOn: 'change' } : {});
-      }
+      const updateOn = SchemaUtils.noBlur.includes(property) ? 'change' : 'blur';
+      group[property] = new SubscriptionFormControl('', {
+        updateOn,
+      });
     });
 
     return group;
-  }
-
-  static onBlurValidation(control: AbstractControl | null, calendarOpened: boolean) {
-    if (!calendarOpened && control) {
-      control.markAsTouched();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const pendingValue = (control as any)._pendingValue;
-      control.setValue(pendingValue);
-      control.updateValueAndValidity();
-    }
   }
 
   /**

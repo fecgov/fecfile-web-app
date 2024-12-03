@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { MemoText } from 'app/shared/models/memo-text.model';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('AdditionalInfoInputComponent', () => {
   let component: AdditionalInfoInputComponent;
@@ -21,8 +22,8 @@ describe('AdditionalInfoInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
-        contribution_purpose_descrip: new FormControl(''),
-        text4000: new FormControl(''),
+        contribution_purpose_descrip: new SubscriptionFormControl(''),
+        text4000: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
