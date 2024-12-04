@@ -11,7 +11,7 @@ export class MemoTextService {
   constructor(private apiService: ApiService) {}
 
   public get(id: string): Observable<MemoText> {
-    return this.apiService.get<MemoText>(`/memo-text/${id}`).pipe(map((response) => MemoText.fromJSON(response)));
+    return this.apiService.get<MemoText>(`/memo-text/${id}/`).pipe(map((response) => MemoText.fromJSON(response)));
   }
 
   public getForReportId(reportId: string): Observable<MemoText[]> {
@@ -35,6 +35,6 @@ export class MemoTextService {
   }
 
   public delete(memoText: MemoText): Observable<null> {
-    return this.apiService.delete<null>(`/memo-text/${memoText.id}`);
+    return this.apiService.delete<null>(`/memo-text/${memoText.id}/`);
   }
 }

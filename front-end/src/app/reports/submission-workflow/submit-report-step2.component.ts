@@ -174,9 +174,9 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
         from(this.router.navigateByUrl(this.getContinueUrl?.(this.report) || ''));
         if (this.report?.id) {
           this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
-          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));
+          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}/`));
         } else {
-          return from(this.router.navigateByUrl('/reports'));
+          return from(this.router.navigateByUrl('/reports/'));
         }
       }),
     );

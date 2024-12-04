@@ -36,7 +36,7 @@ describe('ReportResolver', () => {
       expect(response).toEqual(form3X);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${form3X.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${form3X.id}/`);
     expect(req.request.method).toEqual('GET');
     req.flush(form3X);
     httpTestingController.verify();

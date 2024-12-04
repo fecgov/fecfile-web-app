@@ -31,7 +31,7 @@ describe('MemoTextService', () => {
       expect(response).toEqual(memoText);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/${memoText.id}`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/${memoText.id}/`);
     expect(req.request.method).toEqual('GET');
     req.flush(memoText);
     httpTestingController.verify();
@@ -84,7 +84,7 @@ describe('MemoTextService', () => {
         expect(response).toBeNull();
       });
 
-      const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/999`);
+      const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/999/`);
       expect(req.request.method).toEqual('DELETE');
       req.flush(null);
       httpTestingController.verify();
