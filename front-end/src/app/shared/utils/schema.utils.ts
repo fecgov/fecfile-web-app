@@ -174,6 +174,11 @@ export class SchemaUtils {
         ...SchemaUtils.getFormValues(form, jsonSchema),
         ...SchemaUtils.getNonFormValues(transaction),
       };
+      if (data['telephone']) {
+        if (data['telephone'].trim() === '' || /^\+\d+\s*$/.test(data['telephone'])) {
+          data['telephone'] = undefined;
+        }
+      }
       const errors: ValidationError[] = validate(jsonSchema, data, [property]);
 
       if (errors.length) {
