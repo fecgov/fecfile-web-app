@@ -74,23 +74,6 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
         this.onChange('+' + this.countryCode + ' ' + this.number);
       });
     }
-
-    if (this.labelName.length > 0) {
-      const inputChildren = this.internationalPhoneInputChild?.nativeElement.parentNode?.childNodes;
-      for (const childKey in inputChildren) {
-        const childElement = inputChildren[childKey as unknown as number] as unknown as HTMLElement;
-        if (childElement.classList?.contains('iti__country-container')) {
-          for (const nephewElementKey in childElement.childNodes) {
-            const nephewElement = childElement.childNodes[
-              nephewElementKey as unknown as number
-            ] as unknown as HTMLElement;
-            if (nephewElement.classList?.contains('iti__selected-country')) {
-              nephewElement.setAttribute('aria-labelledby', this.labelName);
-            }
-          }
-        }
-      }
-    }
   }
 
   onKey(event: KeyboardEvent) {
