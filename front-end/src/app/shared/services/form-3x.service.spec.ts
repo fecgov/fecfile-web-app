@@ -59,7 +59,7 @@ describe('Form3XService', () => {
       expect(response).toBeNull();
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/999`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/form-3x/999/`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(null);
     httpTestingController.verify();

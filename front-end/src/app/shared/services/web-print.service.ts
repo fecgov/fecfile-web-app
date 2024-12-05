@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
 import { firstValueFrom } from 'rxjs';
@@ -11,7 +10,6 @@ export class WebPrintService {
   constructor(
     private apiService: ApiService,
     private reportService: ReportService,
-    private store: Store,
   ) {}
 
   /**
