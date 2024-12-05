@@ -7,7 +7,6 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ApiService } from 'app/shared/services/api.service';
-import { Form3XService } from 'app/shared/services/form-3x.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -16,7 +15,7 @@ import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { combineLatest, from, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, firstValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-submit-report-step2',
@@ -52,10 +51,9 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
-    protected confirmationService: ConfirmationService,
-    private apiService: ApiService,
-    private reportService: ReportService,
-    private form3XService: Form3XService,
+    public confirmationService: ConfirmationService,
+    public apiService: ApiService,
+    public reportService: ReportService,
   ) {
     super();
   }
@@ -108,7 +106,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     }
   }
 
-  public submitClicked(): void {
+  submitClicked(): void {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
@@ -120,28 +118,25 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.saveAndSubmit$.subscribe();
+        this.saveAndSubmit();
       },
     });
   }
 
-  get saveAndSubmit$(): Observable<boolean> {
-    return this.saveTreasurerName$.pipe(
-      switchMap(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Updated',
-          life: 3000,
-        });
+  async saveAndSubmit(): Promise<boolean> {
+    await this.saveTreasurerName();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Report Updated',
+      life: 3000,
+    });
 
-        return this.submitReport$;
-      }),
-    );
+    return this.submitReport();
   }
 
-  get saveTreasurerName$(): Observable<Report | undefined> {
-    if (!this.report) return of(undefined);
+  async saveTreasurerName(): Promise<Report | undefined> {
+    if (!this.report) return undefined;
     this.loading = 1;
     const payload: Report = getReportFromJSON({
       ...this.report,
@@ -157,10 +152,10 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       payload.zip = this.committeeAccount?.zip;
     }
 
-    return this.reportService.update(payload, this.formProperties);
+    return firstValueFrom(this.reportService.update(payload, this.formProperties));
   }
 
-  get submitReport$(): Observable<boolean> {
+  async submitReport(): Promise<boolean> {
     this.loading = 2;
 
     const payload = {
@@ -168,17 +163,14 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       password: this.form?.value['filingPassword'],
       backdoor_code: this.form?.value['backdoor_code'],
     };
-    return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
-      switchMap(() => {
-        this.loading = 0;
-        from(this.router.navigateByUrl(this.getContinueUrl?.(this.report) || ''));
-        if (this.report?.id) {
-          this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
-          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}/`));
-        } else {
-          return from(this.router.navigateByUrl('/reports/'));
-        }
-      }),
-    );
+    await firstValueFrom(this.apiService.post('/web-services/submit-to-fec/', payload));
+    this.loading = 0;
+    await this.router.navigateByUrl(this.getContinueUrl?.(this.report) || '');
+    if (this.report?.id) {
+      this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
+      return this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}/`);
+    } else {
+      return this.router.navigateByUrl('/reports/');
+    }
   }
 }

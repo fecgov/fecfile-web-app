@@ -1,11 +1,9 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SharedModule } from 'app/shared/shared.module';
@@ -18,43 +16,34 @@ import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
 import { Report } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
   let fixture: ComponentFixture<ReportLevelMemoComponent>;
   let testMemoTextService: MemoTextService;
   let testMessageService: MessageService;
-  let testRouter: Router;
-  const f3x: Form3X = Form3X.fromJSON({
-    id: '999',
-    coverage_from_date: '2022-05-25',
-    form_type: 'F3XN',
-    report_code: 'Q1',
-  });
+
+  let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    mockRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
+
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        SharedModule,
-        CardModule,
-        ToastModule,
-        ReactiveFormsModule,
-        ButtonModule,
-        InputTextareaModule,
-        RouterTestingModule.withRoutes([]),
-      ],
+      imports: [SharedModule, CardModule, ToastModule, ReactiveFormsModule, ButtonModule, InputTextareaModule],
       declarations: [ReportLevelMemoComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         MessageService,
         MemoTextService,
         FormBuilder,
         provideMockStore(testMockStore),
+        { provide: Router, useValue: mockRouter },
         {
           provide: ActivatedRoute,
           useValue: {
             data: of({
-              report: f3x,
               getNextUrl: (report?: Report) => `/reports/f3x/submit/step1/${report?.id}`,
             }),
           },
@@ -64,7 +53,6 @@ describe('ReportLevelMemoComponent', () => {
   });
 
   beforeEach(() => {
-    testRouter = TestBed.inject(Router);
     testMemoTextService = TestBed.inject(MemoTextService);
     testMessageService = TestBed.inject(MessageService);
     fixture = TestBed.createComponent(ReportLevelMemoComponent);
@@ -95,12 +83,11 @@ describe('ReportLevelMemoComponent', () => {
       life: 3000,
     };
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(of(new MemoText()));
-    const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = '1';
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
@@ -112,12 +99,11 @@ describe('ReportLevelMemoComponent', () => {
       life: 3000,
     };
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(of(new MemoText()));
-    const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = undefined;
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 });
