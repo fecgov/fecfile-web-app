@@ -18,6 +18,15 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
 
+const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
+const loansDebts = [
+  'LOAN_RECEIVED_FROM_INDIVIDUAL',
+  'LOAN_RECEIVED_FROM_BANK',
+  'LOAN_BY_COMMITTEE',
+  'DEBT_OWED_BY_COMMITTEE',
+  'DEBT_OWED_TO_COMMITTEE',
+];
+
 @Component({
   template: '',
 })
@@ -336,18 +345,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   private canDelete(transaction: Transaction): boolean {
-    if (
-      transaction.transaction_type_identifier === undefined ||
-      ((transaction.loan_id || transaction.debt_id) &&
-        ![
-          'LOAN_RECEIVED_FROM_INDIVIDUAL',
-          'LOAN_RECEIVED_FROM_BANK',
-          'LOAN_BY_COMMITTEE',
-          'DEBT_OWED_BY_COMMITTEE',
-          'DEBT_OWED_TO_COMMITTEE',
-        ].includes(transaction.transaction_type_identifier || ''))
-    ) {
-      return false;
+    if (transaction.transaction_type_identifier) {
+      // Shouldn't be able to delete loan receipts
+      if (loanReceipts.includes(transaction.transaction_type_identifier)) return false;
+      // Shouldn't be able to delete pulled forward loans and debts
+      if (loansDebts.includes(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
+        return false;
     }
 
     return !!transaction?.can_delete;

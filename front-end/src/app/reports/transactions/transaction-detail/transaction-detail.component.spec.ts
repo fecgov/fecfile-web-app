@@ -86,7 +86,7 @@ describe('TransactionDetailComponent', () => {
     const saveSpy = spyOn(component, 'save');
 
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    console.log('HEY LISTEN', component.form);
+
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     expect(navSpy).not.toHaveBeenCalled();

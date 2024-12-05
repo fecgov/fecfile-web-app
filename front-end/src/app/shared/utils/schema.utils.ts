@@ -40,6 +40,7 @@ export class SchemaUtils {
     'support_oppose_code',
     'userCertified',
     'secured',
+    'memo_code',
   ];
 
   static getFormGroupFieldsNoBlur(properties: string[]) {
