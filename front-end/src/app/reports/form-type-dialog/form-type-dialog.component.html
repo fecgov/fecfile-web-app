@@ -14,18 +14,20 @@
       </div>
       <div class="dialog-body">
         <div class="dropdown">
-          <label id="type-label" for="typeDropdown">FORM TYPE</label>
+          <span id="type-label">FORM TYPE</span>
           <button
             class="btn dropdown-toggle focus-ring"
             type="button"
             id="typeDropdown"
             [autofocus]="true"
             data-bs-toggle="dropdown"
+            (keydown.escape)="closeDialog()"
             aria-expanded="false"
+            aria-label="Possible report types"
             #dropdownElement
             [innerHTML]="dropdownButtonText"
           ></button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <ul class="dropdown-menu" aria-labelledby="typeDropdown">
             <li *ngFor="let type of formTypeOptions" [attr.data-cy-form-type]="type">
               <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
                 <span class="option">
