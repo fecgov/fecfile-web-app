@@ -19,6 +19,7 @@ import intlTelInput, { Iti } from 'intl-tel-input';
 })
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
   @Input() disabled = false;
+  @Input() labelName = '';
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
   private intlTelInput: Iti | undefined;
@@ -72,6 +73,23 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
         this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
         this.onChange('+' + this.countryCode + ' ' + this.number);
       });
+    }
+
+    if (this.labelName.length > 0) {
+      const inputChildren = this.internationalPhoneInputChild?.nativeElement.parentNode?.childNodes;
+      for (const childKey in inputChildren) {
+        const childElement = inputChildren[childKey as unknown as number] as unknown as HTMLElement;
+        if (childElement.classList?.contains('iti__country-container')) {
+          for (const nephewElementKey in childElement.childNodes) {
+            const nephewElement = childElement.childNodes[
+              nephewElementKey as unknown as number
+            ] as unknown as HTMLElement;
+            if (nephewElement.classList?.contains('iti__selected-country')) {
+              nephewElement.setAttribute('aria-labelledby', this.labelName);
+            }
+          }
+        }
+      }
     }
   }
 

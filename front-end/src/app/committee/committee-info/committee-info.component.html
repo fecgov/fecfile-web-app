@@ -159,8 +159,13 @@
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <label for="treasurer_phone">TELEPHONE</label>
-        <app-fec-international-phone-input [disabled]="true" id="treasurer_phone" formControlName="treasurer_phone">
+        <label id="telephone-label" for="treasurer_phone">TELEPHONE</label>
+        <app-fec-international-phone-input
+          [disabled]="true"
+          id="treasurer_phone"
+          formControlName="treasurer_phone"
+          labelName="telephone-label"
+        >
         </app-fec-international-phone-input>
       </div>
     </div>
