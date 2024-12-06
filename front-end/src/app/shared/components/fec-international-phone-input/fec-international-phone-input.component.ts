@@ -19,6 +19,7 @@ import intlTelInput, { Iti } from 'intl-tel-input';
 })
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
   @Input() disabled = false;
+  @Input() labelName = '';
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
   private intlTelInput: Iti | undefined;

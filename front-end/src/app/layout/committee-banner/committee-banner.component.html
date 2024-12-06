@@ -2,10 +2,11 @@
   <div class="col-12">
     <div class="committee-name">{{ committeeName }}</div>
     <div class="grid">
-      <div class="col-12 committee-info">
+      <div class="col-12 committee-info" aria-label="Committee Status">
         <div
           class="pi pi-circle-on status-circle"
           [ngStyle]="{ color: committeeStatus === 'Active' ? '#4AA564' : '#AEB0B5' }"
+          [attr.aria-label]="committeeStatus === 'Active' ? 'Active' : 'Inactive'"
         ></div>
         <div class="sub-banner-item">{{ committeeFrequency }}</div>
         |
