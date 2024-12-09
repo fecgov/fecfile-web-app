@@ -122,6 +122,10 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
     else this.selectedForm24Type = item;
   }
 
+  closeDialog() {
+    this.dialog?.nativeElement.close();
+  }
+
   @HostListener('keydown', ['$event'])
   handleTabKey(event: KeyboardEvent) {
     if (!this.firstElement) return;
