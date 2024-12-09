@@ -46,6 +46,11 @@ describe('Receipt Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(scheduleData, '', '#contribution_date');
+
+    // Check for regression on date error
+    cy.get('#contribution_date').clear();
+    PageUtils.clickButton('Save'); // Triggers errors to show
+    cy.get('app-calendar').should('exist').should('contain', 'This is a required field.');
   });
 
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {

@@ -97,17 +97,27 @@ describe('Disbursements', () => {
       '',
       'date_signed',
     );
-
     PageUtils.clickButton('Save');
+
+    // Check that fields saved correctly
     PageUtils.clickLink('Independent Expenditure');
     cy.contains('Address').should('exist');
     cy.get('#first_name').should('have.value', individualContactFormData.first_name);
     cy.get('#last_name').should('have.value', individualContactFormData.last_name);
+
+    // Check that the date fields have the right errors
+    cy.get('#dissemination_date').clear();
+    cy.get('#disbursement_date').clear();
+    PageUtils.clickButton('Save'); // Trigger errors to show
+    cy.get('app-amount-input')
+      .should('contain', 'At least ONE date field must be entered.')
+      .should('not.contain', 'This is a required field.');
+
+    // Add IE to a F24 Report
     PageUtils.clickSidebarItem('Manage your transactions');
 
     PageUtils.getKabob('Independent Expenditure').click();
     PageUtils.clickButton('Add to Form24 Report', '', true);
-    //PageUtils.dropdownSetValue('', '#1')
     PageUtils.clickButton('Select a F24 Report');
     cy.get('.dropdown > ul').contains('#1').click();
     PageUtils.clickButton('Confirm');
