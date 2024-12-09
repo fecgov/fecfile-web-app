@@ -32,7 +32,7 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   private countryCode: string | undefined;
   private number = '';
 
-  constructor(@Optional() @Self() private ngControl: NgControl) {
+  constructor(@Optional() @Self() public ngControl: NgControl) {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
@@ -93,7 +93,8 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   }
 
   onBlur(event: FocusEvent) {
-    const value = `+${this.countryCode} ${(event.target as HTMLInputElement).value}`;
+    const inputValue = (event.target as HTMLInputElement).value.trim();
+    const value = inputValue ? `+${this.countryCode} ${(event.target as HTMLInputElement).value}` : undefined;
     this.ngControl.control?.setValue(value, { emitEvent: false });
     this.ngControl.control?.updateValueAndValidity();
     this.ngControl.control?.markAsTouched();

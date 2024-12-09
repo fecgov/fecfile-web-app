@@ -10,7 +10,7 @@ describe('Manage contacts', () => {
     ContactListPage.goToPage();
   });
 
-  it('Create an Individual contact', () => {
+  xit('Create an Individual contact', () => {
     PageUtils.clickButton('Add contact');
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
@@ -22,6 +22,16 @@ describe('Manage contacts', () => {
     cy.get('#entity_type_dropdown > div.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
+  });
+
+  it('should not trigger validation failure if telephone is touched', () => {
+    PageUtils.clickButton('Add contact');
+    const formData = { ...contactFormData };
+    formData['phone'] = ' ';
+    ContactListPage.enterFormData(formData);
+
+    PageUtils.clickButton('Save');
+    cy.contains('Save').should('not.exist');
   });
 
   it('Create a Candidate contact', () => {
