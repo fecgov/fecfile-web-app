@@ -95,7 +95,7 @@ describe('FecInternationalPhoneInputComponent', () => {
     } as unknown as FocusEvent;
 
     component.onBlur(event);
-    expect(control.setValue).toHaveBeenCalledWith(undefined, { emitEvent: false });
+    expect(control.setValue).toHaveBeenCalledWith(null, { emitEvent: false });
     expect(control.markAsTouched).toHaveBeenCalled();
     expect(control.markAsDirty).toHaveBeenCalled();
     expect(control.updateValueAndValidity).toHaveBeenCalled();
