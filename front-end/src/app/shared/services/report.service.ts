@@ -53,7 +53,7 @@ export class ReportService implements TableListService<Report> {
 
   public get(reportId: string): Observable<Report> {
     return this.apiService
-      .get<Report>(`${this.apiEndpoint}/${reportId}`)
+      .get<Report>(`${this.apiEndpoint}/${reportId}/`)
       .pipe(map((response) => getReportFromJSON(response)));
   }
 
@@ -72,7 +72,7 @@ export class ReportService implements TableListService<Report> {
   }
 
   public delete(report: Report): Observable<null> {
-    return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}`);
+    return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}/`);
   }
 
   /**

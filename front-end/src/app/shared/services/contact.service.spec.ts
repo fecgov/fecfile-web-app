@@ -105,9 +105,22 @@ describe('ContactService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/1/`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
+  it('#get() should GET a record', () => {
+    const contact: Contact = new Contact();
+    contact.id = '1';
+
+    service.get(contact.id).subscribe((response: Contact) => {
+      expect(response).toEqual(contact);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/1/`);
+    expect(req.request.method).toEqual('GET');
     httpTestingController.verify();
   });
 

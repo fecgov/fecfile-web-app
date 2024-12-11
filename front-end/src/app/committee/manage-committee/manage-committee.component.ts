@@ -22,8 +22,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   override rowsPerPage = 10;
 
-  public members: Promise<CommitteeMember[]>;
-
   sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
     { field: 'email', label: 'Email' },
@@ -39,7 +37,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     override itemService: CommitteeMemberService,
   ) {
     super(messageService, confirmationService, elementRef);
-    this.members = this.itemService.getMembers();
   }
 
   public override addItem() {
