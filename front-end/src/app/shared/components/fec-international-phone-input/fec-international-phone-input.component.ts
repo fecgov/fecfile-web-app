@@ -94,7 +94,7 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
 
   onBlur(event: FocusEvent) {
     const inputValue = (event.target as HTMLInputElement).value.trim();
-    const value = inputValue ? `+${this.countryCode} ${(event.target as HTMLInputElement).value}` : undefined;
+    const value = inputValue ? `+${this.countryCode} ${(event.target as HTMLInputElement).value}` : null;
     this.ngControl.control?.setValue(value, { emitEvent: false });
     this.ngControl.control?.updateValueAndValidity();
     this.ngControl.control?.markAsTouched();
