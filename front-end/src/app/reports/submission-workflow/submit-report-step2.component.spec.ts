@@ -134,6 +134,7 @@ describe('SubmitReportStep2Component', () => {
 
     it('should call saveAndSubmit when form is valid', fakeAsync(async () => {
       if (component.report) component.report.id = '999';
+      component.getContinueUrl = () => `/reports/f3x/submit/status/999/`;
       const saveSepy = spyOn(component, 'saveAndSubmit').and.callThrough();
 
       component.submitClicked();
@@ -149,23 +150,7 @@ describe('SubmitReportStep2Component', () => {
         password: mockPassword,
         backdoor_code: undefined,
       });
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('');
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/status/999/');
-    }));
-
-    it('should redirect to reports if no report id', fakeAsync(async () => {
-      if (component.report) component.report.id = undefined;
-
-      component.submitClicked();
-      tick(100);
-
-      expect(apiSpy).toHaveBeenCalledWith('/web-services/submit-to-fec/', {
-        report_id: undefined,
-        password: mockPassword,
-        backdoor_code: undefined,
-      });
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('');
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/');
     }));
   });
 });

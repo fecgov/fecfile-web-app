@@ -165,12 +165,6 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     };
     await firstValueFrom(this.apiService.post('/web-services/submit-to-fec/', payload));
     this.loading = 0;
-    await this.router.navigateByUrl(this.getContinueUrl?.(this.report) || '');
-    if (this.report?.id) {
-      this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
-      return this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}/`);
-    } else {
-      return this.router.navigateByUrl('/reports/');
-    }
+    return this.router.navigateByUrl(this.getContinueUrl?.(this.report) || '/reports/');
   }
 }
