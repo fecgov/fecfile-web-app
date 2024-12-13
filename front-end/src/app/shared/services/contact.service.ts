@@ -60,7 +60,7 @@ export class ContactService implements TableListService<Contact> {
   }
 
   public get(id: string): Observable<Contact> {
-    return this.apiService.get<Contact>(`/contacts/${id}`).pipe(map((response) => Contact.fromJSON(response)));
+    return this.apiService.get<Contact>(`/contacts/${id}/`).pipe(map((response) => Contact.fromJSON(response)));
   }
 
   public create(contact: Contact): Observable<Contact> {
@@ -75,7 +75,7 @@ export class ContactService implements TableListService<Contact> {
   }
 
   public delete(contact: Contact): Observable<null> {
-    return this.apiService.delete<null>(`/contacts/${contact.id}`);
+    return this.apiService.delete<null>(`/contacts/${contact.id}/`);
   }
 
   /**
