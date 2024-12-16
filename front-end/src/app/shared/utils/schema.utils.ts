@@ -40,6 +40,7 @@ export class SchemaUtils {
     'support_oppose_code',
     'userCertified',
     'secured',
+    'memo_code',
   ];
 
   static getFormGroupFieldsNoBlur(properties: string[]) {
@@ -173,8 +174,8 @@ export class SchemaUtils {
         ...SchemaUtils.getFormValues(form, jsonSchema),
         ...SchemaUtils.getNonFormValues(transaction),
       };
-      const errors: ValidationError[] = validate(jsonSchema, data, [property]);
 
+      const errors: ValidationError[] = validate(jsonSchema, data, [property]);
       if (errors.length) {
         const result: ValidationErrors = {};
         errors.forEach((error) => {

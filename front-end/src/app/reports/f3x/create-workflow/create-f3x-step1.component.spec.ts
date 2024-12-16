@@ -178,7 +178,7 @@ describe('CreateF3XStep1Component', () => {
         { updateOn: 'blur' },
       );
       validator(group);
-      console.log(group.get('coverage_from_date')?.errors);
+
       expect(group.get('coverage_from_date')?.errors).toEqual(
         expectedFromMessage ? { invaliddate: { msg: expectedFromMessage } } : null,
       );

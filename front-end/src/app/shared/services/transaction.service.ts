@@ -156,7 +156,7 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public delete(transaction: Transaction): Observable<null> {
-    return this.apiService.delete<null>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}`);
+    return this.apiService.delete<null>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`);
   }
 
   public multiSaveReattRedes(transactions: Transaction[]): Observable<Transaction[]> {

@@ -37,7 +37,12 @@ dialog {
   margin-right: 25px;
 }
 
-label {
+#type-label {
+  display: block;
+}
+
+label,
+#type-label {
   font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   font-weight: bold;
   font-size: 14px;

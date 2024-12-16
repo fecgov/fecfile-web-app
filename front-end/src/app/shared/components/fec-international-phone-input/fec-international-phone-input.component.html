@@ -1,5 +1,6 @@
 <div>
   <input
+    [attr.aria-labelledby]="labelName"
     ngClass="{{ disabled ? 'p-disabled' : '' }}"
     #internationalPhoneInput
     type="tel"
