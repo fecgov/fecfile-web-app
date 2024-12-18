@@ -1,10 +1,4 @@
 <div class="sidebar">
-  <div class="grid title">
-    <a class="col-12" class="sidebar-logo" routerLink="/">
-      <h4 class="site-name">FECFile</h4>
-      <div>FEDERAL ELECTION COMMISSION</div>
-    </a>
-  </div>
   <app-f3x-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F3X"></app-f3x-menu>
   <app-f99-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F99"></app-f99-menu>
   <app-f1m-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F1M"></app-f1m-menu>

@@ -1,5 +1,12 @@
 <div id="page-container" [ngClass]="[layoutControls.backgroundStyle]">
   <app-banner #bannerRef></app-banner>
+  <div
+    class="header-container"
+    [ngStyle]="{ paddingBottom: layoutControls.showSidebar ? '0' : '64px' }"
+    *ngIf="layoutControls.showHeader"
+  >
+    <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
+  </div>
 
   <!--  Begin Sidebar section -->
 
@@ -8,9 +15,6 @@
       <app-sidebar></app-sidebar>
     </div>
     <div class="sidebar-content-container">
-      <div class="header-container" *ngIf="layoutControls.showHeader">
-        <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
-      </div>
       <div class="main-content">
         <div class="grid">
           <div *ngIf="layoutControls.showCommitteeBanner">
@@ -32,13 +36,6 @@
 
   <!-- Begin No Sidebar section -->
   <div *ngIf="!layoutControls.showSidebar" id="content-offset" #contentOffset>
-    <div
-      class="header-container"
-      style="max-width: 1320px; margin-left: auto; margin-right: auto"
-      *ngIf="layoutControls.showHeader"
-    >
-      <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
-    </div>
     <div class="main-content">
       <app-committee-banner *ngIf="layoutControls.showCommitteeBanner"></app-committee-banner>
       <div class="container" *ngIf="layoutControls.backgroundStyle === BackgroundStyles.DEFAULT; else no_container">
