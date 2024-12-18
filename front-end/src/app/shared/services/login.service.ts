@@ -9,7 +9,6 @@ import { firstValueFrom, Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { UsersService } from '../services/users.service';
-import { DateUtils } from '../utils/date.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -57,11 +56,7 @@ export class LoginService extends DestroyerComponent {
 
   public async userHasConsented(): Promise<boolean> {
     const userLoginData = await firstValueFrom(this.userLoginData$);
-    const consentExpirationDate = DateUtils.convertFecFormatToDate(userLoginData.security_consent_exp_date || null);
-    if (!consentExpirationDate) return !!userLoginData.temporary_security_consent;
-
-    const consentExpired = new Date() > consentExpirationDate;
-    return !consentExpired;
+    return !!userLoginData.security_consented;
   }
 
   public userIsAuthenticated() {

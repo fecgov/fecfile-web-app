@@ -9,7 +9,6 @@ import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions'
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
-import { DateUtils } from '../utils/date.utils';
 import { LoginService } from './login.service';
 
 describe('LoginService', () => {
@@ -67,10 +66,7 @@ describe('LoginService', () => {
   });
 
   describe('#userHasConsented should work', () => {
-    const one_year_ahead = new Date();
-    one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
-
-    it('expiration one day ahead is recent', () => {
+    it('test undefined security_consented', () => {
       const one_day_ahead = new Date();
       one_day_ahead.setDate(one_day_ahead.getDate() + 1);
 
@@ -78,53 +74,11 @@ describe('LoginService', () => {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_exp_date: DateUtils.convertDateToFecFormat(one_day_ahead) as string,
-      });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
-    });
-
-    it('expiration six months ahead is recent', () => {
-      const recentDate = new Date();
-      recentDate.setMonth(recentDate.getMonth() + 6);
-      const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-
-      store.overrideSelector(selectUserLoginData, {
-        first_name: '',
-        last_name: '',
-        email: '',
-        security_consent_exp_date: testDate,
-      });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
-    });
-
-    it('expiration 364 days ahead is recent', () => {
-      const recentDate = new Date();
-      recentDate.setDate(recentDate.getDate() + 364);
-      const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-
-      store.overrideSelector(selectUserLoginData, {
-        first_name: '',
-        last_name: '',
-        email: '',
-        security_consent_exp_date: testDate,
-      });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
-    });
-
-    it('expiration one year ago is not recent', () => {
-      const recentDate = new Date();
-      recentDate.setFullYear(recentDate.getFullYear() - 1);
-      const testDate = DateUtils.convertDateToFecFormat(recentDate) as string;
-      store.overrideSelector(selectUserLoginData, {
-        first_name: '',
-        last_name: '',
-        email: '',
-        security_consent_exp_date: testDate,
       });
       service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
     });
 
-    it('test undefined security_consent_exp_date', () => {
+    it('test false security_consented', () => {
       const one_day_ahead = new Date();
       one_day_ahead.setDate(one_day_ahead.getDate() + 1);
 
@@ -132,9 +86,22 @@ describe('LoginService', () => {
         first_name: '',
         last_name: '',
         email: '',
-        security_consent_exp_date: undefined,
+        security_consented: false,
       });
       service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
+    });
+
+    it('test true security_consented', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consented: true,
+      });
+      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
     });
   });
 });

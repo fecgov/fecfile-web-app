@@ -90,7 +90,6 @@ export const testUserLoginData: UserLoginData = {
   first_name: 'test_first_name',
   last_name: 'test_last_name',
   email: 'test_email@testhost.com',
-  security_consent_exp_date: '2022-05-01',
 };
 
 export const testActiveReport: Form3X = Form3X.fromJSON({
