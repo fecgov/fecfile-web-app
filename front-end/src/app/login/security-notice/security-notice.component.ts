@@ -71,8 +71,8 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     this.usersService
       .updateCurrentUser(updatedUserLoginData)
       .pipe(
-        map(() => {
-          this.store.dispatch(userLoginDataUpdatedAction({ payload: updatedUserLoginData }));
+        map((retval) => {
+          this.store.dispatch(userLoginDataUpdatedAction({ payload: retval }));
           this.router.navigate(['/dashboard']);
         }),
       )
