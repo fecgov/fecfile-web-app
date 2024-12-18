@@ -65,8 +65,8 @@ const routes: Routes = [
     canActivate: [loggedInGuard],
     data: {
       showCommitteeBanner: false,
-      showHeader: false,
       showUpperFooter: false,
+      headerStyle: HeaderStyles.LOGOUT,
     },
   },
   { path: '**', redirectTo: '' },
