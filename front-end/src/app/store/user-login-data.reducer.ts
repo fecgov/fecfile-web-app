@@ -10,7 +10,6 @@ export const initialState: UserLoginData = {
   first_name: undefined,
   last_name: undefined,
   email: undefined,
-  security_consent_exp_date: undefined,
 };
 
 export const loginReducer = createReducer(

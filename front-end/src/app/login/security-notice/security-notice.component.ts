@@ -6,7 +6,6 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -66,12 +65,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     }
     const updatedUserLoginData = { ...this.userLoginData };
     if (this.form.get('security-consent-annual')?.value) {
-      const one_year_ahead = new Date();
-      one_year_ahead.setFullYear(one_year_ahead.getFullYear() + 1);
-      updatedUserLoginData.security_consent_exp_date = DateUtils.convertDateToFecFormat(one_year_ahead) as string;
-    } else {
-      updatedUserLoginData.temporary_security_consent = true;
-      updatedUserLoginData.security_consent_exp_date = undefined;
+      updatedUserLoginData.consent_for_one_year = true;
     }
 
     this.usersService
