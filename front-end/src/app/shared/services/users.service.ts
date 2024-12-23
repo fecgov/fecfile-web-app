@@ -15,6 +15,8 @@ export class UsersService {
   }
 
   public updateCurrentUser(userLoginData: UserLoginData): Observable<UserLoginData> {
-    return this.apiService.put<UserLoginData>(`/users/update_current/`, userLoginData).pipe(map((response) => response));
+    return this.apiService
+      .put<UserLoginData>(`/users/update_current/`, userLoginData)
+      .pipe(map((response) => response));
   }
 }
