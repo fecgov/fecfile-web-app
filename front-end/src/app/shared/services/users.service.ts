@@ -11,10 +11,10 @@ export class UsersService {
   constructor(private apiService: ApiService) {}
 
   public getCurrentUser(): Promise<UserLoginData> {
-    return firstValueFrom(this.apiService.get<UserLoginData>(`/users/current/`).pipe(map((response) => response)));
+    return firstValueFrom(this.apiService.get<UserLoginData>(`/users/get_current/`).pipe(map((response) => response)));
   }
 
   public updateCurrentUser(userLoginData: UserLoginData): Observable<UserLoginData> {
-    return this.apiService.put<UserLoginData>(`/users/current/`, userLoginData).pipe(map((response) => response));
+    return this.apiService.put<UserLoginData>(`/users/update_current/`, userLoginData).pipe(map((response) => response));
   }
 }
