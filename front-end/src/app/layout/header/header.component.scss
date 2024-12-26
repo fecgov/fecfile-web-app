@@ -20,6 +20,10 @@ a {
 
 nav {
   background-color: white !important;
+  height: 80px;
+  border-bottom: 2px solid #e8e8e8;
+  padding-left: calc(32px + 0.5rem);
+  padding-right: calc(32px + 0.5rem);
 }
 
 .navbar-nav {
