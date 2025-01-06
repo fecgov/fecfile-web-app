@@ -120,7 +120,7 @@ describe('CreateF3XStep1Component', () => {
     it('should pick first unused report code', () => {
       component.form.controls['filing_frequency'].setValue('Q');
       component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
-      expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q1);
+      expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q2);
     });
   });
 
