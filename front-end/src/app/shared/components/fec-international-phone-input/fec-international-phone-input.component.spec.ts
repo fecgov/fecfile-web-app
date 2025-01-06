@@ -1,7 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FecInternationalPhoneInputComponent } from './fec-international-phone-input.component';
+import { ElementRef } from '@angular/core';
+
+class MockNgControl extends NgControl {
+  control = new FormControl<string | undefined>('', Validators.pattern(/^\+\d{1,3} \d{10}$/));
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  viewToModelUpdate(value: any): void {
+    // No-op for testing
+  }
+}
 
 describe('FecInternationalPhoneInputComponent', () => {
   let component: FecInternationalPhoneInputComponent;
@@ -10,7 +20,7 @@ describe('FecInternationalPhoneInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FecInternationalPhoneInputComponent],
-      providers: [],
+      providers: [{ provide: NgControl, useClass: MockNgControl }],
       imports: [FormsModule, ReactiveFormsModule],
     }).compileComponents();
   });
@@ -18,6 +28,7 @@ describe('FecInternationalPhoneInputComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FecInternationalPhoneInputComponent);
     component = fixture.componentInstance;
+    component.internationalPhoneInputChild = new ElementRef(document.createElement('input'));
     fixture.detectChanges();
   });
 
@@ -69,4 +80,33 @@ describe('FecInternationalPhoneInputComponent', () => {
     expect(component['countryCode']).toEqual(testDialCode);
     expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + testDialCode + ' ' + component['number']);
   }));
+
+  it('should blur properly', () => {
+    component.ngControl = new MockNgControl();
+    const control = (component.ngControl as MockNgControl).control;
+
+    spyOn(control, 'setValue').and.callThrough();
+    spyOn(control, 'markAsTouched').and.callThrough();
+    spyOn(control, 'markAsDirty').and.callThrough();
+    spyOn(control, 'updateValueAndValidity').and.callThrough();
+
+    let event: FocusEvent = {
+      target: { value: '' } as HTMLInputElement,
+    } as unknown as FocusEvent;
+
+    component.onBlur(event);
+    expect(control.setValue).toHaveBeenCalledWith(null, { emitEvent: false });
+    expect(control.markAsTouched).toHaveBeenCalled();
+    expect(control.markAsDirty).toHaveBeenCalled();
+    expect(control.updateValueAndValidity).toHaveBeenCalled();
+    expect(control.valid).toBeTrue();
+
+    event = {
+      target: { value: '123' } as HTMLInputElement,
+    } as unknown as FocusEvent;
+
+    component.onBlur(event);
+    expect(control.setValue).toHaveBeenCalledWith('+1 123', { emitEvent: false });
+    expect(control.valid).toBeFalse();
+  });
 });

@@ -10,7 +10,6 @@ import { DestroyerComponent } from '../components/app-destroyer.component';
 import { UserLoginData } from '../models/user.model';
 import { UsersService } from '../services/users.service';
 import { DateUtils } from '../utils/date.utils';
-import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +19,6 @@ export class LoginService extends DestroyerComponent {
   constructor(
     private store: Store,
     private router: Router,
-    private apiService: ApiService,
     private cookieService: CookieService,
     private usersService: UsersService,
   ) {

@@ -26,7 +26,6 @@ export class PollerService {
       const remoteMainScript = matchResponses && matchResponses.length > 0 ? matchResponses[1] : undefined;
 
       if (!remoteMainScript) {
-        console.log('Could not find main script in index.html');
         this.isNewVersionAvailable.next(false);
         return;
       }

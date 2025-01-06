@@ -166,7 +166,6 @@ export class TransactionContactUtils {
             config,
             transaction,
           );
-          console.log(contactChanges);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
             contact[property] = value as never;

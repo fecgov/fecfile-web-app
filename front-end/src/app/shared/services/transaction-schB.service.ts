@@ -1,7 +1,6 @@
-import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService, QueryParams } from './api.service';
+import { QueryParams } from './api.service';
 import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 
@@ -10,12 +9,6 @@ import { ListRestResponse } from '../models/rest-api.model';
 })
 export class TransactionSchBService extends TransactionService {
   override tableDataEndpoint = '/transactions';
-  constructor(
-    override apiService: ApiService,
-    override datePipe: DatePipe,
-  ) {
-    super(apiService, datePipe);
-  }
 
   override getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     // The table data for the Schedule B disbursements also includes the Schedule E expenditures.
