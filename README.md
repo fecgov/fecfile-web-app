@@ -60,29 +60,4 @@ The following events occur for fecfile-web-api and fecfile-web-app independently
 
 ## Additional developer notes
 
-This section covers a few topics we think might help developers after setup.
-
-### Git Secrets
-
-Set up git secrets to protect oneself from committing sensitive information such as passwords to the repository.
-
-- First install AWS git-secret utility in your PATH so it can be run at the command line: https://github.com/awslabs/git-secrets#installing-git-secrets
-- Pull the script to install git-secrets globally on your local machine. This only has to be done one time as you clone the different fecfile github repositories: https://github.com/fecgov/fecfile-web-api/blob/main/install-git-secrets-hook.sh
-- Once you have git-secrets installed, run the fecfile-online/install-git-secrets-hook.sh shell script in the root directory of your cloned fecfile-online repo to install the pre-commit hooks.
-  NOTE: The pre-commit hook is installed GLOBALLY by default so commits to all cloned repositories on your computer will be scanned for sensitive data. See the comments at the top of the script for local install options.
-- See git-secrets README for more features: https://github.com/awslabs/git-secrets#readme
-
-### Commit local code changes to origin daily
-
-As a best practice policy, please commit any feature code changes made during the day to origin each evening before signing off for the day.
-
-### Snyk security scanning
-A Snyk online account has been set up for FEC to monitor the FECFile Online GitHub repositories. The management of vulnerability alerts will be handled as a weekly rotating task performed by a developer who will log into the [Snyk Dashboard](https://app.snyk.io/invite/link/accept?invite=93042de6-4eca-4bb5-bf76-9c2e9f895e24&utm_source=link_invite&utm_medium=referral&utm_campaign=product-link-invite&from=link_invite) and perform the following tasks:
-
-1. Review the vulnerability reports for each of the FECFile Online GitHub repository.
-2. Write up a ticket (1 for each reported "Critical" or "High" severity vulnerability) to remediate the vulnerability.
-3. Point and mark each ticket with the following tags: "security", "high priority".
-4. Move each new ticket into the current sprint and sprint backlog.
-5. Update weekly assignment log with tickets created or "None".
-
-The weekly assignment log can be found in the Google drive 🔒  [here](https://docs.google.com/spreadsheets/d/1SNMOyGS4JAKgXQ0RhhzoX7M2ib1vm14dD0LxWNpssP4) 🔒
+See [Additional Developer Notes](https://github.com/fecgov/fecfile-web-api/wiki/Additional-Developer-Notes).
