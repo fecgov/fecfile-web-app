@@ -16,7 +16,7 @@ const formData = {
     others_liable: 'NO',
     collateral: 'NO',
     future_income: 'NO',
-    date_incurred: new Date('04/27/2024'),
+    date_incurred: new Date(currentYear, 3, 27),
   },
 };
 
@@ -72,7 +72,7 @@ describe('Loans', () => {
         date_received: undefined,
         secured: undefined,
         memo_text: '',
-        date_incurred: new Date('05/27/2024'),
+        date_incurred: new Date(currentYear, 4, 27),
         amount: 65000,
       },
     };
@@ -95,7 +95,7 @@ describe('Loans', () => {
     cy.contains('Review loan agreement').click({ force: true });
     PageUtils.urlCheck('/list/');
     PageUtils.valueCheck('#amount', '$65,000.00');
-    PageUtils.valueCheck('#loan_incurred_date', '05/27/2024');
+    PageUtils.valueCheck('#loan_incurred_date', `05/27/${currentYear}`);
   });
 
   it('should test: Loan Received from Bank', () => {
