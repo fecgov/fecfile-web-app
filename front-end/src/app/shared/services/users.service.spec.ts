@@ -37,14 +37,13 @@ describe('UsersService', () => {
       first_name: 'testFirstName',
       last_name: 'testLastName',
       email: 'testEmail@testhost.com',
-      security_consent_exp_date: '1970-01-01',
     };
 
     service.getCurrentUser().then((response) => {
       expect(response).toEqual(testCurrentUser);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/users/current/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/users/get_current/`);
     expect(req.request.method).toEqual('GET');
     req.flush(testCurrentUser);
     httpTestingController.verify();
