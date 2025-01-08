@@ -9,7 +9,7 @@
         "local_memory": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
         "local_aot": "ng serve --configuration=local --aot",
         "local_aot_memory": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --configuration=local --aot",
-        "build-dev": "npm install && npx -y -p @angular/cli ng build --configuration=cloud.gov.dev",
+        "build-dev": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.dev",
         "build-stage": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.stage",
         "build-prod": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.prod",
         "build-test": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.test",
