@@ -22,7 +22,8 @@
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "prettier:check:ci": "./node_modules/.bin/prettier --check .",
-        "prettier:fix": "./node_modules/.bin/prettier --write ."
+        "prettier:fix": "./node_modules/.bin/prettier --write .",
+        "postinstall": "./git-secrets-check.sh"
     },
     "private": true,
     "dependencies": {
