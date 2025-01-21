@@ -8,7 +8,7 @@ from invoke import task
 
 
 APP_NAME = "fecfile-web-app"
-ORG_NAME = "fec-fecfileonline-prototyping"
+ORG_NAME = "fec-fecfile"
 
 
 def _detect_space(repo, branch=None):
