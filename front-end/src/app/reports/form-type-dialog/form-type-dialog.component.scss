@@ -20,6 +20,7 @@ dialog {
   box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
   border: none;
   margin-top: 15%;
+  overflow: hidden;
 }
 
 .dialog-header {
@@ -94,4 +95,8 @@ label,
 
 .modal-item-margin {
   margin-top: 32px;
+}
+
+.dropdown-menu {
+  position: fixed !important;
 }
