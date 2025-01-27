@@ -65,6 +65,20 @@ label,
   border: 2px solid #aeb0b5;
   font-size: 14px;
   border-radius: 4px;
+  text-wrap-mode: wrap;
+}
+
+.option {
+  font-size: 14px;
+  display: flex !important;
+  text-align: left !important;
+  text-wrap-mode: wrap !important;
+}
+
+.option > b {
+  min-width: 60px !important;
+  max-width: 60px !important;
+  width: 60px !important;
 }
 
 .dialog-footer {
@@ -73,10 +87,6 @@ label,
   border-top: 0;
   padding-top: 0;
   padding-bottom: 16px;
-}
-
-.option {
-  font-size: 14px;
 }
 
 .btn-close {
@@ -99,4 +109,5 @@ label,
 
 .dropdown-menu {
   position: fixed !important;
+  max-width: 440px;
 }

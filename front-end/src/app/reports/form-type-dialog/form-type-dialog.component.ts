@@ -82,15 +82,6 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
     return type ? FORM_TYPES.get(type) : undefined;
   }
 
-  get dropdownButtonText(): string {
-    if (this.selectedType) {
-      const type = this.getFormType(this.selectedType);
-      return `<span class="option"><b>${type?.label}:</b> ${type?.description}</span>`;
-    } else {
-      return '<span></span>';
-    }
-  }
-
   updateSelected(type: FormTypes) {
     this.selectedType = type;
   }
