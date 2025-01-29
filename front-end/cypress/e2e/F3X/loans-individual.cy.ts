@@ -32,14 +32,16 @@ describe('Loans', () => {
     PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Individual').should('exist');
-    cy.contains('Loan Received from Individual')
-      .closest('tr')
-      .find('button')
-      .each(($button) => {
-        const innerHTML = $button.html();
-        if (innerHTML.includes('Delete')) {
-          throw new Error('A button contains "Delete", test failed.');
-        }
-      });
+    cy.get('app-transaction-receipts').within(() => {
+      cy.contains('Loan Received from Individual')
+        .closest('tr')
+        .find('button')
+        .each(($button) => {
+          const innerHTML = $button.html();
+          if (innerHTML.includes('Delete')) {
+            throw new Error('A button contains "Delete", test failed.');
+          }
+        });
+    });
   });
 });
