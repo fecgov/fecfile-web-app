@@ -104,6 +104,15 @@ describe('Loans', () => {
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
     cy.contains('Loan Received from Bank').should('exist');
+    cy.contains('Loan Received from Bank')
+      .closest('tr')
+      .find('button')
+      .each(($button) => {
+        const innerHTML = $button.html();
+        if (innerHTML.includes('Delete')) {
+          throw new Error('A button contains "Delete", test failed.');
+        }
+      });
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
