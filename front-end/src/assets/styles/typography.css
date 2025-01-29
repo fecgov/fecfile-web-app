@@ -104,8 +104,8 @@ label,
 select {
   display: block;
 }
-input[type=file] {
-  display:none!important;
+input[type='file'] {
+  display: none !important;
 }
 label {
   margin: 0;
@@ -170,56 +170,8 @@ input[type='search'] {
   -o-appearance: none;
   appearance: none;
 }
-[type='radio'] {
-  position: absolute !important;
-  top: auto;
-  left: -9999px !important;
-}
-[type='radio'] + label {
-  border: 1px solid #aeb0b5;
-  background-color: #aeb0b5;
-  display: inline-block;
-  cursor: pointer;
-  line-height: 2rem;
-  margin: 0 0 1rem 0.25rem;
-  padding: 0.4rem 0.8rem 0.4rem 3rem;
-}
-[type='radio'] + label:hover {
-  background-color: #d6d7d9;
-  border-color: #d6d7d9;
-}
-[type='radio'] + label::before {
-  background: #fff;
-  border: 2px solid #5b616b;
-  border-radius: 2px;
-  content: '';
-  display: inline-block;
-  height: 1.6rem;
-  margin-right: 0.6em;
-  margin-left: -2.4rem;
-  text-indent: 0.15em;
-  width: 1.6rem;
-  vertical-align: -4px;
-}
-/*
-[type=radio]+label::before{height:1.6rem; width:1.6rem; border-radius:1.6rem}
- */
-[type='radio']:checked + label {
-  background-color: transparent;
-}
-[type='radio']:checked + label::before {
-  background-color: #5b616b;
-  box-shadow: 0 0 0 1.2px #fff inset;
-}
-[type='radio']:focus + label {
-  box-shadow: 0 0 2px 2px #5b9dd9;
-}
-[type='radio']:disabled + label::before {
-  cursor: not-allowed;
-}
-[type='button'],
-[type='submit'],
-button {
+.seal-link,
+.usa-banner__button {
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;

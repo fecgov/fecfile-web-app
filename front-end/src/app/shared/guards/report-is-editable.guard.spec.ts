@@ -3,7 +3,8 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportIsEditableGuard } from './report-is-editable.guard';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ReportIsEditableGuard', () => {
   let guard: ReportIsEditableGuard;
@@ -13,8 +14,7 @@ describe('ReportIsEditableGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideMockStore(testMockStore)],
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore)],
     });
     guard = TestBed.inject(ReportIsEditableGuard);
   });

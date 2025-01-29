@@ -1,4 +1,5 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
+@import 'primeicons/primeicons.css';
 
 p {
   max-width: 100%;
@@ -22,12 +23,12 @@ hr.black-line {
 }
 
 .p-panel .p-panel-header,
-.p-sidebar {
+.p-drawer {
   background: #f1f1f1;
   color: #112e51;
 }
 
-.p-sidebar-header {
+.p-drawer-header {
   font-family: karla, sans-serif;
   font-weight: bold;
   color: #112e51;
@@ -40,7 +41,7 @@ hr.black-line {
   border-bottom: 1px black dotted;
 }
 
-.p-sidebar-bottom {
+.p-drawer-bottom {
   height: fit-content;
 }
 
@@ -48,14 +49,10 @@ li {
   list-style-type: none;
 }
 
-mark {
-  background-color: lightsteelblue;
-}
-
 .ng-submitted .p-inputtext.ng-invalid,
 .p-inputtext.ng-invalid.ng-touched,
-.ng-submitted p-dropdown.ng-invalid div.p-dropdown,
-p-dropdown.ng-invalid.ng-touched div.p-dropdown,
+.ng-submitted p-select.ng-invalid div.p-select,
+p-select.ng-invalid.ng-touched div.p-select,
 .ng-submitted p-inputnumber.ng-invalid input.p-inputtext,
 p-inputnumber.ng-invalid.ng-touched input.p-inputtext,
 .ng-submitted p-calendar.ng-dirty.ng-invalid input.p-inputtext,
@@ -66,7 +63,7 @@ p-autocomplete.ng-invalid.ng-touched input.p-inputtext {
 }
 
 .contact-dialog-not-submitted .p-inputtext.ng-invalid,
-.contact-dialog-not-submitted p-dropdown.ng-invalid div.p-dropdown {
+.contact-dialog-not-submitted p-select.ng-invalid div.p-select {
   border: 2px solid #aeb0b5;
 }
 
@@ -196,7 +193,7 @@ label.disabled {
   width: 50%;
 }
 
-.form-type-dialog p-dropdown {
+.form-type-dialog p-select {
   display: flex;
 }
 
@@ -210,6 +207,10 @@ label.disabled {
   background-color: #f77b42;
   border-color: #f77b42;
   border: 0;
+  font-weight: 600;
+}
+
+.add-button > .p-button-label {
   font-weight: 600;
 }
 
@@ -377,7 +378,7 @@ label.disabled {
   border-bottom-left-radius: 0;
 }
 
-.p-dropdown {
+.p-select {
   height: 48px;
 }
 
@@ -408,11 +409,11 @@ label.disabled {
   margin-top: 0 !important;
 }
 
-.action-options .p-overlaypanel-content {
+.action-options .p-popover-content {
   padding: 0.5em;
 }
 
-.action-options .p-overlaypanel-content .p-button {
+.action-options .p-popover-content .p-button {
   width: 100%;
   text-align: inherit;
 }

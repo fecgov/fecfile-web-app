@@ -40,7 +40,7 @@ describe('ErrorMessagesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ErrorMessagesComponent],
+      imports: [ErrorMessagesComponent],
     }).compileComponents();
   });
 

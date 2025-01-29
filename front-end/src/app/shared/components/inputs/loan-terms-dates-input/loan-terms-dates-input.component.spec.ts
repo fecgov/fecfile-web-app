@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { LoanTermsDatesInputComponent } from './loan-terms-dates-input.component';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { percentageValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
@@ -13,8 +13,7 @@ describe('LoanTermsDatesInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule],
-      declarations: [LoanTermsDatesInputComponent],
+      imports: [LoanTermsDatesInputComponent],
       providers: [provideMockStore(testMockStore)],
     });
     fixture = TestBed.createComponent(LoanTermsDatesInputComponent);

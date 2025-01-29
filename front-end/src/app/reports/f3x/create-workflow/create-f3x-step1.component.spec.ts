@@ -1,16 +1,13 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../../../shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { SharedModule } from 'app/shared/shared.module';
 import { MessageService } from 'primeng/api';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
@@ -22,6 +19,8 @@ import { firstValueFrom, of } from 'rxjs';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -67,17 +66,18 @@ describe('CreateF3XStep1Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        SelectButtonModule,
-        SharedModule,
-        RadioButtonModule,
-        CalendarModule,
-        ReactiveFormsModule,
-        RouterTestingModule.withRoutes([]),
+      imports: [SelectButtonModule, RadioButtonModule, DatePickerModule, ReactiveFormsModule, CreateF3XStep1Component],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        Form3XService,
+        FormBuilder,
+        MessageService,
+        FecDatePipe,
+        LabelPipe,
+        provideMockStore(testMockStore),
       ],
-      declarations: [CreateF3XStep1Component, LabelPipe],
-      providers: [Form3XService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -125,7 +125,7 @@ describe('CreateF3XStep1Component', () => {
     });
   });
 
-  it('#save should save a new f3x record', () => {
+  it('#save should save a new f3x record', async () => {
     const listResponse = {
       count: 0,
       next: '/',
@@ -133,23 +133,23 @@ describe('CreateF3XStep1Component', () => {
       results: [],
       pageNumber: 0,
     } as ListRestResponse;
-    spyOn(form3XService, 'create').and.returnValue(of(f3x));
-    spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
+    spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
+    spyOn(reportService, 'getTableData').and.returnValue(Promise.resolve(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.form.patchValue({ ...f3x });
-    component.save();
+    await component.save();
     expect(component.form.invalid).toBe(false);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
     component.form.patchValue({ ...f3x });
-    component.save('continue');
+    await component.save('continue');
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 
   it('#save should not save with invalid f3x record', () => {
-    spyOn(form3XService, 'create').and.returnValue(of(f3x));
+    spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
     component.form.patchValue({ ...f3x });
     component.form.patchValue({ form_type: 'NO-GOOD' });
     component.save();

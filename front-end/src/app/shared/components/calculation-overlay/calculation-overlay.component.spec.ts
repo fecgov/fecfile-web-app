@@ -8,8 +8,7 @@ describe('CalculationOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OverlayModule],
-      declarations: [CalculationOverlayComponent],
+      imports: [OverlayModule, CalculationOverlayComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CalculationOverlayComponent);

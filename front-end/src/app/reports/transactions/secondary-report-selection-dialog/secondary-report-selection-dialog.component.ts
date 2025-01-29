@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/report.model';
@@ -8,40 +18,40 @@ import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { Toast } from 'primeng/toast';
+import { LabelPipe as LabelPipe_1 } from '../../../shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',
   templateUrl: './secondary-report-selection-dialog.component.html',
   styleUrls: ['./secondary-report-selection-dialog.component.scss'],
+  imports: [ButtonDirective, Ripple, Toast, LabelPipe_1],
 })
 export class SecondaryReportSelectionDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit {
+  public readonly router = inject(Router);
+  private readonly reportService = inject(ReportService);
+  private readonly transactionService = inject(TransactionService);
+  private readonly messageService = inject(MessageService);
+  readonly reportTypeLabels = reportLabelList;
+  readonly reportTypes = ReportTypes;
+
   @Input() transaction: Transaction | undefined;
   @Input() dialogVisible = false;
   @Input() createEventMethod = () => {
     return;
   };
-  @Output() dialogClose = new EventEmitter<undefined>();
+  @Output() readonly dialogClose = new EventEmitter<undefined>();
   @ViewChild('dialog') dialog?: ElementRef;
 
   reports: Report[] = [];
   reportLabels: LabelList = [];
 
   _reportType: ReportTypes | undefined;
-  reportTypeLabels = reportLabelList;
 
   selectedReport: Report | undefined;
   dropDownFieldText = 'Loading Reports...';
-
-  reportTypes = ReportTypes;
-
-  constructor(
-    public router: Router,
-    private reportService: ReportService,
-    private transactionService: TransactionService,
-    private messageService: MessageService,
-  ) {
-    super();
-  }
 
   ngAfterViewInit() {
     this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());

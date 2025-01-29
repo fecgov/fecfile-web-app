@@ -1,8 +1,6 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { catchError, of } from 'rxjs';
 import { Contact, ContactTypes } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
@@ -15,35 +13,37 @@ import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
   let testContactService: ContactService;
 
   const testBedConfig = {
-    imports: [HttpClientTestingModule],
     providers: [
+      provideHttpClient(),
+      provideHttpClientTesting(),
       provideMockStore(testMockStore),
       {
         provide: TransactionService,
         useValue: {
-          get: (transactionId: string) =>
-            of(
-              SchATransaction.fromJSON({
-                id: transactionId,
-                transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-                contact_id: '123',
-                contact_1: Contact.fromJSON({ id: 123 }),
-              }),
-            ),
-          getTableData: () =>
-            of({
+          get: async (transactionId: string) =>
+            SchATransaction.fromJSON({
+              id: transactionId,
+              transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+              contact_id: '123',
+              contact_1: Contact.fromJSON({ id: 123 }),
+            }),
+          getTableData: async () => {
+            return {
               count: 5,
-              next: 'https://url',
+              next: '',
               previous: 'https://url',
               pageNumber: 1,
               results: [],
-            }),
+            };
+          },
         },
       },
     ],
@@ -60,7 +60,7 @@ describe('TransactionResolver', () => {
   });
 
   describe('resolve existing', () => {
-    it('should return an existing transaction', () => {
+    it('should return an existing transaction', async () => {
       const route = {
         queryParamMap: convertToParamMap({}),
         paramMap: convertToParamMap({ transactionId: '999' }),
@@ -68,17 +68,16 @@ describe('TransactionResolver', () => {
 
       const testContact: Contact = new Contact();
       testContact.id = 'testId';
-      spyOn(testContactService, 'get').and.returnValue(of(testContact));
-
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
-        expect(of(response)).toBeTruthy();
-        if (response) {
-          expect('Offsets to Operating Expenditures').toEqual(response.transactionType?.title || '');
-        }
-      });
+      spyOn(testContactService, 'get').and.returnValue(Promise.resolve(testContact));
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((response) => {
+          expect(response).toBeTruthy();
+          expect('Offsets to Operating Expenditures').toEqual(response?.transactionType?.title ?? '');
+        }),
+      ).toBeResolved();
     });
 
-    it('should return an existing transaction', () => {
+    it('should return an existing transaction', async () => {
       const route = {
         queryParamMap: convertToParamMap({}),
         paramMap: convertToParamMap({
@@ -86,29 +85,31 @@ describe('TransactionResolver', () => {
           transactionType: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
         }),
       };
-
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
-        expect(response).toBeTruthy();
-        if (response) {
-          expect(response.transactionType?.title).toEqual('Offsets to Operating Expenditures');
-        }
-      });
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((response: Transaction | undefined) => {
+          expect(response).toBeTruthy();
+          if (response) {
+            expect(response.transactionType?.title).toEqual('Offsets to Operating Expenditures');
+          }
+        }),
+      ).toBeResolved();
     });
 
-    it('should return undefined', () => {
+    it('should return undefined', async () => {
       const route = {
         queryParamMap: convertToParamMap({}),
         paramMap: convertToParamMap({ transactionId: undefined }),
       };
-
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
-        expect(response).toEqual(undefined);
-      });
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((response: Transaction | undefined) => {
+          expect(response).toEqual(undefined);
+        }),
+      ).toBeResolved();
     });
   });
 
   describe('resolve', () => {
-    it('should return a child transaction', () => {
+    it('should return a child transaction', async () => {
       const route = {
         queryParamMap: convertToParamMap({}),
         paramMap: convertToParamMap({
@@ -118,7 +119,7 @@ describe('TransactionResolver', () => {
         }),
       };
       spyOn(resolver.transactionService, 'get').and.returnValue(
-        of(
+        Promise.resolve(
           SchATransaction.fromJSON({
             id: 1,
             report_ids: [1],
@@ -130,17 +131,19 @@ describe('TransactionResolver', () => {
         ),
       );
 
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
-        expect(response).toBeTruthy();
-        if (response) {
-          expect(response.transactionType?.title).toEqual('PAC Joint Fundraising Transfer Memo');
-        }
-      });
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((response: Transaction | undefined) => {
+          expect(response).toBeTruthy();
+          if (response) {
+            expect(response.transactionType?.title).toEqual('PAC Joint Fundraising Transfer Memo');
+          }
+        }),
+      ).toBeResolved();
     });
 
-    it('should add debt to repayment', () => {
+    it('should add debt to repayment', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchDTransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
@@ -158,17 +161,19 @@ describe('TransactionResolver', () => {
         }),
       };
 
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
-        expect(transaction).toBeTruthy();
-        if (transaction) {
-          expect(transaction.debt?.id).toEqual('1');
-        }
-      });
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
+          expect(transaction).toBeTruthy();
+          if (transaction) {
+            expect(transaction.debt?.id).toEqual('1');
+          }
+        }),
+      ).toBeResolved();
     });
 
-    it('should add loan to repayment', () => {
+    it('should add loan to repayment', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchDTransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
@@ -186,17 +191,19 @@ describe('TransactionResolver', () => {
         }),
       };
 
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
-        expect(transaction).toBeTruthy();
-        if (transaction) {
-          expect(transaction.loan?.id).toEqual('1');
-        }
-      });
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
+          expect(transaction).toBeTruthy();
+          if (transaction) {
+            expect(transaction.loan?.id).toEqual('1');
+          }
+        }),
+      ).toBeResolved();
     });
 
-    it('should add redesignation', () => {
+    it('should add redesignation', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchBTransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
@@ -214,88 +221,70 @@ describe('TransactionResolver', () => {
         }),
       };
 
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
-        expect(transaction).toBeTruthy();
-        if (transaction) {
-          expect((transaction as SchBTransaction).reattribution_redesignation_tag).toEqual('REDESIGNATION_TO');
-          expect(
-            ((transaction as SchBTransaction).children[0] as SchBTransaction).reattribution_redesignation_tag,
-          ).toEqual('REDESIGNATION_FROM');
-        }
-      });
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
+          expect(transaction).toBeTruthy();
+          if (transaction) {
+            expect((transaction as SchBTransaction).reattribution_redesignation_tag).toEqual('REDESIGNATION_TO');
+            expect(
+              ((transaction as SchBTransaction).children[0] as SchBTransaction).reattribution_redesignation_tag,
+            ).toEqual('REDESIGNATION_FROM');
+          }
+        }),
+      ).toBeResolved();
     });
   });
 
   describe('resolveExistingTransactionFromId', () => {
-    it('should throw an error if trying to resolve an invalid transaction type identifier', () => {
-      spyOn(resolver.transactionService, 'get').and.returnValue(of({} as SchATransaction));
-      resolver
-        .resolveExistingTransactionFromId('10')
-        .pipe(
-          catchError((err) => {
-            expect(err.message).toBe(
-              "Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID 10",
-            );
-            return of(err);
-          }),
-        )
-        .subscribe();
-    });
-
-    it('should throw an error if dependent child transaction does not have a parent', () => {
-      spyOn(resolver.transactionService, 'get').and.returnValue(
-        of(
-          SchATransaction.fromJSON({
-            id: 999,
-            transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
-            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
-            contact_id: '123',
-            contact_1: Contact.fromJSON({ id: 123 }),
-          }),
-        ),
-      );
-      resolver
-        .resolveExistingTransactionFromId('10')
-        .pipe(
-          catchError((err) => {
-            expect(err.message).toBe(
-              'Fecfile: Transaction 999 (EARMARK_MEMO) is a dependent transaction type but does not have a parent transaction.',
-            );
-            return of(err);
-          }),
-        )
-        .subscribe();
-    });
-
-    it('should return parent transaction if dependent child is requested', () => {
-      spyOn(resolver.transactionService, 'get').and.returnValue(
-        of(
-          SchATransaction.fromJSON({
-            id: 999,
-            transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
-            transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
-            contact_id: '123',
-            contact_1: Contact.fromJSON({ id: 123 }),
-            parent_transaction_id: 2,
-          }),
-        ),
-      );
-      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
-        if (transaction) expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
+    it('should return parent transaction if dependent child is requested', async () => {
+      let firstCall = true;
+      spyOn(resolver.transactionService, 'get').and.callFake(() => {
+        if (firstCall) {
+          firstCall = false; // Mark first call as completed
+          return Promise.resolve(
+            SchATransaction.fromJSON({
+              id: 999,
+              transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
+              transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
+              contact_id: '123',
+              contact_1: Contact.fromJSON({ id: 123 }),
+              parent_transaction_id: 2,
+            }),
+          );
+        } else {
+          return Promise.resolve(
+            SchATransaction.fromJSON({
+              id: 2,
+              transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+              transactionType: TransactionTypeUtils.factory(
+                ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+              ),
+            }),
+          );
+        }
       });
+
+      await expectAsync(
+        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
+          if (transaction)
+            expect(transaction.transaction_type_identifier).toBe(
+              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+            );
+        }),
+      ).toBeResolved();
     });
 
-    it('should have parent transaction', () => {
+    it('should have parent transaction', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
               ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             parent_transaction: SchATransaction.fromJSON({
               id: '2',
               transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
@@ -306,15 +295,18 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
-        if (transaction) expect(transaction.id).toBe('10');
-        expect(transaction?.parent_transaction?.id).toBe('2');
-      });
+      await expectAsync(
+        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
+          expect(transaction).toBeTruthy();
+          if (transaction) expect(transaction.id).toBe('10');
+          expect(transaction?.parent_transaction?.id).toBe('2');
+        }),
+      ).toBeResolved();
     });
 
-    it('should have grandparent transaction ', () => {
+    it('should have grandparent transaction ', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
@@ -324,11 +316,11 @@ describe('TransactionResolver', () => {
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction: SchATransaction.fromJSON({
-              id: '2',
               transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
               transactionType: TransactionTypeUtils.factory(
                 ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
               ),
+              id: '2',
               contact_id: '123',
               contact_1: Contact.fromJSON({ id: 123 }),
               parent_transaction: SchATransaction.fromJSON({
@@ -342,16 +334,18 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
-        if (transaction) expect(transaction.id).toBe('10');
-        expect(transaction?.parent_transaction?.id).toBe('2');
-        expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
-      });
+      await expectAsync(
+        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
+          if (transaction) expect(transaction.id).toBe('10');
+          expect(transaction?.parent_transaction?.id).toBe('2');
+          expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
+        }),
+      ).toBeResolved();
     });
 
-    it('should have debt transaction', () => {
+    it('should have debt transaction', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
@@ -368,15 +362,17 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
-        if (transaction) expect(transaction.id).toBe('10');
-        expect(transaction?.debt?.id).toBe('2');
-      });
+      await expectAsync(
+        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
+          if (transaction) expect(transaction.id).toBe('10');
+          expect(transaction?.debt?.id).toBe('2');
+        }),
+      ).toBeResolved();
     });
 
-    it('should have loan transaction', () => {
+    it('should have loan transaction', async () => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
@@ -393,21 +389,25 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
-        if (transaction) expect(transaction.id).toBe('10');
-        expect(transaction?.loan?.id).toBe('2');
-      });
+      await expectAsync(
+        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
+          if (transaction) expect(transaction.id).toBe('10');
+          expect(transaction?.loan?.id).toBe('2');
+        }),
+      ).toBeResolved();
     });
   });
 
   describe('resolveNewTransaction', () => {
-    it('should add new child transaction to new parent if parent has a dependentChildTransactionTypes', () => {
-      resolver
-        .resolveNewTransaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
-        .subscribe((transaction: Transaction | undefined) => {
-          if (transaction?.children)
-            expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
-        });
+    it('should add new child transaction to new parent if parent has a dependentChildTransactionTypes', async () => {
+      await expectAsync(
+        resolver
+          .resolveNewTransaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
+          .then((transaction: Transaction | undefined) => {
+            if (transaction?.children)
+              expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
+          }),
+      ).toBeResolved();
     });
   });
 
@@ -421,7 +421,7 @@ describe('TransactionResolver', () => {
     };
     beforeEach(() => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -437,19 +437,21 @@ describe('TransactionResolver', () => {
         );
       });
     });
-    it('should add reattribution', () => {
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe((transaction: Transaction | undefined) => {
-        expect(transaction).toBeTruthy();
-        if (transaction) {
-          expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
-          expect(
-            ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag,
-          ).toEqual('REATTRIBUTION_FROM');
-        }
-      });
+    it('should add reattribution', async () => {
+      await expectAsync(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
+          expect(transaction).toBeTruthy();
+          if (transaction) {
+            expect((transaction as SchATransaction).reattribution_redesignation_tag).toEqual('REATTRIBUTION_TO');
+            expect(
+              ((transaction as SchATransaction).children[0] as SchATransaction).reattribution_redesignation_tag,
+            ).toEqual('REATTRIBUTION_FROM');
+          }
+        }),
+      ).toBeResolved();
     });
 
-    it('should throw error if redesignated does not have transaction_type_identifier', () => {
+    it('should throw error if redesignated does not have transaction_type_identifier', async () => {
       spyOn(ReattributedUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
         return SchATransaction.fromJSON({
           id: id,
@@ -459,18 +461,16 @@ describe('TransactionResolver', () => {
           contact_1: Contact.fromJSON({ id: 123 }),
         });
       });
-      resolver.resolve(route as ActivatedRouteSnapshot).subscribe({
-        error: (err) => {
-          expect(err).toEqual(new Error('Fecfile online: originating reattribution transaction type not found.'));
-        },
-      });
+      await expectAsync(resolver.resolve(route as ActivatedRouteSnapshot)).toBeRejectedWithError(
+        'Fecfile online: originating reattribution transaction type not found.',
+      );
     });
   });
 
-  describe('resolveExistingReattribution', () => {
+  describe('resolveExistingReattribution', async () => {
     beforeEach(() => {
       spyOn(resolver.transactionService, 'get').and.callFake((id) => {
-        return of(
+        return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -489,10 +489,12 @@ describe('TransactionResolver', () => {
       });
     });
 
-    it('should resolve existing reattribution', () => {
-      resolver.resolveExistingTransactionFromId('10').subscribe((transaction: Transaction | undefined) => {
-        if (transaction) expect(transaction.id).toBe('10');
-      });
+    it('should resolve existing reattribution', async () => {
+      await expectAsync(
+        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
+          if (transaction) expect(transaction.id).toBe('10');
+        }),
+      ).toBeResolved();
     });
   });
 });

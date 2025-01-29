@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import intlTelInput, { Iti } from 'intl-tel-input';
-
 @Component({
   selector: 'app-fec-international-phone-input',
   templateUrl: './fec-international-phone-input.component.html',

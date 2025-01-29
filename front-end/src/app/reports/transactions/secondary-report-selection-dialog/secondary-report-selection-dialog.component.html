@@ -21,25 +21,29 @@
             [innerHTML]="dropDownFieldText"
           ></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li *ngFor="let report of reports">
-              <button
-                class="dropdown-item"
-                (click)="updateSelectedReport(report)"
-                (select)="updateSelectedReport(report)"
-              >
-                <span class="option">
-                  <b>{{ report.id | label: reportLabels }}</b></span
+            @for (report of reports; track report) {
+              <li>
+                <button
+                  class="dropdown-item"
+                  (click)="updateSelectedReport(report)"
+                  (select)="updateSelectedReport(report)"
                 >
-              </button>
-            </li>
+                  <span class="option">
+                    <b>{{ report.id | label: reportLabels }}</b></span
+                  >
+                </button>
+              </li>
+            }
           </ul>
         </div>
-        <p *ngIf="reportType === reportTypes.F24" class="dialog-text dialog-note">
-          <i>
-            <b>Note:</b> Unitemized IEs on Form 3X will appear itemized on Form 24.<br />
-            They will remain unitemized on Form3X.
-          </i>
-        </p>
+        @if (reportType === reportTypes.F24) {
+          <p class="dialog-text dialog-note">
+            <i>
+              <b>Note:</b> Unitemized IEs on Form 3X will appear itemized on Form 24.<br />
+              They will remain unitemized on Form3X.
+            </i>
+          </p>
+        }
       </div>
       <div class="dialog-footer grid">
         <div class="col-12 center">

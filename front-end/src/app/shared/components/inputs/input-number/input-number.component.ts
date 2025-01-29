@@ -6,7 +6,7 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
-  Inject,
+  inject,
   Injector,
   Input,
   numberAttribute,
@@ -15,10 +15,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
-import { PrimeNGConfig } from 'primeng/api';
 import { DomHandler } from 'primeng/dom';
 import { InputNumberInputEvent } from 'primeng/inputnumber';
 import { Nullable } from 'primeng/ts-helpers';
+import { InputText } from 'primeng/inputtext';
+import { AutoFocusModule } from 'primeng/autofocus';
 
 export const INPUTNUMBER_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -35,10 +36,16 @@ type textNumber = string | number | null;
   templateUrl: './input-number.component.html',
   styleUrl: './input-number.component.scss',
   providers: [INPUTNUMBER_VALUE_ACCESSOR],
+  imports: [InputText, AutoFocusModule],
 })
 export class InputNumberComponent implements OnInit, ControlValueAccessor {
-  locale = 'en-US';
-  options: Intl.NumberFormatOptions = {
+  private readonly document: Document = inject(DOCUMENT);
+  public readonly el = inject(ElementRef);
+  public readonly cd = inject(ChangeDetectorRef);
+  private readonly injector = inject(Injector);
+
+  readonly locale = 'en-US';
+  readonly options: Intl.NumberFormatOptions = {
     localeMatcher: 'best fit',
     style: 'currency',
     currency: 'USD',
@@ -164,25 +171,25 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
    * @param {InputNumberInputEvent} event - Custom input event.
    * @group Emits
    */
-  @Output() inputEvent: EventEmitter<InputNumberInputEvent> = new EventEmitter<InputNumberInputEvent>();
+  @Output() readonly inputEvent: EventEmitter<InputNumberInputEvent> = new EventEmitter<InputNumberInputEvent>();
   /**
    * Callback to invoke when the component receives focus.
    * @param {Event} event - Browser event.
    * @group Emits
    */
-  @Output() focusEvent: EventEmitter<Event> = new EventEmitter<Event>();
+  @Output() readonly focusEvent: EventEmitter<Event> = new EventEmitter<Event>();
   /**
    * Callback to invoke when the component loses focus.
    * @param {Event} event - Browser event.
    * @group Emits
    */
-  @Output() blurEvent: EventEmitter<Event> = new EventEmitter<Event>();
+  @Output() readonly blurEvent: EventEmitter<Event> = new EventEmitter<Event>();
   /**
    * Callback to invoke on input key press.
    * @param {KeyboardEvent} event - Keyboard event.
    * @group Emits
    */
-  @Output() keyDown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
+  @Output() readonly keyDown: EventEmitter<KeyboardEvent> = new EventEmitter<KeyboardEvent>();
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
 
@@ -202,8 +209,11 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
 
   lastValue: Nullable<string>;
 
-  _numeral: RegExp;
-
+  private readonly numerals = [
+    ...new Intl.NumberFormat(this.locale, { useGrouping: false }).format(9876543210),
+  ].reverse();
+  _numeral: RegExp = new RegExp(`[${this.numerals.join('')}]`, 'g');
+  private readonly index = new Map(this.numerals.map((d, i) => [d, i]));
   numberFormat = new Intl.NumberFormat(this.locale, this.options);
 
   _decimalChar = '.';
@@ -212,34 +222,18 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
   groupChar = ',';
   _group = new RegExp(`[${this.groupChar}]`, 'g');
 
-  _minusSign: RegExp;
+  _minusSign: RegExp = this.getMinusSignExpression();
 
-  _currency: RegExp;
+  _currency: RegExp = this.getCurrencyExpression();
 
-  _prefix: RegExp;
+  _prefix: RegExp = this.getPrefixExpression();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _index: number | any;
+  _index: any = (d: string) => this.index.get(d);
 
   _disabled: boolean | undefined;
 
   private ngControl: NgControl | null = null;
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    public el: ElementRef,
-    public cd: ChangeDetectorRef,
-    private readonly injector: Injector,
-    public config: PrimeNGConfig,
-  ) {
-    const numerals = [...new Intl.NumberFormat(this.locale, { useGrouping: false }).format(9876543210)].reverse();
-    const index = new Map(numerals.map((d, i) => [d, i]));
-    this._numeral = new RegExp(`[${numerals.join('')}]`, 'g');
-    this._minusSign = this.getMinusSignExpression();
-    this._currency = this.getCurrencyExpression();
-    this._prefix = this.getPrefixExpression();
-    this._index = (d: string) => index.get(d);
-  }
 
   ngOnInit() {
     this.ngControl = this.injector.get(NgControl, null, { optional: true });

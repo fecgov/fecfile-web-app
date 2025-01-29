@@ -1,16 +1,14 @@
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SingleClickDirective } from './single-click.directive';
-import { SharedModule } from '../shared.module';
 import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
 import { singleClickEnableAction } from '../../store/single-click.actions';
 import { singleClickReducer } from '../../store/single-click.reducer';
 
 @Component({
-  standalone: true,
   template: '<button #box appSingleClick>Test</button>',
-  imports: [SharedModule],
+  imports: [SingleClickDirective],
 })
 class TestComponent {}
 
@@ -20,7 +18,7 @@ describe('SingleClickDirective', () => {
   let store: Store;
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [TestComponent, SharedModule, StoreModule.forRoot({ singleClickDisabled: singleClickReducer })],
+      imports: [TestComponent, SingleClickDirective, StoreModule.forRoot({ singleClickDisabled: singleClickReducer })],
     }).createComponent(TestComponent);
     store = TestBed.inject(Store);
     fixture.detectChanges(); // initial binding
@@ -29,6 +27,7 @@ describe('SingleClickDirective', () => {
   });
 
   it('should create instance and add+remove disabled attribute', fakeAsync(() => {
+    expect(des.length).toBe(1);
     const button = des[0].nativeElement as HTMLButtonElement;
     spyOn(button, 'setAttribute');
     spyOn(button, 'removeAttribute');

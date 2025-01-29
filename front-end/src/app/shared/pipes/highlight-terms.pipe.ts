@@ -1,8 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-  name: 'highlightTerms',
-})
+@Pipe({ name: 'highlightTerms' })
 export class HighlightTermsPipe implements PipeTransform {
   transform(value?: string, terms?: string): string | undefined {
     if (value && terms) {

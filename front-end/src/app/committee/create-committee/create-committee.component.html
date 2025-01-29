@@ -32,35 +32,41 @@
       </p-inputGroup>
       <p class="search-examples font-karla mt-1">Examples: C00431445, C00343509</p>
     </div>
-    <div class="right-side-box" *ngIf="selectedCommittee || unableToCreateAccount">
-      <h2 class="m-0">Result</h2>
-      <div class="committee-card" *ngIf="selectedCommittee">
-        <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-        <div class="committee-info">
-          <h3>{{ selectedCommittee.name }}</h3>
-          <h5 class="font-karla-bold mb-0">{{ selectedCommittee.committee_id }}</h5>
+    @if (selectedCommittee || unableToCreateAccount) {
+      <div class="right-side-box">
+        <h2 class="m-0">Result</h2>
+        @if (selectedCommittee) {
+          <div class="committee-card">
+            <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+            <div class="committee-info">
+              <h3>{{ selectedCommittee.name }}</h3>
+              <h5 class="font-karla-bold mb-0">{{ selectedCommittee.committee_id }}</h5>
 
-          <p-button
-            class="create-button"
-            label="Create account"
-            styleClass="p-button-primary"
-            (click)="createAccount()"
-            icon="pi pi-angle-right"
-            iconPos="right"
-          >
-          </p-button>
-        </div>
+              <p-button
+                class="create-button"
+                label="Create account"
+                styleClass="p-button-primary"
+                (click)="createAccount()"
+                icon="pi pi-angle-right"
+                iconPos="right"
+              >
+              </p-button>
+            </div>
+          </div>
+        }
+        @if (unableToCreateAccount) {
+          <div class="committee-card unable-card">
+            <div class="unable-excl-img">
+              <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
+            </div>
+            <div class="unable-verbiage">
+              <p class="unable-verbiage-p1">Unable to create account</p>
+              <p class="unable-verbiage-p2">CONTACT FECFILE TECHNICAL SUPPORT FOR HELP</p>
+            </div>
+          </div>
+        }
       </div>
-      <div class="committee-card unable-card" *ngIf="unableToCreateAccount">
-        <div class="unable-excl-img">
-          <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
-        </div>
-        <div class="unable-verbiage">
-          <p class="unable-verbiage-p1">Unable to create account</p>
-          <p class="unable-verbiage-p2">CONTACT FECFILE TECHNICAL SUPPORT FOR HELP</p>
-        </div>
-      </div>
-    </div>
+    }
   </div>
 </div>
 

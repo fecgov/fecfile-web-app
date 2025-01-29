@@ -1,8 +1,6 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SharedModule } from 'app/shared/shared.module';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -15,9 +13,10 @@ import { Contact, ContactTypes } from '../../shared/models/contact.model';
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { ContactListComponent } from './contact-list.component';
-import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DeletedContactService } from 'app/shared/services/contact.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -42,17 +41,19 @@ describe('ContactListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         ToastModule,
         TableModule,
         ToolbarModule,
         DialogModule,
         FileUploadModule,
         ConfirmDialogModule,
-        SharedModule,
+        ContactListComponent,
+        ContactDialogComponent,
+        DeletedContactDialogComponent,
       ],
-      declarations: [ContactListComponent, ContactDialogComponent, DeletedContactDialogComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         ConfirmationService,
         DeletedContactService,
         FormBuilder,
@@ -124,13 +125,13 @@ describe('ContactListComponent', () => {
     expect(status).toBeFalse();
   });
 
-  it('#onSelectAllChange set properties', () => {
-    spyOn(component.itemService, 'getTableData').and.returnValue(of(tableDataResponse));
-    component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
+  it('#onSelectAllChange set properties', async () => {
+    spyOn(component.itemService, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
+    await component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeFalse();
     expect(component.selectedItems).toEqual([]);
 
-    component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
+    await component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeTrue();
     expect(component.selectedItems.length).toBe(1);
   });
@@ -144,7 +145,7 @@ describe('ContactListComponent', () => {
     expect(component.restoreContactsButtonIsVisible).toBeFalse();
 
     spyOn(deletedContactService, 'getTableData').and.returnValue(
-      of({
+      Promise.resolve({
         count: 1,
         next: '',
         previous: '',
@@ -161,7 +162,7 @@ describe('ContactListComponent', () => {
     component.restoreContactsButtonIsVisible = true;
 
     spyOn(deletedContactService, 'getTableData').and.returnValue(
-      of({
+      Promise.resolve({
         count: 0,
         next: '',
         previous: '',
@@ -175,9 +176,9 @@ describe('ContactListComponent', () => {
   });
 
   it('#saveContact calls itemService', () => {
-    spyOn(component.itemService, 'update').and.returnValue(of(testContact));
-    spyOn(component.itemService, 'create').and.returnValue(of(testContact));
-    spyOn(component.itemService, 'getTableData').and.returnValue(of(tableDataResponse));
+    spyOn(component.itemService, 'update').and.returnValue(Promise.resolve(testContact));
+    spyOn(component.itemService, 'create').and.returnValue(Promise.resolve(testContact));
+    spyOn(component.itemService, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
     const contact = testContact;
     component.saveContact(contact);
     expect(component.itemService.update).toHaveBeenCalledTimes(1);

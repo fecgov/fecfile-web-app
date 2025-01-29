@@ -1,11 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Feedback } from 'app/shared/models/feedback.model';
 import { FeedbackService } from 'app/shared/services/feedback.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { OverlayPanel } from 'primeng/overlaypanel';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from '../../shared/directives/single-click.directive';
+import { ButtonDirective } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
 
 enum SubmissionStates {
   DRAFT,
@@ -17,9 +21,20 @@ enum SubmissionStates {
   selector: 'app-feedback-overlay',
   templateUrl: './feedback-overlay.component.html',
   styleUrls: ['./feedback-overlay.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    ErrorMessagesComponent,
+    SingleClickDirective,
+    ButtonDirective,
+    TextareaModule,
+    PopoverModule,
+  ],
 })
 export class FeedbackOverlayComponent {
-  @ViewChild(OverlayPanel) op!: OverlayPanel;
+  private readonly fb = inject(FormBuilder);
+  private readonly store = inject(Store);
+  public readonly feedbackService = inject(FeedbackService);
+  @ViewChild('op') op!: Popover;
 
   form: FormGroup = this.fb.group(
     {
@@ -32,12 +47,6 @@ export class FeedbackOverlayComponent {
   formSubmitted = false;
   SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;
-
-  constructor(
-    private fb: FormBuilder,
-    private store: Store,
-    public feedbackService: FeedbackService,
-  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   show(event: any): void {

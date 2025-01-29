@@ -1,65 +1,67 @@
-<div id="page-container" [ngClass]="[layoutControls.backgroundStyle]">
+<div id="page-container" [class]="[layoutControls.backgroundStyle]">
   <app-banner #bannerRef></app-banner>
-  <div
-    class="header-container"
-    [ngStyle]="{ paddingBottom: layoutControls.showSidebar ? '0' : '64px' }"
-    *ngIf="layoutControls.showHeader"
-  >
-    <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
-  </div>
+  @if (layoutControls.showHeader) {
+    <div class="header-container" [style]="{ paddingBottom: layoutControls.showSidebar ? '0' : '64px' }">
+      <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
+    </div>
+  }
 
   <!--  Begin Sidebar section -->
-
-  <div class="inline-flex w-100" *ngIf="layoutControls.showSidebar">
-    <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
-      <app-sidebar></app-sidebar>
-    </div>
-    <div class="sidebar-content-container">
-      <div class="main-content">
-        <div class="grid">
-          <div *ngIf="layoutControls.showCommitteeBanner">
-            <app-committee-banner></app-committee-banner>
+  @if (layoutControls.showSidebar) {
+    <div class="inline-flex w-100">
+      <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
+        <app-drawer></app-drawer>
+      </div>
+      <div class="sidebar-content-container">
+        <div class="main-content">
+          <div class="grid">
+            @if (layoutControls.showCommitteeBanner) {
+              <app-committee-banner></app-committee-banner>
+            }
+          </div>
+          <div class="router-outlet">
+            <router-outlet></router-outlet>
           </div>
         </div>
-        <div class="router-outlet">
-          <router-outlet></router-outlet>
+        <div class="flex-grow-1 d-flex flex-column">
+          <div class="flex-grow-1"></div>
+          <app-footer [showSidebar]="true"></app-footer>
         </div>
       </div>
-      <div class="flex-grow-1 d-flex flex-column">
-        <div class="flex-grow-1"></div>
-        <app-footer [showSidebar]="true"></app-footer>
-      </div>
     </div>
-  </div>
+  }
 
   <!--  End Sidebar section -->
 
   <!-- Begin No Sidebar section -->
-  <div *ngIf="!layoutControls.showSidebar" id="content-offset" #contentOffset>
-    <div class="main-content">
-      <app-committee-banner *ngIf="layoutControls.showCommitteeBanner"></app-committee-banner>
-      <div class="container" *ngIf="layoutControls.backgroundStyle === BackgroundStyles.DEFAULT; else no_container">
-        <router-outlet></router-outlet>
+  @if (!layoutControls.showSidebar) {
+    <div id="content-offset" #contentOffset>
+      <div class="main-content">
+        @if (layoutControls.showCommitteeBanner) {
+          <app-committee-banner></app-committee-banner>
+        }
+        @if (layoutControls.backgroundStyle === BackgroundStyles.DEFAULT) {
+          <div class="container">
+            <router-outlet></router-outlet>
+          </div>
+        } @else {
+          <router-outlet></router-outlet>
+        }
       </div>
-      <ng-template #no_container>
-        <router-outlet></router-outlet>
-      </ng-template>
     </div>
-  </div>
-  <app-footer
-    #footerRef
-    *ngIf="!layoutControls.showSidebar"
-    [showUpperFooter]="layoutControls.showUpperFooter"
-  ></app-footer>
+    <app-footer #footerRef [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
+  }
   <!-- End No Sidebar section -->
-  <button
-    type="button"
-    *ngIf="layoutControls.showFeedbackButton"
-    pButton
-    pRipple
-    label="Feedback"
-    class="p-button-info feedback-button"
-    (click)="this.feedbackOverlay.show($event)"
-  ></button>
+  @if (layoutControls.showFeedbackButton) {
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Feedback"
+      class="p-button-info feedback-button"
+      (click)="feedbackOverlay.show($event)"
+    ></button>
+  }
+
   <app-feedback-overlay></app-feedback-overlay>
 </div>

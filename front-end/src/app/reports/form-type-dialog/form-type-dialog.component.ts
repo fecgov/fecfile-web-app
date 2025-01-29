@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
+  inject,
   Input,
   OnChanges,
   OnInit,
@@ -19,15 +20,21 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Ripple } from 'primeng/ripple';
+import { ButtonDirective } from 'primeng/button';
 
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
+  imports: [Ripple, ButtonDirective],
 })
 export class FormTypeDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit, OnInit {
+  public readonly router = inject(Router);
+  private readonly form24Service = inject(Form24Service);
+  private readonly store = inject(Store);
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
-  formTypes = FormTypes;
+  readonly formTypes = FormTypes;
   selectedType?: FormTypes;
   committeeAccount$?: Observable<CommitteeAccount>;
   street = undefined;
@@ -40,17 +47,9 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
   @ViewChild('form24FocusElement') form24FocusElement?: ElementRef;
   @ViewChild('dropdownElement') dropdownElement?: ElementRef;
 
-  @Output() refreshReports = new EventEmitter();
+  @Output() readonly refreshReports = new EventEmitter();
 
   selectedForm24Type: '24' | '48' | undefined;
-
-  constructor(
-    public router: Router,
-    private form24Service: Form24Service,
-    private store: Store,
-  ) {
-    super();
-  }
 
   ngAfterViewInit() {
     this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());
@@ -100,7 +99,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
       });
       const create$ = this.form24Service.create(form24, ['report_type_24_48']);
 
-      create$.subscribe((report) => {
+      create$.then((report) => {
         this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       });
 

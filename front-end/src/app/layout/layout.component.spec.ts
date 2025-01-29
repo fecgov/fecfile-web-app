@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { LayoutComponent } from './layout.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SharedModule } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { StoreModule } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -21,16 +22,26 @@ describe('LayoutComponent', () => {
     mockFooter = jasmine.createSpyObj('FooterComponent', ['getFooterElement']);
     mockBanner = jasmine.createSpyObj('BannerComponent', ['getBannerElement']);
     mockFooter.getFooterElement = () => {
-      return { offsetHeight: 466 } as HTMLElement;
+      return { offsetHeight: 456 } as HTMLElement;
     };
     mockBanner.getBannerElement = () => {
       return { offsetHeight: 35 } as HTMLElement;
     };
 
     await TestBed.configureTestingModule({
-      imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule, StoreModule.forRoot({}), SharedModule],
-      declarations: [LayoutComponent, FooterComponent, BannerComponent, FeedbackOverlayComponent],
+      imports: [
+        MenubarModule,
+        StoreModule.forRoot({}),
+        SharedModule,
+        LayoutComponent,
+        FooterComponent,
+        BannerComponent,
+        FeedbackOverlayComponent,
+      ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         provideMockStore(), // Provide a mock store
       ],
     }).compileComponents();

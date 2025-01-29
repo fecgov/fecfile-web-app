@@ -1,7 +1,7 @@
 <div>
   <input
     [attr.aria-labelledby]="labelName"
-    ngClass="{{ disabled ? 'p-disabled' : '' }}"
+    [class.p-disabled]="disabled"
     #internationalPhoneInput
     type="tel"
     (keyup)="onKey($event)"

@@ -5,7 +5,7 @@
 <hr type="solid" />
 <div class="p-fluid">
   <p-card>
-    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="grid">
         <div class="col-12">
           <div class="field">
@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="col-6">
-          <div class="field">
+          <div class="field d-grid">
             <label for="filingPassword">
               <strong>ELECTRONIC FILING PASSWORD </strong>
             </label>
@@ -110,49 +110,56 @@
           </div>
         </div>
       </div>
-      <div class="grid" *ngIf="report?.report_version">
-        <div class="col-12">
-          <div class="field">
-            <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo"></p-checkbox>
-            <label for="backdoor-check" class="mb-0 ml-2">
-              ADD A BACKDOOR CODE <span class="optional-text">(OPTIONAL)</span>
-            </label>
-            <span
-              class="pi pi-info-circle"
-              style="font-size: 1.5rem; margin-left: 0.5rem"
-              pTooltip="Do you need to use a backdoor code?"
-            ></span>
-            <ng-container *ngIf="showBackdoorCode">
-              <div class="grid">
-                <div class="col-4">
-                  <div class="field">
-                    <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
-                    <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
-                    <app-error-messages
-                      [form]="form"
-                      fieldName="backdoor_code"
-                      [formSubmitted]="formSubmitted"
-                    ></app-error-messages>
+      @if (report?.report_version) {
+        <div class="grid">
+          <div class="col-12">
+            <div class="field flex">
+              <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo"></p-checkbox>
+              <label for="backdoor-check" class="mb-0 ml-2">
+                ADD A BACKDOOR CODE <span class="optional-text">(OPTIONAL)</span>
+              </label>
+              <span
+                class="pi pi-info-circle"
+                style="font-size: 1.5rem; margin-left: 0.5rem"
+                pTooltip="Do you need to use a backdoor code?"
+              ></span>
+              @if (showBackdoorCode) {
+                <div class="grid">
+                  <div class="col-4">
+                    <div class="field">
+                      <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
+                      <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
+                      <app-error-messages
+                        [form]="form"
+                        fieldName="backdoor_code"
+                        [formSubmitted]="formSubmitted"
+                      ></app-error-messages>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ng-container>
+              }
+            </div>
           </div>
         </div>
-      </div>
+      }
+
       <div class="grid">
         <div class="col-12">
-          <div class="field">
-            <strong>
-              <p-checkbox
-                [binary]="true"
-                inputId="userCertified"
-                label="I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct, and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing this Statement to the penalties of 52 U.S.C. § 30109."
-                formControlName="userCertified"
-                [trueValue]="true"
-                [falseValue]="false"
-              ></p-checkbox>
-            </strong>
+          <div class="field flex" data-cy="userCertified">
+            <p-checkbox
+              [binary]="true"
+              inputId="userCertified"
+              formControlName="userCertified"
+              [trueValue]="true"
+              [falseValue]="false"
+            ></p-checkbox>
+            <label for="userCertified" class="ml-2">
+              <strong>
+                I certify that I have examined this Statement and to the best of my knowledge and belief it is true,
+                correct, and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the
+                person signing this Statement to the penalties of 52 U.S.C. § 30109.
+              </strong>
+            </label>
           </div>
         </div>
       </div>
@@ -178,12 +185,15 @@
             [disabled]="!form.value.userCertified || loading > 0"
           ></button>
         </div>
-        <ng-container *ngIf="loading > 0">
+        @if (loading > 0) {
           <div class="col-4">
-            <p *ngIf="loading === 1">Updating treasurer name...</p>
-            <p *ngIf="loading === 2">Submitting report to the FEC...</p>
+            @if (loading === 1) {
+              <p>Updating treasurer name...</p>
+            } @else if (loading === 2) {
+              <p>Submitting report to the FEC...</p>
+            }
           </div>
-        </ng-container>
+        }
       </div>
     </form>
   </p-card>

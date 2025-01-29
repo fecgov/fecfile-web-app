@@ -1,14 +1,14 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { DashboardComponent } from 'app/dashboard/dashboard.component';
 import { UsersService } from 'app/shared/services/users.service';
 import { testMockStore, testUserLoginData } from 'app/shared/utils/unit-test.utils';
-import { of } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { SecurityNoticeComponent } from './security-notice.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('SecurityNoticeComponent', () => {
   let component: SecurityNoticeComponent;
@@ -18,18 +18,19 @@ describe('SecurityNoticeComponent', () => {
   beforeEach(async () => {
     window.onbeforeunload = jasmine.createSpy();
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
+      imports: [ReactiveFormsModule, SecurityNoticeComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
           {
             path: 'dashboard',
             component: DashboardComponent,
           },
         ]),
-        ReactiveFormsModule,
+        { provide: Window, useValue: window },
+        provideMockStore(testMockStore),
       ],
-      providers: [{ provide: Window, useValue: window }, provideMockStore(testMockStore)],
-      declarations: [SecurityNoticeComponent],
     }).compileComponents();
   });
 
@@ -46,7 +47,7 @@ describe('SecurityNoticeComponent', () => {
   });
 
   it('should submit', () => {
-    const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(of(testUserLoginData));
+    const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(Promise.resolve(testUserLoginData));
     component.signConsentForm();
     const expectedUserLoginData = testUserLoginData;
     expect(spy).toHaveBeenCalledOnceWith(expectedUserLoginData);

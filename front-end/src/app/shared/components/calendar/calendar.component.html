@@ -1,6 +1,6 @@
-<div class="field">
+<div class="field d-grid">
   <label [for]="fieldName" [innerHTML]="label"></label>
-  <p-calendar
+  <p-datepicker
     (onFocus)="calendarOpened = true"
     (onClose)="validateDate(false)"
     (onBlur)="validateDate(calendarOpened)"
@@ -8,15 +8,14 @@
     [name]="fieldName"
     [formControl]="control"
     [attr.data-cy]="fieldName"
-  ></p-calendar>
-  <ng-container *ngIf="control">
+  ></p-datepicker>
+  @if (control && showErrors) {
     <app-error-messages
-      *ngIf="showErrors"
       [attr.data-cy]="fieldName + '-error'"
       [form]="form"
       [control]="control"
       [formSubmitted]="formSubmitted"
       [requiredErrorMessage]="requiredErrorMessage"
     ></app-error-messages>
-  </ng-container>
+  }
 </div>

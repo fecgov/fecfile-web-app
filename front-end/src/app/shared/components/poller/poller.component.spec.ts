@@ -31,7 +31,7 @@ describe('PollerComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [PollerComponent],
+      imports: [PollerComponent],
       providers: [
         { provide: PollerService, useValue: pollerServiceMock },
         { provide: Location, useValue: locationMock },

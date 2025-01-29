@@ -9,11 +9,11 @@ import { JOINT_FUNDRAISING_TRANSFER } from 'app/shared/models/transaction-types/
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
-import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { testMockStore } from '../../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
+import { SelectModule } from 'primeng/select';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -22,8 +22,7 @@ describe('NavigationControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ButtonModule, DropdownModule, ReactiveFormsModule],
-      declarations: [NavigationControlComponent, Dropdown],
+      imports: [ButtonModule, SelectModule, ReactiveFormsModule, NavigationControlComponent],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
     store = TestBed.inject(Store);

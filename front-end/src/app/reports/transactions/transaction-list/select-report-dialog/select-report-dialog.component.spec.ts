@@ -1,14 +1,13 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
 import { SelectReportDialogComponent } from './select-report-dialog.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
-import { of } from 'rxjs';
+import { testActiveReport, testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
 import { F3xFormTypes, Form3X } from '../../../../shared/models/form-3x.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -17,23 +16,22 @@ describe('SelectReportDialogComponent', () => {
   let futureSpy: jasmine.Spy;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [SelectReportDialogComponent],
-      providers: [provideMockStore(testMockStore)],
+      imports: [SelectReportDialogComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
     });
     service = TestBed.inject(Form3XService);
     fixture = TestBed.createComponent(SelectReportDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    futureSpy = spyOn(service, 'getFutureReports').and.callFake(() => {
+    futureSpy = spyOn(service, 'getFutureReports').and.callFake(async () => {
       const data = {
         id: '999',
         form_type: F3xFormTypes.F3XT,
         committee_name: 'foo',
         coverage_through_date: '2024-04-20',
       };
-      return of([Form3X.fromJSON(data)]);
+      return [Form3X.fromJSON(data)];
     });
   });
 
@@ -90,6 +88,7 @@ describe('SelectReportDialogComponent', () => {
       component.ngOnInit();
       ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
       component.selectedReport = component.availableReports[0];
+      component.selectedReport = testActiveReport;
       try {
         await component.createReattribution();
       } finally {

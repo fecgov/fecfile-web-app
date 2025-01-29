@@ -1,4 +1,4 @@
-<p-sidebar [(visible)]="sidebarVisible" position="bottom" [showCloseIcon]="false" [modal]="false" appendTo="body">
+<p-drawer [(visible)]="sidebarVisible" position="bottom" [showCloseIcon]="false" [modal]="false" appendTo="body">
   <ng-template pTemplate="header">Your downloads</ng-template>
   <ng-template pTemplate="content">
     <table>
@@ -12,36 +12,43 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of downloads">
-          <td>
-            <img *ngIf="item.isComplete" src="assets/img/check.svg" draggable="false" alt="Checkmark" />
-            <img *ngIf="!item.isComplete" src="assets/img/loading-dots.gif" draggable="false" alt="Loading dots gif" />
-          </td>
-          <td class="download-text">{{ item.name }}</td>
-          <td>
-            <button
-              pButton
-              pRipple
-              styleClass="p-button-primary"
-              (click)="download(item)"
-              [disabled]="!item.isComplete"
-            >
-              Download
-            </button>
-          </td>
-          <td>
-            <button (click)="removeDownload(item)">
-              <img src="assets/img/x-circle.svg" draggable="false" alt="X in a circle" />
-            </button>
-          </td>
-          <td class="download-text">
-            <span *ngIf="!item.isComplete">
-              We are preparing your download. Your wait will vary depending on how many records you requested and how
-              many downloads we are processing
-            </span>
-          </td>
-        </tr>
+        @for (item of downloads; track item) {
+          <tr>
+            <td>
+              @if (item.isComplete) {
+                <img src="assets/img/check.svg" draggable="false" alt="Checkmark" />
+              } @else {
+                <img src="assets/img/loading-dots.gif" draggable="false" alt="Loading dots gif" />
+              }
+            </td>
+            <td class="download-text">{{ item.name }}</td>
+            <td>
+              <button
+                pButton
+                pRipple
+                styleClass="p-button-primary"
+                (click)="download(item)"
+                [disabled]="!item.isComplete"
+              >
+                Download
+              </button>
+            </td>
+            <td>
+              <button (click)="removeDownload(item)">
+                <img src="assets/img/x-circle.svg" draggable="false" alt="X in a circle" />
+              </button>
+            </td>
+            <td class="download-text">
+              @if (!item.isComplete) {
+                <span>
+                  We are preparing your download. Your wait will vary depending on how many records you requested and
+                  how many downloads we are processing
+                </span>
+              }
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </ng-template>
-</p-sidebar>
+</p-drawer>

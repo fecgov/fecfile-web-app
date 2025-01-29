@@ -11,8 +11,10 @@
     </div>
   </div>
   <div class="grid">
-    <div class="col-12" *ngIf="items$ | async">
-      <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
-    </div>
+    @if (items$ | async) {
+      <div class="col-12">
+        <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
+      </div>
+    }
   </div>
 </div>

@@ -7,11 +7,48 @@ import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Report } from 'app/shared/models/report.model';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
+import { CommitteeInputComponent } from '../../../shared/components/inputs/committee-input/committee-input.component';
+import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
+import { SectionHeaderComponent } from './section-header/section-header.component';
+import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
+import { EmployerInputComponent } from '../../../shared/components/inputs/employer-input/employer-input.component';
+import { AmountInputComponent } from '../../../shared/components/inputs/amount-input/amount-input.component';
+import { DebtInputComponent } from '../../../shared/components/inputs/debt-input/debt-input.component';
+import { LoanInfoInputComponent } from '../../../shared/components/inputs/loan-info-input/loan-info-input.component';
+import { LoanTermsInputComponent } from '../../../shared/components/inputs/loan-terms-input/loan-terms-input.component';
+import { LoanAgreementInputComponent } from '../../../shared/components/inputs/loan-agreement-input/loan-agreement-input.component';
+import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
+import { SignatureInputComponent } from '../../../shared/components/inputs/signature-input/signature-input.component';
+import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
+import { CandidateInputComponent } from '../../../shared/components/inputs/candidate-input/candidate-input.component';
+import { ElectionInputComponent } from '../../../shared/components/inputs/election-input/election-input.component';
 
 @Component({
   selector: 'app-transaction-input',
   templateUrl: './transaction-input.component.html',
   styleUrls: ['../transaction.scss'],
+  imports: [
+    TransactionContactLookupComponent,
+    CommitteeInputComponent,
+    NameInputComponent,
+    SectionHeaderComponent,
+    AddressInputComponent,
+    EmployerInputComponent,
+    NgTemplateOutlet,
+    AmountInputComponent,
+    DebtInputComponent,
+    LoanInfoInputComponent,
+    LoanTermsInputComponent,
+    LoanAgreementInputComponent,
+    AdditionalInfoInputComponent,
+    SignatureInputComponent,
+    SupportOpposeInputComponent,
+    CandidateInputComponent,
+    ElectionInputComponent,
+    AsyncPipe,
+  ],
 })
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
@@ -31,7 +68,7 @@ export class TransactionInputComponent implements OnInit {
   @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
 
   ContactTypes = ContactTypes;
-  transactionType: TransactionType = {} as TransactionType;
+  transactionType?: TransactionType;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
@@ -70,5 +107,9 @@ export class TransactionInputComponent implements OnInit {
 
   updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
     this.tertiaryContactSelect.emit(selectItem);
+  }
+
+  get entityType(): ContactTypes {
+    return this.form.get('entity_type')?.value;
   }
 }

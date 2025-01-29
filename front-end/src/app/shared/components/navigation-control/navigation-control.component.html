@@ -1,59 +1,61 @@
 <div>
-  <button
-    *ngIf="controlType === 'button'"
-    pButton
-    pRipple
-    [label]="navigationControl?.label || ''"
-    [icon]="navigationControl?.icon || ''"
-    [class]="navigationControl?.ngClass || ''"
-    (click)="clickButton()"
-    [disabled]="isDisabled()"
-    data-test="navigation-control-button"
-    appSingleClick
-  ></button>
-  <div *ngIf="controlType === 'dropdown'" class="dropdown">
+  @if (controlType === 'button') {
     <button
-      data-test="navigation-control-dropdown"
+      pButton
+      pRipple
+      [label]="navigationControl?.label || ''"
+      [icon]="navigationControl?.icon || ''"
+      [class]="navigationControl?.ngClass || ''"
+      (click)="clickButton()"
       [disabled]="isDisabled()"
-      aria-expanded="false"
-      aria-haspopup="true"
-      class="btn dd-button"
-      data-bs-toggle="dropdown"
-      id="dropdownMenuLink"
-      role="button"
-    >
-      <i [ngClass]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
-    </button>
-    <div aria-labelledby="dropdownMenuLink" class="dropdown-menu">
-      <div *ngFor="let option of dropdownOptions">
-        <div *ngIf="option.items; else noHeader">
-          <span class="dropdown-header">{{ option.label }}</span>
-          <hr />
-          <button
-            (click)="onDropdownChange(childOption)"
-            (keyup.enter)="onDropdownChange(childOption)"
-            (keyup.space)="onDropdownChange(childOption)"
-            *ngFor="let childOption of option.items"
-            [disabled]="!childOption.value"
-            class="dropdown-item"
-            data-test="navigation-control-dropdown-option"
-          >
-            {{ childOption.label }}
-          </button>
-        </div>
-        <ng-template #noHeader>
-          <button
-            (click)="onDropdownChange(option)"
-            (keyup.enter)="onDropdownChange(option)"
-            (keyup.space)="onDropdownChange(option)"
-            [disabled]="!option.value"
-            class="dropdown-item"
-            data-test="navigation-control-dropdown-option"
-          >
-            {{ option.label }}
-          </button>
-        </ng-template>
+      data-test="navigation-control-button"
+      appSingleClick
+    ></button>
+  } @else if (controlType === 'dropdown') {
+    <div class="dropdown">
+      <button
+        data-test="navigation-control-dropdown"
+        [disabled]="isDisabled()"
+        aria-expanded="false"
+        aria-haspopup="true"
+        class="btn dd-button"
+        data-bs-toggle="dropdown"
+        id="dropdownMenuLink"
+        role="button"
+      >
+        <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
+      </button>
+      <div aria-labelledby="dropdownMenuLink" class="dropdown-menu">
+        @for (option of dropdownOptions; track option) {
+          @if (option.items) {
+            <span class="dropdown-header">{{ option.label }}</span>
+            <hr />
+            @for (childOption of option.items; track childOption) {
+              <button
+                (click)="onDropdownChange(childOption)"
+                (keyup.enter)="onDropdownChange(childOption)"
+                (keyup.space)="onDropdownChange(childOption)"
+                [disabled]="!childOption.value"
+                class="dropdown-item"
+                data-test="navigation-control-dropdown-option"
+              >
+                {{ childOption.label }}
+              </button>
+            }
+          } @else {
+            <button
+              (click)="onDropdownChange(option)"
+              (keyup.enter)="onDropdownChange(option)"
+              (keyup.space)="onDropdownChange(option)"
+              [disabled]="!option.value"
+              class="dropdown-item"
+              data-test="navigation-control-dropdown-option"
+            >
+              {{ option.label }}
+            </button>
+          }
+        }
       </div>
     </div>
-  </div>
+  }
 </div>

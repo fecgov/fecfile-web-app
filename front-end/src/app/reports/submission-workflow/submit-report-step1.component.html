@@ -6,7 +6,7 @@
   <hr type="solid" />
   <div class="p-fluid">
     <p-card>
-      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
         <div class="grid">
           <div class="col-12">
             <div class="field">
@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="report?.hasChangeOfAddress">
+        @if (report?.hasChangeOfAddress) {
           <hr type="solid" />
           <div class="grid">
             <div class="col-12">
@@ -54,21 +54,21 @@
               <div class="flex flex-wrap gap-3">
                 <div class="flex align-items-center">
                   <p-radioButton
-                    name="change_of_address"
+                    inputId="Y"
                     [value]="true"
-                    label="YES"
                     formControlName="change_of_address"
                     ariaLabel="Address has changed in the last 10 days"
                   ></p-radioButton>
+                  <label for="Y" class="ml-2">YES</label>
                 </div>
                 <div class="flex align-items-center">
                   <p-radioButton
-                    name="change_of_address"
+                    inputId="N"
                     [value]="false"
-                    label="NO"
                     formControlName="change_of_address"
                     ariaLabel="Address has not changed in the last 10 days"
                   ></p-radioButton>
+                  <label for="N" class="ml-2">NO</label>
                 </div>
                 <app-error-messages
                   [form]="form"
@@ -79,9 +79,9 @@
               </div>
             </div>
           </div>
-        </div>
+        }
 
-        <ng-container *ngIf="form.get('change_of_address')?.value">
+        @if (form.get('change_of_address')?.value) {
           <!--
 
         Per a discussion with Mitchell, this section is commented out 
@@ -130,13 +130,13 @@
             <div class="col-3">
               <div class="field">
                 <label for="state">STATE/PROVINCE</label>
-                <p-dropdown
+                <p-select
                   inputId="state"
                   formControlName="state"
                   [options]="stateOptions"
                   [autoDisplayFirst]="false"
                   appendTo="body"
-                ></p-dropdown>
+                ></p-select>
                 <app-error-messages
                   [form]="form"
                   fieldName="state"
@@ -152,7 +152,7 @@
               </div>
             </div>
           </div>
-        </ng-container>
+        }
         <div class="flex justify-content-between flex-wrap">
           <button
             pButton

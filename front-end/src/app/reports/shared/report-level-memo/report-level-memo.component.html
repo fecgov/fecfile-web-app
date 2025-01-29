@@ -3,13 +3,16 @@
     <h1>Report level memo</h1>
     <div>
       <span class="bold"
-        >{{ report.formLabel }}<ng-container *ngIf="report.formSubLabel">:</ng-container>
+        >{{ report.formLabel }}
+        @if (report.formSubLabel) {
+          :
+        }
         {{ report.formSubLabel }}</span
       >
     </div>
   </div>
 
-  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-11">
         <label for="{{ text4kFormProperty }}">
@@ -20,7 +23,7 @@
             id="{{ text4kFormProperty }}"
             [rows]="20"
             [cols]="30"
-            pInputTextarea
+            pTextarea
             [autoResize]="true"
             formControlName="{{ text4kFormProperty }}"
           ></textarea>

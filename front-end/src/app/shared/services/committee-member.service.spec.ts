@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { CommitteeMemberService } from './committee-member.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { CommitteeMember } from '../models/committee-member.model';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;
@@ -13,8 +14,12 @@ describe('CommitteeMemberService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CommitteeMemberService, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        CommitteeMemberService,
+        provideMockStore(testMockStore),
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(CommitteeMemberService);
@@ -48,7 +53,7 @@ describe('CommitteeMemberService', () => {
       ],
     };
 
-    service.getTableData().subscribe((response: ListRestResponse) => {
+    service.getTableData().then((response: ListRestResponse) => {
       expect(response).toEqual(mockResponse);
     });
     const req = httpTestingController.expectOne(`${environment.apiUrl}/committee-members/?page=1`);

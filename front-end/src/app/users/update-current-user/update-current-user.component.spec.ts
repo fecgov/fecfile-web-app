@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -12,6 +12,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { UpdateCurrentUserComponent } from './update-current-user.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('UpdateCurrentUserComponent', () => {
   let component: UpdateCurrentUserComponent;
@@ -20,16 +21,23 @@ describe('UpdateCurrentUserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         ToastModule,
         TableModule,
         ToolbarModule,
         DialogModule,
         FileUploadModule,
         ConfirmDialogModule,
+        UpdateCurrentUserComponent,
       ],
-      declarations: [UpdateCurrentUserComponent],
-      providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore), UsersService],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ConfirmationService,
+        MessageService,
+        FormBuilder,
+        provideMockStore(testMockStore),
+        UsersService,
+      ],
     }).compileComponents();
   });
 

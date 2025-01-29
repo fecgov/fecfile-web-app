@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from 'environments/environment';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Feedback } from '../models/feedback.model';
 import { FeedbackService } from './feedback.service';
 import { LoginService } from './login.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('FeedbackService', () => {
   let service: FeedbackService;
@@ -16,8 +17,13 @@ describe('FeedbackService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ApiService,
+        LoginService,
+        provideMockStore(testMockStore),
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(FeedbackService);

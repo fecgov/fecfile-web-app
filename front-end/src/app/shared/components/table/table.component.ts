@@ -10,13 +10,28 @@ import {
   OnChanges,
   AfterContentChecked,
 } from '@angular/core';
-import { PaginatorState } from 'primeng/paginator';
-import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table } from 'primeng/table';
+import { PaginatorState, Paginator } from 'primeng/paginator';
+import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table, TableModule } from 'primeng/table';
+import { NgTemplateOutlet } from '@angular/common';
+import { PrimeTemplate } from 'primeng/api';
+import { Select } from 'primeng/select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  imports: [
+    NgTemplateOutlet,
+    TableModule,
+    PrimeTemplate,
+    Select,
+    ReactiveFormsModule,
+    FormsModule,
+    Paginator,
+    TableSortIconComponent,
+  ],
 })
 export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges {
   @Input() title?: string;

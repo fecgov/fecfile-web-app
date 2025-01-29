@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -12,12 +11,16 @@ import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
   templateUrl: './transaction-contact-lookup.component.html',
+  imports: [ContactLookupComponent, ContactDialogComponent, ErrorMessagesComponent],
 })
 export class TransactionContactLookupComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
   @Input() contactProperty = 'contact_1';
   @Input() transaction?: Transaction;
   @Input() form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
@@ -26,8 +29,8 @@ export class TransactionContactLookupComponent implements OnInit {
   @Input() excludeFecIds: string[] = [];
   @Input() excludeIds: string[] = [];
 
-  @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
-  @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
+  @Output() readonly contactSelect = new EventEmitter<SelectItem<Contact>>();
 
   @ViewChild(ContactDialogComponent) contactDialog!: ContactDialogComponent;
 
@@ -46,11 +49,6 @@ export class TransactionContactLookupComponent implements OnInit {
   errorMessageFormControl?: SubscriptionFormControl;
   currentContactLabel = 'Individual';
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private contactService: ContactService,
-  ) {}
 
   ngOnInit(): void {
     // Set the contact type options in the child dialog component to the first contact type option

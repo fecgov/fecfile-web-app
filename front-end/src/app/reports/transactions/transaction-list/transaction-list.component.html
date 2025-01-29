@@ -10,50 +10,56 @@
     </ng-template>
 
     <ng-template pTemplate="right">
-      <app-table-actions-button
-        *ngIf="report?.report_status === reportStatus.IN_PROGRESS"
-        [tableActions]="tableActions"
-        [actionItem]="report"
-        [rounded]="false"
-        (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
-        buttonIcon="pi pi-plus"
-        buttonLabel="Add transaction"
-        buttonStyleClass="add-button"
-        buttonAriaLabel="Add a Transaction"
-      ></app-table-actions-button>
+      @if (report?.report_status === reportStatus.IN_PROGRESS) {
+        <app-table-actions-button
+          [tableActions]="tableActions"
+          [actionItem]="report"
+          [rounded]="false"
+          (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
+          buttonIcon="pi pi-plus"
+          buttonLabel="Add transaction"
+          buttonStyleClass="add-button"
+          buttonAriaLabel="Add a Transaction"
+        ></app-table-actions-button>
+      }
     </ng-template>
   </p-toolbar>
+  @if (report?.report_type !== reportTypes.F24) {
+    <app-transaction-receipts [report]="report" (reloadTables)="refreshTables()"></app-transaction-receipts>
+  }
 
-  <app-transaction-receipts
-    [report]="report"
-    (reloadTables)="refreshTables()"
-    *ngIf="report?.report_type !== reportTypes.F24"
-  ></app-transaction-receipts>
   <app-transaction-disbursements
     [report]="report"
     [openReportSelectionDialog]="openReportSelectDialog"
     (reloadTables)="refreshTables()"
   ></app-transaction-disbursements>
-  <app-transaction-loans-and-debts
-    [report]="report"
-    *ngIf="report?.report_type !== reportTypes.F24"
-    (reloadTables)="refreshTables()"
-  ></app-transaction-loans-and-debts>
+  @if (report?.report_type !== reportTypes.F24) {
+    <app-transaction-loans-and-debts
+      [report]="report"
+      (reloadTables)="refreshTables()"
+    ></app-transaction-loans-and-debts>
+  }
 </div>
 
 <p-confirmDialog #cd [style]="{ width: '450px' }" key="transaction-itemization-dialog">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">
-      <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.reject()"></button>
-      <button type="button" pButton label="Confirm" (click)="cd.accept()"></button>
+      <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="cd.onReject()"></button>
+      <button type="button" pButton label="Confirm" (click)="cd.onAccept()"></button>
     </span>
   </ng-template>
 </p-confirmDialog>
 <p-confirmDialog #deleteDialog [style]="{ width: '450px' }" key="transaction-deletion-dialog" header="Are you sure?">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">
-      <button type="button" pButton class="p-button-secondary" label="Cancel" (click)="deleteDialog.reject()"></button>
-      <button type="button" pButton label="Confirm" (click)="deleteDialog.accept()"></button>
+      <button
+        type="button"
+        pButton
+        class="p-button-secondary"
+        label="Cancel"
+        (click)="deleteDialog.onReject()"
+      ></button>
+      <button type="button" pButton label="Confirm" (click)="deleteDialog.onAccept()"></button>
     </span>
   </ng-template>
 </p-confirmDialog>

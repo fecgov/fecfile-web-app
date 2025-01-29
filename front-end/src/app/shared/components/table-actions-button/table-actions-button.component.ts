@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TableAction } from '../table-list-base/table-list-base.component';
+import { Button, ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-table-actions-button',
   templateUrl: './table-actions-button.component.html',
   styleUrls: ['./table-actions-button.component.scss'],
+  imports: [Button, Ripple, ButtonDirective],
 })
 export class TableActionsButtonComponent {
   @Input() tableActions: TableAction[] = [];

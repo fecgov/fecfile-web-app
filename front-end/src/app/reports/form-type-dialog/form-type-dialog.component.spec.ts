@@ -1,19 +1,18 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { FormTypes } from 'app/shared/utils/form-type.utils';
-import { RouterTestingModule } from '@angular/router/testing';
-
 import { FormTypeDialogComponent } from './form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { Form24Service } from 'app/shared/services/form-24.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportTypes } from 'app/shared/models/report.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
@@ -23,18 +22,16 @@ describe('FormTypeDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([
+      imports: [DialogModule, Dialog, FormTypeDialogComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
           {
             path: 'reports/transactions/report/2401/list',
             redirectTo: '',
           },
         ]),
-        DialogModule,
-        HttpClientTestingModule,
-      ],
-      declarations: [Dialog, FormTypeDialogComponent],
-      providers: [
         Form24Service,
         provideMockStore(testMockStore),
         {
@@ -109,7 +106,7 @@ describe('FormTypeDialogComponent', () => {
     component.selectedForm24Type = '48';
 
     const create = spyOn(form24Service, 'create').and.returnValue(
-      of(
+      Promise.resolve(
         Form24.fromJSON({
           id: 2401,
         }),

@@ -27,63 +27,70 @@
             aria-label="Possible report types"
             #dropdownElement
           >
-            <span *ngIf="!selectedType"></span>
-            <span *ngIf="selectedType" class="option">
-              <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
-            </span>
+            @if (selectedType) {
+              <span class="option">
+                <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
+              </span>
+            } @else {
+              <span></span>
+            }
           </button>
           <ul class="dropdown-menu" aria-labelledby="typeDropdown">
-            <li *ngFor="let type of formTypeOptions" [attr.data-cy-form-type]="type">
-              <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
-                <span class="option">
-                  <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
-                >
-              </button>
-            </li>
+            @for (type of formTypeOptions; track type) {
+              <li [attr.data-cy-form-type]="type">
+                <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
+                  <span class="option">
+                    <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
+                  >
+                </button>
+              </li>
+            }
           </ul>
         </div>
-        <div class="modal-item-margin" *ngIf="selectedType === formTypes.F24">
-          <label for="form24Options">REPORT TYPE</label>
+        @if (selectedType === formTypes.F24) {
+          <div class="modal-item-margin">
+            <label for="form24Options">REPORT TYPE</label>
 
-          <div role="group" class="p-selectbutton p-buttonset p-component">
-            <div
-              pRipple
-              pAutoFocus
-              class="p-ripple p-element p-button p-component"
-              [ngClass]="selectedForm24Type === '24' ? 'p-highlight' : ''"
-              role="radio"
-              tabindex="0"
-              aria-label="24 Hour"
-              aria-checked="false"
-              aria-labelledby="label_24"
-              data-pc-section="button"
-              (click)="selectItem('24')"
-              (keydown.space)="selectItem('24')"
-              (keydown.enter)="selectItem('24')"
-            >
-              <span id="label_24" class="p-button-label">24 Hour</span>
-            </div>
-            <div
-              pRipple
-              pAutoFocus
-              class="p-ripple p-element p-button p-component"
-              id="48-button"
-              [ngClass]="selectedForm24Type === '48' ? 'p-highlight' : ''"
-              role="radio"
-              tabindex="0"
-              aria-label="48 Hour"
-              aria-checked="false"
-              aria-labelledby="label_48"
-              data-pc-section="button"
-              (click)="selectItem('48')"
-              (keydown.space)="selectItem('48')"
-              (keydown.enter)="selectItem('48')"
-              #form24FocusElement
-            >
-              <span id="label_48" class="p-button-label">48 Hour</span>
+            <div role="group" class="p-selectbutton p-buttonset p-component">
+              <div
+                pRipple
+                pAutoFocus
+                class="p-ripple p-element p-button p-component"
+                [class.p-highlight]="selectedForm24Type === '24'"
+                role="radio"
+                tabindex="0"
+                aria-label="24 Hour"
+                aria-checked="false"
+                aria-labelledby="label_24"
+                data-pc-section="button"
+                (click)="selectItem('24')"
+                (keydown.space)="selectItem('24')"
+                (keydown.enter)="selectItem('24')"
+              >
+                <span id="label_24" class="p-button-label">24 Hour</span>
+              </div>
+              <div
+                pRipple
+                pAutoFocus
+                class="p-ripple p-element p-button p-component"
+                id="48-button"
+                [class.p-highlight]="selectedForm24Type === '48'"
+                role="radio"
+                tabindex="0"
+                aria-label="48 Hour"
+                aria-checked="false"
+                aria-labelledby="label_48"
+                data-pc-section="button"
+                (click)="selectItem('48')"
+                (keydown.space)="selectItem('48')"
+                (keydown.enter)="selectItem('48')"
+                #form24FocusElement
+              >
+                <span id="label_48" class="p-button-label">48 Hour</span>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </div>
       <div class="dialog-footer">
         <button

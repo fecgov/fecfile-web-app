@@ -1,19 +1,21 @@
 <div [formGroup]="form">
-  <div class="grid">
-    <ng-container *ngIf="memoCodeMapOptions.length === 0">
-      <div class="col-12">
+  <div class="grid memo-container">
+    @if (memoCodeMapOptions.length === 0) {
+      <div class="col-12 align-items-center">
         <p-checkbox
           #memoCode
           [binary]="true"
           inputId="memo_code"
           [formControlName]="templateMap['memo_code']"
-          [label]="checkboxLabel"
           ariaLabel="have memo item"
           [trueValue]="true"
           [falseValue]="false"
-          [readonly]="memoCodeReadOnly"
+          [readonly]="form.controls[templateMap['memo_code']].disabled"
           (click)="onMemoItemClick()"
         ></p-checkbox>
+        <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">{{
+          checkboxLabel
+        }}</label>
         <span
           class="pi pi-info-circle"
           style="font-size: 1.5rem; margin-left: 0.5rem"
@@ -27,8 +29,7 @@
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
-    </ng-container>
-    <ng-container *ngIf="memoCodeMapOptions.length > 0">
+    } @else {
       <div class="col-3">
         <p-selectButton
           #memoCode
@@ -40,21 +41,23 @@
         ></p-selectButton>
       </div>
       <div class="col-12">
-        <ng-container *ngIf="memoControl?.value === true">
+        @if (memoControl.value) {
           <span
             class="pi pi-check"
             style="font-size: 1rem; margin-left: 0.5rem"
             pTooltip="{{ memoItemHelpText }}"
           ></span>
           MEMO ITEM
-        </ng-container>
-        <ng-container *ngIf="memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
-        <span
-          *ngIf="memoControl?.value !== undefined"
-          class="pi pi-info-circle"
-          style="font-size: 1.5rem; margin-left: 0.5rem"
-          pTooltip="{{ memoItemHelpText }}"
-        ></span>
+        } @else {
+          NOT A MEMO ITEM
+        }
+        @if (memoControl.value !== undefined) {
+          <span
+            class="pi pi-info-circle"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
+            pTooltip="{{ memoItemHelpText }}"
+          ></span>
+        }
       </div>
       <div class="col-12">
         <app-error-messages
@@ -64,7 +67,7 @@
           [patternErrorMessage]="'This is a required field.'"
         ></app-error-messages>
       </div>
-    </ng-container>
+    }
   </div>
   <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
     <ng-template pTemplate="header">

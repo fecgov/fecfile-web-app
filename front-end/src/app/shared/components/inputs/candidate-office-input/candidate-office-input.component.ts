@@ -4,11 +4,16 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Select } from 'primeng/select';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-candidate-office-input',
   styleUrls: ['./candidate-office-input.component.scss'],
   templateUrl: './candidate-office-input.component.html',
+  imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText],
 })
 export class CandidateOfficeInputComponent extends BaseInputComponent implements OnInit {
   @Input() officeFormControlName = '';

@@ -1,6 +1,16 @@
 <div class="sidebar">
-  <app-f3x-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F3X"></app-f3x-menu>
-  <app-f99-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F99"></app-f99-menu>
-  <app-f1m-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F1M"></app-f1m-menu>
-  <app-f24-menu *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24"></app-f24-menu>
+  @switch ((activeReport$ | async)?.report_type) {
+    @case (reportTypes.F3X) {
+      <app-f3x-menu></app-f3x-menu>
+    }
+    @case (reportTypes.F99) {
+      <app-f99-menu></app-f99-menu>
+    }
+    @case (reportTypes.F1M) {
+      <app-f1m-menu></app-f1m-menu>
+    }
+    @case (reportTypes.F24) {
+      <app-f24-menu></app-f24-menu>
+    }
+  }
 </div>

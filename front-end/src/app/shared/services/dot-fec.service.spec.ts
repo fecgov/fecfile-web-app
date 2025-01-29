@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-
 import { DotFecService, Download } from './dot-fec.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
-import { Observable, Subject, of } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Report } from '../models/report.model';
 import { ApiService } from './api.service';
 import { RendererFactory2 } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 const childNodesMap = new WeakMap();
 
@@ -50,8 +50,9 @@ describe('DotFecService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         DotFecService,
         ApiService,
         provideMockStore(testMockStore),
@@ -80,7 +81,7 @@ describe('DotFecService', () => {
   it('should generate FEC file', async () => {
     const response = { status: 'testStatus', file_name: 'testFileName', task_id: 'testTaskId' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn(apiService, 'post').and.returnValue(of(response) as Observable<any>);
+    spyOn(apiService, 'post').and.returnValue(Promise.resolve(response) as Promise<any>);
 
     const result = await service.generateFecFile(report);
 
@@ -95,7 +96,7 @@ describe('DotFecService', () => {
 
   it('should download FEC file', async () => {
     const dotFEC = 'test content';
-    spyOn(apiService, 'getString').and.returnValue(of(dotFEC));
+    spyOn(apiService, 'getString').and.returnValue(Promise.resolve(dotFEC));
     spyOn(window.URL, 'createObjectURL').and.returnValue('blob:testBlob');
     const link = {
       href: '',
@@ -125,7 +126,7 @@ describe('DotFecService', () => {
   it('should check FEC file', async () => {
     const response = { done: true, id: 'testId' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn(apiService, 'get').and.returnValue(of(response) as Observable<any>);
+    spyOn(apiService, 'get').and.returnValue(Promise.resolve(response) as Promise<any>);
 
     service.downloads.next([download]);
     await service.checkFecFileTask(download);

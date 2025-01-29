@@ -1,6 +1,4 @@
-import { Injectable } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { inject, Injectable } from '@angular/core';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
 
@@ -8,15 +6,13 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class UsersService {
-  constructor(private apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
   public getCurrentUser(): Promise<UserLoginData> {
-    return firstValueFrom(this.apiService.get<UserLoginData>(`/users/get_current/`).pipe(map((response) => response)));
+    return this.apiService.get<UserLoginData>(`/users/get_current/`);
   }
 
-  public updateCurrentUser(userLoginData: UserLoginData): Observable<UserLoginData> {
-    return this.apiService
-      .put<UserLoginData>(`/users/update_current/`, userLoginData)
-      .pipe(map((response) => response));
+  public updateCurrentUser(userLoginData: UserLoginData): Promise<UserLoginData> {
+    return this.apiService.put<UserLoginData>(`/users/update_current/`, userLoginData);
   }
 }

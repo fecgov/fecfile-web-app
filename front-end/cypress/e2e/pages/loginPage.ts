@@ -8,8 +8,6 @@ export class LoginPage {
     cy.session(
       `Login Through ${intervalString}`,
       () => {
-        //apiLogin();
-        //legacyLogin();
         loginDotGovLogin();
       },
       {
@@ -64,7 +62,7 @@ function loginDotGovLogin() {
   cy.get('#loginButton').click();
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
-  cy.get('.p-checkbox-box').click();
+  cy.get('#security-consent-annual').click();
   cy.get('[data-test="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();

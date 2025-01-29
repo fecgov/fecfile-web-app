@@ -1,7 +1,4 @@
-<div
-  [ngStyle]="{ display: dialogVisible ? '' : 'none' }"
-  [ngClass]="{ 'contact-dialog-not-submitted': !formSubmitted }"
->
+<div [style]="{ display: dialogVisible ? '' : 'none' }" [class.contact-dialog-not-submitted]="!formSubmitted">
   <p-dialog
     [visible]="detailVisible"
     [style]="{ width: '90%' }"
@@ -13,7 +10,7 @@
     (visibleChange)="closeDialog($event)"
   >
     <ng-template pTemplate="content">
-      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
         <div class="grid">
           <div class="col-12">
             <h3>Contact</h3>
@@ -37,7 +34,7 @@
           </div>
           <div class="col-6"></div>
         </div>
-        <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
+        @if (contactType === ContactTypes.CANDIDATE) {
           <div class="grid">
             <div class="col-6">
               <div class="field">
@@ -52,10 +49,10 @@
             </div>
             <div class="col-4"></div>
           </div>
-        </ng-container>
-        <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)">
+        }
+        @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
           <div class="grid">
-            <ng-container *ngIf="contactType === ContactTypes.COMMITTEE">
+            @if (contactType === ContactTypes.COMMITTEE) {
               <div class="col-4">
                 <div class="field">
                   <label for="committee_id">COMMITTEE ID</label>
@@ -67,7 +64,7 @@
                   ></app-error-messages>
                 </div>
               </div>
-            </ng-container>
+            }
             <div class="col-8">
               <div class="field">
                 <label for="name">NAME</label>
@@ -75,12 +72,12 @@
                 <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
               </div>
             </div>
-            <ng-container *ngIf="contactType === ContactTypes.ORGANIZATION">
+            @if (contactType === ContactTypes.ORGANIZATION) {
               <div class="col-4"></div>
-            </ng-container>
+            }
           </div>
-        </ng-container>
-        <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
+        }
+        @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
           <div class="grid">
             <div class="col-4">
               <div class="field">
@@ -141,7 +138,7 @@
             </div>
             <div class="col-6"></div>
           </div>
-        </ng-container>
+        }
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -154,9 +151,9 @@
         </div>
         <div class="grid">
           <div class="col-6">
-            <div class="field">
+            <div class="field d-grid">
               <label for="country">COUNTRY/REGION</label>
-              <p-dropdown inputId="country" formControlName="country" [options]="countryOptions"></p-dropdown>
+              <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
             </div>
           </div>
           <div class="col-6"></div>
@@ -194,15 +191,15 @@
             </div>
           </div>
           <div class="col-3">
-            <div class="field">
+            <div class="field d-grid">
               <label for="state">STATE/PROVINCE</label>
-              <p-dropdown
+              <p-select
                 inputId="state"
                 formControlName="state"
                 [options]="stateOptions"
                 [autoDisplayFirst]="false"
                 appendTo="body"
-              ></p-dropdown>
+              ></p-select>
               <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
@@ -230,7 +227,7 @@
           </div>
           <div class="col-6"></div>
         </div>
-        <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)">
+        @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
           <div class="grid">
             <div class="col-12">
               <hr />
@@ -265,8 +262,8 @@
               </div>
             </div>
           </div>
-        </ng-container>
-        <ng-container *ngIf="contactType === ContactTypes.CANDIDATE">
+        }
+        @if (contactType === ContactTypes.CANDIDATE) {
           <div class="grid">
             <div class="col-12">
               <hr />
@@ -285,37 +282,39 @@
             districtFormControlName="candidate_district"
           >
           </app-candidate-office-input>
-        </ng-container>
+        }
       </form>
 
-      <div *ngIf="showHistory && !isNewItem">
-        <app-table
-          title="Transaction history"
-          sortField="transaction_type_identifier"
-          [items]="transactions"
-          [totalItems]="totalTransactions"
-          [sortableHeaders]="sortableHeaders"
-          [loading]="tableLoading"
-          [rowsPerPage]="rowsPerPage"
-          itemName="transactions"
-          [emptyMessage]="emptyMessage"
-          (loadTableItems)="loadTransactions($event)"
-          (rowsPerPageChange)="onRowsPerPageChange($event)"
-        >
-          <ng-template #header> </ng-template>
-          <ng-template #body let-transaction>
-            <td>
-              <a (click)="openTransaction(transaction)">
-                {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
-              </a>
-            </td>
-            <td>{{ transaction.form_type }}</td>
-            <td>{{ transaction.report_code_label }}</td>
-            <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
-            <td>{{ transaction.amount | currency }}</td>
-          </ng-template>
-        </app-table>
-      </div>
+      @if (showHistory && !isNewItem) {
+        <div>
+          <app-table
+            title="Transaction history"
+            sortField="transaction_type_identifier"
+            [items]="transactions"
+            [totalItems]="totalTransactions"
+            [sortableHeaders]="sortableHeaders"
+            [loading]="tableLoading"
+            [rowsPerPage]="rowsPerPage"
+            itemName="transactions"
+            [emptyMessage]="emptyMessage"
+            (loadTableItems)="loadTransactions($event)"
+            (rowsPerPageChange)="onRowsPerPageChange($event)"
+          >
+            <ng-template #header> </ng-template>
+            <ng-template #body let-transaction>
+              <td>
+                <a (click)="openTransaction(transaction)">
+                  {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
+                </a>
+              </td>
+              <td>{{ transaction.form_type }}</td>
+              <td>{{ transaction.report_code_label }}</td>
+              <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
+              <td>{{ transaction.amount | currency }}</td>
+            </ng-template>
+          </app-table>
+        </div>
+      }
     </ng-template>
     <ng-template pTemplate="footer">
       <div class="grid">
@@ -331,7 +330,17 @@
           ></button>
         </div>
         <div class="col-11">
-          <ng-container *ngIf="!headerTitle; else transactionContactLookupButton">
+          @if (headerTitle) {
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Save & continue"
+              icon="pi pi-check"
+              class="p-button-info"
+              (click)="saveContact()"
+            ></button>
+          } @else {
             <button
               type="button"
               pButton
@@ -341,33 +350,22 @@
               class="p-button-primary"
               (click)="isNewItem ? saveContact() : confirmPropagation()"
             ></button>
-            <button
-              type="button"
-              *ngIf="isNewItem"
-              pButton
-              pRipple
-              label="Save & Add More"
-              icon="pi pi-check"
-              class="p-button-info"
-              (click)="saveContact(false)"
-            ></button>
-          </ng-container>
+            @if (isNewItem) {
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="Save & Add More"
+                icon="pi pi-check"
+                class="p-button-info"
+                (click)="saveContact(false)"
+              ></button>
+            }
+          }
         </div>
       </div>
     </ng-template>
   </p-dialog>
 </div>
 
-<ng-template #transactionContactLookupButton>
-  <button
-    type="button"
-    pButton
-    pRipple
-    label="Save & continue"
-    icon="pi pi-check"
-    class="p-button-info"
-    (click)="saveContact()"
-  ></button>
-</ng-template>
-
-<p-confirmDialog key="contactDialogDialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="contactDialogDialog" [style.width.px]="450"></p-confirmDialog>

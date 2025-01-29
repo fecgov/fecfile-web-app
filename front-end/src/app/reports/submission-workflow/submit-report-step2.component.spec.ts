@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService, QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { Confirmation, ConfirmationService, MessageService, SharedModule } from 'primeng/api';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { SubmitReportStep2Component } from './submit-report-step2.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -12,7 +12,6 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { ReportsModule } from '../reports.module';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { Report } from 'app/shared/models/report.model';
@@ -28,7 +27,6 @@ describe('SubmitReportStep2Component', () => {
     mockMessageService = jasmine.createSpyObj('MessageService', ['add']);
 
     await TestBed.configureTestingModule({
-      declarations: [SubmitReportStep2Component],
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -36,7 +34,7 @@ describe('SubmitReportStep2Component', () => {
         CheckboxModule,
         RadioButtonModule,
         SharedModule,
-        ReportsModule,
+        SubmitReportStep2Component,
       ],
       providers: [
         provideHttpClient(),
@@ -99,15 +97,15 @@ describe('SubmitReportStep2Component', () => {
     let confirmSpy: jasmine.Spy<(confirmation: Confirmation) => ConfirmationService>;
     let saveTreasurerSpy: jasmine.Spy<() => Promise<Report | undefined>>;
     let submitSpy: jasmine.Spy<() => Promise<boolean>>;
-    let reportSpy: jasmine.Spy<(report: Report, fieldsToValidate?: string[]) => Observable<Report>>;
+    let reportSpy: jasmine.Spy<(report: Report, fieldsToValidate?: string[]) => Promise<Report>>;
     let apiSpy: jasmine.Spy<{
-      <T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Observable<T>;
+      <T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Promise<T>;
       <T>(
         endpoint: string,
         payload: unknown,
         queryParams?: QueryParams,
         allowedErrorCodes?: number[],
-      ): Observable<HttpResponse<T>>;
+      ): Promise<HttpResponse<T>>;
     }>;
     const mockPassword = '12345aA!';
 
@@ -118,8 +116,8 @@ describe('SubmitReportStep2Component', () => {
       });
       saveTreasurerSpy = spyOn(component, 'saveTreasurerName').and.callThrough();
       submitSpy = spyOn(component, 'submitReport').and.callThrough();
-      reportSpy = spyOn(component.reportService, 'update').and.returnValue(of(new Form3X()));
-      apiSpy = spyOn(component.apiService, 'post').and.returnValue(of(new HttpResponse()));
+      reportSpy = spyOn(component.reportService, 'update').and.returnValue(Promise.resolve(new Form3X()));
+      apiSpy = spyOn(component.apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse()));
 
       component.form.patchValue({
         treasurer_name_1: 'name1',

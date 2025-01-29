@@ -1,12 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  provideRouter,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { testMockStore } from '../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
 import { LoginService } from '../services/login.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { nameGuard } from './name.guard';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('nameGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
@@ -14,8 +20,7 @@ describe('nameGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
     });
   });
 

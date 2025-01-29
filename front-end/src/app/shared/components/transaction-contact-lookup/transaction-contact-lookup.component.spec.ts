@@ -1,10 +1,9 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
@@ -16,6 +15,8 @@ import { ContactDialogComponent } from '../contact-dialog/contact-dialog.compone
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -23,21 +24,25 @@ describe('TransactionContactLookupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TransactionContactLookupComponent, ContactLookupComponent, LabelPipe, ContactDialogComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         DialogModule,
-        HttpClientTestingModule,
-        DropdownModule,
+        SelectModule,
         AutoCompleteModule,
+        TransactionContactLookupComponent,
+        ContactLookupComponent,
+        ContactDialogComponent,
       ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         ConfirmationService,
         FormBuilder,
         EventEmitter,
         provideMockStore(testMockStore),
         DatePipe,
+        LabelPipe,
         {
           provide: ActivatedRoute,
           useValue: {

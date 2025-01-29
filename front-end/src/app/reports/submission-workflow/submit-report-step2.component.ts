@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -15,15 +15,42 @@ import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { combineLatest, firstValueFrom, takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
+import { Card } from 'primeng/card';
+import { InputText } from 'primeng/inputtext';
+import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
+import { Password } from 'primeng/password';
+import { Checkbox } from 'primeng/checkbox';
+import { Tooltip } from 'primeng/tooltip';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-submit-report-step2',
   templateUrl: './submit-report-step2.component.html',
   styleUrls: ['./submit-report-step2.component.scss'],
+  imports: [
+    Card,
+    ReactiveFormsModule,
+    InputText,
+    ErrorMessagesComponent,
+    Password,
+    Checkbox,
+    Tooltip,
+    ButtonDirective,
+    Ripple,
+  ],
 })
 export class SubmitReportStep2Component extends DestroyerComponent implements OnInit {
-  formProperties: string[] = [
+  public readonly router = inject(Router);
+  public readonly route = inject(ActivatedRoute);
+  private readonly fb = inject(FormBuilder);
+  private readonly store = inject(Store);
+  private readonly messageService = inject(MessageService);
+  public readonly confirmationService = inject(ConfirmationService);
+  public readonly apiService = inject(ApiService);
+  public readonly reportService = inject(ReportService);
+  readonly formProperties: string[] = [
     'treasurer_first_name',
     'treasurer_last_name',
     'treasurer_middle_name',
@@ -44,19 +71,6 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
   committeeAccount?: CommitteeAccount;
-
-  constructor(
-    public router: Router,
-    public route: ActivatedRoute,
-    private fb: FormBuilder,
-    private store: Store,
-    private messageService: MessageService,
-    public confirmationService: ConfirmationService,
-    public apiService: ApiService,
-    public reportService: ReportService,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
@@ -152,7 +166,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       payload.zip = this.committeeAccount?.zip;
     }
 
-    return firstValueFrom(this.reportService.update(payload, this.formProperties));
+    return this.reportService.update(payload, this.formProperties);
   }
 
   async submitReport(): Promise<boolean> {
@@ -163,7 +177,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
       password: this.form?.value['filingPassword'],
       backdoor_code: this.form?.value['backdoor_code'],
     };
-    await firstValueFrom(this.apiService.post('/web-services/submit-to-fec/', payload));
+    await this.apiService.post('/web-services/submit-to-fec/', payload);
     this.loading = 0;
     return this.router.navigateByUrl(this.getContinueUrl?.(this.report) || '/reports/');
   }

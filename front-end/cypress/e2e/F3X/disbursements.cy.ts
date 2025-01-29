@@ -164,7 +164,7 @@ describe('Disbursements', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Other Disbursement');
-    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(formTransactionDataForSchedule);
@@ -188,6 +188,7 @@ describe('Disbursements', () => {
         purpose_description: '',
         category_code: '',
         date_received: new Date(currentYear, 4 - 1, 27),
+        memoCode: false,
       },
     };
     TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
@@ -200,7 +201,7 @@ describe('Disbursements', () => {
 
     // Check values of edit form
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-    cy.get('#entity_type_dropdown > div.readonly').should('exist');
+    cy.get('#entity_type_dropdown.readonly').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(organizationFormData, true);
     TransactionDetailPage.assertFormData(transactionFormData);

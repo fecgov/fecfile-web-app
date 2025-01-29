@@ -1,6 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
@@ -8,9 +6,10 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { of } from 'rxjs';
 import { CreateCommitteeComponent } from './create-committee.component';
-import { NavigationBehaviorOptions, Router, UrlTree } from '@angular/router';
+import { NavigationBehaviorOptions, provideRouter, Router, UrlTree } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
@@ -21,9 +20,15 @@ describe('CreateCommitteeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ToastModule, DialogModule],
-      declarations: [CreateCommitteeComponent],
-      providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
+      imports: [ToastModule, DialogModule, CreateCommitteeComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        ConfirmationService,
+        MessageService,
+        provideMockStore(testMockStore),
+      ],
     });
     testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
     router = TestBed.inject(Router);
@@ -43,7 +48,9 @@ describe('CreateCommitteeComponent', () => {
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
       const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-      const spy = spyOn(testCommitteeAccountService, 'getAvailableCommittee').and.returnValue(of(testCommittee));
+      const spy = spyOn(testCommitteeAccountService, 'getAvailableCommittee').and.returnValue(
+        Promise.resolve(testCommittee),
+      );
 
       expect(component.selectedCommittee).toBeFalsy();
       component.search(testCommitteeId);

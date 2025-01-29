@@ -8,11 +8,9 @@ import {
   HttpResponse,
   HttpStatusCode,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-
 import { catchError, Observable, of, throwError } from 'rxjs';
-
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { LoginService } from '../services/login.service';
 
@@ -20,10 +18,8 @@ export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => [200]);
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  constructor(
-    private store: Store,
-    private loginService: LoginService,
-  ) {}
+  private readonly store = inject(Store);
+  private readonly loginService = inject(LoginService);
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(

@@ -1,8 +1,6 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -13,7 +11,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { of } from 'rxjs';
 import { SubmitReportStep1Component } from './submit-report-step1.component';
 import { ReportService } from 'app/shared/services/report.service';
-import { ReportsModule } from '../reports.module';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('SubmitReportStep1Component', () => {
   let component: SubmitReportStep1Component;
@@ -25,16 +24,16 @@ describe('SubmitReportStep1Component', () => {
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([]),
-        HttpClientTestingModule,
         DividerModule,
         CheckboxModule,
         RadioButtonModule,
         SharedModule,
-        ReportsModule,
+        SubmitReportStep1Component,
       ],
-      declarations: [SubmitReportStep1Component],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         FormBuilder,
         ReportService,
         MessageService,
@@ -58,7 +57,7 @@ describe('SubmitReportStep1Component', () => {
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(SubmitReportStep1Component);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(Form3X.fromJSON({})));
+    spyOn(reportService, 'get').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
     fixture.detectChanges();
   });
 
