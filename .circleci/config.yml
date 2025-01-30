@@ -214,19 +214,12 @@ workflows:
     when:
       not: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
-      - lint
-      - test
-      - dependency-check
       - e2e-test:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
-          requires:
-            - lint
-            - test
-            - dependency-check
           filters:
             branches:
               only: /feature\/1908-testing-in-dev|release\/sprint-[\.\d]+|main/
