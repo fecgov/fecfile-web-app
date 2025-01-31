@@ -32,6 +32,7 @@ describe('FormTypeUtils', () => {
     });
 
     it('should have F3 if environment has showForm3', async () => {
+      environment.showForm3 = true;
       expect(environment.showForm3).toBeTrue();
       const { FORM_TYPES } = await loadFormTypes();
       const F3 = FORM_TYPES.get(FormTypes.F3);
