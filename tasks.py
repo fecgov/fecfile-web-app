@@ -55,7 +55,6 @@ def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
     os.chdir(os.path.join(orig_directory, "front-end"))
 
-    ctx.run("npm install", warn=True, echo=True)
     print(f"Starting build: npm run build-{space}")
     result = ctx.run(f"npm run build-{space}", warn=True, echo=True)
 

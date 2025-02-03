@@ -18,7 +18,7 @@
 }
 
 .header-container {
-  padding: 0 32px 64px 32px;
+  padding: 0;
 }
 
 .row {
@@ -39,6 +39,7 @@ app-footer {
   width: calc(100% - 250px);
   display: flex;
   flex-direction: column;
+  padding-top: 64px;
 }
 
 .login-background {
