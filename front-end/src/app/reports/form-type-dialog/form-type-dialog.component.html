@@ -15,6 +15,7 @@
       <div class="dialog-body">
         <div class="dropdown">
           <span id="type-label">FORM TYPE</span>
+
           <button
             class="btn dropdown-toggle focus-ring"
             type="button"
@@ -25,8 +26,12 @@
             aria-expanded="false"
             aria-label="Possible report types"
             #dropdownElement
-            [innerHTML]="dropdownButtonText"
-          ></button>
+          >
+            <span *ngIf="!selectedType"></span>
+            <span *ngIf="selectedType" class="option">
+              <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
+            </span>
+          </button>
           <ul class="dropdown-menu" aria-labelledby="typeDropdown">
             <li *ngFor="let type of formTypeOptions" [attr.data-cy-form-type]="type">
               <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
