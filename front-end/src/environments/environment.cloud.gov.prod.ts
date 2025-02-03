@@ -17,6 +17,7 @@ export const environment = {
   sessionIdCookieName: 'sessionid',
   committee_data_source: 'production',
   form1m_link: 'https://webforms.fec.gov/webforms/form1/index.htm',
+  showForm3: false,
 };
 
 /*
