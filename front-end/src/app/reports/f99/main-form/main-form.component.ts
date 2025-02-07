@@ -2,14 +2,15 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
-import { MessageService } from 'primeng/api';
+import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { Form99, textCodes } from 'app/shared/models/form-99.model';
+import { Report } from 'app/shared/models/report.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
-import { Report } from 'app/shared/models/report.model';
-import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-main-form',
@@ -28,6 +29,7 @@ export class MainFormComponent extends MainFormBaseComponent {
     'message_text',
   ];
   schema = f99Schema;
+  schemaName = SchemaNames.F99;
   webprintURL = '/reports/f99/web-print/';
   templateMap = {
     street_1: 'street_1',

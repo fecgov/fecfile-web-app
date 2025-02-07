@@ -4,6 +4,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { BaseInputComponent } from '../base-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -14,7 +15,8 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {
-    SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, SchemaNames.Text, false);
+    this.form.updateValueAndValidity();
 
     if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
       this.initPrefix(

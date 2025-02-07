@@ -4,10 +4,13 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 import { lastValueFrom, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
+import { Candidate } from '../models/candidate.model';
+import { CommitteeAccount } from '../models/committee-account.model';
 import {
   CandidateLookupResponse,
   CandidateOfficeType,
@@ -19,14 +22,12 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
-import { Candidate } from '../models/candidate.model';
-import { CommitteeAccount } from '../models/committee-account.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   /**
    * Given the type of contact given, return the appropriate JSON schema doc
@@ -45,6 +46,25 @@ export class ContactService implements TableListService<Contact> {
       schema = contactOrganizationSchema;
     }
     return schema;
+  }
+
+  /**
+   * Given the type of contact given, return the appropriate JSON schema name
+   * @param {ContactTypes} type
+   * @returns {SchemaNames} schemaName
+   */
+  public static getSchemaNameByType(type: ContactTypes): SchemaNames {
+    let schemaName: SchemaNames = SchemaNames.Contact_Individual;
+    if (type === ContactTypes.CANDIDATE) {
+      schemaName = SchemaNames.Contact_Candidate;
+    }
+    if (type === ContactTypes.COMMITTEE) {
+      schemaName = SchemaNames.Contact_Committee;
+    }
+    if (type === ContactTypes.ORGANIZATION) {
+      schemaName = SchemaNames.Contact_Organization;
+    }
+    return schemaName;
   }
 
   public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
@@ -204,7 +224,7 @@ export class ContactService implements TableListService<Contact> {
   providedIn: 'root',
 })
 export class DeletedContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     if (!ordering) {

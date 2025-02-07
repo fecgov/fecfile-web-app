@@ -1,5 +1,5 @@
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { validate, ValidationError } from 'fecfile-validate';
+import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
+import { validate } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
@@ -142,6 +142,7 @@ export class SchemaUtils {
   static addJsonSchemaValidators(
     form: FormGroup,
     jsonSchema: JsonSchema,
+    schemaName: string,
     clearExistingValidators: boolean,
     transaction?: Transaction,
   ) {
@@ -149,7 +150,7 @@ export class SchemaUtils {
       if (clearExistingValidators) {
         form.get(key)?.clearValidators();
       }
-      form.get(key)?.addValidators(SchemaUtils.jsonSchemaValidator(key, form, jsonSchema, transaction));
+      form.get(key)?.addAsyncValidators(SchemaUtils.jsonSchemaValidator(key, form, jsonSchema, schemaName, transaction));
     }
     form.updateValueAndValidity();
   }
@@ -167,15 +168,16 @@ export class SchemaUtils {
     property: string,
     form: FormGroup,
     jsonSchema: JsonSchema,
+    schemaName: string,
     transaction?: Transaction,
-  ): ValidatorFn {
-    return (): ValidationErrors | null => {
+  ): AsyncValidatorFn {
+    return async (): Promise<ValidationErrors | null> => {
       const data = {
         ...SchemaUtils.getFormValues(form, jsonSchema),
         ...SchemaUtils.getNonFormValues(transaction),
       };
 
-      const errors: ValidationError[] = validate(jsonSchema, data, [property]);
+      const errors = await validate(schemaName, data, [property]);
       if (errors.length) {
         const result: ValidationErrors = {};
         errors.forEach((error) => {

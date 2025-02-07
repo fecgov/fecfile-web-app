@@ -4,6 +4,7 @@ import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -14,6 +15,7 @@ export abstract class Report extends BaseModel {
   state?: string;
   zip?: string;
   abstract schema: JsonSchema;
+  abstract schemaName: SchemaNames;
   abstract report_type: ReportTypes;
   abstract form_type: string;
   hasChangeOfAddress = false;

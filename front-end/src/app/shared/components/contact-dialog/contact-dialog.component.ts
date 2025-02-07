@@ -1,12 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ReportTypes } from 'app/shared/models/report.model';
+import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
+import { ConfirmationService } from 'primeng/api';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { lastValueFrom, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
@@ -15,24 +21,18 @@ import {
   ContactTypeLabels,
   ContactTypes,
 } from '../../models/contact.model';
+import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
+import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
+import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
+import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
+import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.model';
+import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
+import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
+import { getReportFromJSON } from '../../services/report.service';
+import { TransactionService } from '../../services/transaction.service';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
-import { ConfirmationService } from 'primeng/api';
-import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
-import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
-import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.model';
-import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
-import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
-import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
-import { Router } from '@angular/router';
-import { TransactionService } from '../../services/transaction.service';
-import { TableLazyLoadEvent } from 'primeng/table';
-import { getReportFromJSON } from '../../services/report.service';
-import { ReportTypes } from 'app/shared/models/report.model';
-import { QueryParams } from 'app/shared/services/api.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 export class TransactionData {
   id: string;
@@ -146,9 +146,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       event = this.pagerState
         ? this.pagerState
         : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+          first: 0,
+          rows: this.rowsPerPage,
+        };
     }
 
     // Calculate the record page number to retrieve from the API.
@@ -254,7 +254,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.get('type')?.setValue(contactType);
 
     const schema = ContactService.getSchemaByType(contactType);
-    SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
+    const schemaName = ContactService.getSchemaNameByType(contactType);
+    SchemaUtils.addJsonSchemaValidators(this.form, schema, schemaName, true);
+    this.form.updateValueAndValidity();
     this.refreshFecIdValidator('candidate_id', this.contact.id, contactType === ContactTypes.CANDIDATE);
     this.refreshFecIdValidator('committee_id', this.contact.id, contactType === ContactTypes.COMMITTEE);
 
@@ -359,6 +361,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   public saveContact(closeDialog = true) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
+    this.form.updateValueAndValidity();
     if (this.form.invalid) {
       return;
     }

@@ -60,7 +60,7 @@ export class SubmitReportStep1Component extends DestroyerComponent implements On
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
-      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
+      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, this.report.schemaName, false);
       this.initializeFormWithReport(this.report, committeeAccount);
     });
 

@@ -14,6 +14,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ReportService } from 'app/shared/services/report.service';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 @Component({
   template: '',
@@ -21,6 +22,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
 export abstract class MainFormBaseComponent extends DestroyerComponent implements OnInit {
   abstract formProperties: string[];
   abstract schema: JsonSchema;
+  abstract schemaName: SchemaNames;
   abstract getReportPayload(): Report;
   abstract webprintURL: string;
 
@@ -52,7 +54,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
       }
     });
 
-    SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, this.schema, this.schemaName, false);
   }
 
   setConstantFormValues(committeeAccount: CommitteeAccount) {

@@ -2,22 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
+import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
+import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
+import { Report } from 'app/shared/models/report.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
-import { Report } from 'app/shared/models/report.model';
-import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
-import { Contact } from 'app/shared/models/contact.model';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
+import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-main-form',
@@ -95,6 +96,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
   schema = f1mSchema;
+  schemaName = SchemaNames.F1M;
   webprintURL = '/reports/f1m/web-print/';
   templateMap = {
     street_1: 'street_1',
@@ -189,7 +191,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     (this.form.get('statusBy') as SubscriptionFormControl)?.addSubscription(
       (value: 'affiliation' | 'qualification') => {
-        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
+        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, SchemaNames.F1M, true);
         if (value === 'affiliation') {
           this.enableValidation([this.affiliatedContact]);
           this.disableValidation(this.candidateContacts);

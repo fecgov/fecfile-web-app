@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 import { Report } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -74,7 +75,7 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
         });
       });
 
-    SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, textSchema, SchemaNames.Text, false);
   }
 
   save() {

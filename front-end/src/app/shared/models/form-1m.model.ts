@@ -1,8 +1,9 @@
-import { Report, ReportTypes } from './report.model';
 import { plainToInstance, Transform, Type } from 'class-transformer';
+import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 import { BaseModel } from './base.model';
 import { CandidateOfficeType, Contact } from './contact.model';
-import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { Report, ReportTypes } from './report.model';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -18,6 +19,7 @@ export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
   schema = f1mSchema;
+  schemaName = SchemaNames.F1M;
   report_type = ReportTypes.F1M;
   form_type = F1MFormTypes.F1MN;
   override submitAlertText =
