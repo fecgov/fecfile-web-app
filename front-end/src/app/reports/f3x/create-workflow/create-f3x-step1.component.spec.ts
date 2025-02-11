@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../../../shared/utils/unit-test.utils';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
@@ -12,15 +10,15 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
-import { ReportService } from '../../../shared/services/report.service';
-import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { firstValueFrom, of } from 'rxjs';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Form3X, F3xCoverageDates, ListRestResponse } from 'app/shared/models';
+import { ReportService } from 'app/shared/services/report.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;

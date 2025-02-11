@@ -1,21 +1,21 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { PrimeTemplate } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
-import { TableComponent } from '../../shared/components/table/table.component';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { LabelPipe } from '../../shared/pipes/label.pipe';
+import { TableComponent } from 'app/shared/components/table/table.component';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-deleted-contact-dialog',
   templateUrl: './deleted-contact-dialog.component.html',
   imports: [Dialog, PrimeTemplate, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
-export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnInit, OnChanges {
+export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnChanges {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() contactsRestored = new EventEmitter<string[]>();

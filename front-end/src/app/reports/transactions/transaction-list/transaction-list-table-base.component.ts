@@ -2,14 +2,19 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes, Report } from 'app/shared/models/report.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { isPulledForwardLoan, ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import {
+  Report,
+  Transaction,
+  ReportTypes,
+  ScheduleIds,
+  ScheduleCTransactionTypes,
+  isPulledForwardLoan,
+  ScheduleDTransactionTypes,
+  Form3X,
+  ScheduleC1TransactionTypes,
+  ScheduleATransactionTypes,
+  ScheduleBTransactionTypes,
+} from 'app/shared/models';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -197,8 +202,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
-  override ngOnInit(): void {
-    this.loading = true;
+  ngOnInit(): void {
     if (this.report) {
       this.reportIsEditable = this.reportService.isEditable(this.report);
     } else {
@@ -366,12 +370,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       accept: () => {
         this.itemService.delete(item).then(() => {
           this.item = this.getEmptyItem();
-          this.refreshTable(true);
+          this.refreshAllTables();
           this.messageService.add({
             severity: 'success',
             summary: 'Successful',
             detail: 'Transaction Deleted',
-            life: 3000,
           });
         });
       },

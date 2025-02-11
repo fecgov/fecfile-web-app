@@ -8,10 +8,6 @@ class TestTableListBaseComponent extends TableListBaseComponent<string> {
   protected getEmptyItem(): string {
     return '';
   }
-
-  public override loadItemService(itemService: TableListService<string>) {
-    this.itemService = itemService;
-  }
 }
 
 class TestTableListService implements TableListService<string> {
@@ -53,7 +49,7 @@ describe('TableListBaseComponent', () => {
     testTableListService = TestBed.inject(TestTableListService);
     fixture = TestBed.createComponent(TestTableListBaseComponent);
     component = fixture.componentInstance;
-    component.loadItemService(testTableListService);
+    component.itemService = testTableListService;
     fixture.detectChanges();
   });
 

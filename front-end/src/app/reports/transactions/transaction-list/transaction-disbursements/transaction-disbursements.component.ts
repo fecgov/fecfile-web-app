@@ -31,7 +31,7 @@ import { MemoCodePipe } from '../transaction-list.component';
   ],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
-  protected override readonly itemService = inject(TransactionSchBService);
+  override readonly itemService = inject(TransactionSchBService);
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleETransactionTypeLabels,

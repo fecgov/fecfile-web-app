@@ -1,9 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
-import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
@@ -13,6 +11,8 @@ import { TableActionsButtonComponent } from '../../shared/components/table-actio
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -30,7 +30,7 @@ import { LabelPipe } from '../../shared/pipes/label.pipe';
     LabelPipe,
   ],
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> {
+export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
@@ -65,9 +65,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   public override itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
 
-  constructor() {
-    super();
-
+  ngOnInit() {
     this.checkForDeletedContacts();
   }
 

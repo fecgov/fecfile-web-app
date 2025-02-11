@@ -6,20 +6,16 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
-import { F3xFormTypes, Form3X } from '../../shared/models/form-3x.model';
-import { Report, ReportTypes } from '../../shared/models/report.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UploadSubmission } from 'app/shared/models/upload-submission.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { ReportService } from 'app/shared/services/report.service';
-import { Form1M } from 'app/shared/models/form-1m.model';
-import { Form24 } from 'app/shared/models/form-24.model';
 import { of, Subject } from 'rxjs';
 import { Actions } from '@ngrx/effects';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Report, ReportTypes, UploadSubmission, Form3X, F3xFormTypes, Form24, Form1M } from 'app/shared/models';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;

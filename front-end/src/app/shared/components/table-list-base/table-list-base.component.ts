@@ -1,15 +1,15 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
+import { ListRestResponse } from 'app/shared/models';
 
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> extends DestroyerComponent implements OnInit, AfterViewInit {
+export abstract class TableListBaseComponent<T> extends DestroyerComponent implements AfterViewInit {
   readonly messageService = inject(MessageService);
   readonly confirmationService = inject(ConfirmationService);
   protected readonly elementRef = inject(ElementRef);
@@ -19,21 +19,16 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   rowsPerPage = 10;
   totalItems = 0;
   pagerState: TableLazyLoadEvent | undefined;
-  loading = false;
+  loading = true;
   selectAll = false;
   selectedItems: T[] = [];
   detailVisible = false;
   isNewItem = true;
-  protected itemService!: TableListService<T>;
+  itemService!: TableListService<T>;
 
   protected caption?: string;
 
   @Output() readonly reloadTables = new EventEmitter();
-
-  ngOnInit() {
-    this.loading = true;
-    this.loadItemService(this.itemService);
-  }
 
   ngAfterViewInit(): void {
     // Fix accessibility issues in paginator buttons.
@@ -186,12 +181,12 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
   }
 
-  public async refreshTable(allTables = false) {
-    if (allTables) {
-      this.reloadTables.emit();
-    } else {
-      await this.loadTableItems({} as TableLazyLoadEvent);
-    }
+  public refreshAllTables() {
+    this.reloadTables.emit();
+  }
+
+  public refreshTable() {
+    return this.loadTableItems({} as TableLazyLoadEvent);
   }
 
   /**
@@ -216,14 +211,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    * Returns and empty instance of the class model being displayed in the table.
    */
   protected abstract getEmptyItem(): T;
-
-  /**
-   * Makes the data service available to the component. Used for getting data from backend.
-   * @param {TableListService<T>} itemService
-   */
-  protected loadItemService(itemService: TableListService<T>) {
-    this.itemService = itemService;
-  }
 }
 
 export class TableAction {

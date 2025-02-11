@@ -1,15 +1,16 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Feedback } from 'app/shared/models/feedback.model';
+import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { Popover, PopoverModule } from 'primeng/popover';
-import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
-import { SingleClickDirective } from '../../shared/directives/single-click.directive';
 import { ButtonDirective } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 
 enum SubmissionStates {
   DRAFT,
@@ -30,7 +31,7 @@ enum SubmissionStates {
     PopoverModule,
   ],
 })
-export class FeedbackOverlayComponent {
+export class FeedbackOverlayComponent extends FormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
   public readonly feedbackService = inject(FeedbackService);
@@ -44,7 +45,6 @@ export class FeedbackOverlayComponent {
     },
     { updateOn: 'blur' },
   );
-  formSubmitted = false;
   SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;
 

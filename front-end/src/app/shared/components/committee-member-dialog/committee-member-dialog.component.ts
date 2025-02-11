@@ -10,17 +10,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService } from 'primeng/api';
-import { DestroyerComponent } from '../app-destroyer.component';
+import { FormComponent } from '../app-destroyer.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { Select } from 'primeng/select';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+import { Roles, CommitteeMember } from 'app/shared/models';
 
 @Component({
   selector: 'app-committee-member-dialog',
@@ -28,28 +28,26 @@ import { Ripple } from 'primeng/ripple';
   styleUrls: ['./committee-member-dialog.component.scss'],
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select, ButtonDirective, Ripple],
 })
-export class CommitteeMemberDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit {
+export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges, AfterViewInit {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly committeeMemberService = inject(CommitteeMemberService);
   protected readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
 
-  @Input() detailVisible = false;
-  @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() readonly saveMembership: EventEmitter<{ email: string; role: typeof CommitteeMemberRoles }> =
-    new EventEmitter<{
-      email: string;
-      role: typeof CommitteeMemberRoles;
-    }>();
-  @Output() readonly detailClose = new EventEmitter<undefined>();
-
-  readonly roleOptions = Object.keys(CommitteeMemberRoles).map((key) => {
+  protected readonly roleOptions = Object.keys(Roles).map((key) => {
     return {
-      label: CommitteeMemberRoles[key as keyof typeof CommitteeMemberRoles],
+      label: Roles[key as keyof typeof Roles],
       value: key,
     };
   });
 
-  form: FormGroup = new FormGroup(
+  @Input() detailVisible = false;
+  @Input() member?: CommitteeMember = undefined;
+  @Output() readonly detailVisibleChange = new EventEmitter<boolean>();
+  @Output() readonly userAdded = new EventEmitter<string>();
+  @Output() readonly roleEdited = new EventEmitter<undefined>();
+  @Output() readonly detailClose = new EventEmitter<undefined>();
+
+  readonly form: FormGroup = new FormGroup(
     {
       role: new SubscriptionFormControl(),
       email: new SubscriptionFormControl('', {
@@ -60,7 +58,6 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
     },
     { updateOn: 'blur' },
   );
-  formSubmitted = false;
 
   @ViewChild('dialog') dialog?: ElementRef;
 
@@ -70,9 +67,7 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
 
   ngOnChanges(): void {
     if (this.detailVisible) {
-      this.form.reset();
-      this.form.get('role')?.setValue(this.roleOptions[0].value);
-      this.formSubmitted = false;
+      this.resetForm();
       this.dialog?.nativeElement.showModal();
     }
   }
@@ -81,17 +76,58 @@ export class CommitteeMemberDialogComponent extends DestroyerComponent implement
     this.form.get('role')?.setValue(roleOption);
   }
 
-  public async addUser() {
+  public submit() {
+    this.formSubmitted = true;
+    if (this.member) {
+      this.editRole();
+    } else {
+      this.addUser();
+    }
+  }
+
+  private resetForm() {
+    this.form.reset({ role: this.roleOptions[0].value, email: '' });
+    this.formSubmitted = false;
+  }
+
+  private async editRole() {
+    if (this.form.get('role')?.valid) {
+      const role = this.form.get('role')?.value;
+      if (this.form.get('role')?.valid) {
+        try {
+          await this.committeeMemberService.update({ ...this.member, role } as CommitteeMember);
+          this.dialog?.nativeElement.close();
+          this.roleEdited.emit();
+          this.resetForm();
+        } catch (error) {
+          console.error('Error updating member', error);
+        }
+      }
+    }
+  }
+
+  private async addUser() {
     const email = this.form.get('email')?.value as string;
     const role = this.form.get('role')?.value;
-
     this.form.updateValueAndValidity();
-    if (this.form.valid) {
-      this.saveMembership.emit({
-        email,
-        role,
-      });
-      this.dialog?.nativeElement.close();
+    Object.values(this.form.controls).forEach((control) => {
+      control.markAsDirty();
+    });
+
+    if (this.form.valid && email) {
+      try {
+        const newUser = await this.committeeMemberService.addMember(email, role);
+        this.dialog?.nativeElement.close();
+        this.userAdded.emit(newUser.email);
+        this.resetForm();
+      } catch (error) {
+        console.error('Error adding member', error);
+      }
     }
+  }
+
+  get role(): string {
+    if (!this.member) return '';
+    return Roles[this.member.role as keyof typeof Roles];
   }
 }

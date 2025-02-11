@@ -26,7 +26,7 @@ import { MemoCodePipe } from '../transaction-list.component';
   ],
 })
 export class TransactionReceiptsComponent extends TransactionListTableBaseComponent implements OnInit {
-  protected override readonly itemService = inject(TransactionSchAService);
+  override readonly itemService = inject(TransactionSchAService);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.';

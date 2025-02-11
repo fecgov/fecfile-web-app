@@ -4,9 +4,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
 import { CommitteeMemberService } from './committee-member.service';
-import { ListRestResponse } from '../models/rest-api.model';
-import { CommitteeMember } from '../models/committee-member.model';
 import { provideHttpClient } from '@angular/common/http';
+import { ListRestResponse, CommitteeMember } from '../models';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;

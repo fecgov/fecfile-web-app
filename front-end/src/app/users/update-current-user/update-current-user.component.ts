@@ -2,19 +2,19 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { takeUntil } from 'rxjs';
-import { UserLoginData } from '../../shared/models/user.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Card } from 'primeng/card';
-import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
-import { SingleClickDirective } from '../../shared/directives/single-click.directive';
+import { UserLoginData } from 'app/shared/models';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 
 @Component({
   selector: 'app-update-current-user',
@@ -22,14 +22,13 @@ import { SingleClickDirective } from '../../shared/directives/single-click.direc
   styleUrls: ['./update-current-user.component.scss'],
   imports: [Card, ReactiveFormsModule, ErrorMessagesComponent, SingleClickDirective],
 })
-export class UpdateCurrentUserComponent extends DestroyerComponent implements OnInit {
+export class UpdateCurrentUserComponent extends FormComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
-  formSubmitted = false;
 
   ngOnInit(): void {
     this.store

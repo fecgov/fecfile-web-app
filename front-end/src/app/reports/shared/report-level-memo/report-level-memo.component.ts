@@ -2,9 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { MemoText } from 'app/shared/models/memo-text.model';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -12,13 +10,13 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
-import { Report } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
 import { TextareaModule } from 'primeng/textarea';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { Form3X, Report, MemoText } from 'app/shared/models';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -26,7 +24,7 @@ import { TextareaModule } from 'primeng/textarea';
   styleUrls: ['../../styles.scss'],
   imports: [ReactiveFormsModule, ErrorMessagesComponent, ButtonDirective, Ripple, SingleClickDirective, TextareaModule],
 })
-export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
+export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   private readonly store = inject(Store);
   protected readonly fb = inject(FormBuilder);
   public readonly router = inject(Router);
@@ -45,7 +43,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   assignedMemoText: MemoText = new MemoText();
 
-  formSubmitted = false;
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
 
   ngOnInit(): void {

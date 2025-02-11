@@ -7,14 +7,13 @@ import { Confirmation, ConfirmationService, MessageService, SharedModule } from 
 import { of } from 'rxjs';
 import { SubmitReportStep2Component } from './submit-report-step2.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
-import { Report } from 'app/shared/models/report.model';
+import { Form3X, Report } from 'app/shared/models';
 
 describe('SubmitReportStep2Component', () => {
   let component: SubmitReportStep2Component;

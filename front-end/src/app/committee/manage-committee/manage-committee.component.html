@@ -20,32 +20,42 @@
         <h1 class="m-0">Manage users</h1>
       </ng-template>
       <ng-template #end>
-        <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
+        @if (isCommitteeAdmin()) {
+          <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
+        }
       </ng-template>
     </p-toolbar>
   </ng-template>
   <ng-template #header>
-    <th id="buttons" role="columnheader">Actions</th>
+    @if (isCommitteeAdmin()) {
+      <th id="buttons" role="columnheader">Actions</th>
+    }
   </ng-template>
   <ng-template let-item #body>
     <td>{{ item.name }}</td>
     <td>{{ item.email }}</td>
-    <td>{{ item.getRoleLabel() }}</td>
+    <td>{{ getRoleLabel(item.role) }}</td>
     <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-    <td>
-      <app-table-actions-button
-        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-        [actionItem]="item"
-        [tableActions]="rowActions"
-        buttonIcon="pi pi-ellipsis-v"
-        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-      ></app-table-actions-button>
-    </td>
+    @if (isCommitteeAdmin()) {
+      <td>
+        @if (isNotCurrentUser(item)) {
+          <app-table-actions-button
+            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+            [actionItem]="item"
+            [tableActions]="rowActions"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+          ></app-table-actions-button>
+        }
+      </td>
+    }
   </ng-template>
 </app-table>
 
 <app-committee-member-dialog
-  (detailClose)="detailVisible = false"
-  (saveMembership)="saveMembership($event)"
+  (detailClose)="detailClose()"
+  (userAdded)="userAdded($event)"
+  (roleEdited)="roleEdited()"
   [(detailVisible)]="detailVisible"
+  [member]="member"
 ></app-committee-member-dialog>

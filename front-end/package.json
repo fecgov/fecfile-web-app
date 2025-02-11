@@ -17,7 +17,7 @@
         "test": "npx --node-options='--max-old-space-size=4000' -y -p @angular/cli ng test",
         "e2e": "npx -y -p @angular/cli ng e2e",
         "json-server": "nodemon ./server/server.js",
-        "lint": "sh ./build-scripts/lint.sh",
+        "lint": "./node_modules/.bin/eslint 'src/**/*.ts' --max-warnings=0",
         "license-report": "./node_modules/.bin/license-checker",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",

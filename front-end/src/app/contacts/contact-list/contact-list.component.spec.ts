@@ -9,14 +9,14 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { Contact, ContactTypes } from '../../shared/models/contact.model';
-import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
-import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { ContactListComponent } from './contact-list.component';
 import { ActivatedRoute } from '@angular/router';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
+import { Contact, ContactTypes } from 'app/shared/models';
+import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;

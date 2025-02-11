@@ -8,7 +8,7 @@ import { CommitteeMemberDialogComponent } from './committee-member-dialog.compon
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { CommitteeMember } from 'app/shared/models';
 import { firstValueFrom, of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -50,7 +50,7 @@ describe('CommitteeMemberDialogComponent', () => {
   it('should add new users', () => {
     const newEmail = 'test_1234321@test.com';
     component.form.get('email')?.setValue(newEmail);
-    component.addUser();
+    component.submit();
     expect(component.detailVisible).toBeFalse();
   });
 
