@@ -96,11 +96,7 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    if (force) {
-      cy.get(alias).contains('button', name).click({ force: true });
-    } else {
-      cy.get(alias).contains('button', name).click();
-    }
+    cy.get(alias).contains('button', name).click({ force });
   }
 
   static dateToString(date: Date) {

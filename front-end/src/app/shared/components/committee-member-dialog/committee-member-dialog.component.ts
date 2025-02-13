@@ -85,12 +85,12 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     }
   }
 
-  private resetForm() {
+  resetForm() {
     this.form.reset({ role: this.roleOptions[0].value, email: '' });
     this.formSubmitted = false;
   }
 
-  private async editRole() {
+  async editRole() {
     if (this.form.get('role')?.valid) {
       const role = this.form.get('role')?.value;
       if (this.form.get('role')?.valid) {
@@ -106,7 +106,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     }
   }
 
-  private async addUser() {
+  async addUser() {
     const email = this.form.get('email')?.value as string;
     const role = this.form.get('role')?.value;
     this.form.updateValueAndValidity();

@@ -93,6 +93,38 @@ describe('ManageCommitteeComponent', () => {
     expect(component.isNewItem).toBe(false);
   });
 
+  it('should open edit mode and set member', () => {
+    component.openEdit(committeeMembers[0]);
+
+    expect(component.member).toEqual(committeeMembers[0]);
+    expect(component.detailVisible).toBeTrue();
+  });
+
+  it('should call loadTableItems, show success message, and close detail', () => {
+    spyOn(component, 'loadTableItems');
+    spyOn(component, 'detailClose');
+    const messageSpy = spyOn(component.messageService, 'add');
+
+    component.roleEdited();
+
+    expect(component.loadTableItems).toHaveBeenCalledWith({});
+    expect(messageSpy).toHaveBeenCalledWith({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Role Updated',
+    });
+    expect(component.detailClose).toHaveBeenCalled();
+  });
+
+  it('should close detail and clear member', () => {
+    component.member = committeeMembers[0];
+    component.detailVisible = true;
+    component.detailClose();
+
+    expect(component.detailVisible).toBeFalse();
+    expect(component.member).toBeUndefined();
+  });
+
   it("the Committee Member's names should be correct", () => {
     const name = `${committeeMembers[0].last_name}, ${committeeMembers[0].first_name}`;
     expect(name).toBe('Smith, John');
@@ -110,38 +142,36 @@ describe('ManageCommitteeComponent', () => {
     expect(confirmSpy).toHaveBeenCalled();
   });
 
-  describe('deleteItem', () => {
-    it('should delete member', fakeAsync(async () => {
-      const messageSpy = spyOn(component.messageService, 'add');
-      const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(async (member) => {
-        committeeMembers = committeeMembers.filter((m) => m.email !== member.email);
-        return null;
-      });
-      await component.deleteItem(committeeMembers[0]);
+  it('should delete member', fakeAsync(async () => {
+    const messageSpy = spyOn(component.messageService, 'add');
+    const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(async (member) => {
+      committeeMembers = committeeMembers.filter((m) => m.email !== member.email);
+      return null;
+    });
+    await component.deleteItem(committeeMembers[0]);
 
-      expect(deleteSpy).toHaveBeenCalledWith(johnSmith);
-      expect(messageSpy).toHaveBeenCalledWith({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Successfully removed user from committee',
-        life: 3000,
-      });
-    }));
+    expect(deleteSpy).toHaveBeenCalledWith(johnSmith);
+    expect(messageSpy).toHaveBeenCalledWith({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Successfully removed user from committee',
+      life: 3000,
+    });
+  }));
 
-    it('should show error on fail', fakeAsync(async () => {
-      const messageSpy = spyOn(component.messageService, 'add');
-      const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(() => {
-        throw new Error('Failed');
-      });
-      await component.deleteItem(committeeMembers[0]);
+  it('should show error on fail', fakeAsync(async () => {
+    const messageSpy = spyOn(component.messageService, 'add');
+    const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(() => {
+      throw new Error('Failed');
+    });
+    await component.deleteItem(committeeMembers[0]);
 
-      expect(deleteSpy).toHaveBeenCalledWith(johnSmith);
-      expect(messageSpy).toHaveBeenCalledWith({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error removing the user from the committee',
-        life: 3000,
-      });
-    }));
-  });
+    expect(deleteSpy).toHaveBeenCalledWith(johnSmith);
+    expect(messageSpy).toHaveBeenCalledWith({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'There was an error removing the user from the committee',
+      life: 3000,
+    });
+  }));
 });
