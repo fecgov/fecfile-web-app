@@ -5,11 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { Select } from 'primeng/select';
+import { FluidModule } from 'primeng/fluid';
 
 @Component({
   selector: 'app-address-input',
   templateUrl: './address-input.component.html',
-  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select],
+  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select, FluidModule],
 })
 export class AddressInputComponent extends BaseInputComponent implements OnInit {
   @Input() readonly = false;

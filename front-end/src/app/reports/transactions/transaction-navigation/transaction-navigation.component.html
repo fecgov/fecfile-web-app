@@ -6,11 +6,9 @@
   }
 }
 
-<div class="p-fluid">
-  <hr type="solid" />
-  <app-navigation-control-bar
-    [navigationControls]="getNavigationControls()"
-    [transaction]="transaction"
-    [class]="isEditable ? '' : 'flex-center'"
-  ></app-navigation-control-bar>
-</div>
+<hr type="solid" />
+<app-navigation-control-bar
+  [navigationControls]="getNavigationControls()"
+  [transaction]="transaction"
+  [class]="isEditable ? '' : 'flex-center'"
+></app-navigation-control-bar>

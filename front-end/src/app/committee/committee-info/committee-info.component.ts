@@ -10,12 +10,13 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { environment } from 'environments/environment';
 import { Select } from 'primeng/select';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-committee-info',
   templateUrl: './committee-info.component.html',
   styleUrls: ['./committee-info.component.scss'],
-  imports: [ReactiveFormsModule, Select, FecInternationalPhoneInputComponent],
+  imports: [ReactiveFormsModule, Select, FecInternationalPhoneInputComponent, ButtonModule],
 })
 export class CommitteeInfoComponent extends DestroyerComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);

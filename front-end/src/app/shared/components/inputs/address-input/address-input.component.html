@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="col-3">
-      <div class="field d-grid">
+      <div class="field">
         <label for="state">STATE/PROVINCE</label>
         <p-select
           inputId="state"
@@ -67,6 +67,7 @@
           appendTo="body"
           [readonly]="readonly"
           styleClass="{{ readonly ? 'readonly' : '' }}"
+          fluid
         ></p-select>
         <app-error-messages
           [form]="form"

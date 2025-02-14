@@ -4,7 +4,6 @@
     [style]="{ width: '90%' }"
     [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
-    styleClass="p-fluid"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
     (visibleChange)="closeDialog($event)"
@@ -151,7 +150,7 @@
         </div>
         <div class="grid">
           <div class="col-6">
-            <div class="field d-grid">
+            <div class="field">
               <label for="country">COUNTRY/REGION</label>
               <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
             </div>
@@ -191,7 +190,7 @@
             </div>
           </div>
           <div class="col-3">
-            <div class="field d-grid">
+            <div class="field">
               <label for="state">STATE/PROVINCE</label>
               <p-select
                 inputId="state"
