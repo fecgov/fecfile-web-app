@@ -69,7 +69,7 @@ describe('NavigationControlComponent', () => {
 
     it('should be dropdown', () => {
       const nativeElement = fixture.nativeElement;
-      const button = nativeElement.querySelector('[data-bs-toggle="dropdown"]');
+      const button = nativeElement.querySelector('.dd-button');
       expect(button).toBeTruthy();
     });
   });

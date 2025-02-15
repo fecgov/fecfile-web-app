@@ -1,5 +1,5 @@
 :host ::ng-deep .navigation-dropdown {
-  background-color: #f77b42;
+  background-color: var(--orange);
   flex-direction: row-reverse;
   padding: 0 16px;
 }
@@ -27,9 +27,9 @@
 }
 
 .dd-button {
-  color: #212121;
+  color: var(--p-content-color);
   font-weight: bold;
-  background-color: #f77b42;
+  background-color: var(--orange);
   padding: 0 16px;
   height: 3rem;
 }
@@ -48,7 +48,7 @@ button > span {
   text-transform: uppercase;
   font-weight: bolder;
   font-size: 1rem;
-  color: #212121;
+  color: var(--p-content-color);
 }
 
 .dropdown-menu {
@@ -62,5 +62,5 @@ button > span {
 }
 
 hr {
-  margin: 1rem;
+  margin: 1rem 0;
 }

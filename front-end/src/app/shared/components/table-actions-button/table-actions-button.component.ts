@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { TableAction } from '../table-list-base/table-list-base.component';
-import { Button, ButtonDirective } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+import { Popover, PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-table-actions-button',
   templateUrl: './table-actions-button.component.html',
   styleUrls: ['./table-actions-button.component.scss'],
-  imports: [Button, Ripple, ButtonDirective],
+  imports: [ButtonModule, Ripple, PopoverModule],
 })
 export class TableActionsButtonComponent {
+  @ViewChild(Popover) op!: Popover;
   @Input() tableActions: TableAction[] = [];
   @Input() actionItem: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   @Input() buttonIcon = '';
@@ -21,5 +23,10 @@ export class TableActionsButtonComponent {
 
   get filteredActions(): TableAction[] {
     return this.tableActions.filter((action) => !action.isAvailable || action.isAvailable(this.actionItem));
+  }
+
+  performAction(action: TableAction) {
+    this.tableActionClick.emit({ action, actionItem: this.actionItem });
+    this.op.hide();
   }
 }

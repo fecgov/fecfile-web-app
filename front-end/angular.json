@@ -33,17 +33,12 @@
                         "inlineStyleLanguage": "scss",
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": [
-                            "node_modules/bootstrap/dist/css/bootstrap.css",
                             "node_modules/primeflex/primeflex.css",
                             "src/assets/styles/Fonts.css",
                             "src/assets/styles/typography.css",
                             "src/assets/styles/_variables.scss",
                             "src/assets/styles/theme.css",
                             "src/styles.scss"
-                        ],
-                        "scripts": [
-                            "node_modules/@popperjs/core/dist/umd/popper.min.js",
-                            "node_modules/bootstrap/dist/js/bootstrap.js"
                         ]
                     },
                     "configurations": {

@@ -39,7 +39,7 @@
         @if (sortableHeaders) {
           @for (h of sortableHeaders; track h) {
             <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
-              <div class="d-flex justify-content-between">
+              <div class="flex justify-content-between">
                 <span>{{ h.label }}</span>
                 <p-sortIcon [field]="h.field"></p-sortIcon>
               </div>
@@ -61,7 +61,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-      <div class="d-flex justify-content-between">
+      <div class="flex justify-content-between">
         <div class="responsive-container left-container">
           <span class="paginator-text">Results per page:</span>
           <p-select

@@ -170,7 +170,7 @@
             <script crossorigin="anonymous" defer="defer" type="application/javascript" integrity="sha512-RpUdepNZwCrWdCk6PkEeC4lx8ySAsvy9rTmObQojBqCtjYOAwP3TpO051hjBDKop3Uk6BI9N07Jax5nJsdMiVQ==" src="https://github.githubassets.com/assets/sessions-46951d7a9359.js"></script>
 <header class="Header-old header-logged-out js-details-container Details position-relative f4 py-2" role="banner">
   <div class="container-xl d-lg-flex flex-items-center p-responsive">
-    <div class="d-flex flex-justify-between flex-items-center">
+    <div class="flex flex-justify-between flex-items-center">
       <a class="mr-4 color-fg-inherit" href="https://github.com/" aria-label="Homepage" data-ga-click="(Logged out) Header, go to homepage, icon:logo-wordmark">
         <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github">
     <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
@@ -182,7 +182,7 @@
 
         </div>
 
-      <div class="d-flex flex-items-center">
+      <div class="flex flex-items-center">
             <a href="/signup?ref_cta=Sign+up&amp;ref_loc=header+logged+out&amp;ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E%2Fblob%2Fshow&amp;source=header-repo"
               class="d-inline-block d-lg-none f5 no-underline border color-border-default rounded-2 px-2 py-1 mr-3 mr-sm-5 color-fg-inherit"
               data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;site header&quot;,&quot;repository_id&quot;:null,&quot;auth_type&quot;:&quot;SIGN_UP&quot;,&quot;originating_url&quot;:&quot;https://github.com/fecgov/fec-eregs/blob/develop/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="b1b8f27f2588502c66c79ff267ca342c67cb35735c1772dfc9c173b5cc6a297b"
@@ -198,7 +198,7 @@
     </div>
 
     <div class="HeaderMenu HeaderMenu--logged-out position-fixed top-0 right-0 bottom-0 height-fit position-lg-relative d-lg-flex flex-justify-between flex-items-center flex-auto">
-      <div class="d-flex d-lg-none flex-justify-end border-bottom color-bg-subtle p-3">
+      <div class="flex d-lg-none flex-justify-end border-bottom color-bg-subtle p-3">
         <button aria-label="Toggle navigation" aria-expanded="false" type="button" data-view-component="true" class="js-details-target btn-link">  <svg aria-hidden="true" height="24" viewBox="0 0 24 24" version="1.1" width="24" data-view-component="true" class="octicon octicon-x color-fg-muted">
     <path fill-rule="evenodd" d="M5.72 5.72a.75.75 0 011.06 0L12 10.94l5.22-5.22a.75.75 0 111.06 1.06L13.06 12l5.22 5.22a.75.75 0 11-1.06 1.06L12 13.06l-5.22 5.22a.75.75 0 01-1.06-1.06L10.94 12 5.72 6.78a.75.75 0 010-1.06z"></path>
 </svg>
@@ -424,7 +424,7 @@
 >
   <div class="position-relative">
     <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="js-site-search-form" role="search" aria-label="Site" data-scope-type="Repository" data-scope-id="47775597" data-scoped-search-url="/fecgov/fec-eregs/search" data-owner-scoped-search-url="/orgs/fecgov/search" data-unscoped-search-url="/search" data-turbo="false" action="/fecgov/fec-eregs/search" accept-charset="UTF-8" method="get">
-      <label class="form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+      <label class="form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative flex flex-justify-between flex-items-center">
         <input type="text"
           class="form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
           data-hotkey=s,/
@@ -454,8 +454,8 @@
 <ul class="d-none js-jump-to-suggestions-template-container">
   
 
-<li class="d-flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-suggestion" role="option">
-  <a tabindex="-1" class="no-underline d-flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="suggestion">
+<li class="flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-suggestion" role="option">
+  <a tabindex="-1" class="no-underline flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="suggestion">
     <div class="jump-to-octicon js-jump-to-octicon flex-shrink-0 mr-2 text-center d-none">
       <svg title="Repository" aria-label="Repository" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo js-jump-to-octicon-repo d-none flex-shrink-0">
     <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
@@ -493,7 +493,7 @@
 </ul>
 
 <ul class="d-none js-jump-to-no-results-template-container">
-  <li class="d-flex flex-justify-center flex-items-center f5 d-none js-jump-to-suggestion p-2">
+  <li class="flex flex-justify-center flex-items-center f5 d-none js-jump-to-suggestion p-2">
     <span class="color-fg-muted">No suggested jump to results</span>
   </li>
 </ul>
@@ -501,8 +501,8 @@
 <ul id="jump-to-results" role="listbox" class="p-0 m-0 js-navigation-container jump-to-suggestions-results-container js-jump-to-suggestions-results-container">
   
 
-<li class="d-flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-scoped-search d-none" role="option">
-  <a tabindex="-1" class="no-underline d-flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="scoped_search">
+<li class="flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-scoped-search d-none" role="option">
+  <a tabindex="-1" class="no-underline flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="scoped_search">
     <div class="jump-to-octicon js-jump-to-octicon flex-shrink-0 mr-2 text-center d-none">
       <svg title="Repository" aria-label="Repository" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo js-jump-to-octicon-repo d-none flex-shrink-0">
     <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
@@ -539,8 +539,8 @@
 
   
 
-<li class="d-flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-owner-scoped-search d-none" role="option">
-  <a tabindex="-1" class="no-underline d-flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="owner_scoped_search">
+<li class="flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-owner-scoped-search d-none" role="option">
+  <a tabindex="-1" class="no-underline flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="owner_scoped_search">
     <div class="jump-to-octicon js-jump-to-octicon flex-shrink-0 mr-2 text-center d-none">
       <svg title="Repository" aria-label="Repository" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo js-jump-to-octicon-repo d-none flex-shrink-0">
     <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
@@ -577,8 +577,8 @@
 
   
 
-<li class="d-flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-global-search d-none" role="option">
-  <a tabindex="-1" class="no-underline d-flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="global_search">
+<li class="flex flex-justify-start flex-items-center p-0 f5 navigation-item js-navigation-item js-jump-to-global-search d-none" role="option">
+  <a tabindex="-1" class="no-underline flex flex-auto flex-items-center jump-to-suggestions-path js-jump-to-suggestion-path js-navigation-open p-2" href="" data-item-type="global_search">
     <div class="jump-to-octicon js-jump-to-octicon flex-shrink-0 mr-2 text-center d-none">
       <svg title="Repository" aria-label="Repository" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo js-jump-to-octicon-repo d-none flex-shrink-0">
     <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
@@ -705,10 +705,10 @@
 
   <div id="repository-container-header" class="pt-3 hide-full-screen" style="background-color: var(--color-page-header-bg);" data-pjax-replace data-turbo-replace>
 
-      <div class="d-flex mb-3 px-3 px-md-4 px-lg-5">
+      <div class="flex mb-3 px-3 px-md-4 px-lg-5">
 
         <div class="flex-auto min-width-0 width-fit mr-3">
-            <div class=" d-flex flex-wrap flex-items-center wb-break-word f3 text-normal">
+            <div class=" flex flex-wrap flex-items-center wb-break-word f3 text-normal">
     <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo color-fg-muted mr-2">
     <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
 </svg>
@@ -748,7 +748,7 @@
   </li>
 
   <li>
-        <div data-view-component="true" class="BtnGroup d-flex">
+        <div data-view-component="true" class="BtnGroup flex">
       <a href="/login?return_to=%2Ffecgov%2Ffec-eregs" rel="nofollow" data-hydro-click="{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;star button&quot;,&quot;repository_id&quot;:47775597,&quot;auth_type&quot;:&quot;LOG_IN&quot;,&quot;originating_url&quot;:&quot;https://github.com/fecgov/fec-eregs/blob/develop/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="e414c73799e80d9827eac6f0f0f3868e8b3ace9795fe50c7faa64f5f4c14b482" aria-label="You must be signed in to star a repository" data-view-component="true" class="tooltipped tooltipped-s btn-sm btn BtnGroup-item">  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star v-align-text-bottom d-inline-block mr-2">
     <path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z"></path>
 </svg><span data-view-component="true" class="d-inline">
@@ -931,7 +931,7 @@
     
 <a class="d-none js-permalink-shortcut" data-hotkey="y" href="/fecgov/fec-eregs/blob/e3bc089e60836660662c90bef3a98c238826498f/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff">Permalink</a>
 
-<div class="d-flex flex-items-start flex-shrink-0 pb-3 flex-wrap flex-md-nowrap flex-justify-between flex-md-justify-start">
+<div class="flex flex-items-start flex-shrink-0 pb-3 flex-wrap flex-md-nowrap flex-justify-between flex-md-justify-start">
   
 <div class="position-relative">
   <details class="details-reset details-overlay mr-0 mb-0 " id="branch-select-menu">
@@ -956,7 +956,7 @@
     </header>
 
     <input-demux data-action="tab-container-change:input-demux#storeInput tab-container-changed:input-demux#updateInput">
-      <tab-container class="d-flex flex-column js-branches-tags-tabs" style="min-height: 0;">
+      <tab-container class="flex flex-column js-branches-tags-tabs" style="min-height: 0;">
         <div class="SelectMenu-filter">
           <input data-target="input-demux.source"
                  id="context-commitish-filter-field"
@@ -976,7 +976,7 @@
           <button class="SelectMenu-tab" type="button" role="tab">Tags</button>
         </div>
 
-        <div role="tabpanel" id="ref-list-branches" data-filter-placeholder="Filter branches/tags" tabindex="" class="d-flex flex-column flex-auto overflow-auto">
+        <div role="tabpanel" id="ref-list-branches" data-filter-placeholder="Filter branches/tags" tabindex="" class="flex flex-column flex-auto overflow-auto">
           <ref-selector
             type="branch"
             data-targets="input-demux.sinks"
@@ -1028,7 +1028,7 @@
 
         </div>
 
-        <div role="tabpanel" id="tags-menu" data-filter-placeholder="Find a tag" tabindex="" hidden class="d-flex flex-column flex-auto overflow-auto">
+        <div role="tabpanel" id="tags-menu" data-filter-placeholder="Find a tag" tabindex="" hidden class="flex flex-column flex-auto overflow-auto">
           <ref-selector
             type="tag"
             data-action="
@@ -1097,12 +1097,12 @@
 </summary>
   <div data-view-component="true">      <ul class="dropdown-menu dropdown-menu-sw">
         <li class="d-block d-md-none">
-          <a class="dropdown-item d-flex flex-items-baseline" data-hydro-click="{&quot;event_type&quot;:&quot;repository.click&quot;,&quot;payload&quot;:{&quot;target&quot;:&quot;FIND_FILE_BUTTON&quot;,&quot;repository_id&quot;:47775597,&quot;originating_url&quot;:&quot;https://github.com/fecgov/fec-eregs/blob/develop/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="a947f6d8c48a806b6ff2faae4721327535666ee6cd97f497060fa2c9bfbd3b1c" data-ga-click="Repository, find file, location:repo overview" data-hotkey="t" data-pjax="true" href="/fecgov/fec-eregs/find/develop">
+          <a class="dropdown-item flex flex-items-baseline" data-hydro-click="{&quot;event_type&quot;:&quot;repository.click&quot;,&quot;payload&quot;:{&quot;target&quot;:&quot;FIND_FILE_BUTTON&quot;,&quot;repository_id&quot;:47775597,&quot;originating_url&quot;:&quot;https://github.com/fecgov/fec-eregs/blob/develop/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff&quot;,&quot;user_id&quot;:null}}" data-hydro-click-hmac="a947f6d8c48a806b6ff2faae4721327535666ee6cd97f497060fa2c9bfbd3b1c" data-ga-click="Repository, find file, location:repo overview" data-hotkey="t" data-pjax="true" href="/fecgov/fec-eregs/find/develop">
             <span class="flex-auto">Go to file</span>
             <span class="text-small color-fg-muted" aria-hidden="true">T</span>
 </a>        </li>
         <li data-toggle-for="blob-more-options-details">
-          <button data-toggle-for="jumpto-line-details-dialog" type="button" data-view-component="true" class="dropdown-item btn-link">  <span class="d-flex flex-items-baseline">
+          <button data-toggle-for="jumpto-line-details-dialog" type="button" data-view-component="true" class="dropdown-item btn-link">  <span class="flex flex-items-baseline">
               <span class="flex-auto">Go to line</span>
               <span class="text-small color-fg-muted" aria-hidden="true">L</span>
             </span>
@@ -1118,7 +1118,7 @@
         <li>
           <clipboard-copy data-toggle-for="blob-more-options-details" aria-label="Copy permalink" value="https://github.com/fecgov/fec-eregs/blob/e3bc089e60836660662c90bef3a98c238826498f/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff" data-view-component="true" class="dropdown-item cursor-pointer">
     
-            <span class="d-flex flex-items-baseline">
+            <span class="flex flex-items-baseline">
               <span class="flex-auto">Copy permalink</span>
             </span>
 
@@ -1147,14 +1147,14 @@
 
     <include-fragment src="/fecgov/fec-eregs/spoofed_commit_check/e3bc089e60836660662c90bef3a98c238826498f" data-test-selector="spoofed-commit-check"></include-fragment>
 
-    <div class="Box d-flex flex-column flex-shrink-0 mb-3">
+    <div class="Box flex flex-column flex-shrink-0 mb-3">
   <include-fragment src="/fecgov/fec-eregs/contributors/develop/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff" class="commit-loader">
-    <div class="Box-header d-flex flex-items-center">
+    <div class="Box-header flex flex-items-center">
       <div class="Skeleton avatar avatar-user flex-shrink-0 ml-n1 mr-n1 mt-n1 mb-n1" style="width:24px;height:24px;"></div>
       <div class="Skeleton Skeleton--text col-5 ml-2">&nbsp;</div>
     </div>
 
-    <div class="Box-body d-flex flex-items-center" >
+    <div class="Box-body flex flex-items-center" >
       <div class="Skeleton Skeleton--text col-1">&nbsp;</div>
       <span class="color-fg-danger h6 loader-error">Cannot retrieve contributors at this time</span>
     </div>
@@ -1170,7 +1170,7 @@
     <div data-target="readme-toc.content" class="Box mt-3 position-relative">
       
   <div
-    class="Box-header js-blob-header py-2 pr-2 d-flex flex-shrink-0 flex-md-row flex-items-center"
+    class="Box-header js-blob-header py-2 pr-2 flex flex-shrink-0 flex-md-row flex-items-center"
     
   >
 
@@ -1182,7 +1182,7 @@
     33.1 KB
   </div>
 
-  <div class="d-flex py-1 py-md-0 flex-auto flex-order-1 flex-md-order-2 flex-sm-grow-0 flex-justify-between hide-sm hide-md">
+  <div class="flex py-1 py-md-0 flex-auto flex-order-1 flex-md-order-2 flex-sm-grow-0 flex-justify-between hide-sm hide-md">
       
 
     <div class="BtnGroup">
@@ -1190,7 +1190,7 @@
   
 </a>    </div>
 
-    <div class="d-flex">
+    <div class="flex">
           <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="inline-form" data-turbo="false" action="/fecgov/fec-eregs/delete/develop/fec_eregs/static/fec_eregs/fonts/gandhiserif-bold.woff" accept-charset="UTF-8" method="post"><input type="hidden" data-csrf="true" name="authenticity_token" value="39WBrUppw09FgPG4T5SIlefmH+WB2uxpoWhVaV+q8jmwcpEY2of+HbKogmP8FRVY6w1SHL1/Zg4ZyYNEodRiOA==" />
             <button class="btn-octicon btn-octicon-danger tooltipped tooltipped-nw" type="submit"
               aria-label="You must be signed in to make or propose changes" data-disable-with>
@@ -1201,7 +1201,7 @@
 </form>    </div>
   </div>
 
-    <div class="d-flex hide-lg hide-xl flex-order-2 flex-grow-0">
+    <div class="flex hide-lg hide-xl flex-order-2 flex-grow-0">
       <details class="dropdown details-reset details-overlay d-inline-block">
         <summary
           class="js-blob-dropdown-click btn-octicon"
@@ -1251,8 +1251,8 @@
 
   <details class="details-reset details-overlay details-overlay-dark" id="jumpto-line-details-dialog">
     <summary data-hotkey="l" aria-label="Jump to line"></summary>
-    <details-dialog class="Box Box--overlay d-flex flex-column anim-fade-in fast linejump" aria-label="Jump to line">
-      <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="js-jump-to-line-form Box-body d-flex" data-turbo="false" action="" accept-charset="UTF-8" method="get">
+    <details-dialog class="Box Box--overlay flex flex-column anim-fade-in fast linejump" aria-label="Jump to line">
+      <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="js-jump-to-line-form Box-body flex" data-turbo="false" action="" accept-charset="UTF-8" method="get">
         <input class="form-control flex-auto mr-3 linejump-input js-jump-to-line-field" type="text" placeholder="Jump to line&hellip;" aria-label="Jump to line" autofocus>
         <button data-close-dialog="" type="submit" data-view-component="true" class="btn">  Go
   
@@ -1279,9 +1279,9 @@
           <footer class="footer width-full container-xl p-responsive">
   <h2 class='sr-only'>Footer</h2>
 
-  <div class="position-relative d-flex flex-items-center pb-2 f6 color-fg-muted border-top color-border-muted flex-column-reverse flex-lg-row flex-wrap flex-lg-nowrap mt-6 pt-6">
-    <div class="list-style-none d-flex flex-wrap col-0 col-lg-2 flex-justify-start flex-lg-justify-between mb-2 mb-lg-0">
-      <div class="mt-2 mt-lg-0 d-flex flex-items-center">
+  <div class="position-relative flex flex-items-center pb-2 f6 color-fg-muted border-top color-border-muted flex-column-reverse flex-lg-row flex-wrap flex-lg-nowrap mt-6 pt-6">
+    <div class="list-style-none flex flex-wrap col-0 col-lg-2 flex-justify-start flex-lg-justify-between mb-2 mb-lg-0">
+      <div class="mt-2 mt-lg-0 flex flex-items-center">
         <a aria-label="Homepage" title="GitHub" class="footer-octicon mr-2" href="https://github.com">
           <svg aria-hidden="true" height="24" viewBox="0 0 16 16" version="1.1" width="24" data-view-component="true" class="octicon octicon-mark-github">
     <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
@@ -1294,7 +1294,7 @@
 
     <nav aria-label='footer' class="col-12 col-lg-8">
       <h3 class='sr-only' id='sr-footer-heading'>Footer navigation</h3>
-      <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0" aria-labelledby='sr-footer-heading'>
+      <ul class="list-style-none flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0" aria-labelledby='sr-footer-heading'>
           <li class="mr-3 mr-lg-0"><a href="https://docs.github.com/en/github/site-policy/github-terms-of-service" data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to terms&quot;,&quot;label&quot;:&quot;text:terms&quot;}">Terms</a></li>
           <li class="mr-3 mr-lg-0"><a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to privacy&quot;,&quot;label&quot;:&quot;text:privacy&quot;}">Privacy</a></li>
           <li class="mr-3 mr-lg-0"><a data-analytics-event="{&quot;category&quot;:&quot;Footer&quot;,&quot;action&quot;:&quot;go to security&quot;,&quot;label&quot;:&quot;text:security&quot;}" href="https://github.com/security">Security</a></li>
@@ -1310,7 +1310,7 @@
     </nav>
   </div>
 
-  <div class="d-flex flex-justify-center pb-6">
+  <div class="flex flex-justify-center pb-6">
     <span class="f6 color-fg-muted"></span>
   </div>
 </footer>
@@ -1341,7 +1341,7 @@
     <template id="site-details-dialog">
   <details class="details-reset details-overlay details-overlay-dark lh-default color-fg-default hx_rsm" open>
     <summary role="button" aria-label="Close dialog"></summary>
-    <details-dialog class="Box Box--overlay d-flex flex-column anim-fade-in fast hx_rsm-dialog hx_rsm-modal">
+    <details-dialog class="Box Box--overlay flex flex-column anim-fade-in fast hx_rsm-dialog hx_rsm-modal">
       <button class="Box-btn-octicon m-0 btn-octicon position-absolute right-0 top-0" type="button" aria-label="Close dialog" data-close-dialog>
         <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
     <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>

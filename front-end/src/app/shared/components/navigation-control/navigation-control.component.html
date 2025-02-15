@@ -1,61 +1,64 @@
 <div>
-  @if (controlType === 'button') {
-    <button
-      pButton
-      pRipple
-      [label]="navigationControl?.label || ''"
-      [icon]="navigationControl?.icon || ''"
-      [class]="navigationControl?.ngClass || ''"
-      (click)="clickButton()"
-      [disabled]="isDisabled()"
-      data-test="navigation-control-button"
-      appSingleClick
-    ></button>
-  } @else if (controlType === 'dropdown') {
-    <div class="dropdown">
+  @switch (controlType) {
+    @case ('button') {
       <button
-        data-test="navigation-control-dropdown"
+        pButton
+        pRipple
+        [label]="navigationControl?.label || ''"
+        [icon]="navigationControl?.icon || ''"
+        [class]="navigationControl?.ngClass || ''"
+        (click)="clickButton()"
         [disabled]="isDisabled()"
-        aria-expanded="false"
-        aria-haspopup="true"
-        class="btn dd-button"
-        data-bs-toggle="dropdown"
-        id="dropdownMenuLink"
-        role="button"
-      >
+        data-test="navigation-control-button"
+        appSingleClick
+      ></button>
+    }
+    @case ('dropdown') {
+      <button pButton pRipple class="dd-button" [disabled]="isDisabled()" (click)="op.toggle($event)">
         <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
       </button>
-      <div aria-labelledby="dropdownMenuLink" class="dropdown-menu">
-        @for (option of dropdownOptions; track option) {
-          @if (option.items) {
-            <span class="dropdown-header">{{ option.label }}</span>
-            <hr />
-            @for (childOption of option.items; track childOption) {
+      <p-popover #op>
+        <div class="p-3">
+          @for (option of dropdownOptions; track option) {
+            @if (option.items) {
+              <span class="dropdown-header">{{ option.label }}</span>
+              <hr />
+
+              <ul>
+                @for (childOption of option.items; track childOption) {
+                  <li>
+                    <button
+                      [text]="true"
+                      pButton
+                      pRipple
+                      (click)="onDropdownChange(childOption)"
+                      (keyup.enter)="onDropdownChange(childOption)"
+                      (keyup.space)="onDropdownChange(childOption)"
+                      [disabled]="!childOption.value"
+                      class="w-full flex justify-content-start"
+                    >
+                      {{ childOption.label }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            } @else {
               <button
-                (click)="onDropdownChange(childOption)"
-                (keyup.enter)="onDropdownChange(childOption)"
-                (keyup.space)="onDropdownChange(childOption)"
-                [disabled]="!childOption.value"
-                class="dropdown-item"
-                data-test="navigation-control-dropdown-option"
+                [text]="true"
+                pButton
+                pRipple
+                (click)="onDropdownChange(option)"
+                (keyup.enter)="onDropdownChange(option)"
+                (keyup.space)="onDropdownChange(option)"
+                [disabled]="!option.value"
+                class="w-full flex justify-content-start"
               >
-                {{ childOption.label }}
+                {{ option.label }}
               </button>
             }
-          } @else {
-            <button
-              (click)="onDropdownChange(option)"
-              (keyup.enter)="onDropdownChange(option)"
-              (keyup.space)="onDropdownChange(option)"
-              [disabled]="!option.value"
-              class="dropdown-item"
-              data-test="navigation-control-dropdown-option"
-            >
-              {{ option.label }}
-            </button>
           }
-        }
-      </div>
-    </div>
+        </div>
+      </p-popover>
+    }
   }
 </div>

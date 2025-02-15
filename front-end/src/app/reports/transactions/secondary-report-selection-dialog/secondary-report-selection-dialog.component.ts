@@ -1,14 +1,5 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  inject,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/report.model';
@@ -18,18 +9,19 @@ import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { Ripple } from 'primeng/ripple';
+import { SelectModule } from 'primeng/select';
 import { Toast } from 'primeng/toast';
-import { LabelPipe as LabelPipe_1 } from '../../../shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',
   templateUrl: './secondary-report-selection-dialog.component.html',
   styleUrls: ['./secondary-report-selection-dialog.component.scss'],
-  imports: [ButtonDirective, Ripple, Toast, LabelPipe_1],
+  imports: [ButtonModule, Ripple, Toast, LabelPipe, SelectModule, DialogModule, FormsModule],
 })
-export class SecondaryReportSelectionDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit {
+export class SecondaryReportSelectionDialogComponent extends DestroyerComponent {
   public readonly router = inject(Router);
   private readonly reportService = inject(ReportService);
   private readonly transactionService = inject(TransactionService);
@@ -43,7 +35,6 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     return;
   };
   @Output() readonly dialogClose = new EventEmitter<undefined>();
-  @ViewChild('dialog') dialog?: ElementRef;
 
   reports: Report[] = [];
   reportLabels: LabelList = [];
@@ -52,16 +43,6 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
 
   selectedReport: Report | undefined;
   dropDownFieldText = 'Loading Reports...';
-
-  ngAfterViewInit() {
-    this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());
-  }
-
-  ngOnChanges(): void {
-    if (this.dialogVisible) {
-      this.dialog?.nativeElement.showModal();
-    }
-  }
 
   @Input() set reportType(reportType: ReportTypes | undefined) {
     this._reportType = reportType;
@@ -133,7 +114,7 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     if (this.selectedReport && this.transaction) {
       this.transactionService.addToReport(this.transaction, this.selectedReport).then((response) => {
         this.createEventMethod();
-        this.dialog?.nativeElement.close();
+        this.closeDialog();
         if (response.status === 200) {
           this.messageService.add({
             severity: 'success',
@@ -153,5 +134,9 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
         }
       });
     }
+  }
+
+  closeDialog() {
+    this.dialogClose.emit();
   }
 }
