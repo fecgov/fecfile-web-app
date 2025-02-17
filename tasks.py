@@ -51,6 +51,7 @@ DEPLOY_RULES = (
 )
 
 
+# new commit to trigger build
 def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
     os.chdir(os.path.join(orig_directory, "front-end"))
