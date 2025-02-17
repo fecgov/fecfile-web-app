@@ -221,15 +221,15 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|main/
-      - deploy-job: # Deploy job even when e2e tests fail
-          name: deploy-even-if-e2e-job-fails
-          requires:
-            - lint
-            - test
-            - dependency-check
-          filters:
-            branches:
-              only: /feature\/1972|release\/sprint-[\.\d]+|main/
+      # - deploy-job: # Deploy job even when e2e tests fail
+      #     name: deploy-even-if-e2e-job-fails
+      #     requires:
+      #       - lint
+      #       - test
+      #       - dependency-check
+      #     filters:
+      #       branches:
+      #         only: /feature\/1972|release\/sprint-[\.\d]+|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
