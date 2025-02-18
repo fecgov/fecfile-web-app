@@ -1,5 +1,4 @@
 import { FormGroup } from '@angular/forms';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
@@ -175,9 +174,8 @@ export class TransactionFormUtils {
     }
 
     const schema = transaction.transactionType?.schema;
-    const schemaName = TransactionFormUtils.schemaToKey(schema);
-    if (schema && schemaName) {
-      SchemaUtils.addJsonSchemaValidators(form, schema, schemaName, false, transaction);
+    if (schema) {
+      SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
       form.updateValueAndValidity();
     }
 
@@ -358,16 +356,5 @@ export class TransactionFormUtils {
     if (memo_text?.text4000) {
       form.patchValue({ text4000: memo_text.text4000 });
     }
-  }
-
-  static schemaToKey(schema: JsonSchema) {
-    if (schema) {
-      const mappingRegex = ".+/(.+).json$";
-      const retval = schema['$id'].match(mappingRegex);
-      if (retval) {
-        return retval[1];
-      }
-    }
-    return;
   }
 }

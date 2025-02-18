@@ -9,7 +9,6 @@ import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.m
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 import { MessageService } from 'primeng/api';
 
 @Component({
@@ -29,7 +28,6 @@ export class MainFormComponent extends MainFormBaseComponent {
     'message_text',
   ];
   schema = f99Schema;
-  schemaName = SchemaNames.F99;
   webprintURL = '/reports/f99/web-print/';
   templateMap = {
     street_1: 'street_1',

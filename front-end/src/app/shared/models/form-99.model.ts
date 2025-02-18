@@ -1,8 +1,7 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { Report, ReportTypes } from './report.model';
-import { BaseModel } from './base.model';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
+import { BaseModel } from './base.model';
+import { Report, ReportTypes } from './report.model';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -12,7 +11,6 @@ export type F99FormType = F99FormTypes.F99;
 
 export class Form99 extends Report {
   schema = f99Schema;
-  schemaName = SchemaNames.F99;
   report_type = ReportTypes.F99;
   form_type = F99FormTypes.F99;
   override submitAlertText =

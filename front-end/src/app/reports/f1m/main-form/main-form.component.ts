@@ -15,7 +15,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
@@ -96,7 +95,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
   schema = f1mSchema;
-  schemaName = SchemaNames.F1M;
   webprintURL = '/reports/f1m/web-print/';
   templateMap = {
     street_1: 'street_1',
@@ -191,13 +189,13 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     (this.form.get('statusBy') as SubscriptionFormControl)?.addSubscription(
       (value: 'affiliation' | 'qualification') => {
-        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, SchemaNames.F1M, true);
+        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
         if (value === 'affiliation') {
           this.enableValidation([this.affiliatedContact]);
           this.disableValidation(this.candidateContacts);
-          this.form.get('date_of_original_registration')?.clearValidators();
-          this.form.get('date_of_51st_contributor')?.clearValidators();
-          this.form.get('date_committee_met_requirements')?.clearValidators();
+          this.form.get('date_of_original_registration')?.clearAsyncValidators();
+          this.form.get('date_of_51st_contributor')?.clearAsyncValidators();
+          this.form.get('date_committee_met_requirements')?.clearAsyncValidators();
           this.form.get('date_of_original_registration')?.setValue(undefined);
           this.form.get('date_of_51st_contributor')?.setValue(undefined);
           this.form.get('date_committee_met_requirements')?.setValue(undefined);

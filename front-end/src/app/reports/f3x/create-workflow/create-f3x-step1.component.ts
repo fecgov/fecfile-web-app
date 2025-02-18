@@ -27,7 +27,6 @@ import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'a
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -137,7 +136,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       }
     });
 
-    SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, SchemaNames.F3X, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {

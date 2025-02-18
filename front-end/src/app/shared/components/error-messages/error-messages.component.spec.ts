@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/UNIT_TEST';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ErrorMessagesComponent } from './error-messages.component';
@@ -33,7 +32,7 @@ describe('ErrorMessagesComponent', () => {
     const formValidatorForm = fb.group(
       SchemaUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount']),
     );
-    SchemaUtils.addJsonSchemaValidators(formValidatorForm, schema, SchemaNames.UNIT_TEST, false);
+    SchemaUtils.addJsonSchemaValidators(formValidatorForm, schema, false);
     component.form = formValidatorForm;
     component.fieldName = 'in_between';
     component.ngOnInit();
@@ -64,7 +63,7 @@ describe('ErrorMessagesComponent', () => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(['exclusive_negative_amount']));
-    SchemaUtils.addJsonSchemaValidators(formValidatorForm, schema, SchemaNames.UNIT_TEST, false);
+    SchemaUtils.addJsonSchemaValidators(formValidatorForm, schema, false);
     component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
     component.ngOnInit();

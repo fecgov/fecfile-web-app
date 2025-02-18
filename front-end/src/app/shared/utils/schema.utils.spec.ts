@@ -1,7 +1,6 @@
 import { AsyncValidatorFn, FormBuilder, ValidationErrors } from '@angular/forms';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 import { SchemaUtils } from './schema.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
 
@@ -19,23 +18,23 @@ describe('ValidateUtils', () => {
     });
 
     let validator: AsyncValidatorFn = SchemaUtils.jsonSchemaValidator('telephone',
-      formValidatorForm, formValidatorSchema, SchemaNames.Contact_Candidate);
+      formValidatorForm, formValidatorSchema);
     let result: ValidationErrors | null = await validator(formValidatorForm.get('telephone') as SubscriptionFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
     }
 
-    validator = SchemaUtils.jsonSchemaValidator('candidate_state', 
-      formValidatorForm, formValidatorSchema, SchemaNames.Contact_Candidate);
+    validator = SchemaUtils.jsonSchemaValidator('candidate_state',
+      formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('candidate_state') as SubscriptionFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['required']).toBe(true);
     }
 
-    validator = SchemaUtils.jsonSchemaValidator('last_name', formValidatorForm, 
-      formValidatorSchema, SchemaNames.Contact_Candidate);
+    validator = SchemaUtils.jsonSchemaValidator('last_name', formValidatorForm,
+      formValidatorSchema);
     result = await validator(formValidatorForm.get('last_name') as SubscriptionFormControl);
     expect(result).toBe(null);
   });
@@ -52,7 +51,6 @@ describe('ValidateUtils', () => {
       'change_of_address',
       formValidatorForm,
       formValidatorSchema,
-      SchemaNames.F3X,
     );
     let result: ValidationErrors | null = await validator(
       formValidatorForm.get('change_of_address') as SubscriptionFormControl,
@@ -65,8 +63,8 @@ describe('ValidateUtils', () => {
     formValidatorForm.patchValue({
       change_of_address: true,
     });
-    validator = SchemaUtils.jsonSchemaValidator('change_of_address', 
-      formValidatorForm, formValidatorSchema, SchemaNames.F3X);
+    validator = SchemaUtils.jsonSchemaValidator('change_of_address',
+      formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('change_of_address') as SubscriptionFormControl);
     expect(result).toBe(null);
   });
@@ -83,7 +81,6 @@ describe('ValidateUtils', () => {
       'L6a_cash_on_hand_jan_1_ytd',
       formValidatorForm,
       formValidatorSchema,
-      SchemaNames.F3X,
     );
     let result: ValidationErrors | null = await validator(
       formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl,
@@ -96,8 +93,8 @@ describe('ValidateUtils', () => {
     formValidatorForm.patchValue({
       L6a_cash_on_hand_jan_1_ytd: -200.0,
     });
-    validator = SchemaUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd', 
-      formValidatorForm, formValidatorSchema, SchemaNames.F3X);
+    validator = SchemaUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd',
+      formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl);
     if (result) {
       expect(result['min'].min).toBe(0);

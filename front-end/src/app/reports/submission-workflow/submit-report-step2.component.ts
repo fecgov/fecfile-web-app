@@ -64,7 +64,7 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
       this.report = activeReport;
       this.committeeAccount = committeeAccount;
-      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, this.report.schemaName, false);
+      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
       this.initializeFormWithReport(this.report, committeeAccount);
     });
 

@@ -1,8 +1,7 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { Report, ReportStatus, ReportTypes } from './report.model';
-import { BaseModel } from './base.model';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
+import { BaseModel } from './base.model';
+import { Report, ReportStatus, ReportTypes } from './report.model';
 
 export enum F24FormTypes {
   F24N = 'F24N',
@@ -13,7 +12,6 @@ export type F24FormType = F24FormTypes.F24N | F24FormTypes.F24A;
 
 export class Form24 extends Report {
   schema = f24Schema;
-  schemaName = SchemaNames.F24;
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
 

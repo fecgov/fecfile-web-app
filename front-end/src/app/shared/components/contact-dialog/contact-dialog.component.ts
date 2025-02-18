@@ -254,8 +254,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.get('type')?.setValue(contactType);
 
     const schema = ContactService.getSchemaByType(contactType);
-    const schemaName = ContactService.getSchemaNameByType(contactType);
-    SchemaUtils.addJsonSchemaValidators(this.form, schema, schemaName, true);
+    SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
     this.form.updateValueAndValidity();
     this.refreshFecIdValidator('candidate_id', this.contact.id, contactType === ContactTypes.CANDIDATE);
     this.refreshFecIdValidator('committee_id', this.contact.id, contactType === ContactTypes.COMMITTEE);

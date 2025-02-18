@@ -2,19 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { MessageService } from 'primeng/api';
-import { Observable, combineLatest, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ReportService } from 'app/shared/services/report.service';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { JsonSchema } from 'fecfile-validate';
+import { MessageService } from 'primeng/api';
+import { Observable, combineLatest, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
@@ -22,7 +21,6 @@ import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-na
 export abstract class MainFormBaseComponent extends DestroyerComponent implements OnInit {
   abstract formProperties: string[];
   abstract schema: JsonSchema;
-  abstract schemaName: SchemaNames;
   abstract getReportPayload(): Report;
   abstract webprintURL: string;
 
@@ -54,7 +52,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
       }
     });
 
-    SchemaUtils.addJsonSchemaValidators(this.form, this.schema, this.schemaName, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 
   setConstantFormValues(committeeAccount: CommitteeAccount) {

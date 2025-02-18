@@ -3,7 +3,6 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
-import { SchemaNames } from 'fecfile-validate/fecfile_validate_js/dist/schema-names-export';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -28,7 +27,6 @@ export class F3xCoverageDates {
 
 export class Form3X extends Report {
   schema = f3xSchema;
-  schemaName = SchemaNames.F3X;
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   override hasChangeOfAddress = true;
