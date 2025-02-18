@@ -75,18 +75,6 @@ describe('FormTypeDialogComponent', () => {
     });
   });
 
-  describe('dropdownButtonText', () => {
-    it('should return an empty span if there is no selected type', () => {
-      expect(component.dropdownButtonText).toEqual('<span></span>');
-    });
-    it('should return a correctly formatted string if there is a selected type', () => {
-      component.selectedType = FormTypes.F3X;
-      expect(component.dropdownButtonText).toEqual(
-        '<span class="option"><b>Form 3X:</b> Report of Receipts and Disbursements</span>',
-      );
-    });
-  });
-
   describe('updateSelected', () => {
     it('should set the selectedType to the provided type', () => {
       component.updateSelected(FormTypes.F3X);

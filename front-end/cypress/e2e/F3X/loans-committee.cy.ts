@@ -34,6 +34,15 @@ describe('Loans', () => {
     PageUtils.urlCheck('/list');
     cy.contains('Loan By Committee').should('exist');
     cy.contains('Loan Made').should('exist');
+    cy.contains('Loan Made')
+      .closest('tr')
+      .find('button')
+      .each(($button) => {
+        const innerHTML = $button.html();
+        if (innerHTML.includes('Delete')) {
+          throw new Error('A button contains "Delete", test failed.');
+        }
+      });
   });
 
   it('should test: Loan By Committee - Receive loan repayment', () => {

@@ -8,4 +8,8 @@ export class Loans {
   static ByCommittee() {
     PageUtils.clickLink('Loan By Committee');
   }
+
+  static Individual() {
+    PageUtils.clickLink('Loan Received from Individual');
+  }
 }
