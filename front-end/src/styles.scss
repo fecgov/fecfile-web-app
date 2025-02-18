@@ -471,3 +471,10 @@ table {
 .optional-text {
   color: #aeb0b5;
 }
+
+.top-border-footer {
+  display: flex;
+  width: 100%;
+  border-top: 1px solid var(--surface-hover);
+  padding: 1.25rem 1.5rem 0.5rem 1.5rem;
+}

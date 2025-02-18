@@ -70,7 +70,7 @@
     }
   </div>
   <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
-    <ng-template pTemplate="header">
+    <ng-template #header>
       <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
     </ng-template>
     <p id="out-of-date-dialog-text">
@@ -85,7 +85,6 @@
     <div class="grid">
       <div class="mx-auto">
         <button
-          type="button"
           pButton
           id="out-of-date-dialog-button"
           class="p-button"

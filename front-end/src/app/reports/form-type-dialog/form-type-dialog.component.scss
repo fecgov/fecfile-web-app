@@ -7,6 +7,7 @@ h1 {
   font-size: 36px;
   font-weight: bold;
   line-height: 36px;
+  padding: 0 1rem;
 }
 
 .field {
@@ -34,8 +35,6 @@ dialog {
 
 .dialog-body {
   padding: 64px 16px;
-  margin-left: 25px;
-  margin-right: 25px;
 }
 
 #type-label {
@@ -52,20 +51,8 @@ label,
   text-transform: uppercase;
 }
 
-.dropdown,
-.dropdown-toggle {
+.dropdown {
   width: 400px !important;
-}
-
-.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  border: 2px solid #aeb0b5;
-  font-size: 14px;
-  border-radius: 4px;
-  text-wrap-mode: wrap;
 }
 
 .option {
@@ -91,6 +78,7 @@ label,
 
 .modal-item-margin {
   margin-top: 32px;
+  width: fit-content;
 }
 
 .dropdown-menu {

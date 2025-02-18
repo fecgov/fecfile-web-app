@@ -18,7 +18,7 @@ import {
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
-import { ConfirmationService, PrimeTemplate } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
@@ -78,7 +78,6 @@ export class TransactionData {
   styleUrls: ['./contact-dialog.component.scss'],
   imports: [
     Dialog,
-    PrimeTemplate,
     ReactiveFormsModule,
     ContactLookupComponent,
     InputText,

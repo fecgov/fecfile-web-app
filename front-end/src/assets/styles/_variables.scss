@@ -37,8 +37,7 @@
   --fec-grey-background: var(--surface-c);
   --fec-grey-alt: #aeb0b5;
 
-  --bs-heading-color: var(--p-content-color);
-  --p-overlay-select-background: white;
+  --p-overlay-select-background: var(--p-content-background);
   --p-textarea-color: var(--p-content-color);
   --p-select-color: var(--p-content-color);
   --p-select-padding-x: 0;
@@ -86,8 +85,15 @@
   --p-accordion-header-hover-background: var(--p-accordion-header-background);
   --p-accordion-panel-border-color: var(--surface-border);
 
+  /* Dialog */
+  --p-dialog-header-padding: 1rem 1rem 1rem 1rem;
+  --p-dialog-content-padding: 1rem 2rem;
+  --p-dialog-footer-padding: 0 0 1rem 0;
+  --p-dialog-color: var(--p-content-color);
+  --p-confirmdialog-icon-color: var(--p-content-color);
+
   /* Autocomplete */
-  --p-autocomplete-dropdown-background: white;
+  --p-autocomplete-dropdown-background: var(--background);
   --p-autocomplete-dropdown-active-background: var(--p-autocomplete-dropdown-background);
   --p-autocomplete-dropdown-hover-background: var(--p-autocomplete-dropdown-background);
   --p-autocomplete-option-focus-background: var(--p-autocomplete-dropdown-background);
@@ -99,6 +105,10 @@
   /* Button */
   --p-button-padding-x: 1.25rem;
   --p-button-padding-y: 0.5rem;
+
+  /* Toggle Button */
+  --p-togglebutton-padding: 1rem 1.25rem;
+  --p-selectbutton-border-radius: 4px;
 
   /* Toast */
   --p-toast-transition-duration: 3000;
@@ -112,10 +122,6 @@
   --p-toast-success-border-color: #c3e6cb;
   --p-toast-success-color: #155724;
   --p-toast-success-detail-color: var(--p-toast-success-color);
-
-  --bs-body-line-height: 1rem;
-
-  --p-confirmdialog-icon-color: var(--p-content-color);
 
   --orange: #f77b42;
 

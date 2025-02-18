@@ -13,7 +13,6 @@ import { Tooltip } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { SelectButton } from 'primeng/selectbutton';
 import { Dialog } from 'primeng/dialog';
-import { PrimeTemplate } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 
@@ -27,7 +26,6 @@ import { FecDatePipe } from '../../../pipes/fec-date.pipe';
     ErrorMessagesComponent,
     SelectButton,
     Dialog,
-    PrimeTemplate,
     ButtonDirective,
     FecDatePipe,
     CheckboxModule,
