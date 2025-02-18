@@ -154,7 +154,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   xit('#save should not save with invalid f3x record', fakeAsync(async () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    spyOn(router, 'navigateByUrl');
     spyOn(form3XService, 'create').and.returnValue(of(f3x));
     component.form.patchValue({ ...f3x });
     component.form.patchValue({ form_type: 'NO-GOOD' });
