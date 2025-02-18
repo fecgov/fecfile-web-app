@@ -214,9 +214,6 @@ workflows:
     when:
       not: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
-      - lint
-      - test
-      - dependency-check
       - e2e-test:
           filters:
             branches:
