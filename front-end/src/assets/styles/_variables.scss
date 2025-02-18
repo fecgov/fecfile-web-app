@@ -85,6 +85,11 @@
   --p-accordion-header-hover-background: var(--p-accordion-header-background);
   --p-accordion-panel-border-color: var(--surface-border);
 
+  /* Font */
+  --karla: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --gandhi-bold: 'gandhi-bold', serif;
+  --gandhi-regular: gandhi-regular, serif;
+
   /* Dialog */
   --p-dialog-header-padding: 1rem 1rem 1rem 1rem;
   --p-dialog-content-padding: 1rem 2rem;
@@ -122,6 +127,11 @@
   --p-toast-success-border-color: #c3e6cb;
   --p-toast-success-color: #155724;
   --p-toast-success-detail-color: var(--p-toast-success-color);
+
+  /* Panel */
+  --p-panelmenu-panel-padding: 0 0.25rem;
+  --p-panelmenu-item-border-radius: 0;
+  --p-panelmenu-gap: 0;
 
   --orange: #f77b42;
 

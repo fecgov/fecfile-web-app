@@ -4,7 +4,7 @@
 
 /* Updates */
 .p-component {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-size: 1rem;
   font-weight: normal;
 }
@@ -32,7 +32,7 @@ label.p-disabled {
 }
 
 .p-error {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-size: 13px;
   font-weight: bold;
   color: #cd2026;
@@ -44,7 +44,7 @@ label.p-disabled {
 
 .p-link {
   font-size: 1rem;
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   border-radius: 4px;
 }
 .p-link:focus {
@@ -100,7 +100,7 @@ label.p-disabled {
   padding: 0.25rem 0;
 }
 .p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token input {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-size: 1rem;
   color: var(--p-content-color);
   padding: 0;
@@ -1563,7 +1563,7 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
   background-color: #ffffff;
   border: 3px solid var(--fec-grey-alt);
   font-weight: 400;
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
   font-size: 14px;
   color: var(--p-content-color);
   cursor: pointer;
@@ -1658,7 +1658,7 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   border: 3px solid var(--fec-grey-alt);
   color: var(--p-content-color);
   font-weight: 400;
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
   cursor: pointer;
   transition:
     background-color 0.15s,
@@ -6369,7 +6369,7 @@ sortalticon {
 }
 
 .p-autocomplete-option-group {
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
   font-size: 12px;
 }
 
@@ -6389,7 +6389,7 @@ mark {
   border-right: 0;
   border-radius: 0;
   color: #212121;
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
   font-size: 16px;
   width: 342px;
 }
@@ -6439,7 +6439,7 @@ mark {
 }
 
 input {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-size: 1rem;
   font-weight: normal;
   color: var(--p-content-color);
@@ -6491,6 +6491,34 @@ input {
   padding: 0;
 }
 
-.p-panelmenu-item-link {
+.p-panelmenu-item-link,
+.p-panelmenu-header-label {
   color: var(--p-primary-contrast-color);
+}
+
+.p-panelmenu-header-label {
+  font-weight: 700;
+}
+.p-panelmenu-item-link.p-panelmenu-item-link-active {
+  font-size: 0.9em;
+  font-weight: bolder;
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: none;
+  text-transform: uppercase;
+}
+
+.p-panelmenu-header-link > chevrondownicon,
+.p-panelmenu-header-link > chevronrighticon {
+  display: none;
+}
+
+.p-panelmenu-header-link {
+  height: 48px;
+  padding: 0 0 0 20px;
+  align-content: center;
+}
+
+.p-panelmenu-item-link {
+  padding: 12px 16px 12px 16px;
 }

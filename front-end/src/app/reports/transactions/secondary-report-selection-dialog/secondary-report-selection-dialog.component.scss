@@ -39,7 +39,7 @@ dialog {
 
 .dialog-text {
   margin-bottom: 16px;
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   color: #212121;
 }
 
@@ -48,7 +48,7 @@ dialog {
 }
 
 label {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-weight: bold;
   font-size: 14px;
   color: #212121;

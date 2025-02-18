@@ -5,7 +5,7 @@
   <div class="dialog-body">
     <div class="dropdown">
       <span id="type-label">FORM TYPE</span>
-      <p-select [options]="formTypeOptions" [(ngModel)]="selectedType" class="w-full" appendTo="body">
+      <p-select [options]="formTypeOptions" [(ngModel)]="selectedType" class="w-full" appendTo="body" id="typeDropdown">
         <ng-template #dropdownicon>
           <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="8px" width="8px" />
         </ng-template>
@@ -15,7 +15,12 @@
           </span>
         </ng-template>
         <ng-template let-type #item>
-          <span class="option" (click)="updateSelected(type)">
+          <span
+            class="option"
+            (click)="updateSelected(type)"
+            (keydown.enter)="updateSelected(type)"
+            [attr.data-cy]="type"
+          >
             <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}
           </span>
         </ng-template>
