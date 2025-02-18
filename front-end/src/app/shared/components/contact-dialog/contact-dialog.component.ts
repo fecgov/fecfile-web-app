@@ -146,9 +146,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
       event = this.pagerState
         ? this.pagerState
         : {
-          first: 0,
-          rows: this.rowsPerPage,
-        };
+            first: 0,
+            rows: this.rowsPerPage,
+          };
     }
 
     // Calculate the record page number to retrieve from the API.

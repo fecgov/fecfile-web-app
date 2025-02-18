@@ -26,7 +26,7 @@ import { ApiService, QueryParams } from './api.service';
   providedIn: 'root',
 })
 export class ContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   /**
    * Given the type of contact given, return the appropriate JSON schema doc
@@ -204,7 +204,7 @@ export class ContactService implements TableListService<Contact> {
   providedIn: 'root',
 })
 export class DeletedContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
     if (!ordering) {

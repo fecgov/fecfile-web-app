@@ -17,24 +17,27 @@ describe('ValidateUtils', () => {
       last_name: 'Valid Name',
     });
 
-    let validator: AsyncValidatorFn = SchemaUtils.jsonSchemaValidator('telephone',
-      formValidatorForm, formValidatorSchema);
-    let result: ValidationErrors | null = await validator(formValidatorForm.get('telephone') as SubscriptionFormControl);
+    let validator: AsyncValidatorFn = SchemaUtils.jsonSchemaValidator(
+      'telephone',
+      formValidatorForm,
+      formValidatorSchema,
+    );
+    let result: ValidationErrors | null = await validator(
+      formValidatorForm.get('telephone') as SubscriptionFormControl,
+    );
     expect(result).not.toBe(null);
     if (result) {
       expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
     }
 
-    validator = SchemaUtils.jsonSchemaValidator('candidate_state',
-      formValidatorForm, formValidatorSchema);
+    validator = SchemaUtils.jsonSchemaValidator('candidate_state', formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('candidate_state') as SubscriptionFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['required']).toBe(true);
     }
 
-    validator = SchemaUtils.jsonSchemaValidator('last_name', formValidatorForm,
-      formValidatorSchema);
+    validator = SchemaUtils.jsonSchemaValidator('last_name', formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('last_name') as SubscriptionFormControl);
     expect(result).toBe(null);
   });
@@ -63,8 +66,7 @@ describe('ValidateUtils', () => {
     formValidatorForm.patchValue({
       change_of_address: true,
     });
-    validator = SchemaUtils.jsonSchemaValidator('change_of_address',
-      formValidatorForm, formValidatorSchema);
+    validator = SchemaUtils.jsonSchemaValidator('change_of_address', formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('change_of_address') as SubscriptionFormControl);
     expect(result).toBe(null);
   });
@@ -93,8 +95,7 @@ describe('ValidateUtils', () => {
     formValidatorForm.patchValue({
       L6a_cash_on_hand_jan_1_ytd: -200.0,
     });
-    validator = SchemaUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd',
-      formValidatorForm, formValidatorSchema);
+    validator = SchemaUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd', formValidatorForm, formValidatorSchema);
     result = await validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl);
     if (result) {
       expect(result['min'].min).toBe(0);
