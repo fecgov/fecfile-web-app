@@ -48,6 +48,7 @@ DEPLOY_RULES = (
     ("test", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
     ("dev", lambda _, branch: branch == "develop"),
+    ("prod", lambda _, branch: branch == "main-prod-deploy"),
 )
 
 
