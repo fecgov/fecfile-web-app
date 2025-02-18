@@ -193,9 +193,9 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
         if (value === 'affiliation') {
           this.enableValidation([this.affiliatedContact]);
           this.disableValidation(this.candidateContacts);
-          this.form.get('date_of_original_registration')?.clearAsyncValidators();
-          this.form.get('date_of_51st_contributor')?.clearAsyncValidators();
-          this.form.get('date_committee_met_requirements')?.clearAsyncValidators();
+          this.form.get('date_of_original_registration')?.clearValidators();
+          this.form.get('date_of_51st_contributor')?.clearValidators();
+          this.form.get('date_committee_met_requirements')?.clearValidators();
           this.form.get('date_of_original_registration')?.setValue(undefined);
           this.form.get('date_of_51st_contributor')?.setValue(undefined);
           this.form.get('date_committee_met_requirements')?.setValue(undefined);
