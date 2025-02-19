@@ -28,7 +28,7 @@ import { Ripple } from 'primeng/ripple';
 @Component({
   selector: 'app-submit-report-step2',
   templateUrl: './submit-report-step2.component.html',
-  styleUrls: ['./submit-report-step2.component.scss'],
+  styleUrls: ['../styles.scss', './submit-report-step2.component.scss'],
   imports: [
     Card,
     ReactiveFormsModule,

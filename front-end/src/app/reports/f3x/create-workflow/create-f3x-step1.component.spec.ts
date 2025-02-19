@@ -1,26 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../../../shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
-import { ReportService } from '../../../shared/services/report.service';
-import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { firstValueFrom, of } from 'rxjs';
-import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
-import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
+import { ListRestResponse } from '../../../shared/models/rest-api.model';
+import { ReportService } from '../../../shared/services/report.service';
+import { testMockStore } from '../../../shared/utils/unit-test.utils';
+import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -64,6 +64,10 @@ describe('CreateF3XStep1Component', () => {
     'JULY 15 QUARTERLY REPORT (Q2)',
   );
 
+  beforeAll(async () => {
+    await import(`fecfile-validate/fecfile_validate_js/dist/F3X.validator`);
+  });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SelectButtonModule, RadioButtonModule, DatePickerModule, ReactiveFormsModule, CreateF3XStep1Component],
@@ -86,6 +90,7 @@ describe('CreateF3XStep1Component', () => {
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
+    component.ngOnInit();
 
     fixture.detectChanges();
   });
@@ -152,9 +157,14 @@ describe('CreateF3XStep1Component', () => {
     spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
     component.form.patchValue({ ...f3x });
     component.form.patchValue({ form_type: 'NO-GOOD' });
+    component.form.updateValueAndValidity();
+    flush();
+    tick(1000);
     component.save();
+    flush();
+    tick(1000);
     expect(component.form.invalid).toBe(true);
-  });
+  }));
 
   it('back button should go back to report list page', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');

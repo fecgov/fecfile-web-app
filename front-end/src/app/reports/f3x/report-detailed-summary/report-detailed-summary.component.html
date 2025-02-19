@@ -33,7 +33,7 @@
         <tr>
           <td class="right-border">(a)(i)</td>
           <td class="justify-left right-border indent-2">
-            <em>Itemized<span style="color: grey"> (use Schedule A)</span></em>
+            <em>Itemized<span class="parenthesis-text"> (use Schedule A)</span></em>
           </td>
           <td class="right-border">{{ report.L11ai_itemized_period | defaultZero | currency }}</td>
           <td>{{ report.L11ai_itemized_ytd | defaultZero | currency }}</td>
@@ -139,7 +139,7 @@
         <tr>
           <td class="right-border">(a)</td>
           <td class="justify-left right-border indent-1">
-            Non-federal account <span style="color: grey">(from Schedule H3)</span>
+            Non-federal account <span class="parenthesis-text">(from Schedule H3)</span>
           </td>
           <td class="right-border">
             {{ report.L18a_transfers_from_nonfederal_account_h3_period | defaultZero | currency }}
@@ -149,7 +149,7 @@
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1">
-            Levin funds <span style="color: grey">(from Schedule H5)</span>
+            Levin funds <span class="parenthesis-text">(from Schedule H5)</span>
           </td>
           <td class="right-border">
             {{ report.L18b_transfers_from_nonfederal_levin_h5_period | defaultZero | currency }}
@@ -211,7 +211,7 @@
         <tr>
           <td class="right-border">(a)</td>
           <td class="justify-left right-border">
-            <em>Allocated Federal/Non-Federal Activity <span style="color: grey">(from Schedule H4)</span></em>
+            <em>Allocated Federal/Non-Federal Activity <span class="parenthesis-text">(from Schedule H4)</span></em>
           </td>
           <td class="right-border"></td>
           <td></td>
@@ -268,7 +268,7 @@
         <tr class="gray">
           <td class="right-border bold">24</td>
           <td class="justify-left right-border bold">
-            INDEPENDENT EXPENDITURES <span style="color: grey">(use Schedule E)</span>
+            INDEPENDENT EXPENDITURES <span class="parenthesis-text">(use Schedule E)</span>
           </td>
           <td class="right-border">{{ report.L24_independent_expenditures_period | defaultZero | currency }}</td>
           <td>{{ report.L24_independent_expenditures_ytd | defaultZero | currency }}</td>
@@ -276,7 +276,7 @@
         <tr class="gray">
           <td class="right-border bold">25</td>
           <td class="justify-left right-border bold">
-            COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D)) <span style="color: grey">(use Schedule F)</span>
+            COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D)) <span class="parenthesis-text">(use Schedule F)</span>
           </td>
           <td class="right-border">
             {{ report.L25_coordinated_expend_made_by_party_cmtes_period | defaultZero | currency }}
@@ -345,7 +345,7 @@
         <tr>
           <td class="right-border">(a)</td>
           <td class="justify-left right-border indent-1">
-            Allocated Federal Election Activity <span style="color: grey">(use Schedule H6)</span>
+            Allocated Federal Election Activity <span class="parenthesis-text">(use Schedule H6)</span>
           </td>
           <td class="right-border"></td>
           <td></td>

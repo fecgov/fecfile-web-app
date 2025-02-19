@@ -7,6 +7,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 
 @Component({
   selector: 'app-yes-no-radio-input',
+  styleUrls: ['./yes-no-radio-input.component.scss'],
   templateUrl: './yes-no-radio-input.component.html',
   imports: [ReactiveFormsModule, Tooltip, RadioButton, ErrorMessagesComponent],
 })

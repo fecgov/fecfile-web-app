@@ -6,7 +6,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../services/transaction.service';
 import { ReportService } from '../../services/report.service';
@@ -102,7 +102,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should save all transaction', async () => {
+    it('should save all transaction', fakeAsync(async () => {
       if (!component.transaction) throw Error('Bad test setup');
       spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
       const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() =>
@@ -114,9 +114,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
         new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
       );
 
-      expect(multiSaveSpy).toHaveBeenCalledTimes(1);
-      expect(navSpy).toHaveBeenCalledTimes(1);
-    });
+      expect(multiSaveSpy).toHaveBeenCalledTimes(2);
+      expect(navSpy).toHaveBeenCalledTimes(2);
+    }));
   });
 
   describe('updateElectionData', () => {

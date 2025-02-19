@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { JsonSchema } from '../interfaces/json-schema.interface';
+import { JsonSchema } from 'fecfile-validate';
 import {
   CandidateLookupResponse,
   CommitteeLookupResponse,

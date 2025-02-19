@@ -16,11 +16,7 @@
         <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">{{
           checkboxLabel
         }}</label>
-        <span
-          class="pi pi-info-circle"
-          style="font-size: 1.5rem; margin-left: 0.5rem"
-          pTooltip="{{ memoItemHelpText }}"
-        ></span>
+        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText }}"></span>
       </div>
       <div class="col-12">
         <app-error-messages
@@ -42,11 +38,7 @@
       </div>
       <div class="col-12">
         @if (memoControl.value) {
-          <span
-            class="pi pi-check"
-            style="font-size: 1rem; margin-left: 0.5rem"
-            pTooltip="{{ memoItemHelpText }}"
-          ></span>
+          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText }}"></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM

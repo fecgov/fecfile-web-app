@@ -15,6 +15,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 
 @Component({
   selector: 'app-linked-report-input',
+  styleUrls: ['./linked-report-input.component.scss'],
   templateUrl: './linked-report-input.component.html',
   imports: [ReactiveFormsModule, Tooltip, InputText, ErrorMessagesComponent],
 })
