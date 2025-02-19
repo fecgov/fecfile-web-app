@@ -9,12 +9,19 @@
         [class]="navigationControl?.ngClass || ''"
         (click)="clickButton()"
         [disabled]="isDisabled()"
-        data-test="navigation-control-button"
+        data-cy="navigation-control-button"
         appSingleClick
       ></button>
     }
     @case ('dropdown') {
-      <button pButton pRipple class="dd-button" [disabled]="isDisabled()" (click)="op.toggle($event)">
+      <button
+        pButton
+        pRipple
+        class="dd-button"
+        [disabled]="isDisabled()"
+        (click)="op.toggle($event)"
+        data-cy="navigation-control-dropdown"
+      >
         <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
       </button>
       <p-popover #op>
@@ -31,6 +38,7 @@
                       [text]="true"
                       pButton
                       pRipple
+                      data-cy="navigation-control-dropdown-option"
                       (click)="onDropdownChange(childOption)"
                       (keyup.enter)="onDropdownChange(childOption)"
                       (keyup.space)="onDropdownChange(childOption)"
@@ -47,6 +55,7 @@
                 [text]="true"
                 pButton
                 pRipple
+                data-cy="navigation-control-dropdown-option"
                 (click)="onDropdownChange(option)"
                 (keyup.enter)="onDropdownChange(option)"
                 (keyup.space)="onDropdownChange(option)"

@@ -100,6 +100,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   private readonly transactionService = inject(TransactionService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
+  readonly ContactTypes = ContactTypes;
   @Input() contact: Contact = new Contact();
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
@@ -139,7 +140,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   isNewItem = true;
   contactType = ContactTypes.INDIVIDUAL;
-  ContactTypes = ContactTypes;
+
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -269,6 +270,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
    * @param contactType
    */
   contactTypeChanged(contactType: ContactTypes) {
+    if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
     if (!this.contact) this.contact = new Contact();
 
@@ -353,6 +355,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   updateContact(contact: Contact) {
     this.contact = contact;
+    this.contactType = contact.type;
+    this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type);
     this.form.patchValue(contact);
   }
 

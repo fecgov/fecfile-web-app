@@ -4,37 +4,70 @@
       <li class="nav-item" routerLink="/dashboard" [style.fontSize]="fontSize">Dashboard</li>
       <li class="nav-item" routerLink="/reports" [style.fontSize]="fontSize">Reports</li>
       <li class="nav-item" routerLink="/contacts" [style.fontSize]="fontSize">Contacts</li>
-      <li class="nav-item" (click)="op.toggle($event)" [style.fontSize]="fontSize">
+      <li class="nav-item" (click)="op.toggle($event)" (keydown.enter)="op.toggle($event)" [style.fontSize]="fontSize">
         <span>Tools</span>
         <i class="pi pi-sort-down-fill"></i>
         <p-popover #op>
           <ul>
-            <li class="cursor-pointer py-2 px-4" (click)="openLink('/tools/update-cash-on-hand', op)">
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/tools/update-cash-on-hand', op)"
+              (keydown.enter)="openLink('/tools/update-cash-on-hand', op)"
+            >
               Update cash on hand
             </li>
           </ul>
         </p-popover>
       </li>
-      <li class="nav-item" (click)="op2.toggle($event)" [style.fontSize]="fontSize">
+      <li
+        id="navbarProfileDropdownMenuLink"
+        class="nav-item"
+        (click)="op2.toggle($event)"
+        (keydown.enter)="op2.toggle($event)"
+        [style.fontSize]="fontSize"
+      >
         <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" [height]="16" [width]="8" />
         <i class="pi pi-sort-down-fill"></i>
         <p-popover #op2>
           <ul>
-            <li class="cursor-pointer py-2 px-4" (click)="openLink('/committee/', op2)">Account</li>
-            <li class="cursor-pointer py-2 px-4" (click)="openLink('/committee/members', op2)">Users</li>
-            <li class="cursor-pointer py-2 px-4" (click)="openLink('/login/select-committee/', op2)">
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/committee/', op2)"
+              (keydown.enter)="openLink('/committee/', op2)"
+            >
+              Account
+            </li>
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/committee/members', op2)"
+              (keydown.enter)="openLink('/committee/members', op2)"
+            >
+              Users
+            </li>
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/login/select-committee/', op2)"
+              (keydown.enter)="openLink('/login/select-committee/', op2)"
+            >
               Switch Committees
             </li>
-            <li class="cursor-pointer py-2 px-4" (click)="logOut()">Logout</li>
+            <li class="cursor-pointer py-2 px-4" (click)="logOut()" (keydown.enter)="logOut()">Logout</li>
           </ul>
         </p-popover>
       </li>
     }
     @case (headerStyles.LOGIN) {
-      <li class="nav-item" (click)="navigateToLoginDotGov()" [style.fontSize]="fontSize">SIGN IN</li>
+      <li
+        class="nav-item"
+        (click)="navigateToLoginDotGov()"
+        (keydown.enter)="navigateToLoginDotGov()"
+        [style.fontSize]="fontSize"
+      >
+        SIGN IN
+      </li>
     }
     @case (headerStyles.LOGOUT) {
-      <li class="nav-item" (click)="logOut()" [style.fontSize]="fontSize">Log Out</li>
+      <li class="nav-item" (click)="logOut()" (keydown.enter)="logOut()" [style.fontSize]="fontSize">Log Out</li>
     }
   }
 </ul>

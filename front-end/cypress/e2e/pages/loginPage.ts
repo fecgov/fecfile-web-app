@@ -63,7 +63,7 @@ function loginDotGovLogin() {
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
-  cy.get('[data-test="consent-button"]').click();
+  cy.get('[data-cy="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
