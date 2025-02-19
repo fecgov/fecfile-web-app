@@ -1,24 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MainFormComponent } from './main-form.component';
-import { provideMockStore } from '@ngrx/store/testing';
-import { initialState as initActiveReport } from 'app/store/active-report.reducer';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { CalendarModule } from 'primeng/calendar';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Form1MService } from 'app/shared/services/form-1m.service';
-import { SharedModule } from 'app/shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { Form1MService } from 'app/shared/services/form-1m.service';
+import { SharedModule } from 'app/shared/shared.module';
+import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
+import { initialState as initActiveReport } from 'app/store/active-report.reducer';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { MainFormComponent } from './main-form.component';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -36,8 +38,17 @@ describe('MainFormComponent', () => {
     initialState: {
       fecfile_online_activeReport: initActiveReport,
     },
-    selectors: [{ selector: selectActiveReport, value: testActiveReport }],
+    selectors: [
+      { selector: selectActiveReport, value: testActiveReport },
+      { selector: selectCommitteeAccount, value: testCommitteeAccount },
+    ],
   };
+
+  beforeAll(async () => {
+    await import(`fecfile-validate/fecfile_validate_js/dist/F1M.validator`);
+    await import(`fecfile-validate/fecfile_validate_js/dist/Contact_Candidate.validator`);
+    await import(`fecfile-validate/fecfile_validate_js/dist/Contact_Committee.validator`);
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -82,7 +93,7 @@ describe('MainFormComponent', () => {
     expect(component.form.get('statusBy')?.value).toBe('affiliation');
   });
 
-  it('ngOnInit should set form controls', () => {
+  it('ngOnInit should set form controls', fakeAsync(() => {
     fixture.detectChanges();
     component.form.patchValue({
       committee_type: 'X',
@@ -114,8 +125,10 @@ describe('MainFormComponent', () => {
 
     component.form.patchValue({ statusBy: 'qualification' });
     fixture.detectChanges();
+    tick(100);
+    flush();
     expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
-  });
+  }));
 
   it('getReportPayload should update and return the report properties', () => {
     fixture.detectChanges();
@@ -151,7 +164,7 @@ describe('MainFormComponent', () => {
     expect((payload as Form1M).committee_name).toBe('test committee');
   });
 
-  it('getSelectedContactIds() should return correct ids', () => {
+  it('getSelectedContactIds() should return correct ids', fakeAsync(() => {
     fixture.detectChanges();
     component.form.patchValue({
       statusBy: 'qualification',
@@ -159,6 +172,7 @@ describe('MainFormComponent', () => {
       II_candidate_id_number: 'P00000002',
       III_candidate_id_number: 'P00000003',
     });
+    tick(100);
 
     let candidateIds = component.getSelectedContactIds();
     expect(candidateIds.length).toBe(3);
@@ -179,10 +193,12 @@ describe('MainFormComponent', () => {
     expect(control).toBeTruthy();
     expect(control?.valid).toBeTrue();
     control?.setValue('P00000001');
+    tick(100);
     expect(control?.valid).toBeFalse();
     control?.setValue('P00000002');
+    tick(100);
     expect(control?.valid).toBeTrue();
-  });
+  }));
 
   it('Update a contact from the contact lookup', () => {
     fixture.detectChanges();

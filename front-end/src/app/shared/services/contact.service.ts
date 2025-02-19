@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { JsonSchema } from 'fecfile-validate';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { lastValueFrom, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
+import { Candidate } from '../models/candidate.model';
+import { CommitteeAccount } from '../models/committee-account.model';
 import {
   CandidateLookupResponse,
   CandidateOfficeType,
@@ -19,8 +21,6 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
-import { Candidate } from '../models/candidate.model';
-import { CommitteeAccount } from '../models/committee-account.model';
 
 @Injectable({
   providedIn: 'root',

@@ -8,6 +8,7 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-loan-agreement-input',
+  styleUrls: ['./loan-agreement-input.component.scss'],
   templateUrl: './loan-agreement-input.component.html',
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
