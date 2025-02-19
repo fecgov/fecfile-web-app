@@ -55,8 +55,8 @@ export class ReattributionToUtils {
       ?.addValidators([buildReattRedesTransactionValidator(transaction)]);
 
     // Clear normal schema validation from reattribution TO form
-    form.get('contribution_purpose_descrip')?.clearValidators();
-    form.get('memo_code')?.clearValidators();
+    form.get('contribution_purpose_descrip')?.clearAsyncValidators();
+    form.get('memo_code')?.clearAsyncValidators();
     form.get('memo_code')?.setValue(true);
     form.get('memo_code')?.disable();
 

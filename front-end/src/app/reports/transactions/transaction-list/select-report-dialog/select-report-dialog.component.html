@@ -3,7 +3,14 @@
     <div class="dialog-content">
       <div class="dialog-header">
         <h1 class="dialog-title" id="dialog-title">Select a report</h1>
-        <button type="button" class="btn-close" (click)="cancel()" aria-label="Cancel"></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          id="close-button"
+          (click)="cancel()"
+          aria-label="Cancel"
+        ></button>
       </div>
       <div class="dialog-body">
         <p>

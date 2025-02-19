@@ -85,8 +85,8 @@ export class RedesignationFromUtils {
     const templateMap = transaction.transactionType.templateMap;
     const purposeDescriptionControl = fromForm.get(templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.
-    purposeDescriptionControl?.clearValidators();
-    fromForm.get('memo_code')?.clearValidators();
+    purposeDescriptionControl?.clearAsyncValidators();
+    fromForm.get('memo_code')?.clearAsyncValidators();
     fromForm.get('memo_code')?.addValidators(Validators.requiredTrue);
     fromForm.get('memo_code')?.setValue(true);
 

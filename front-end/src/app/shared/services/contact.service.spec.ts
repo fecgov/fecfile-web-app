@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { JsonSchema } from '../interfaces/json-schema.interface';
+import { JsonSchema } from 'fecfile-validate';
 import {
   CandidateLookupResponse,
   CommitteeLookupResponse,

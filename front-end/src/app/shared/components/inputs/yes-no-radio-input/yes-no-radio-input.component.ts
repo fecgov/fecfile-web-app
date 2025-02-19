@@ -4,6 +4,7 @@ import { AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-yes-no-radio-input',
+  styleUrls: ['./yes-no-radio-input.component.scss'],
   templateUrl: './yes-no-radio-input.component.html',
 })
 export class YesNoRadioInputComponent extends BaseInputComponent implements OnInit {

@@ -1,5 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import {
@@ -8,16 +9,15 @@ import {
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { BehaviorSubject, combineLatestWith, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
-import { ContactService } from 'app/shared/services/contact.service';
-import { MemoText } from 'app/shared/models/memo-text.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 export class TransactionFormUtils {
   /**
@@ -176,6 +176,7 @@ export class TransactionFormUtils {
     const schema = transaction.transactionType?.schema;
     if (schema) {
       SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
+      form.updateValueAndValidity();
     }
 
     Object.entries(contactIdMap).forEach(([contact, id$]) => {
