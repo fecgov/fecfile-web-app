@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { lastValueFrom, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import {
@@ -26,7 +24,7 @@ import { CommitteeAccount } from '../models/committee-account.model';
   providedIn: 'root',
 })
 export class ContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
   /**
    * Given the type of contact given, return the appropriate JSON schema doc
@@ -47,43 +45,44 @@ export class ContactService implements TableListService<Contact> {
     return schema;
   }
 
-  public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
+  public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
     }
-    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}&ordering=${ordering}`, params).pipe(
-      map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => Contact.fromJSON(item));
-        return response;
-      }),
+    const response = await this.apiService.get<ListRestResponse>(
+      `/contacts/?page=${pageNumber}&ordering=${ordering}`,
+      params,
     );
+    response.results = response.results.map((item) => Contact.fromJSON(item));
+    return response;
   }
 
-  public get(id: string): Observable<Contact> {
-    return this.apiService.get<Contact>(`/contacts/${id}/`).pipe(map((response) => Contact.fromJSON(response)));
+  public async get(id: string): Promise<Contact> {
+    const response = await this.apiService.get<Contact>(`/contacts/${id}/`);
+    return Contact.fromJSON(response);
   }
 
-  public create(contact: Contact): Observable<Contact> {
+  public async create(contact: Contact): Promise<Contact> {
     const payload = this.preparePayload(contact);
-    return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));
+    const response = await this.apiService.post<Contact>(`/contacts/`, payload);
+    return Contact.fromJSON(response);
   }
 
-  public update(updated: Contact): Observable<Contact> {
-    return this.apiService
-      .put<Contact>(`/contacts/${updated.id}/`, updated)
-      .pipe(map((response) => Contact.fromJSON(response)));
+  public async update(updated: Contact): Promise<Contact> {
+    const response = await this.apiService.put<Contact>(`/contacts/${updated.id}/`, updated);
+    return Contact.fromJSON(response);
   }
 
-  public delete(contact: Contact): Observable<null> {
+  public delete(contact: Contact): Promise<null> {
     return this.apiService.delete<null>(`/contacts/${contact.id}/`);
   }
 
   /**
    * Gets the candidate details.
    *
-   * @return     {Observable}  The candidate details.
+   * @return     {Promise}  The candidate details.
    */
-  public getCandidateDetails(candidate_id: string | null): Observable<Candidate> {
+  public async getCandidateDetails(candidate_id: string | null): Promise<Candidate> {
     if (!candidate_id) {
       throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
     }
@@ -93,9 +92,9 @@ export class ContactService implements TableListService<Contact> {
   /**
    * Gets the commitee account details.
    *
-   * @return     {Observable}  The commitee details.
+   * @return     {Promise}  The commitee details.
    */
-  public getCommitteeDetails(committee_id: string | null): Observable<CommitteeAccount> {
+  public async getCommitteeDetails(committee_id: string | null): Promise<CommitteeAccount> {
     if (!committee_id) {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
@@ -110,89 +109,78 @@ export class ContactService implements TableListService<Contact> {
     excludeFecIds?: string[],
     excludeIds?: string[],
   ): Promise<CandidateLookupResponse> {
-    const response = await lastValueFrom(
-      this.apiService.get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
-        q: search,
-        max_fec_results: maxFecResults,
-        max_fecfile_results: maxFecfileResults,
-        office: office ?? '',
-        exclude_fec_ids: excludeFecIds?.join(',') as string,
-        exclude_ids: excludeIds?.join(',') as string,
-      }),
-    );
+    const response = await this.apiService.get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
+      q: search,
+      max_fec_results: maxFecResults,
+      max_fecfile_results: maxFecfileResults,
+      office: office ?? '',
+      exclude_fec_ids: excludeFecIds?.join(',') as string,
+      exclude_ids: excludeIds?.join(',') as string,
+    });
     return CandidateLookupResponse.fromJSON(response);
   }
 
-  public committeeLookup(
+  public async committeeLookup(
     search: string,
     maxFecResults: number,
     maxFecfileResults: number,
     excludeFecIds?: string[],
     excludeIds?: string[],
-  ): Observable<CommitteeLookupResponse> {
-    return this.apiService
-      .get<CommitteeLookupResponse>('/contacts/committee_lookup/', {
-        q: search,
-        max_fec_results: maxFecResults,
-        max_fecfile_results: maxFecfileResults,
-        exclude_fec_ids: excludeFecIds?.join(',') as string,
-        exclude_ids: excludeIds?.join(',') as string,
-      })
-      .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
+  ): Promise<CommitteeLookupResponse> {
+    const response = await this.apiService.get<CommitteeLookupResponse>('/contacts/committee_lookup/', {
+      q: search,
+      max_fec_results: maxFecResults,
+      max_fecfile_results: maxFecfileResults,
+      exclude_fec_ids: excludeFecIds?.join(',') as string,
+      exclude_ids: excludeIds?.join(',') as string,
+    });
+    return CommitteeLookupResponse.fromJSON(response);
   }
 
-  public checkFecIdForUniqueness(fecId: string, contactId?: string): Observable<boolean> {
+  public async checkFecIdForUniqueness(fecId: string, contactId?: string): Promise<boolean> {
     if (fecId) {
-      return this.apiService
-        .get<string>(`/contacts/get_contact_id/`, { fec_id: fecId })
-        .pipe(map((matchingContactId) => matchingContactId == '' || matchingContactId == (contactId ?? '')));
+      const matchingContactId = await this.apiService.get<string>(`/contacts/get_contact_id/`, { fec_id: fecId });
+      return matchingContactId == '' || matchingContactId == (contactId ?? '');
     }
-    return of(true);
+    return true;
   }
 
   public getFecIdValidator = (contactId?: string) => {
-    return (control: AbstractControl) => {
+    return async (control: AbstractControl) => {
       if (!control.dirty) {
-        return of(null);
+        return null;
       }
-      return of(control.value).pipe(
-        switchMap((fecId) =>
-          this.checkFecIdForUniqueness(fecId, contactId).pipe(
-            map((isUnique: boolean) => {
-              return isUnique ? null : { fecIdMustBeUnique: true };
-            }),
-          ),
-        ),
-      );
+
+      const isUnique = await this.checkFecIdForUniqueness(control.value, contactId);
+      return isUnique ? null : { fecIdMustBeUnique: true };
     };
   };
 
-  public individualLookup(
+  public async individualLookup(
     search: string,
     maxFecfileResults: number,
     excludeIds?: string[],
-  ): Observable<IndividualLookupResponse> {
-    return this.apiService
-      .get<IndividualLookupResponse>('/contacts/individual_lookup/', {
-        q: search,
-        max_fecfile_results: maxFecfileResults,
-        exclude_ids: excludeIds?.join(',') as string,
-      })
-      .pipe(map((response) => IndividualLookupResponse.fromJSON(response)));
+  ): Promise<IndividualLookupResponse> {
+    const response = await this.apiService.get<IndividualLookupResponse>('/contacts/individual_lookup/', {
+      q: search,
+      max_fecfile_results: maxFecfileResults,
+      exclude_ids: excludeIds?.join(',') as string,
+    });
+
+    return IndividualLookupResponse.fromJSON(response);
   }
 
-  public organizationLookup(
+  public async organizationLookup(
     search: string,
     maxFecfileResults: number,
     excludeIds?: string[],
-  ): Observable<OrganizationLookupResponse> {
-    return this.apiService
-      .get<OrganizationLookupResponse>('/contacts/organization_lookup/', {
-        q: search,
-        max_fecfile_results: maxFecfileResults,
-        exclude_ids: excludeIds?.join(',') as string,
-      })
-      .pipe(map((response) => OrganizationLookupResponse.fromJSON(response)));
+  ): Promise<OrganizationLookupResponse> {
+    const response = await this.apiService.get<OrganizationLookupResponse>('/contacts/organization_lookup/', {
+      q: search,
+      max_fecfile_results: maxFecfileResults,
+      exclude_ids: excludeIds?.join(',') as string,
+    });
+    return OrganizationLookupResponse.fromJSON(response);
   }
 
   private preparePayload(contact: Contact): Record<string, unknown> {
@@ -204,29 +192,27 @@ export class ContactService implements TableListService<Contact> {
   providedIn: 'root',
 })
 export class DeletedContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
-  public getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Observable<ListRestResponse> {
+  public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
     if (!ordering) {
       ordering = 'name';
     }
-    return this.apiService
-      .get<ListRestResponse>(`/contacts-deleted/?page=${pageNumber}&ordering=${ordering}`, params)
-      .pipe(
-        map((response: ListRestResponse) => {
-          response.results = response.results.map(Contact.fromJSON);
-          return response;
-        }),
-      );
+    const response = await this.apiService.get<ListRestResponse>(
+      `/contacts-deleted/?page=${pageNumber}&ordering=${ordering}`,
+      params,
+    );
+    response.results = response.results.map(Contact.fromJSON);
+    return response;
   }
 
-  public restore(contacts: Contact[]): Observable<string[]> {
+  public restore(contacts: Contact[]): Promise<string[]> {
     const contactIds = contacts.map((contact) => contact.id);
     return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public delete(_: Contact): Observable<null> {
-    return of(null);
+  public async delete(_: Contact): Promise<null> {
+    return null;
   }
 }

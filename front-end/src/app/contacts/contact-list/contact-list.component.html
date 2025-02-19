@@ -20,14 +20,16 @@
         <h1 class="m-0">Manage contacts</h1>
       </ng-template>
       <ng-template pTemplate="right">
-        <button
-          pButton
-          pRipple
-          label="Restore deleted contacts"
-          class="restore-contact-button"
-          (click)="onRestoreClick()"
-          *ngIf="restoreContactsButtonIsVisible"
-        ></button>
+        @if (restoreContactsButtonIsVisible) {
+          <button
+            pButton
+            pRipple
+            label="Restore deleted contacts"
+            class="restore-contact-button"
+            (click)="onRestoreClick()"
+          ></button>
+        }
+
         <button
           id="button-contacts-new"
           pButton
@@ -37,15 +39,6 @@
           class="add-button"
           (click)="addItem()"
         ></button>
-        <!--      <p-fileUpload-->
-        <!--        mode="basic"-->
-        <!--        accept="image/*"-->
-        <!--        [maxFileSize]="1000000"-->
-        <!--        label="Import"-->
-        <!--        chooseLabel="Import"-->
-        <!--        class="mr-2 inline-block"-->
-        <!--      ></p-fileUpload>-->
-        <!--      <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>-->
       </ng-template>
     </p-toolbar>
   </ng-template>
@@ -75,7 +68,7 @@
 
 <app-contact-dialog
   [contactTypeOptions]="dialogContactTypeOptions"
-  [contact]="this.item"
+  [contact]="item"
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact($event)"

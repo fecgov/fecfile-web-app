@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Route } from '@angular/router';
 import { CreateCommitteeComponent } from 'app/committee/create-committee/create-committee.component';
 import { SelectCommitteeComponent } from 'app/committee/select-committee/select-committee.component';
 import { HeaderStyles } from 'app/layout/header/header.component';
@@ -11,7 +10,7 @@ import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update
 import { LoginComponent } from './login/login.component';
 import { SecurityNoticeComponent } from './security-notice/security-notice.component';
 
-const routes: Routes = [
+export const LOGIN_ROUTES: Route[] = [
   {
     path: '',
     component: LoginComponent,
@@ -71,9 +70,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class LoginRoutingModule {}

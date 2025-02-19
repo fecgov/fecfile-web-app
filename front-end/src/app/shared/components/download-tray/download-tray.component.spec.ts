@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DownloadTrayComponent } from './download-tray.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Actions } from '@ngrx/effects';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Subject } from 'rxjs';
 import { DotFecService, Download } from 'app/shared/services/dot-fec.service';
 import { Report } from 'app/shared/models/report.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('DownloadTrayComponent', () => {
   let component: DownloadTrayComponent;
@@ -19,9 +19,14 @@ describe('DownloadTrayComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [DownloadTrayComponent],
-      providers: [DotFecService, provideMockStore(testMockStore), { provide: Actions, useValue: actions$ }],
+      imports: [DownloadTrayComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        DotFecService,
+        provideMockStore(testMockStore),
+        { provide: Actions, useValue: actions$ },
+      ],
     });
     fixture = TestBed.createComponent(DownloadTrayComponent);
     dotFecService = TestBed.inject(DotFecService);

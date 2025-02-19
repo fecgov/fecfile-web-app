@@ -1,24 +1,24 @@
 <div [formGroup]="form">
-  <div class="grid">
-    <div class="col-2">
+  <div class="field-row" data-cy="support_oppose_code">
+    <div class="col-2 flex align-items-center">
       <p-radioButton
         name="support_oppose_code"
-        [value]="'S'"
-        label="SUPPORT"
+        inputId="support"
+        value="S"
         formControlName="support_oppose_code"
         ariaLabel="support candidate"
-        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
       ></p-radioButton>
+      <label for="support" class="ml-2">SUPPORT</label>
     </div>
-    <div class="col-2">
+    <div class="col-2 flex align-items-center">
       <p-radioButton
+        inputId="oppose"
         name="support_oppose_code"
-        [value]="'O'"
-        label="OPPOSE"
+        value="O"
         formControlName="support_oppose_code"
         ariaLabel="oppose candidate"
-        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
       ></p-radioButton>
+      <label for="oppose" class="ml-2">OPPOSE</label>
     </div>
   </div>
   <div class="grid">

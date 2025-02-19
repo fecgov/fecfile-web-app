@@ -6,17 +6,20 @@
     [templateMapKeyPrefix]="templateMapKeyPrefix"
   ></app-name-input>
   <div class="grid">
-    <div class="col-4" *ngIf="titleFieldName">
-      <div class="field">
-        <label for="title">TITLE</label>
-        <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
-        <app-error-messages
-          [form]="form"
-          [fieldName]="titleFieldName"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+    @if (titleFieldName) {
+      <div class="col-4">
+        <div class="field">
+          <label for="title">TITLE</label>
+          <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="titleFieldName"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
       </div>
-    </div>
+    }
+
     <div class="col-4">
       <app-calendar
         [fieldName]="dateSignedFieldName"

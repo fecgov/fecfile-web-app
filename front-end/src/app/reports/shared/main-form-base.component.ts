@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -6,7 +6,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { MessageService } from 'primeng/api';
-import { Observable, combineLatest, takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
@@ -19,6 +19,12 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   template: '',
 })
 export abstract class MainFormBaseComponent extends DestroyerComponent implements OnInit {
+  protected readonly store = inject(Store);
+  protected readonly fb = inject(FormBuilder);
+  protected abstract reportService: ReportService;
+  protected readonly messageService = inject(MessageService);
+  protected readonly router = inject(Router);
+  protected readonly activatedRoute = inject(ActivatedRoute);
   abstract formProperties: string[];
   abstract schema: JsonSchema;
   abstract getReportPayload(): Report;
@@ -27,17 +33,6 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
   formSubmitted = false;
   form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   reportId?: string;
-
-  constructor(
-    protected store: Store,
-    protected fb: FormBuilder,
-    protected reportService: ReportService,
-    protected messageService: MessageService,
-    protected router: Router,
-    protected activatedRoute: ActivatedRoute,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
@@ -55,7 +50,8 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 
-  setConstantFormValues(committeeAccount: CommitteeAccount) {
+  setConstantFormValues(committeeAccount?: CommitteeAccount) {
+    if (!committeeAccount) return;
     this.form.patchValue({
       street_1: committeeAccount.street_1,
       street_2: committeeAccount.street_2,
@@ -71,7 +67,7 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
     this.router.navigateByUrl('/reports');
   }
 
-  public save(jump: 'continue' | undefined = undefined) {
+  public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
@@ -80,26 +76,24 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
     }
 
     const payload: Report = this.getReportPayload();
-    let save$: Observable<Report>;
+    let report: Report;
     if (this.reportId) {
       payload.id = this.reportId;
-      save$ = this.reportService.update(payload, this.formProperties);
+      report = await this.reportService.update(payload, this.formProperties);
     } else {
-      save$ = this.reportService.create(payload, this.formProperties);
+      report = await this.reportService.create(payload, this.formProperties);
     }
 
-    save$.pipe(takeUntil(this.destroy$)).subscribe((report: Report) => {
-      if (jump === 'continue') {
-        this.router.navigateByUrl(this.webprintURL + report.id);
-      } else {
-        this.router.navigateByUrl('/reports');
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Form saved',
-          life: 3000,
-        });
-      }
-    });
+    if (jump === 'continue') {
+      await this.router.navigateByUrl(this.webprintURL + report.id);
+    } else {
+      await this.router.navigateByUrl('/reports');
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Form saved',
+        life: 3000,
+      });
+    }
   }
 }

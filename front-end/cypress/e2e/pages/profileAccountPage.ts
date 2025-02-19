@@ -1,10 +1,13 @@
+import { PageUtils } from './pageUtils';
+
 export class ProfileAccountPage {
   static goToPage() {
+    const alias = PageUtils.getAlias('');
     cy.intercept('/profile').as('account');
     cy.visit('/dashboard');
 
     cy.get('#navbarProfileDropdownMenuLink').click();
-    cy.get('[href="/committee"]').contains('Account').click();
+    cy.get(alias).find('.p-popover').contains('Account').click();
     cy.location('pathname').should('include', '/committee');
   }
 }

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
@@ -14,8 +14,7 @@ describe('AdditionalInfoInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AdditionalInfoInputComponent, ErrorMessagesComponent],
-      imports: [InputTextareaModule, ReactiveFormsModule],
+      imports: [TextareaModule, ReactiveFormsModule, AdditionalInfoInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdditionalInfoInputComponent);

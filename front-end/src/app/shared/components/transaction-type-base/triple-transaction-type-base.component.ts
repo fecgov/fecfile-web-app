@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
-import { concat, Observable, of, reduce } from 'rxjs';
+import { of } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
@@ -98,7 +98,7 @@ export abstract class TripleTransactionTypeBaseComponent
     Object.values(this.childContactIdMap_2).forEach((id$) => id$.complete());
   }
 
-  override save(navigationEvent: NavigationEvent) {
+  override async save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction && this.childTransaction_2) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -137,7 +137,7 @@ export abstract class TripleTransactionTypeBaseComponent
     payload.children[0].report_ids = payload.report_ids;
     payload.children[1].report_ids = payload.report_ids;
 
-    this.processPayload(payload, navigationEvent);
+    return this.processPayload(payload, navigationEvent);
   }
 
   override isInvalid(): boolean {
@@ -145,12 +145,15 @@ export abstract class TripleTransactionTypeBaseComponent
     return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 
-  override get confirmation$(): Observable<boolean> {
-    if (!this.childTransaction_2) return of(false);
-    return concat(
+  override get confirmation$(): Promise<boolean> {
+    if (!this.childTransaction_2) return Promise.resolve(false);
+
+    return Promise.all([
       super.confirmation$,
       this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2'),
-    ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
+    ]).then((results) => {
+      return results.every((confirmed) => confirmed);
+    });
   }
 
   override resetForm() {

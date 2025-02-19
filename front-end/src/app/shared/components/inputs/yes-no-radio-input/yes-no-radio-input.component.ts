@@ -1,10 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { Tooltip } from 'primeng/tooltip';
+import { RadioButton } from 'primeng/radiobutton';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-yes-no-radio-input',
   templateUrl: './yes-no-radio-input.component.html',
+  imports: [ReactiveFormsModule, Tooltip, RadioButton, ErrorMessagesComponent],
 })
 export class YesNoRadioInputComponent extends BaseInputComponent implements OnInit {
   control: AbstractControl | null = null;

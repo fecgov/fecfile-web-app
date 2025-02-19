@@ -1,11 +1,139 @@
-$primaryLightColor: rgba(38, 143, 255, 0.5) !default;
-$primaryColor: #112e51 !default;
-$primaryDarkColor: #164f85 !default;
-$primaryDarkerColor: #112e51 !default;
-$primaryTextColor: #ffffff !default;
-$primaryAccentBg: #0aacfa !default;
+:root {
+  --surface-a: #ffffff;
+  --surface-b: #f1f1f1;
+  --surface-c: #e8e8e8;
+  --surface-d: #d6d7d9;
+  --surface-e: #ffffff;
+  --surface-f: #ffffff;
+  --text-color: var(--p-content-color);
+  --text-color-secondary: #5b616b;
+  --primary-color: #112e51;
+  --primary-color-text: #ffffff;
+  --font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
+  --surface-0: #ffffff;
+  --surface-50: #e8e8e8;
+  --surface-100: #d3d3d3;
+  --surface-200: #bdbdbd;
+  --surface-300: #a7a7a7;
+  --surface-400: #919191;
+  --surface-500: #7a7a7a;
+  --surface-600: #646464;
+  --surface-700: #4e4e4e;
+  --surface-800: #373737;
+  --surface-900: var(--p-content-color);
+  --content-padding: 1.25rem;
+  --inline-spacing: 0.5rem;
+  --border-radius: 4px;
+  --surface-ground: #f1f1f1;
+  --surface-section: #ffffff;
+  --surface-card: #ffffff;
+  --surface-overlay: #ffffff;
+  --surface-border: #d6d7d9;
+  --surface-hover: #e8e8e8;
+  --maskbg: rgba(0, 0, 0, 0.4);
+  --focus-ring: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
 
-$highlightBg: $primaryColor !default;
-$highlightTextColor: $primaryTextColor !default;
+  --fec-grey-background: var(--surface-c);
+  --fec-grey-alt: #aeb0b5;
 
-@import './variables_light'
+  --p-overlay-select-background: var(--p-content-background);
+  --p-textarea-color: var(--p-content-color);
+  --p-select-color: var(--p-content-color);
+  --p-select-padding-x: 0;
+  --p-select-option-color: var(--p-content-color);
+  --p-select-option-selected-color: white;
+  --p-select-option-selected-background: var(--p-primary-color);
+  --p-select-option-selected-focus-color: white;
+  --p-select-option-selected-focus-background: var(--p-primary-color);
+  --p-select-option-focus-color: var(--p-content-color);
+  --p-select-option-focus-background: var(--fec-grey-background);
+  --p-select-option-border-radius: 0;
+
+  --p-paginator-background: var(--p-primary-color);
+  --p-panelmenu-panel-background: transparent;
+  --p-panelmenu-item-focus-background: transparent;
+  --p-content-background: white;
+  --p-accordion-content-color: var(--p-content-color);
+  --p-togglebutton-content-checked-background: transparent;
+  --p-datepicker-panel-padding: 0;
+  --p-content-color: #212121;
+  --p-primary-color: var(--primary-color);
+  --p-primary-contrast-color: white;
+  --p-datepicker-select-month-hover-color: var(--p-datepicker-select-month-color);
+  --p-datepicker-select-year-hover-color: var(--p-datepicker-select-year-color);
+  --p-content-hover-background: var(--surface-hover);
+  --p-content-hover-color: var(--p-content-color);
+  --p-datepicker-month-padding: 0.5rem;
+  --p-datepicker-date-border-radius: var(--p-border-radius-sm);
+  --p-datepicker-month-border-radius: var(--p-datepicker-date-border-radius);
+  --p-datepicker-year-border-radius: var(--p-datepicker-date-border-radius);
+  --p-datepicker-date-height: 2.5rem;
+  --p-datepicker-date-width: 2.5rem;
+  --p-panel-border-width: 0;
+  --p-panelmenu-panel-border-width: var(--p-panel-border-width);
+  --p-panelmenu-panel-first-border-width: var(--p-panel-border-width);
+  --p-panelmenu-panel-last-border-width: var(--p-panel-border-width);
+  --p-panelmenu-panel-border-radius: 0;
+  --p-accordion-header-color: var(--p-content-color);
+  --p-accordion-header-hover-color: var(--p-accordion-header-color);
+  --p-accordion-header-background: #f1f1f1;
+  --p-accordion-header-active-background: var(--p-accordion-header-background);
+  --p-accordion-header-active-color: var(--p-content-color);
+  --p-accordion-header-active-hover-background: var(--p-accordion-header-hover-background);
+  --p-accordion-header-active-hover-color: var(--p-accordion-header-active-color);
+  --p-accordion-header-hover-background: var(--p-accordion-header-background);
+  --p-accordion-panel-border-color: var(--surface-border);
+
+  /* Font */
+  --karla: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --gandhi-bold: 'gandhi-bold', serif;
+  --gandhi-regular: gandhi-regular, serif;
+
+  /* Dialog */
+  --p-dialog-header-padding: 1rem 1rem 1rem 1rem;
+  --p-dialog-content-padding: 1rem 2rem;
+  --p-dialog-footer-padding: 0 0 1rem 0;
+  --p-dialog-color: var(--p-content-color);
+  --p-confirmdialog-icon-color: var(--p-content-color);
+
+  /* Autocomplete */
+  --p-autocomplete-dropdown-background: var(--background);
+  --p-autocomplete-dropdown-active-background: var(--p-autocomplete-dropdown-background);
+  --p-autocomplete-dropdown-hover-background: var(--p-autocomplete-dropdown-background);
+  --p-autocomplete-option-focus-background: var(--p-autocomplete-dropdown-background);
+  --p-autocomplete-option-focus-color: var(--p-content-color);
+  --p-autocomplete-option-color: var(--p-content-color);
+  --p-autocomplete-option-border-radius: 0;
+  --p-autocomplete-option-group-color: var(--p-primary-color);
+
+  /* Button */
+  --p-button-padding-x: 1.25rem;
+  --p-button-padding-y: 0.5rem;
+
+  /* Toggle Button */
+  --p-togglebutton-padding: 1rem 1.25rem;
+  --p-selectbutton-border-radius: 4px;
+
+  /* Toast */
+  --p-toast-transition-duration: 3000;
+  --p-toast-border-width: 1px;
+  --p-toast-close-button-border-radius: 50%;
+  --p-toast-close-button-width: var(--p-toast-close-icon-size);
+  --p-toast-close-button-height: var(--p-toast-close-icon-size);
+
+  --p-toast-success-background: #d4edda;
+  --p-toast-success-close-button-hover-background: rgba(255, 255, 255, 0.3);
+  --p-toast-success-border-color: #c3e6cb;
+  --p-toast-success-color: #155724;
+  --p-toast-success-detail-color: var(--p-toast-success-color);
+
+  /* Panel */
+  --p-panelmenu-panel-padding: 0 0.25rem;
+  --p-panelmenu-item-border-radius: 0;
+  --p-panelmenu-gap: 0;
+
+  --orange: #f77b42;
+
+  color-scheme: light;
+}

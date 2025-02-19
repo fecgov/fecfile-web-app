@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -15,7 +15,6 @@ import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { take, takeUntil } from 'rxjs';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
@@ -31,12 +30,16 @@ const loansDebts = [
   template: '',
 })
 export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
+  protected readonly reportService = inject(ReportService);
+  protected readonly router = inject(Router);
+  protected readonly store = inject(Store);
+  protected readonly activatedRoute = inject(ActivatedRoute);
+
   @Input() report?: Report;
   abstract scheduleTransactionTypeLabels: LabelList;
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
   reportIsEditable = false;
-  reportId: string;
 
   public rowActions: TableAction[] = [
     new TableAction(
@@ -192,18 +195,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     { field: 'name', label: 'Name' },
   ];
 
-  protected constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected store: Store,
-    protected reportService: ReportService,
-  ) {
-    super(messageService, confirmationService, elementRef);
-    this.reportId = this.activatedRoute.snapshot.params['reportId'];
-  }
+  reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
   override ngOnInit(): void {
     this.loading = true;
@@ -248,17 +240,17 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     );
   }
 
-  public forceAggregate(transaction: Transaction): void {
-    this.forceUnaggregation(transaction, false);
+  public forceAggregate(transaction: Transaction): Promise<void> {
+    return this.forceUnaggregation(transaction, false);
   }
 
-  public forceUnaggregate(transaction: Transaction): void {
-    this.forceUnaggregation(transaction, true);
+  public forceUnaggregate(transaction: Transaction): Promise<void> {
+    return this.forceUnaggregation(transaction, true);
   }
 
   public forceUnaggregation(transaction: Transaction, unaggregated: boolean) {
     transaction.force_unaggregated = unaggregated;
-    this.updateItem(transaction);
+    return this.updateItem(transaction);
   }
 
   public forceItemize(transaction: Transaction): void {
@@ -326,15 +318,24 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
   }
 
-  public updateItem(item: Transaction) {
+  public async updateItem(item: Transaction) {
     if (this.itemService.update) {
-      this.itemService
-        .update(item)
-        .pipe(take(1), takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.loadTableItems({});
-        });
+      try {
+        await this.untilDestroyed(this.itemService.update(item));
+        this.loadTableItems({});
+      } catch (error) {
+        console.error('Error updating item:', error);
+      }
     }
+  }
+
+  private untilDestroyed<T>(promise: Promise<T>): Promise<T> {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        this.destroy$.pipe(take(1)).subscribe(() => reject(new Error('Destroyed')));
+      }),
+    ]);
   }
 
   public formatId(id: string | null): string {
@@ -363,7 +364,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         'Deleting this transaction will also delete any linked transactions ' +
         '(such as memos, in-kinds, and transfers). Please note that you cannot undo this action.',
       accept: () => {
-        this.itemService.delete(item).subscribe(() => {
+        this.itemService.delete(item).then(() => {
           this.item = this.getEmptyItem();
           this.refreshTable(true);
           this.messageService.add({

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { YesNoRadioInputComponent } from './yes-no-radio-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
@@ -10,8 +10,7 @@ describe('YesNoRadioInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule],
-      declarations: [YesNoRadioInputComponent],
+      imports: [YesNoRadioInputComponent],
     });
     fixture = TestBed.createComponent(YesNoRadioInputComponent);
     component = fixture.componentInstance;

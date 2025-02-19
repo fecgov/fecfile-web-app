@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { ListRestResponse } from '../models/rest-api.model';
 
 export interface TableListService<T> {
@@ -6,9 +5,9 @@ export interface TableListService<T> {
     pageNumber: number,
     ordering?: string,
     params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-  ): Observable<ListRestResponse>;
+  ): Promise<ListRestResponse>;
 
-  delete(item: T): Observable<null>;
+  delete(item: T): Promise<null>;
 
-  update?(item: T, fieldsToValidate?: string[]): Observable<T>;
+  update?(item: T, fieldsToValidate?: string[]): Promise<T>;
 }

@@ -12,7 +12,7 @@ export function enterConfirmationDetails(details: ConfirmationDetails, save = tr
     cy.get('input[formControlName="street_2"]').overwrite(details.street_2);
     cy.get('input[formControlName="city"]').overwrite(details.city);
     cy.get('input[formControlName="zip"]').overwrite(details.zip);
-    cy.dropdownSetValue('p-dropdown[formControlName="state"]', details.state);
+    cy.dropdownSetValue('p-select[formControlName="state"]', details.state);
   }
 
   if (save) {

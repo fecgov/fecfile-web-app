@@ -7,8 +7,7 @@ describe('TableSortIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [],
-      declarations: [TableSortIconComponent],
+      imports: [TableSortIconComponent],
       providers: [],
     }).compileComponents();
   });

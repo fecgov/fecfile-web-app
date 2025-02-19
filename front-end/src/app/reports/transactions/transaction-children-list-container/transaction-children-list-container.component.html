@@ -1,3 +1,3 @@
-<ng-container *ngIf="transaction?.transactionType?.showGuarantorTable">
+@if (transaction?.transactionType?.showGuarantorTable) {
   <app-transaction-guarantors [loan]="transaction"></app-transaction-guarantors>
-</ng-container>
+}

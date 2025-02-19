@@ -18,48 +18,53 @@
     [currentPageReportTemplate]="currentPageReportTemplate"
     [sortField]="sortField"
     [showCurrentPageReport]="true"
-    styleClass="p-datatable-striped p-datatable-gridlines"
+    stripedRows
+    showGridlines
   >
     <ng-template pTemplate="caption">
-      <div *ngIf="title" class="flex align-items-center justify-content-between">
-        <h2 class="m-0">{{ title }}</h2>
-      </div>
+      @if (title) {
+        <div class="flex align-items-center justify-content-between">
+          <h2 class="m-0">{{ title }}</h2>
+        </div>
+      }
       <ng-container *ngTemplateOutlet="caption"></ng-container>
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th *ngIf="hasCheckbox" style="width: 3rem" id="header-checkbox" role="columnheader">
-          <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
-        </th>
-        <ng-container *ngIf="sortableHeaders">
-          <th
-            *ngFor="let h of sortableHeaders"
-            [pSortableColumn]="h.field"
-            [id]="h.field + '-column'"
-            role="columnheader"
-          >
-            <div class="d-flex justify-content-between">
-              <span>{{ h.label }}</span>
-              <p-sortIcon [field]="h.field"></p-sortIcon>
-            </div>
+        @if (hasCheckbox) {
+          <th style="width: 3rem" id="header-checkbox" role="columnheader">
+            <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
           </th>
-        </ng-container>
+        }
+        @if (sortableHeaders) {
+          @for (h of sortableHeaders; track h) {
+            <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
+              <div class="flex justify-content-between">
+                <span>{{ h.label }}</span>
+                <p-sortIcon [field]="h.field"></p-sortIcon>
+              </div>
+            </th>
+          }
+        }
+
         <ng-container *ngTemplateOutlet="header"></ng-container>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td *ngIf="hasCheckbox">
-          <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel!(item)"></p-tableCheckbox>
-        </td>
+        @if (hasCheckbox) {
+          <td>
+            <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel!(item)"></p-tableCheckbox>
+          </td>
+        }
         <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-      <div class="d-flex justify-content-between">
+      <div class="flex justify-content-between">
         <div class="responsive-container left-container">
           <span class="paginator-text">Results per page:</span>
-          <p-dropdown
+          <p-select
             [options]="paginationPageSizeOptions"
             [(ngModel)]="rowsPerPage"
             class="custom-paginator-dropdown"
@@ -68,7 +73,7 @@
             <ng-template pTemplate="dropdownicon">
               <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
             </ng-template>
-          </p-dropdown>
+          </p-select>
         </div>
         <div class="responsive-container">
           <span class="paginator-text">{{ showing }}:</span>
@@ -100,15 +105,11 @@
     <ng-template pTemplate="paginatorleft">
       <div class="responsive-container">
         <span>Results per table:</span>
-        <p-dropdown
-          [options]="paginationPageSizeOptions"
-          [(ngModel)]="rowsPerPage"
-          (onChange)="rowsPerPageChange.emit()"
-        >
+        <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" (onChange)="rowsPerPageChange.emit()">
           <ng-template pTemplate="dropdownicon">
             <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
           </ng-template>
-        </p-dropdown>
+        </p-select>
       </div>
     </ng-template>
     <ng-template pTemplate="paginatorfirstpagelinkicon">

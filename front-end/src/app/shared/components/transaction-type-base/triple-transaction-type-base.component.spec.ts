@@ -1,8 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -13,7 +11,6 @@ import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/sc
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { TripleTransactionDetailComponent } from 'app/reports/transactions/triple-transaction-detail/triple-transaction-detail.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
-import { of } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { Contact } from '../../models/contact.model';
 import {
@@ -22,6 +19,11 @@ import {
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
@@ -35,20 +37,17 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TripleTransactionDetailComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      imports: [TripleTransactionDetailComponent],
       providers: [
         DatePipe,
         MessageService,
         FormBuilder,
-        {
-          provide: TransactionService,
-          useValue: jasmine.createSpyObj('TransactionService', {
-            update: of(undefined),
-            create: of(undefined),
-            getPreviousTransaction: of(undefined),
-          }),
-        },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideAnimationsAsync(),
+        provideAnimations(),
+        TransactionService,
         ConfirmationService,
         provideMockStore(testMockStore),
         FecDatePipe,
@@ -68,9 +67,10 @@ describe('TripleTransactionTypeBaseComponent', () => {
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
-    fixture.detectChanges();
 
     confirmSpy = spyOn(testConfirmationService, 'confirm');
+
+    component.ngOnInit();
   });
 
   it('should create', () => {
@@ -79,23 +79,21 @@ describe('TripleTransactionTypeBaseComponent', () => {
   });
 
   describe('confirmation$', () => {
-    it('should return false if there is not child transaction 2', () => {
+    it('should return false if there is not child transaction 2', async () => {
       component.childTransaction_2 = undefined;
-      component.confirmation$.subscribe((res) => {
-        expect(res).toBeFalse();
-      });
+      const res = await component.confirmation$;
+      expect(res).toBeFalse();
     });
 
-    it('should confirm with user 1 time if only primary transaction contact updated', fakeAsync(() => {
+    it('should confirm with user 1 time if only primary transaction contact updated', async () => {
       if (!component.transaction) throw new Error('Bad test');
       component.transaction.contact_1 = testContact;
-      component.confirmation$.subscribe((res) => {
+      component.confirmation$.then((res) => {
         expect(res).toBeTrue();
       });
-      tick(500);
 
       expect(confirmSpy).toHaveBeenCalledTimes(1);
-    }));
+    });
   });
 
   describe('isInvalid', () => {
@@ -216,11 +214,12 @@ describe('TripleTransactionTypeBaseComponent', () => {
   });
 
   describe('save', () => {
-    it('should bail out if transactions are invalid', () => {
+    it('should bail out if transactions are invalid', async () => {
       component.transaction = undefined;
-      expect(function () {
-        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
-      }).toThrow(new Error('Fecfile: No transactions submitted for triple-entry transaction form.'));
+
+      await expectAsync(
+        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction)),
+      ).toBeRejectedWithError('Fecfile: No transactions submitted for triple-entry transaction form.');
     });
   });
 });

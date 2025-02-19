@@ -1,12 +1,15 @@
-import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, inject } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { filter, takeUntil } from 'rxjs';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
-import { HeaderStyles } from './header/header.component';
+import { HeaderStyles, HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
+import { ButtonDirective } from 'primeng/button';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -18,20 +21,27 @@ export enum BackgroundStyles {
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
+  imports: [
+    BannerComponent,
+    HeaderComponent,
+    SidebarComponent,
+    CommitteeBannerComponent,
+    RouterOutlet,
+    FooterComponent,
+    ButtonDirective,
+    FeedbackOverlayComponent,
+  ],
 })
 export class LayoutComponent extends DestroyerComponent implements OnInit, AfterViewChecked {
   @ViewChild(FeedbackOverlayComponent) feedbackOverlay!: FeedbackOverlayComponent;
-
+  readonly router: Router = inject(Router);
   layoutControls = new LayoutControls();
-  BackgroundStyles = BackgroundStyles;
+  readonly BackgroundStyles = BackgroundStyles;
 
   @ViewChild('footerRef') footer!: FooterComponent;
   @ViewChild('contentOffset') contentOffset!: ElementRef;
   @ViewChild('bannerRef') banner!: BannerComponent;
 
-  constructor(public router: Router) {
-    super();
-  }
   ngAfterViewChecked(): void {
     this.updateContentOffset();
   }
@@ -42,11 +52,11 @@ export class LayoutComponent extends DestroyerComponent implements OnInit, After
     const height = this.contentOffset.nativeElement.offsetHeight;
     const footerHeight = this.footer ? this.footer.getFooterElement().offsetHeight : 0;
     const bannerHeight = this.banner ? this.banner.getBannerElement().offsetHeight : 0;
-
     const currentPadding =
       this.contentOffset.nativeElement.style.paddingBottom === ''
         ? 0
         : parseInt(this.contentOffset.nativeElement.style.paddingBottom, 10);
+
     const paddingBottom = Math.max(64, window.innerHeight - height - footerHeight - bannerHeight + currentPadding);
 
     // Apply the margin-bottom to the div

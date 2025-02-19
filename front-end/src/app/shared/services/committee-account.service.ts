@@ -1,6 +1,5 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
@@ -9,40 +8,35 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class CommitteeAccountService {
-  constructor(private apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
-  public getCommittees(): Observable<CommitteeAccount[]> {
-    return this.apiService
-      .get<ListRestResponse>(`/committees/`)
-      .pipe(map((response) => response.results as CommitteeAccount[]));
+  public async getCommittees(): Promise<CommitteeAccount[]> {
+    const response = await this.apiService.get<ListRestResponse>(`/committees/`);
+    return response.results as CommitteeAccount[];
   }
 
-  public getAvailableCommittee(committeeId: string): Observable<CommitteeAccount> {
+  public getAvailableCommittee(committeeId: string): Promise<CommitteeAccount> {
     return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
   }
 
   public activateCommittee(committeeUUID?: string): Promise<boolean> {
-    return firstValueFrom(this.apiService.post(`/committees/${committeeUUID}/activate/`, {}));
+    return this.apiService.post(`/committees/${committeeUUID}/activate/`, {});
   }
 
-  public getActiveCommittee(): Observable<CommitteeAccount> {
+  public getActiveCommittee(): Promise<CommitteeAccount> {
     return this.apiService.get(`/committees/active/`);
   }
 
-  public createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
-    return firstValueFrom(
-      this.apiService
-        .post<CommitteeAccount>('/committees/create_account/', { committee_id: committeeId }, {}, [
-          HttpStatusCode.BadRequest,
-        ])
-        .pipe(
-          map((response) => {
-            if (!response.body) {
-              throw new Error();
-            }
-            return response.body;
-          }),
-        ),
+  public async createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
+    const response = await this.apiService.post<CommitteeAccount>(
+      '/committees/create_account/',
+      { committee_id: committeeId },
+      {},
+      [HttpStatusCode.BadRequest],
     );
+    if (!response.body) {
+      throw new Error();
+    }
+    return response.body;
   }
 }

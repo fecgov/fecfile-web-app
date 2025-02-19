@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
-import { forkJoin, Observable } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
@@ -11,6 +10,10 @@ import { QueryParams } from 'app/shared/services/api.service';
   template: '',
 })
 export abstract class TableListBaseComponent<T> extends DestroyerComponent implements OnInit, AfterViewInit {
+  readonly messageService = inject(MessageService);
+  readonly confirmationService = inject(ConfirmationService);
+  protected readonly elementRef = inject(ElementRef);
+
   item!: T;
   items: T[] = [];
   rowsPerPage = 10;
@@ -25,15 +28,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
   protected caption?: string;
 
-  @Output() reloadTables = new EventEmitter();
-
-  constructor(
-    protected messageService: MessageService,
-    protected confirmationService: ConfirmationService,
-    protected elementRef: ElementRef,
-  ) {
-    super();
-  }
+  @Output() readonly reloadTables = new EventEmitter();
 
   ngOnInit() {
     this.loading = true;
@@ -65,7 +60,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    * Method is called when the table data needs to be refreshed.
    * @param {TableLazyLoadEvent} event
    */
-  public loadTableItems(event: TableLazyLoadEvent) {
+  public async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     this.loading = true;
 
     // event is undefined when triggered from the detail page because
@@ -96,11 +91,16 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       ordering = `${ordering}`;
     }
 
-    this.itemService.getTableData(pageNumber, ordering, params).subscribe((response: ListRestResponse) => {
+    const response = await this.itemService.getTableData(pageNumber, ordering, params);
+    try {
       this.items = [...response.results];
-      this.totalItems = response.count;
-      this.loading = false;
-    });
+    } catch (err) {
+      this.items = [];
+      console.log(err);
+    }
+
+    this.totalItems = response.count;
+    this.loading = false;
   }
 
   onRowsPerPageChange(rowsPerPage: number) {
@@ -124,11 +124,11 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    * Event listener when user selects the "all" checkbox to select/deselect row checkboxes.
    * @param event
    */
-  public onSelectAllChange(event: TableSelectAllChangeEvent) {
+  public async onSelectAllChange(event: TableSelectAllChangeEvent): Promise<void> {
     const checked: boolean = event.checked;
 
     if (checked) {
-      this.itemService.getTableData(1).subscribe((response: ListRestResponse) => {
+      await this.itemService.getTableData(1).then((response: ListRestResponse) => {
         this.selectedItems = response.results || [];
         this.selectAll = true;
       });
@@ -156,7 +156,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.itemService.delete(item).subscribe(() => {
+        this.itemService.delete(item).then(() => {
           this.item = this.getEmptyItem();
           this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
@@ -165,7 +165,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     });
   }
 
-  public deleteSelectedItems() {
+  public async deleteSelectedItems(): Promise<void> {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected items?',
       header: 'Confirm',
@@ -174,24 +174,23 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     });
   }
 
-  public deleteSelectedItemsAccept() {
-    const obs: Observable<null>[] = [];
+  public async deleteSelectedItemsAccept() {
+    const obs: Promise<null>[] = [];
     this.selectedItems.forEach((item: T) => {
       obs.push(this.itemService.delete(item));
     });
-    forkJoin(obs).subscribe(() => {
-      this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
-      this.selectedItems = [];
-      this.refreshTable();
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
-    });
+    await Promise.all(obs);
+    this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
+    this.selectedItems = [];
+    this.refreshTable();
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
   }
 
-  public refreshTable(allTables = false) {
+  public async refreshTable(allTables = false) {
     if (allTables) {
       this.reloadTables.emit();
     } else {
-      this.loadTableItems({} as TableLazyLoadEvent);
+      await this.loadTableItems({} as TableLazyLoadEvent);
     }
   }
 

@@ -1,27 +1,27 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { TransactionContainerComponent } from './transaction-container.component';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TransactionDetailComponent } from '../transaction-detail/transaction-detail.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
@@ -30,24 +30,26 @@ describe('TransactionContainerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterTestingModule,
         ToastModule,
-        SharedModule,
         DividerModule,
-        DropdownModule,
+        SelectModule,
         ButtonModule,
-        CalendarModule,
+        DatePickerModule,
         CheckboxModule,
         InputTextModule,
         InputNumberModule,
-        InputTextareaModule,
+        TextareaModule,
         ConfirmDialogModule,
+        TransactionContainerComponent,
+        ConfirmDialog,
+        TransactionDetailComponent,
       ],
-      declarations: [TransactionContainerComponent, ConfirmDialog, TransactionDetailComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         FormBuilder,
         MessageService,
         ConfirmationService,

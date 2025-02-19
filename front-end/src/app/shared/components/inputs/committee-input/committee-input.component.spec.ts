@@ -13,8 +13,7 @@ describe('CommitteeInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CommitteeInputComponent, ErrorMessagesComponent],
-      imports: [InputTextModule, ReactiveFormsModule],
+      imports: [InputTextModule, ReactiveFormsModule, CommitteeInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CommitteeInputComponent);

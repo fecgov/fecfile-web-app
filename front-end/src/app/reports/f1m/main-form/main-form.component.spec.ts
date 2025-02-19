@@ -7,18 +7,18 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { CalendarModule } from 'primeng/calendar';
-import { RouterTestingModule } from '@angular/router/testing';
+import { DatePickerModule } from 'primeng/datepicker';
 import { Form1MService } from 'app/shared/services/form-1m.service';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { ActivatedRoute } from '@angular/router';
 import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -42,18 +42,18 @@ describe('MainFormComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         SelectButtonModule,
-        SharedModule,
         DividerModule,
-        DropdownModule,
+        SelectModule,
         RadioButtonModule,
-        CalendarModule,
+        DatePickerModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([]),
+        MainFormComponent,
+        LabelPipe,
       ],
-      declarations: [MainFormComponent, LabelPipe],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         ConfirmationService,
         Form1MService,
         FormBuilder,

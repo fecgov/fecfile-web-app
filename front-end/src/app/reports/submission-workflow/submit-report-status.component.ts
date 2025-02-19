@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -7,25 +7,26 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 import { Report } from 'app/shared/models/report.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Card } from 'primeng/card';
+import { NgOptimizedImage } from '@angular/common';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
 
 @Component({
   selector: 'app-report-summary',
   templateUrl: './submit-report-status.component.html',
   styleUrls: ['./submit-report-status.component.scss'],
+  imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, LongDatePipe],
 })
 export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
+  private readonly store = inject(Store);
+  public readonly router = inject(Router);
+  private readonly form3XService = inject(Form3XService);
   report?: Report;
   reportCode?: F3xReportCodes;
   coverageDates?: { [key: string]: Date | undefined };
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
-
-  constructor(
-    private store: Store,
-    public router: Router,
-    private form3XService: Form3XService,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));

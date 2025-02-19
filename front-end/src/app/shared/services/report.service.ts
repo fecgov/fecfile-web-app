@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { firstValueFrom, map, Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { CommitteeAccount } from '../models/committee-account.model';
@@ -27,66 +26,63 @@ export function getReportFromJSON(json: any): Report {
   providedIn: 'root',
 })
 export class ReportService implements TableListService<Report> {
+  protected readonly apiService = inject(ApiService);
+  protected readonly store = inject(Store);
   apiEndpoint = '/reports';
 
-  constructor(
-    protected apiService: ApiService,
-    protected store: Store,
-  ) {}
-
-  public getTableData(pageNumber = 1, ordering = 'form_type', params: QueryParams = {}): Observable<ListRestResponse> {
-    return this.apiService
-      .get<ListRestResponse>(`${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
-      .pipe(
-        map((response: ListRestResponse) => {
-          response.results = response.results.map((item) => getReportFromJSON(item));
-          return response;
-        }),
-      );
+  public async getTableData(
+    pageNumber = 1,
+    ordering = 'form_type',
+    params: QueryParams = {},
+  ): Promise<ListRestResponse> {
+    const response = await this.apiService.get<ListRestResponse>(
+      `${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
+      params,
+    );
+    response.results = response.results.map((item) => getReportFromJSON(item));
+    return response;
   }
 
-  public getAllReports(): Promise<Report[]> {
-    return firstValueFrom(this.apiService.get<Report[]>(this.apiEndpoint + '/')).then((rawReports) => {
-      return rawReports.map((item) => getReportFromJSON(item));
+  public async getAllReports(): Promise<Report[]> {
+    const rawReports = await this.apiService.get<Report[]>(this.apiEndpoint + '/');
+    return rawReports.map((item) => getReportFromJSON(item));
+  }
+
+  public async get(reportId: string): Promise<Report> {
+    const response = await this.apiService.get<Report>(`${this.apiEndpoint}/${reportId}/`);
+    return getReportFromJSON(response);
+  }
+
+  public async create(report: Report, fieldsToValidate: string[] = []): Promise<Report> {
+    const payload = this.preparePayload(report);
+    const response = await this.apiService.post<Report>(`${this.apiEndpoint}/`, payload, {
+      fields_to_validate: fieldsToValidate.join(','),
     });
+    return getReportFromJSON(response);
   }
 
-  public get(reportId: string): Observable<Report> {
-    return this.apiService
-      .get<Report>(`${this.apiEndpoint}/${reportId}/`)
-      .pipe(map((response) => getReportFromJSON(response)));
-  }
-
-  public create(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
+  public async update(report: Report, fieldsToValidate: string[] = []): Promise<Report> {
     const payload = this.preparePayload(report);
-    return this.apiService
-      .post<Report>(`${this.apiEndpoint}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
-      .pipe(map((response) => getReportFromJSON(response)));
+    const response = await this.apiService.put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, {
+      fields_to_validate: fieldsToValidate.join(','),
+    });
+    return getReportFromJSON(response);
   }
 
-  public update(report: Report, fieldsToValidate: string[] = []): Observable<Report> {
-    const payload = this.preparePayload(report);
-    return this.apiService
-      .put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, { fields_to_validate: fieldsToValidate.join(',') })
-      .pipe(map((response) => getReportFromJSON(response)));
-  }
-
-  public delete(report: Report): Observable<null> {
+  public delete(report: Report): Promise<null> {
     return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}/`);
   }
 
   /**
    * Pulls the report from the back end, stores it in the ngrx store, and returns the report to the caller.
    * @param reportId
-   * @returns Observable<Report>
+   * @returns Promise<Report>
    */
-  setActiveReportById(reportId: string | undefined): Observable<Report> {
+  async setActiveReportById(reportId: string | undefined): Promise<Report> {
     if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
-    return this.get(reportId).pipe(
-      tap((report) => {
-        return this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
-      }),
-    );
+    const report = await this.get(reportId);
+    this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
+    return report;
   }
 
   /**
@@ -102,11 +98,11 @@ export class ReportService implements TableListService<Report> {
   }
 
   public startAmendment(report: Report): Promise<string> {
-    return firstValueFrom(this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {}));
+    return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
   }
 
   public startUnamendment(report: Report): Promise<string> {
-    return firstValueFrom(this.apiService.post(`${this.apiEndpoint}/${report.id}/unamend/`, {}));
+    return this.apiService.post(`${this.apiEndpoint}/${report.id}/unamend/`, {});
   }
 
   preparePayload(item: Report): Record<string, unknown> {
@@ -115,7 +111,7 @@ export class ReportService implements TableListService<Report> {
     return payload;
   }
 
-  public fecUpdate(report: Report, committeeAccount?: CommitteeAccount): Observable<Report> {
+  public fecUpdate(report: Report, committeeAccount?: CommitteeAccount): Promise<Report> {
     const payload: Report = getReportFromJSON({
       ...report,
       committee_name: committeeAccount?.name,

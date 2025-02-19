@@ -1,17 +1,34 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ListRestResponse } from 'app/shared/models/rest-api.model';
+import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService, DeletedContactService } from '../../shared/services/contact.service';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
-import { firstValueFrom } from 'rxjs';
+import { TableComponent } from '../../shared/components/table/table.component';
+import { Toolbar } from 'primeng/toolbar';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
+import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
+import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
+import { LabelPipe } from '../../shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.scss'],
+  imports: [
+    TableComponent,
+    Toolbar,
+    PrimeTemplate,
+    ButtonDirective,
+    Ripple,
+    TableActionsButtonComponent,
+    ContactDialogComponent,
+    DeletedContactDialogComponent,
+    LabelPipe,
+  ],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   contactTypeLabels: LabelList = ContactTypeLabels;
@@ -45,29 +62,26 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    public override itemService: ContactService,
-    public deletedContactService: DeletedContactService,
-  ) {
-    super(messageService, confirmationService, elementRef);
+  public override itemService = inject(ContactService);
+  public readonly deletedContactService = inject(DeletedContactService);
+
+  constructor() {
+    super();
 
     this.checkForDeletedContacts();
   }
 
   public async checkForDeletedContacts() {
-    const contactListResponse = await firstValueFrom(this.deletedContactService.getTableData());
+    const contactListResponse = await this.deletedContactService.getTableData();
     const deletedContactsExist = contactListResponse.count > 0;
     this.restoreContactsButtonIsVisible = deletedContactsExist;
     return deletedContactsExist;
   }
 
-  public override loadTableItems(event: TableLazyLoadEvent): void {
-    super.loadTableItems(event);
+  public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
+    await super.loadTableItems(event);
 
-    this.checkForDeletedContacts();
+    await this.checkForDeletedContacts();
   }
 
   protected getEmptyItem(): Contact {
@@ -106,14 +120,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     this.restoreDialogIsVisible = true;
   }
 
-  public override onSelectAllChange(event: TableSelectAllChangeEvent) {
+  public override async onSelectAllChange(event: TableSelectAllChangeEvent) {
     const checked: boolean = event.checked;
 
     if (checked) {
-      this.itemService.getTableData(1).subscribe((response: ListRestResponse) => {
-        this.selectedItems = response.results.filter((item: Contact) => this.canDeleteItem(item)) || [];
-        this.selectAll = true;
-      });
+      const response = await this.itemService.getTableData(1);
+      this.selectedItems = response.results.filter((item: Contact) => this.canDeleteItem(item)) || [];
+      this.selectAll = true;
     } else {
       this.selectedItems = [];
       this.selectAll = false;
@@ -122,7 +135,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   saveContact(contact: Contact) {
     if (contact.id) {
-      this.itemService.update(contact).subscribe(() => {
+      this.itemService.update(contact).then(() => {
         this.loadTableItems({});
         this.messageService.add({
           severity: 'success',
@@ -132,7 +145,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
         });
       });
     } else {
-      this.itemService.create(contact).subscribe(() => {
+      this.itemService.create(contact).then(() => {
         this.loadTableItems({});
         this.messageService.add({
           severity: 'success',

@@ -1,5 +1,4 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TableModule } from 'primeng/table';
@@ -19,6 +18,8 @@ import { Form1M } from 'app/shared/models/form-1m.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { of, Subject } from 'rxjs';
 import { Actions } from '@ngrx/effects';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -29,9 +30,10 @@ describe('ReportListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TableModule, ToolbarModule, DialogModule],
-      declarations: [ReportListComponent, FormTypeDialogComponent, Dialog],
+      imports: [TableModule, ToolbarModule, DialogModule, ReportListComponent, FormTypeDialogComponent, Dialog],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         ReportService,
         ConfirmationService,
         MessageService,
@@ -147,7 +149,7 @@ describe('ReportListComponent', () => {
     });
 
     it('should delete', fakeAsync(async () => {
-      const deleteSpy = spyOn(component.itemService, 'delete').and.returnValue(of(null));
+      const deleteSpy = spyOn(component.itemService, 'delete').and.returnValue(Promise.resolve(null));
       const messageServiceSpy = spyOn(component.messageService, 'add');
       await component.delete(testActiveReport);
       expect(deleteSpy).toHaveBeenCalledOnceWith(testActiveReport);

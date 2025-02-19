@@ -1,33 +1,42 @@
-<div class="p-fluid">
-  <h1 *ngIf="transactionType?.showParentTransactionTitle">
+@if (transactionType?.showParentTransactionTitle) {
+  <h1>
     {{ transaction?.parent_transaction?.transactionType?.title }}
   </h1>
-  <h1 [ngClass]="{ 'dark-gray-text': transactionType?.showParentTransactionTitle }">
-    {{ transactionType?.title }}
-  </h1>
-  <hr class="solid" />
-  <div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
-  <app-independent-expenditure-create-f3x-input
-    *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24"
-  ></app-independent-expenditure-create-f3x-input>
-  <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
-  <h4 class="read-only-tag subtitle" *ngIf="isDebtRepayment(transaction)">DEBT REPAYMENT</h4>
-  <h2 class="top-margin-32">{{ transactionType?.contactTitle || 'Contact' }}</h2>
-  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-    <app-transaction-input
-      [activeReport$]="activeReport$"
-      [isEditable]="isEditable"
-      [isSingle]="true"
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [transaction]="transaction"
-      [contactTypeOptions]="contactTypeOptions"
-      [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-      (primaryContactSelect)="updateFormWithPrimaryContact($event)"
-      (candidateContactSelect)="updateFormWithCandidateContact($event)"
-      (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-      (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-    >
-    </app-transaction-input>
-  </form>
-</div>
+}
+
+<h1 [class.dark-gray-text]="transactionType?.showParentTransactionTitle">
+  {{ transactionType?.title }}
+</h1>
+<hr class="solid" />
+@if (transactionType?.subTitle) {
+  <div>{{ transactionType?.subTitle }}</div>
+}
+
+@if ((activeReport$ | async)?.report_type === reportTypes.F24) {
+  <app-independent-expenditure-create-f3x-input></app-independent-expenditure-create-f3x-input>
+}
+@if (!isEditable) {
+  <h4 class="read-only-tag subtitle">READ ONLY</h4>
+}
+@if (isDebtRepayment(transaction)) {
+  <h4 class="read-only-tag subtitle">DEBT REPAYMENT</h4>
+}
+
+<h2 class="top-margin-32">{{ transactionType?.contactTitle || 'Contact' }}</h2>
+<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+  <app-transaction-input
+    [activeReport$]="activeReport$"
+    [isEditable]="isEditable"
+    [isSingle]="true"
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [transaction]="transaction"
+    [contactTypeOptions]="contactTypeOptions"
+    [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+    (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+    (candidateContactSelect)="updateFormWithCandidateContact($event)"
+    (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
+    (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
+  >
+  </app-transaction-input>
+</form>

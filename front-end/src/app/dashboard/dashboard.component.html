@@ -4,7 +4,9 @@
       <div class="card-body">
         <h2 class="card-title">In-progress reports</h2>
         <div id="report-container">
-          <p class="card-text" #reportText *ngFor="let report of reports">{{ report.report_code_label }}</p>
+          @for (report of reports; track report.report_code_label) {
+            <p class="card-text" #reportText>{{ report.report_code_label }}</p>
+          }
         </div>
       </div>
       <div class="card-footer">

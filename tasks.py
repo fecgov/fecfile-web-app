@@ -47,10 +47,11 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("test", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "feature/2004-acao-header"),
+    ("dev", lambda _, branch: branch == "feature/2004b-test-deploy-with-1972-included"),
 )
 
 
+# new commit to trigger build
 def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
     os.chdir(os.path.join(orig_directory, "front-end"))

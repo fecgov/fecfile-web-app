@@ -1,13 +1,14 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PopoverModule } from 'primeng/popover';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FeedbackOverlayComponent } from './feedback-overlay.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('FeedbackOverlayComponent', () => {
   let component: FeedbackOverlayComponent;
@@ -15,9 +16,14 @@ describe('FeedbackOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToastModule, TableModule, OverlayPanelModule, ConfirmDialogModule, HttpClientTestingModule],
-      declarations: [FeedbackOverlayComponent],
-      providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
+      imports: [ToastModule, TableModule, PopoverModule, ConfirmDialogModule, FeedbackOverlayComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ConfirmationService,
+        MessageService,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeedbackOverlayComponent);

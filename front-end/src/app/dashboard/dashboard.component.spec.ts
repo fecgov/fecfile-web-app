@@ -1,9 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { ReportService } from 'app/shared/services/report.service';
-import { testActiveReport } from 'app/shared/utils/unit-test.utils';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ElementRef, QueryList } from '@angular/core';
 import { Subject } from 'rxjs';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -12,8 +16,14 @@ describe('DashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
-      providers: [{ provide: ReportService, useValue: jasmine.createSpyObj('ReportService', ['getAllReports']) }],
+      imports: [DashboardComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideMockStore(testMockStore),
+        { provide: ReportService, useValue: jasmine.createSpyObj('ReportService', ['getAllReports']) },
+      ],
     }).compileComponents();
 
     reportService = TestBed.inject(ReportService);

@@ -1,68 +1,73 @@
-<ul class="navbar-nav">
-  <ng-container *ngIf="headerStyle === headerStyles.DEFAULT">
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" routerLink="/dashboard"><span [ngStyle]="{ 'font-size': fontSize }">Dashboard</span></a>
-    </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" routerLink="/reports"><span [ngStyle]="{ 'font-size': fontSize }">Reports</span></a>
-    </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" routerLink="/contacts"><span [ngStyle]="{ 'font-size': fontSize }">Contacts</span></a>
-    </li>
-    <li class="nav-item dropdown" [ngClass]="full ? 'full-width' : ''">
-      <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        role="button"
-        id="navbarDropdownMenuLink"
-        data-bs-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <span [ngStyle]="{ 'font-size': fontSize }">Tools</span>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-        <a class="dropdown-item" routerLink="/tools/update-cash-on-hand">Update cash on hand</a>
-      </ul>
-    </li>
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        role="button"
+<ul class="flex">
+  @switch (headerStyle) {
+    @case (headerStyles.DEFAULT) {
+      <li class="nav-item" routerLink="/dashboard" [style.fontSize]="fontSize">Dashboard</li>
+      <li class="nav-item" routerLink="/reports" [style.fontSize]="fontSize">Reports</li>
+      <li class="nav-item" routerLink="/contacts" [style.fontSize]="fontSize">Contacts</li>
+      <li class="nav-item" (click)="op.toggle($event)" (keydown.enter)="op.toggle($event)" [style.fontSize]="fontSize">
+        <span>Tools</span>
+        <i class="pi pi-sort-down-fill"></i>
+        <p-popover #op>
+          <ul>
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/tools/update-cash-on-hand', op)"
+              (keydown.enter)="openLink('/tools/update-cash-on-hand', op)"
+            >
+              Update cash on hand
+            </li>
+          </ul>
+        </p-popover>
+      </li>
+      <li
         id="navbarProfileDropdownMenuLink"
-        data-bs-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
+        class="nav-item"
+        (click)="op2.toggle($event)"
+        (keydown.enter)="op2.toggle($event)"
+        [style.fontSize]="fontSize"
       >
-        <img
-          class="header-navbar-icon"
-          ngSrc="assets/img/profile_icon.svg"
-          alt="Profile"
-          [height]="16 * ratio"
-          [width]="8 * ratio"
-        />
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarProfileDropdownMenuLink">
-        <a class="dropdown-item" routerLink="/committee/">Account</a>
-        <a class="dropdown-item" routerLink="/committee/members">Users</a>
-        <a class="dropdown-item" routerLink="/login/select-committee/">Switch Committees</a>
-        <a class="dropdown-item" (click)="loginService.logOut()">Logout</a>
-      </ul>
-    </li>
-  </ng-container>
-  <ng-container *ngIf="headerStyle === headerStyles.LOGIN">
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" (click)="navigateToLoginDotGov()">
-        <span [ngStyle]="{ 'font-size': fontSize }">SIGN IN</span>
-      </a>
-    </li>
-  </ng-container>
-  <ng-container *ngIf="headerStyle === headerStyles.LOGOUT">
-    <li class="nav-item" [ngClass]="full ? 'full-width' : ''">
-      <a class="nav-link" (click)="loginService.logOut()">
-        <span [ngStyle]="{ 'font-size': fontSize }">Log Out</span>
-      </a>
-    </li>
-  </ng-container>
+        <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" [height]="16" [width]="8" />
+        <i class="pi pi-sort-down-fill"></i>
+        <p-popover #op2>
+          <ul>
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/committee/', op2)"
+              (keydown.enter)="openLink('/committee/', op2)"
+            >
+              Account
+            </li>
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/committee/members', op2)"
+              (keydown.enter)="openLink('/committee/members', op2)"
+            >
+              Users
+            </li>
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/login/select-committee/', op2)"
+              (keydown.enter)="openLink('/login/select-committee/', op2)"
+            >
+              Switch Committees
+            </li>
+            <li class="cursor-pointer py-2 px-4" (click)="logOut()" (keydown.enter)="logOut()">Logout</li>
+          </ul>
+        </p-popover>
+      </li>
+    }
+    @case (headerStyles.LOGIN) {
+      <li
+        class="nav-item"
+        (click)="navigateToLoginDotGov()"
+        (keydown.enter)="navigateToLoginDotGov()"
+        [style.fontSize]="fontSize"
+      >
+        SIGN IN
+      </li>
+    }
+    @case (headerStyles.LOGOUT) {
+      <li class="nav-item" (click)="logOut()" (keydown.enter)="logOut()" [style.fontSize]="fontSize">Log Out</li>
+    }
+  }
 </ul>

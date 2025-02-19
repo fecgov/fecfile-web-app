@@ -1,41 +1,23 @@
 :host ::ng-deep {
-  mark {
-    background-color: #c9ebea;
-  }
-  .dropdown-with-search .p-dropdown {
+  .dropdown-with-search .p-select {
     border-radius: 4px 0 0 4px;
   }
 
-  .dropdown-with-search .p-dropdown:hover {
+  .dropdown-with-search .p-select:hover {
     border-color: #d6d7d9;
   }
 
-  .p-dropdown {
+  .p-select {
     border: 2px solid #aeb0b5;
     background-color: #f1f1f1;
   }
 
-  .p-dropdown-label {
+  .p-select-label {
     color: #212121;
     font-family: karla-bold, sans-serif;
     font-size: 16px;
     width: 132px;
     height: 42px;
-  }
-
-  .p-autocomplete-input {
-    background-color: white;
-    border: 2px solid #aeb0b5;
-    border-left: 0;
-    border-radius: 0;
-    color: #212121;
-    font-family: karla, sans-serif;
-    font-size: 16px;
-    width: 342px;
-  }
-
-  .p-autocomplete-input::placeholder {
-    opacity: 0.5;
   }
 
   .p-button-icon-only {
@@ -46,26 +28,6 @@
     top: 5px;
     min-width: 15px;
     border: none;
-  }
-
-  .p-autocomplete-panel {
-    border: 1px solid #5b616b;
-    border-radius: 0;
-  }
-
-  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item-group {
-    padding: 10px 0 10px 10px;
-  }
-
-  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
-    padding: 10px 0 20px 10px;
-    border-bottom: 0.5px solid #e8e8e8;
-    border-left: 4px solid transparent;
-  }
-
-  .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item:hover {
-    background-color: #f1f1f1;
-    border-left: 4px solid #36bdbb;
   }
 
   .readonly {
@@ -89,6 +51,7 @@
 .contact-label-container {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .contact-label {
@@ -126,10 +89,4 @@
 
 .contact-lookup-container {
   max-width: 65em;
-}
-
-.option-group-header {
-  font-family: karla, sans-serif;
-  font-size: 12px;
-  color: #112e51;
 }

@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit } from '@angular/core';
+import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -8,13 +8,32 @@ import { TransactionFormUtils } from '../../transaction-type-base/transaction-fo
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Tooltip } from 'primeng/tooltip';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { SelectButton } from 'primeng/selectbutton';
+import { Dialog } from 'primeng/dialog';
+import { ButtonDirective } from 'primeng/button';
+import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 
 @Component({
   selector: 'app-memo-code',
   styleUrls: ['./memo-code.component.scss'],
   templateUrl: './memo-code.component.html',
+  imports: [
+    ReactiveFormsModule,
+    Tooltip,
+    ErrorMessagesComponent,
+    SelectButton,
+    Dialog,
+    ButtonDirective,
+    FecDatePipe,
+    CheckboxModule,
+  ],
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly store = inject(Store);
   @Input() overrideMemoItemHelpText: string | undefined;
   @Input() checkboxLabel = '';
 
@@ -30,13 +49,6 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   memoControl: SubscriptionFormControl = new SubscriptionFormControl();
   outOfDateDialogVisible = false;
   memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private store: Store,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     this.store

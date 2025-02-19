@@ -46,7 +46,7 @@ describe('Manage reports', () => {
     for (let index = 0; index < candidates.length; index++) {
       const candidateSection = cy.get(`[data-cy="candidate-${index}"]`);
       candidateSection.find('[id="searchBox"]').type(candidates[index].first_name.slice(0, 3));
-      candidateSection.get(`[data-cy="candidate-lookup"]`).contains(candidates[index].first_name).click();
+      candidateSection.get('.p-autocomplete-list-container').contains(candidates[index].first_name.slice(0, 3)).click();
       cy.get(`[data-cy="candidate-${index}"]`)
         .find('[data-cy="last-name"]')
         .should('have.value', candidates[index].last_name);

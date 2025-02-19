@@ -1,13 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Select } from 'primeng/select';
+import { PrimeTemplate } from 'primeng/api';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-election-input',
   templateUrl: './election-input.component.html',
+  imports: [ReactiveFormsModule, Select, PrimeTemplate, ErrorMessagesComponent, InputText],
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
   @Input() labelPrefix = '';

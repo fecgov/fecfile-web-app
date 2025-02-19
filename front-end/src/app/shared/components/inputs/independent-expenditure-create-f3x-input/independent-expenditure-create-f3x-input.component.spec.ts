@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { IndependentExpenditureCreateF3xInputComponent } from './independent-expenditure-create-f3x-input.component';
 import { TooltipModule } from 'primeng/tooltip';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('IndependentExpenditureCreateF3xInputComponent', () => {
   let component: IndependentExpenditureCreateF3xInputComponent;
@@ -12,9 +13,8 @@ describe('IndependentExpenditureCreateF3xInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [IndependentExpenditureCreateF3xInputComponent],
-      imports: [HttpClientTestingModule, TooltipModule],
-      providers: [provideMockStore(testMockStore), RouterTestingModule],
+      imports: [TooltipModule, IndependentExpenditureCreateF3xInputComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(IndependentExpenditureCreateF3xInputComponent);

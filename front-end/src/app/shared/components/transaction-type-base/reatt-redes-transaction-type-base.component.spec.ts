@@ -1,7 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
-import { of } from 'rxjs';
 import {
   NavigationAction,
   NavigationDestination,
@@ -11,8 +10,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../services/transaction.service';
 import { ReportService } from '../../services/report.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DatePipe } from '@angular/common';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -22,8 +19,11 @@ import { RedesignationToUtils } from '../../utils/reatt-redes/redesignation-to.u
 import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-from.utils';
 import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { ReattributedUtils } from '../../utils/reatt-redes/reattributed.utils';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -35,9 +35,13 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ReattRedesTransactionTypeDetailComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      imports: [ReattRedesTransactionTypeDetailComponent],
       providers: [
+        provideMockStore(testMockStore),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideAnimationsAsync(),
         DatePipe,
         MessageService,
         FormBuilder,
@@ -47,12 +51,6 @@ describe('ReattTransactionTypeBaseComponent', () => {
         FecDatePipe,
         ReportService,
         TransactionService,
-        {
-          ActivatedRoute,
-          useValue: {
-            params: of({ reportId: 123 }),
-          },
-        },
       ],
     }).compileComponents();
   });
@@ -81,12 +79,13 @@ describe('ReattTransactionTypeBaseComponent', () => {
     reattRedes.reports = [testActiveReport];
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
     component.transaction.reatt_redes = reattRedes;
-    fixture.detectChanges();
+    component.ngOnInit();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
   describe('reattribution and redesignation', () => {
     it('should update child primary contacts', () => {
       if (!component.transaction) throw Error('Bad test setup');
@@ -103,15 +102,17 @@ describe('ReattTransactionTypeBaseComponent', () => {
       expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should save all transaction', () => {
+    it('should save all transaction', async () => {
       if (!component.transaction) throw Error('Bad test setup');
       spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
-      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() => of([testTransaction]));
-      const navSpy = spyOn(component, 'navigateTo').and.callFake(() => {
-        return;
-      });
+      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() =>
+        Promise.resolve([testTransaction]),
+      );
+      const navSpy = spyOn(component, 'navigateTo').and.callFake(async () => true);
       component.ngOnInit();
-      component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
+      await component.save(
+        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+      );
 
       expect(multiSaveSpy).toHaveBeenCalledTimes(1);
       expect(navSpy).toHaveBeenCalledTimes(1);

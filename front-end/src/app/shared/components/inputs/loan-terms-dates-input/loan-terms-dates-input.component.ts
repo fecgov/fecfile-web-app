@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
@@ -11,6 +11,9 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
+import { CalendarComponent } from '../../calendar/calendar.component';
+import { Select } from 'primeng/select';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -21,16 +24,14 @@ enum LoanTermsFieldSettings {
 @Component({
   selector: 'app-loan-terms-dates-input',
   templateUrl: './loan-terms-dates-input.component.html',
+  imports: [ReactiveFormsModule, CalendarComponent, Select, ErrorMessagesComponent, InputText],
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
+  private readonly store = inject(Store);
   @ViewChild('interestRatePercentage') interestInput!: InputText;
   clearValuesOnChange = true;
 
-  constructor(private store: Store) {
-    super();
-  }
-
-  termFieldSettings = LoanTermsFieldSettings;
+  readonly termFieldSettings = LoanTermsFieldSettings;
 
   dueDateSettingOptions = LabelUtils.getPrimeOptions([
     [LoanTermsFieldSettings.SPECIFIC_DATE, 'Enter a specific date'],

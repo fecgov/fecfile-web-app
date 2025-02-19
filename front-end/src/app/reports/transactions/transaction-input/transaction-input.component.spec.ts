@@ -6,21 +6,28 @@ import { ContactTypes } from 'app/shared/models/contact.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ConfirmationService } from 'primeng/api';
 
 describe('TransactionInputComponent', () => {
   let component: TransactionInputComponent;
   let fixture: ComponentFixture<TransactionInputComponent>;
-  let store;
 
   const selectItem = {
     value: testContact,
   };
 
   beforeEach(() => {
-    store = provideMockStore(testMockStore);
     TestBed.configureTestingModule({
-      declarations: [TransactionInputComponent],
-      providers: [store, ReportService],
+      imports: [TransactionInputComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideMockStore(testMockStore),
+        ConfirmationService,
+        ReportService,
+      ],
     });
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;
@@ -28,7 +35,11 @@ describe('TransactionInputComponent', () => {
     component.transaction.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };
-    fixture.detectChanges();
+    component.form.setControl('loan_balance', new SubscriptionFormControl());
+    component.form.setControl('contribution_amount', new SubscriptionFormControl());
+    component.form.setControl('payment_amount', new SubscriptionFormControl());
+    component.form.setControl('balance_at_close', new SubscriptionFormControl());
+    component.ngOnInit();
   });
 
   it('should create', () => {

@@ -13,9 +13,9 @@
         <label for="report-selector">OPEN REPORTS</label>
         <select id="report-selector" class="form-select" aria-label="Report selector" [(ngModel)]="selectedReport">
           <option selected></option>
-          <option *ngFor="let report of availableReports" [ngValue]="report">
-            {{ report.formLabel }}: {{ report.formSubLabel }}
-          </option>
+          @for (report of availableReports; track report) {
+            <option [ngValue]="report">{{ report.formLabel }}: {{ report.formSubLabel }}</option>
+          }
         </select>
       </div>
       <div class="dialog-footer">

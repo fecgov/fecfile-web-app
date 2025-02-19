@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
 import { MainFormComponent } from './main-form.component';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -7,18 +7,18 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { CalendarModule } from 'primeng/calendar';
-import { RouterTestingModule } from '@angular/router/testing';
+import { DatePickerModule } from 'primeng/datepicker';
 import { Form99Service } from 'app/shared/services/form-99.service';
-import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
-import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { SelectModule } from 'primeng/select';
+import { provideRouter, Router } from '@angular/router';
 import { Form99 } from 'app/shared/models/form-99.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ReportListComponent } from 'app/reports/report-list/report-list.component';
+import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -29,18 +29,29 @@ describe('MainFormComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         SelectButtonModule,
-        SharedModule,
         DividerModule,
-        DropdownModule,
+        SelectModule,
         RadioButtonModule,
-        CalendarModule,
+        DatePickerModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([]),
+        MainFormComponent,
+        LabelPipe,
+        PrintPreviewComponent,
       ],
-      declarations: [MainFormComponent, LabelPipe],
-      providers: [Form99Service, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
+          { path: 'reports', pathMatch: 'full', component: ReportListComponent },
+          { path: 'reports/f99/web-print/999', pathMatch: 'full', component: PrintPreviewComponent },
+        ]),
+        Form99Service,
+        FormBuilder,
+        MessageService,
+        FecDatePipe,
+        provideMockStore(testMockStore),
+      ],
     });
     router = TestBed.inject(Router);
     form99Service = TestBed.inject(Form99Service);
@@ -59,23 +70,23 @@ describe('MainFormComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('should save', () => {
+  it('should save', fakeAsync(() => {
     component.form.patchValue({
       message_text: 'message',
     });
-    const createSpy = spyOn(form99Service, 'create').and.returnValue(of(Form99.fromJSON({})));
-    const updateSpy = spyOn(form99Service, 'update').and.returnValue(of(Form99.fromJSON({})));
+    const createSpy = spyOn(form99Service, 'create').and.callFake(async () => Form99.fromJSON({}));
+    const updateSpy = spyOn(form99Service, 'update').and.callFake(async () => Form99.fromJSON({}));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.save();
+    component.save().then(() => {
+      expect(navigateSpy).toHaveBeenCalledWith('/reports');
+      expect(createSpy).toHaveBeenCalledTimes(1);
 
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-    expect(createSpy).toHaveBeenCalledTimes(1);
+      component.reportId = '999';
+      component.save('continue');
 
-    component.reportId = '999';
-    component.save('continue');
-
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-    expect(updateSpy).toHaveBeenCalledTimes(1);
-  });
+      expect(navigateSpy).toHaveBeenCalledWith('/reports');
+      expect(updateSpy).toHaveBeenCalledTimes(1);
+    });
+  }));
 });

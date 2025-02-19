@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
@@ -27,14 +27,37 @@ import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'a
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SelectButton } from 'primeng/selectbutton';
+import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
+import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
+import { Select } from 'primeng/select';
+import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
+import { TextareaModule } from 'primeng/textarea';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-create-f3x-step1',
   templateUrl: './create-f3x-step1.component.html',
   styleUrl: './create-f3x-step1.component.scss',
+  imports: [
+    ReactiveFormsModule,
+    RadioButtonModule,
+    SelectButton,
+    ErrorMessagesComponent,
+    CalendarComponent,
+    Select,
+    SaveCancelComponent,
+    TextareaModule,
+  ],
 })
 export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
-  formProperties: string[] = [
+  private readonly store = inject(Store);
+  private readonly fb = inject(FormBuilder);
+  private readonly form3XService = inject(Form3XService);
+  private readonly messageService = inject(MessageService);
+  protected readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  readonly formProperties: string[] = [
     'filing_frequency',
     'report_type_category',
     'report_code',
@@ -44,7 +67,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     'state_of_election',
     'form_type',
   ];
-  userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
+  readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
@@ -57,17 +80,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   public thisYear = new Date().getFullYear();
   committeeAccount?: CommitteeAccount;
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
-
-  constructor(
-    private store: Store,
-    private fb: FormBuilder,
-    private form3XService: Form3XService,
-    private messageService: MessageService,
-    protected router: Router,
-    private activatedRoute: ActivatedRoute,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
@@ -194,11 +206,10 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
       summary.form_type = F3xFormTypes.F3XT;
     }
 
-    //Observables are *defined* here ahead of their execution
     const create$ = this.form3XService.create(summary, this.formProperties);
 
     //Create the report
-    create$.subscribe((report) => {
+    create$.then((report) => {
       if (jump === 'continue') {
         this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       } else {
