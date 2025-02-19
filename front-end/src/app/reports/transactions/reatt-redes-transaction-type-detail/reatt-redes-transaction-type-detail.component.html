@@ -6,7 +6,7 @@
   <p-accordionTab>
     <ng-template pTemplate="header">
       <strong>{{ transactionType?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">
+      <p class="accordion-subtext">
         {{ transactionType?.accordionSubText }}
       </p></ng-template
     >
@@ -37,7 +37,7 @@
   <p-accordionTab>
     <ng-template pTemplate="header">
       <strong>{{ childTransactionType?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">
+      <p class="accordion-subtext">
         {{ childTransactionType?.accordionSubText }}
       </p></ng-template
     >
@@ -70,7 +70,7 @@
   <p-accordionTab *ngIf="pullForward">
     <ng-template pTemplate="header">
       <strong>AUTO-POPULATED:</strong>
-      <p style="font-weight: normal">Duplicate of the original transaction</p>
+      <p class="accordion-subtext">Duplicate of the original transaction</p>
     </ng-template>
     <div class="p-fluid">
       <h2 *ngIf="transaction?.reatt_redes?.transactionType?.showParentTransactionTitle">

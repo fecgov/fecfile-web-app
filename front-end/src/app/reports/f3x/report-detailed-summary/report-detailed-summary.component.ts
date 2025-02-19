@@ -11,7 +11,7 @@ import { DestroyerComponent } from 'app/shared/components/app-destroyer.componen
 @Component({
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../../styles.scss', './report-detailed-summary.component'],
 })
 export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
   protected calculationFinished$ = new BehaviorSubject<boolean>(false);

@@ -22,6 +22,7 @@ import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags,
 @Component({
   selector: 'app-main-form',
   templateUrl: './main-form.component.html',
+  styleUrl: './main-form.component.scss',
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   formProperties: string[] = [
