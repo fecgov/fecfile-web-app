@@ -11,7 +11,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 
 @Component({
   selector: 'app-memo-code',
-  styleUrls: ['../../styles.scss', './memo-code.component.scss'],
+  styleUrls: ['./memo-code.component.scss'],
   templateUrl: './memo-code.component.html',
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {

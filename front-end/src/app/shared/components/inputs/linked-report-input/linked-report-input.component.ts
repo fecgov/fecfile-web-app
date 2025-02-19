@@ -11,7 +11,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 
 @Component({
   selector: 'app-linked-report-input',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['./linked-report-input.component.scss'],
   templateUrl: './linked-report-input.component.html',
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
