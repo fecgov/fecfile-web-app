@@ -47,7 +47,7 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("test", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "feature/2004-acao-header"),
+    ("dev", lambda _, branch: branch == "develop"),
 )
 
 
