@@ -3,7 +3,7 @@
     <div class="dialog-content">
       <div class="dialog-header">
         <h1 class="dialog-title" id="dialog-title">Add new user</h1>
-        <button pButton type="button" icon="pi pi-times" (click)="dialog.close()" aria-label="Cancel"></button>
+        <button pButton type="button" icon="pi pi-times" id="close-button" (click)="dialog.close()" aria-label="Cancel"></button>
       </div>
       <div class="dialog-body">
         <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
