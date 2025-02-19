@@ -225,20 +225,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   /**
-   * Add or remove the FEC ID unique validation check for a FormControl
-   * @param formId
-   * @param contactId
-   * @param enableValidator
-   */
-  refreshFecIdValidator(formId: string, contactId: string | undefined, enableValidator: boolean) {
-    this.form?.get(formId)?.clearAsyncValidators();
-    if (enableValidator) {
-      this.form?.get(formId)?.addAsyncValidators(this.contactService.getFecIdValidator(contactId));
-    }
-    this.form?.get(formId)?.updateValueAndValidity();
-  }
-
-  /**
    * On ngOnInit and when a user changes the selection of the ContactType for the contact
    * entry form (as known by the emitter from the contact-lookup component), update the necessary
    * FormControl elements for the ContactType selected by the user.
@@ -255,9 +241,15 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
     const schema = ContactService.getSchemaByType(contactType);
     SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
+    switch (contactType) {
+      case ContactTypes.CANDIDATE:
+        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+        break;
+      case ContactTypes.COMMITTEE:
+        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+        break;
+    }
     this.form.updateValueAndValidity();
-    this.refreshFecIdValidator('candidate_id', this.contact.id, contactType === ContactTypes.CANDIDATE);
-    this.refreshFecIdValidator('committee_id', this.contact.id, contactType === ContactTypes.COMMITTEE);
 
     // Clear out non-schema form values
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
