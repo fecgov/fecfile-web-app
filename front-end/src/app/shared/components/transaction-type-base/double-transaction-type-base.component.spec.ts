@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { ROUTES } from 'app/routes';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
@@ -18,14 +19,9 @@ import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { of } from 'rxjs';
 import { TransactionType } from '../../models/transaction-type.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ROUTES } from 'app/routes';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [

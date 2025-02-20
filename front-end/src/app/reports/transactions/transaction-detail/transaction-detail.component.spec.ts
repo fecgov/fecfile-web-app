@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
@@ -25,6 +25,9 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { TransactionDetailComponent } from './transaction-detail.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;

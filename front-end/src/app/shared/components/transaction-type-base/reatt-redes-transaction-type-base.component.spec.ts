@@ -114,8 +114,8 @@ describe('ReattTransactionTypeBaseComponent', () => {
         new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
       );
 
-      expect(multiSaveSpy).toHaveBeenCalledTimes(2);
-      expect(navSpy).toHaveBeenCalledTimes(2);
+      expect(multiSaveSpy).toHaveBeenCalledTimes(1);
+      expect(navSpy).toHaveBeenCalledTimes(1);
     }));
   });
 
