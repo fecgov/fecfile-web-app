@@ -17,7 +17,7 @@ import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
 @Component({
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
   imports: [Card, CalculationOverlayComponent, ButtonDirective, Ripple, AsyncPipe, CurrencyPipe, DefaultZeroPipe],
 })
 export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {

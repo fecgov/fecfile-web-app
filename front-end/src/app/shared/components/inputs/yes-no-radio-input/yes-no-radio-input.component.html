@@ -1,11 +1,10 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label [for]="controlName" style="display: inline-block">{{ label }}</label>
+      <label [for]="controlName" class="control-label">{{ label }}</label>
       @if (tooltipText) {
         <span
-          class="pi pi-info-circle"
-          style="font-size: 1.5rem; margin-left: 0.5rem"
+          class="pi pi-info-circle circle-icon-tooltip"
           pTooltip="{{ tooltipText }}"
           [escape]="tooltipEscape"
         ></span>

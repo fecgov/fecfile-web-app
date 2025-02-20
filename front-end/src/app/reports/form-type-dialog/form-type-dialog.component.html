@@ -1,110 +1,57 @@
-<dialog #dialog>
-  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
-    <div class="dialog-content">
-      <div class="dialog-header">
-        <h1 class="dialog-title" id="dialog-title">Create a new report</h1>
-        <button
-          #firstElement
-          type="button"
-          class="btn-close"
-          id="close-button"
-          (click)="dialog.close()"
-          aria-label="Cancel"
-        ></button>
-      </div>
-      <div class="dialog-body">
-        <div class="dropdown">
-          <span id="type-label">FORM TYPE</span>
-
-          <button
-            class="btn dropdown-toggle focus-ring"
-            type="button"
-            id="typeDropdown"
-            [autofocus]="true"
-            data-bs-toggle="dropdown"
-            (keydown.escape)="closeDialog()"
-            aria-expanded="false"
-            aria-label="Possible report types"
-            #dropdownElement
+<p-dialog [modal]="true" [(visible)]="dialogVisible" (onHide)="closeDialog()" [style]="{ width: '512px' }">
+  <ng-template #header>
+    <h1>Create a new report</h1>
+  </ng-template>
+  <div class="dialog-body">
+    <div class="dropdown">
+      <span id="type-label">FORM TYPE</span>
+      <p-select [options]="formTypeOptions" [(ngModel)]="selectedType" class="w-full" appendTo="body" id="typeDropdown">
+        <ng-template #dropdownicon>
+          <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="8px" width="8px" />
+        </ng-template>
+        <ng-template #selectedItem let-selectedOption>
+          <span class="option">
+            <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
+          </span>
+        </ng-template>
+        <ng-template let-type #item>
+          <span
+            class="option"
+            (click)="updateSelected(type)"
+            (keydown.enter)="updateSelected(type)"
+            [attr.data-cy]="type"
           >
-            @if (selectedType) {
-              <span class="option">
-                <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
-              </span>
-            } @else {
-              <span></span>
-            }
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="typeDropdown">
-            @for (type of formTypeOptions; track type) {
-              <li [attr.data-cy-form-type]="type">
-                <button class="dropdown-item" (click)="updateSelected(type)" (select)="updateSelected(type)">
-                  <span class="option">
-                    <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}</span
-                  >
-                </button>
-              </li>
-            }
-          </ul>
-        </div>
-        @if (selectedType === formTypes.F24) {
-          <div class="modal-item-margin">
-            <label for="form24Options">REPORT TYPE</label>
-
-            <div role="group" class="p-selectbutton p-buttonset p-component">
-              <div
-                pRipple
-                pAutoFocus
-                class="p-ripple p-element p-button p-component"
-                [class.p-highlight]="selectedForm24Type === '24'"
-                role="radio"
-                tabindex="0"
-                aria-label="24 Hour"
-                aria-checked="false"
-                aria-labelledby="label_24"
-                data-pc-section="button"
-                (click)="selectItem('24')"
-                (keydown.space)="selectItem('24')"
-                (keydown.enter)="selectItem('24')"
-              >
-                <span id="label_24" class="p-button-label">24 Hour</span>
-              </div>
-              <div
-                pRipple
-                pAutoFocus
-                class="p-ripple p-element p-button p-component"
-                id="48-button"
-                [class.p-highlight]="selectedForm24Type === '48'"
-                role="radio"
-                tabindex="0"
-                aria-label="48 Hour"
-                aria-checked="false"
-                aria-labelledby="label_48"
-                data-pc-section="button"
-                (click)="selectItem('48')"
-                (keydown.space)="selectItem('48')"
-                (keydown.enter)="selectItem('48')"
-                #form24FocusElement
-              >
-                <span id="label_48" class="p-button-label">48 Hour</span>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-      <div class="dialog-footer">
-        <button
-          #lastElement
-          id="submit-button"
-          pButton
-          pRipple
-          [disabled]="isSubmitDisabled"
-          label="Start building report"
-          data-cy="start-report"
-          class="p-button-primary"
-          (click)="goToReportForm()"
-        ></button>
-      </div>
+            <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}
+          </span>
+        </ng-template>
+      </p-select>
     </div>
+    @if (selectedType === formTypes.F24) {
+      <div class="modal-item-margin">
+        <label for="form24Options">REPORT TYPE</label>
+
+        <p-selectbutton
+          inputid="form24Options"
+          [options]="form24Options"
+          [(ngModel)]="selectedForm24Type"
+          optionLabel="label"
+          optionValue="value"
+        />
+      </div>
+    }
   </div>
-</dialog>
+  <ng-template #footer>
+    <div class="flex justify-content-center w-full pb-3">
+      <button
+        id="submit-button"
+        pButton
+        pRipple
+        [disabled]="isSubmitDisabled"
+        label="Start building report"
+        data-cy="start-report"
+        class="p-button-primary"
+        (click)="goToReportForm()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

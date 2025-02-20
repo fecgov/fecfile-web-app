@@ -116,8 +116,8 @@ describe('Receipt Transactions', () => {
 
     TransactionDetailPage.enterScheduleFormData(formTransactionData, false, '', true, 'contribution_date');
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
-    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').first().click();
 
     // Create memo transaction
     cy.contains('h1', 'Partnership Attribution').should('exist');
@@ -129,20 +129,20 @@ describe('Receipt Transactions', () => {
     };
 
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
-    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
+    cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
 
     // Create a second memo transaction so we can check the aggregate value
     cy.contains('Transactions in this report').should('exist');
     PageUtils.clickLink('Partnership Receipt');
-    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
-    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').first().click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').first().click();
     PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
     cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
 
-    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
+    cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
 
     // Assert transaction list table is correct
     checkTable(0, 'Partnership Receipt', false, '$200.01');
@@ -467,8 +467,8 @@ describe('Receipt Transactions', () => {
     };
     TransactionDetailPage.enterScheduleFormData(tier1TransactionData, false, '', true, 'contribution_date');
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
-    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Partnership Receipt').click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').contains('Partnership Receipt').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue', '', true);
 
@@ -490,8 +490,8 @@ describe('Receipt Transactions', () => {
       },
     };
     TransactionDetailPage.enterScheduleFormData(tier2TransactionData, false, '', true, 'contribution_date');
-    cy.get(alias).find('[data-test="navigation-control-dropdown"]').first().click();
-    cy.get(alias).find('[data-test="navigation-control-dropdown-option"]').contains('Individual').click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
+    cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').contains('Individual').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue', '', true);
 
@@ -513,7 +513,7 @@ describe('Receipt Transactions', () => {
       },
     };
     TransactionDetailPage.enterScheduleFormData(tier3TransactionData, false, '', true, 'contribution_date');
-    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
+    cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue', '', true);
 

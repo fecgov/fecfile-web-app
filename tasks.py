@@ -8,7 +8,7 @@ from invoke import task
 
 
 APP_NAME = "fecfile-web-app"
-ORG_NAME = "fec-fecfileonline-prototyping"
+ORG_NAME = "fec-fecfile"
 
 
 def _detect_space(repo, branch=None):
@@ -45,7 +45,8 @@ def _detect_branch(repo):
 
 
 DEPLOY_RULES = (
-    ("test", lambda _, branch: branch == "main"),
+    ("prod", lambda _, branch: branch == "main"),
+    ("test", lambda _, branch: branch == "test"),
     ("stage", lambda _, branch: branch.startswith("release")),
     ("dev", lambda _, branch: branch == "develop"),
 )

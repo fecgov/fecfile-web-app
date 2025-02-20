@@ -7,7 +7,6 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
-import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
 import { CommitteeMember } from 'app/shared/models';
@@ -37,7 +36,6 @@ describe('ManageCommitteeComponent', () => {
         TableModule,
         ToolbarModule,
         DialogModule,
-        FileUploadModule,
         ConfirmDialogModule,
         ManageCommitteeComponent,
         CommitteeMemberDialogComponent,

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TripleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/triple-transaction-type-base.component';
 import { AsyncPipe } from '@angular/common';
-import { IndependentExpenditureCreateF3xInputComponent } from '../../../shared/components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 import { AccordionModule } from 'primeng/accordion';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
+import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 
 @Component({
   selector: 'app-triple-transaction-detail',

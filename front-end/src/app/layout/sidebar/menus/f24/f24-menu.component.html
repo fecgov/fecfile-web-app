@@ -6,11 +6,9 @@
       <div class="sub-heading">{{ subLabel }}</div>
     </div>
   </div>
-  <div class="grid">
-    @if (items$ | async) {
-      <div class="col-12">
-        <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
-      </div>
-    }
-  </div>
+  @if (items$ | async) {
+    <div class="pl-1 pt-2">
+      <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
+    </div>
+  }
 </div>

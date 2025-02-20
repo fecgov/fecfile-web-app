@@ -15,12 +15,12 @@
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ transactionType?.accordionTitle }}:</strong>
-        <p style="font-weight: normal">
+        <p class="accordion-subtext">
           {{ transactionType?.accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
-    <p-accordion-content class="p-fluid">
+    <p-accordion-content>
       @if (transactionType?.formTitle) {
         <h2>
           {{ transactionType?.formTitle }}
@@ -51,12 +51,12 @@
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ childTransactionType?.accordionTitle }}:</strong>
-        <p style="font-weight: normal">
+        <p class="accordion-subtext">
           {{ childTransactionType?.accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
-    <p-accordion-content class="p-fluid">
+    <p-accordion-content>
       <h2>{{ childTransaction?.transactionType?.title }}</h2>
       @if (childTransactionType?.description) {
         <p>

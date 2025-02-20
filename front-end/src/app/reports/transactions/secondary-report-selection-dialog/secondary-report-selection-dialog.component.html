@@ -1,41 +1,24 @@
-<dialog #dialog>
-  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+<p-dialog header="Confirm" [modal]="true" [(visible)]="dialogVisible" (onHide)="closeDialog()" class="w-6">
+  <div>
     <div class="dialog-content">
-      <div class="dialog-header">
-        <h1 class="dialog-title" id="dialog-title">Confirm</h1>
-        <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
-      </div>
       <div class="dialog-body">
         <p class="dialog-text">
           <b>This independent expenditure will be added to the following {{ reportType | label: reportTypeLabels }}:</b>
         </p>
-        <div class="dropdown">
-          <label id="type-label" for="typeDropdown">{{ reportType | label: reportTypeLabels }}</label>
-          <button
-            class="btn dropdown-toggle"
-            type="button"
-            id="typeDropdown"
-            [autofocus]="true"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            [innerHTML]="dropDownFieldText"
-          ></button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            @for (report of reports; track report) {
-              <li>
-                <button
-                  class="dropdown-item"
-                  (click)="updateSelectedReport(report)"
-                  (select)="updateSelectedReport(report)"
-                >
-                  <span class="option">
-                    <b>{{ report.id | label: reportLabels }}</b></span
-                  >
-                </button>
-              </li>
-            }
-          </ul>
-        </div>
+
+        <p-select [options]="reports" [(ngModel)]="selectedReport" class="w-full" appendTo="body">
+          <ng-template #selectedItem let-selectedOption>
+            <span class="option">
+              {{ dropDownFieldText }}
+            </span>
+          </ng-template>
+          <ng-template let-report #item>
+            <span class="option" (click)="updateSelectedReport(report)">
+              <b>{{ report.id | label: reportLabels }}</b>
+            </span>
+          </ng-template>
+        </p-select>
+
         @if (reportType === reportTypes.F24) {
           <p class="dialog-text dialog-note">
             <i>
@@ -45,22 +28,18 @@
           </p>
         }
       </div>
-      <div class="dialog-footer grid">
-        <div class="col-12 center">
-          <button
-            pButton
-            pRipple
-            [disabled]="!selectedReport"
-            label="Confirm"
-            class="p-button-primary"
-            (click)="linkToSelectedReport()"
-          ></button>
-        </div>
-        <div class="col-12 center">
-          <span (click)="dialog.close()" class="hover">Cancel</span>
-        </div>
+      <div class="flex justify-content-between">
+        <button pButton pRipple [text]="true" (click)="closeDialog()" label="Cancel"></button>
+        <button
+          pButton
+          pRipple
+          [disabled]="!selectedReport"
+          label="Confirm"
+          class="p-button-primary"
+          (click)="linkToSelectedReport()"
+        ></button>
       </div>
     </div>
   </div>
-</dialog>
+</p-dialog>
 <p-toast key="reportLinkToast"></p-toast>

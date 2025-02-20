@@ -1,18 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
+import { Form99, textCodes } from 'app/shared/models/form-99.model';
+import { Report } from 'app/shared/models/report.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { Form99Service } from 'app/shared/services/form-99.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
-import { Form99, textCodes } from 'app/shared/models/form-99.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { Report } from 'app/shared/models/report.model';
-import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { InputText } from 'primeng/inputtext';
+import { Select } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
-import { Select } from 'primeng/select';
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
-import { TextareaModule } from 'primeng/textarea';
-import { Form99Service } from 'app/shared/services/form-99.service';
 
 @Component({
   selector: 'app-main-form',

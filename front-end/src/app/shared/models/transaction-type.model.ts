@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { JsonSchema } from '../interfaces/json-schema.interface';
+import { JsonSchema } from 'fecfile-validate';
 import {
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,

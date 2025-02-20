@@ -1,31 +1,31 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { ConfirmationService } from 'primeng/api';
-import { Form1M } from 'app/shared/models/form-1m.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { Report } from 'app/shared/models/report.model';
+import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
+import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
 import { Contact } from 'app/shared/models/contact.model';
+import { Form1M } from 'app/shared/models/form-1m.model';
+import { Report } from 'app/shared/models/report.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { Form1MService } from 'app/shared/services/form-1m.service';
+import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { InputText } from 'primeng/inputtext';
-import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
-import { RadioButton } from 'primeng/radiobutton';
-import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
-import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
-import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
-import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
-import { CandidateOfficeInputComponent } from '../../../shared/components/inputs/candidate-office-input/candidate-office-input.component';
-import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
+import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { Form1MService } from 'app/shared/services/form-1m.service';
+import { InputText } from 'primeng/inputtext';
+import { RadioButton } from 'primeng/radiobutton';
+import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
+import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
+import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
+import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
+import { CandidateOfficeInputComponent } from '../../../shared/components/inputs/candidate-office-input/candidate-office-input.component';
+import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
+import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
+import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
+import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
 
 @Component({
   selector: 'app-main-form',
@@ -43,6 +43,7 @@ import { Form1MService } from 'app/shared/services/form-1m.service';
     SaveCancelComponent,
     ConfirmDialog,
   ],
+  styleUrl: './main-form.component.scss',
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   protected override reportService: Form1MService = inject(Form1MService);

@@ -5,16 +5,16 @@ import { PageUtils } from './pageUtils';
 export class ReportListPage {
   static goToPage() {
     cy.visit('/dashboard');
-    cy.get('.navbar-nav').find('.nav-link').contains('Reports').click();
+    cy.get('nav').find('.nav-item').contains('Reports').click();
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
     cy.get('[data-cy="create-report"]').click({ force });
     cy.get('#typeDropdown').click();
     if (formType === 'F24') {
-      cy.get(`[data-cy-form-type="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
+      cy.get(`[data-cy="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
     }
-    cy.get(`[data-cy-form-type="${formType}"]`).click();
+    cy.get(`[data-cy="${formType}"]`).click();
     if (submit) {
       cy.get('[data-cy="start-report"]').click();
     }
@@ -64,7 +64,7 @@ export class ReportListPage {
   static createF24(report = defaultForm24Data) {
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('F24', true, false);
-    cy.get('div > span').contains(`${report.report_type_24_48} Hour`).should('exist').click();
+    cy.get('p-togglebutton').contains(`${report.report_type_24_48} Hour`).should('exist').click();
     cy.get('[data-cy="start-report"]').click();
   }
 

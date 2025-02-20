@@ -67,7 +67,7 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
 if (environment.production) {
   enableProdMode();
 }
-
+const ngCspNonce = document.body?.querySelector('[ngCspNonce]')?.getAttribute('ngCspNonce') ?? undefined;
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
@@ -102,6 +102,9 @@ bootstrapApplication(AppComponent, {
     provideRouter(ROUTES),
     provideAnimationsAsync(),
     providePrimeNG({
+      csp: {
+        nonce: ngCspNonce,
+      },
       theme: {
         preset: Aura,
         options: {

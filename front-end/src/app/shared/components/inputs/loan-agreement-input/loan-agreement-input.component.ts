@@ -19,6 +19,7 @@ import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-loan-agreement-input',
+  styleUrls: ['./loan-agreement-input.component.scss'],
   templateUrl: './loan-agreement-input.component.html',
   imports: [
     ReactiveFormsModule,

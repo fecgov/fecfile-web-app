@@ -156,7 +156,7 @@ export class PageUtils {
       .find('app-table-actions-button')
       .children()
       .last()
-      .as('kabob');
-    return cy.get('@kabob');
+      .click();
+    return cy.get(alias).find('.p-popover');
   }
 }

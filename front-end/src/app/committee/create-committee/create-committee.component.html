@@ -19,7 +19,7 @@
         <input type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
         <p-button pButton class="search-button" (click)="search(searchBoxFormControl.value)">
           <ng-template pTemplate="iconTemplate">
-            <div class="p-fluid">
+            <div>
               <img
                 alt="Magnifying lens"
                 src="assets/img/contact_lookup_magnifying_glass.svg"
@@ -71,7 +71,6 @@
 </div>
 
 <p-dialog
-  header="Header"
   [(visible)]="explanationVisible"
   [modal]="true"
   [dismissableMask]="true"
@@ -80,7 +79,7 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <ng-template pTemplate="header">
+  <ng-template #header>
     <span class="explanation-header">What am I searching?</span>
   </ng-template>
   <p>
@@ -93,7 +92,9 @@
     the committee was just created and the Form 1 was recently submitted, please wait 24 hours for the database to
     update. For all other questions, don't hesitate to get in touch with FECFile technical support for assistance.
   </p>
-  <ng-template pTemplate="footer">
-    <p-button (click)="explanationVisible = false" label="Close" pAutoFocus [autofocus]="true"></p-button>
+  <ng-template #footer>
+    <div class="top-border-footer">
+      <p-button (click)="explanationVisible = false" label="Close" pAutoFocus [autofocus]="true"></p-button>
+    </div>
   </ng-template>
 </p-dialog>

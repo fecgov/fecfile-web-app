@@ -12,6 +12,7 @@
       [readonly]="contactTypeReadOnly"
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
       id="entity_type_dropdown"
+      appendTo="body"
     >
       <ng-template pTemplate="dropdownicon">
         @if (contactTypeOptions.length > 1) {

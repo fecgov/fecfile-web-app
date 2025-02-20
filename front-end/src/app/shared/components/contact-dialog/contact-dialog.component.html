@@ -4,141 +4,212 @@
     [style]="{ width: '90%' }"
     [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
-    styleClass="p-fluid"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
     (visibleChange)="closeDialog($event)"
   >
-    <ng-template pTemplate="content">
-      <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+      <div class="grid">
+        <div class="col-12">
+          <h3>Contact</h3>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-10">
+          <div class="field">
+            <label for="type">CONTACT TYPE</label>
+            <app-contact-lookup
+              [contactTypeOptions]="contactTypeOptions"
+              [showSearchBoxCallback]="showSearchBox"
+              [showCreateNewContactButton]="false"
+              [includeFecfileResults]="false"
+              [candidateOffice]="defaultCandidateOffice"
+              (contactTypeSelect)="contactTypeChanged($event)"
+              (contactLookupSelect)="updateContact($event)"
+            >
+            </app-contact-lookup>
+          </div>
+        </div>
+        <div class="col-6"></div>
+      </div>
+      @if (contactType === ContactTypes.CANDIDATE) {
         <div class="grid">
-          <div class="col-12">
-            <h3>Contact</h3>
+          <div class="col-6">
+            <div class="field">
+              <label for="candidate_id">CANDIDATE ID</label>
+              <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
+              <app-error-messages
+                [form]="form"
+                fieldName="candidate_id"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-4"></div>
+        </div>
+      }
+      @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
+        <div class="grid">
+          @if (contactType === ContactTypes.COMMITTEE) {
+            <div class="col-4">
+              <div class="field">
+                <label for="committee_id">COMMITTEE ID</label>
+                <input type="text" pInputText id="committee_id" formControlName="committee_id" />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="committee_id"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
+            </div>
+          }
+          <div class="col-8">
+            <div class="field">
+              <label for="name">NAME</label>
+              <input type="text" pInputText id="name" formControlName="name" />
+              <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
+          </div>
+          @if (contactType === ContactTypes.ORGANIZATION) {
+            <div class="col-4"></div>
+          }
+        </div>
+      }
+      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+        <div class="grid">
+          <div class="col-4">
+            <div class="field">
+              <label for="last_name">LAST NAME</label>
+              <input type="text" pInputText id="last_name" formControlName="last_name" />
+              <app-error-messages
+                [form]="form"
+                fieldName="last_name"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="field">
+              <label for="first_name">FIRST NAME</label>
+              <input type="text" pInputText id="first_name" formControlName="first_name" />
+              <app-error-messages
+                [form]="form"
+                fieldName="first_name"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="field">
+              <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+              <input type="text" pInputText id="middle_name" formControlName="middle_name" />
+              <app-error-messages
+                [form]="form"
+                fieldName="middle_name"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
           </div>
         </div>
         <div class="grid">
-          <div class="col-10">
+          <div class="col-3">
             <div class="field">
-              <label for="type">CONTACT TYPE</label>
-              <app-contact-lookup
-                [contactTypeOptions]="contactTypeOptions"
-                [showSearchBoxCallback]="showSearchBox"
-                [showCreateNewContactButton]="false"
-                [includeFecfileResults]="false"
-                [candidateOffice]="defaultCandidateOffice"
-                (contactTypeSelect)="contactTypeChanged($event)"
-                (contactLookupSelect)="updateContact($event)"
-              >
-              </app-contact-lookup>
+              <label for="prefix">PREFIX (OPTIONAL)</label>
+              <input type="text" pInputText id="prefix" formControlName="prefix" />
+              <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="field">
+              <label for="suffix">SUFFIX (OPTIONAL)</label>
+              <input type="text" pInputText id="suffix" formControlName="suffix" />
+              <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-6"></div>
         </div>
-        @if (contactType === ContactTypes.CANDIDATE) {
-          <div class="grid">
-            <div class="col-6">
-              <div class="field">
-                <label for="candidate_id">CANDIDATE ID</label>
-                <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="candidate_id"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-4"></div>
+      }
+      <div class="grid">
+        <div class="col-12">
+          <hr />
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <h3>Address</h3>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="country">COUNTRY/REGION</label>
+            <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
           </div>
-        }
-        @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
-          <div class="grid">
-            @if (contactType === ContactTypes.COMMITTEE) {
-              <div class="col-4">
-                <div class="field">
-                  <label for="committee_id">COMMITTEE ID</label>
-                  <input type="text" pInputText id="committee_id" formControlName="committee_id" />
-                  <app-error-messages
-                    [form]="form"
-                    fieldName="committee_id"
-                    [formSubmitted]="formSubmitted"
-                  ></app-error-messages>
-                </div>
-              </div>
-            }
-            <div class="col-8">
-              <div class="field">
-                <label for="name">NAME</label>
-                <input type="text" pInputText id="name" formControlName="name" />
-                <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
-              </div>
-            </div>
-            @if (contactType === ContactTypes.ORGANIZATION) {
-              <div class="col-4"></div>
-            }
+        </div>
+        <div class="col-6"></div>
+      </div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="street_1">STREET ADDRESS</label>
+            <input type="text" pInputText id="street_1" formControlName="street_1" />
+            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
-        }
-        @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
-          <div class="grid">
-            <div class="col-4">
-              <div class="field">
-                <label for="last_name">LAST NAME</label>
-                <input type="text" pInputText id="last_name" formControlName="last_name" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="last_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="field">
-                <label for="first_name">FIRST NAME</label>
-                <input type="text" pInputText id="first_name" formControlName="first_name" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="first_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="field">
-                <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-                <input type="text" pInputText id="middle_name" formControlName="middle_name" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="middle_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
+        </div>
+        <div class="col-6">
+          <div class="field">
+            <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+            <input type="text" pInputText id="street_2" formControlName="street_2" />
+            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
-          <div class="grid">
-            <div class="col-3">
-              <div class="field">
-                <label for="prefix">PREFIX (OPTIONAL)</label>
-                <input type="text" pInputText id="prefix" formControlName="prefix" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="prefix"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="field">
-                <label for="suffix">SUFFIX (OPTIONAL)</label>
-                <input type="text" pInputText id="suffix" formControlName="suffix" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="suffix"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-6"></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="city">CITY</label>
+            <input type="text" pInputText id="city" formControlName="city" />
+            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
-        }
+        </div>
+        <div class="col-3">
+          <div class="field">
+            <label for="state">STATE/PROVINCE</label>
+            <p-select
+              inputId="state"
+              formControlName="state"
+              [options]="stateOptions"
+              [autoDisplayFirst]="false"
+              appendTo="body"
+            ></p-select>
+            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="field">
+            <label for="zip">ZIP/POSTAL CODE</label>
+            <input type="text" pInputText id="zip" formControlName="zip" />
+            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+            <app-fec-international-phone-input id="telephone" formControlName="telephone" labelName="telephone-label">
+            </app-fec-international-phone-input>
+            <app-error-messages
+              [form]="form"
+              fieldName="telephone"
+              [formSubmitted]="formSubmitted"
+              patternErrorMessage="This field must contain 10 numeric characters."
+            ></app-error-messages>
+          </div>
+        </div>
+        <div class="col-6"></div>
+      </div>
+      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -146,223 +217,128 @@
         </div>
         <div class="grid">
           <div class="col-12">
-            <h3>Address</h3>
+            <h3>Employer</h3>
           </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field d-grid">
-              <label for="country">COUNTRY/REGION</label>
-              <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
-            </div>
-          </div>
-          <div class="col-6"></div>
         </div>
         <div class="grid">
           <div class="col-6">
             <div class="field">
-              <label for="street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="street_1" formControlName="street_1" />
+              <label for="employer">EMPLOYER (OPTIONAL)</label>
+              <input type="text" pInputText id="employer" formControlName="employer" />
               <app-error-messages
                 [form]="form"
-                fieldName="street_1"
+                fieldName="employer"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
           <div class="col-6">
             <div class="field">
-              <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="street_2" formControlName="street_2" />
+              <label for="occupation">OCCUPATION (OPTIONAL)</label>
+              <input type="text" pInputText id="occupation" formControlName="occupation" />
               <app-error-messages
                 [form]="form"
-                fieldName="street_2"
+                fieldName="occupation"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="city">CITY</label>
-              <input type="text" pInputText id="city" formControlName="city" />
-              <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field d-grid">
-              <label for="state">STATE/PROVINCE</label>
-              <p-select
-                inputId="state"
-                formControlName="state"
-                [options]="stateOptions"
-                [autoDisplayFirst]="false"
-                appendTo="body"
-              ></p-select>
-              <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="zip" formControlName="zip" />
-              <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
-              <app-fec-international-phone-input id="telephone" formControlName="telephone" labelName="telephone-label">
-              </app-fec-international-phone-input>
-              <app-error-messages
-                [form]="form"
-                fieldName="telephone"
-                [formSubmitted]="formSubmitted"
-                patternErrorMessage="This field must contain 10 numeric characters."
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6"></div>
-        </div>
-        @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
-          <div class="grid">
-            <div class="col-12">
-              <hr />
-            </div>
-          </div>
-          <div class="grid">
-            <div class="col-12">
-              <h3>Employer</h3>
-            </div>
-          </div>
-          <div class="grid">
-            <div class="col-6">
-              <div class="field">
-                <label for="employer">EMPLOYER (OPTIONAL)</label>
-                <input type="text" pInputText id="employer" formControlName="employer" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="employer"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="field">
-                <label for="occupation">OCCUPATION (OPTIONAL)</label>
-                <input type="text" pInputText id="occupation" formControlName="occupation" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="occupation"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-          </div>
-        }
-        @if (contactType === ContactTypes.CANDIDATE) {
-          <div class="grid">
-            <div class="col-12">
-              <hr />
-            </div>
-          </div>
-          <div class="grid">
-            <div class="col-12">
-              <h3>Office</h3>
-            </div>
-          </div>
-          <app-candidate-office-input
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            officeFormControlName="candidate_office"
-            stateFormControlName="candidate_state"
-            districtFormControlName="candidate_district"
-          >
-          </app-candidate-office-input>
-        }
-      </form>
-
-      @if (showHistory && !isNewItem) {
-        <div>
-          <app-table
-            title="Transaction history"
-            sortField="transaction_type_identifier"
-            [items]="transactions"
-            [totalItems]="totalTransactions"
-            [sortableHeaders]="sortableHeaders"
-            [loading]="tableLoading"
-            [rowsPerPage]="rowsPerPage"
-            itemName="transactions"
-            [emptyMessage]="emptyMessage"
-            (loadTableItems)="loadTransactions($event)"
-            (rowsPerPageChange)="onRowsPerPageChange($event)"
-          >
-            <ng-template #header> </ng-template>
-            <ng-template #body let-transaction>
-              <td>
-                <a (click)="openTransaction(transaction)">
-                  {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
-                </a>
-              </td>
-              <td>{{ transaction.form_type }}</td>
-              <td>{{ transaction.report_code_label }}</td>
-              <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
-              <td>{{ transaction.amount | currency }}</td>
-            </ng-template>
-          </app-table>
         </div>
       }
-    </ng-template>
-    <ng-template pTemplate="footer">
-      <div class="grid">
-        <div class="col-1">
+      @if (contactType === ContactTypes.CANDIDATE) {
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <h3>Office</h3>
+          </div>
+        </div>
+        <app-candidate-office-input
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          officeFormControlName="candidate_office"
+          stateFormControlName="candidate_state"
+          districtFormControlName="candidate_district"
+        >
+        </app-candidate-office-input>
+      }
+    </form>
+
+    @if (showHistory && !isNewItem) {
+      <div>
+        <app-table
+          title="Transaction history"
+          sortField="transaction_type_identifier"
+          [items]="transactions"
+          [totalItems]="totalTransactions"
+          [sortableHeaders]="sortableHeaders"
+          [loading]="tableLoading"
+          [rowsPerPage]="rowsPerPage"
+          itemName="transactions"
+          [emptyMessage]="emptyMessage"
+          (loadTableItems)="loadTransactions($event)"
+          (rowsPerPageChange)="onRowsPerPageChange($event)"
+        >
+          <ng-template #header> </ng-template>
+          <ng-template #body let-transaction>
+            <td>
+              <a (click)="openTransaction(transaction)">
+                {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
+              </a>
+            </td>
+            <td>{{ transaction.form_type }}</td>
+            <td>{{ transaction.report_code_label }}</td>
+            <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ transaction.amount | currency }}</td>
+          </ng-template>
+        </app-table>
+      </div>
+    }
+    <ng-template #footer>
+      <div class="top-border-footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary mr-4"
+          (click)="closeDialog()"
+        ></button>
+        @if (headerTitle) {
           <button
             type="button"
             pButton
             pRipple
-            label="Cancel"
-            icon="pi pi-times"
-            class="p-button-secondary"
-            (click)="closeDialog()"
+            label="Save & continue"
+            icon="pi pi-check"
+            class="p-button-info"
+            (click)="saveContact()"
           ></button>
-        </div>
-        <div class="col-11">
-          @if (headerTitle) {
+        } @else {
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Save"
+            icon="pi pi-check"
+            class="p-button-primary"
+            (click)="isNewItem ? saveContact() : confirmPropagation()"
+          ></button>
+          @if (isNewItem) {
             <button
               type="button"
               pButton
               pRipple
-              label="Save & continue"
+              label="Save & Add More"
               icon="pi pi-check"
               class="p-button-info"
-              (click)="saveContact()"
+              (click)="saveContact(false)"
             ></button>
-          } @else {
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Save"
-              icon="pi pi-check"
-              class="p-button-primary"
-              (click)="isNewItem ? saveContact() : confirmPropagation()"
-            ></button>
-            @if (isNewItem) {
-              <button
-                type="button"
-                pButton
-                pRipple
-                label="Save & Add More"
-                icon="pi pi-check"
-                class="p-button-info"
-                (click)="saveContact(false)"
-              ></button>
-            }
           }
-        </div>
+        }
       </div>
     </ng-template>
   </p-dialog>

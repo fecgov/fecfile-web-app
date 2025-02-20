@@ -192,7 +192,7 @@ describe('Disbursements', () => {
       },
     };
     TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
-    cy.get('[data-test="navigation-control-button"]').contains('button', 'Save').click();
+    cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
     cy.get('tr').should('contain', organizationFormData['name']);

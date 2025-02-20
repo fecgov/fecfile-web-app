@@ -1,4 +1,4 @@
-<div class="p-fluid" data-cy="form-1m-component">
+<div data-cy="form-1m-component">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
@@ -352,7 +352,7 @@
                   ></app-error-messages>
                 </div>
               </div>
-              <div class="col-9" style="margin-top: -9px">
+              <div class="col-9 co-input-container">
                 <app-candidate-office-input
                   [form]="form"
                   [formSubmitted]="formSubmitted"
@@ -386,4 +386,4 @@
 </div>
 <app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
 
-<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="dialog" class="confirm-dialog"> </p-confirmDialog>

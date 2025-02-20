@@ -49,7 +49,7 @@
     <div class="footer">
       <hr type="solid" />
       <form [formGroup]="form">
-        <div class="flex items-center gap-1">
+        <div class="field-row">
           <p-checkbox
             formControlName="security-consent-annual"
             [binary]="true"
@@ -73,7 +73,7 @@
           pButton
           pRipple
           class="p-button-primary"
-          data-test="consent-button"
+          data-cy="consent-button"
           label="Consent"
           (click)="signConsentForm()"
         ></button>

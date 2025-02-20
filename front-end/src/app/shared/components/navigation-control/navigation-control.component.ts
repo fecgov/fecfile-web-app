@@ -21,15 +21,17 @@ import { Store } from '@ngrx/store';
 import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
+import { FormsModule } from '@angular/forms';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
   styleUrls: ['./navigation-control.component.scss'],
-  imports: [ButtonDirective, Ripple, SingleClickDirective],
+  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule],
 })
 export class NavigationControlComponent implements OnInit {
   private readonly store = inject(Store);

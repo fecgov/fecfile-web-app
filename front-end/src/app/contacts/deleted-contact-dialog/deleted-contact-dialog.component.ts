@@ -3,7 +3,6 @@ import { TableListBaseComponent } from 'app/shared/components/table-list-base/ta
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { PrimeTemplate } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -13,7 +12,7 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 @Component({
   selector: 'app-deleted-contact-dialog',
   templateUrl: './deleted-contact-dialog.component.html',
-  imports: [Dialog, PrimeTemplate, TableComponent, ButtonDirective, Ripple, LabelPipe],
+  imports: [Dialog, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
 export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnChanges {
   @Input() visible = false;

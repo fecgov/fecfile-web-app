@@ -3,20 +3,22 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { Form3X } from 'app/shared/models/form-3x.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
+import { Report } from 'app/shared/models/report.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { takeUntil } from 'rxjs';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TextareaModule } from 'primeng/textarea';
-import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
-import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
-import { Form3X, Report, MemoText } from 'app/shared/models';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-report-level-memo',

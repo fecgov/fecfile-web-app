@@ -7,6 +7,7 @@ h1 {
   font-size: 36px;
   font-weight: bold;
   line-height: 36px;
+  padding: 0 1rem;
 }
 
 .field {
@@ -34,8 +35,6 @@ dialog {
 
 .dialog-body {
   padding: 64px 16px;
-  margin-left: 25px;
-  margin-right: 25px;
 }
 
 #type-label {
@@ -44,7 +43,7 @@ dialog {
 
 label,
 #type-label {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-weight: bold;
   font-size: 14px;
   color: #212121;
@@ -52,20 +51,8 @@ label,
   text-transform: uppercase;
 }
 
-.dropdown,
-.dropdown-toggle {
+.dropdown {
   width: 400px !important;
-}
-
-.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  border: 2px solid #aeb0b5;
-  font-size: 14px;
-  border-radius: 4px;
-  text-wrap-mode: wrap;
 }
 
 .option {
@@ -76,9 +63,9 @@ label,
 }
 
 .option > b {
-  min-width: 60px !important;
-  max-width: 60px !important;
-  width: 60px !important;
+  min-width: 65px !important;
+  max-width: 65px !important;
+  width: 65px !important;
 }
 
 .dialog-footer {
@@ -91,9 +78,16 @@ label,
 
 .modal-item-margin {
   margin-top: 32px;
+  width: fit-content;
 }
 
 .dropdown-menu {
   position: fixed !important;
   max-width: 440px;
+}
+
+#close-button {
+  color: #212121;
+  background: transparent;
+  border: none;
 }

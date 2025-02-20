@@ -5,7 +5,6 @@ import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { FileUploadModule } from 'primeng/fileupload';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -45,7 +44,6 @@ describe('ContactListComponent', () => {
         TableModule,
         ToolbarModule,
         DialogModule,
-        FileUploadModule,
         ConfirmDialogModule,
         ContactListComponent,
         ContactDialogComponent,
