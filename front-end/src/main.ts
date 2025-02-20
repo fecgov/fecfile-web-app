@@ -102,6 +102,9 @@ bootstrapApplication(AppComponent, {
     provideRouter(ROUTES),
     provideAnimationsAsync(),
     providePrimeNG({
+      csp: {
+        nonce: 'web_app_nonce',
+      },
       theme: {
         preset: Aura,
         options: {
