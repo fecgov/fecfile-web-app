@@ -30,7 +30,7 @@
           id="electionYear"
           type="text"
           pInputText
-          oninput="value = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1').slice(0, 4);"
+          (input)="formatElectionYear($event)"
           formControlName="electionYear"
           required
         />
