@@ -127,6 +127,7 @@ describe('CommitteeMemberDialogComponent', () => {
       const updateSpy = spyOn(testCommitteeService, 'update').and.returnValue(Promise.resolve(johnSmith));
       const resetSpy = spyOn(component, 'resetForm');
       component.member = johnSmith;
+      component.form.get('role')?.setValue('MANAGER');
       await component.editRole();
 
       expect(updateSpy).toHaveBeenCalledWith({ ...johnSmith, role: 'MANAGER' });
