@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Component, inject, OnInit } from '@angular/core';
+import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
 import { Contact } from 'app/shared/models/contact.model';
@@ -15,17 +13,42 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { InputText } from 'primeng/inputtext';
+import { RadioButton } from 'primeng/radiobutton';
 import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
+import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
+import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
+import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
+import { CandidateOfficeInputComponent } from '../../../shared/components/inputs/candidate-office-input/candidate-office-input.component';
+import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
+import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
+import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
 
 @Component({
   selector: 'app-main-form',
   templateUrl: './main-form.component.html',
+  imports: [
+    ReactiveFormsModule,
+    InputText,
+    ErrorMessagesComponent,
+    RadioButton,
+    AddressInputComponent,
+    TransactionContactLookupComponent,
+    CalendarComponent,
+    NameInputComponent,
+    CandidateOfficeInputComponent,
+    SaveCancelComponent,
+    ConfirmDialog,
+  ],
   styleUrl: './main-form.component.scss',
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
-  formProperties: string[] = [
+  protected override reportService: Form1MService = inject(Form1MService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  readonly formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',
     'committee_name',
@@ -96,8 +119,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
   schema = f1mSchema;
-  webprintURL = '/reports/f1m/web-print/';
-  templateMap = {
+  readonly webprintURL = '/reports/f1m/web-print/';
+  readonly templateMap = {
     street_1: 'street_1',
     street_2: 'street_2',
     city: 'city',
@@ -113,18 +136,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   excludeIds: string[] = [];
 
   report = new Form1M();
-
-  constructor(
-    protected override store: Store,
-    protected override fb: FormBuilder,
-    protected override reportService: Form1MService,
-    protected override messageService: MessageService,
-    protected override router: Router,
-    protected override activatedRoute: ActivatedRoute,
-    protected confirmationService: ConfirmationService,
-  ) {
-    super(store, fb, reportService, messageService, router, activatedRoute);
-  }
 
   get confirmation$(): Observable<boolean> {
     if (!this.report) return of(false);
@@ -231,7 +242,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     return Object.assign(this.report, formValues);
   }
 
-  public override save(jump: 'continue' | undefined = undefined) {
+  public override async save(jump: 'continue' | undefined = undefined): Promise<void> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {

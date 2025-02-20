@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -6,9 +5,12 @@ import { FecInternationalPhoneInputComponent } from 'app/shared/components/fec-i
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SharedModule } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { CommitteeInfoComponent } from './committee-info.component';
 import { environment } from 'environments/environment';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('CommitteeInfoComponent', () => {
   let component: CommitteeInfoComponent;
@@ -34,9 +36,16 @@ describe('CommitteeInfoComponent', () => {
     if (form1m_link) Object.assign(environment, { form1m_link });
     // Now configure and compile TestBed with the updated environment
     await TestBed.configureTestingModule({
-      providers: [provideMockStore(testMockStore)],
-      declarations: [CommitteeInfoComponent, FecInternationalPhoneInputComponent],
-      imports: [DividerModule, DropdownModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule, SharedModule],
+      providers: [provideMockStore(testMockStore), provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+      imports: [
+        DividerModule,
+        SelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        CommitteeInfoComponent,
+        FecInternationalPhoneInputComponent,
+      ],
     }).compileComponents();
 
     // Create the component (constructor will be called here)

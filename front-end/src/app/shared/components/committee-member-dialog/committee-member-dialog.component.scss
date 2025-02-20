@@ -38,7 +38,7 @@ dialog {
 }
 
 label {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-weight: bold;
   font-size: 14px;
   color: #212121;
@@ -57,12 +57,12 @@ label {
 }
 
 // Both of these are necessary to keep the dropdowns displaying consistently
-:host ::ng-deep p-dropdown > div > p-overlay > div {
+:host ::ng-deep p-select > div > p-overlay > div {
   // The first time a dropdown is displayed
   top: 45px !important;
   left: 0px !important;
 }
-:host ::ng-deep p-dropdown > div > .p-overlay {
+:host ::ng-deep p-select > div > .p-overlay {
   // All subsequent times that dropdown is displayed
   top: 45px !important;
   left: 0px !important;

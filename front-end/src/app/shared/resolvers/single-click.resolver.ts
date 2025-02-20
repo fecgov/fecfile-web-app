@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 
@@ -6,11 +6,11 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
   providedIn: 'root',
 })
 export class SingleClickResolver {
-  constructor(private store: Store) {}
+  private readonly store = inject(Store);
 
   /**
    * Re-enables any singleClick buttons
-   * @returns {Observable<Report | undefined>}
+   *
    */
   resolve() {
     this.store.dispatch(singleClickEnableAction());

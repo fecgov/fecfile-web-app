@@ -28,7 +28,7 @@ function setupLoanFromBank(setup: Setup) {
   formData.date_received = undefined;
   TransactionDetailPage.enterLoanFormData(formData);
 
-  PageUtils.clickLink('STEP TWO:');
+  PageUtils.clickAccordion('STEP TWO:');
   TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
 }
 
@@ -38,7 +38,7 @@ describe('Loans', () => {
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    setupLoanFromBank({ individual: true, organization: true, report: reportFormDataApril }, true);
+    setupLoanFromBank({ individual: true, organization: true, report: reportFormDataApril });
 
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');

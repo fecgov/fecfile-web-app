@@ -1,5 +1,5 @@
 import { DatePipe, formatDate } from '@angular/common';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
@@ -9,7 +9,7 @@ import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-trans
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { Form3X } from '../models/form-3x.model';
@@ -20,8 +20,9 @@ describe('TransactionService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
         TransactionService,
         provideMockStore(testMockStore),
@@ -55,7 +56,7 @@ describe('TransactionService', () => {
         ],
       };
 
-      service.getTableData().subscribe((response: ListRestResponse) => {
+      service.getTableData().then((response: ListRestResponse) => {
         expect(response).toEqual(mockResponse);
       });
 
@@ -75,7 +76,7 @@ describe('TransactionService', () => {
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.get('1').subscribe((response) => {
+      service.get('1').then((response) => {
         expect(response?.id).toEqual(mockResponse.id);
       });
 
@@ -97,7 +98,7 @@ describe('TransactionService', () => {
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).subscribe((response) => {
+      service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).then((response) => {
         expect(response?.id).toEqual(mockResponse.id);
       });
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -114,7 +115,7 @@ describe('TransactionService', () => {
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).subscribe((response) => {
+      service.getPreviousTransactionForAggregate(mockTransaction, '1', new Date()).then((response) => {
         expect(response).toEqual(undefined);
       });
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -135,7 +136,7 @@ describe('TransactionService', () => {
       mockTransaction.id = 'abc';
       service
         .getPreviousTransactionForCalendarYTD(mockTransaction, new Date(), new Date(), '1', 'A', 'A', 'A')
-        .subscribe((response) => {
+        .then((response) => {
           expect(response).toEqual(undefined);
         });
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -155,7 +156,7 @@ describe('TransactionService', () => {
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.create(schATransaction).subscribe((response) => {
+      service.create(schATransaction).then((response) => {
         expect(response?.id).toEqual(schATransaction.id);
       });
 
@@ -173,7 +174,7 @@ describe('TransactionService', () => {
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.update(schATransaction).subscribe((response) => {
+      service.update(schATransaction).then((response) => {
         expect(response?.id).toEqual(schATransaction.id);
       });
 
@@ -192,7 +193,7 @@ describe('TransactionService', () => {
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
 
-      service.delete(schATransaction).subscribe(() => {
+      service.delete(schATransaction).then(() => {
         expect(true).toBeTrue();
       });
 
@@ -220,7 +221,7 @@ describe('TransactionService', () => {
         }),
       ];
 
-      service.multiSaveReattRedes(transactions).subscribe((response) => {
+      service.multiSaveReattRedes(transactions).then((response) => {
         expect(response[0]?.id).toEqual('1');
         expect(response[1]?.id).toEqual('2');
         expect(response[2]?.id).toEqual('3');

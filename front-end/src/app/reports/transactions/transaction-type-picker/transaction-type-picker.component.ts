@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -41,6 +41,8 @@ import {
 } from 'app/shared/models/sche-transaction.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { AccordionModule } from 'primeng/accordion';
+import { LabelPipe } from '../../../shared/pipes/label.pipe';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -48,9 +50,14 @@ type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
   selector: 'app-transaction-type-picker',
   templateUrl: './transaction-type-picker.component.html',
   styleUrls: ['./transaction-type-picker.component.scss'],
+  imports: [RouterLink, LabelPipe, AccordionModule],
 })
 export class TransactionTypePickerComponent extends DestroyerComponent implements OnInit {
-  transactionTypeLabels: LabelList = [
+  private readonly store = inject(Store);
+  private readonly route = inject(ActivatedRoute);
+  private readonly titleService = inject(Title);
+
+  readonly transactionTypeLabels: LabelList = [
     ...ScheduleATransactionTypeLabels,
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleCTransactionTypeLabels,
@@ -62,14 +69,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   title: string = this.getCategoryTitle();
   debtId?: string;
   committeeAccount?: CommitteeAccount;
-
-  constructor(
-    private store: Store,
-    private route: ActivatedRoute,
-    private titleService: Title,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     combineLatest([

@@ -1,9 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom, of } from 'rxjs';
@@ -15,7 +12,8 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('SecondaryReportSelectionDialogComponent', () => {
   let component: SecondaryReportSelectionDialogComponent;
@@ -30,18 +28,16 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([
+      imports: [DialogModule, Dialog, SecondaryReportSelectionDialogComponent, LabelPipe],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
           {
             path: 'reports/transactions/report/2401/list',
             redirectTo: '',
           },
         ]),
-        DialogModule,
-        HttpClientTestingModule,
-      ],
-      declarations: [Dialog, SecondaryReportSelectionDialogComponent, LabelPipe],
-      providers: [
         ReportService,
         TransactionService,
         MessageService,

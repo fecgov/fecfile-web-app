@@ -7,8 +7,8 @@
   [selectAll]="selectAll"
   [selectedItems]="selectedItems"
   sortField="line_label,created"
-  itemName="transactions"
   [sortableHeaders]="sortableHeaders"
+  itemName="transactions"
   (loadTableItems)="loadTableItems($event)"
   (selectionChange)="onSelectionChange($event)"
   (selectAllChange)="onSelectAllChange($event)"
@@ -25,8 +25,12 @@
     </td>
     <td>
       <a [routerLink]="[item?.id]">{{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}</a>
-      <div *ngIf="item?.force_unaggregated"><strong>Unaggregated</strong></div>
-      <div *ngIf="!item?.itemized && report?.report_type !== form24ReportType"><strong>Unitemized</strong></div>
+      @if (item?.force_unaggregated) {
+        <div><strong>Unaggregated</strong></div>
+      }
+      @if (!item?.itemized && report?.report_type !== form24ReportType) {
+        <div><strong>Unitemized</strong></div>
+      }
     </td>
     <td>
       {{ item.name }}

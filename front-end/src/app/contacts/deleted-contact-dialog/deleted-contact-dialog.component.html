@@ -3,55 +3,56 @@
   [style]="{ width: '90%' }"
   header="Restore deleted contacts"
   [modal]="true"
-  styleClass="p-fluid"
   (onHide)="hide()"
 >
-  <ng-template pTemplate="content">
-    <app-table
-      title="Restore deleted contacts"
-      [items]="items"
-      [totalItems]="totalItems"
-      [loading]="loading"
-      sortField="sort_name"
-      [rowsPerPage]="rowsPerPage"
-      [selectAll]="selectAll"
-      [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-      [selectedItems]="selectedItems"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
-      [sortableHeaders]="sortableHeaders"
-      [hasCheckbox]="true"
-      [checkboxLabel]="getCheckboxLabel.bind(this)"
-      (loadTableItems)="loadTableItems($event)"
-      (selectionChange)="onSelectionChange($event)"
-      (selectAllChange)="onSelectAllChange($event)"
-      (rowsPerPageChange)="onRowsPerPageChange($event)"
-    >
-      <ng-template #header> </ng-template>
-      <ng-template #body let-item>
-        <td>{{ displayName(item) }}</td>
-        <td>{{ item.type | label: contactTypeLabels }}</td>
-        <td>{{ item.employer }}</td>
-        <td>{{ item.occupation }}</td>
-      </ng-template>
-    </app-table>
-  </ng-template>
-  <ng-template pTemplate="footer">
-    <div class="grid">
-      <div class="col-1">
-        <button pButton pRipple label="Cancel" (click)="hide()" [autofocus]="true"></button>
-      </div>
-      <div class="col-11">
-        <button
-          pButton
-          pRipple
-          id="restoreButton"
-          [disabled]="selectedItems.length <= 0"
-          label="Restore selected"
-          icon="pi pi-check"
-          class="p-button-primary"
-          (click)="restoreSelected()"
-        ></button>
-      </div>
+  <app-table
+    title="Restore deleted contacts"
+    [items]="items"
+    [totalItems]="totalItems"
+    [loading]="loading"
+    sortField="sort_name"
+    [rowsPerPage]="rowsPerPage"
+    [selectAll]="selectAll"
+    [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+    [selectedItems]="selectedItems"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
+    [sortableHeaders]="sortableHeaders"
+    [hasCheckbox]="true"
+    [checkboxLabel]="getCheckboxLabel.bind(this)"
+    (loadTableItems)="loadTableItems($event)"
+    (selectionChange)="onSelectionChange($event)"
+    (selectAllChange)="onSelectAllChange($event)"
+    (rowsPerPageChange)="onRowsPerPageChange($event)"
+  >
+    <ng-template #header> </ng-template>
+    <ng-template #body let-item>
+      <td>{{ displayName(item) }}</td>
+      <td>{{ item.type | label: contactTypeLabels }}</td>
+      <td>{{ item.employer }}</td>
+      <td>{{ item.occupation }}</td>
+    </ng-template>
+  </app-table>
+  <ng-template #footer>
+    <div class="top-border-footer">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-secondary mr-4"
+        (click)="hide()"
+        [autofocus]="true"
+      ></button>
+      <button
+        pButton
+        pRipple
+        id="restoreButton"
+        [disabled]="selectedItems.length <= 0"
+        label="Restore selected"
+        icon="pi pi-check"
+        class="p-button-primary"
+        (click)="restoreSelected()"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>

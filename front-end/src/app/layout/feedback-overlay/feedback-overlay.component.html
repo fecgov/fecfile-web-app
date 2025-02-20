@@ -1,135 +1,154 @@
 <div class="anchor" #anchor></div>
-<p-overlayPanel
+<p-popover
   #op
   [style]="{ width: '500px', height: '95vh', overflow: 'auto' }"
   showTransitionOptions=".25s linear(0, 1)"
-  [showCloseIcon]="true"
   [appendTo]="anchor"
   (onHide)="onHide()"
 >
-  <ng-template pTemplate="content">
-    <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.DRAFT">
-      <div class="grid">
-        <div class="col-12">
-          <h3>Post feedback about FECFile anonymously</h3>
-          <p class="mb-2">
-            How can we improve FECFile? When you submit your feedback, it will include your comments, browser
-            information, and the URL you were viewing at the time of submission.
-          </p>
-        </div>
-      </div>
-      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <label for="action"
-                >WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT? <span>(Required)</span></label
-              >
-              <textarea id="action" [rows]="3" pInputTextarea [autoResize]="true" formControlName="action"></textarea>
-              <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted"></app-error-messages>
+  <ng-template #content let-closeCallback="closeCallback">
+    <div class="px-4 py-2">
+      <button (click)="closeCallback($event)" class="p-popover-close">
+        <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" />
+      </button>
+      @switch (submitStatus) {
+        @case (SubmissionStatesEnum.DRAFT) {
+          <div class="grid">
+            <div class="col-12">
+              <h3>Post feedback about FECFile anonymously</h3>
+              <p class="mb-2">
+                How can we improve FECFile? When you submit your feedback, it will include your comments, browser
+                information, and the URL you were viewing at the time of submission.
+              </p>
             </div>
           </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
-              <textarea
-                id="feedback"
-                [rows]="3"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="feedback"
-              ></textarea>
-              <app-error-messages
-                [form]="form"
-                fieldName="feedback"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+          <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+            <div class="grid">
+              <div class="col-12">
+                <div class="field">
+                  <label for="action"
+                    >WHAT WERE YOU TRYING TO DO ON FECFILE ONLINE, AND HOW CAN WE IMPROVE IT?
+                    <span>(Required)</span></label
+                  >
+                  <textarea id="action" [rows]="3" pTextarea [autoResize]="true" formControlName="action"></textarea>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="action"
+                    [formSubmitted]="formSubmitted"
+                  ></app-error-messages>
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="col-12">
+                <div class="field">
+                  <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
+                  <textarea
+                    id="feedback"
+                    [rows]="3"
+                    pTextarea
+                    [autoResize]="true"
+                    formControlName="feedback"
+                  ></textarea>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="feedback"
+                    [formSubmitted]="formSubmitted"
+                  ></app-error-messages>
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="col-12">
+                <div class="field">
+                  <label for="about"
+                    >TELL US ABOUT YOURSELF
+                    <br />
+                    <span
+                      >(Please don't include sensitive information like your name, contact information or Social
+                      Security number.)</span
+                    >
+                  </label>
+                  <textarea id="about" [rows]="3" pTextarea [autoResize]="true" formControlName="about"></textarea>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="about"
+                    [formSubmitted]="formSubmitted"
+                  ></app-error-messages>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="grid">
+            <div class="col-1">
+              <button
+                appSingleClick
+                type="button"
+                pButton
+                pRipple
+                label="Post"
+                class="p-button-primary"
+                (click)="save()"
+              ></button>
             </div>
           </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <label for="about"
-                >TELL US ABOUT YOURSELF
-                <br />
-                <span
-                  >(Please don't include sensitive information like your name, contact information or Social Security
-                  number.)</span
+          <div class="grid">
+            <div class="col-12">
+              <div class="flex gap-1 text-start">
+                <a href="https://www.fec.gov/use-recaptcha/" target="_blank" rel="noopener">Use of reCAPTCHA</a>
+                |
+                <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener"
+                  >Contact the FEC about a specific question</a
                 >
-              </label>
-              <textarea id="about" [rows]="3" pInputTextarea [autoResize]="true" formControlName="about"></textarea>
-              <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted"></app-error-messages>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-      <div class="grid">
-        <div class="col-1">
-          <button
-            appSingleClick
-            type="button"
-            pButton
-            pRipple
-            label="Post"
-            class="p-button-primary"
-            (click)="save()"
-          ></button>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12">
-          <div class="field text-start">
-            <a href="https://www.fec.gov/use-recaptcha/" target="_blank" rel="noopener">Use of reCAPTCHA</a>
-            |
-            <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener"
-              >Contact the FEC about a specific question</a
-            >
+        }
+        @case (SubmissionStatesEnum.SUCCESS) {
+          <div class="flex">
+            <div class="success-verticle-bar"></div>
+            <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%" />
+            <div>
+              <h2>Thanks for helping us improve FECFile</h2>
+              <p>This information has been reported.</p>
+            </div>
           </div>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.SUCCESS">
-      <div class="flex">
-        <div class="success-verticle-bar"></div>
-        <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%" />
-        <div>
-          <h2>Thanks for helping us improve FECFile</h2>
-          <p>This information has been reported.</p>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-6 flex">
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Submit more feedback"
-            class="p-button-info"
-            (click)="reset()"
-          ></button>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="this.submitStatus === SubmissionStatesEnum.FAIL">
-      <div class="flex">
-        <div class="fail-verticle-bar"></div>
-        <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%" />
-        <div>
-          <h2>Oops: Something went wrong.</h2>
-          <p>We had trouble processing your feedback.</p>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-4">
-          <button type="button" pButton pRipple label="Try Again" class="p-button-info" (click)="tryAgain()"></button>
-        </div>
-      </div>
-    </ng-container>
+          <div class="grid">
+            <div class="col-6 flex">
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="Submit more feedback"
+                class="p-button-info"
+                (click)="reset()"
+              ></button>
+            </div>
+          </div>
+        }
+        @case (SubmissionStatesEnum.FAIL) {
+          <div class="flex">
+            <div class="fail-verticle-bar"></div>
+            <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%" />
+            <div>
+              <h2>Oops: Something went wrong.</h2>
+              <p>We had trouble processing your feedback.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-4">
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="Try Again"
+                class="p-button-info"
+                (click)="tryAgain()"
+              ></button>
+            </div>
+          </div>
+        }
+      }
+    </div>
   </ng-template>
-  <ng-template pTemplate="closeicon">
-    <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" height="250%" width="250%" />
-  </ng-template>
-</p-overlayPanel>
+</p-popover>

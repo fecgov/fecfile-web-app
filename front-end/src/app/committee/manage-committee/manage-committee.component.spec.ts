@@ -1,6 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -8,12 +7,13 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
-import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
 import { CommitteeMember } from 'app/shared/models/committee-member.model';
-import { of } from 'rxjs';
 import { CommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/committee-member-dialog.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('ManageCommitteeComponent', () => {
   let component: ManageCommitteeComponent;
@@ -32,16 +32,23 @@ describe('ManageCommitteeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         ToastModule,
         TableModule,
         ToolbarModule,
         DialogModule,
-        FileUploadModule,
         ConfirmDialogModule,
+        ManageCommitteeComponent,
+        CommitteeMemberDialogComponent,
       ],
-      declarations: [ManageCommitteeComponent, CommitteeMemberDialogComponent],
-      providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        ConfirmationService,
+        MessageService,
+        FormBuilder,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
   });
 
@@ -104,9 +111,9 @@ describe('ManageCommitteeComponent', () => {
   describe('deleteItem', () => {
     it('should delete member', fakeAsync(async () => {
       const messageSpy = spyOn(component.messageService, 'add');
-      const deleteSpy = spyOn(component.itemService, 'delete').and.callFake((member) => {
+      const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(async (member) => {
         committeeMembers = committeeMembers.filter((m) => m.email !== member.email);
-        return of(null);
+        return null;
       });
       await component.deleteItem(committeeMembers[0]);
 

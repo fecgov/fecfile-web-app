@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -6,16 +6,32 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { PrimeTemplate } from 'primeng/api';
 import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
 import { ReportService } from '../../shared/services/report.service';
+import { TableComponent } from '../../shared/components/table/table.component';
+import { Toolbar } from 'primeng/toolbar';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
+import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
+import { FecDatePipe } from '../../shared/pipes/fec-date.pipe';
 
 @Component({
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
   styleUrls: ['./report-list.component.scss'],
+  imports: [
+    TableComponent,
+    Toolbar,
+    PrimeTemplate,
+    ButtonDirective,
+    Ripple,
+    TableActionsButtonComponent,
+    FormTypeDialogComponent,
+    FecDatePipe,
+  ],
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   dialogVisible = false;
@@ -46,20 +62,14 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     { field: 'upload_submission__created', label: 'Filed' },
   ];
 
-  constructor(
-    override messageService: MessageService,
-    override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    override itemService: ReportService,
-    public router: Router,
-    private store: Store,
-    private form3XService: Form3XService,
-    public dotFecService: DotFecService,
-  ) {
-    super(messageService, confirmationService, elementRef);
-    this.caption =
-      'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
-  }
+  public readonly router = inject(Router);
+  override readonly itemService = inject(ReportService);
+  private readonly store = inject(Store);
+  private readonly form3XService = inject(Form3XService);
+  public readonly dotFecService = inject(DotFecService);
+
+  override readonly caption =
+    'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
 
   override ngOnInit() {
     this.loading = true;
@@ -125,7 +135,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   async delete(report: Report) {
-    await lastValueFrom(this.itemService.delete(report));
+    await this.itemService.delete(report);
     this.refreshTable();
     this.messageService.add({
       severity: 'success',
@@ -141,7 +151,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         ...report,
         qualified_committee: this.committeeAccount?.qualified,
       });
-      await firstValueFrom(this.form3XService.update(payload, ['qualified_committee']));
+      await this.form3XService.update(payload, ['qualified_committee']);
     }
     const download = await this.dotFecService.generateFecFile(report);
     this.dotFecService.checkFecFileTask(download);

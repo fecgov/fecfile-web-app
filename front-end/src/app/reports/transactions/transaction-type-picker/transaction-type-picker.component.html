@@ -1,24 +1,28 @@
-<h1>{{ this.title }}</h1>
-<p *ngIf="this.debtId">Select the proper transaction type below to report this debt repayment.</p>
-<p-accordion muiltiple="false">
-  <ng-container *ngFor="let transactionGroup of getTransactionGroups()">
-    <p-accordionTab [header]="transactionGroup" *ngIf="hasTransactions(transactionGroup)">
-      <div class="grid">
-        <div class="col-12" *ngFor="let transactionType of getTransactionTypes(transactionGroup)">
-          <a
-            *ngIf="!isTransactionDisabled(transactionType); else elseBlock"
-            [routerLink]="getRouterLink(transactionType)"
-            [queryParams]="debtId ? { debt: debtId } : undefined"
-          >
-            {{ transactionType | label: transactionTypeLabels }}
-          </a>
-          <ng-template #elseBlock>
-            <div class="disabled">
-              {{ transactionType | label: transactionTypeLabels }}
+<h1>{{ title }}</h1>
+@if (debtId) {
+  <p>Select the proper transaction type below to report this debt repayment.</p>
+}
+<p-accordion expandIcon="pi pi-angle-right">
+  @for (transactionGroup of getTransactionGroups(); track transactionGroup; let index = $index) {
+    @if (hasTransactions(transactionGroup)) {
+      <p-accordion-panel [value]="index">
+        <p-accordion-header>{{ transactionGroup }}</p-accordion-header>
+        <p-accordion-content class="grid">
+          @for (transactionType of getTransactionTypes(transactionGroup); track transactionType) {
+            <div class="col-12">
+              @if (!isTransactionDisabled(transactionType)) {
+                <a [routerLink]="getRouterLink(transactionType)" [queryParams]="debtId ? { debt: debtId } : undefined">
+                  {{ transactionType | label: transactionTypeLabels }}
+                </a>
+              } @else {
+                <div class="disabled">
+                  {{ transactionType | label: transactionTypeLabels }}
+                </div>
+              }
             </div>
-          </ng-template>
-        </div>
-      </div>
-    </p-accordionTab>
-  </ng-container>
+          }
+        </p-accordion-content>
+      </p-accordion-panel>
+    }
+  }
 </p-accordion>

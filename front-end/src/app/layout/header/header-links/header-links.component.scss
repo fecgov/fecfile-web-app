@@ -9,29 +9,32 @@
 
 .nav-item {
   display: flex;
-  height: 100%;
+  height: 34px;
   align-items: center;
+  padding: 8px;
+  font-size: 12px;
+  font-family: 'karla-bold', sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+  gap: 4px;
 }
 
 .nav-item:hover {
   background: #e8e8e8;
 }
 
-.nav-link {
-  font-size: 12px;
-  font-family: 'karla-bold', sans-serif;
-  text-transform: uppercase;
-  color: black !important;
-}
-
-.nav-link.disabled {
+.nav-item.disabled {
   color: rgba(0, 0, 0, 0.3) !important;
 }
 
-.nav-link.disabled:hover {
+.nav-item.disabled:hover {
   cursor: default;
 }
 
 .header-navbar-icon-disabled {
   filter: (invert(100%) sepia(100%) saturate(0%) brightness(135%));
+}
+
+li:hover {
+  background: var(--surface-hover);
 }

@@ -11,8 +11,7 @@ describe('CommitteeBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [],
-      declarations: [CommitteeBannerComponent],
+      imports: [CommitteeBannerComponent],
       providers: [CommitteeBannerComponent, provideMockStore(testMockStore)],
     }).compileComponents();
   });

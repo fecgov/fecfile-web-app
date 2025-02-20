@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -10,17 +10,39 @@ import { Transaction } from '../../../shared/models/transaction.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
+import { Toolbar } from 'primeng/toolbar';
+import { PrimeTemplate } from 'primeng/api';
+import { TableActionsButtonComponent } from '../../../shared/components/table-actions-button/table-actions-button.component';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ButtonDirective } from 'primeng/button';
+import { SelectReportDialogComponent } from './select-report-dialog/select-report-dialog.component';
+import { SecondaryReportSelectionDialogComponent } from '../secondary-report-selection-dialog/secondary-report-selection-dialog.component';
 
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
   styleUrls: ['../transaction.scss'],
+  imports: [
+    Toolbar,
+    PrimeTemplate,
+    TableActionsButtonComponent,
+    TransactionReceiptsComponent,
+    TransactionDisbursementsComponent,
+    TransactionLoansAndDebtsComponent,
+    ConfirmDialog,
+    ButtonDirective,
+    SelectReportDialogComponent,
+    SecondaryReportSelectionDialogComponent,
+  ],
 })
 export class TransactionListComponent extends DestroyerComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly store = inject(Store);
+  readonly reportTypes = ReportTypes;
+  readonly reportStatus = ReportStatus;
+
   @ViewChild('reportSelectDialog') reportSelectDialog?: ElementRef;
   report: Report | undefined;
-  reportTypes = ReportTypes;
-  reportStatus = ReportStatus;
 
   reportSelectDialogVisible = false;
   reportSelectFormType: ReportTypes | undefined;
@@ -79,14 +101,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   @ViewChild(TransactionDisbursementsComponent) disbursements!: TransactionDisbursementsComponent;
   @ViewChild(TransactionLoansAndDebtsComponent) loans!: TransactionLoansAndDebtsComponent;
 
-  constructor(
-    private router: Router,
-    private store: Store,
-  ) {
-    super();
-  }
-
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))

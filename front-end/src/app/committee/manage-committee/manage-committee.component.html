@@ -16,10 +16,10 @@
 >
   <ng-template #caption>
     <p-toolbar>
-      <ng-template pTemplate="left">
+      <ng-template #start>
         <h1 class="m-0">Manage users</h1>
       </ng-template>
-      <ng-template pTemplate="right">
+      <ng-template #end>
         <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
       </ng-template>
     </p-toolbar>

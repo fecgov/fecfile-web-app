@@ -1,22 +1,16 @@
 <div class="grid">
   <div class="grid col-6 cancel-controls">
-    <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('cancel')">
+    @for (control of getNavigationControls('cancel'); track control) {
       <div class="col-4">
-        <app-navigation-control
-          [navigationControl]="navigationControl"
-          [transaction]="transaction"
-        ></app-navigation-control>
+        <app-navigation-control [navigationControl]="control" [transaction]="transaction"></app-navigation-control>
       </div>
-    </ng-template>
+    }
   </div>
   <div class="grid col-6 continue-controls">
-    <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('continue')">
+    @for (control of getNavigationControls('continue'); track control) {
       <div class="col-6 align-right">
-        <app-navigation-control
-          [navigationControl]="navigationControl"
-          [transaction]="transaction"
-        ></app-navigation-control>
+        <app-navigation-control [navigationControl]="control" [transaction]="transaction"></app-navigation-control>
       </div>
-    </ng-template>
+    }
   </div>
 </div>

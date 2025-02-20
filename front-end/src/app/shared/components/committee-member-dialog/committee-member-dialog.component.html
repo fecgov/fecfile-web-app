@@ -13,7 +13,7 @@
         ></button>
       </div>
       <div class="dialog-body">
-        <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
           <div class="grid">
             <div class="col-12">
               <div class="field">
@@ -29,15 +29,12 @@
             <div class="col-12">
               <div class="field">
                 <label id="role-label" for="role">ROLE</label>
-                <p-dropdown
+                <p-select
                   inputId="role"
                   formControlName="role"
                   [options]="roleOptions"
                   [autoDisplayFirst]="true"
-                  appendTo="dialog"
-                  autoWidth="false"
-                  [style]="{ minWidth: '100%' }"
-                ></p-dropdown>
+                ></p-select>
                 <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
               </div>
             </div>

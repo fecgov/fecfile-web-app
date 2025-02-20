@@ -7,11 +7,12 @@ import { LinkedReportInputComponent } from './linked-report-input.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { firstValueFrom, of } from 'rxjs';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('LinkedReportInputComponent', () => {
   let component: LinkedReportInputComponent;
@@ -19,9 +20,14 @@ describe('LinkedReportInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LinkedReportInputComponent, ErrorMessagesComponent],
-      imports: [HttpClientTestingModule, InputTextModule, ReactiveFormsModule, FormsModule],
-      providers: [ReportService, FecDatePipe, provideMockStore(testMockStore)],
+      imports: [InputTextModule, ReactiveFormsModule, FormsModule, LinkedReportInputComponent, ErrorMessagesComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ReportService,
+        FecDatePipe,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LinkedReportInputComponent);

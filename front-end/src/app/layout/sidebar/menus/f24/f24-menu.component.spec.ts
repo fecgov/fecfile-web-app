@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '../../../../shared/shared.module';
+import { provideRouter, Router } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F24MenuComponent } from './f24-menu.component';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('F24MenuComponent', () => {
   let component: F24MenuComponent;
@@ -16,20 +15,18 @@ describe('F24MenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [F24MenuComponent],
-      providers: [provideMockStore(testMockStore)],
-      imports: [
-        SharedModule,
-        PanelMenuModule,
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
           {
             path: 'reports/transactions/report/999/list',
             redirectTo: '',
           },
         ]),
+        provideMockStore(testMockStore),
       ],
+      imports: [PanelMenuModule, BrowserAnimationsModule, F24MenuComponent],
     }).compileComponents();
   });
 

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { formatCurrency } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -8,6 +8,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
   templateUrl: './error-messages.component.html',
 })
 export class ErrorMessagesComponent implements OnInit {
+  private readonly localeId = inject(LOCALE_ID);
   // Pass the form and fieldName OR pass the formControl itself.
   @Input() form?: FormGroup;
   @Input() fieldName = '';
@@ -169,8 +170,6 @@ export class ErrorMessagesComponent implements OnInit {
     }
     return 'There is no Form 3X with corresponding coverage dates currently in progress. Create a new Form 3X to save this transaction.';
   }
-
-  constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
     if (!this.control) {

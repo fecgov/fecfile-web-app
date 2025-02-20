@@ -1,15 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -19,42 +8,40 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Ripple } from 'primeng/ripple';
+import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
+  imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, SelectButtonModule],
 })
-export class FormTypeDialogComponent extends DestroyerComponent implements OnChanges, AfterViewInit, OnInit {
+export class FormTypeDialogComponent extends DestroyerComponent implements OnInit {
+  public readonly router = inject(Router);
+  private readonly form24Service = inject(Form24Service);
+  private readonly store = inject(Store);
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
-  formTypes = FormTypes;
+  readonly formTypes = FormTypes;
   selectedType?: FormTypes;
   committeeAccount$?: Observable<CommitteeAccount>;
   street = undefined;
   @Input() noReports = true;
   @Input() dialogVisible = false;
   @Output() dialogClose = new EventEmitter<undefined>();
-  @ViewChild('dialog') dialog?: ElementRef;
-  @ViewChild('firstElement') firstElement?: ElementRef;
-  @ViewChild('lastElement') _lastElement?: ElementRef;
-  @ViewChild('form24FocusElement') form24FocusElement?: ElementRef;
-  @ViewChild('dropdownElement') dropdownElement?: ElementRef;
 
-  @Output() refreshReports = new EventEmitter();
+  @Output() readonly refreshReports = new EventEmitter();
 
-  selectedForm24Type: '24' | '48' | undefined;
+  selectedForm24Type: '24' | '48' | null = null;
 
-  constructor(
-    public router: Router,
-    private form24Service: Form24Service,
-    private store: Store,
-  ) {
-    super();
-  }
-
-  ngAfterViewInit() {
-    this.dialog?.nativeElement.addEventListener('close', () => this.dialogClose.emit());
-  }
+  form24Options = [
+    { label: '24 Hour ', value: '24' },
+    { label: '48 Hour', value: '48' },
+  ];
 
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(
@@ -63,14 +50,8 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
     );
   }
 
-  ngOnChanges(): void {
-    if (this.dialogVisible) {
-      this.dialog?.nativeElement.showModal();
-    }
-  }
-
   goToReportForm(): void {
-    this.dialog?.nativeElement.close();
+    this.closeDialog();
     if (this.getFormType(this.selectedType)?.createRoute) {
       this.router.navigateByUrl(this.getFormType(this.selectedType)?.createRoute || '');
     } else if (this.selectedType === FormTypes.F24) {
@@ -100,7 +81,7 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
       });
       const create$ = this.form24Service.create(form24, ['report_type_24_48']);
 
-      create$.subscribe((report) => {
+      create$.then((report) => {
         this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       });
 
@@ -108,50 +89,14 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnCha
     });
   }
 
-  selectItem(item: '24' | '48') {
-    if (item === this.selectedForm24Type) this.selectedForm24Type = undefined;
-    else this.selectedForm24Type = item;
-  }
-
   closeDialog() {
-    this.dialog?.nativeElement.close();
-  }
-
-  @HostListener('keydown', ['$event'])
-  handleTabKey(event: KeyboardEvent) {
-    if (!this.firstElement) return;
-    if (event.key === 'Tab') {
-      if (event.shiftKey) {
-        if (document.activeElement === this.firstElement.nativeElement) {
-          event.preventDefault();
-          this.lastElement.focus();
-        }
-      } else {
-        if (document.activeElement === this.lastElement) {
-          event.preventDefault();
-          this.firstElement.nativeElement.focus();
-        }
-      }
-    }
-  }
-
-  get lastElement() {
-    let lastElement = this._lastElement;
-    if (this.isSubmitDisabled) {
-      if (this.selectedType === this.formTypes.F24) {
-        lastElement = this.form24FocusElement;
-      } else {
-        lastElement = this.dropdownElement;
-      }
-    }
-
-    return lastElement?.nativeElement;
+    this.dialogClose.emit();
   }
 
   get isSubmitDisabled(): boolean {
     return (
       !this.getFormType(this.selectedType)?.createRoute &&
-      (!(this.selectedType === this.formTypes.F24) || !this.selectedForm24Type)
+      (this.selectedType !== this.formTypes.F24 || !this.selectedForm24Type)
     );
   }
 }

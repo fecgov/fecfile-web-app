@@ -1,10 +1,11 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
 import { MemoText } from '../models/memo-text.model';
 import { MemoTextService } from './memo-text.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('MemoTextService', () => {
   let service: MemoTextService;
@@ -12,8 +13,7 @@ describe('MemoTextService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [MemoTextService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), MemoTextService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -27,7 +27,7 @@ describe('MemoTextService', () => {
   it('#get should return a specific memo text record', () => {
     const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
-    service.get('999').subscribe((response: MemoText) => {
+    service.get('999').then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
 
@@ -40,7 +40,7 @@ describe('MemoTextService', () => {
   it('#getForReportId should return memo texts for report id', () => {
     const memoTexts: MemoText[] = [MemoText.fromJSON({ id: '999' })];
 
-    service.getForReportId('1').subscribe((response: MemoText[]) => {
+    service.getForReportId('1').then((response: MemoText[]) => {
       expect(response).toEqual(memoTexts);
     });
 
@@ -53,7 +53,7 @@ describe('MemoTextService', () => {
   it('#create() should POST a payload', fakeAsync(() => {
     const memoText: MemoText = new MemoText();
 
-    service.create(memoText).subscribe((response: MemoText) => {
+    service.create(memoText).then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
     tick(100);
@@ -66,7 +66,7 @@ describe('MemoTextService', () => {
   it('#update() should PUT a payload', fakeAsync(() => {
     const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
-    service.update(memoText).subscribe((response: MemoText) => {
+    service.update(memoText).then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
     tick(100);
@@ -80,7 +80,7 @@ describe('MemoTextService', () => {
     it('should DELETE a record', () => {
       const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
-      service.delete(memoText).subscribe((response: null) => {
+      service.delete(memoText).then((response: null) => {
         expect(response).toBeNull();
       });
 

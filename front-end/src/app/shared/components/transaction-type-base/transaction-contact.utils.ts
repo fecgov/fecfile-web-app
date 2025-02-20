@@ -2,7 +2,7 @@ import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
-import { Observable, Subject, delay } from 'rxjs';
+import { Subject } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
 export class TransactionContactUtils {
@@ -126,8 +126,8 @@ export class TransactionContactUtils {
     message: string,
     confirmationService: ConfirmationService,
     targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
-  ): Observable<boolean> {
-    return new Observable<boolean>((subscriber) => {
+  ): Promise<boolean> {
+    return new Promise((resolve) => {
       confirmationService.confirm({
         key: targetDialog,
         header: 'Confirm',
@@ -135,16 +135,10 @@ export class TransactionContactUtils {
         message: message,
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',
-        accept: () => {
-          subscriber.next(true);
-          subscriber.complete();
-        },
-        reject: () => {
-          subscriber.next(false);
-          subscriber.complete();
-        },
+        accept: () => resolve(true),
+        reject: () => resolve(false),
       });
-    }).pipe(delay(500));
+    });
   }
 
   /**

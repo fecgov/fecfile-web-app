@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { PollerService } from 'app/shared/services/poller.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
@@ -9,12 +9,9 @@ import { Location } from '@angular/common';
   styleUrl: './poller.component.scss',
 })
 export class PollerComponent implements OnInit, OnDestroy {
+  private readonly pollerService = inject(PollerService);
+  private readonly location = inject(Location);
   private subscription!: Subscription;
-
-  constructor(
-    private pollerService: PollerService,
-    private location: Location,
-  ) {}
 
   ngOnInit() {
     const currentUrl = window.location.href;

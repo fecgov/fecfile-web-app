@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import {
   CandidateOfficeType,
@@ -12,18 +12,24 @@ import {
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItemGroup } from 'primeng/api';
+import { SelectItemGroup, PrimeTemplate } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Select } from 'primeng/select';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
 
 @Component({
   selector: 'app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
+  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+  public readonly contactService = inject(ContactService);
+  readonly contactTypeLabels: LabelList = ContactTypeLabels;
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;
@@ -37,9 +43,9 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() excludeFecIds: string[] = [];
   @Input() excludeIds: string[] = [];
 
-  @Output() contactTypeSelect = new EventEmitter<ContactTypes>();
-  @Output() contactLookupSelect = new EventEmitter<Contact>();
-  @Output() createNewContactSelect = new EventEmitter<void>();
+  @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
+  @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
+  @Output() readonly createNewContactSelect = new EventEmitter<void>();
 
   @ViewChild(AutoComplete)
   set autoComplete(ac: AutoComplete) {
@@ -54,17 +60,11 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
-  contactTypeLabels: LabelList = ContactTypeLabels;
   candidateOfficeLabel?: string;
-
   contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
   searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   searchTerm = '';
-
-  constructor(public contactService: ContactService) {
-    super();
-  }
 
   ngOnInit(): void {
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
@@ -110,21 +110,21 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
               this.excludeFecIds,
               this.excludeIds,
             )
-            .subscribe((response) => {
+            .then((response) => {
               this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
             });
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService
             .individualLookup(searchTerm, this.maxFecfileIndividualResults, this.excludeIds)
-            .subscribe((response) => {
+            .then((response) => {
               this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
         case ContactTypes.ORGANIZATION:
           this.contactService
             .organizationLookup(searchTerm, this.maxFecfileOrganizationResults, this.excludeIds)
-            .subscribe((response) => {
+            .then((response) => {
               this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
@@ -164,7 +164,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
     if (data.candidate_id) {
-      this.contactService.getCandidateDetails(data.candidate_id).subscribe((candidate) => {
+      this.contactService.getCandidateDetails(data.candidate_id).then((candidate) => {
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
           Contact.fromJSON({
@@ -199,7 +199,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
     if (data.id) {
-      this.contactService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
+      this.contactService.getCommitteeDetails(data.id).then((committeeAccount) => {
         let phone;
         if (committeeAccount?.treasurer_phone) {
           phone = '+1 ' + committeeAccount.treasurer_phone;

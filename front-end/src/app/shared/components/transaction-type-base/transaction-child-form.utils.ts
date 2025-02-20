@@ -37,9 +37,8 @@ export class TransactionChildFormUtils {
     // Parent contribution purpose description updates with configured child fields update.
     component.transaction?.transactionType?.childTriggerFields?.forEach((triggerField) => {
       if (childTransaction.transactionType) {
-        (
-          childForm.get(childTransaction.transactionType.templateMap[triggerField]) as SubscriptionFormControl
-        )?.addSubscription((value) => {
+        const control = childForm.get(childTransaction.transactionType.templateMap[triggerField]);
+        (control as SubscriptionFormControl)?.addSubscription((value) => {
           /** Before updating the parent description, manually update the child
            * fields because they will not be updated by the time this hook is called
            **/
@@ -57,11 +56,12 @@ export class TransactionChildFormUtils {
 
     // Child contribution purpose description updates with configured parent fields update.
     childTransaction.transactionType?.parentTriggerFields?.forEach((triggerField) => {
-      (component.form.get(component.templateMap[triggerField]) as SubscriptionFormControl)?.addSubscription((value) => {
+      const key = component.templateMap[triggerField] as keyof ScheduleTransaction;
+      const control = component.form.get(key) as SubscriptionFormControl;
+      control?.addSubscription((value) => {
         /** Before updating the parent description, manually update the child
          * fields because they will not be updated by the time this hook is called
          **/
-        const key = component.templateMap[triggerField] as keyof ScheduleTransaction;
         ((component.transaction as ScheduleTransaction)[key] as string) = value;
         (component.transaction as ScheduleTransaction).entity_type = component.form.get('entity_type')?.value;
         updatePurposeDescription(childForm, childTransaction);

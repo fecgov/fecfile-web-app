@@ -1,22 +1,21 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, flush, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { SharedModule } from 'app/shared/shared.module';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { firstValueFrom, of } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { ReportService } from '../../../shared/services/report.service';
@@ -71,17 +70,18 @@ describe('CreateF3XStep1Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        SelectButtonModule,
-        SharedModule,
-        RadioButtonModule,
-        CalendarModule,
-        ReactiveFormsModule,
-        RouterTestingModule.withRoutes([]),
+      imports: [SelectButtonModule, RadioButtonModule, DatePickerModule, ReactiveFormsModule, CreateF3XStep1Component],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        Form3XService,
+        FormBuilder,
+        MessageService,
+        FecDatePipe,
+        LabelPipe,
+        provideMockStore(testMockStore),
       ],
-      declarations: [CreateF3XStep1Component, LabelPipe],
-      providers: [Form3XService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -130,7 +130,7 @@ describe('CreateF3XStep1Component', () => {
     });
   });
 
-  it('#save should save a new f3x record', () => {
+  it('#save should save a new f3x record', async () => {
     const listResponse = {
       count: 0,
       next: '/',
@@ -138,24 +138,23 @@ describe('CreateF3XStep1Component', () => {
       results: [],
       pageNumber: 0,
     } as ListRestResponse;
-    spyOn(form3XService, 'create').and.returnValue(of(f3x));
-    spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
+    spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
+    spyOn(reportService, 'getTableData').and.returnValue(Promise.resolve(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.form.patchValue({ ...f3x });
-    component.save();
+    await component.save();
     expect(component.form.invalid).toBe(false);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
     component.form.patchValue({ ...f3x });
-    component.save('continue');
+    await component.save('continue');
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 
-  xit('#save should not save with invalid f3x record', fakeAsync(async () => {
-    spyOn(router, 'navigateByUrl');
-    spyOn(form3XService, 'create').and.returnValue(of(f3x));
+  xit('#save should not save with invalid f3x record', () => {
+    spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
     component.form.patchValue({ ...f3x });
     component.form.patchValue({ form_type: 'NO-GOOD' });
     component.form.updateValueAndValidity();
@@ -165,7 +164,7 @@ describe('CreateF3XStep1Component', () => {
     flush();
     tick(1000);
     expect(component.form.invalid).toBe(true);
-  }));
+  });
 
   it('back button should go back to report list page', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');

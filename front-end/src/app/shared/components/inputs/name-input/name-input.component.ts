@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InputText } from 'primeng/inputtext';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-name-input',
   templateUrl: './name-input.component.html',
+  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent],
 })
 export class NameInputComponent extends BaseInputComponent implements OnInit {
   @Input() templateMapKeyPrefix = '';

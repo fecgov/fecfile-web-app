@@ -1,11 +1,11 @@
 :host ::ng-deep .navigation-dropdown {
-  background-color: #f77b42;
+  background-color: var(--orange);
   flex-direction: row-reverse;
   padding: 0 16px;
 }
 
-:host ::ng-deep .navigation-dropdown span.p-dropdown-label.p-inputtext.p-placeholder,
-:host ::ng-deep .p-dropdown-trigger {
+:host ::ng-deep .navigation-dropdown span.p-select-label.p-inputtext.p-placeholder,
+:host ::ng-deep .p-select-trigger {
   color: #212121;
   font-weight: bold;
   padding-right: 0;
@@ -27,9 +27,9 @@
 }
 
 .dd-button {
-  color: #212121;
+  color: var(--p-content-color);
   font-weight: bold;
-  background-color: #f77b42;
+  background-color: var(--orange);
   padding: 0 16px;
   height: 3rem;
 }
@@ -49,7 +49,7 @@ button > span {
   text-transform: uppercase;
   font-weight: bolder;
   font-size: 1rem;
-  color: #212121;
+  color: var(--p-content-color);
 }
 
 .dropdown-menu {
@@ -59,9 +59,9 @@ button > span {
 .dropdown-item {
   padding: 0.5rem 1.5rem;
   font-size: 1rem;
-  line-height: var(--bs-body-line-height);
+  line-height: 1rem;
 }
 
 hr {
-  margin: 1rem;
+  margin: 1rem 0;
 }

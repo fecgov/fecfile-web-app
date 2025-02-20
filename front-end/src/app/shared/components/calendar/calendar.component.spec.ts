@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CalendarComponent } from './calendar.component';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 describe('CalendarComponent', () => {
@@ -11,8 +11,7 @@ describe('CalendarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CalendarComponent],
-      imports: [ReactiveFormsModule, CalendarModule], // Ensure ReactiveFormsModule is imported here
+      imports: [ReactiveFormsModule, DatePickerModule, CalendarComponent], // Ensure ReactiveFormsModule is imported here
       providers: [FormBuilder],
     }).compileComponents();
 

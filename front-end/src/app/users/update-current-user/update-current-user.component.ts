@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -8,29 +8,28 @@ import { UsersService } from 'app/shared/services/users.service';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { map, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { UserLoginData } from '../../shared/models/user.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Card } from 'primeng/card';
+import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from '../../shared/directives/single-click.directive';
 
 @Component({
   selector: 'app-update-current-user',
   templateUrl: './update-current-user.component.html',
   styleUrls: ['./update-current-user.component.scss'],
+  imports: [Card, ReactiveFormsModule, ErrorMessagesComponent, SingleClickDirective],
 })
 export class UpdateCurrentUserComponent extends DestroyerComponent implements OnInit {
+  private readonly store = inject(Store);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly usersService = inject(UsersService);
+  private readonly loginService = inject(LoginService);
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   formSubmitted = false;
-
-  constructor(
-    private store: Store,
-    private fb: FormBuilder,
-    private router: Router,
-    private usersService: UsersService,
-    private loginService: LoginService,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     this.store
@@ -44,7 +43,7 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
       });
   }
 
-  continue() {
+  async continue() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
@@ -57,15 +56,9 @@ export class UpdateCurrentUserComponent extends DestroyerComponent implements On
       last_name: this.form.get('last_name')?.value,
       email: this.form.get('email')?.value,
     } as UserLoginData;
-    this.usersService
-      .updateCurrentUser(updatedUserLoginData)
-      .pipe(
-        map((response) => {
-          this.store.dispatch(userLoginDataUpdatedAction({ payload: response }));
-          this.router.navigate(['dashboard']);
-        }),
-      )
-      .subscribe();
+    const response = await this.usersService.updateCurrentUser(updatedUserLoginData);
+    this.store.dispatch(userLoginDataUpdatedAction({ payload: response }));
+    this.router.navigate(['dashboard']);
   }
 
   cancel() {
