@@ -4,7 +4,6 @@ describe('Role Utility Functions', () => {
   describe('getRoleLabel', () => {
     it('should return the correct label for a given role key', () => {
       expect(getRoleLabel('COMMITTEE_ADMINISTRATOR')).toBe('Committee Administrator');
-      expect(getRoleLabel('REVIEWER')).toBe('Reviewer');
       expect(getRoleLabel('MANAGER')).toBe('Manager');
     });
   });
@@ -16,10 +15,6 @@ describe('Role Utility Functions', () => {
 
     it('should return true for MANAGER', () => {
       expect(isManagerAdmin(Roles.MANAGER)).toBeTrue();
-    });
-
-    it('should return false for REVIEWER', () => {
-      expect(isManagerAdmin(Roles.REVIEWER)).toBeFalse();
     });
 
     it('should return false for undefined role', () => {

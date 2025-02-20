@@ -1,6 +1,5 @@
 export enum Roles {
   COMMITTEE_ADMINISTRATOR = 'Committee Administrator',
-  REVIEWER = 'Reviewer',
   MANAGER = 'Manager',
 }
 

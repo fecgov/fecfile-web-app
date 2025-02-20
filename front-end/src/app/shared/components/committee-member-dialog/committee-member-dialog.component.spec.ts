@@ -97,7 +97,7 @@ describe('CommitteeMemberDialogComponent', () => {
 
     it('should call editRole when member is defined', () => {
       spyOn(component, 'editRole');
-      component.member = { role: 'REVIEWER' } as CommitteeMember;
+      component.member = { role: 'MANAGER' } as CommitteeMember;
       component.submit();
       expect(component.editRole).toHaveBeenCalled();
     });
@@ -112,8 +112,8 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('editRole', () => {
     beforeEach(() => {
-      component.member = { role: 'REVIEWER' } as CommitteeMember;
-      component.form.get('role')?.setValue('MANAGER');
+      component.member = { role: 'MANAGER' } as CommitteeMember;
+      component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
     });
 
     it('should not proceed if role is invalid', async () => {

@@ -46,7 +46,7 @@ describe('CommitteeMemberService', () => {
           first_name: 'Jane',
           last_name: 'Smith',
           email: 'jane_smith@test.com',
-          role: 'REVIEWER',
+          role: 'MANAGER',
           is_active: true,
         }),
       ],
