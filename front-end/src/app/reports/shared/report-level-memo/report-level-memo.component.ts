@@ -2,7 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { Report } from 'app/shared/models/report.model';
@@ -17,8 +19,6 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TextareaModule } from 'primeng/textarea';
 import { takeUntil } from 'rxjs';
-import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
-import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -26,7 +26,7 @@ import { SingleClickDirective } from '../../../shared/directives/single-click.di
   styleUrls: ['../../styles.scss'],
   imports: [ReactiveFormsModule, ErrorMessagesComponent, ButtonDirective, Ripple, SingleClickDirective, TextareaModule],
 })
-export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
+export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   private readonly store = inject(Store);
   protected readonly fb = inject(FormBuilder);
   public readonly router = inject(Router);
@@ -45,7 +45,6 @@ export class ReportLevelMemoComponent extends DestroyerComponent implements OnIn
 
   assignedMemoText: MemoText = new MemoText();
 
-  formSubmitted = false;
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
 
   ngOnInit(): void {

@@ -1,71 +1,66 @@
-<dialog #dialog>
-  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
-    <div class="dialog-content">
-      <div class="dialog-header">
-        <h1 class="dialog-title" id="dialog-title">Add new user</h1>
-        <button
-          pButton
-          type="button"
-          icon="pi pi-times"
-          id="close-button"
-          (click)="dialog.close()"
-          aria-label="Cancel"
-        ></button>
-      </div>
-      <div class="dialog-body">
-        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-          <div class="grid">
-            <div class="col-12">
-              <div class="field">
-                <label for="email">ENTER EMAIL</label>
-                <input type="text" pInputText id="email" formControlName="email" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="email"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="field">
-                <label id="role-label" for="role">ROLE</label>
-                <p-select
-                  inputId="role"
-                  formControlName="role"
-                  [options]="roleOptions"
-                  [autoDisplayFirst]="true"
-                ></p-select>
-                <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
-              </div>
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title">
+  <div class="dialog-header">
+    <h1 class="dialog-title" id="dialog-title">{{ member ? 'Edit' : 'Add' }} User</h1>
+    <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
+  </div>
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
+    <div class="dialog-body">
+      <div class="grid">
+        @if (member) {
+          <div class="col-12">
+            <div class="field">
+              <label id="role-label" for="role">CURRENT ROLE</label>
+              <input id="role" [disabled]="true" [value]="role" />
             </div>
           </div>
-        </form>
-      </div>
-      <div class="dialog-footer">
-        <hr type="solid" />
-        <div class="grid">
-          <div class="col-1">
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Cancel"
-              class="p-button-secondary"
-              (click)="dialog.close()"
-            ></button>
+        } @else {
+          <div class="col-12">
+            <div class="field">
+              <label for="email">ENTER EMAIL</label>
+              <input autofocus type="text" pInputText id="email" formControlName="email" />
+              <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
           </div>
-          <div class="col-11">
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Add"
-              class="p-button-primary float-right"
-              (click)="addUser()"
-            ></button>
+        }
+        <div class="col-12">
+          <div class="field">
+            <label id="role-label" for="role">ROLE</label>
+            <p-select
+              inputId="role"
+              formControlName="role"
+              [options]="roleOptions"
+              [autoDisplayFirst]="true"
+              [autofocus]="!!member"
+            ></p-select>
+            <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="dialog-footer">
+      <hr type="solid" />
+      <div class="grid">
+        <div class="col-1">
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Cancel"
+            class="p-button-secondary"
+            (click)="dialog.close()"
+          ></button>
+        </div>
+        <div class="col-11">
+          <button
+            type="submit"
+            data-cy="membership-submit"
+            pButton
+            pRipple
+            [label]="member ? 'Change' : 'Add'"
+            class="p-button-primary float-right"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </form>
 </dialog>

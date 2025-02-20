@@ -18,7 +18,7 @@ import { CurrencyPipe } from '@angular/common';
   imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent implements OnInit {
-  protected override readonly itemService = inject(TransactionSchC2Service);
+  override readonly itemService = inject(TransactionSchC2Service);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 

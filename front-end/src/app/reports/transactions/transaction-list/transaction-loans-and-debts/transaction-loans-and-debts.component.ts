@@ -20,7 +20,7 @@ import { LabelPipe } from '../../../../shared/pipes/label.pipe';
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, CurrencyPipe, FecDatePipe, LabelPipe],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent implements OnInit {
-  protected override readonly itemService = inject(TransactionSchCService);
+  override readonly itemService = inject(TransactionSchCService);
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleC1TransactionTypeLabels,

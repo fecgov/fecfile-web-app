@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
@@ -21,19 +20,19 @@ import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { combineLatest, startWith, takeUntil } from 'rxjs';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { SelectButton } from 'primeng/selectbutton';
-import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
-import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
 import { Select } from 'primeng/select';
-import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { TextareaModule } from 'primeng/textarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
+import { F3xCoverageDates, CommitteeAccount, Form3X, F3xFormTypes } from 'app/shared/models';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -50,7 +49,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     TextareaModule,
   ],
 })
-export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
+export class CreateF3XStep1Component extends FormComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly fb = inject(FormBuilder);
   private readonly form3XService = inject(Form3XService);
@@ -69,7 +68,6 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
-  formSubmitted = false;
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });

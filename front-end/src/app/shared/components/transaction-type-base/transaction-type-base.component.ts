@@ -2,13 +2,6 @@ import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import {
-  NavigationAction,
-  NavigationDestination,
-  NavigationEvent,
-} from 'app/shared/models/transaction-navigation-controls.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -20,21 +13,32 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, Observable, of, startWith, Subject, takeUntil } from 'rxjs';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
+import { FormComponent } from '../app-destroyer.component';
+import {
+  TransactionType,
+  ContactTypeLabels,
+  Report,
+  ReportTypes,
+  TransactionTemplateMapType,
+  CommitteeAccount,
+  Contact,
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from 'app/shared/models';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 @Component({
   template: '',
 })
-export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -50,7 +54,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formProperties: string[] = [];
   transactionType?: TransactionType;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  readonly destroy$: Subject<boolean> = new Subject<boolean>();
   readonly activeReport$: Observable<Report> = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
   readonly navigationEvent$: Observable<NavigationEvent> = this.store
@@ -65,7 +68,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   };
 
   contactIdMap: ContactIdMapType = {};
-  formSubmitted = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   isEditable = true;
@@ -129,9 +131,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
     Object.values(this.contactIdMap).forEach((id$) => id$.complete());
   }
 

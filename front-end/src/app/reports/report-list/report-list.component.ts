@@ -1,22 +1,20 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { PrimeTemplate } from 'primeng/api';
-import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report, ReportStatus, ReportTypes } from '../../shared/models/report.model';
-import { ReportService } from '../../shared/services/report.service';
-import { TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { FecDatePipe } from '../../shared/pipes/fec-date.pipe';
+import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
+import { TableListBaseComponent, TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableComponent } from 'app/shared/components/table/table.component';
+import { CommitteeAccount, ReportStatus, Form3X, Report, ReportTypes } from 'app/shared/models';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   selector: 'app-report-list',
@@ -71,9 +69,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override readonly caption =
     'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
 
-  override ngOnInit() {
-    this.loading = true;
-    this.loadItemService(this.itemService);
+  ngOnInit() {
     this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
       this.committeeAccount = committeeAccount;
     });

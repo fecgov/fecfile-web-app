@@ -2,10 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { Report } from 'app/shared/models/report.model';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
@@ -24,6 +21,7 @@ import { Checkbox } from 'primeng/checkbox';
 import { Tooltip } from 'primeng/tooltip';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+import { CommitteeAccount, Report, Form3X } from 'app/shared/models';
 
 @Component({
   selector: 'app-submit-report-step2',
@@ -41,7 +39,7 @@ import { Ripple } from 'primeng/ripple';
     Ripple,
   ],
 })
-export class SubmitReportStep2Component extends DestroyerComponent implements OnInit {
+export class SubmitReportStep2Component extends FormComponent implements OnInit {
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
@@ -60,7 +58,6 @@ export class SubmitReportStep2Component extends DestroyerComponent implements On
     'userCertified',
   ];
   report?: Report;
-  formSubmitted = false;
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });

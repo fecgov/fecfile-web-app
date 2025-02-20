@@ -1,25 +1,24 @@
-import { provideRouter, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, flush, TestBed, tick } from '@angular/core/testing';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { F3xCoverageDates, ListRestResponse } from 'app/shared/models';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { firstValueFrom, of } from 'rxjs';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { F3xCoverageDates } from '../../../shared/models/form-3x.model';
-import { ListRestResponse } from '../../../shared/models/rest-api.model';
-import { ReportService } from '../../../shared/services/report.service';
-import { testMockStore } from '../../../shared/utils/unit-test.utils';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 
 describe('CreateF3XStep1Component', () => {
