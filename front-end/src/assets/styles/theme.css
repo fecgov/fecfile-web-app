@@ -45,7 +45,7 @@ label.p-disabled {
 .p-link {
   font-size: 1rem;
   font-family: var(--karla);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-link:focus {
   outline: 0 none;
@@ -111,7 +111,7 @@ label.p-disabled {
   margin-right: 0.5rem;
   background: var(--p-primary-color);
   color: #ffffff;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-token .p-autocomplete-token-icon {
   margin-left: 0.5rem;
@@ -125,7 +125,7 @@ p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 .p-autocomplete-panel .p-autocomplete-items:not(.p-autocomplete-virtualscroll) {
@@ -186,7 +186,7 @@ p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid var(--surface-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-datepicker:not(.p-datepicker-inline) {
   background: var(--p-content-background);
@@ -204,8 +204,8 @@ p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
   font-weight: 600;
   margin: 0;
   border-bottom: 1px solid var(--surface-border);
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-datepicker .p-datepicker-header .p-datepicker-prev-button,
 .p-datepicker .p-datepicker-header .p-datepicker-next-button {
@@ -333,7 +333,7 @@ p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
 .p-datepicker .p-monthpicker .p-monthpicker-month {
   padding: 0.5rem;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-datepicker .p-monthpicker .p-monthpicker-month.p-highlight {
   color: #ffffff;
@@ -345,7 +345,7 @@ p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
 .p-datepicker .p-yearpicker .p-yearpicker-year {
   padding: 0.5rem;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-datepicker .p-yearpicker .p-yearpicker-year.p-highlight {
   color: #ffffff;
@@ -407,7 +407,7 @@ p-datepicker.p-datepicker-clearable.p-datepicker-show-icon .p-datepicker-clear-i
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-cascadeselect:not(.p-disabled):hover {
   border-color: var(--surface-border);
@@ -434,15 +434,15 @@ p-datepicker.p-datepicker-clearable.p-datepicker-show-icon .p-datepicker-clear-i
   background: transparent;
   color: var(--fec-grey-alt);
   width: 2.357rem;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-cascadeselect-panel {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 .p-cascadeselect-panel .p-cascadeselect-items {
@@ -513,7 +513,7 @@ p-checkbox {
   width: 20px;
   height: 20px;
   color: var(--p-content-color);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition:
     background-color 0.15s,
     border-color 0.15s,
@@ -593,7 +593,7 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
   margin-right: 0.5rem;
   background: var(--p-primary-color);
   color: #ffffff;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-chips .p-chips-multiple-container .p-chips-token .p-chips-token-icon {
   margin-left: 0.5rem;
@@ -602,7 +602,8 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
   padding: 0.25rem 0;
 }
 .p-chips .p-chips-multiple-container .p-chips-input-token input {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
   font-size: 1rem;
   color: var(--p-content-color);
@@ -642,7 +643,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 
 .p-select {
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   align-items: center;
 }
 .p-select:not(.p-disabled) {
@@ -689,8 +690,8 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   background: transparent;
   color: #5b616b;
   width: 2.357rem;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-select .p-select-clear-icon {
@@ -702,7 +703,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 .p-select-panel .p-select-header {
@@ -711,8 +712,8 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   color: var(--p-content-color);
   background: #f1f1f1;
   margin: 0;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-select-panel .p-select-header .p-select-filter {
   padding-right: 1.75rem;
@@ -785,8 +786,8 @@ p-select.ng-dirty.ng-invalid > .p-select {
 
 .p-editor-container .p-editor-toolbar {
   background: #f1f1f1;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-editor-container .p-editor-toolbar.ql-snow {
   border: 1px solid var(--surface-border);
@@ -823,7 +824,7 @@ p-select.ng-dirty.ng-invalid > .p-select {
   background: var(--p-content-background);
   border: 1px solid rgba(0, 0, 0, 0.15);
   box-shadow: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   padding: 0.5rem 0;
 }
 .p-editor-container .p-editor-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options .ql-picker-item {
@@ -837,8 +838,8 @@ p-select.ng-dirty.ng-invalid > .p-select {
   padding: 0.5rem 1.5rem;
 }
 .p-editor-container .p-editor-content {
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-editor-container .p-editor-content.ql-snow {
   border: 1px solid var(--surface-border);
@@ -846,8 +847,8 @@ p-select.ng-dirty.ng-invalid > .p-select {
 .p-editor-container .p-editor-content .ql-editor {
   background: var(--p-content-background);
   color: #5b616b;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-editor-container .ql-snow.ql-toolbar button:hover,
 .p-editor-container .ql-snow.ql-toolbar button:focus {
@@ -926,13 +927,13 @@ p-select.ng-dirty.ng-invalid > .p-select {
 .p-inputgroup input:first-child,
 .p-inputgroup > .p-inputwrapper:first-child > .p-component,
 .p-inputgroup > .p-inputwrapper:first-child > .p-component > .p-inputtext {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 
 .p-inputgroup .p-float-label:first-child input {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 
 .p-inputgroup-addon:last-child,
@@ -940,13 +941,13 @@ p-select.ng-dirty.ng-invalid > .p-select {
 .p-inputgroup input:last-child,
 .p-inputgroup > .p-inputwrapper:last-child > .p-component,
 .p-inputgroup > .p-inputwrapper:last-child > .p-component > .p-inputtext {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-inputgroup .p-float-label:last-child input {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-fluid .p-inputgroup .p-button {
@@ -997,7 +998,7 @@ p-inputnumber.p-inputnumber-clearable .p-inputnumber-buttons-horizontal .p-input
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-inputswitch .p-inputswitch-slider:before {
   background: var(--p-content-background);
@@ -1005,7 +1006,7 @@ p-inputnumber.p-inputnumber-clearable .p-inputnumber-buttons-horizontal .p-input
   height: 1.25rem;
   left: 0.25rem;
   margin-top: -0.625rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition-duration: 0.15s;
 }
 .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
@@ -1034,7 +1035,8 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 }
 
 .p-inputtext {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
   font-size: 1rem;
   color: var(--p-content-color);
@@ -1046,7 +1048,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
     border-color 0.15s,
     box-shadow 0.15s;
   appearance: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   height: 3em;
 }
 .p-inputtext:enabled:hover {
@@ -1142,7 +1144,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid var(--surface-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-listbox .p-listbox-header {
   padding: 0.75rem 1.5rem;
@@ -1150,8 +1152,8 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   color: var(--p-content-color);
   background: #f1f1f1;
   margin: 0;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-listbox .p-listbox-header .p-listbox-filter {
   padding-right: 1.75rem;
@@ -1214,7 +1216,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-multiselect:not(.p-disabled):hover {
   border-color: var(--surface-border);
@@ -1240,7 +1242,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   margin-right: 0.5rem;
   background: var(--p-primary-color);
   color: #ffffff;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
   margin-left: 0.5rem;
@@ -1249,8 +1251,8 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   background: transparent;
   color: #5b616b;
   width: 2.357rem;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label {
@@ -1261,7 +1263,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 .p-multiselect-panel .p-multiselect-header {
@@ -1270,8 +1272,8 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   color: var(--p-content-color);
   background: #f1f1f1;
   margin: 0;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
   padding-right: 1.75rem;
@@ -1383,7 +1385,7 @@ p-password.ng-invalid.ng-dirty > .p-password > .p-inputtext {
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.2);
   box-shadow: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-password-panel .p-password-meter {
   margin-bottom: 0.5rem;
@@ -1525,7 +1527,7 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 }
 
 .p-buttonset .p-button:first-of-type {
-  border-radius: 4px 0px 0px 4px;
+  border-radius: 4px 0px 0px var(--border-radius);
 }
 
 .p-buttonset .p-button:last-of-type {
@@ -1593,7 +1595,7 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
 .p-slider {
   background: var(--fec-grey-background);
   border: 0 none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-slider.p-slider-horizontal {
   height: 0.286rem;
@@ -1614,7 +1616,7 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   width: 1.143rem;
   background: var(--p-primary-color);
   border: 2px solid var(--p-primary-color);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition:
     background-color 0.15s,
     border-color 0.15s,
@@ -1704,7 +1706,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-treeselect:not(.p-disabled):hover {
   border-color: var(--surface-border);
@@ -1736,8 +1738,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   background: transparent;
   color: #5b616b;
   width: 2.357rem;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
@@ -1752,7 +1754,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 .p-treeselect-panel .p-treeselect-header {
@@ -1761,8 +1763,8 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   color: var(--p-content-color);
   background: #f1f1f1;
   margin: 0;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-treeselect-panel .p-treeselect-header .p-treeselect-filter-container {
   margin-right: 0.5rem;
@@ -1838,7 +1840,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-button:enabled:hover {
   background: #0e2541;
@@ -2495,7 +2497,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-splitbutton {
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-splitbutton.p-button-outlined > .p-button {
   background-color: transparent;
@@ -3084,8 +3086,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-width: 1px 0 1px 0;
   padding: 1rem 1rem;
   font-weight: 600;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 .p-dataview .p-dataview-loading-icon {
   font-size: 2rem;
@@ -3153,7 +3155,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
   min-width: 12.5rem;
 }
@@ -3193,8 +3195,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: var(--p-content-color);
   background: #f1f1f1;
   margin: 0;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-column-filter-overlay-menu .p-column-filter-constraint {
   padding: 1.25rem;
@@ -3254,7 +3256,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   display: flex;
   align-items: center;
 }
@@ -3338,12 +3340,12 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-radius: 0;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button-group .fc-button:first-child {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .fc.fc-unthemed .fc-toolbar .fc-button-group .fc-button:last-child {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 .fc.fc-theme-standard .fc-view-harness .fc-scrollgrid {
   border-color: var(--surface-border);
@@ -3434,7 +3436,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button:enabled:hover {
   background: #0069d9;
@@ -3522,12 +3524,12 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-radius: 0;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button-group .fc-button:first-child {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button-group .fc-button:last-child {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 .fc.fc-theme-standard a {
   color: var(--p-content-color);
@@ -3549,8 +3551,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 1px solid var(--surface-border);
   padding: 1rem 1.25rem;
   border-bottom: 0 none;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-orderlist .p-orderlist-header .p-orderlist-title {
   font-weight: 600;
@@ -3573,8 +3575,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   padding: 0.5rem 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-orderlist .p-orderlist-list .p-orderlist-item {
   padding: 0.5rem 1.5rem;
@@ -3743,8 +3745,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 1px solid var(--surface-border);
   padding: 1rem 1.25rem;
   border-bottom: 0 none;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-picklist .p-picklist-header .p-picklist-title {
   font-weight: 600;
@@ -3767,8 +3769,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   padding: 0.5rem 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-picklist .p-picklist-list .p-picklist-item {
   padding: 0.5rem 1.5rem;
@@ -3841,13 +3843,13 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   padding: 1.25rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-tree .p-tree-container .p-treenode {
   padding: 0.143rem;
 }
 .p-tree .p-tree-container .p-treenode .p-treenode-content {
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition: box-shadow 0.15s;
   padding: 0.286rem;
 }
@@ -3927,7 +3929,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background-color: #0062cc;
 }
 .p-tree.p-tree-horizontal .p-treenode .p-treenode-content {
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   border: 1px solid var(--surface-border);
   background-color: #ffffff;
   color: var(--p-content-color);
@@ -4179,8 +4181,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-width: 1px 0 1px 0;
   padding: 1rem 1rem;
   font-weight: 600;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-accordion .p-accordion-header .p-accordion-header-link .p-accordion-toggle-icon {
@@ -4216,8 +4218,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-accordionheader {
   flex-direction: row-reverse;
@@ -4266,7 +4268,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 1px solid var(--surface-border);
   background: var(--p-content-background);
   color: var(--p-content-color);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-fieldset .p-fieldset-legend {
   padding: 1rem 1.25rem;
@@ -4274,7 +4276,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: var(--p-content-color);
   background: #f1f1f1;
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend {
   padding: 0;
@@ -4283,7 +4285,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
   padding: 1rem 1.25rem;
   color: var(--p-content-color);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition: box-shadow 0.15s;
 }
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a .p-fieldset-toggler {
@@ -4308,8 +4310,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 1rem 1.25rem;
   background: #f1f1f1;
   color: var(--p-content-color);
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-panel .p-panel-header .p-panel-title {
   font-weight: 600;
@@ -4341,8 +4343,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 1px solid var(--surface-border);
   background: var(--p-content-background);
   color: var(--p-content-color);
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
   border-top: 0 none;
 }
 .p-panel .p-panel-footer {
@@ -4374,7 +4376,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitter {
   border: 1px solid var(--surface-border);
   background: var(--p-content-background);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   color: var(--p-content-color);
 }
 .p-splitter .p-splitter-gutter {
@@ -4404,8 +4406,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #5b616b;
   padding: 0.75rem 1rem;
   font-weight: 600;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
   transition: box-shadow 0.15s;
   margin: 0 0 -1px 0;
 }
@@ -4453,8 +4455,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 1.25rem;
   border: 0 none;
   color: var(--p-content-color);
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 
 .p-toolbar {
@@ -4473,7 +4475,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 .p-confirm-popup .p-confirm-popup-content {
@@ -4514,7 +4516,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-dialog {
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background: var(--p-content-background);
@@ -4522,8 +4524,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-dialog .p-dialog-header {
   color: var(--p-content-color);
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
   position: relative;
 }
 
@@ -4568,8 +4570,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   text-align: right;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
   display: flex;
   justify-content: space-between;
 }
@@ -4588,7 +4590,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
 }
 
@@ -4654,7 +4656,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #ffffff;
   padding: 0.5rem 0.75rem;
   box-shadow: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-tooltip.p-tooltip-right .p-tooltip-arrow {
   border-right-color: var(--p-content-color);
@@ -4675,8 +4677,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 1px solid var(--surface-border);
   color: var(--p-content-color);
   border-bottom: 0 none;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-fileupload .p-fileupload-buttonbar .p-button {
   margin-right: 0.5rem;
@@ -4691,8 +4693,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 2rem 1rem;
   border: 1px solid var(--surface-border);
   color: var(--p-content-color);
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-fileupload .p-progressbar {
   height: 0.25rem;
@@ -4718,12 +4720,12 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-breadcrumb {
   background: #f1f1f1;
   border: 0 none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   padding: 1rem;
 }
 .p-breadcrumb ul li .p-menuitem-link {
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-breadcrumb ul li .p-menuitem-link:focus {
   outline: 0 none;
@@ -4753,7 +4755,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: var(--p-content-color);
   border: 1px solid rgba(0, 0, 0, 0.15);
   box-shadow: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   width: 12.5rem;
 }
 .p-contextmenu .p-menuitem-link {
@@ -4795,7 +4797,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   border: 1px solid rgba(0, 0, 0, 0.15);
   box-shadow: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-contextmenu .p-menuitem {
   margin: 0;
@@ -4896,12 +4898,12 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: #f1f1f1;
   color: rgba(0, 0, 0, 0.9);
   border: 0 none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-megamenu .p-megamenu-root-list > .p-menuitem > .p-menuitem-link {
   padding: 1rem;
   color: rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition: box-shadow 0.15s;
   user-select: none;
 }
@@ -5007,8 +5009,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: var(--p-content-color);
   background: var(--p-content-background);
   font-weight: 600;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-megamenu .p-megamenu-submenu {
   padding: 0.5rem 0;
@@ -5050,7 +5052,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid var(--surface-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   width: 12.5rem;
 }
 .p-menu .p-menuitem-link {
@@ -5117,7 +5119,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: rgba(0, 0, 0, 0.9);
   border: 0 none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   font-weight: 700;
 }
 .p-menubar .p-menuitem-text {
@@ -5159,7 +5161,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
   padding: 1rem;
   color: rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition: box-shadow 0.15s;
   user-select: none;
 }
@@ -5376,7 +5378,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: var(--p-content-color);
   background: #f1f1f1;
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition: box-shadow 0.15s;
 }
 .p-panelmenu .p-panelmenu-header > a .p-panelmenu-icon {
@@ -5419,8 +5421,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link {
   padding: 0.75rem 1rem;
@@ -5463,7 +5465,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   padding: 0 0 0 1rem;
 }
 .p-panelmenu .p-panelmenu-panel {
-  margin-bottom: 0;
+  margin: 0 0.5rem 0 0.25rem;
 }
 .p-panelmenu .p-panelmenu-panel .p-panelmenu-header > a {
   border-radius: 0;
@@ -5479,16 +5481,16 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-top: 0 none;
 }
 .p-panelmenu .p-panelmenu-panel:first-child .p-panelmenu-header > a {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
 }
 .p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-header:not(.p-highlight) > a {
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-content {
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 
 .p-slidemenu {
@@ -5496,7 +5498,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid var(--surface-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   width: 12.5rem;
 }
 .p-slidemenu .p-menuitem-link {
@@ -5568,7 +5570,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-steps .p-steps-item .p-menuitem-link {
   background: transparent;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-steps .p-steps-item .p-menuitem-link .p-steps-number {
   color: var(--p-content-color);
@@ -5579,7 +5581,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   line-height: 2rem;
   font-size: 1.143rem;
   z-index: 1;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-steps .p-steps-item .p-menuitem-link .p-steps-title {
   margin-top: 0.5rem;
@@ -5625,8 +5627,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #5b616b;
   padding: 0.75rem 1rem;
   font-weight: 600;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
   transition: box-shadow 0.15s;
   margin: 0 0 -1px 0;
 }
@@ -5675,7 +5677,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   border: 1px solid var(--surface-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   width: 12.5rem;
 }
 .p-tieredmenu .p-menuitem-link {
@@ -5750,7 +5752,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-inline-message {
   padding: 0.5rem 0.75rem;
   margin: 0;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-inline-message.p-inline-message-info {
   background: #cce5ff;
@@ -5801,7 +5803,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-message {
   margin: 1rem 0;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-message .p-message-wrapper {
   padding: 1rem 1.25rem;
@@ -5890,7 +5892,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-toast .p-toast-message {
   margin: 0 0 1rem 0;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-toast .p-toast-message .p-toast-message-content {
   padding: 1rem;
@@ -5968,7 +5970,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   width: 4rem;
   height: 4rem;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-galleria .p-galleria-close .p-galleria-close-icon {
   font-size: 2rem;
@@ -5983,7 +5985,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   width: 4rem;
   height: 4rem;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   margin: 0 0.5rem;
 }
 .p-galleria .p-galleria-item-nav .p-galleria-item-prev-icon,
@@ -6007,7 +6009,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   width: 1rem;
   height: 1rem;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-galleria .p-galleria-indicators .p-galleria-indicator button:hover {
   background: var(--surface-border);
@@ -6049,7 +6051,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   width: 2rem;
   height: 2rem;
   transition: box-shadow 0.15s;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-galleria .p-galleria-thumbnail-container .p-galleria-thumbnail-prev:hover,
 .p-galleria .p-galleria-thumbnail-container .p-galleria-thumbnail-next:hover {
@@ -6106,7 +6108,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-avatar {
   background-color: var(--surface-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-avatar.p-avatar-lg {
   width: 3rem;
@@ -6187,6 +6189,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-chip .pi-chip-remove-icon {
   margin-left: 0.5rem;
+  border-radius: var(--border-radius);
+  transition: box-shadow 0.15s;
 }
 .p-chip img {
   width: 2rem;
@@ -6194,10 +6198,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin-left: -0.75rem;
   margin-right: 0.5rem;
 }
-.p-chip .pi-chip-remove-icon {
-  border-radius: 4px;
-  transition: box-shadow 0.15s;
-}
+
 .p-chip .pi-chip-remove-icon:focus {
   outline: 0 none;
   outline-offset: 0;
@@ -6206,7 +6207,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-inplace .p-inplace-display {
   padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   transition:
     background-color 0.15s,
     border-color 0.15s,
@@ -6226,7 +6227,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 0 none;
   height: 1.5rem;
   background: var(--fec-grey-background);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-progressbar .p-progressbar-value {
   border: 0 none;
@@ -6241,7 +6242,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-scrolltop {
   width: 3rem;
   height: 3rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   box-shadow: none;
   transition: box-shadow 0.15s;
 }
@@ -6258,7 +6259,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-skeleton {
   background: var(--fec-grey-background);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-skeleton:after {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
@@ -6270,7 +6271,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.4rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 .p-tag.p-tag-success {
   background-color: #28a745;
@@ -6301,13 +6302,15 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-terminal .p-terminal-input {
   font-size: 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 /* Vendor extensions to the designer enhanced bootstrap compatibility */
 .p-breadcrumb .p-breadcrumb-chevron {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 .p-breadcrumb .p-breadcrumb-chevron:before {
@@ -6360,13 +6363,13 @@ sortalticon {
 }
 
 .p-select-list > p-selectitem:first-of-type > li {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
 }
 
 .p-select-list > p-selectitem:last-of-type > li {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .p-autocomplete-option-group {
@@ -6527,6 +6530,7 @@ input {
 .p-accordioncontent-content {
   padding: 20px;
   border: 1px solid var(--surface-border);
+  width: 100%;
 }
 
 .p-confirmdialog > .p-dialog-footer {
