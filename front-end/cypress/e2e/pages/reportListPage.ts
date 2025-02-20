@@ -1,6 +1,6 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
-import { currentYear, PageUtils } from './pageUtils';
+import { PageUtils } from './pageUtils';
 
 export class ReportListPage {
   static goToPage() {
