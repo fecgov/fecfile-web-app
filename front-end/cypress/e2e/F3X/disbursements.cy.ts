@@ -116,10 +116,8 @@ describe('Disbursements', () => {
     // Add IE to a F24 Report
     PageUtils.clickSidebarItem('Manage your transactions');
 
-    PageUtils.getKabob('Independent Expenditure').click();
-    PageUtils.clickButton('Add to Form24 Report', '', true);
-    PageUtils.clickButton('Select a F24 Report');
-    cy.get('.dropdown > ul').contains('#1').click();
+    PageUtils.getKabob('Independent Expenditure').contains('Add to Form24 Report').first().click({ force: true });
+    PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '#1', '');
     PageUtils.clickButton('Confirm');
 
     ReportListPage.editReport('FORM 24');
