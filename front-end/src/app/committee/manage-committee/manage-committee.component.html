@@ -20,14 +20,14 @@
         <h1 class="m-0">Manage users</h1>
       </ng-template>
       <ng-template #end>
-        @if (isCommitteeAdmin()) {
+        @if (isCommitteeAdministrator()) {
           <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
         }
       </ng-template>
     </p-toolbar>
   </ng-template>
   <ng-template #header>
-    @if (isCommitteeAdmin()) {
+    @if (isCommitteeAdministrator()) {
       <th id="buttons" role="columnheader">Actions</th>
     }
   </ng-template>
@@ -36,7 +36,7 @@
     <td>{{ item.email }}</td>
     <td>{{ getRoleLabel(item.role) }}</td>
     <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-    @if (isCommitteeAdmin()) {
+    @if (isCommitteeAdministrator()) {
       <td>
         @if (isNotCurrentUser(item)) {
           <app-table-actions-button

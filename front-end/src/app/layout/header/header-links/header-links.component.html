@@ -38,15 +38,13 @@
             >
               Account
             </li>
-            @if (isManagerAdmin(role)) {
-              <li
-                class="cursor-pointer py-2 px-4"
-                (click)="openLink('/committee/members', op2)"
-                (keydown.enter)="openLink('/committee/members', op2)"
-              >
-                Users
-              </li>
-            }
+            <li
+              class="cursor-pointer py-2 px-4"
+              (click)="openLink('/committee/members', op2)"
+              (keydown.enter)="openLink('/committee/members', op2)"
+            >
+              Users
+            </li>
             <li
               class="cursor-pointer py-2 px-4"
               (click)="openLink('/login/select-committee/', op2)"

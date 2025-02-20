@@ -2,7 +2,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { isManagerAdmin, Roles } from 'app/shared/models';
+import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { environment } from 'environments/environment';
@@ -26,7 +26,6 @@ export class HeaderLinksComponent implements OnInit {
   @Input() headerStyle = HeaderStyles.DEFAULT;
 
   headerStyles = HeaderStyles;
-  isManagerAdmin = isManagerAdmin;
 
   role?: Roles;
 

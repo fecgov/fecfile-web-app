@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { CommitteeMember, getRoleLabel, Roles } from 'app/shared/models';
+import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
@@ -97,8 +97,8 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     return member.email.toLowerCase() !== this.currentUserEmail?.toLowerCase();
   }
 
-  isCommitteeAdmin(): boolean {
-    return this.currentUserRole === Roles.COMMITTEE_ADMINISTRATOR;
+  isCommitteeAdministrator(): boolean {
+    return isCommitteeAdministrator(this.currentUserRole);
   }
 
   override async deleteItem(member: CommitteeMember) {

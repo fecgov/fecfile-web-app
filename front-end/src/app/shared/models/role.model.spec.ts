@@ -1,4 +1,4 @@
-import { getRoleLabel, isManagerAdmin, Roles } from '.';
+import { getRoleLabel, isCommitteeAdministrator, Roles } from '.';
 
 describe('Role Utility Functions', () => {
   describe('getRoleLabel', () => {
@@ -8,17 +8,17 @@ describe('Role Utility Functions', () => {
     });
   });
 
-  describe('isManagerAdmin', () => {
+  describe('isCommitteeAdministrator', () => {
     it('should return true for COMMITTEE_ADMINISTRATOR', () => {
-      expect(isManagerAdmin(Roles.COMMITTEE_ADMINISTRATOR)).toBeTrue();
+      expect(isCommitteeAdministrator(Roles.COMMITTEE_ADMINISTRATOR)).toBeTrue();
     });
 
     it('should return true for MANAGER', () => {
-      expect(isManagerAdmin(Roles.MANAGER)).toBeTrue();
+      expect(isCommitteeAdministrator(Roles.MANAGER)).toBeFalse();
     });
 
     it('should return false for undefined role', () => {
-      expect(isManagerAdmin(undefined)).toBeFalse();
+      expect(isCommitteeAdministrator(undefined)).toBeFalse();
     });
   });
 });
