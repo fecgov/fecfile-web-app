@@ -1,10 +1,9 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
-import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { Popover } from 'primeng/popover';
@@ -16,7 +15,7 @@ import { HeaderStyles } from '../header.component';
   styleUrls: ['../header.component.scss', './header-links.component.scss'],
   imports: [RouterLink, NgOptimizedImage, Popover, ButtonModule],
 })
-export class HeaderLinksComponent implements OnInit {
+export class HeaderLinksComponent {
   private readonly router = inject(Router);
   readonly loginService = inject(LoginService);
   readonly store = inject(Store);
@@ -28,12 +27,6 @@ export class HeaderLinksComponent implements OnInit {
   headerStyles = HeaderStyles;
 
   role?: Roles;
-
-  ngOnInit() {
-    this.store.select(selectUserLoginData).subscribe((user) => {
-      this.role = Roles[user.role as keyof typeof Roles];
-    });
-  }
 
   get fontSize(): string {
     return (12 * this.ratio).toFixed() + 'px';
