@@ -85,4 +85,13 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     this.form.get(this.templateMap['election_other_description'])?.markAsTouched();
     this.form.get(this.templateMap['election_other_description'])?.updateValueAndValidity();
   }
+
+  formatElectionYear(event: Event) {
+    const enteredYear = (event.target as HTMLInputElement).value;
+    const formattedYear = enteredYear
+      .replace(/[^0-9]/g, '')
+      .replace(/(\..*)\./g, '$1')
+      .slice(0, 4);
+    this.form.get('electionYear')?.setValue(formattedYear);
+  }
 }
