@@ -71,7 +71,7 @@ export class ReportListPage {
   static editReport(reportName: string, fieldName = 'Edit') {
     ReportListPage.goToPage();
     cy.wait(500);
-    PageUtils.getKabob(reportName).contains(fieldName).first().click({ force: true });
+    PageUtils.clickKababItem(reportName, fieldName);
     cy.wait(500);
   }
 

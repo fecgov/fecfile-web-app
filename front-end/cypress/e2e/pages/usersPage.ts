@@ -2,11 +2,11 @@ import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
 
 export class UsersPage {
-  static goToPage() {
+  static goToPage(alias = '') {
+    alias = PageUtils.getAlias(alias);
     cy.visit('/dashboard');
-    cy.get('.navbar-nav').find('#navbarProfileDropdownMenuLink').click();
-    cy.get('.dropdown-menu', { timeout: 500 }).should('be.visible');
-    cy.get('.dropdown-menu').contains('Users').click();
+    cy.get('#navbarProfileDropdownMenuLink').click();
+    cy.get(alias).find('.p-popover').contains('Users').click();
   }
 
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {
@@ -36,15 +36,7 @@ export class UsersPage {
 
   static editRole(fd: UserFormData, alias = '') {
     UsersPage.goToPage();
-    cy.get('table tbody tr')
-      .contains('td', fd.email)
-      .parent()
-      .find('button')
-      .then((buttons) => {
-        cy.wrap(buttons[0]).click(); // Click ellipsis button
-        cy.wrap(buttons[1]).click(); // Click Edit Role button
-      });
-
+    PageUtils.clickKababItem(fd.email, 'Edit Role');
     PageUtils.dropdownSetValue("p-select[formcontrolname='role']", fd['role'], alias);
     cy.get('[data-cy="membership-submit"]').click();
   }
@@ -52,16 +44,7 @@ export class UsersPage {
   static delete(email: string) {
     const alias = PageUtils.getAlias('');
     UsersPage.goToPage();
-
-    cy.get('table tbody tr')
-      .contains('td', email)
-      .parent()
-      .find('button')
-      .then((buttons) => {
-        cy.wrap(buttons[0]).click();
-        cy.wrap(buttons[2]).click();
-      });
-
+    PageUtils.clickKababItem(email, 'Delete');
     cy.get(alias).find('.p-confirmdialog-accept-button').click();
   }
 }
