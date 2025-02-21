@@ -6,7 +6,13 @@
           <b>This independent expenditure will be added to the following {{ reportType | label: reportTypeLabels }}:</b>
         </p>
 
-        <p-select [options]="reports" [(ngModel)]="selectedReport" class="w-full" appendTo="body">
+        <p-select
+          [options]="reports"
+          [(ngModel)]="selectedReport"
+          class="w-full"
+          appendTo="body"
+          data-cy="select-form-24"
+        >
           <ng-template #selectedItem let-selectedOption>
             <span class="option">
               {{ dropDownFieldText }}

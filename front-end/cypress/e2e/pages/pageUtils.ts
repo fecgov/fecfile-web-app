@@ -159,4 +159,8 @@ export class PageUtils {
       .click();
     return cy.get(alias).find('.p-popover');
   }
+
+  static clickKababItem(identifier: string, item: string) {
+    PageUtils.getKabob(identifier).contains(item).first().click({ force: true });
+  }
 }
