@@ -46,8 +46,8 @@ def _detect_branch(repo):
 
 DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
-    ("test", lambda _, branch: branch == "test"),
-    ("stage", lambda _, branch: branch.startswith("release")),
+    ("test", lambda _, branch: branch == "release/test"),
+    ("stage", lambda _, branch: branch.startswith("release/sprint")),
     ("dev", lambda _, branch: branch == "develop"),
 )
 
