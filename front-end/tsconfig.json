@@ -19,7 +19,7 @@
         "target": "ES2022",
         "module": "es2020",
         "typeRoots": ["./node_modules/@types"],
-        "lib": ["ESNext", "dom"],
+        "lib": ["ES2024", "dom"],
         "allowSyntheticDefaultImports": true,
         "useDefineForClassFields": false
     },
