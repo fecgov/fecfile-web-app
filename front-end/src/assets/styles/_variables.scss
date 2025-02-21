@@ -9,8 +9,8 @@
   --text-color-secondary: #5b616b;
   --primary-color: #112e51;
   --primary-color-text: #ffffff;
-  --font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol;
+  --font-family:
+    karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   --surface-0: #ffffff;
   --surface-50: #e8e8e8;
   --surface-100: #d3d3d3;
@@ -70,11 +70,19 @@
   --p-datepicker-year-border-radius: var(--p-datepicker-date-border-radius);
   --p-datepicker-date-height: 2.5rem;
   --p-datepicker-date-width: 2.5rem;
+
+  /* Panel */
+  --p-panelmenu-gap: 0;
+  --p-panelmenu-panel-padding: 0;
   --p-panel-border-width: 0;
   --p-panelmenu-panel-border-width: var(--p-panel-border-width);
   --p-panelmenu-panel-first-border-width: var(--p-panel-border-width);
   --p-panelmenu-panel-last-border-width: var(--p-panel-border-width);
+  --p-panelmenu-item-border-radius: 0;
   --p-panelmenu-panel-border-radius: 0;
+  --p-panelmenu-panel-first-top-border-radius: 0;
+
+  /* Accordion */
   --p-accordion-header-color: var(--p-content-color);
   --p-accordion-header-hover-color: var(--p-accordion-header-color);
   --p-accordion-header-background: #f1f1f1;
@@ -127,11 +135,6 @@
   --p-toast-success-border-color: #c3e6cb;
   --p-toast-success-color: #155724;
   --p-toast-success-detail-color: var(--p-toast-success-color);
-
-  /* Panel */
-  --p-panelmenu-panel-padding: 0 0.25rem;
-  --p-panelmenu-item-border-radius: 0;
-  --p-panelmenu-gap: 0;
 
   --orange: #f77b42;
 
