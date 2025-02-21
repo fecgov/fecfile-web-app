@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, model, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -21,7 +21,7 @@ import { Toast } from 'primeng/toast';
   styleUrls: ['./secondary-report-selection-dialog.component.scss'],
   imports: [ButtonModule, Ripple, Toast, LabelPipe, SelectModule, DialogModule, FormsModule],
 })
-export class SecondaryReportSelectionDialogComponent extends DestroyerComponent {
+export class SecondaryReportSelectionDialogComponent extends DestroyerComponent implements OnInit {
   public readonly router = inject(Router);
   private readonly reportService = inject(ReportService);
   private readonly transactionService = inject(TransactionService);
@@ -43,8 +43,9 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
 
   _reportType: ReportTypes | undefined;
 
-  selectedReport: Report | undefined;
+  selectedReport = model<Report | undefined>();
   dropDownFieldText = 'Loading Reports...';
+  placeholder = 'Select a form 24 report';
 
   @Input() set reportType(reportType: ReportTypes | undefined) {
     this._reportType = reportType;
@@ -56,28 +57,25 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     return this._reportType;
   }
 
+  ngOnInit(): void {
+    this.selectedReport.subscribe(
+      (report) => (this.dropDownFieldText = new LabelPipe().transform(report!.id, this.reportLabels)),
+    );
+  }
+
   public setReports(reports: Report[]) {
     this.reports = reports.filter((report) => {
       return report.report_type === this.reportType && report.report_status === ReportStatus.IN_PROGRESS;
     });
     this.reportLabels = this.getReportLabels();
-    this.dropDownFieldText = this.getDropdownText();
-  }
-
-  public updateSelectedReport(report: Report) {
-    this.selectedReport = report;
-    this.dropDownFieldText = this.getDropdownText();
+    this.placeholder =
+      this.reports.length === 0 ? `No In-Progress ${this.reportType} Reports are available` : 'Select a form 24 report';
   }
 
   public getReportLabels(): LabelList {
     if (!this.reports) return [];
 
-    const sortedReports = this.reports.sort((a, b) => {
-      const aTime = a.created?.getTime() ?? 0;
-      const bTime = b.created?.getTime() ?? 0;
-      return aTime - bTime;
-    });
-
+    const sortedReports = this.reports.toSorted(sortReport);
     const labels: LabelList = [];
     let year = 0;
     let inYearCount = 0;
@@ -100,41 +98,28 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     return labels;
   }
 
-  public getDropdownText(): string {
-    if (this.reports.length === 0) {
-      return `No In-Progress ${this.reportType} Reports are available`;
-    }
-
-    if (!this.selectedReport) {
-      return `Select a ${this.reportType} Report`;
-    } else {
-      return new LabelPipe().transform(this.selectedReport.id, this.reportLabels);
-    }
-  }
-
-  public linkToSelectedReport() {
-    if (this.selectedReport && this.transaction) {
-      this.transactionService.addToReport(this.transaction, this.selectedReport).then((response) => {
-        this.createEventMethod();
-        this.closeDialog();
-        if (response.status === 200) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: `Transaction added to ${this.reportType} Report`,
-            key: 'reportLinkToast',
-            life: 3000,
-          });
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Transaction was not added to ${this.reportType} Report`,
-            key: 'reportLinkToast',
-            life: 3000,
-          });
-        }
-      });
+  public async linkToSelectedReport() {
+    if (this.selectedReport() && this.transaction) {
+      const response = await this.transactionService.addToReport(this.transaction, this.selectedReport()!);
+      this.createEventMethod();
+      this.closeDialog();
+      if (response.status === 200) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: `Transaction added to ${this.reportType} Report`,
+          key: 'reportLinkToast',
+          life: 3000,
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Transaction was not added to ${this.reportType} Report`,
+          key: 'reportLinkToast',
+          life: 3000,
+        });
+      }
     }
   }
 
@@ -146,3 +131,9 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     this.select.applyFocus();
   }
 }
+
+const sortReport = (a: Report, b: Report) => {
+  const aTime = a.created?.getTime() ?? 0;
+  const bTime = b.created?.getTime() ?? 0;
+  return aTime - bTime;
+};

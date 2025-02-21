@@ -15,12 +15,13 @@
 
     <p-select
       #select
-      [autofocus]="true"
       [options]="reports"
       [(ngModel)]="selectedReport"
       class="w-full"
       appendTo="body"
       data-cy="select-form-24"
+      [placeholder]="placeholder"
+      [disabled]="reports.length === 0"
     >
       <ng-template #dropdownicon>
         <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="8px" width="8px" />
@@ -31,7 +32,7 @@
         </span>
       </ng-template>
       <ng-template let-report #item>
-        <span class="option" (keydown.enter)="updateSelectedReport(report)" (click)="updateSelectedReport(report)">
+        <span class="option">
           <b>{{ report.id | label: reportLabels }}</b>
         </span>
       </ng-template>
@@ -52,7 +53,7 @@
       <button
         pButton
         pRipple
-        [disabled]="!selectedReport"
+        [disabled]="!selectedReport()"
         label="Confirm"
         class="p-button-primary"
         (click)="linkToSelectedReport()"
