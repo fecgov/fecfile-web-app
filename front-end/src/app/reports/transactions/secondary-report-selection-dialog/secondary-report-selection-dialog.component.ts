@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Ripple } from 'primeng/ripple';
-import { SelectModule } from 'primeng/select';
+import { Select, SelectModule } from 'primeng/select';
 import { Toast } from 'primeng/toast';
 
 @Component({
@@ -28,6 +28,8 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
   private readonly messageService = inject(MessageService);
   readonly reportTypeLabels = reportLabelList;
   readonly reportTypes = ReportTypes;
+
+  @ViewChild('select') select!: Select;
 
   @Input() transaction: Transaction | undefined;
   @Input() dialogVisible = false;
@@ -138,5 +140,9 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
 
   closeDialog() {
     this.dialogClose.emit();
+  }
+
+  showDialog() {
+    this.select.applyFocus();
   }
 }

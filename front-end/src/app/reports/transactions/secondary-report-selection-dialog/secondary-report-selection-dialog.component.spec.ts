@@ -137,4 +137,12 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
     expect(transactionSpy).toHaveBeenCalledOnceWith(testScheduleATransaction, component.reports[1]);
   });
+
+  it('should call applyFocus on select when showDialog is called', () => {
+    component.select = jasmine.createSpyObj('Select', ['applyFocus']);
+
+    component.showDialog();
+
+    expect(component.select.applyFocus).toHaveBeenCalled();
+  });
 });
