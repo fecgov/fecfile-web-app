@@ -15,12 +15,13 @@ import { Card } from 'primeng/card';
 import { UserLoginData } from 'app/shared/models';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-update-current-user',
   templateUrl: './update-current-user.component.html',
   styleUrls: ['./update-current-user.component.scss'],
-  imports: [Card, ReactiveFormsModule, ErrorMessagesComponent, SingleClickDirective],
+  imports: [Card, ReactiveFormsModule, ErrorMessagesComponent, SingleClickDirective, ButtonModule],
 })
 export class UpdateCurrentUserComponent extends FormComponent implements OnInit {
   private readonly store = inject(Store);
