@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, takeUntil } from 'rxjs';
@@ -70,6 +70,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   debtId?: string;
   committeeAccount?: CommitteeAccount;
 
+  active = model<number>(-1);
+
   ngOnInit(): void {
     combineLatest([
       this.store.select(selectActiveReport),
@@ -82,6 +84,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         this.report = report;
         this.committeeAccount = committeeAccount;
         this.category = params['category'];
+        this.active.set(-1);
         this.debtId = queryParamMap.get('debt') ?? undefined;
         this.title = this.getCategoryTitle();
         this.titleService.setTitle(this.title);

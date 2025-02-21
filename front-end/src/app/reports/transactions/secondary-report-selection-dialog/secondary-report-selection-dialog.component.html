@@ -1,51 +1,65 @@
-<p-dialog header="Confirm" [modal]="true" [(visible)]="dialogVisible" (onHide)="closeDialog()" class="w-6">
-  <div>
-    <div class="dialog-content">
-      <div class="dialog-body">
-        <p class="dialog-text">
-          <b>This independent expenditure will be added to the following {{ reportType | label: reportTypeLabels }}:</b>
-        </p>
+<p-dialog
+  [modal]="true"
+  [(visible)]="dialogVisible"
+  (onHide)="closeDialog()"
+  [style]="{ width: '512px' }"
+  (onShow)="showDialog()"
+>
+  <ng-template #header>
+    <h1>Confirm</h1>
+  </ng-template>
+  <div class="dialog-body">
+    <p class="dialog-text">
+      <b>This independent expenditure will be added to the following {{ reportType | label: reportTypeLabels }}:</b>
+    </p>
 
-        <p-select
-          [options]="reports"
-          [(ngModel)]="selectedReport"
-          class="w-full"
-          appendTo="body"
-          data-cy="select-form-24"
-        >
-          <ng-template #selectedItem let-selectedOption>
-            <span class="option">
-              {{ dropDownFieldText }}
-            </span>
-          </ng-template>
-          <ng-template let-report #item>
-            <span class="option" (click)="updateSelectedReport(report)">
-              <b>{{ report.id | label: reportLabels }}</b>
-            </span>
-          </ng-template>
-        </p-select>
+    <p-select
+      #select
+      [options]="reports"
+      [(ngModel)]="selectedReport"
+      class="w-full"
+      appendTo="body"
+      data-cy="select-form-24"
+      [placeholder]="placeholder"
+      [disabled]="reports.length === 0"
+    >
+      <ng-template #dropdownicon>
+        <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="8px" width="8px" />
+      </ng-template>
+      <ng-template #selectedItem let-selectedOption>
+        <span class="option">
+          {{ dropDownFieldText }}
+        </span>
+      </ng-template>
+      <ng-template let-report #item>
+        <span class="option">
+          <b>{{ report.id | label: reportLabels }}</b>
+        </span>
+      </ng-template>
+    </p-select>
 
-        @if (reportType === reportTypes.F24) {
-          <p class="dialog-text dialog-note">
-            <i>
-              <b>Note:</b> Unitemized IEs on Form 3X will appear itemized on Form 24.<br />
-              They will remain unitemized on Form3X.
-            </i>
-          </p>
-        }
-      </div>
-      <div class="flex justify-content-between">
-        <button pButton pRipple [text]="true" (click)="closeDialog()" label="Cancel"></button>
-        <button
-          pButton
-          pRipple
-          [disabled]="!selectedReport"
-          label="Confirm"
-          class="p-button-primary"
-          (click)="linkToSelectedReport()"
-        ></button>
-      </div>
-    </div>
+    @if (reportType === reportTypes.F24) {
+      <p class="dialog-text dialog-note">
+        <i>
+          <b>Note:</b> Unitemized IEs on Form 3X will appear itemized on Form 24.<br />
+          They will remain unitemized on Form3X.
+        </i>
+      </p>
+    }
   </div>
+
+  <ng-template #footer>
+    <div class="dialog-footer">
+      <button
+        pButton
+        pRipple
+        [disabled]="!selectedReport()"
+        label="Confirm"
+        class="p-button-primary"
+        (click)="linkToSelectedReport()"
+      ></button>
+      <button pButton pRipple [text]="true" (click)="closeDialog()" label="Cancel"></button>
+    </div>
+  </ng-template>
 </p-dialog>
 <p-toast key="reportLinkToast"></p-toast>
