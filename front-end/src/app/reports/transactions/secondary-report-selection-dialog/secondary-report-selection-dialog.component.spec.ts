@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom, of } from 'rxjs';
 import { F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -21,9 +21,14 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   let transactionService: TransactionService;
   let reportService: ReportService;
   const testReports = [
-    Form3X.fromJSON({ id: '1', created: '2022-12-01' }),
-    Form3X.fromJSON({ id: '2', created: '2022-12-31' }),
-    Form3X.fromJSON({ id: '3', created: '2023-01-15', form_type: F3xFormTypes.F3XA }),
+    Form3X.fromJSON({ id: '1', created: '2022-12-01', report_status: ReportStatus.IN_PROGRESS }),
+    Form3X.fromJSON({ id: '2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
+    Form3X.fromJSON({
+      id: '3',
+      created: '2023-01-15',
+      form_type: F3xFormTypes.F3XA,
+      report_status: ReportStatus.IN_PROGRESS,
+    }),
   ];
 
   beforeEach(async () => {
@@ -79,18 +84,16 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   });
 
   it('should set related values when reports are retrieved', () => {
-    const fieldSpy = spyOn(component, 'getDropdownText');
     const labelSpy = spyOn(component, 'getReportLabels');
     component.setReports(testReports);
 
-    expect(fieldSpy).toHaveBeenCalled();
     expect(labelSpy).toHaveBeenCalled();
   });
 
-  it('should set the dropdown text correctly', () => {
-    component.reports = testReports;
+  it('should set the placeholder text correctly', () => {
     component._reportType = ReportTypes.F3X;
-    expect(component.getDropdownText()).toEqual(`Select a ${ReportTypes.F3X} Report`);
+    component.setReports(testReports);
+    expect(component.placeholder).toEqual(`Select a ${ReportTypes.F3X} Report`);
   });
 
   it('should generate report labels correctly', () => {
@@ -107,15 +110,15 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   });
 
   it('should set the dropdown text when choosing a report', () => {
-    component.reports = testReports;
     component._reportType = ReportTypes.F3X;
+    component.setReports(testReports);
     component.reportLabels = component.getReportLabels();
-    component.updateSelectedReport(component.reports[1]);
+    component.selectedReport.set(component.reports[1]);
 
-    expect(component.selectedReport).toEqual(component.reports[1]);
+    expect(component.selectedReport()).toEqual(component.reports[1]);
     expect(component.dropDownFieldText).toEqual(`${component.reports[1]?.getLongLabel()} [2022] #2`);
 
-    component.updateSelectedReport(component.reports[2]);
+    component.selectedReport.set(component.reports[2]);
     expect(component.dropDownFieldText).toEqual(`${component.reports[2]?.getLongLabel()} [2023] #1 (Amendment)`);
   });
 
@@ -124,7 +127,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     component.transaction = testScheduleATransaction;
     component._reportType = ReportTypes.F3X;
     component.reportLabels = component.getReportLabels();
-    component.updateSelectedReport(component.reports[1]);
+    component.selectedReport.set(component.reports[1]);
 
     const transactionSpy = spyOn(transactionService, 'addToReport').and.returnValue(
       firstValueFrom(
@@ -140,9 +143,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
   it('should call applyFocus on select when showDialog is called', () => {
     component.select = jasmine.createSpyObj('Select', ['applyFocus']);
-
     component.showDialog();
-
     expect(component.select.applyFocus).toHaveBeenCalled();
   });
 });

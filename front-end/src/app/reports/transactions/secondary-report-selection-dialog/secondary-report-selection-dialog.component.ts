@@ -23,7 +23,7 @@ import { Toast } from 'primeng/toast';
 })
 export class SecondaryReportSelectionDialogComponent extends DestroyerComponent implements OnInit {
   public readonly router = inject(Router);
-  private readonly reportService = inject(ReportService);
+  readonly reportService = inject(ReportService);
   private readonly transactionService = inject(TransactionService);
   private readonly messageService = inject(MessageService);
   readonly reportTypeLabels = reportLabelList;
@@ -69,7 +69,9 @@ export class SecondaryReportSelectionDialogComponent extends DestroyerComponent 
     });
     this.reportLabels = this.getReportLabels();
     this.placeholder =
-      this.reports.length === 0 ? `No In-Progress ${this.reportType} Reports are available` : 'Select a form 24 report';
+      this.reports.length === 0
+        ? `No In-Progress ${this.reportType} Reports are available`
+        : `Select a ${this.reportType} Report`;
   }
 
   public getReportLabels(): LabelList {
