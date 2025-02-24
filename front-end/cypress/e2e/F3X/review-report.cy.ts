@@ -1,6 +1,5 @@
 import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel';
-import { ContactListPage } from '../pages/contactListPage';
 import { Initialize } from '../pages/loginPage';
 import { PageUtils, currentYear } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -46,7 +45,7 @@ describe('Receipt Transactions', () => {
     cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click({ force: true });
-    TransactionDetailPage.enterScheduleFormData(scheduleData);
+    TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');
     PageUtils.clickButton('Save');
 
     // Go to summary and verify summary calc runs
