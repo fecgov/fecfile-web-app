@@ -9,6 +9,7 @@ import { ApiService } from './api.service';
 import { RendererFactory2 } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 const childNodesMap = new WeakMap();
 
@@ -56,6 +57,7 @@ describe('DotFecService', () => {
         DotFecService,
         ApiService,
         provideMockStore(testMockStore),
+        provideRouter([]),
         { provide: Actions, useValue: actions$ },
         { provide: RendererFactory2, useClass: MockRendererFactory },
       ],
@@ -72,10 +74,10 @@ describe('DotFecService', () => {
   });
 
   it('should clear downloads list on logout', () => {
-    service.downloads.next([download]);
-    expect(service.downloads.getValue().length).toEqual(1);
+    service.downloads.set([download]);
+    expect(service.downloads().length).toEqual(1);
     actions$.next({ type: '[User Login Data] Discarded' });
-    expect(service.downloads.getValue().length).toEqual(0);
+    expect(service.downloads().length).toEqual(0);
   });
 
   it('should generate FEC file', async () => {
@@ -86,12 +88,12 @@ describe('DotFecService', () => {
     const result = await service.generateFecFile(report);
 
     expect(apiService.post).toHaveBeenCalledWith(`/web-services/dot-fec/`, { report_id: report.id });
-    expect(service.downloads.getValue().length).toBe(1);
-    expect(service.downloads.getValue()[0].taskId).toBe(response.task_id);
-    expect(service.downloads.getValue()[0].report).toBe(report);
-    expect(service.downloads.getValue()[0].name).toBe(response.file_name);
-    expect(service.downloads.getValue()[0].isComplete).toBe(false);
-    expect(result).toEqual(service.downloads.getValue()[0]);
+    expect(service.downloads().length).toBe(1);
+    expect(service.downloads()[0].taskId).toBe(response.task_id);
+    expect(service.downloads()[0].report).toBe(report);
+    expect(service.downloads()[0].name).toBe(response.file_name);
+    expect(service.downloads()[0].isComplete).toBe(false);
+    expect(result).toEqual(service.downloads()[0]);
   });
 
   it('should download FEC file', async () => {
@@ -128,11 +130,17 @@ describe('DotFecService', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spyOn(apiService, 'get').and.returnValue(Promise.resolve(response) as Promise<any>);
 
-    service.downloads.next([download]);
+    service.downloads.set([download]);
     await service.checkFecFileTask(download);
 
     expect(apiService.get).toHaveBeenCalledWith(`/web-services/dot-fec/check/${download.taskId}/`);
-    expect(service.downloads.getValue()[0].isComplete).toBe(true);
-    expect(service.downloads.getValue()[0].id).toBe(response.id);
+    expect(service.downloads()[0].isComplete).toBe(true);
+    expect(service.downloads()[0].id).toBe(response.id);
+  });
+
+  it('should clear downloads on navigation', async () => {
+    service.downloads.set([download]);
+    await service.router.navigateByUrl('');
+    expect(service.downloads().length).toBe(0);
   });
 });

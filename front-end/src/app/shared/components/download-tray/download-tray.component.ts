@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Download, DotFecService } from 'app/shared/services/dot-fec.service';
 import { Drawer } from 'primeng/drawer';
 import { PrimeTemplate } from 'primeng/api';
@@ -11,21 +11,12 @@ import { Ripple } from 'primeng/ripple';
   styleUrls: ['./download-tray.component.scss'],
   imports: [Drawer, PrimeTemplate, ButtonModule, Ripple],
 })
-export class DownloadTrayComponent implements OnInit {
-  private readonly dotFecService = inject(DotFecService);
-  sidebarVisible = false;
-  downloads: Download[] = [];
-
-  ngOnInit(): void {
-    this.dotFecService.downloads.subscribe((downloads) => {
-      this.downloads = downloads;
-      this.sidebarVisible = this.downloads.length > 0;
-    });
-  }
+export class DownloadTrayComponent {
+  readonly dotFecService = inject(DotFecService);
+  readonly sidebarVisible = computed(() => this.dotFecService.downloads().length > 0);
 
   removeDownload(download: Download) {
-    const downloads = this.downloads.filter((d) => d !== download);
-    this.dotFecService.downloads.next(downloads);
+    this.dotFecService.downloads.update((downloads) => downloads.filter((d) => d !== download));
   }
 
   download(download: Download) {

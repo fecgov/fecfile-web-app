@@ -41,27 +41,28 @@ describe('DownloadTrayComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update downloads and sidebarVisible on ngOnInit', () => {
-    component.ngOnInit();
+  it('should update downloads and sidebarVisible', () => {
+    expect(component.sidebarVisible()).toBeFalse();
+    expect(dotFecService.downloads()).toEqual([]);
     const downloads = [download];
-    dotFecService.downloads.next(downloads);
-    expect(component.downloads).toEqual(downloads);
-    expect(component.sidebarVisible).toBe(true);
+    dotFecService.downloads.set(downloads);
+    expect(dotFecService.downloads()).toEqual(downloads);
+    expect(component.sidebarVisible()).toBeTrue();
   });
 
   it('should remove download and update sidebarVisible', () => {
     const downloads = [download];
-    dotFecService.downloads.next(downloads);
+    dotFecService.downloads.set(downloads);
 
     component.removeDownload(download);
 
-    expect(component.downloads).toEqual([]);
-    expect(component.sidebarVisible).toBe(false);
+    expect(dotFecService.downloads()).toEqual([]);
+    expect(component.sidebarVisible()).toBeFalse();
   });
 
   it('should call downloadFecFile on download', () => {
     const downloads = [download];
-    dotFecService.downloads.next(downloads);
+    dotFecService.downloads.set(downloads);
     spyOn(dotFecService, 'downloadFecFile');
 
     component.download(download);
