@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
@@ -14,16 +14,13 @@ import { UsersService } from '../services/users.service';
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
-  public userLoginData$: Observable<UserLoginData>;
-  constructor(
-    private store: Store,
-    private router: Router,
-    private cookieService: CookieService,
-    private usersService: UsersService,
-  ) {
-    super();
-    this.userLoginData$ = this.store.select(selectUserLoginData).pipe(takeUntil(this.destroy$));
-  }
+  private readonly store = inject(Store);
+  private readonly router = inject(Router);
+  private readonly cookieService = inject(CookieService);
+  private readonly usersService = inject(UsersService);
+  public userLoginData$: Observable<UserLoginData> = this.store
+    .select(selectUserLoginData)
+    .pipe(takeUntil(this.destroy$));
 
   public logOut() {
     this.store.dispatch(userLoginDataDiscardedAction());

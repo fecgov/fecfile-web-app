@@ -4,17 +4,16 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { MemoText } from 'app/shared/models/memo-text.model';
+import { Report, MemoText } from 'app/shared/models';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
-import { SharedModule } from 'app/shared/shared.module';
-import { Message, MessageService } from 'primeng/api';
+
+import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
-import { Report } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -30,8 +29,7 @@ describe('ReportLevelMemoComponent', () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
 
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CardModule, ToastModule, ReactiveFormsModule, ButtonModule, InputTextareaModule],
-      declarations: [ReportLevelMemoComponent],
+      imports: [CardModule, ToastModule, ReactiveFormsModule, ButtonModule, TextareaModule, ReportLevelMemoComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -70,38 +68,42 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.text4000 = 'test_text4k';
     component.form.addControl('text4000', new SubscriptionFormControl());
     component.form.get('text4000')?.setValue(testText4kValue);
-    spyOn(testMemoTextService, 'getForReportId').and.returnValue(of([testMemoText]));
+    spyOn(testMemoTextService, 'getForReportId').and.returnValue(Promise.resolve([testMemoText]));
     component.ngOnInit();
     expect(component).toBeTruthy();
   });
 
-  it('save for existing memo text happy path', () => {
-    const expectedMessage: Message = {
+  it('save for existing memo text happy path', async () => {
+    const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Updated',
       life: 3000,
     };
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(of(new MemoText()));
+    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(
+      Promise.resolve(new MemoText()),
+    );
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = '1';
-    component.save();
+    await component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
-  it('save for new memo text happy path', () => {
-    const expectedMessage: Message = {
+  it('save for new memo text happy path', async () => {
+    const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Created',
       life: 3000,
     };
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(of(new MemoText()));
+    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(
+      Promise.resolve(new MemoText()),
+    );
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = undefined;
-    component.save();
+    await component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);

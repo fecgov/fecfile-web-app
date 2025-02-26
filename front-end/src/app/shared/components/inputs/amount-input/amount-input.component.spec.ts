@@ -5,7 +5,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService } from 'primeng/api';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Dialog } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -25,8 +25,19 @@ describe('AmountInputComponent', () => {
   beforeEach(async () => {
     store = provideMockStore(testMockStore);
     await TestBed.configureTestingModule({
-      declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe, Dialog, Tooltip, InputNumberComponent],
-      imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule, TooltipModule],
+      imports: [
+        CheckboxModule,
+        InputNumberModule,
+        DatePickerModule,
+        ReactiveFormsModule,
+        TooltipModule,
+        AmountInputComponent,
+        ErrorMessagesComponent,
+        FecDatePipe,
+        Dialog,
+        Tooltip,
+        InputNumberComponent,
+      ],
       providers: [store, ConfirmationService],
     }).compileComponents();
 

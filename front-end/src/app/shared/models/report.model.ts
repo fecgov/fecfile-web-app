@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { JsonSchema } from '../interfaces/json-schema.interface';
+import { JsonSchema } from 'fecfile-validate';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';

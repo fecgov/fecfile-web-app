@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { Report } from '../models/report.model';
 import { ReportService } from '../services/report.service';
 
@@ -9,20 +7,17 @@ import { ReportService } from '../services/report.service';
   providedIn: 'root',
 })
 export class ReportResolver {
-  constructor(
-    private store: Store,
-    private reportService: ReportService,
-  ) {}
+  private readonly reportService = inject(ReportService);
 
   /**
    * Returns the report record for the id passed in the URL
    * @param {ActivatedRouteSnapshot} route
    * @returns {Observable<Report | undefined>}
    */
-  resolve(route: ActivatedRouteSnapshot): Observable<Report | undefined> {
+  async resolve(route: ActivatedRouteSnapshot): Promise<Report | undefined> {
     const reportId = String(route.paramMap.get('reportId'));
     if (!reportId) {
-      return of(undefined);
+      return undefined;
     }
     return this.reportService.setActiveReportById(reportId);
   }

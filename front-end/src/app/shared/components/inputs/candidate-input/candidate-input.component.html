@@ -73,7 +73,7 @@
     </div>
     <div class="col-6"></div>
   </div>
-  <ng-container *ngIf="hasCandidateOfficeInput">
+  @if (hasCandidateOfficeInput) {
     <app-candidate-office-input
       [transaction]="transaction"
       [form]="form"
@@ -83,5 +83,5 @@
       [districtFormControlName]="templateMap['candidate_district']"
     >
     </app-candidate-office-input>
-  </ng-container>
+  }
 </div>

@@ -1,13 +1,13 @@
-import { LabelList } from '../utils/label.utils';
-
 export enum Roles {
-  COMMITTEE_ADMINISTRATOR = 'COMMITTEE_ADMINISTRATOR',
-  REVIEWER = 'REVIEWER',
+  COMMITTEE_ADMINISTRATOR = 'Committee Administrator',
+  MANAGER = 'Manager',
 }
 
-export type RoleType = Roles.COMMITTEE_ADMINISTRATOR | Roles.REVIEWER;
+export function getRoleLabel(roleKey: keyof typeof Roles): string {
+  return Roles[roleKey];
+}
 
-export const RoleLabels: LabelList = [
-  [Roles.COMMITTEE_ADMINISTRATOR, 'Committee Administrator'],
-  [Roles.REVIEWER, 'Reviewer'],
-];
+export function isCommitteeAdministrator(role: Roles | undefined): boolean {
+  if (!role) return false;
+  return [Roles.COMMITTEE_ADMINISTRATOR].includes(role);
+}

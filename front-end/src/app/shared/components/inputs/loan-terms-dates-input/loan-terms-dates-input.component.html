@@ -12,13 +12,14 @@
     <div class="col-6">
       <div class="field">
         <label for="due_date_setting">DATE DUE</label>
-        <p-dropdown
+        <p-select
           inputId="due_date_setting"
+          class="w-full"
           [formControlName]="templateMap['due_date_setting']"
           [options]="dueDateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-        ></p-dropdown>
+        ></p-select>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['due_date_setting']"
@@ -26,39 +27,42 @@
         ></app-error-messages>
       </div>
     </div>
-    <div class="col-6" [ngSwitch]="dueDateSetting">
-      <ng-container *ngSwitchCase="termFieldSettings.USER_DEFINED">
-        <div class="field">
-          <label for="due_date">DATE DUE (USER DEFINED)</label>
-          <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
-          <app-error-messages
-            [form]="form"
+    <div class="col-6">
+      @switch (dueDateSetting) {
+        @case (termFieldSettings.USER_DEFINED) {
+          <div class="field">
+            <label for="due_date">DATE DUE (USER DEFINED)</label>
+            <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['due_date']"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        }
+        @case (termFieldSettings.SPECIFIC_DATE) {
+          <app-calendar
             [fieldName]="templateMap['due_date']"
+            [form]="form"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="termFieldSettings.SPECIFIC_DATE">
-        <app-calendar
-          [fieldName]="templateMap['due_date']"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          label="SPECIFIC DATE"
-        ></app-calendar>
-      </ng-container>
-      <ng-container *ngSwitchDefault> </ng-container>
+            label="SPECIFIC DATE"
+          ></app-calendar>
+        }
+        @default {}
+      }
     </div>
 
     <div class="col-6">
       <div class="field">
         <label for="interest_rate_setting">INTEREST RATE</label>
-        <p-dropdown
+        <p-select
           inputId="interest_rate_setting"
+          class="w-full"
           [formControlName]="templateMap['interest_rate_setting']"
           [options]="interestRateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-        ></p-dropdown>
+        ></p-select>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['interest_rate_setting']"
@@ -67,37 +71,39 @@
         </app-error-messages>
       </div>
     </div>
-    <div class="col-6" [ngSwitch]="interestRateSetting">
-      <ng-container *ngSwitchCase="termFieldSettings.USER_DEFINED">
-        <div class="field">
-          <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
-          <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['interest_rate']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="termFieldSettings.EXACT_PERCENTAGE">
-        <div class="field">
-          <label for="interest_rate">EXACT PERCENTAGE (%)</label>
-          <input
-            #interestRatePercentage
-            type="text"
-            pInputText
-            id="interest_rate"
-            [formControlName]="templateMap['interest_rate']"
-          />
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['interest_rate']"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
-          ></app-error-messages>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchDefault> </ng-container>
+    <div class="col-6">
+      @switch (interestRateSetting) {
+        @case (termFieldSettings.USER_DEFINED) {
+          <div class="field">
+            <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
+            <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['interest_rate']"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        }
+        @case (termFieldSettings.EXACT_PERCENTAGE) {
+          <div class="field">
+            <label for="interest_rate">EXACT PERCENTAGE (%)</label>
+            <input
+              #interestRatePercentage
+              type="text"
+              pInputText
+              id="interest_rate"
+              [formControlName]="templateMap['interest_rate']"
+            />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['interest_rate']"
+              [formSubmitted]="formSubmitted"
+              patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
+            ></app-error-messages>
+          </div>
+        }
+        @default {}
+      }
     </div>
   </div>
 </div>

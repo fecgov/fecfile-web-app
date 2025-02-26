@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Route } from '@angular/router';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override/cash-on-hand-override.component';
 
-const routes: Routes = [
+export const TOOLS_ROUTES: Route[] = [
   {
     path: 'update-cash-on-hand',
     component: CashOnHandOverrideComponent,
@@ -11,9 +10,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ToolsRoutingModule {}

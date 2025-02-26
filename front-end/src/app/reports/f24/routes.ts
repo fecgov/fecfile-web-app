@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
@@ -18,7 +17,7 @@ import { TransactionIndependentExpenditurePickerComponent } from './transaction-
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
-const routes: Routes = [
+export const F24_ROUTES: Route[] = [
   {
     path: 'report/:reportId/transactions/select/independent-expenditures',
     component: TransactionIndependentExpenditurePickerComponent,
@@ -88,9 +87,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class F24RoutingModule {}

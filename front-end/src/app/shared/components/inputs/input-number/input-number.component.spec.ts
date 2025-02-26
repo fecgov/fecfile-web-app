@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { InputNumberComponent } from './input-number.component';
 import { InputTextModule } from 'primeng/inputtext';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ElementRef } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('InputNumberComponent', () => {
   function createInput(value: string, event?: Event, selection?: [number, number]) {
@@ -27,7 +27,8 @@ describe('InputNumberComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, InputTextModule, ReactiveFormsModule, FormsModule],
+      imports: [InputTextModule, ReactiveFormsModule, FormsModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InputNumberComponent);

@@ -48,7 +48,8 @@
 
 @font-face {
   font-family: fec_currency_mono;
-  src: url(/assets/fonts/fec-currencymono-bold.woff2) format('woff2'),
+  src:
+    url(/assets/fonts/fec-currencymono-bold.woff2) format('woff2'),
     url(/assets/fonts/fec-currencymono-bold.woff) format('woff');
   font-weight: 700;
   font-style: normal;
@@ -57,7 +58,8 @@
 
 @font-face {
   font-family: fec_currency_mono;
-  src: url(/assets/fonts/fec-currencymono-bolditalic.woff2) format('woff2'),
+  src:
+    url(/assets/fonts/fec-currencymono-bolditalic.woff2) format('woff2'),
     url(/assets/fonts/fec-currencymono-bolditalic.woff) format('woff');
   font-weight: 700;
   font-style: normal;

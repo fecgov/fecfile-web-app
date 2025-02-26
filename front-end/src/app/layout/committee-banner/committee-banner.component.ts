@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -21,15 +21,12 @@ const activeStatusCodes = ['M', 'Q', 'W', 'D'];
   styleUrls: ['./committee-banner.component.scss'],
 })
 export class CommitteeBannerComponent extends DestroyerComponent implements OnInit {
+  private readonly store = inject(Store);
   committeeName?: string;
   committeeStatus?: string;
   committeeFrequency?: string;
   committeeTypeLabel?: string;
   committeeID?: string;
-
-  constructor(private store: Store) {
-    super();
-  }
 
   ngOnInit(): void {
     this.store

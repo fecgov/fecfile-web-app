@@ -1,2 +1,5 @@
-<h3 *ngIf="!isSingle">{{ text }}</h3>
-<h2 *ngIf="isSingle" class="top-margin-32">{{ text }}</h2>
+@if (isSingle) {
+  <h2 class="top-margin-32">{{ text }}</h2>
+} @else {
+  <h3>{{ text }}</h3>
+}

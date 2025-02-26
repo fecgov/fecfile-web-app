@@ -9,7 +9,7 @@
   <div class="col-6 right-side">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
-      <ng-container *ngIf="committees?.length === 0">
+      @if (committees?.length === 0) {
         <div class="committee-card empty-card">
           <div class="empty-lens-img">
             <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg" />
@@ -18,20 +18,21 @@
             <p class="font-karla-bold">Not currently active in any FECFile committee accounts</p>
           </div>
         </div>
-      </ng-container>
-      <ng-container *ngIf="committees?.length">
+      } @else if (committees?.length) {
         <div class="committee-list">
-          <div class="committee-card" *ngFor="let committee of committees" (click)="activateCommittee(committee)">
-            <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-            <div class="committee-info">
-              <h3>
-                <span>{{ committee.name }}</span>
-              </h3>
-              <span class="font-karla-bold h5">{{ committee.committee_id }}</span>
+          @for (committee of committees; track committee) {
+            <div class="committee-card" (click)="activateCommittee(committee)">
+              <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+              <div class="committee-info">
+                <h3>
+                  <span>{{ committee.name }}</span>
+                </h3>
+                <span class="font-karla-bold h5">{{ committee.committee_id }}</span>
+              </div>
             </div>
-          </div>
+          }
         </div>
-      </ng-container>
+      }
       <span class="font-karla-bold h5">LOOKING FOR AN EXISTING FECFILE COMMITTEE ACCOUNT?</span>
       Contact the administrator for that committee.
     </div>

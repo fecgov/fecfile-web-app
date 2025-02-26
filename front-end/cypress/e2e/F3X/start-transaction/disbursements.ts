@@ -2,22 +2,22 @@ import { PageUtils } from '../../pages/pageUtils';
 
 export class Disbursements {
   static Contributions() {
-    PageUtils.clickLink('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
     return Contributions;
   }
 
   static Federal() {
-    PageUtils.clickLink('FEDERAL ELECTION ACTIVITY EXPENDITURES');
+    PageUtils.clickAccordion('FEDERAL ELECTION ACTIVITY EXPENDITURES');
     return Federal;
   }
 
   static Independent() {
-    PageUtils.clickLink('INDEPENDENT EXPENDITURES');
+    PageUtils.clickAccordion('INDEPENDENT EXPENDITURES');
     return Independent;
   }
 
   static Other() {
-    PageUtils.clickLink('OTHER EXPENDITURES');
+    PageUtils.clickAccordion('OTHER EXPENDITURES');
     return Other;
   }
 }

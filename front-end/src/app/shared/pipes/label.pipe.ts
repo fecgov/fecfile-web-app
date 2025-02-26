@@ -1,9 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { LabelList, LabelUtils } from '../utils/label.utils';
 
-@Pipe({
-  name: 'label',
-})
+@Pipe({ name: 'label' })
 export class LabelPipe implements PipeTransform {
   transform(value: string | null | undefined, labels: LabelList): string {
     if (value) {

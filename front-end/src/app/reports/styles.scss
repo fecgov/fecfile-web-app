@@ -61,7 +61,7 @@ td.justify-left {
 }
 
 caption {
-  font-family: gandhi-bold, serif;
+  font-family: var(--gandhi-bold);
   font-weight: bolder;
   text-align: left;
   margin-bottom: 10px;
@@ -78,10 +78,6 @@ caption {
 
 .table-spacer {
   height: 3em;
-}
-
-.p-inputtextarea {
-  height: auto !important;
 }
 
 :host ::ng-deep .p-datatable-header {

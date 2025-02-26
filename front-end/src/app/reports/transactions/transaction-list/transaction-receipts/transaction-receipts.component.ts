@@ -1,34 +1,38 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Component, forwardRef, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { ReportService } from 'app/shared/services/report.service';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import { CurrencyPipe } from '@angular/common';
+import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
+import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
+import { LabelPipe } from '../../../../shared/pipes/label.pipe';
+import { MemoCodePipe } from '../transaction-list.component';
 
 @Component({
   selector: 'app-transaction-receipts',
   templateUrl: './transaction-receipts.component.html',
   styleUrls: ['../../transaction.scss'],
+  imports: [
+    TableComponent,
+    RouterLink,
+    TableActionsButtonComponent,
+    CurrencyPipe,
+    FecDatePipe,
+    LabelPipe,
+    forwardRef(() => MemoCodePipe),
+  ],
 })
 export class TransactionReceiptsComponent extends TransactionListTableBaseComponent implements OnInit {
-  scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
+  override readonly itemService = inject(TransactionSchAService);
+  readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
+  override readonly caption =
+    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.';
 
-  constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    protected override activatedRoute: ActivatedRoute,
-    protected override router: Router,
-    protected override itemService: TransactionSchAService,
-    protected override store: Store,
-    protected override reportService: ReportService,
-  ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
-    this.caption =
-      'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.';
+  constructor() {
+    super();
     this.sortableHeaders.push(
       ...[
         { field: 'date', label: 'Date' },

@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-banner',
@@ -8,17 +8,15 @@ import { filter, Subscription } from 'rxjs';
   styleUrls: ['./banner.component.scss'],
 })
 export class BannerComponent implements OnDestroy {
+  private readonly router = inject(Router);
+  private readonly routerEventsSubscription = this.router.events
+    .pipe(filter((event) => event instanceof NavigationEnd))
+    .subscribe(() => {
+      this.expanded = false;
+    });
+
   expanded = false;
   @ViewChild('banner') bannerElement!: ElementRef;
-  private routerEventsSubscription!: Subscription;
-
-  constructor(private router: Router) {
-    this.routerEventsSubscription = this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.expanded = false;
-      });
-  }
 
   getBannerElement(): HTMLElement {
     return this.bannerElement.nativeElement;

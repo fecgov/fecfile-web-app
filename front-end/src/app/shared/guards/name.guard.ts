@@ -2,13 +2,12 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 
-export const nameGuard: CanActivateFn = () => {
+export const nameGuard: CanActivateFn = async () => {
   const router = inject(Router);
   const loginService = inject(LoginService);
-  return loginService.userHasProfileData().then((userHasProfileData) => {
-    if (!userHasProfileData) {
-      return router.createUrlTree(['/login/create-profile']);
-    }
-    return true;
-  });
+  const userHasProfileData = await loginService.userHasProfileData();
+  if (!userHasProfileData) {
+    return router.createUrlTree(['/login/create-profile']);
+  }
+  return true;
 };

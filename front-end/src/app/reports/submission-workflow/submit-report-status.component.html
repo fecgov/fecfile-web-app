@@ -6,23 +6,18 @@
 <p-card>
   <div class="grid">
     <div class="col-12">
-      <h2 *ngIf="report?.upload_submission?.fec_status === 'ACCEPTED'" class="super-header">
-        Congratulations. Your report was accepted by the FEC.
-      </h2>
-      <h2 *ngIf="report?.upload_submission?.fec_status === 'REJECTED'" class="super-header">
-        Your report has been rejected.
-      </h2>
-      <h2
-        *ngIf="
-          report?.upload_submission?.fec_status === 'PROCESSING' ||
-          (!report?.upload_submission?.fec_status &&
-            report?.upload_submission?.fecfile_task_state &&
-            report?.upload_submission?.fecfile_task_state !== 'FAILED')
-        "
-        class="super-header"
-      >
-        Thank you for submitting your report. It is currently being processed.
-      </h2>
+      @if (report?.upload_submission?.fec_status === 'ACCEPTED') {
+        <h2 class="super-header">Congratulations. Your report was accepted by the FEC.</h2>
+      } @else if (report?.upload_submission?.fec_status === 'REJECTED') {
+        <h2 class="super-header">Your report has been rejected.</h2>
+      } @else if (
+        report?.upload_submission?.fec_status === 'PROCESSING' ||
+        (!report?.upload_submission?.fec_status &&
+          report?.upload_submission?.fecfile_task_state &&
+          report?.upload_submission?.fecfile_task_state !== 'FAILED')
+      ) {
+        <h2 class="super-header">Thank you for submitting your report. It is currently being processed.</h2>
+      }
     </div>
   </div>
   <div class="grid">
@@ -35,22 +30,27 @@
           </h3>
           <br />
         </div>
-        <div class="col-12" *ngIf="reportCode">
-          <h5>YOUR REPORT TYPE:</h5>
-          <h3>
-            {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
-          </h3>
-          <br />
-        </div>
-        <div class="col-12" *ngIf="coverageDates">
-          <h5>YOUR COVERAGE DATES:</h5>
-          <h3 class="no-wrap">
-            {{ coverageDates['coverage_from_date'] || null | longDate }} —
-            <wbr />
-            {{ coverageDates['coverage_through_date'] || null | longDate }}
-          </h3>
-          <br />
-        </div>
+        @if (reportCode) {
+          <div class="col-12">
+            <h5>YOUR REPORT TYPE:</h5>
+            <h3>
+              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
+            </h3>
+            <br />
+          </div>
+        }
+        @if (coverageDates) {
+          <div class="col-12">
+            <h5>YOUR COVERAGE DATES:</h5>
+            <h3 class="no-wrap">
+              {{ coverageDates['coverage_from_date'] || null | longDate }} —
+              <wbr />
+              {{ coverageDates['coverage_through_date'] || null | longDate }}
+            </h3>
+            <br />
+          </div>
+        }
+
         <div class="col-12">
           <h5 class="word-break">CONFIRMATION EMAILS:</h5>
           <h3 class="word-break">
@@ -59,56 +59,63 @@
           </h3>
           <br />
         </div>
-        <ng-container *ngIf="report?.upload_submission?.fec_report_id">
+        @if (report?.upload_submission?.fec_report_id) {
           <div class="col-12">
             <h5>FILING ID:</h5>
             <h3>
               {{ report?.upload_submission?.fec_report_id }}
             </h3>
           </div>
-        </ng-container>
+        }
       </div>
     </div>
-    <div class="col-8" [ngSwitch]="report?.upload_submission?.fec_status">
-      <img
-        *ngSwitchCase="'ACCEPTED'"
-        class="image-max-width"
-        ngSrc="assets/img/Report-status--Congratulations.png"
-        draggable="false"
-        alt="Form submitted success image"
-        height="271"
-        width="450"
-      />
-      <img
-        *ngSwitchCase="'PROCESSING'"
-        class="image-max-width"
-        ngSrc="assets/img/Report-status--Submitted.png"
-        draggable="false"
-        alt="Form submitted success image"
-        height="271"
-        width="450"
-      />
-      <img
-        *ngSwitchCase="'REJECTED'"
-        class="image-max-width"
-        ngSrc="assets/img/Report-status--Rejected.png"
-        draggable="false"
-        alt="Form submitted success image"
-        height="271"
-        width="450"
-      />
+    <div class="col-8">
+      @switch (report?.upload_submission?.fec_status) {
+        @case ('ACCEPTED') {
+          <img
+            class="image-max-width"
+            ngSrc="assets/img/Report-status--Congratulations.png"
+            draggable="false"
+            alt="Form submitted success image"
+            height="271"
+            width="450"
+          />
+        }
+        @case ('PROCESSING') {
+          <img
+            class="image-max-width"
+            ngSrc="assets/img/Report-status--Submitted.png"
+            draggable="false"
+            alt="Form submitted success image"
+            height="271"
+            width="450"
+          />
+        }
+        @case ('REJECTED') {
+          <img
+            class="image-max-width"
+            ngSrc="assets/img/Report-status--Rejected.png"
+            draggable="false"
+            alt="Form submitted success image"
+            height="271"
+            width="450"
+          />
+        }
+      }
     </div>
   </div>
   <div class="grid">
     <div class="col-12">
-      <p *ngIf="!['ACCEPTED', 'REJECTED'].includes(report?.upload_submission?.fec_status || '')">
-        The FEC will send a report status message to the confirmation emails you provided during the submission process.
-        If any problems are encountered during the process, Web Upload will terminate the upload session and relay the
-        specifics of the error.
-      </p>
-      <p *ngIf="report?.upload_submission?.fec_status === 'REJECTED' && report?.upload_submission?.fec_message">
-        FEC Error Message: {{ report?.upload_submission?.fec_message }}
-      </p>
+      @if (!['ACCEPTED', 'REJECTED'].includes(report?.upload_submission?.fec_status || '')) {
+        <p>
+          The FEC will send a report status message to the confirmation emails you provided during the submission
+          process. If any problems are encountered during the process, Web Upload will terminate the upload session and
+          relay the specifics of the error.
+        </p>
+      }
+      @if (report?.upload_submission?.fec_status === 'REJECTED' && report?.upload_submission?.fec_message) {
+        <p>FEC Error Message: {{ report?.upload_submission?.fec_message }}</p>
+      }
     </div>
   </div>
 

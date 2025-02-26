@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { SignatureInputComponent } from './signature-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -11,8 +11,7 @@ describe('SignatureInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule],
-      declarations: [SignatureInputComponent],
+      imports: [SignatureInputComponent],
     });
     fixture = TestBed.createComponent(SignatureInputComponent);
     component = fixture.componentInstance;

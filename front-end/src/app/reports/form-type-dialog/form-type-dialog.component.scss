@@ -7,6 +7,7 @@ h1 {
   font-size: 36px;
   font-weight: bold;
   line-height: 36px;
+  padding: 0 1rem;
 }
 
 .field {
@@ -34,8 +35,6 @@ dialog {
 
 .dialog-body {
   padding: 64px 16px;
-  margin-left: 25px;
-  margin-right: 25px;
 }
 
 #type-label {
@@ -44,7 +43,7 @@ dialog {
 
 label,
 #type-label {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   font-weight: bold;
   font-size: 14px;
   color: #212121;
@@ -52,20 +51,8 @@ label,
   text-transform: uppercase;
 }
 
-.dropdown,
-.dropdown-toggle {
+.dropdown {
   width: 400px !important;
-}
-
-.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  border: 2px solid #aeb0b5;
-  font-size: 14px;
-  border-radius: 4px;
-  text-wrap-mode: wrap;
 }
 
 .option {
@@ -76,9 +63,9 @@ label,
 }
 
 .option > b {
-  min-width: 60px !important;
-  max-width: 60px !important;
-  width: 60px !important;
+  min-width: 65px !important;
+  max-width: 65px !important;
+  width: 65px !important;
 }
 
 .dialog-footer {
@@ -89,25 +76,18 @@ label,
   padding-bottom: 16px;
 }
 
-.btn-close {
-  box-sizing: content-box;
-  width: 1em;
-  height: 1em;
-  padding: 0.25em 0.25em;
-  color: #000;
-  background: transparent
-    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e")
-    center/1em auto no-repeat;
-  border: 0;
-  border-radius: 0.25rem;
-  opacity: 0.5;
-}
-
 .modal-item-margin {
   margin-top: 32px;
+  width: fit-content;
 }
 
 .dropdown-menu {
   position: fixed !important;
   max-width: 440px;
+}
+
+#close-button {
+  color: #212121;
+  background: transparent;
+  border: none;
 }

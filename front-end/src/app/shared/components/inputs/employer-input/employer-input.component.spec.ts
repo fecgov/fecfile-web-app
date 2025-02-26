@@ -12,8 +12,7 @@ describe('EmployerInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EmployerInputComponent, ErrorMessagesComponent],
-      imports: [InputTextModule, ReactiveFormsModule],
+      imports: [InputTextModule, ReactiveFormsModule, EmployerInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EmployerInputComponent);

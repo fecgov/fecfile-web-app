@@ -1,20 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
-import { BaseInputComponent } from '../base-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
+import { Select } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-additional-info-input',
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
+  imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {
     SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
+    this.form.updateValueAndValidity();
 
     if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
       this.initPrefix(

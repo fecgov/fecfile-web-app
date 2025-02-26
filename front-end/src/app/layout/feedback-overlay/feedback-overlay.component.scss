@@ -24,6 +24,18 @@
   position: fixed;
 }
 
+.feedback-close-button {
+  text-align: right;
+}
+
+.feedback-close-button > button {
+  border: 0;
+}
+
+.feedback-close-button > button > img {
+  width: 30px;
+}
+
 :host ::ng-deep {
   p,
   span,
@@ -44,26 +56,31 @@
     top: 50px;
   }
 
-  .p-overlaypanel .p-overlaypanel-close {
+  .p-popover .p-popover-close {
     right: 0.5rem;
     top: 0.5rem;
     background: transparent;
     transform: scale(1.5);
+    border: 0;
   }
 
-  .p-overlaypanel .p-overlaypanel-close:hover {
+  .p-popover .p-popover-close:hover {
     background: transparent;
   }
 
-  .p-overlaypanel {
+  .p-popover .p-popover-close:focus {
+    box-shadow: var(--focus-ring);
+  }
+
+  .p-popover {
     background: #f1f1f1;
   }
 
-  .p-overlaypanel .p-overlaypanel-content {
+  .p-popover .p-popover-content {
     padding-top: 2.5rem;
   }
 
-  .p-overlaypanel .p-overlaypanel-content * {
+  .p-popover .p-popover-content * {
     font-family: karla, sans-serif;
   }
 }

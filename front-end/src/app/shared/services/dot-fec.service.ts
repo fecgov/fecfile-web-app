@@ -1,5 +1,5 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
 import { Report } from '../models/report.model';
 import { Actions } from '@ngrx/effects';
@@ -16,15 +16,13 @@ export interface Download {
   providedIn: 'root',
 })
 export class DotFecService {
-  downloads = new BehaviorSubject<Download[]>([]);
-  renderer: Renderer2;
+  private readonly apiService = inject(ApiService);
+  private readonly actions = inject(Actions);
+  readonly rendererFactory = inject(RendererFactory2);
+  readonly downloads = new BehaviorSubject<Download[]>([]);
+  readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
 
-  constructor(
-    private apiService: ApiService,
-    private actions: Actions,
-    rendererFactory: RendererFactory2,
-  ) {
-    this.renderer = rendererFactory.createRenderer(null, null);
+  constructor() {
     this.actions.subscribe((action) => {
       if (action.type === '[User Login Data] Discarded') {
         this.downloads.next([]);
@@ -33,10 +31,11 @@ export class DotFecService {
   }
 
   async generateFecFile(report: Report): Promise<Download> {
-    const response = await firstValueFrom(
-      this.apiService.post<{ status: string; file_name: string; task_id: string }>(`/web-services/dot-fec/`, {
+    const response = await this.apiService.post<{ status: string; file_name: string; task_id: string }>(
+      `/web-services/dot-fec/`,
+      {
         report_id: report.id,
-      }),
+      },
     );
     const downloads = this.downloads.getValue();
     const download = { taskId: response.task_id, report, name: response.file_name, isComplete: false };
@@ -46,7 +45,7 @@ export class DotFecService {
   }
 
   async downloadFecFile(download: Download): Promise<void> {
-    const dotFEC = await firstValueFrom(this.apiService.getString(`/web-services/dot-fec/${download.id}/`));
+    const dotFEC = await this.apiService.getString(`/web-services/dot-fec/${download.id}/`);
     const newBlob = new Blob([dotFEC], { type: 'application/text' });
     const data = window.URL.createObjectURL(newBlob);
     const link = this.renderer.createElement('a');
@@ -74,8 +73,8 @@ export class DotFecService {
   }
 
   private async checkFecFile(taskId: string): Promise<string | undefined> {
-    const response = await firstValueFrom(
-      this.apiService.get<{ done: boolean; id?: string }>(`/web-services/dot-fec/check/${taskId}/`),
+    const response = await this.apiService.get<{ done: boolean; id?: string }>(
+      `/web-services/dot-fec/check/${taskId}/`,
     );
     return response.id;
   }

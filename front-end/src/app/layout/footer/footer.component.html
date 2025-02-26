@@ -1,19 +1,21 @@
-<footer #footerElement [ngClass]="showSidebar ? 'sidebar-version' : 'full-version'">
-  <div id="footer-upper" *ngIf="showUpperFooter">
-    <div class="upper-footer-section">
-      <a
-        href="https://www.fec.gov/efiling/getting-started-fecfile-pilot"
-        class="footer-upper-text font-karla-bold"
-        target="_blank"
-        rel="noopener"
-      >
-        Need help? Contact us
-      </a>
+<footer #footerElement [class.sidebar-version]="showSidebar" [class.full-version]="!showSidebar">
+  @if (showUpperFooter) {
+    <div id="footer-upper">
+      <div class="upper-footer-section">
+        <a
+          href="https://www.fec.gov/efiling/getting-started-fecfile-pilot"
+          class="footer-upper-text font-karla-bold"
+          target="_blank"
+          rel="noopener"
+        >
+          Need help? Contact us
+        </a>
+      </div>
+      <div class="upper-footer-section">
+        <a routerLink="/notifications/security" class="footer-upper-text font-karla-bold">Security notification </a>
+      </div>
     </div>
-    <div class="upper-footer-section">
-      <a routerLink="/notifications/security" class="footer-upper-text font-karla-bold">Security notification </a>
-    </div>
-  </div>
+  }
   <div id="footer-lower" class="grid">
     <div class="col-6">
       <img alt="The seal of the Federal Election Commission" id="fec-seal" src="assets/img/fec-seal-inverse.svg" />

@@ -1,12 +1,13 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-3">
-      <div class="field">
+      <div class="field flex flex-column">
         <label for="electionType">{{ labelPrefix }} ELECTION TYPE</label>
-        <p-dropdown
+        <p-select
           inputId="electionType"
           [options]="electionTypeOptions"
           [autoDisplayFirst]="false"
+          class="w-full"
           appendTo="body"
           formControlName="electionType"
         >
@@ -18,7 +19,7 @@
             <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>
             {{ electionCode?.label.split(' ')[1] }}
           </ng-template>
-        </p-dropdown>
+        </p-select>
         <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
@@ -29,7 +30,7 @@
           id="electionYear"
           type="text"
           pInputText
-          oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1').slice(0, 4);"
+          (input)="formatElectionYear($event)"
           formControlName="electionYear"
           required
         />

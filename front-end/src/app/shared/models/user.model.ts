@@ -11,6 +11,7 @@ export type UserLoginData = {
   email?: string;
   consent_for_one_year?: boolean;
   security_consented?: boolean;
+  role?: string;
 };
 
 export class User extends BaseModel {
