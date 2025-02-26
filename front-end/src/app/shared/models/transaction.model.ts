@@ -19,6 +19,7 @@ import {
 } from './schc2-transaction.model';
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
+import { SchFTransaction, ScheduleFTransactionGroupsType, ScheduleFTransactionTypes } from './schf-transaction.model';
 import { Report, ReportTypes } from './report.model';
 import { Form3X } from './form-3x.model';
 import { Form24 } from './form-24.model';
@@ -180,7 +181,8 @@ export type ScheduleTransaction =
   | SchC1Transaction
   | SchC2Transaction
   | SchDTransaction
-  | SchETransaction;
+  | SchETransaction
+  | SchFTransaction;
 export type TransactionTypes =
   | ScheduleATransactionTypes
   | ScheduleBTransactionTypes
@@ -188,7 +190,8 @@ export type TransactionTypes =
   | ScheduleC1TransactionTypes
   | ScheduleC2TransactionTypes
   | ScheduleDTransactionTypes
-  | ScheduleETransactionTypes;
+  | ScheduleETransactionTypes
+  | ScheduleFTransactionTypes;
 export type TransactionGroupTypes =
   | ScheduleATransactionGroupsType
   | ScheduleBTransactionGroupsType
@@ -196,7 +199,8 @@ export type TransactionGroupTypes =
   | ScheduleC1TransactionGroupsType
   | ScheduleC2TransactionGroupsType
   | ScheduleDTransactionGroupsType
-  | ScheduleETransactionGroupsType;
+  | ScheduleETransactionGroupsType
+  | ScheduleFTransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',

@@ -39,6 +39,11 @@ import {
   ScheduleETransactionTypeLabels,
   ScheduleETransactionTypes,
 } from 'app/shared/models/sche-transaction.model';
+import {
+  ScheduleFTransactionGroups,
+  ScheduleFTransactionTypeLabels,
+  ScheduleFTransactionTypes,
+} from 'app/shared/models/schf-transaction.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccordionModule } from 'primeng/accordion';
@@ -63,6 +68,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleDTransactionTypeLabels,
     ...ScheduleETransactionTypeLabels,
+    ...ScheduleFTransactionTypeLabels,
   ];
   report?: Report;
   category: Categories = 'receipt';
