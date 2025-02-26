@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from '../candidate-office-input/candidate-office-input.component';
@@ -14,8 +14,14 @@ describe('CandidateInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CandidateInputComponent, ErrorMessagesComponent, CandidateOfficeInputComponent],
-      imports: [InputTextModule, DropdownModule, ReactiveFormsModule],
+      imports: [
+        InputTextModule,
+        SelectModule,
+        ReactiveFormsModule,
+        CandidateInputComponent,
+        ErrorMessagesComponent,
+        CandidateOfficeInputComponent,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CandidateInputComponent);

@@ -1,11 +1,12 @@
 #out-of-date-dialog-button {
   width: 50vm;
+  min-width: 125px;
   text-align: center;
   line-height: 1.5em;
 }
 
 #out-of-date-dialog-header {
-  font-family: 'gandhi-bold', serif;
+  font-family: var(--gandhi-bold);
   font-size: 36px;
   color: #212121;
 }
@@ -17,4 +18,18 @@
   font-size: 14px;
   line-height: 1.3;
   color: #212121;
+}
+
+.memo-container > div {
+  display: flex;
+}
+
+.memo-item-check {
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.circle-icon-tooltip {
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
 }

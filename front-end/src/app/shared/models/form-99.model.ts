@@ -1,7 +1,7 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { Report, ReportTypes } from './report.model';
-import { BaseModel } from './base.model';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
+import { BaseModel } from './base.model';
+import { Report, ReportTypes } from './report.model';
 
 export enum F99FormTypes {
   F99 = 'F99',

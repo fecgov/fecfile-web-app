@@ -1,10 +1,11 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
 import { BannerComponent } from './banner.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('BannerComponent', () => {
   let component: BannerComponent;
@@ -12,9 +13,14 @@ describe('BannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MenubarModule, RouterTestingModule],
-      declarations: [BannerComponent],
-      providers: [BannerComponent, provideMockStore(testMockStore)],
+      imports: [MenubarModule, BannerComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        BannerComponent,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
   });
 

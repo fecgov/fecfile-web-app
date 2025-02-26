@@ -1,18 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
-
 import { ReportDetailedSummaryComponent } from './report-detailed-summary.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReportService } from 'app/shared/services/report.service';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ApiService } from 'app/shared/services/api.service';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ReportDetailedSummaryComponent', () => {
   let component: ReportDetailedSummaryComponent;
@@ -28,9 +26,11 @@ describe('ReportDetailedSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
-      declarations: [ReportDetailedSummaryComponent],
+      imports: [CardModule, ReportDetailedSummaryComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         ReportService,
         provideMockStore(testMockStore),
         {
@@ -50,7 +50,7 @@ describe('ReportDetailedSummaryComponent', () => {
     fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(apiService, 'post').and.returnValue(of());
+    spyOn(apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse<unknown>()));
   });
 
   it('should create', () => {

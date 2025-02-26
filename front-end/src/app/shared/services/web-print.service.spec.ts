@@ -1,12 +1,12 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
 import { WebPrintService } from './web-print.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('WebPrintService', () => {
   let service: WebPrintService;
@@ -15,8 +15,7 @@ describe('WebPrintService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [WebPrintService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), WebPrintService, provideMockStore(testMockStore)],
     }).compileComponents();
 
     TestBed.inject(HttpTestingController);
@@ -38,7 +37,7 @@ describe('WebPrintService', () => {
   });
 
   it('should get new reports', () => {
-    const reportRequest = spyOn(reportService, 'setActiveReportById').and.returnValue(of(new Form3X()));
+    const reportRequest = spyOn(reportService, 'setActiveReportById').and.returnValue(Promise.resolve(new Form3X()));
     service.getStatus('1');
     expect(reportRequest).toHaveBeenCalledWith('1');
   });

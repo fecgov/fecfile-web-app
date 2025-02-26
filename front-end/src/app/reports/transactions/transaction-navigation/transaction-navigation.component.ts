@@ -6,9 +6,13 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 
+import { NavigationControlComponent } from '../../../shared/components/navigation-control/navigation-control.component';
+import { NavigationControlBarComponent } from '../../../shared/components/navigation-control-bar/navigation-control-bar.component';
+
 @Component({
   selector: 'app-transaction-navigation',
   templateUrl: './transaction-navigation.component.html',
+  imports: [NavigationControlComponent, NavigationControlBarComponent],
 })
 export class TransactionNavigationComponent {
   @Input() isEditable = true;

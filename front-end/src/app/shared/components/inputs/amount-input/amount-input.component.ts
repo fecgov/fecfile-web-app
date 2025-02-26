@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
@@ -10,13 +10,28 @@ import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { AsyncPipe } from '@angular/common';
+import { CalendarComponent } from '../../calendar/calendar.component';
+import { LinkedReportInputComponent } from '../linked-report-input/linked-report-input.component';
+import { InputNumberComponent } from '../input-number/input-number.component';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-amount-input',
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
+  imports: [
+    ReactiveFormsModule,
+    CalendarComponent,
+    LinkedReportInputComponent,
+    MemoCodeInputComponent,
+    InputNumberComponent,
+    ErrorMessagesComponent,
+    AsyncPipe,
+  ],
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit, OnChanges {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   @Input() contributionAmountReadOnly = false;
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
@@ -32,10 +47,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
   reportTypes = ReportTypes;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    super();
-  }
 
   ngOnInit(): void {
     if (this.contributionAmountReadOnly) {

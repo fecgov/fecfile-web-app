@@ -1,5 +1,4 @@
-import { CanActivateFn } from '@angular/router';
-import { Router } from '@angular/router';
+import { Router, CanActivateFn } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginService } from '../services/login.service';
 import { inject } from '@angular/core';

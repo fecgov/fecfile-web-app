@@ -1,13 +1,18 @@
 <div class="components-wrapper">
-  <ng-container [ngSwitch]="transactionCardinality()">
-    <app-transaction-detail *ngSwitchCase="1" [transaction]="transaction"></app-transaction-detail>
-    <app-double-transaction-detail *ngSwitchCase="2" [transaction]="transaction"></app-double-transaction-detail>
-    <app-triple-transaction-detail *ngSwitchCase="3" [transaction]="transaction"></app-triple-transaction-detail>
-    <app-reatt-redes-transaction-type-detail
-      *ngSwitchCase="-1"
-      [transaction]="transaction"
-    ></app-reatt-redes-transaction-type-detail>
-  </ng-container>
+  @switch (transactionCardinality()) {
+    @case (1) {
+      <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
+    }
+    @case (2) {
+      <app-double-transaction-detail [transaction]="transaction"></app-double-transaction-detail>
+    }
+    @case (3) {
+      <app-triple-transaction-detail [transaction]="transaction"></app-triple-transaction-detail>
+    }
+    @case (-1) {
+      <app-reatt-redes-transaction-type-detail [transaction]="transaction"></app-reatt-redes-transaction-type-detail>
+    }
+  }
 
   <app-transaction-children-list-container [transaction]="transaction"></app-transaction-children-list-container>
 

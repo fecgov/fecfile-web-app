@@ -19,9 +19,8 @@ describe('FecInternationalPhoneInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FecInternationalPhoneInputComponent],
       providers: [{ provide: NgControl, useClass: MockNgControl }],
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [FormsModule, ReactiveFormsModule, FecInternationalPhoneInputComponent],
     }).compileComponents();
   });
 

@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 import { loggedInGuard } from 'app/shared/guards/logged-in.guard';
 import { nameGuard } from 'app/shared/guards/name.guard';
 import { SecurityNoticeComponent } from 'app/login/security-notice/security-notice.component';
 
-const routes: Routes = [
+export const NOTIFICATION_ROUTES: Route[] = [
   {
     path: 'security',
     component: SecurityNoticeComponent,
@@ -16,9 +15,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class NotificationsRoutingModule {}

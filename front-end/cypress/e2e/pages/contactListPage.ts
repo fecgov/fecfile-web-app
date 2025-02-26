@@ -10,7 +10,7 @@ import { PageUtils } from './pageUtils';
 export class ContactListPage {
   static goToPage() {
     cy.visit('/dashboard');
-    cy.get('.navbar-nav').find('.nav-link').contains('Contacts').click();
+    cy.get('nav').find('.nav-item').contains('Contacts').click();
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
@@ -39,20 +39,20 @@ export class ContactListPage {
     cy.get(alias).find('#city').safeType(formData['city']);
     cy.get(alias).find('#zip').safeType(formData['zip']);
     cy.get(alias).find('#telephone').safeType(formData['phone']);
-    PageUtils.dropdownSetValue("p-dropdown[formcontrolname='state']", formData['state'], alias);
+    PageUtils.dropdownSetValue("p-select[formcontrolname='state']", formData['state'], alias);
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
       cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
 
-      PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_office']", formData['candidate_office'], alias);
+      PageUtils.dropdownSetValue("p-select[inputid='candidate_office']", formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
-        PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_state']", formData['candidate_state'], alias);
+        PageUtils.dropdownSetValue("p-select[inputid='candidate_state']", formData['candidate_state'], alias);
 
         const singleDistrictStates = ['Alaska', 'Delaware', 'North Dakota', 'South Dakota', 'Vermont', 'Wyoming'];
         if (formData['candidate_office'] == 'House' && !singleDistrictStates.includes(formData['candidate_state'])) {
-          PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_district']", formData['candidate_district'], alias);
+          PageUtils.dropdownSetValue("p-select[inputid='candidate_district']", formData['candidate_district'], alias);
         }
       }
     }

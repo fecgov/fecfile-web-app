@@ -1,8 +1,8 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
+import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
@@ -15,19 +15,19 @@ import { ReportService } from 'app/shared/services/report.service';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
-import { SharedModule } from 'app/shared/shared.module';
 import { TransactionDetailComponent } from './transaction-detail.component';
-import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
-import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
@@ -35,27 +35,33 @@ describe('TransactionDetailComponent', () => {
   let reportService: ReportService;
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
 
+  beforeAll(async () => {
+    await import(`fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECEIPT.validator`);
+  });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
         FormsModule,
         ReactiveFormsModule,
         ToastModule,
-        SharedModule,
         DividerModule,
-        DropdownModule,
-        CalendarModule,
+        SelectModule,
+        DatePickerModule,
         ButtonModule,
         CheckboxModule,
         InputTextModule,
-        InputTextareaModule,
+        TextareaModule,
         InputNumberModule,
         ConfirmDialogModule,
+        TransactionDetailComponent,
+        AmountInputComponent,
+        NavigationControlComponent,
       ],
-      declarations: [TransactionDetailComponent, AmountInputComponent, NavigationControlComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         MessageService,
         ConfirmationService,
         FormBuilder,
@@ -81,15 +87,15 @@ describe('TransactionDetailComponent', () => {
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('#handleNavigate() should not save an invalid record', () => {
+  it('#handleNavigate() should not save an invalid record', fakeAsync(() => {
     const navSpy = spyOn(component, 'navigateTo');
     const saveSpy = spyOn(component, 'save');
 
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-
+    tick(100);
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     expect(navSpy).not.toHaveBeenCalled();
     expect(saveSpy).not.toHaveBeenCalled();
-  });
+  }));
 });

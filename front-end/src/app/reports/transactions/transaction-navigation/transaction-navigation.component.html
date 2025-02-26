@@ -1,19 +1,14 @@
-<ng-container *ngIf="transaction?.contact_1 && isEditable && getInlineControls().length > 0">
-  <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
+@if (transaction?.contact_1 && isEditable && getInlineControls().length > 0) {
+  @for (control of getInlineControls(); track control) {
     <div class="p-2">
-      <app-navigation-control
-        [navigationControl]="navigationControl"
-        [transaction]="transaction"
-      ></app-navigation-control>
+      <app-navigation-control [navigationControl]="control" [transaction]="transaction"></app-navigation-control>
     </div>
-  </ng-template>
-</ng-container>
+  }
+}
 
-<div class="p-fluid">
-  <hr type="solid" />
-  <app-navigation-control-bar
-    [navigationControls]="getNavigationControls()"
-    [transaction]="transaction"
-    [class]="isEditable ? '' : 'flex-center'"
-  ></app-navigation-control-bar>
-</div>
+<hr type="solid" />
+<app-navigation-control-bar
+  [navigationControls]="getNavigationControls()"
+  [transaction]="transaction"
+  [class]="isEditable ? '' : 'flex-center'"
+></app-navigation-control-bar>

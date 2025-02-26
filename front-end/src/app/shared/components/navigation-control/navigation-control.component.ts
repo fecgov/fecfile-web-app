@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   ControlType,
@@ -15,27 +15,31 @@ import {
 } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
 import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ButtonModule } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { SingleClickDirective } from '../../directives/single-click.directive';
+import { FormsModule } from '@angular/forms';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
   styleUrls: ['./navigation-control.component.scss'],
+  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule],
 })
 export class NavigationControlComponent implements OnInit {
+  private readonly store = inject(Store);
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   dropdownControl = new SubscriptionFormControl('');
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     /**

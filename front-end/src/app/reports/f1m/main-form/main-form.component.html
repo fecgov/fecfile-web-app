@@ -1,5 +1,5 @@
-<div class="p-fluid" data-cy="form-1m-component">
-  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+<div data-cy="form-1m-component">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
         <h1>FORM 1M</h1>
@@ -63,12 +63,11 @@
       </div>
     </div>
     <div class="grid">
-      <div class="col-12">
+      <div class="col-12 flex">
         <p-radioButton
           inputId="X"
           name="committee_type"
           value="X"
-          label="STATE PARTY"
           data-cy="state-party-radio"
           formControlName="committee_type"
           [class]="
@@ -78,15 +77,15 @@
               : ''
           "
         ></p-radioButton>
+        <label for="X" class="ml-2">STATE PARTY</label>
       </div>
     </div>
     <div class="grid">
-      <div class="col-12">
+      <div class="col-12 flex">
         <p-radioButton
           inputId="N"
           name="committee_type"
           value="N"
-          label="OTHER"
           formControlName="committee_type"
           [class]="
             committeeTypeControl?.invalid &&
@@ -95,6 +94,7 @@
               : ''
           "
         ></p-radioButton>
+        <label for="N" class="ml-2">OTHER</label>
       </div>
     </div>
     <div class="grid">
@@ -134,12 +134,11 @@
       </div>
     </div>
     <div class="grid">
-      <div class="col-12">
+      <div class="col-12 flex">
         <p-radioButton
           inputId="affiliation"
           name="statusBy"
           value="affiliation"
-          label="AFFILIATION"
           data-cy="affiliation-radio"
           formControlName="statusBy"
           [class]="
@@ -148,15 +147,15 @@
               : ''
           "
         ></p-radioButton>
+        <label for="affiliation" class="ml-2">AFFILIATION</label>
       </div>
     </div>
     <div class="grid">
-      <div class="col-12">
+      <div class="col-12 flex">
         <p-radioButton
           inputId="qualification"
           name="statusBy"
           value="qualification"
-          label="QUALIFICATION"
           data-cy="qualification-radio"
           formControlName="statusBy"
           [class]="
@@ -165,6 +164,7 @@
               : ''
           "
         ></p-radioButton>
+        <label for="qualification" class="ml-2">QUALIFICATION</label>
       </div>
     </div>
     <div class="grid">
@@ -177,7 +177,7 @@
         ></app-error-messages>
       </div>
     </div>
-    <ng-container *ngIf="statusByControl?.value === 'affiliation'">
+    @if (statusByControl?.value === 'affiliation') {
       <div class="grid">
         <div class="col-12">
           <h2>Affiliation</h2>
@@ -189,12 +189,7 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <div
-            class="field"
-            [ngClass]="{
-              'transaction-contact-invalid': affiliatedContact.control?.status === 'INVALID',
-            }"
-          >
+          <div class="field" [class.transaction-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
             <label for="entity_type">LOOKUP</label>
             <app-transaction-contact-lookup
               [form]="form"
@@ -211,7 +206,7 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="report.contact_affiliated">
+      @if (report.contact_affiliated) {
         <div class="grid">
           <div class="col-9">
             <div class="field">
@@ -261,9 +256,9 @@
             <hr />
           </div>
         </div>
-      </ng-container>
-    </ng-container>
-    <ng-container *ngIf="statusByControl?.value === 'qualification'">
+      }
+    }
+    @if (statusByControl?.value === 'qualification') {
       <div class="grid">
         <div class="col-12">
           <h2>Qualification</h2>
@@ -300,7 +295,7 @@
           <p>The committee has made contributions to the five (5) federal candidates listed below:</p>
         </div>
       </div>
-      <ng-container *ngFor="let candidateContact of candidateContacts; index as i">
+      @for (candidateContact of candidateContacts; track candidateContact; let i = $index) {
         <div attr.data-cy="candidate-{{ i }}">
           <div class="grid">
             <div class="col-12">
@@ -309,12 +304,7 @@
           </div>
           <div class="grid">
             <div class="col-12">
-              <div
-                class="field"
-                [ngClass]="{
-                  'transaction-contact-invalid': candidateContact.control?.status === 'INVALID',
-                }"
-              >
+              <div class="field" [class.transaction-contact-invalid]="candidateContact.control?.status === 'INVALID'">
                 <label for="entity_type">LOOKUP</label>
                 <app-transaction-contact-lookup
                   [form]="form"
@@ -323,7 +313,6 @@
                   [excludeFecIds]="excludeFecIds"
                   [excludeIds]="excludeIds"
                   (contactSelect)="candidateContact.update($event)"
-                  data-cy="candidate-lookup"
                 >
                 </app-transaction-contact-lookup>
                 <app-error-messages
@@ -335,7 +324,7 @@
               </div>
             </div>
           </div>
-          <ng-container *ngIf="report[candidateContact.contactKey]">
+          @if (report[candidateContact.contactKey]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -363,7 +352,7 @@
                   ></app-error-messages>
                 </div>
               </div>
-              <div class="col-9" style="margin-top: -9px">
+              <div class="col-9 co-input-container">
                 <app-candidate-office-input
                   [form]="form"
                   [formSubmitted]="formSubmitted"
@@ -384,17 +373,17 @@
                 ></app-calendar>
               </div>
             </div>
-          </ng-container>
+          }
           <div class="grid">
             <div class="col-12">
               <hr />
             </div>
           </div>
         </div>
-      </ng-container>
-    </ng-container>
+      }
+    }
   </form>
 </div>
 <app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
 
-<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="dialog" class="confirm-dialog"> </p-confirmDialog>

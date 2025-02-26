@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
@@ -10,6 +10,7 @@ import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
 import { LoginService } from './login.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -18,8 +19,13 @@ describe('LoginService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ApiService,
+        LoginService,
+        provideMockStore(testMockStore),
+      ],
     });
     service = TestBed.inject(LoginService);
     store = TestBed.inject(MockStore);

@@ -1,14 +1,14 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ReportsModule } from 'app/reports/reports.module';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('CashOnHandOverrideComponent', () => {
   let component: CashOnHandOverrideComponent;
@@ -19,9 +19,15 @@ describe('CashOnHandOverrideComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CashOnHandOverrideComponent],
-      imports: [HttpClientTestingModule, ReportsModule],
-      providers: [Form3XService, CashOnHandService, MessageService, provideMockStore(testMockStore)],
+      imports: [CashOnHandOverrideComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        Form3XService,
+        CashOnHandService,
+        MessageService,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
   });
 

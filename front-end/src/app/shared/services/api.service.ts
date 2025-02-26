@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
@@ -18,10 +18,8 @@ export interface QueryParams {
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(
-    private http: HttpClient,
-    private cookieService: CookieService,
-  ) {}
+  private readonly http = inject(HttpClient);
+  private readonly cookieService = inject(CookieService);
 
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
@@ -39,83 +37,95 @@ export class ApiService {
     return new HttpParams({ fromObject: queryParams });
   }
 
-  public get<T>(endpoint: string, params?: QueryParams): Observable<T>;
-  public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Observable<T>;
+  public get<T>(endpoint: string, params?: QueryParams): Promise<T>;
+  public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Promise<T>;
   public get<T>(
     endpoint: string,
     params: QueryParams = {},
     allowedErrorCodes?: number[],
-  ): Observable<T> | Observable<HttpResponse<T>> {
+  ): Promise<T> | Promise<HttpResponse<T>> {
     const headers = this.getHeaders();
     if (allowedErrorCodes) {
-      return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+      return firstValueFrom(
+        this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+          headers,
+          params,
+          withCredentials: true,
+          observe: 'response',
+          responseType: 'json',
+          context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+        }),
+      );
+    }
+    return firstValueFrom(
+      this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
         headers,
         params,
         withCredentials: true,
-        observe: 'response',
-        responseType: 'json',
-        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
-      });
-    }
-    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
-      headers,
-      params,
-      withCredentials: true,
-    });
+      }),
+    );
   }
 
-  public getString(endpoint: string): Observable<string> {
+  public getString(endpoint: string): Promise<string> {
     const headers = this.getHeaders();
-    return this.http.get(`${environment.apiUrl}${endpoint}`, {
-      headers: headers,
-      withCredentials: true,
-      responseType: 'text',
-    });
+    return firstValueFrom(
+      this.http.get(`${environment.apiUrl}${endpoint}`, {
+        headers: headers,
+        withCredentials: true,
+        responseType: 'text',
+      }),
+    );
   }
 
-  public post<T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Observable<T>;
+  public post<T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Promise<T>;
   public post<T>(
     endpoint: string,
     payload: unknown,
     queryParams?: QueryParams,
     allowedErrorCodes?: number[],
-  ): Observable<HttpResponse<T>>;
+  ): Promise<HttpResponse<T>>;
   public post<T>(
     endpoint: string,
     payload: unknown,
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
-  ): Observable<T> | Observable<HttpResponse<T>> {
+  ): Promise<T> | Promise<HttpResponse<T>> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
-      return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+      return firstValueFrom(
+        this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+          headers,
+          params,
+          withCredentials: true,
+          observe: 'response',
+          context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+        }),
+      );
+    }
+    return firstValueFrom(
+      this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
         headers,
         params,
         withCredentials: true,
-        observe: 'response',
-        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
-      });
-    }
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
-      headers,
-      params,
-      withCredentials: true,
-    });
+      }),
+    );
   }
 
-  public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Observable<T> {
+  public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Promise<T> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
-      headers,
-      params,
-      withCredentials: true,
-    });
+    return firstValueFrom(
+      this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
+        headers,
+        params,
+        withCredentials: true,
+      }),
+    );
   }
 
-  public delete<T>(endpoint: string): Observable<T> {
+  public delete<T>(endpoint: string): Promise<T> {
     const headers = this.getHeaders();
-    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers, withCredentials: true });
+    return firstValueFrom(this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers, withCredentials: true }));
   }
 }

@@ -7,8 +7,7 @@ describe('TransactionChildrenListContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [],
-      declarations: [TransactionChildrenListContainerComponent],
+      imports: [TransactionChildrenListContainerComponent],
     }).compileComponents();
   });
 

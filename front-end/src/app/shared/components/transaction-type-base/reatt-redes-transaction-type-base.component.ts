@@ -32,7 +32,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   pullForward = false;
   reattributedData = {} as AccordionData;
 
-  override async ngOnInit(): Promise<void> {
+  override ngOnInit(): void {
     super.ngOnInit();
     this.childUpdateFormWithPrimaryContact({
       value: this.transaction?.reatt_redes?.contact_1,
@@ -63,12 +63,14 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     );
   }
 
-  override processPayload(payload: SchATransaction | SchBTransaction, navigationEvent: NavigationEvent) {
+  override async processPayload(
+    payload: SchATransaction | SchBTransaction,
+    navigationEvent: NavigationEvent,
+  ): Promise<void> {
     const payloads: (SchATransaction | SchBTransaction)[] = ReattRedesUtils.getPayloads(payload, this.pullForward);
-    this.transactionService.multiSaveReattRedes(payloads).subscribe((response) => {
-      navigationEvent.transaction = response[0];
-      this.navigateTo(navigationEvent);
-    });
+    const response = await this.transactionService.multiSaveReattRedes(payloads);
+    navigationEvent.transaction = response[0];
+    this.navigateTo(navigationEvent);
   }
 
   updateElectionData() {

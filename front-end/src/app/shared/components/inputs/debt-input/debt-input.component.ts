@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InputNumberComponent } from '../input-number/input-number.component';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-debt-input',
   templateUrl: './debt-input.component.html',
+  imports: [ReactiveFormsModule, InputNumberComponent, ErrorMessagesComponent],
 })
 export class DebtInputComponent extends BaseInputComponent implements OnInit {
   ngOnInit(): void {

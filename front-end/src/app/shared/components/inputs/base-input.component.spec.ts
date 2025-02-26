@@ -9,7 +9,7 @@ describe('BaseInputComponent', () => {
   let fixture: ComponentFixture<BaseInputComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BaseInputComponent],
+      imports: [BaseInputComponent],
     }).compileComponents();
     fixture = TestBed.createComponent(TestBaseInputComponent);
     component = fixture.componentInstance;

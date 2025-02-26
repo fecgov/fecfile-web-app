@@ -3,7 +3,14 @@
     <div class="dialog-content">
       <div class="dialog-header">
         <h1 class="dialog-title" id="dialog-title">Select a report</h1>
-        <button type="button" class="btn-close" (click)="cancel()" aria-label="Cancel"></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          id="close-button"
+          (click)="cancel()"
+          aria-label="Cancel"
+        ></button>
       </div>
       <div class="dialog-body">
         <p>
@@ -13,9 +20,9 @@
         <label for="report-selector">OPEN REPORTS</label>
         <select id="report-selector" class="form-select" aria-label="Report selector" [(ngModel)]="selectedReport">
           <option selected></option>
-          <option *ngFor="let report of availableReports" [ngValue]="report">
-            {{ report.formLabel }}: {{ report.formSubLabel }}
-          </option>
+          @for (report of availableReports; track report) {
+            <option [ngValue]="report">{{ report.formLabel }}: {{ report.formSubLabel }}</option>
+          }
         </select>
       </div>
       <div class="dialog-footer">

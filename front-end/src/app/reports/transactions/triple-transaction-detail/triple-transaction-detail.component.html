@@ -1,24 +1,33 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
-<div *ngIf="transactionType?.subTitle">{{ transactionType?.subTitle }}</div>
-<app-independent-expenditure-create-f3x-input
-  *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24"
-></app-independent-expenditure-create-f3x-input>
-<h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
+@if (transactionType?.subTitle) {
+  <div>{{ transactionType?.subTitle }}</div>
+}
+@if ((activeReport$ | async)?.report_type === reportTypes.F24) {
+  <app-independent-expenditure-create-f3x-input></app-independent-expenditure-create-f3x-input>
+}
+@if (!isEditable) {
+  <h4 class="read-only-tag subtitle">READ ONLY</h4>
+}
+
 <p class="group-description">{{ transactionType?.description }}</p>
-<p-accordion [activeIndex]="accordionActiveIndex">
-  <p-accordionTab>
-    <ng-template pTemplate="header">
-      <strong>{{ transactionType?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">
-        {{ transactionType?.accordionSubText }}
-      </p></ng-template
-    >
-    <div class="p-fluid">
-      <h2 *ngIf="transactionType?.formTitle">
-        {{ transactionType?.formTitle }}
-      </h2>
+<p-accordion expandIcon="pi pi-angle-right" value="0">
+  <p-accordion-panel value="0">
+    <p-accordion-header>
+      <div class="flex align-items-center">
+        <strong>{{ transactionType?.accordionTitle }}:</strong>
+        <p class="accordion-subtext">
+          {{ transactionType?.accordionSubText }}
+        </p>
+      </div>
+    </p-accordion-header>
+    <p-accordion-content>
+      @if (transactionType?.formTitle) {
+        <h2>
+          {{ transactionType?.formTitle }}
+        </h2>
+      }
       <h3>{{ transactionType?.contactTitle }}</h3>
-      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [activeReport$]="activeReport$"
           [isEditable]="isEditable"
@@ -34,23 +43,28 @@
         >
         </app-transaction-input>
       </form>
-    </div>
-  </p-accordionTab>
+    </p-accordion-content>
+  </p-accordion-panel>
 
-  <p-accordionTab>
-    <ng-template pTemplate="header">
-      <strong>{{ childTransactionType?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">
-        {{ childTransactionType?.accordionSubText }}
-      </p></ng-template
-    >
-    <div class="p-fluid">
+  <p-accordion-panel value="1">
+    <p-accordion-header>
+      <div class="flex align-items-center">
+        <strong>{{ childTransactionType?.accordionTitle }}:</strong>
+        <p class="accordion-subtext">
+          {{ childTransactionType?.accordionSubText }}
+        </p>
+      </div>
+    </p-accordion-header>
+    <p-accordion-content>
       <h2>{{ childTransaction?.transactionType?.title }}</h2>
-      <p *ngIf="childTransactionType?.description">
-        <em [innerHtml]="childTransactionType?.description"></em>
-      </p>
+      @if (childTransactionType?.description) {
+        <p>
+          <em [innerHtml]="childTransactionType?.description"></em>
+        </p>
+      }
+
       <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [isEditable]="isEditable"
           [form]="childForm"
@@ -67,23 +81,27 @@
         >
         </app-transaction-input>
       </form>
-    </div>
-  </p-accordionTab>
+    </p-accordion-content>
+  </p-accordion-panel>
 
-  <p-accordionTab>
-    <ng-template pTemplate="header">
-      <strong>{{ childTransactionType_2?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">
-        {{ childTransactionType_2?.accordionSubText }}
-      </p></ng-template
-    >
-    <div class="p-fluid">
+  <p-accordion-panel value="2">
+    <p-accordion-header>
+      <div class="flex align-items-center">
+        <strong>{{ childTransactionType_2?.accordionTitle }}:</strong>
+        <p class="accordion-subtext">
+          {{ childTransactionType_2?.accordionSubText }}
+        </p>
+      </div>
+    </p-accordion-header>
+    <p-accordion-content>
       <h2>{{ childTransaction_2?.transactionType?.title }}</h2>
-      <p *ngIf="childTransactionType_2?.description">
-        <em [innerHtml]="childTransactionType_2?.description"></em>
-      </p>
+      @if (childTransactionType_2?.description) {
+        <p>
+          <em [innerHtml]="childTransactionType_2?.description"></em>
+        </p>
+      }
       <h3>{{ childTransactionType_2?.contactTitle }}</h3>
-      <form id="childForm_2" [formGroup]="childForm_2" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form id="childForm_2" [formGroup]="childForm_2" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [isEditable]="isEditable"
           [form]="childForm_2"
@@ -100,6 +118,6 @@
         >
         </app-transaction-input>
       </form>
-    </div>
-  </p-accordionTab>
+    </p-accordion-content>
+  </p-accordion-panel>
 </p-accordion>

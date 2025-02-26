@@ -1,44 +1,58 @@
-<ng-container
-  *ngIf="
-    formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn !== 'change')))
-  "
->
-  <small class="p-error" *ngIf="control?.hasError('required')">{{ requiredErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('fecIdMustBeUnique')">{{ uniqueFecIdMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('requiredTrue')">{{ requiredTrueErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
-  <small class="p-error" *ngIf="!control?.hasError('max') && control?.hasError('maxlength')">{{
-    maxLengthErrorMessage
-  }}</small>
-  <small class="p-error" *ngIf="control?.hasError('min')">{{ minErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('max')">{{ maxErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('exclusiveMax')">{{ exclusiveMaxErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('exclusiveMin')">{{ exclusiveMinErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('invaliddate')">{{ invalidDateErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('noDateProvided')">{{ noDateProvidedErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('noCorrespondingForm3X')">{{
-    noCorrespondingForm3XErrorMessage
-  }}</small>
-  <small
-    class="p-error"
-    *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"
-    >{{ emailErrorMessage }}</small
-  >
-  <small class="p-error" *ngIf="control?.hasError('isAfter')">{{ isAfterMessage }}</small>
-  <small
-    class="p-error"
-    *ngIf="
-      !control?.hasError('required') &&
-      !control?.hasError('minlength') &&
-      !control?.hasError('maxlength') &&
-      !control?.hasError('min') &&
-      !control?.hasError('max') &&
-      !control?.hasError('exclusiveMax') &&
-      !control?.hasError('exclusiveMin') &&
-      !control?.hasError('invaliddate') &&
-      !control?.hasError('isAfter') &&
-      control?.hasError('pattern')
-    "
-    >{{ patternErrorMessage }}</small
-  >
-</ng-container>
+@if (formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn !== 'change')))) {
+  @if (control?.hasError('required')) {
+    <small class="p-error">{{ requiredErrorMessage }}</small>
+  }
+  @if (control?.hasError('fecIdMustBeUnique')) {
+    <small class="p-error">{{ uniqueFecIdMessage }}</small>
+  }
+  @if (control?.hasError('requiredTrue')) {
+    <small class="p-error">{{ requiredTrueErrorMessage }}</small>
+  }
+  @if (control?.hasError('minlength')) {
+    <small class="p-error">{{ minLengthErrorMessage }}</small>
+  }
+  @if (!control?.hasError('max') && control?.hasError('maxlength')) {
+    <small class="p-error">{{ maxLengthErrorMessage }}</small>
+  }
+  @if (control?.hasError('min')) {
+    <small class="p-error">{{ minErrorMessage }}</small>
+  }
+  @if (control?.hasError('max')) {
+    <small class="p-error">{{ maxErrorMessage }}</small>
+  }
+  @if (control?.hasError('exclusiveMax')) {
+    <small class="p-error">{{ exclusiveMaxErrorMessage }}</small>
+  }
+  @if (control?.hasError('exclusiveMin')) {
+    <small class="p-error">{{ exclusiveMinErrorMessage }}</small>
+  }
+  @if (control?.hasError('invaliddate')) {
+    <small class="p-error">{{ invalidDateErrorMessage }}</small>
+  }
+  @if (control?.hasError('noDateProvided')) {
+    <small class="p-error">{{ noDateProvidedErrorMessage }}</small>
+  }
+  @if (control?.hasError('noCorrespondingForm3X')) {
+    <small class="p-error">{{ noCorrespondingForm3XErrorMessage }}</small>
+  }
+  @if (!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')) {
+    <small class="p-error">{{ emailErrorMessage }}</small>
+  }
+  @if (control?.hasError('isAfter')) {
+    <small class="p-error">{{ isAfterMessage }}</small>
+  }
+  @if (
+    !control?.hasError('required') &&
+    !control?.hasError('minlength') &&
+    !control?.hasError('maxlength') &&
+    !control?.hasError('min') &&
+    !control?.hasError('max') &&
+    !control?.hasError('exclusiveMax') &&
+    !control?.hasError('exclusiveMin') &&
+    !control?.hasError('invaliddate') &&
+    !control?.hasError('isAfter') &&
+    control?.hasError('pattern')
+  ) {
+    <small class="p-error">{{ patternErrorMessage }}</small>
+  }
+}

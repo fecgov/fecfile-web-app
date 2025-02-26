@@ -3,16 +3,16 @@
     <div class="col-6">
       <div class="field">
         <label for="candidate_office">CANDIDATE OFFICE</label>
-        <p-dropdown
+        <p-select
           inputId="candidate_office"
-          [formControlName]="this.officeFormControlName"
+          [formControlName]="officeFormControlName"
           [options]="candidateOfficeTypeOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-        ></p-dropdown>
+        ></p-select>
         <app-error-messages
           [form]="form"
-          [fieldName]="this.officeFormControlName"
+          [fieldName]="officeFormControlName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -20,19 +20,17 @@
     <div class="col-3">
       <div class="field">
         <label for="candidate_state">CANDIDATE STATE</label>
-        <p-dropdown
+        <p-select
           inputId="candidate_state"
-          [formControlName]="this.stateFormControlName"
+          [formControlName]="stateFormControlName"
           [options]="candidateStateOptions"
           [autoDisplayFirst]="false"
-          [ngClass]="{
-            disabled: this.form.get(this.stateFormControlName)?.disabled,
-          }"
+          [class.disabled]="form.get(stateFormControlName)?.disabled"
           appendTo="body"
-        ></p-dropdown>
+        ></p-select>
         <app-error-messages
           [form]="form"
-          [fieldName]="this.stateFormControlName"
+          [fieldName]="stateFormControlName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -40,30 +38,27 @@
     <div class="col-3">
       <div class="field">
         <label for="candidate_district">CANDIDATE DISTRICT</label>
-        <ng-container *ngIf="this.candidateDistrictOptions.length === 1">
+        @if (candidateDistrictOptions.length === 1) {
           <input
             type="text"
             pInputText
             id="candidate_district"
-            [formControlName]="this.districtFormControlName"
+            [formControlName]="districtFormControlName"
             class="p-disabled"
           />
-        </ng-container>
-        <ng-container *ngIf="this.candidateDistrictOptions.length !== 1">
-          <p-dropdown
+        } @else {
+          <p-select
             inputId="candidate_district"
-            [formControlName]="this.districtFormControlName"
+            [formControlName]="districtFormControlName"
             [options]="candidateDistrictOptions"
-            [ngClass]="{
-              disabled: this.form.get(this.stateFormControlName)?.disabled,
-            }"
+            [class.disabled]="form.get(stateFormControlName)?.disabled"
             appendTo="body"
             [autoDisplayFirst]="false"
-          ></p-dropdown>
-        </ng-container>
+          ></p-select>
+        }
         <app-error-messages
           [form]="form"
-          [fieldName]="this.districtFormControlName"
+          [fieldName]="districtFormControlName"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

@@ -1,12 +1,12 @@
 import { AbstractControl, Validators } from '@angular/forms';
-import { SelectItem } from 'primeng/api';
-import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { MainFormComponent } from './main-form.component';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
+import { SelectItem } from 'primeng/api';
+import { MainFormComponent } from './main-form.component';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];

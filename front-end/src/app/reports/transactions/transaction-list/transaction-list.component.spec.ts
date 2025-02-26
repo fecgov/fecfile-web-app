@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
@@ -10,7 +8,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -18,6 +16,8 @@ import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts
 import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -29,14 +29,14 @@ describe('TransactionListComponent', () => {
       imports: [
         ToolbarModule,
         TableModule,
-        SharedModule,
-        RouterTestingModule,
         ConfirmDialogModule,
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([]),
+        TransactionListComponent,
+        TransactionLoansAndDebtsComponent,
       ],
-      declarations: [TransactionListComponent, TransactionLoansAndDebtsComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore),

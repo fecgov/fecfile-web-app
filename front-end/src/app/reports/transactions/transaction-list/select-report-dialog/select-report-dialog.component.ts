@@ -1,27 +1,28 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { Report } from '../../../../shared/models/report.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
 import { Transaction } from '../../../../shared/models/transaction.model';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-select-report-dialog',
   templateUrl: './select-report-dialog.component.html',
   styleUrls: ['./select-report-dialog.component.scss'],
+  imports: [ReactiveFormsModule, FormsModule, ButtonDirective, Ripple],
 })
 export class SelectReportDialogComponent implements OnInit {
+  public readonly router = inject(Router);
+  private readonly service = inject(Form3XService);
   availableReports: Report[] = [];
   selectedReport?: Report;
 
   transaction?: Transaction;
   type?: ReattRedesTypes;
   @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
-
-  constructor(
-    public router: Router,
-    private service: Form3XService,
-  ) {}
 
   ngOnInit() {
     ReattRedesUtils.selectReportDialogSubject.subscribe((data) => {
@@ -33,7 +34,7 @@ export class SelectReportDialogComponent implements OnInit {
       if (!coverage_through_date) return;
       this.service
         .getFutureReports(coverage_through_date.toString())
-        .subscribe((reports) => (this.availableReports = reports));
+        .then((reports) => (this.availableReports = reports));
     });
   }
 

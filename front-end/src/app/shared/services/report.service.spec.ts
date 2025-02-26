@@ -1,11 +1,12 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -13,8 +14,7 @@ describe('ReportService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ReportService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), ReportService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ReportService);
@@ -40,7 +40,7 @@ describe('ReportService', () => {
       ],
     };
 
-    service.getTableData().subscribe((response: ListRestResponse) => {
+    service.getTableData().then((response) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -50,20 +50,23 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
-  it('#setActiveReportById() should throw error if report id is undefined', () => {
-    expect(() => {
-      service.setActiveReportById(undefined);
-    }).toThrowError();
+  it('#setActiveReportById() should throw error if report id is undefined', async () => {
+    try {
+      await service.setActiveReportById(undefined);
+      fail('Expected function to throw an error, but it did not.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      expect(err.message).toBe('Fecfile: No Report Id Provided.');
+    }
   });
 
-  it('#delete() should DELETE a record', () => {
+  it('#delete() should DELETE a record', async () => {
     const mockResponse = null;
     const form3X: Form3X = Form3X.fromJSON({ id: 1 });
 
-    service.delete(form3X).subscribe((response: null) => {
+    service.delete(form3X).then((response) => {
       expect(response).toEqual(mockResponse);
     });
-
     const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);

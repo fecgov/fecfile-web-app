@@ -8,7 +8,7 @@ describe('TransactionNavigationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TransactionNavigationComponent],
+      imports: [TransactionNavigationComponent],
     });
     fixture = TestBed.createComponent(TransactionNavigationComponent);
     component = fixture.componentInstance;

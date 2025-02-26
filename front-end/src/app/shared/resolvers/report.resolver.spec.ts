@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
@@ -8,6 +8,7 @@ import { ReportResolver } from './report.resolver';
 import { Report } from '../models/report.model';
 import { Form3X } from '../models/form-3x.model';
 import { environment } from '../../../environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ReportResolver', () => {
   let resolver: ReportResolver;
@@ -15,8 +16,7 @@ describe('ReportResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Form3XService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), Form3XService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);
@@ -32,7 +32,7 @@ describe('ReportResolver', () => {
       paramMap: convertToParamMap({ reportId: '999' }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).then((response: Report | undefined) => {
       expect(response).toEqual(form3X);
     });
 
@@ -47,7 +47,7 @@ describe('ReportResolver', () => {
       paramMap: convertToParamMap({ reportId: undefined }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).then((response: Report | undefined) => {
       expect(response).toEqual(undefined);
     });
   });

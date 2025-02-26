@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '../../../../shared/shared.module';
+import { provideRouter, Router } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F3XMenuComponent } from './f3x-menu.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('F3XMenuComponent', () => {
   let component: F3XMenuComponent;
@@ -16,20 +15,18 @@ describe('F3XMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [F3XMenuComponent],
-      providers: [provideMockStore(testMockStore)],
-      imports: [
-        SharedModule,
-        PanelMenuModule,
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([
           {
             path: 'reports/transactions/report/999/list',
             redirectTo: '',
           },
         ]),
+        provideMockStore(testMockStore),
       ],
+      imports: [PanelMenuModule, BrowserAnimationsModule, F3XMenuComponent],
     }).compileComponents();
   });
 

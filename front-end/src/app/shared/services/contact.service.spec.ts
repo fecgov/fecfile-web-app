@@ -1,9 +1,8 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { JsonSchema } from '../interfaces/json-schema.interface';
+import { JsonSchema } from 'fecfile-validate';
 import {
   CandidateLookupResponse,
   CommitteeLookupResponse,
@@ -18,6 +17,7 @@ import { ApiService } from './api.service';
 import { ContactService, DeletedContactService } from './contact.service';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { Candidate } from '../models/candidate.model';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
@@ -27,8 +27,14 @@ describe('ContactService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ContactService, DeletedContactService, ApiService, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ContactService,
+        DeletedContactService,
+        ApiService,
+        provideMockStore(testMockStore),
+      ],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -57,7 +63,7 @@ describe('ContactService', () => {
       ],
     };
 
-    service.getTableData().subscribe((response: ListRestResponse) => {
+    service.getTableData().then((response: ListRestResponse) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -71,7 +77,7 @@ describe('ContactService', () => {
     const mockResponse: Contact = new Contact();
     const contact: Contact = mockResponse;
 
-    service.create(contact).subscribe((response: Contact) => {
+    service.create(contact).then((response: Contact) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -86,7 +92,7 @@ describe('ContactService', () => {
     const contact: Contact = mockResponse;
     contact.id = '1';
 
-    service.update(contact).subscribe((response: Contact) => {
+    service.update(contact).then((response: Contact) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -101,7 +107,7 @@ describe('ContactService', () => {
     const contact: Contact = new Contact();
     contact.id = '1';
 
-    service.delete(contact).subscribe((response: null) => {
+    service.delete(contact).then((response: null) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -115,7 +121,7 @@ describe('ContactService', () => {
     const contact: Contact = new Contact();
     contact.id = '1';
 
-    service.get(contact.id).subscribe((response: Contact) => {
+    service.get(contact.id).then((response: Contact) => {
       expect(response).toEqual(contact);
     });
 
@@ -126,7 +132,7 @@ describe('ContactService', () => {
 
   it('#candidateLookup() happy path', async () => {
     const expectedRetval = new CandidateLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
     const testSearch = 'testSearch';
     const testMaxFecResults = 1;
     const testMaxFecfileResults = 2;
@@ -153,7 +159,7 @@ describe('ContactService', () => {
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
-  it('#committeeLookup() happy path', () => {
+  it('#committeeLookup() happy path', async () => {
     const expectedRetval = new CommitteeLookupResponse();
     const testSearch = 'testSearch';
     const testMaxFecResults = 1;
@@ -166,7 +172,7 @@ describe('ContactService', () => {
         exclude_fec_ids: '',
         exclude_ids: '',
       })
-      .and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+      .and.callFake(async () => expectedRetval);
 
     const expectedEndpoint = '/contacts/committee_lookup/';
     const expectedParams = {
@@ -177,15 +183,14 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    service
-      .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults, [], [])
-      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    const value = await service.committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults, [], []);
+    expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
   it('#individualLookup() happy path', () => {
     const expectedRetval = new IndividualLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
@@ -198,13 +203,13 @@ describe('ContactService', () => {
 
     service
       .individualLookup(testSearch, testMaxFecfileResults, [])
-      .subscribe((value) => expect(value).toEqual(expectedRetval));
+      .then((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
-  it('#organizationLookup() happy path', () => {
+  it('#organizationLookup() happy path', async () => {
     const expectedRetval = new OrganizationLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
@@ -215,9 +220,8 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    service
-      .organizationLookup(testSearch, testMaxFecfileResults, [])
-      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    const value = await service.organizationLookup(testSearch, testMaxFecfileResults, []);
+    expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
@@ -248,7 +252,7 @@ describe('ContactService', () => {
       ],
     };
 
-    deletedService.getTableData().subscribe((response: ListRestResponse) => {
+    deletedService.getTableData().then((response: ListRestResponse) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -260,7 +264,7 @@ describe('ContactService', () => {
 
   it('#restore() should POST a payload', () => {
     const mockResponse: string[] = ['1'];
-    deletedService.restore([new Contact()]).subscribe((response: string[]) => {
+    deletedService.restore([new Contact()]).then((response: string[]) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -270,51 +274,48 @@ describe('ContactService', () => {
     httpTestingController.verify();
   });
 
-  it('#checkFecIdForUniqueness should return true if contact matches', () => {
+  it('#checkFecIdForUniqueness should return true if contact matches', async () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
     spyOn(testApiService, 'get')
       .withArgs('/contacts/get_contact_id/', {
         fec_id: fecId,
       })
-      .and.returnValue(of('contactId' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+      .and.returnValue(Promise.resolve('contactId' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-    service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
-      expect(isUnique).toBeTrue();
-    });
+    const isUnique = await service.checkFecIdForUniqueness(fecId, contactId);
+    expect(isUnique).toBeTrue();
   });
 
-  it('#checkFecIdForUniqueness should return false if server comes back with differnt contact id', () => {
+  it('#checkFecIdForUniqueness should return false if server comes back with differnt contact id', async () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
     spyOn(testApiService, 'get')
       .withArgs('/contacts/get_contact_id/', {
         fec_id: fecId,
       })
-      .and.returnValue(of('different id' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
-    service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
-      expect(isUnique).toBeFalse();
-    });
+      .and.returnValue(Promise.resolve('different id' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const isUnique = await service.checkFecIdForUniqueness(fecId, contactId);
+    expect(isUnique).toBeFalse();
   });
 
-  it('#checkFecIdForUniqueness should return true if server comes back no id', () => {
+  it('#checkFecIdForUniqueness should return true if server comes back no id', async () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
     spyOn(testApiService, 'get')
       .withArgs('/contacts/get_contact_id/', {
         fec_id: fecId,
       })
-      .and.returnValue(of('' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
-    service.checkFecIdForUniqueness(fecId, contactId).subscribe((isUnique) => {
-      expect(isUnique).toBeTrue();
-    });
+      .and.returnValue(Promise.resolve('' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const isUnique = await service.checkFecIdForUniqueness(fecId, contactId);
+    expect(isUnique).toBeTrue();
   });
 
   describe('#getCandidateDetails()', () => {
     it('should return candidate details', () => {
       const candidate: Candidate = new Candidate();
 
-      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
+      service.getCandidateDetails('P12345678').then((candidateData) => {
         expect(candidateData).toEqual(candidate);
       });
 
@@ -331,7 +332,7 @@ describe('ContactService', () => {
     const committeeAccount: CommitteeAccount = new CommitteeAccount();
     const response: CommitteeAccount = committeeAccount;
 
-    service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
+    service.getCommitteeDetails('C00601211').then((committeeAccountData) => {
       expect(committeeAccountData).toEqual(committeeAccount);
     });
 
@@ -341,19 +342,15 @@ describe('ContactService', () => {
     req.flush(response);
   });
 
-  it('#getCommitteeDetails should raise an error when no id is provided', () => {
-    try {
-      service.getCommitteeDetails(null);
-    } catch (error) {
-      expect(error).toEqual(Error('Fecfile: No Committee Id provided in getCommitteeDetails()'));
-    }
+  it('#getCommitteeDetails should raise an error when no id is provided', async () => {
+    await expectAsync(service.getCommitteeDetails(null)).toBeRejectedWithError(
+      'Fecfile: No Committee Id provided in getCommitteeDetails()',
+    );
   });
 
-  it('#getCandidateDetails should raise an error when no id is provided', () => {
-    try {
-      service.getCandidateDetails(null);
-    } catch (error) {
-      expect(error).toEqual(Error('Fecfile: No Candidate Id provided in getCandidateDetails()'));
-    }
+  it('#getCandidateDetails should raise an error when no id is provided', async () => {
+    await expectAsync(service.getCandidateDetails(null)).toBeRejectedWithError(
+      'Fecfile: No Candidate Id provided in getCandidateDetails()',
+    );
   });
 });

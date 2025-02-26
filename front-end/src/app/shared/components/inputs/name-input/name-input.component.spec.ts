@@ -13,8 +13,7 @@ describe('NameInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NameInputComponent, ErrorMessagesComponent],
-      imports: [InputTextModule, ReactiveFormsModule],
+      imports: [InputTextModule, ReactiveFormsModule, NameInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NameInputComponent);

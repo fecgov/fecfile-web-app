@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,16 +21,15 @@ import {
   OrganizationLookupResponse,
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { SharedModule } from 'app/shared/shared.module';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { of } from 'rxjs';
+import { SelectModule } from 'primeng/select';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from './contact-lookup.component';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -41,17 +39,23 @@ describe('ContactLookupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContactLookupComponent, LabelPipe],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         DialogModule,
-        HttpClientTestingModule,
-        DropdownModule,
+        SelectModule,
         AutoCompleteModule,
-        SharedModule,
+        ContactLookupComponent,
       ],
-      providers: [FormBuilder, ContactService, EventEmitter, provideMockStore(testMockStore), HttpClient],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        FormBuilder,
+        ContactService,
+        EventEmitter,
+        provideMockStore(testMockStore),
+        LabelPipe,
+      ],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
@@ -146,21 +150,21 @@ describe('ContactLookupComponent', () => {
         testCommitteeLookupResponse = new CommitteeLookupResponse();
       });
 
-      it('#onDropdownSearch COM undefined fec_api_committees', fakeAsync(() => {
+      it('#onDropdownSearch COM undefined fec_api_committees', async () => {
         testCommitteeLookupResponse.fecfile_committees = [
           {
             id: 123,
             name: 'testName',
           } as unknown as FecfileCommitteeLookupData,
         ];
-        spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
+        spyOn(testContactService, 'committeeLookup').and.returnValue(Promise.resolve(testCommitteeLookupResponse));
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
-        component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(testEvent);
         expect(component.contactLookupList[1].items.length === 0).toBeTrue();
-      }));
+      });
 
-      it('#onDropdownSearch COM undefined fecfile_committees', fakeAsync(() => {
+      it('#onDropdownSearch COM undefined fecfile_committees', async () => {
         testCommitteeLookupResponse.fec_api_committees = [
           {
             id: 'testId',
@@ -168,14 +172,14 @@ describe('ContactLookupComponent', () => {
             is_active: true,
           } as FecApiCommitteeLookupData,
         ];
-        spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
+        spyOn(testContactService, 'committeeLookup').and.returnValue(Promise.resolve(testCommitteeLookupResponse));
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
-        component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(testEvent);
         expect(component.contactLookupList[0].items.length === 0).toBeTrue();
-      }));
+      });
 
-      it('#onDropdownSearch COM happy path', fakeAsync(() => {
+      it('#onDropdownSearch COM happy path', async () => {
         testCommitteeLookupResponse.fec_api_committees = [
           {
             id: 'testId',
@@ -189,10 +193,10 @@ describe('ContactLookupComponent', () => {
             name: 'testName',
           } as unknown as FecfileCommitteeLookupData,
         ];
-        spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
+        spyOn(testContactService, 'committeeLookup').and.returnValue(Promise.resolve(testCommitteeLookupResponse));
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
-        component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(testEvent);
         expect(
           JSON.stringify(component.contactLookupList) ===
             JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
@@ -203,7 +207,7 @@ describe('ContactLookupComponent', () => {
             { label: 'There are no matching registered committees', items: [] },
           ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true)),
         ).toBeTrue();
-      }));
+      });
     });
 
     describe('individual search', () => {
@@ -213,7 +217,7 @@ describe('ContactLookupComponent', () => {
       });
 
       it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
-        spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
+        spyOn(testContactService, 'individualLookup').and.returnValue(Promise.resolve(testIndividualLookupResponse));
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
         component.onDropdownSearch(testEvent);
@@ -230,7 +234,7 @@ describe('ContactLookupComponent', () => {
             type: ContactTypes.INDIVIDUAL,
           } as unknown as FecfileIndividualLookupData),
         ];
-        spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
+        spyOn(testContactService, 'individualLookup').and.returnValue(Promise.resolve(testIndividualLookupResponse));
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
         component.onDropdownSearch(testEvent);
@@ -257,7 +261,9 @@ describe('ContactLookupComponent', () => {
       });
 
       it('#onDropdownSearch ORG undefined fecfile_organizations', fakeAsync(() => {
-        spyOn(testContactService, 'organizationLookup').and.returnValue(of(testOrganizationLookupResponse));
+        spyOn(testContactService, 'organizationLookup').and.returnValue(
+          Promise.resolve(testOrganizationLookupResponse),
+        );
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
         component.onDropdownSearch(testEvent);
@@ -273,7 +279,9 @@ describe('ContactLookupComponent', () => {
             type: ContactTypes.ORGANIZATION,
           } as unknown as FecfileOrganizationLookupData),
         ];
-        spyOn(testContactService, 'organizationLookup').and.returnValue(of(testOrganizationLookupResponse));
+        spyOn(testContactService, 'organizationLookup').and.returnValue(
+          Promise.resolve(testOrganizationLookupResponse),
+        );
         const testEvent = { query: 'hi' };
         component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
         component.onDropdownSearch(testEvent);
@@ -353,7 +361,7 @@ describe('ContactLookupComponent', () => {
 
     async function testCandidate(candidate: Candidate) {
       const getCandidateDetailsSpy = spyOn(component.contactService, 'getCandidateDetails').and.returnValue(
-        of(candidate),
+        Promise.resolve(candidate),
       );
 
       component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);

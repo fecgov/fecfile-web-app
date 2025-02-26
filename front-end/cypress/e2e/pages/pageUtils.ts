@@ -13,7 +13,7 @@ export class PageUtils {
 
     if (value) {
       cy.get(alias).find(querySelector).first().click();
-      cy.contains('p-dropdownitem', value)
+      cy.contains('p-selectitem', value)
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
@@ -25,7 +25,7 @@ export class PageUtils {
     //
     cy.get(alias).find(calendar).first().as('calendarElement').click();
 
-    cy.get('@calendarElement').find('.p-datepicker-year').first().scrollIntoView().click();
+    cy.get('@calendarElement').find('.p-datepicker-select-year').first().scrollIntoView().click();
     //    Choose the year
     const year: number = dateObj.getFullYear();
     const currentYear: number = currentDate.getFullYear();
@@ -33,16 +33,16 @@ export class PageUtils {
     const decadeEnd: number = decadeStart + 9;
     if (year < decadeStart) {
       for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev').scrollIntoView().click();
+        cy.get('@calendarElement').find('.p-datepicker-prev-button').scrollIntoView().click();
       }
     }
     if (year > decadeEnd) {
       for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next').scrollIntoView().click();
+        cy.get('@calendarElement').find('.p-datepicker-next-button').scrollIntoView().click();
       }
     }
     cy.get('@calendarElement')
-      .find('.p-yearpicker-year')
+      .find('.p-datepicker-year')
       .contains(year.toString())
       .scrollIntoView()
       .click({ force: true });
@@ -50,7 +50,7 @@ export class PageUtils {
     //    Choose the month
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const Month: string = Months[dateObj.getMonth()];
-    cy.get('@calendarElement').find('.p-monthpicker-month').contains(Month).scrollIntoView().click({ force: true });
+    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).scrollIntoView().click({ force: true });
 
     //    Choose the day
     const Day: string = dateObj.getDate().toString();
@@ -89,13 +89,14 @@ export class PageUtils {
     cy.get(alias).contains('a', name).click();
   }
 
+  static clickAccordion(name: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias).contains('p-accordion-header', name).click();
+  }
+
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    if (force) {
-      cy.get(alias).contains('button', name).click({ force: true });
-    } else {
-      cy.get(alias).contains('button', name).click();
-    }
+    cy.get(alias).contains('button', name).click({ force });
   }
 
   static dateToString(date: Date) {
@@ -155,7 +156,11 @@ export class PageUtils {
       .find('app-table-actions-button')
       .children()
       .last()
-      .as('kabob');
-    return cy.get('@kabob');
+      .click();
+    return cy.get(alias).find('.p-popover');
+  }
+
+  static clickKababItem(identifier: string, item: string) {
+    PageUtils.getKabob(identifier).contains(item).first().click({ force: true });
   }
 }

@@ -91,8 +91,8 @@ export class RedesignationToUtils {
       ?.addValidators([buildReattRedesTransactionValidator(toTransaction)]);
 
     // Clear normal schema validation from redesignation TO form
-    form.get(toTransaction.transactionType.templateMap.purpose_description)?.clearValidators();
-    form.get('memo_code')?.clearValidators();
+    form.get(toTransaction.transactionType.templateMap.purpose_description)?.clearAsyncValidators();
+    form.get('memo_code')?.clearAsyncValidators();
     form.get('memo_code')?.setValue(true);
 
     RedesignationToUtils.readOnlyFields.forEach((field) =>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
@@ -9,15 +9,23 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
+import { Select } from 'primeng/select';
+import { InputNumberComponent } from '../../shared/components/inputs/input-number/input-number.component';
+import { ButtonDirective } from 'primeng/button';
 
 @Component({
   selector: 'app-cash-on-hand-override',
   templateUrl: './cash-on-hand-override.component.html',
+  imports: [ReactiveFormsModule, Select, InputNumberComponent, ButtonDirective],
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
-  yearFormControl = new SubscriptionFormControl<string | null>(null, Validators.required);
-  currentAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
-  newAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
+  private readonly router = inject(Router);
+  private readonly messageService = inject(MessageService);
+  public readonly cashOnHandService = inject(CashOnHandService);
+  public readonly form3XService = inject(Form3XService);
+  readonly yearFormControl = new SubscriptionFormControl<string | null>(null, Validators.required);
+  readonly currentAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
+  readonly newAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
   yearOptions: string[] = [];
   numberOfYearOptions = 25;
 
@@ -26,15 +34,6 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
     currentAmount: this.currentAmountFormControl,
     newAmount: this.newAmountFormControl,
   });
-
-  constructor(
-    private readonly router: Router,
-    private readonly messageService: MessageService,
-    public cashOnHandService: CashOnHandService,
-    public form3XService: Form3XService,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((selectedYear) => {

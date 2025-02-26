@@ -8,13 +8,13 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
-import { DropdownModule } from 'primeng/dropdown';
-import { SharedModule } from 'app/shared/shared.module';
+import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -22,9 +22,10 @@ describe('TransactionGuarantorsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
-      declarations: [TransactionGuarantorsComponent],
+      imports: [ToolbarModule, TableModule, SelectModule, FormsModule, TransactionGuarantorsComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore),

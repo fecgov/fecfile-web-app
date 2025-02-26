@@ -1,29 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { Report } from '../../../../shared/models/report.model';
-import { ReportService } from '../../../../shared/services/report.service';
 import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
 import { takeUntil } from 'rxjs';
 import { Form3X } from '../../../../shared/models/form-3x.model';
-import { Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { PanelMenu } from 'primeng/panelmenu';
+import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 
 @Component({
   selector: 'app-f3x-menu',
   templateUrl: './f3x-menu.component.html',
   styleUrls: ['../menu-report.component.scss'],
+  imports: [PanelMenu, AsyncPipe, FecDatePipe],
 })
 export class F3XMenuComponent extends AbstractMenuComponent implements OnInit {
   formLabel?: string;
   subLabel?: string;
   coverage_from_date?: Date;
   coverage_through_date?: Date;
-
-  constructor(store: Store, reportService: ReportService, router: Router) {
-    super(store, reportService, router);
-    this.reportString = 'f3x';
-  }
+  override reportString = 'f3x';
 
   override ngOnInit() {
     super.ngOnInit();

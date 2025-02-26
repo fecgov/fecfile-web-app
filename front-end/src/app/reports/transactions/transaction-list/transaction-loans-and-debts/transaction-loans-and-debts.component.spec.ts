@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,14 +8,15 @@ import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
-import { SharedModule } from 'app/shared/shared.module';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { of } from 'rxjs';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -25,9 +25,10 @@ describe('TransactionReceiptsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
-      declarations: [TransactionLoansAndDebtsComponent],
+      imports: [ToolbarModule, TableModule, SelectModule, FormsModule, TransactionLoansAndDebtsComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore),

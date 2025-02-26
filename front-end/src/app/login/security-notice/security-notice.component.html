@@ -1,13 +1,15 @@
-<div [ngClass]="{ 'security-container': showForm }">
-  <div *ngIf="showForm">
-    <img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
+<div [class.security-container]="showForm">
+  @if (showForm) {
+    <div>
+      <img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
 
-    <a class="logout-button" (click)="loginService.logOut()">
-      <span>Log Out</span>
-    </a>
-  </div>
+      <a class="logout-button" (click)="loginService.logOut()">
+        <span>Log Out</span>
+      </a>
+    </div>
+  }
 
-  <div [ngClass]="showForm ? 'notice-box-form' : 'notice-box'">
+  <div [class.notice-box-form]="showForm" [class.notice-box]="!showForm">
     <h1>Security notification</h1>
     <hr type="solid" class="top-line" />
 
@@ -43,36 +45,41 @@
     </p>
   </div>
 
-  <div class="footer" *ngIf="showForm">
-    <hr type="solid" />
-    <form [formGroup]="form">
-      <div class="field">
-        <p-checkbox
-          formControlName="security-consent-annual"
-          [binary]="true"
-          inputId="security-consent-annual"
-          label="You consent to the security notification for one year"
-          ariaLabel="You consent to the security notification for one year"
-        ></p-checkbox>
+  @if (showForm) {
+    <div class="footer">
+      <hr type="solid" />
+      <form [formGroup]="form">
+        <div class="field-row">
+          <p-checkbox
+            formControlName="security-consent-annual"
+            [binary]="true"
+            inputId="security-consent-annual"
+            ariaLabel="You consent to the security notification for one year"
+          ></p-checkbox>
+          <label for="security-consent-annual" class="p-checkbox-label">
+            You consent to the security notification for one year
+          </label>
+        </div>
+      </form>
+      <div class="align-center">
+        <button
+          pButton
+          pRipple
+          class="p-button-secondary decline-button"
+          label="Decline and exit"
+          (click)="loginService.logOut()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          class="p-button-primary"
+          data-cy="consent-button"
+          label="Consent"
+          (click)="signConsentForm()"
+        ></button>
       </div>
-    </form>
-    <div class="align-center">
-      <button
-        pButton
-        pRipple
-        class="p-button-secondary decline-button"
-        label="Decline and exit"
-        (click)="loginService.logOut()"
-      ></button>
-      <button
-        pButton
-        pRipple
-        class="p-button-primary"
-        data-test="consent-button"
-        label="Consent"
-        (click)="signConsentForm()"
-      ></button>
     </div>
-  </div>
-  <div class="consent-box" *ngIf="showForm"></div>
+
+    <div class="consent-box"></div>
+  }
 </div>

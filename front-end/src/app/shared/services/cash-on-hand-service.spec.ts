@@ -1,9 +1,9 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '../../../environments/environment';
 import { CashOnHandService } from './cash-on-hand-service';
 import { CashOnHand } from '../models/cash-on-hand.model';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 
 describe('CashOnHandService', () => {
   let service: CashOnHandService;
@@ -11,8 +11,7 @@ describe('CashOnHandService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CashOnHandService],
+      providers: [provideHttpClient(), provideHttpClientTesting(), CashOnHandService],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
 

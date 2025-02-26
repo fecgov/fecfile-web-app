@@ -1,46 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/UNIT_TEST';
 
-import { ErrorMessagesComponent } from './error-messages.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ErrorMessagesComponent } from './error-messages.component';
 
 describe('ErrorMessagesComponent', () => {
   let component: ErrorMessagesComponent;
   let fixture: ComponentFixture<ErrorMessagesComponent>;
 
-  const testSchema: JsonSchema = {
-    $schema: 'http://json-schema.org/draft-07/schema#',
-    $id: 'https://unit-test',
-    type: 'object',
-    required: [],
-    properties: {
-      in_between: {
-        type: 'string',
-        minLength: 10,
-        maxLength: 20,
-      },
-      low_high: {
-        type: 'number',
-        minimum: 0,
-        maximum: 10,
-      },
-      exclusive_low_high: {
-        type: 'number',
-        exclusiveMinimum: 0,
-        exclusiveMaximum: 100,
-      },
-      exclusive_negative_amount: {
-        type: 'number',
-        exclusiveMaximum: 0,
-      },
-    },
-  };
+  beforeAll(async () => {
+    await import(`fecfile-validate/fecfile_validate_js/dist/UNIT_TEST.validator.js`);
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ErrorMessagesComponent],
+      imports: [ErrorMessagesComponent],
     }).compileComponents();
   });
 
@@ -55,49 +31,63 @@ describe('ErrorMessagesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should provide default error messages', () => {
+  it('should provide default error messages', fakeAsync(() => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
       SchemaUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount']),
     );
-    SchemaUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
+    SchemaUtils.addJsonSchemaValidators(formValidatorForm, schema, false);
     component.form = formValidatorForm;
     component.fieldName = 'in_between';
     component.ngOnInit();
     component.form.patchValue({ in_between: 'short' });
+    tick(100);
     expect(component.minLengthErrorMessage).toBe('This field must contain at least 10 alphanumeric characters.');
+
     component.form.patchValue({ in_between: 'looooooooooooooooooong' });
+    tick(100);
     expect(component.maxLengthErrorMessage).toBe('This field cannot contain more than 20 alphanumeric characters.');
+
     component.form.patchValue({ in_between: '' });
+    tick(100);
     expect(component.requiredErrorMessage).toBe('This is a required field.');
     expect(component.requiredTrueErrorMessage).toBe('This is a required field.');
+
     component.fieldName = 'low_high';
     component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ low_high: -100 });
+    tick(100);
     expect(component.minErrorMessage).toBe('This field must be greater than or equal to $0.00.');
+
     component.form.patchValue({ low_high: 100 });
+    tick(100);
     expect(component.maxErrorMessage).toBe('This field must be less than or equal to $10.00.');
+
     component.fieldName = 'exclusive_low_high';
     component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ exclusive_low_high: 0 });
+    tick(100);
     expect(component.exclusiveMinErrorMessage).toBe('This field must be greater than $0.00.');
-    component.form.patchValue({ exclusive_low_high: 100 });
-    expect(component.exclusiveMaxErrorMessage).toBe('This field must be less than $100.00.');
-  });
 
-  it('should present a unique error message when a negative contribution amount is required', () => {
+    component.form.patchValue({ exclusive_low_high: 100 });
+    tick(100);
+    expect(component.exclusiveMaxErrorMessage).toBe('This field must be less than $100.00.');
+  }));
+
+  it('should present a unique error message when a negative contribution amount is required', fakeAsync(() => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(['exclusive_negative_amount']));
-    SchemaUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
+    SchemaUtils.addJsonSchemaValidators(formValidatorForm, schema, false);
     component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
     component.ngOnInit();
     component.form.patchValue({ exclusive_negative_amount: 1 });
+    tick(100);
     expect(component.exclusiveMaxErrorMessage).toBe('Amount must be negative (example: -$20.00)');
-  });
+  }));
 
   it('should let us override the error messages', () => {
     component.minLengthErrorMessage = 'My custom min error message';

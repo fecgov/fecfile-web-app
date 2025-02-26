@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
-import { SharedModule } from 'app/shared/shared.module';
+
 import { LoanAgreementInputComponent } from './loan-agreement-input.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
@@ -12,8 +12,7 @@ describe('LoanAgreementInputComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule],
-      declarations: [LoanAgreementInputComponent],
+      imports: [LoanAgreementInputComponent],
       providers: [provideMockStore(testMockStore)],
     });
     fixture = TestBed.createComponent(LoanAgreementInputComponent);

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import {
   getTestTransactionByType,
@@ -26,8 +26,18 @@ describe('MemoCodeInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MemoCodeInputComponent, ErrorMessagesComponent, FecDatePipe, Dialog, Tooltip],
-      imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule, TooltipModule],
+      imports: [
+        CheckboxModule,
+        InputNumberModule,
+        DatePickerModule,
+        ReactiveFormsModule,
+        TooltipModule,
+        MemoCodeInputComponent,
+        ErrorMessagesComponent,
+        FecDatePipe,
+        Dialog,
+        Tooltip,
+      ],
       providers: [provideMockStore(testMockStore), ConfirmationService],
     }).compileComponents();
 

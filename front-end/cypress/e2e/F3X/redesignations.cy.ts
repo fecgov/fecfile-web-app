@@ -46,7 +46,7 @@ function CreateContribution() {
 }
 
 function Redesignate(old = false) {
-  PageUtils.getKabob(Contributions.TO_CANDIDATE).contains('Redesignate').first().click({ force: true });
+  PageUtils.clickKababItem(Contributions.TO_CANDIDATE, 'Redesignate');
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');
