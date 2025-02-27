@@ -8,6 +8,9 @@ import { DotFecService, Download } from 'app/shared/services/dot-fec.service';
 import { Report } from 'app/shared/models/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { LayoutComponent } from 'app/layout/layout.component';
+import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 
 describe('DownloadTrayComponent', () => {
   let component: DownloadTrayComponent;
@@ -24,6 +27,10 @@ describe('DownloadTrayComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         DotFecService,
+        provideRouter([
+          { path: '', component: LayoutComponent },
+          { path: 'reports', component: ReportListComponent },
+        ]),
         provideMockStore(testMockStore),
         { provide: Actions, useValue: actions$ },
       ],
@@ -41,13 +48,20 @@ describe('DownloadTrayComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update downloads and sidebarVisible', () => {
-    expect(component.sidebarVisible()).toBeFalse();
-    expect(dotFecService.downloads()).toEqual([]);
+  it('should update downloads and sidebarVisible', async () => {
+    await component.router.navigateByUrl('/reports');
     const downloads = [download];
     dotFecService.downloads.set(downloads);
-    expect(dotFecService.downloads()).toEqual(downloads);
     expect(component.sidebarVisible()).toBeTrue();
+
+    dotFecService.downloads.set([]);
+    expect(component.sidebarVisible()).toBeFalse();
+
+    dotFecService.downloads.set(downloads);
+    expect(component.sidebarVisible()).toBeTrue();
+
+    await component.router.navigateByUrl('');
+    expect(component.sidebarVisible()).toBeFalse();
   });
 
   it('should remove download and update sidebarVisible', () => {

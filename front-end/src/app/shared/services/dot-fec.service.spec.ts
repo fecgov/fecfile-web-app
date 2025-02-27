@@ -1,7 +1,7 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { DotFecService, Download } from './dot-fec.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
+import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
 import { Report } from '../models/report.model';
@@ -10,6 +10,7 @@ import { RendererFactory2 } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
 
 const childNodesMap = new WeakMap();
 
@@ -73,12 +74,16 @@ describe('DotFecService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should clear downloads list on logout', () => {
+  it('should clear downloads list on logout', waitForAsync(() => {
     service.downloads.set([download]);
     expect(service.downloads().length).toEqual(1);
+
     actions$.next({ type: '[User Login Data] Discarded' });
-    expect(service.downloads().length).toEqual(0);
-  });
+
+    setTimeout(() => {
+      expect(service.downloads().length).toEqual(0);
+    }, 0);
+  }));
 
   it('should generate FEC file', async () => {
     const response = { status: 'testStatus', file_name: 'testFileName', task_id: 'testTaskId' };
@@ -138,9 +143,12 @@ describe('DotFecService', () => {
     expect(service.downloads()[0].id).toBe(response.id);
   });
 
-  it('should clear downloads on navigation', async () => {
+  it('should clear downloads on committee change', waitForAsync(() => {
     service.downloads.set([download]);
-    await service.router.navigateByUrl('');
-    expect(service.downloads().length).toBe(0);
-  });
+    expect(service.downloads().length).toEqual(1);
+    service.store.dispatch(setCommitteeAccountDetailsAction({ payload: testCommitteeAccount }));
+    setTimeout(() => {
+      expect(service.downloads().length).toEqual(0);
+    }, 0);
+  }));
 });

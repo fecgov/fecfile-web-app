@@ -1,8 +1,10 @@
-import { inject, Injectable, Renderer2, RendererFactory2, signal, WritableSignal } from '@angular/core';
+import { effect, inject, Injectable, Renderer2, RendererFactory2, signal, WritableSignal } from '@angular/core';
 import { ApiService } from './api.service';
 import { Report } from '../models/report.model';
 import { Actions } from '@ngrx/effects';
-import { NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 
 export interface Download {
@@ -17,22 +19,21 @@ export interface Download {
   providedIn: 'root',
 })
 export class DotFecService {
-  readonly router = inject(Router);
+  readonly store = inject(Store);
   private readonly apiService = inject(ApiService);
   private readonly actions = inject(Actions);
   readonly rendererFactory = inject(RendererFactory2);
   readonly downloads: WritableSignal<Download[]> = signal([]);
   readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
 
-  constructor() {
-    this.actions.subscribe((action) => {
-      if (action.type === '[User Login Data] Discarded') {
-        this.downloads.set([]);
-      }
-    });
+  private readonly loggedOut = toSignal(
+    this.actions.pipe(filter((action) => action.type === '[User Login Data] Discarded')),
+  );
+  private readonly committee = toSignal(this.store.select(selectCommitteeAccount));
 
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      this.downloads.set([]);
+  constructor() {
+    effect(() => {
+      if (this.committee() || this.loggedOut()) this.downloads.set([]);
     });
   }
 
