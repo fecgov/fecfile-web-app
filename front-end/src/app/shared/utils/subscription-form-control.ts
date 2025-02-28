@@ -9,7 +9,6 @@ export interface Subscription {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   action: (...value: any[]) => void;
   destroy$?: Subject<undefined> | Subject<boolean>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   piped?: Pipeable[];
 }
 
