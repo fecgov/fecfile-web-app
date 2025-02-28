@@ -22,7 +22,6 @@ import {
   merge,
   Observable,
   of,
-  pipe,
   startWith,
   switchMap,
   takeUntil,
