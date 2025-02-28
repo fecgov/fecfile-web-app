@@ -5,9 +5,9 @@ export abstract class SchFTransactionType extends TransactionType {
   scheduleId = ScheduleIds.F;
 
   //Labels
-  override dateLabel = 'DATE RECEIVED';
-  override amountInputHeader = 'Receipt information';
-  override purposeDescripLabel = 'PURPOSE OF RECEIPT';
+  override dateLabel = 'DATE EXPENDED';
+  override amountInputHeader = 'Expenditure information';
+  override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
