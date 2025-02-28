@@ -33,52 +33,52 @@ export function getCoverageDatesFunction(
 ): ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date]) | undefined {
   switch (reportCode) {
     case F3xReportCodes.Q1: {
-      return createCoverageFunction(0, 1, 2, 31);
+      return createCoverageFunction(0, 2);
     }
     case F3xReportCodes.Q2: {
-      return createCoverageFunction(3, 1, 5, 30);
+      return createCoverageFunction(3, 5);
     }
     case F3xReportCodes.Q3: {
-      return createCoverageFunction(6, 1, 8, 30);
+      return createCoverageFunction(6, 8);
     }
     case F3xReportCodes.YE: {
       return getYearEndCoverageDates;
     }
     case F3xReportCodes.MY: {
-      return createCoverageFunction(0, 1, 5, 30);
+      return createCoverageFunction(0, 5);
     }
     case F3xReportCodes.M2: {
-      return createCoverageFunction(0, 1, 0, 31);
+      return createCoverageFunction(0, 0);
     }
     case F3xReportCodes.M3: {
-      return createCoverageFunction(1, 1, 1, 29);
+      return createCoverageFunction(1, 1);
     }
     case F3xReportCodes.M4: {
-      return createCoverageFunction(2, 1, 2, 31);
+      return createCoverageFunction(2, 2);
     }
     case F3xReportCodes.M5: {
-      return createCoverageFunction(3, 1, 3, 30);
+      return createCoverageFunction(3, 3);
     }
     case F3xReportCodes.M6: {
-      return createCoverageFunction(4, 1, 4, 31);
+      return createCoverageFunction(4, 4);
     }
     case F3xReportCodes.M7: {
-      return createCoverageFunction(5, 1, 5, 30);
+      return createCoverageFunction(5, 5);
     }
     case F3xReportCodes.M8: {
-      return createCoverageFunction(6, 1, 6, 31);
+      return createCoverageFunction(6, 6);
     }
     case F3xReportCodes.M9: {
-      return createCoverageFunction(7, 1, 7, 31);
+      return createCoverageFunction(7, 7);
     }
     case F3xReportCodes.M10: {
-      return createCoverageFunction(8, 1, 8, 30);
+      return createCoverageFunction(8, 8);
     }
     case F3xReportCodes.M11: {
-      return createCoverageFunction(9, 1, 9, 31);
+      return createCoverageFunction(9, 9);
     }
     case F3xReportCodes.M12: {
-      return createCoverageFunction(10, 1, 10, 30);
+      return createCoverageFunction(10, 10);
     }
     default:
       return undefined;
@@ -87,12 +87,10 @@ export function getCoverageDatesFunction(
 
 function createCoverageFunction(
   startMonth: number,
-  startDayOfMonth: number,
   endMonth: number,
-  endDayOfMonth: number,
 ): (year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date] {
   return (year: number) => {
-    return [new Date(year, startMonth, startDayOfMonth), new Date(year, endMonth, endDayOfMonth)];
+    return [new Date(year, startMonth, 1), new Date(year, endMonth + 1, 0)];
   };
 }
 
