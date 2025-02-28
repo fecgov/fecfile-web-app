@@ -1,21 +1,32 @@
 import { FormControl } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { MonoTypeOperatorFunction, OperatorFunction, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Pipeable = OperatorFunction<any, any> | MonoTypeOperatorFunction<any>;
 
 export interface Subscription {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  action: (value: any) => void;
+  action: (...value: any[]) => void;
   destroy$?: Subject<undefined> | Subject<boolean>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  piped?: Pipeable[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class SubscriptionFormControl<TValue = any> extends FormControl {
   subscriptions: Subscription[] = [];
 
-  addSubscription(action: (value: TValue) => void, destroy$?: Subject<undefined> | Subject<boolean>) {
-    this.subscriptions.push({ action, destroy$ });
-    if (destroy$) this.valueChanges.pipe(takeUntil(destroy$)).subscribe(action);
-    else this.valueChanges.subscribe(action);
+  addSubscription(
+    action: (...value: TValue[]) => void,
+    destroy$?: Subject<undefined> | Subject<boolean>,
+    piped: Pipeable[] = [],
+  ) {
+    this.subscriptions.push({ action, destroy$, piped });
+    if (destroy$ !== undefined) {
+      piped = [takeUntil(destroy$), ...piped];
+    }
+    return this.valueChanges.pipe(...(piped as [])).subscribe(action);
   }
 
   copy<T>(value: T, updateOn: 'blur' | 'change' | 'submit' | undefined = 'blur'): SubscriptionFormControl<T> {
@@ -26,7 +37,7 @@ export class SubscriptionFormControl<TValue = any> extends FormControl {
     });
 
     this.subscriptions.forEach((sub) => {
-      control.addSubscription(sub.action, sub.destroy$);
+      control.addSubscription(sub.action, sub.destroy$, sub.piped);
     });
 
     if (this.disabled) control.disable();
