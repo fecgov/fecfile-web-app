@@ -225,4 +225,5 @@ export enum ScheduleIds {
   C2 = 'C2',
   D = 'D',
   E = 'E',
+  F = 'F',
 }

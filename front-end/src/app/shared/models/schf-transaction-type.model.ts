@@ -2,7 +2,7 @@ import { TransactionType, TransactionTemplateMapType } from './transaction-type.
 import { ScheduleIds } from './transaction.model';
 
 export abstract class SchFTransactionType extends TransactionType {
-  scheduleId = ScheduleIds.A;
+  scheduleId = ScheduleIds.F;
 
   //Labels
   override dateLabel = 'DATE RECEIVED';

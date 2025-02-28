@@ -3,10 +3,6 @@ import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
-import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
-import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
-import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 
 export class SchFTransaction extends Transaction {
   coordinated_expenditures: boolean | undefined;
@@ -64,23 +60,6 @@ export class SchFTransaction extends Transaction {
         return getFromJSON(child, depth - 1);
       });
     }
-    switch (transaction.reattribution_redesignation_tag) {
-      case ReattRedesTypes.REATTRIBUTED: {
-        transaction = ReattributedUtils.overlayTransactionProperties(transaction);
-        break;
-      }
-      case ReattRedesTypes.REATTRIBUTION_TO: {
-        transaction = ReattributionToUtils.overlayTransactionProperties(transaction);
-        break;
-      }
-      case ReattRedesTypes.REATTRIBUTION_FROM: {
-        transaction = ReattributionFromUtils.overlayTransactionProperties(transaction);
-        break;
-      }
-    }
-    if (depth > 0 && transaction.reatt_redes) {
-      transaction.reatt_redes = getFromJSON(transaction.reatt_redes, depth - 1);
-    }
     return transaction;
   }
 
@@ -89,7 +68,7 @@ export class SchFTransaction extends Transaction {
   }
 }
 
-export enum ScheduleATransactionGroups {
+export enum ScheduleFTransactionGroups {
   CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS = 'CONTRIBUTIONS FROM INDIVIDUALS/PERSONS',
   CONTRIBUTIONS_FROM_REGISTERED_FILERS = 'CONTRIBUTIONS FROM REGISTERED FILERS',
   TRANSFERS = 'TRANSFERS',
@@ -97,14 +76,14 @@ export enum ScheduleATransactionGroups {
   OTHER = 'OTHER',
 }
 
-export type ScheduleATransactionGroupsType =
-  | ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS
-  | ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS
-  | ScheduleATransactionGroups.TRANSFERS
-  | ScheduleATransactionGroups.REFUNDS
-  | ScheduleATransactionGroups.OTHER;
+export type ScheduleFTransactionGroupsType =
+  | ScheduleFTransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS
+  | ScheduleFTransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS
+  | ScheduleFTransactionGroups.TRANSFERS
+  | ScheduleFTransactionGroups.REFUNDS
+  | ScheduleFTransactionGroups.OTHER;
 
-export enum ScheduleATransactionTypes {
+export enum ScheduleFTransactionTypes {
   // Contributions from Individuals/Persons
   INDIVIDUAL_RECEIPT = 'INDIVIDUAL_RECEIPT',
   TRIBAL_RECEIPT = 'TRIBAL_RECEIPT',
@@ -206,262 +185,262 @@ export enum ScheduleATransactionTypes {
   LOAN_REPAYMENT_RECEIVED = 'LOAN_REPAYMENT_RECEIVED',
 }
 
-export const ScheduleATransactionTypeLabels: LabelList = [
+export const ScheduleFTransactionTypeLabels: LabelList = [
   // Contributions from Individuals/Persons
-  [ScheduleATransactionTypes.INDIVIDUAL_RECEIPT, 'Individual Receipt'],
-  [ScheduleATransactionTypes.TRIBAL_RECEIPT, 'Tribal Receipt'],
-  [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
-  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-kind Receipt'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
-  [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
-  [ScheduleATransactionTypes.EARMARK_MEMO, 'Earmark Memo'],
-  [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT, 'Conduit Earmark Receipt'],
-  [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'Conduit Earmark (Deposited)'],
-  [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY, 'Receipt from Unregistered Entity'],
+  [ScheduleFTransactionTypes.INDIVIDUAL_RECEIPT, 'Individual Receipt'],
+  [ScheduleFTransactionTypes.TRIBAL_RECEIPT, 'Tribal Receipt'],
+  [ScheduleFTransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
+  [ScheduleFTransactionTypes.IN_KIND_RECEIPT, 'In-kind Receipt'],
+  [ScheduleFTransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
+  [ScheduleFTransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
+  [ScheduleFTransactionTypes.EARMARK_MEMO, 'Earmark Memo'],
+  [ScheduleFTransactionTypes.CONDUIT_EARMARK_RECEIPT, 'Conduit Earmark Receipt'],
+  [ScheduleFTransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'Conduit Earmark (Deposited)'],
+  [ScheduleFTransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
+  [ScheduleFTransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY, 'Receipt from Unregistered Entity'],
   [
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+    ScheduleFTransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
     'Receipt from Unregistered Entity - Returned/Bounced Receipt',
   ],
   // Contributions from Registered Filers
-  [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
-  [ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT, 'Party In-kind Receipt'],
-  [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
-  [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
-  [ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT, 'PAC In-kind Receipt'],
-  [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
-  [ScheduleATransactionTypes.PAC_EARMARK_MEMO, 'PAC Earmark Memo'],
-  [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK, 'PAC Conduit Earmark'],
-  [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
-  [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.PAC_RETURN, 'PAC Returned/Bounced Receipt'],
+  [ScheduleFTransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
+  [ScheduleFTransactionTypes.PARTY_IN_KIND_RECEIPT, 'Party In-kind Receipt'],
+  [ScheduleFTransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
+  [ScheduleFTransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
+  [ScheduleFTransactionTypes.PAC_IN_KIND_RECEIPT, 'PAC In-kind Receipt'],
+  [ScheduleFTransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
+  [ScheduleFTransactionTypes.PAC_EARMARK_MEMO, 'PAC Earmark Memo'],
+  [ScheduleFTransactionTypes.PAC_CONDUIT_EARMARK, 'PAC Conduit Earmark'],
+  [ScheduleFTransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
+  [ScheduleFTransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
+  [ScheduleFTransactionTypes.PAC_RETURN, 'PAC Returned/Bounced Receipt'],
   // Transfers
-  [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
-  [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
-  [ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO, 'Individual Joint Fundraising Transfer Memo'],
-  [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
-  [ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO, 'Party Joint Fundraising Transfer Memo'],
-  [ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO, 'Tribal Joint Fundraising Transfer Memo'],
-  [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-kind Transfer'],
+  [ScheduleFTransactionTypes.TRANSFER, 'Transfer'],
+  [ScheduleFTransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
+  [ScheduleFTransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO, 'Individual Joint Fundraising Transfer Memo'],
+  [ScheduleFTransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
+  [ScheduleFTransactionTypes.PARTY_JF_TRANSFER_MEMO, 'Party Joint Fundraising Transfer Memo'],
+  [ScheduleFTransactionTypes.TRIBAL_JF_TRANSFER_MEMO, 'Tribal Joint Fundraising Transfer Memo'],
+  [ScheduleFTransactionTypes.IN_KIND_TRANSFER, 'In-kind Transfer'],
   [
-    ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+    ScheduleFTransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
     'In-kind Transfer - Federal Election Activity',
   ],
   [
-    ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   ],
   [
-    ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     'PAC National Party Pres. Nominating Convention Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
-  [ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE, 'Refund of Contribution to Federal Candidate'],
+  [ScheduleFTransactionTypes.REFUND_TO_FEDERAL_CANDIDATE, 'Refund of Contribution to Federal Candidate'],
   [
-    ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
+    ScheduleFTransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
     'Refund of Contribution to Other Political Committee',
   ],
-  [ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE, 'Refund of Contribution to Unregistered Committee'],
+  [ScheduleFTransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE, 'Refund of Contribution to Unregistered Committee'],
   // Other
-  [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
-  [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
+  [ScheduleFTransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
+  [ScheduleFTransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+    ScheduleFTransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     'Individual Receipt - Non-contribution Account',
   ],
   [
-    ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+    ScheduleFTransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     'Other Committee Receipt - Non-contribution Account',
   ],
   [
-    ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+    ScheduleFTransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Receipt - Non-contribution Account',
   ],
-  [ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
-  [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
-  [ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT, 'PAC Recount Receipt'],
-  [ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT, 'Tribal Recount Receipt'],
+  [ScheduleFTransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
+  [ScheduleFTransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
+  [ScheduleFTransactionTypes.PAC_RECOUNT_RECEIPT, 'PAC Recount Receipt'],
+  [ScheduleFTransactionTypes.TRIBAL_RECOUNT_RECEIPT, 'Tribal Recount Receipt'],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Individual National Party Recount/Legal Proceedings Account',
   ],
   [
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Party National Party Recount/Legal Proceedings Account',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'PAC National Party Recount/Legal Proceedings Account',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Tribal National Party Recount/Legal Proceedings Account',
   ],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Individual National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Party National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'PAC National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Tribal National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'Individual National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'Party National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'PAC National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'Tribal National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
+    ScheduleFTransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)',
   ],
   [
-    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
+    ScheduleFTransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Pres. Nominating Convention Account (Contribution)',
   ],
   [
-    ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
+    ScheduleFTransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Headquarters Buildings Account (Contribution)',
   ],
   [
-    ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT,
     'Earmark Memo for Recount/Legal Proceedings Account (Contribution)',
   ],
   [
-    ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT,
     'Earmark Memo for Pres. Nominating Convention Account (Contribution)',
   ],
   [
-    ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
     'Earmark Memo for Headquarters Buildings Account (Contribution)',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Partnership National Party Recount/Legal Proceedings Account',
   ],
-  [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT, 'Partnership Recount Account Receipt'],
+  [ScheduleFTransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT, 'Partnership Recount Account Receipt'],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Partnership National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'Partnership National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Individual National Party Headquarters Buildings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'PAC National Party Headquarters Buildings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Tribal National Party Headquarters Buildings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Receipt Headquarters Buildings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'Partnership Receipt Recount/Legal Proceedings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     'Partnership National Party Pres. Nominating Convention Proceedings Account Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
     'Partnership Attribution National Party Recount/Legal Proceedings Account Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO,
     'Partnership Attribution National Party Pres. Nominating Convention Account Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO,
     'Partnership Attribution National Party Headquarters Buildings Account Memo',
   ],
-  [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION, 'Partnership Attribution'],
-  [ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership Receipt Joint Fundraising Transfer Memo'],
+  [ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION, 'Partnership Attribution'],
+  [ScheduleFTransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership Receipt Joint Fundraising Transfer Memo'],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
     'Partnership Attribution Joint Fundraising Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     'Partnership Attribution Pres. Nominating Convention Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO,
     'Partnership Attribution Recount Account Receipt Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'Partnership Attribution Recount/Legal Proceedings Account JF Transfer Memo',
   ],
   [
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    ScheduleFTransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Attribution Headquarters Buildings Account JF Transfer Memo',
   ],
-  [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT, 'Loan Received from Individual'],
-  [ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT, 'Loan Received from Bank'],
-  [ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED, 'Loan Repayment Received'],
+  [ScheduleFTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT, 'Loan Received from Individual'],
+  [ScheduleFTransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT, 'Loan Received from Bank'],
+  [ScheduleFTransactionTypes.LOAN_REPAYMENT_RECEIVED, 'Loan Repayment Received'],
 ];
 
 export const UnimplementedTypeEntityCategories: LabelList = [
-  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership'],
-  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
+  [ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership'],
+  [ScheduleFTransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
 ];
