@@ -39,6 +39,11 @@ import {
   ScheduleETransactionTypeLabels,
   ScheduleETransactionTypes,
 } from 'app/shared/models/sche-transaction.model';
+import {
+  ScheduleFTransactionGroups,
+  ScheduleFTransactionTypeLabels,
+  ScheduleFTransactionTypes,
+} from 'app/shared/models/schf-transaction.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccordionModule } from 'primeng/accordion';
@@ -63,6 +68,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleDTransactionTypeLabels,
     ...ScheduleETransactionTypeLabels,
+    ...ScheduleFTransactionTypeLabels,
   ];
   report?: Report;
   category: Categories = 'receipt';
@@ -300,6 +306,12 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+        ];
+        break;
+      case ScheduleFTransactionGroups.COORDINATED_EXPENDITURES:
+        transactionTypes = [
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
         ];
         break;
       default:
