@@ -125,7 +125,7 @@ jobs:
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" docker-compose up --build -d
             docker container run --network container:fecfile-api-proxy \
               docker.io/jwilder/dockerize \
-              -wait http://localhost:8080/api/v1/status/ \
+              -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
               -timeout 60s; \
           working_directory: ~/project/fecfile-web-api
@@ -220,7 +220,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|test|main/
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
@@ -229,7 +229,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|test|main/
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
