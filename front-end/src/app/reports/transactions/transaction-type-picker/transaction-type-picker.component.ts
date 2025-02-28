@@ -308,6 +308,12 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
         ];
         break;
+      case ScheduleFTransactionGroups.COORDINATED_EXPENDITURES:
+        transactionTypes = [
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+        ];
+        break;
       default:
         break;
     }
