@@ -47,7 +47,7 @@ export class SchFTransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchFTransaction {
-    let transaction = plainToInstance(SchFTransaction, json);
+    const transaction = plainToInstance(SchFTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
