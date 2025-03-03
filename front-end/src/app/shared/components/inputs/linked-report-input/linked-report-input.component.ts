@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { combineLatestWith, startWith, takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
@@ -8,29 +8,28 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Tooltip } from 'primeng/tooltip';
+import { InputText } from 'primeng/inputtext';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-linked-report-input',
   styleUrls: ['./linked-report-input.component.scss'],
   templateUrl: './linked-report-input.component.html',
+  imports: [ReactiveFormsModule, Tooltip, InputText, ErrorMessagesComponent],
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
-  committeeF3xReports: Promise<Report[]>;
+  private readonly reportService = inject(ReportService);
+  private readonly datePipe = inject(FecDatePipe);
+  committeeF3xReports: Promise<Report[]> = this.reportService.getAllReports();
   linkedF3xControl = new SubscriptionFormControl();
 
-  tooltipText =
+  readonly tooltipText =
     'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
     'To determine coverage dates, calculations rely on an IE’s date of disbursement. If date of disbursement is not ' +
     'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
     'corresponding coverage dates.';
-
-  constructor(
-    private reportService: ReportService,
-    private datePipe: FecDatePipe,
-  ) {
-    super();
-    this.committeeF3xReports = this.reportService.getAllReports();
-  }
 
   ngOnInit(): void {
     this.form.addControl('linkedF3x', this.linkedF3xControl);

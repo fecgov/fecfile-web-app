@@ -1,20 +1,26 @@
 <div [formGroup]="form">
-  <ng-container *ngIf="transaction?.transactionType?.hasDate()">
-    <div class="grid" *ngIf="templateMap['date2']">
-      <div class="col-12">
-        <em>Only one date is required, but both dates can be entered.</em>
+  @if (transaction?.transactionType?.hasDate()) {
+    @if (templateMap['date2']) {
+      <div class="grid">
+        <div class="col-12">
+          <em>Only one date is required, but both dates can be entered.</em>
+        </div>
       </div>
-    </div>
+    }
+
     <div class="grid">
-      <div class="col-4" *ngIf="templateMap['date2']">
-        <app-calendar
-          [fieldName]="templateMap['date2']"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [label]="transaction?.transactionType?.date2Label || ''"
-          requiredErrorMessage="At least ONE date field must be entered."
-        ></app-calendar>
-      </div>
+      @if (templateMap['date2']) {
+        <div class="col-4">
+          <app-calendar
+            [fieldName]="templateMap['date2']"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [label]="transaction?.transactionType?.date2Label || ''"
+            requiredErrorMessage="At least ONE date field must be entered."
+          ></app-calendar>
+        </div>
+      }
+
       <div class="col-4">
         <app-calendar
           [fieldName]="templateMap['date']"
@@ -24,32 +30,31 @@
           [showErrors]="!templateMap['date2']"
         ></app-calendar>
       </div>
-      <div class="col-4" *ngIf="(activeReport$ | async)?.report_type === reportTypes.F24">
-        <app-linked-report-input [form]="this.form" [templateMap]="this.templateMap"></app-linked-report-input>
-      </div>
+      @if ((activeReport$ | async)?.report_type === reportTypes.F24) {
+        <div class="col-4">
+          <app-linked-report-input [form]="form" [templateMap]="templateMap"></app-linked-report-input>
+        </div>
+      }
     </div>
-  </ng-container>
+  }
 
-  <div
-    class="grid"
-    *ngIf="
-      transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)
-    "
-  >
-    <div class="col-12">
-      <div class="field">
-        <app-memo-code
-          #memoCode
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [templateMap]="templateMap"
-          [overrideMemoItemHelpText]="memoItemHelpText"
-          [transaction]="transaction"
-          [checkboxLabel]="memoCodeCheckboxLabel"
-        ></app-memo-code>
+  @if (transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)) {
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <app-memo-code
+            #memoCode
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMap"
+            [overrideMemoItemHelpText]="memoItemHelpText"
+            [transaction]="transaction"
+            [checkboxLabel]="memoCodeCheckboxLabel"
+          ></app-memo-code>
+        </div>
       </div>
     </div>
-  </div>
+  }
   <div class="grid">
     <div class="col-6">
       <div class="field">
@@ -72,41 +77,45 @@
         ></app-error-messages>
       </div>
     </div>
-    <div class="col-6" *ngIf="showAggregate">
-      <div class="field">
-        <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
-        <app-input-number
-          inputId="aggregate"
-          [formControlName]="templateMap['aggregate']"
-          [readonly]="true"
-          inputStyleClass="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['aggregate']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The aggregate can be 12 digits max"
-        ></app-error-messages>
+    @if (showAggregate) {
+      <div class="col-6">
+        <div class="field">
+          <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
+          <app-input-number
+            inputId="aggregate"
+            [formControlName]="templateMap['aggregate']"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          ></app-input-number>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['aggregate']"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The aggregate can be 12 digits max"
+          ></app-error-messages>
+        </div>
       </div>
-    </div>
-    <div class="col-6" *ngIf="showCalendarYTD">
-      <div class="field">
-        <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
-        <app-input-number
-          inputId="calendar_ytd"
-          [formControlName]="templateMap['calendar_ytd']"
-          [readonly]="true"
-          inputStyleClass="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['calendar_ytd']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
-        ></app-error-messages>
+    }
+    @if (showCalendarYTD) {
+      <div class="col-6">
+        <div class="field">
+          <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
+          <app-input-number
+            inputId="calendar_ytd"
+            [formControlName]="templateMap['calendar_ytd']"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          ></app-input-number>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['calendar_ytd']"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
+          ></app-error-messages>
+        </div>
       </div>
-    </div>
+    }
   </div>
 </div>

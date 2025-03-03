@@ -1,7 +1,7 @@
-<div>
-  <form id="form" [formGroup]="form" class="p-fluid">
-    <div class="field">
-      <label for="linkedF3x">LINKED REPORT</label>
+<form id="form" [formGroup]="form">
+  <div class="field">
+    <label for="linkedF3x" class="flex">
+      <span class="align-content-center">LINKED REPORT</span>
       <span
         class="pi pi-info-circle circle-icon-tooltip"
         pTooltip="{{ tooltipText }}"
@@ -9,8 +9,9 @@
           tooltipPosition: 'top',
         }"
       ></span>
-      <input type="text" [readonly]="true" class="readonly" pInputText id="linkedF3x" formControlName="linkedF3x" />
-      <app-error-messages [form]="form" fieldName="linkedF3x" [formSubmitted]="formSubmitted"></app-error-messages>
-    </div>
-  </form>
-</div>
+    </label>
+
+    <input type="text" [readonly]="true" class="readonly" pInputText id="linkedF3x" formControlName="linkedF3x" />
+    <app-error-messages [form]="form" fieldName="linkedF3x" [formSubmitted]="formSubmitted"></app-error-messages>
+  </div>
+</form>

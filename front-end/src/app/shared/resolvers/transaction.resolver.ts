@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { EMPTY, expand, map, mergeMap, Observable, of, reduce } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils, MultipleEntryTransactionTypes } from '../utils/transaction-type.utils';
@@ -19,9 +18,9 @@ import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
   providedIn: 'root',
 })
 export class TransactionResolver {
-  constructor(public transactionService: TransactionService) {}
+  readonly transactionService = inject(TransactionService);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
+  async resolve(route: ActivatedRouteSnapshot): Promise<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
     const transactionTypeName = route.paramMap.get('transactionType');
     const transactionId = route.paramMap.get('transactionId');
@@ -38,11 +37,8 @@ export class TransactionResolver {
     // New
     if (reportId && transactionTypeName) {
       if (parentTransactionId) {
-        return this.transactionService.get(String(parentTransactionId)).pipe(
-          mergeMap((parentTransaction: Transaction) => {
-            return of(this.getNewChildTransaction(parentTransaction, transactionTypeName));
-          }),
-        );
+        const parentTransaction = await this.transactionService.get(String(parentTransactionId));
+        return this.getNewChildTransaction(parentTransaction, transactionTypeName);
       }
       if (debtId) {
         return this.resolveNewRepayment(debtId, transactionTypeName, 'debt');
@@ -58,27 +54,24 @@ export class TransactionResolver {
       }
       return this.resolveNewTransaction(reportId, transactionTypeName);
     }
-    return of(undefined);
+    return undefined;
   }
 
-  resolveExistingTransactionFromId(transactionId: string): Observable<Transaction | undefined> {
-    return this.transactionService.get(String(transactionId)).pipe(
-      mergeMap((transaction: Transaction) => {
-        if (
-          transaction.transactionType?.isDependentChild(transaction) ||
-          ReattRedesUtils.isReattRedes(transaction, [
-            ReattRedesTypes.REATTRIBUTION_FROM,
-            ReattRedesTypes.REDESIGNATION_FROM,
-          ])
-        ) {
-          return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
-        }
-        return this.resolveExistingTransaction(transaction);
-      }),
-    );
+  async resolveExistingTransactionFromId(transactionId: string): Promise<Transaction | undefined> {
+    const transaction = await this.transactionService.get(String(transactionId));
+    if (
+      transaction.transactionType?.isDependentChild(transaction) ||
+      ReattRedesUtils.isReattRedes(transaction, [
+        ReattRedesTypes.REATTRIBUTION_FROM,
+        ReattRedesTypes.REDESIGNATION_FROM,
+      ])
+    ) {
+      return this.resolveExistingTransactionFromId(transaction.parent_transaction_id ?? '');
+    }
+    return this.resolveExistingTransaction(transaction);
   }
 
-  resolveExistingTransaction(transaction: Transaction): Observable<Transaction | undefined> {
+  async resolveExistingTransaction(transaction: Transaction): Promise<Transaction | undefined> {
     if (
       (ReattRedesUtils.isReattRedes(transaction) &&
         !(
@@ -91,20 +84,18 @@ export class TransactionResolver {
       transaction.children = [];
       // tune page size
       const params = { parent: transaction.id ?? '', page_size: 100 };
-      return this.transactionService.getTableData(1, '', params).pipe(
-        expand((page: ListRestResponse) => {
-          return page.next ? this.transactionService.getTableData(page.pageNumber + 1, '', params) : EMPTY;
-        }),
-        reduce((transactionWithChildren: Transaction, page: ListRestResponse) => {
-          transactionWithChildren.children?.push(...(page.results as Transaction[]));
-          return transactionWithChildren;
-        }, transaction),
-      );
+      let pageNumber = 0;
+      let page: ListRestResponse | null = null;
+      do {
+        page = await this.transactionService.getTableData(++pageNumber, '', params);
+        transaction.children?.push(...(page.results as Transaction[]));
+      } while (page?.next);
+      return transaction;
     }
-    return of(transaction);
+    return transaction;
   }
 
-  resolveNewTransaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
+  async resolveNewTransaction(reportId: string, transactionTypeName: string): Promise<Transaction | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_ids = [String(reportId)];
@@ -115,74 +106,65 @@ export class TransactionResolver {
         this.getNewChildTransaction(transaction, type),
       );
     }
-    return of(transaction);
+    return transaction;
   }
 
-  resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
-    return this.transactionService.get(toId).pipe(
-      map((to: Transaction) => {
-        const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
-        const repayment = repaymentType.getNewTransaction();
-        if (type === 'loan') {
-          repayment.loan = to;
-          repayment.loan_id = to.id;
-        }
-        if (type === 'debt') {
-          repayment.debt = to;
-          repayment.debt_id = to.id;
-        }
-        repayment.report_ids = to.report_ids;
-        return repayment;
-      }),
-    );
+  async resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
+    const to = await this.transactionService.get(toId);
+    const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
+    const repayment = repaymentType.getNewTransaction();
+    if (type === 'loan') {
+      repayment.loan = to;
+      repayment.loan_id = to.id;
+    }
+    if (type === 'debt') {
+      repayment.debt = to;
+      repayment.debt_id = to.id;
+    }
+    repayment.report_ids = to.report_ids;
+    return repayment;
   }
 
-  resolveNewReattribution(reportId: string, originatingId: string) {
-    return this.transactionService.get(originatingId).pipe(
-      map((originatingTransaction: Transaction) => {
-        const reattributed = ReattributedUtils.overlayTransactionProperties(
-          originatingTransaction as SchATransaction,
-          reportId,
-        );
-        if (!reattributed.transaction_type_identifier) {
-          throw Error('Fecfile online: originating reattribution transaction type not found.');
-        }
-        let to = TransactionTypeUtils.factory(
-          reattributed.transaction_type_identifier,
-        ).getNewTransaction() as SchATransaction;
-        to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
-        let from = TransactionTypeUtils.factory(
-          reattributed.transaction_type_identifier,
-        ).getNewTransaction() as SchATransaction;
-        from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
-        to.children = [from];
-        return to;
-      }),
+  async resolveNewReattribution(reportId: string, originatingId: string) {
+    const originatingTransaction = await this.transactionService.get(originatingId);
+    const reattributed = ReattributedUtils.overlayTransactionProperties(
+      originatingTransaction as SchATransaction,
+      reportId,
     );
+    if (!reattributed.transaction_type_identifier) {
+      throw Error('Fecfile online: originating reattribution transaction type not found.');
+    }
+    let to = TransactionTypeUtils.factory(
+      reattributed.transaction_type_identifier,
+    ).getNewTransaction() as SchATransaction;
+    to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
+    let from = TransactionTypeUtils.factory(
+      reattributed.transaction_type_identifier,
+    ).getNewTransaction() as SchATransaction;
+    from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
+    to.children = [from];
+    return to;
   }
 
-  resolveNewRedesignation(reportId: string, originatingId: string) {
-    return this.transactionService.get(originatingId).pipe(
-      map((originatingTransaction: Transaction) => {
-        const redesignated = RedesignatedUtils.overlayTransactionProperties(
-          originatingTransaction as SchBTransaction,
-          reportId,
-        );
-        if (!redesignated.transaction_type_identifier) {
-          throw Error('Fecfile online: originating redesignation transaction type not found.');
-        }
-        let to = TransactionTypeUtils.factory(
-          redesignated.transaction_type_identifier,
-        ).getNewTransaction() as SchBTransaction;
-        to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
-        let from = TransactionTypeUtils.factory(
-          redesignated.transaction_type_identifier,
-        ).getNewTransaction() as SchBTransaction;
-        from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
-        to.children = [from];
-        return to;
-      }),
+  async resolveNewRedesignation(reportId: string, originatingId: string) {
+    const originatingTransaction = await this.transactionService.get(originatingId);
+    const redesignated = RedesignatedUtils.overlayTransactionProperties(
+      originatingTransaction as SchBTransaction,
+      reportId,
     );
+    if (!redesignated.transaction_type_identifier) {
+      throw Error('Fecfile online: originating redesignation transaction type not found.');
+    }
+    let to = TransactionTypeUtils.factory(
+      redesignated.transaction_type_identifier,
+    ).getNewTransaction() as SchBTransaction;
+    to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
+    let from = TransactionTypeUtils.factory(
+      redesignated.transaction_type_identifier,
+    ).getNewTransaction() as SchBTransaction;
+    from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
+    to.children = [from];
+    return to;
   }
 
   /**

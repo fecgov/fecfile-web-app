@@ -6,9 +6,9 @@
       <div class="sub-heading">MISCELLANEOUS REPORT TO THE FEC</div>
     </div>
   </div>
-  <div class="grid">
-    <div class="col-12" *ngIf="items$ | async">
+  @if (items$ | async) {
+    <div class="pl-1 pt-2">
       <p-panelMenu [model]="(items$ | async)!" [multiple]="false"></p-panelMenu>
     </div>
-  </div>
+  }
 </div>

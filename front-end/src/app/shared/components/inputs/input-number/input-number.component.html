@@ -1,6 +1,6 @@
 <span
   class="p-inputnumber p-component"
-  [ngStyle]="style"
+  [style]="style"
   [class]="styleClass"
   [attr.data-pc-name]="'inputnumber'"
   [attr.data-pc-section]="'root'"
@@ -10,8 +10,8 @@
     #input
     [attr.id]="inputId"
     role="spinbutton"
-    [ngClass]="'p-inputnumber-input'"
-    [ngStyle]="inputStyle"
+    class="p-inputnumber-input"
+    [style]="inputStyle"
     [class]="inputStyleClass"
     [value]="formattedValue()"
     [attr.variant]="'outlined'"
@@ -40,7 +40,6 @@
     (focus)="onInputFocus($event)"
     (blur)="onInputBlur($event)"
     [attr.data-pc-section]="'input'"
-    pAutoFocus
     [autofocus]="autofocus"
   />
 </span>

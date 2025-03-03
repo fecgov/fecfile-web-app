@@ -16,11 +16,11 @@ input {
 }
 
 :host ::ng-deep {
-  .p-dropdown {
+  .p-select {
     height: 42px;
   }
 
-  .p-dropdown > .p-inputtext {
+  .p-select > .p-inputtext {
     font-family: karla-bold, serif;
     font-size: 14px;
     color: #212121;
@@ -36,7 +36,7 @@ input {
 
   .p-disabled,
   .p-component:disabled,
-  .p-dropdown:disabled {
+  .p-select:disabled {
     opacity: 1;
     background: #f1f1f1;
     border: 2px solid gray;

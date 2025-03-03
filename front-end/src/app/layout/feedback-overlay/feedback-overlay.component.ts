@@ -1,11 +1,16 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Feedback } from 'app/shared/models/feedback.model';
+import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { OverlayPanel } from 'primeng/overlaypanel';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { ButtonDirective } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 
 enum SubmissionStates {
   DRAFT,
@@ -17,9 +22,20 @@ enum SubmissionStates {
   selector: 'app-feedback-overlay',
   templateUrl: './feedback-overlay.component.html',
   styleUrls: ['./feedback-overlay.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    ErrorMessagesComponent,
+    SingleClickDirective,
+    ButtonDirective,
+    TextareaModule,
+    PopoverModule,
+  ],
 })
-export class FeedbackOverlayComponent {
-  @ViewChild(OverlayPanel) op!: OverlayPanel;
+export class FeedbackOverlayComponent extends FormComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly store = inject(Store);
+  public readonly feedbackService = inject(FeedbackService);
+  @ViewChild('op') op!: Popover;
 
   form: FormGroup = this.fb.group(
     {
@@ -29,15 +45,8 @@ export class FeedbackOverlayComponent {
     },
     { updateOn: 'blur' },
   );
-  formSubmitted = false;
   SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;
-
-  constructor(
-    private fb: FormBuilder,
-    private store: Store,
-    public feedbackService: FeedbackService,
-  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   show(event: any): void {

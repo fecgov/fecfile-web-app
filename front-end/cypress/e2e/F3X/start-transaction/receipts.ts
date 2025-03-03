@@ -2,22 +2,22 @@ import { PageUtils } from '../../pages/pageUtils';
 
 export class Receipts {
   static Individual() {
-    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+    PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
     return Individual;
   }
 
   static RegisteredFilers() {
-    PageUtils.clickLink('CONTRIBUTIONS FROM REGISTERED FILERS');
+    PageUtils.clickAccordion('CONTRIBUTIONS FROM REGISTERED FILERS');
     return RegisteredFilers;
   }
 
   static Refunds() {
-    PageUtils.clickLink('REFUNDS');
+    PageUtils.clickAccordion('REFUNDS');
     return Refunds;
   }
 
   static Transfers() {
-    PageUtils.clickLink('TRANSFERS');
+    PageUtils.clickAccordion('TRANSFERS');
     return Transfers;
   }
 }

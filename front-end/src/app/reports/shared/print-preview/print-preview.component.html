@@ -13,32 +13,31 @@
 </div>
 <p-card>
   <div class="grid">
-    <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
+    @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
       <div class="col-12">
         <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
       </div>
-    </ng-container>
-    <ng-container
-      *ngIf="webPrintStage === 'checking'; else imagePlaceholder"
-      class="col-12 flex justify-content-center"
-    >
-      <div class="fec-loader-div col-12">
-        <img
-          class="image-max-width fec-loader-image top-30"
-          ngSrc="assets/img/fec-loading-flag.gif"
-          draggable="false"
-          alt="The report's web print status is loading..."
-          height="103"
-          width="114"
-        />
-        <h2 class="align-center super-header h1">
-          <br /><br />
-          <strong>Compiling your preview</strong>
-          <br />
-        </h2>
+    }
+
+    @if (webPrintStage === 'checking') {
+      <div class="col-12 flex justify-content-center">
+        <div class="fec-loader-div col-12">
+          <img
+            class="image-max-width fec-loader-image top-30"
+            ngSrc="assets/img/fec-loading-flag.gif"
+            draggable="false"
+            alt="The report's web print status is loading..."
+            height="103"
+            width="114"
+          />
+          <h2 class="align-center super-header h1">
+            <br /><br />
+            <strong>Compiling your preview</strong>
+            <br />
+          </h2>
+        </div>
       </div>
-    </ng-container>
-    <ng-template #imagePlaceholder>
+    } @else {
       <div class="col-12 align-center">
         <img
           class="image-max-width image-centered-horiz"
@@ -49,15 +48,15 @@
           width="450"
         />
       </div>
-    </ng-template>
+    }
   </div>
   <div class="grid">
-    <ng-container *ngIf="webPrintStage === 'not-submitted' || webPrintStage === 'failure'">
-      <ng-container *ngIf="webPrintStage === 'failure'">
+    @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
+      @if (webPrintStage === 'failure') {
         <div class="col-12">
           <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
         </div>
-      </ng-container>
+      }
       <div class="col-5"></div>
       <div class="col-2">
         <button
@@ -69,8 +68,8 @@
           (click)="submitPrintJob()"
         ></button>
       </div>
-    </ng-container>
-    <ng-container *ngIf="webPrintStage === 'success'">
+    }
+    @if (webPrintStage === 'success') {
       <h2 class="col-12 align-center h1">PDF compiled</h2>
       <div class="bold col-12 align-center">SUBMITTED ON:</div>
       <div class="col-12 align-center">{{ submitDate }}</div>
@@ -97,7 +96,7 @@
           (click)="submitPrintJob()"
         ></button>
       </div>
-    </ng-container>
+    }
   </div>
 
   <div class="grid">

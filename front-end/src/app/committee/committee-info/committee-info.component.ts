@@ -1,5 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -8,13 +8,21 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { environment } from 'environments/environment';
+import { Select } from 'primeng/select';
+import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-committee-info',
   templateUrl: './committee-info.component.html',
   styleUrls: ['./committee-info.component.scss'],
+  imports: [ReactiveFormsModule, Select, FecInternationalPhoneInputComponent, ButtonModule],
 })
 export class CommitteeInfoComponent extends DestroyerComponent implements OnInit, AfterViewInit {
+  private readonly store = inject(Store);
+  private readonly fb = inject(FormBuilder);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   stateOptions: PrimeOptions = [];
@@ -41,13 +49,6 @@ export class CommitteeInfoComponent extends DestroyerComponent implements OnInit
     'custodian_name_full',
   ];
 
-  constructor(
-    private store: Store,
-    private fb: FormBuilder,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) {
-    super();
-  }
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {

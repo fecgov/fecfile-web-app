@@ -1,6 +1,7 @@
 import { discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { PollerService } from './poller.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('PollerService', () => {
   let service: PollerService;
@@ -8,8 +9,7 @@ describe('PollerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PollerService],
+      providers: [provideHttpClient(), provideHttpClientTesting(), PollerService],
     });
     service = TestBed.inject(PollerService);
     httpMock = TestBed.inject(HttpTestingController);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom, interval, Subscription, switchMap } from 'rxjs';
 
@@ -6,10 +6,10 @@ import { BehaviorSubject, firstValueFrom, interval, Subscription, switchMap } fr
   providedIn: 'root',
 })
 export class PollerService {
-  private isNewVersionAvailable = new BehaviorSubject<boolean>(false);
-  isNewVersionAvailable$ = this.isNewVersionAvailable.asObservable();
+  private readonly http = inject(HttpClient);
+  private readonly isNewVersionAvailable = new BehaviorSubject<boolean>(false);
+  readonly isNewVersionAvailable$ = this.isNewVersionAvailable.asObservable();
   versionCheckSubscription?: Subscription;
-  constructor(private http: HttpClient) {}
 
   startPolling(deploymentUrl: string) {
     this.versionCheckSubscription = interval(5000)

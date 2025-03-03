@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { combineLatest, filter, map, Observable, of, startWith, takeUntil } from 'rxjs';
@@ -14,19 +14,13 @@ import { NavigationEnd, Router } from '@angular/router';
   template: '',
 })
 export abstract class AbstractMenuComponent extends DestroyerComponent implements OnInit {
-  activeReport$: Observable<Report>;
+  private readonly store = inject(Store);
+  private readonly reportService = inject(ReportService);
+  private readonly router = inject(Router);
+  activeReport$: Observable<Report> = this.store.select(selectActiveReport);
   items$: Observable<MenuItem[]> = of([]);
   reportString?: string;
   sidebarState: SidebarState | undefined;
-
-  protected constructor(
-    private store: Store,
-    private reportService: ReportService,
-    private router: Router,
-  ) {
-    super();
-    this.activeReport$ = this.store.select(selectActiveReport);
-  }
 
   ngOnInit(): void {
     const routeData$ = this.router.events.pipe(

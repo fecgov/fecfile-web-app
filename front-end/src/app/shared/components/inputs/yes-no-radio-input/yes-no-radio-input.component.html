@@ -2,34 +2,37 @@
   <div class="grid">
     <div class="col-12">
       <label [for]="controlName" class="control-label">{{ label }}</label>
-      <span
-        *ngIf="tooltipText"
-        class="pi pi-info-circle circle-icon-tooltip"
-        pTooltip="{{ tooltipText }}"
-        [escape]="tooltipEscape"
-      ></span>
+      @if (tooltipText) {
+        <span
+          class="pi pi-info-circle circle-icon-tooltip"
+          pTooltip="{{ tooltipText }}"
+          [escape]="tooltipEscape"
+        ></span>
+      }
     </div>
   </div>
   <div class="grid">
-    <div class="col-1">
+    <div class="col-1 flex">
       <p-radioButton
         [name]="controlName"
+        inputId="N"
         [value]="false"
-        label="NO"
         [formControlName]="controlName"
         [ariaLabel]="ariaLabelNo"
         [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
       ></p-radioButton>
+      <label for="N" class="ml-2">NO</label>
     </div>
-    <div class="col-1">
+    <div class="col-1 flex">
       <p-radioButton
         [name]="controlName"
+        inputId="Y"
         [value]="true"
-        label="YES"
         [formControlName]="controlName"
         [ariaLabel]="ariaLabelYes"
         [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
       ></p-radioButton>
+      <label for="Y" class="ml-2">YES</label>
     </div>
   </div>
   <div class="grid">

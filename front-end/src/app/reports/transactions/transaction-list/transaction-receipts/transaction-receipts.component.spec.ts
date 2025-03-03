@@ -1,20 +1,18 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Observable, of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
-import { DropdownModule } from 'primeng/dropdown';
-import { SharedModule } from 'app/shared/shared.module';
+import { SelectModule } from 'primeng/select';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -26,9 +24,10 @@ describe('TransactionReceiptsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, SharedModule, HttpClientTestingModule, DropdownModule, FormsModule],
-      declarations: [TransactionReceiptsComponent],
+      imports: [ToolbarModule, TableModule, SelectModule, FormsModule, TransactionReceiptsComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore),
@@ -45,28 +44,14 @@ describe('TransactionReceiptsComponent', () => {
             },
           },
         },
-        {
-          provide: TransactionSchAService,
-          useValue: {
-            get: (transactionId: string) =>
-              of(
-                SchATransaction.fromJSON({
-                  id: transactionId,
-                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
-                  can_delete: true,
-                }),
-              ),
-            getTableData: () => of([]),
-            update: () => of([]),
-          },
-        },
+        TransactionSchAService,
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
-    testItemService.delete = (): Observable<null> => {
-      return of(null);
+    testItemService.delete = async (): Promise<null> => {
+      return null;
     };
     testConfirmationService = TestBed.inject(ConfirmationService);
     component = fixture.componentInstance;
@@ -178,32 +163,32 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('test forceAggregate', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
-    component.forceAggregate(testTransaction);
-    tick(500);
-    expect(testTransaction.force_unaggregated).toBe(false);
+    spyOn(testItemService, 'update').and.returnValue(Promise.resolve(testTransaction));
+    component.forceAggregate(testTransaction).then(() => {
+      expect(testTransaction.force_unaggregated).toBe(false);
+    });
   }));
 
   it('test forceUnaggregate', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
+    spyOn(testItemService, 'update').and.returnValue(Promise.resolve(testTransaction));
     component.forceUnaggregate(testTransaction);
     tick(500);
     expect(testTransaction.force_unaggregated).toBe(true);
   }));
 
   it('test forceItemize', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
+    spyOn(testItemService, 'update').and.returnValue(Promise.resolve(testTransaction));
     component.forceItemize(testTransaction);
     tick(500);
     expect(testTransaction.force_itemized).toBe(true);
   }));
 
   it('test forceUnitemize', fakeAsync(() => {
-    spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
+    spyOn(testItemService, 'update').and.returnValue(Promise.resolve(testTransaction));
     component.forceUnitemize(testTransaction);
     tick(500);
     expect(testTransaction.force_itemized).toBe(false);

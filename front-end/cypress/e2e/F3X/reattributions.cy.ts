@@ -58,7 +58,7 @@ function CreateReceipt() {
 }
 
 function Reattribute(old = false) {
-  PageUtils.getKabob(' 11(a)(ii) ').contains('Reattribute').first().click({ force: true });
+  PageUtils.clickKababItem(' 11(a)(ii) ', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');

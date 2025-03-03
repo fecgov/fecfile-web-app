@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { QueryParams } from 'app/shared/services/api.service';
@@ -12,8 +13,14 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { ConfirmationService } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { Dialog } from 'primeng/dialog';
+import { InputText } from 'primeng/inputtext';
+import { Ripple } from 'primeng/ripple';
+import { Select } from 'primeng/select';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { lastValueFrom, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
@@ -28,10 +35,15 @@ import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.
 import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.model';
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
+import { LabelPipe } from '../../pipes/label.pipe';
 import { getReportFromJSON } from '../../services/report.service';
 import { TransactionService } from '../../services/transaction.service';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
+import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
+import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
+import { TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 
 export class TransactionData {
@@ -64,22 +76,45 @@ export class TransactionData {
   selector: 'app-contact-dialog',
   templateUrl: './contact-dialog.component.html',
   styleUrls: ['./contact-dialog.component.scss'],
+  imports: [
+    Dialog,
+    ReactiveFormsModule,
+    ContactLookupComponent,
+    InputText,
+    ErrorMessagesComponent,
+    Select,
+    FecInternationalPhoneInputComponent,
+    CandidateOfficeInputComponent,
+    TableComponent,
+    ButtonDirective,
+    Ripple,
+    ConfirmDialog,
+    CurrencyPipe,
+    DatePipe,
+    LabelPipe,
+  ],
 })
 export class ContactDialogComponent extends DestroyerComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly contactService = inject(ContactService);
+  private readonly transactionService = inject(TransactionService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  public readonly router = inject(Router);
+  readonly ContactTypes = ContactTypes;
   @Input() contact: Contact = new Contact();
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
   @Input() showHistory = false;
   @Input() headerTitle?: string;
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
-  @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
+  @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
 
   transactions: TransactionData[] = [];
   tableLoading = true;
   totalTransactions = 0;
   rowsPerPage = 5;
-  scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
+  readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
     ScheduleCTransactionTypeLabels,
     ScheduleC1TransactionTypeLabels,
@@ -105,7 +140,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   isNewItem = true;
   contactType = ContactTypes.INDIVIDUAL;
-  ContactTypes = ContactTypes;
+
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -123,16 +158,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   ];
 
   pagerState?: TableLazyLoadEvent;
-
-  constructor(
-    private fb: FormBuilder,
-    private contactService: ContactService,
-    private transactionService: TransactionService,
-    protected confirmationService: ConfirmationService,
-    public router: Router,
-  ) {
-    super();
-  }
 
   async loadTransactions(event: TableLazyLoadEvent) {
     this.tableLoading = true;
@@ -166,7 +191,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     }
 
     try {
-      const transactionsPage = await lastValueFrom(this.transactionService.getTableData(pageNumber, ordering, params));
+      const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, params);
       this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
       this.totalTransactions = transactionsPage.count;
       this.tableLoading = false;
@@ -231,6 +256,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
    * @param contactType
    */
   contactTypeChanged(contactType: ContactTypes) {
+    if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
     if (!this.contact) this.contact = new Contact();
 
@@ -322,6 +348,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   updateContact(contact: Contact) {
     this.contact = contact;
+    this.contactType = contact.type;
+    this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type);
     this.form.patchValue(contact);
   }
 

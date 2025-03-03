@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -10,14 +10,25 @@ import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { firstValueFrom, takeUntil, take, timer, concatMap, tap, map } from 'rxjs';
+import { takeUntil } from 'rxjs';
+import { Card } from 'primeng/card';
+import { NgOptimizedImage } from '@angular/common';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
 
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
   styleUrls: ['../../styles.scss', './print-preview.component.scss'],
+  imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
+  private readonly store = inject(Store);
+  public readonly router = inject(Router);
+  public readonly route = inject(ActivatedRoute);
+  private readonly webPrintService = inject(WebPrintService);
+  private readonly reportService = inject(ReportService);
   report: Report = new Form3X() as unknown as Report;
   committeeAccount?: CommitteeAccount;
   submitDate: Date | undefined;
@@ -27,16 +38,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'not-submitted';
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
-
-  constructor(
-    private store: Store,
-    public router: Router,
-    public route: ActivatedRoute,
-    private webPrintService: WebPrintService,
-    private reportService: ReportService,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {
     this.store
@@ -102,35 +103,29 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     }
   }
 
-  public pollPrintStatus(): void {
+  public async pollPrintStatus(): Promise<void> {
     /** Request the status of the report
      * tap into observable to update ui with status
      * delay polling again
      * if the status is not completed, poll again
      */
-
-    this.reportService
-      .get(this.report.id!)
-      .pipe(
-        tap((report) => {
-          this.updatePrintStatus(report);
-        }),
-      )
-      .pipe(concatMap((report) => timer(this.pollingTime).pipe(map(() => report))))
-      .pipe(take(1))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
-          this.pollPrintStatus();
-        }
-      });
+    try {
+      const report = await this.reportService.get(this.report.id!);
+      this.updatePrintStatus(report);
+      await new Promise((resolve) => setTimeout(resolve, this.pollingTime)); // Replaces `concatMap(timer(...))`
+      if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
+        this.pollPrintStatus();
+      }
+    } catch (error) {
+      console.error('Error fetching report:', error);
+    }
   }
 
   public async submitPrintJob() {
     if (this.report.id) {
       /** Update the report with the committee information
        * this is a must because the .fec requires this information */
-      await firstValueFrom(this.reportService.fecUpdate(this.report, this.committeeAccount));
+      await this.reportService.fecUpdate(this.report, this.committeeAccount);
       return this.webPrintService.submitPrintJob(this.report.id).then(
         () => {
           // Start polling for a completed status

@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 import { ManageCommitteeComponent } from './manage-committee/manage-committee.component';
 import { CommitteeInfoComponent } from './committee-info/committee-info.component';
 import { SelectCommitteeComponent } from './select-committee/select-committee.component';
 
-const routes: Routes = [
+export const COMMITTEE_ROUTES: Route[] = [
   {
     path: 'members',
     component: ManageCommitteeComponent,
@@ -25,9 +24,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class CommitteeRoutingModule {}

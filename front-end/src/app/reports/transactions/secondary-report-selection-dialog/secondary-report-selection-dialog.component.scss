@@ -1,34 +1,6 @@
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.3);
-}
-
 h1 {
-  color: #212121;
   font-size: 36px;
-  font-weight: bold;
   line-height: 36px;
-}
-
-.field {
-  display: grid;
-}
-
-dialog {
-  width: 512px;
-  background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
-  border: none;
-  margin-top: 15%;
-}
-
-.dialog-header {
-  border-bottom: 2px solid #212121;
-  width: 448px;
-  margin: auto;
-  padding-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
 }
 
 .dialog-body {
@@ -39,7 +11,7 @@ dialog {
 
 .dialog-text {
   margin-bottom: 16px;
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--karla);
   color: #212121;
 }
 
@@ -47,57 +19,21 @@ dialog {
   font-size: 12px;
 }
 
-label {
-  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-weight: bold;
-  font-size: 14px;
-  color: #212121;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-.dropdown {
-  margin-bottom: 8px;
-}
-
-:host ::ng-deep .dropdown-toggle,
-.dropdown > ul {
-  width: 100% !important;
-}
-
-.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  border: 2px solid #aeb0b5;
-  font-size: 14px;
-  border-radius: 4px;
-}
-
 .dialog-footer {
+  width: 100%;
   display: flex;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
   border-top: 0;
   padding-top: 0;
   padding-bottom: 16px;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-
-.hover {
-  cursor: pointer;
+.dialog-footer > button {
+  width: fit-content;
 }
 
 .option {
   font-size: 14px;
-}
-
-#close-button {
-  color: #212121;
-  background: transparent;
-  border: none;
 }

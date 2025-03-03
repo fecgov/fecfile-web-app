@@ -9,7 +9,7 @@
           id="street_1"
           [formControlName]="streetOneFieldName"
           [readonly]="readonly"
-          [ngClass]="{ readonly: this.readonly }"
+          [class.readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
@@ -27,7 +27,7 @@
           id="street_2"
           [formControlName]="streetTwoFieldName"
           [readonly]="readonly"
-          [ngClass]="{ readonly: this.readonly }"
+          [class.readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
@@ -47,7 +47,7 @@
           id="city"
           [formControlName]="cityFieldName"
           [readonly]="readonly"
-          [ngClass]="{ readonly: this.readonly }"
+          [class.readonly]="readonly"
         />
         <app-error-messages
           [form]="form"
@@ -59,16 +59,16 @@
     <div class="col-3">
       <div class="field">
         <label for="state">STATE/PROVINCE</label>
-        <p-dropdown
+        <p-select
           inputId="state"
           [formControlName]="stateFieldName"
           [options]="stateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-          [disabled]="this.readonly"
           [readonly]="readonly"
-          styleClass="{{ this.readonly ? 'readonly' : '' }}"
-        ></p-dropdown>
+          styleClass="{{ readonly ? 'readonly' : '' }}"
+          fluid
+        ></p-select>
         <app-error-messages
           [form]="form"
           [fieldName]="stateFieldName"
@@ -85,7 +85,7 @@
           id="zip"
           [formControlName]="zipFieldName"
           [readonly]="readonly"
-          [ngClass]="{ readonly: this.readonly }"
+          [class.readonly]="readonly"
         />
         <app-error-messages
           [form]="form"

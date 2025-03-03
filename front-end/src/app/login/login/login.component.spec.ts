@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
@@ -8,6 +7,8 @@ import { BannerComponent } from 'app/layout/banner/banner.component';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
 import { LoginComponent } from './login.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -16,8 +17,10 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     window.onbeforeunload = jasmine.createSpy();
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ReactiveFormsModule],
+      imports: [ReactiveFormsModule, LoginComponent, BannerComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: Window, useValue: window },
         provideMockStore(testMockStore),
         provideRouter([
@@ -27,7 +30,6 @@ describe('LoginComponent', () => {
           },
         ]),
       ],
-      declarations: [LoginComponent, BannerComponent],
     }).compileComponents();
   });
 

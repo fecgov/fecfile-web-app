@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
-import { concat, Observable, of, reduce } from 'rxjs';
+import { of } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -19,6 +19,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { Accordion } from 'primeng/accordion';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -35,7 +36,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  accordionActiveIndex = 0; // Value determines which accordion pane to open by default
+  @ViewChild(Accordion) accordion?: Accordion;
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -90,8 +91,8 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
-      this.accordionActiveIndex = 1;
+    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
+      this.accordion.value.set(1);
     }
   }
 
@@ -121,7 +122,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     })[0];
   }
 
-  override save(navigationEvent: NavigationEvent) {
+  override save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -148,7 +149,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     ];
     payload.children[0].reports = payload.reports;
 
-    this.processPayload(payload, navigationEvent);
+    return this.processPayload(payload, navigationEvent);
   }
 
   override isInvalid(): boolean {
@@ -156,11 +157,15 @@ export abstract class DoubleTransactionTypeBaseComponent
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
   }
 
-  override get confirmation$(): Observable<boolean> {
-    if (!this.childTransaction) return of(false);
-    return concat(super.confirmation$, this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')).pipe(
-      reduce((accumulator, confirmed) => accumulator && confirmed),
-    );
+  override get confirmation$(): Promise<boolean> {
+    if (!this.childTransaction) return Promise.resolve(false);
+
+    return Promise.all([
+      super.confirmation$,
+      this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog'),
+    ]).then((results) => {
+      return results.every((confirmed) => confirmed);
+    });
   }
 
   override resetForm() {

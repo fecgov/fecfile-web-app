@@ -55,7 +55,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.supportOpposeCode) {
-      cy.get("p-radiobutton[FormControlName='support_oppose_code']").contains(formData.supportOpposeCode).click();
+      cy.get("[data-cy='support_oppose_code']").contains(formData.supportOpposeCode).click();
       cy.get('#entity_type_dropdown').last().type(contactData.contact_type);
       cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 1));
       cy.contains(contactData.last_name).should('exist');
@@ -240,8 +240,9 @@ export class TransactionDetailPage {
     }
 
     cy.get(alias)
-      .find('#memo_code')
-      .should('have.attr', 'aria-checked', formData.memo_code ? 'true' : 'false');
+      .find('p-checkbox[inputid="memo_code"]')
+      .find('.p-checkbox')
+      .should(formData.memo_code ? 'have.class' : 'not.have.class', 'p-checkbox-checked');
     if (formData.electionType) {
       cy.get(alias).find('[inputid="electionType"]').should('contain', formData.electionType);
     }
@@ -261,7 +262,14 @@ export class TransactionDetailPage {
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {
     if (formData.memo_code) {
-      cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
+      cy.get(alias)
+        .find('p-checkbox[inputid="memo_code"]')
+        .find('.p-checkbox')
+        .then(($checkbox) => {
+          if (!$checkbox.hasClass('p-checkbox-checked')) {
+            cy.wrap($checkbox).click();
+          }
+        });
     }
     if (formData.memo_text !== '') {
       cy.get(alias).find('#text4000').first().type(formData.memo_text);

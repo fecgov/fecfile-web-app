@@ -1,12 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  provideRouter,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { loggedInGuard } from './logged-in.guard';
 import { LoginService } from '../services/login.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('loggedInGuard', () => {
   let loginService: LoginService;
@@ -16,8 +22,13 @@ describe('loggedInGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [LoginService, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        LoginService,
+        provideMockStore(testMockStore),
+      ],
     });
     loginService = TestBed.inject(LoginService);
     router = TestBed.inject(Router);

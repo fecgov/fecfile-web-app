@@ -1,68 +1,66 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Component, inject, OnInit } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-
-import { CommitteeMember, CommitteeMemberRoles } from 'app/shared/models/committee-member.model';
+import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
+import { TableComponent } from '../../shared/components/table/table.component';
+import { Toolbar } from 'primeng/toolbar';
+import { Ripple } from 'primeng/ripple';
+import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
+import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
+import { ButtonDirective } from 'primeng/button';
 
 @Component({
   selector: 'app-manage-committee',
   templateUrl: './manage-committee.component.html',
+  imports: [
+    TableComponent,
+    Toolbar,
+    ButtonDirective,
+    Ripple,
+    TableActionsButtonComponent,
+    CommitteeMemberDialogComponent,
+  ],
 })
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements OnInit {
+  private readonly store = inject(Store);
+  override readonly itemService = inject(CommitteeMemberService);
+  protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
 
-  public rowActions: TableAction[] = [
-    new TableAction('Delete', this.confirmDelete.bind(this), undefined, this.isNotCurrentUser.bind(this)),
+  protected readonly rowActions: TableAction[] = [
+    new TableAction('Edit Role', this.openEdit.bind(this), undefined),
+    new TableAction('Delete', this.confirmDelete.bind(this), undefined),
   ];
   currentUserEmail?: string;
+  currentUserRole?: Roles;
+  member?: CommitteeMember;
 
   override rowsPerPage = 10;
 
-  sortableHeaders: { field: string; label: string }[] = [
+  readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
     { field: 'email', label: 'Email' },
     { field: 'role', label: 'Role' },
     { field: 'is_active', label: 'Status' },
   ];
 
-  constructor(
-    override messageService: MessageService,
-    override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    private store: Store,
-    override itemService: CommitteeMemberService,
-  ) {
-    super(messageService, confirmationService, elementRef);
+  async ngOnInit() {
+    this.store.select(selectUserLoginData).subscribe((user) => {
+      this.currentUserEmail = user.email;
+      this.currentUserRole = Roles[user.role as keyof typeof Roles];
+    });
   }
 
-  public override addItem() {
-    super.addItem();
-  }
-
-  override async ngOnInit() {
-    super.ngOnInit();
-    this.currentUserEmail = (await firstValueFrom(this.store.select(selectUserLoginData))).email;
-  }
-
-  public async saveMembership(payload: { email: string; role: typeof CommitteeMemberRoles }) {
-    try {
-      const new_user = await firstValueFrom(this.itemService.addMember(payload.email, payload.role));
-
-      if (new_user.email) {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Membership Created',
-          life: 3000,
-        });
-      }
-    } catch {
-      return;
+  public userAdded(email: string) {
+    if (email) {
+      this.loadTableItems({});
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Membership Created',
+      });
     }
   }
 
@@ -74,13 +72,38 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     });
   }
 
+  openEdit(member: CommitteeMember) {
+    this.member = member;
+    this.detailVisible = true;
+  }
+
+  roleEdited() {
+    this.loadTableItems({});
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Role Updated',
+    });
+
+    this.detailClose();
+  }
+
+  detailClose() {
+    this.detailVisible = false;
+    this.member = undefined;
+  }
+
   isNotCurrentUser(member: CommitteeMember): boolean {
     return member.email.toLowerCase() !== this.currentUserEmail?.toLowerCase();
   }
 
+  isCommitteeAdministrator(): boolean {
+    return isCommitteeAdministrator(this.currentUserRole);
+  }
+
   override async deleteItem(member: CommitteeMember) {
     try {
-      await lastValueFrom(this.itemService.delete(member));
+      await this.itemService.delete(member);
       this.refreshTable();
       this.messageService.add({
         severity: 'success',

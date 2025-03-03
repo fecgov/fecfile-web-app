@@ -1,13 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { DateUtils } from 'app/shared/utils/date.utils';
+import { DatePicker } from 'primeng/datepicker';
+import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
+  imports: [DatePicker, ReactiveFormsModule, ErrorMessagesComponent],
 })
 export class CalendarComponent extends DestroyerComponent implements OnInit {
   @Input() form!: FormGroup;

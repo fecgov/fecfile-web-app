@@ -2,10 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectCommitteeComponent } from './select-committee.component';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('SelectCommitteeComponent', () => {
   let component: SelectCommitteeComponent;
@@ -13,9 +14,14 @@ describe('SelectCommitteeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SelectCommitteeComponent],
-      imports: [HttpClientTestingModule],
-      providers: [CommitteeAccountService, provideMockStore(testMockStore), HttpClient],
+      imports: [SelectCommitteeComponent],
+      providers: [
+        CommitteeAccountService,
+        provideMockStore(testMockStore),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     });
     fixture = TestBed.createComponent(SelectCommitteeComponent);
     component = fixture.componentInstance;

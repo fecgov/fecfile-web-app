@@ -1,4 +1,3 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -9,7 +8,7 @@ import {
   testMockStore,
   testScheduleATransaction,
 } from 'app/shared/utils/unit-test.utils';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent, TransactionData } from './contact-dialog.component';
@@ -20,13 +19,14 @@ import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { of } from 'rxjs';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -36,15 +36,25 @@ describe('ContactDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule, DropdownModule, AutoCompleteModule],
-      declarations: [
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        SelectModule,
+        AutoCompleteModule,
         ContactDialogComponent,
         ErrorMessagesComponent,
         FecInternationalPhoneInputComponent,
         ContactLookupComponent,
         LabelPipe,
       ],
-      providers: [ConfirmationService, FormBuilder, provideMockStore(testMockStore), DatePipe],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ConfirmationService,
+        FormBuilder,
+        provideMockStore(testMockStore),
+        DatePipe,
+      ],
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
@@ -132,7 +142,7 @@ describe('ContactDialogComponent', () => {
 
     it('should handle pagination', async () => {
       spyOn(transactionService, 'getTableData').and.returnValue(
-        of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
+        Promise.resolve({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
       );
       await component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
 
@@ -146,7 +156,13 @@ describe('ContactDialogComponent', () => {
       transaction.reports = [testActiveReport];
       transaction.reports?.push(Form24.fromJSON({ id: '1', report_type: ReportTypes.F24 }));
       spyOn(transactionService, 'getTableData').and.returnValue(
-        of({ results: [transaction], count: 1, pageNumber: 1, next: '', previous: '' } as ListRestResponse),
+        Promise.resolve({
+          results: [transaction],
+          count: 1,
+          pageNumber: 1,
+          next: '',
+          previous: '',
+        } as ListRestResponse),
       );
       await component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
 
@@ -157,7 +173,7 @@ describe('ContactDialogComponent', () => {
       it('should load even without first in event or pagerState', async () => {
         component.pagerState = undefined;
         spyOn(transactionService, 'getTableData').and.returnValue(
-          of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
+          Promise.resolve({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
         );
         await component.loadTransactions({ rows: 5 } as TableLazyLoadEvent);
 
@@ -167,7 +183,7 @@ describe('ContactDialogComponent', () => {
       it('should load even without first in event', async () => {
         component.pagerState = { rows: 5 } as TableLazyLoadEvent;
         spyOn(transactionService, 'getTableData').and.returnValue(
-          of({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
+          Promise.resolve({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
         );
         await component.loadTransactions({ rows: 5 } as TableLazyLoadEvent);
 

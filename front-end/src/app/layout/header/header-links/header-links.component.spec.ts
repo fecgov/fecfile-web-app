@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderLinksComponent } from './header-links.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MenubarModule } from 'primeng/menubar';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('HeaderLinksComponent', () => {
   let component: HeaderLinksComponent;
@@ -12,9 +13,8 @@ describe('HeaderLinksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MenubarModule, RouterTestingModule],
-      declarations: [HeaderLinksComponent],
-      providers: [HeaderLinksComponent, provideMockStore(testMockStore)],
+      imports: [MenubarModule, HeaderLinksComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

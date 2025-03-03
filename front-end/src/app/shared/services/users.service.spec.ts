@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from 'environments/environment';
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { UserLoginData } from '../models/user.model';
 import { LoginService } from './login.service';
 import { UsersService } from './users.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -16,8 +17,13 @@ describe('UsersService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ApiService,
+        LoginService,
+        provideMockStore(testMockStore),
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(UsersService);

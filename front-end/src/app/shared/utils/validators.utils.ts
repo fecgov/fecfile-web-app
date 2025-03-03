@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import * as _ from 'lodash';
 import { F3xCoverageDates } from '../models/form-3x.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { DateUtils } from './date.utils';
+import { isEmpty, omit } from 'lodash';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;
@@ -95,7 +95,7 @@ function validateDateWithinCoverage(
 }
 
 function getErrors(errors: ValidationErrors | null, newError: ValidationErrors | null): ValidationErrors | null {
-  const otherErrors = !_.isEmpty(_.omit(errors, 'invaliddate')) ? _.omit(errors, 'invaliddate') : null;
+  const otherErrors = !isEmpty(omit(errors, 'invaliddate')) ? omit(errors, 'invaliddate') : null;
   return otherErrors || newError ? { ...otherErrors, ...newError } : null;
 }
 
@@ -220,7 +220,7 @@ export function buildReattRedesTransactionValidator(
 
 @Injectable({ providedIn: 'root' })
 export class CommitteeMemberEmailValidator implements AsyncValidator {
-  constructor(protected committeeMemberService: CommitteeMemberService) {}
+  protected readonly committeeMemberService = inject(CommitteeMemberService);
 
   async validate(control: AbstractControl): Promise<ValidationErrors | null> {
     if (control.value) {

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PopoverModule } from 'primeng/popover';
 import { TableActionsButtonComponent } from './table-actions-button.component';
 import { ButtonModule } from 'primeng/button';
 import { TableAction } from '../table-list-base/table-list-base.component';
@@ -11,8 +11,7 @@ describe('TableActionsButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OverlayPanelModule, ButtonModule],
-      declarations: [TableActionsButtonComponent],
+      imports: [PopoverModule, ButtonModule, TableActionsButtonComponent],
       providers: [],
     }).compileComponents();
   });

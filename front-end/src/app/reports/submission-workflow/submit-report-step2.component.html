@@ -3,122 +3,122 @@
   <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
 </h5>
 <hr type="solid" />
-<div class="p-fluid">
-  <p-card>
-    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+<p-card>
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <h2>Committee treasurer</h2>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="treasurer_last_name"><strong>LAST NAME</strong></label>
+          <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
+          <app-error-messages
+            [form]="form"
+            fieldName="treasurer_last_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="treasurer_first_name"><strong>FIRST NAME</strong></label>
+          <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
+          <app-error-messages
+            [form]="form"
+            fieldName="treasurer_first_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="treasurer_middle_name"><strong>MIDDLE NAME</strong> (OPTIONAL)</label>
+          <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
+          <app-error-messages
+            [form]="form"
+            fieldName="treasurer_middle_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <div class="field">
+          <label for="treasurer_prefix"><strong>PREFIX</strong> (OPTIONAL)</label>
+          <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
+          <app-error-messages
+            [form]="form"
+            fieldName="treasurer_prefix"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="treasurer_suffix"><strong>SUFFIX</strong> (OPTIONAL)</label>
+          <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
+          <app-error-messages
+            [form]="form"
+            fieldName="treasurer_suffix"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <hr type="solid" />
+    <div class="grid">
+      <div class="col-12">
+        <h2>Enter password</h2>
+      </div>
       <div class="grid">
         <div class="col-12">
-          <div class="field">
-            <h2>Committee treasurer</h2>
-          </div>
+          <p>
+            If you have any questions on how to enroll, confirming your email, two-factor authentication, or your
+            Personel Key please go to the following page:
+            <a href="https://webforms.fec.gov/psa/help.htm" target="_blank" rel="noopener"
+              >FEC Electronic Filing Password Assignment System Help</a
+            >
+          </p>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-4">
-          <div class="field">
-            <label for="treasurer_last_name"><strong>LAST NAME</strong></label>
-            <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="treasurer_last_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="field">
-            <label for="treasurer_first_name"><strong>FIRST NAME</strong></label>
-            <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="treasurer_first_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="field">
-            <label for="treasurer_middle_name"><strong>MIDDLE NAME</strong> (OPTIONAL)</label>
-            <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="treasurer_middle_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="filingPassword">
+            <strong>ELECTRONIC FILING PASSWORD </strong>
+          </label>
+          <p-password
+            id="filingPassword"
+            type="password"
+            formControlName="filingPassword"
+            [feedback]="false"
+            [toggleMask]="true"
+            autocomplete="new-password"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="filingPassword"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
+          ></app-error-messages>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-3">
-          <div class="field">
-            <label for="treasurer_prefix"><strong>PREFIX</strong> (OPTIONAL)</label>
-            <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
-            <app-error-messages
-              [form]="form"
-              fieldName="treasurer_prefix"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="field">
-            <label for="treasurer_suffix"><strong>SUFFIX</strong> (OPTIONAL)</label>
-            <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
-            <app-error-messages
-              [form]="form"
-              fieldName="treasurer_suffix"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-      </div>
-      <hr type="solid" />
+    </div>
+    @if (report?.report_version) {
       <div class="grid">
         <div class="col-12">
-          <h2>Enter password</h2>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <p>
-              If you have any questions on how to enroll, confirming your email, two-factor authentication, or your
-              Personel Key please go to the following page:
-              <a href="https://webforms.fec.gov/psa/help.htm" target="_blank" rel="noopener"
-                >FEC Electronic Filing Password Assignment System Help</a
-              >
-            </p>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="field">
-            <label for="filingPassword">
-              <strong>ELECTRONIC FILING PASSWORD </strong>
-            </label>
-            <p-password
-              id="filingPassword"
-              type="password"
-              formControlName="filingPassword"
-              [feedback]="false"
-              [toggleMask]="true"
-              autocomplete="new-password"
-            />
-            <app-error-messages
-              [form]="form"
-              fieldName="filingPassword"
-              [formSubmitted]="formSubmitted"
-              patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
-            ></app-error-messages>
-          </div>
-        </div>
-      </div>
-      <div class="grid" *ngIf="report?.report_version">
-        <div class="col-12">
-          <div class="field">
+          <div class="field-row">
             <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo"></p-checkbox>
             <label for="backdoor-check" class="mb-0 ml-2">
               ADD A BACKDOOR CODE <span class="optional-text">(OPTIONAL)</span>
             </label>
             <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="Do you need to use a backdoor code?"></span>
-            <ng-container *ngIf="showBackdoorCode">
+            @if (showBackdoorCode) {
               <div class="grid">
                 <div class="col-4">
                   <div class="field">
@@ -132,55 +132,63 @@
                   </div>
                 </div>
               </div>
-            </ng-container>
+            }
           </div>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-12">
-          <div class="field">
+    }
+
+    <div class="grid">
+      <div class="col-12">
+        <div class="field-row" data-cy="userCertified">
+          <p-checkbox
+            [binary]="true"
+            inputId="userCertified"
+            formControlName="userCertified"
+            [trueValue]="true"
+            [falseValue]="false"
+          ></p-checkbox>
+          <label for="userCertified" class="ml-2">
             <strong>
-              <p-checkbox
-                [binary]="true"
-                inputId="userCertified"
-                label="I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct, and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing this Statement to the penalties of 52 U.S.C. § 30109."
-                formControlName="userCertified"
-                [trueValue]="true"
-                [falseValue]="false"
-              ></p-checkbox>
+              I certify that I have examined this Statement and to the best of my knowledge and belief it is true,
+              correct, and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the
+              person signing this Statement to the penalties of 52 U.S.C. § 30109.
             </strong>
-          </div>
+          </label>
         </div>
       </div>
-      <div class="grid">
+    </div>
+    <div class="grid">
+      <div class="col-4">
+        <button
+          pButton
+          pRipple
+          label="Back"
+          type="button"
+          class="p-button-secondary"
+          (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
+        ></button>
+      </div>
+      <div class="col-8 submit-container">
+        <button
+          pButton
+          pRipple
+          label="Submit"
+          type="submit"
+          class="p-button"
+          (click)="submitClicked()"
+          [disabled]="!form.value.userCertified || loading > 0"
+        ></button>
+      </div>
+      @if (loading > 0) {
         <div class="col-4">
-          <button
-            pButton
-            pRipple
-            label="Back"
-            type="button"
-            class="p-button-secondary"
-            (click)="router.navigateByUrl(getBackUrl?.(report) || '')"
-          ></button>
+          @if (loading === 1) {
+            <p>Updating treasurer name...</p>
+          } @else if (loading === 2) {
+            <p>Submitting report to the FEC...</p>
+          }
         </div>
-        <div class="col-8 submit-container">
-          <button
-            pButton
-            pRipple
-            label="Submit"
-            type="submit"
-            class="p-button"
-            (click)="submitClicked()"
-            [disabled]="!form.value.userCertified || loading > 0"
-          ></button>
-        </div>
-        <ng-container *ngIf="loading > 0">
-          <div class="col-4">
-            <p *ngIf="loading === 1">Updating treasurer name...</p>
-            <p *ngIf="loading === 2">Submitting report to the FEC...</p>
-          </div>
-        </ng-container>
-      </div>
-    </form>
-  </p-card>
-</div>
+      }
+    </div>
+  </form>
+</p-card>

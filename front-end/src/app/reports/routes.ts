@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -8,7 +7,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 
-const routes: Routes = [
+export const REPORTS_ROUTES: Route[] = [
   {
     path: '',
     title: 'Manage Reports',
@@ -21,34 +20,28 @@ const routes: Routes = [
   {
     path: 'transactions',
     data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
-    loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
+    loadChildren: () => import('./transactions/routes').then((mod) => mod.TRANSACTION_ROUTES),
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'f3x',
     providers: [{ provide: ReportService, useClass: Form3XService }],
-    loadChildren: () => import('./f3x/f3x.module').then((m) => m.F3XModule),
+    loadChildren: () => import('./f3x/routes').then((mod) => mod.F3X_ROUTES),
   },
   {
     path: 'f99',
     providers: [{ provide: ReportService, useClass: Form99Service }],
-    loadChildren: () => import('./f99/f99.module').then((m) => m.F99Module),
+    loadChildren: () => import('./f99/routes').then((mod) => mod.F99_ROUTES),
   },
   {
     path: 'f24',
     providers: [{ provide: ReportService, useClass: Form24Service }],
-    loadChildren: () => import('./f24/f24.module').then((m) => m.F24Module),
+    loadChildren: () => import('./f24/routes').then((mod) => mod.F24_ROUTES),
   },
   {
     path: 'f1m',
     providers: [{ provide: ReportService, useClass: Form1MService }],
-    loadChildren: () => import('./f1m/f1m.module').then((m) => m.F1MModule),
+    loadChildren: () => import('./f1m/routes').then((mod) => mod.F1M_ROUTES),
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ReportsRoutingModule {}

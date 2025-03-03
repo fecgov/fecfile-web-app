@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 import { MainFormComponent } from './main-form/main-form.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
@@ -11,7 +10,7 @@ import { SubmitReportStep2Component } from '../submission-workflow/submit-report
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 
-const routes: Routes = [
+export const F1M_ROUTES: Route[] = [
   {
     path: 'create/step1',
     title: 'Create a report',
@@ -88,9 +87,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class F1MRoutingModule {}

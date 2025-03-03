@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DeletedContactDialogComponent } from './deleted-contact-dialog.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -8,8 +7,10 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { of } from 'rxjs';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('DeletedContactDialogComponent', () => {
   let component: DeletedContactDialogComponent;
@@ -17,15 +18,21 @@ describe('DeletedContactDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToastModule, TableModule, DialogModule, ConfirmDialogModule, HttpClientTestingModule],
-      declarations: [DeletedContactDialogComponent],
-      providers: [ConfirmationService, MessageService, provideMockStore(testMockStore)],
+      imports: [ToastModule, TableModule, DialogModule, ConfirmDialogModule, DeletedContactDialogComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        ConfirmationService,
+        MessageService,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DeletedContactDialogComponent);
     component = fixture.componentInstance;
     spyOn(component.itemService, 'getTableData').and.returnValue(
-      of({
+      Promise.resolve({
         count: 2,
         pageNumber: 1,
         next: 'https://next',
@@ -47,11 +54,11 @@ describe('DeletedContactDialogComponent', () => {
     expect(component.selectedItems).toEqual([]);
   });
 
-  it('should restore', () => {
-    spyOn(component.itemService, 'restore').and.returnValue(of(['1']));
+  it('should restore', async () => {
+    spyOn(component.itemService, 'restore').and.returnValue(Promise.resolve(['1']));
     component.visible = true;
     component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
-    component.restoreSelected();
+    await component.restoreSelected();
 
     expect(component.selectedItems).toEqual([]);
   });

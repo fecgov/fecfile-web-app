@@ -1,24 +1,20 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Dialog } from 'primeng/dialog';
+import { ButtonDirective } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
+import { TableComponent } from 'app/shared/components/table/table.component';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-deleted-contact-dialog',
   templateUrl: './deleted-contact-dialog.component.html',
+  imports: [Dialog, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
-export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnInit, OnChanges {
+export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnChanges {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() contactsRestored = new EventEmitter<string[]>();
@@ -31,15 +27,8 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    public override itemService: DeletedContactService,
-  ) {
-    super(messageService, confirmationService, elementRef);
-  }
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  public override itemService = inject(DeletedContactService);
 
   ngOnChanges(): void {
     this.changeDetectorRef.detectChanges();
@@ -52,17 +41,16 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     this.visible = false;
   }
 
-  restoreSelected(): void {
-    this.itemService.restore(this.selectedItems).subscribe((restoredContacts: string[]) => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Contacts Successfully Restored',
-        life: 3000,
-      });
-      this.contactsRestored.emit(restoredContacts);
-      this.hide();
+  async restoreSelected(): Promise<void> {
+    const restoredContacts = await this.itemService.restore(this.selectedItems);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Contacts Successfully Restored',
+      life: 3000,
     });
+    this.contactsRestored.emit(restoredContacts);
+    this.hide();
   }
 
   getCheckboxLabel(item: Contact): string {
