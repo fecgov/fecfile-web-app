@@ -587,15 +587,12 @@ describe('TransactionTypeBaseComponent', () => {
         date: 'expenditure_date',
       } as TransactionTemplateMapType);
 
-      console.log('SETUP');
       form.get('expenditure_amount')?.setValue(25);
       form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
       expect(transactionServiceSpy.getPreviousTransactionForAggregate).not.toHaveBeenCalled();
-      console.log('AMOUNT/DATE');
 
       await contactId$.next('1234-abcd-1234-abcd');
       expect(transactionServiceSpy.getPreviousTransactionForAggregate).toHaveBeenCalled();
-      console.log('CONTACT ID');
     });
   });
 });

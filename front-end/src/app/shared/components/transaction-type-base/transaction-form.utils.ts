@@ -373,7 +373,6 @@ export class TransactionFormUtils {
 
     (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
       async ([contribution_date, amount, contactId]) => {
-        console.log(contribution_date, amount, contactId);
         const previous_transaction = await component.transactionService.getPreviousTransactionForAggregate(
           transaction,
           contactId,
