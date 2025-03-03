@@ -361,7 +361,7 @@ export class TransactionFormUtils {
     }
   }
 
-  private static async handleShowAggregateValueChanges(
+  static async handleShowAggregateValueChanges(
     component: TransactionTypeBaseComponent,
     form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
     transaction: Transaction,
@@ -373,12 +373,13 @@ export class TransactionFormUtils {
 
     (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
       async ([contribution_date, amount, contactId]) => {
+        console.log(contribution_date, amount, contactId);
         const previous_transaction = await component.transactionService.getPreviousTransactionForAggregate(
           transaction,
           contactId,
           contribution_date,
         );
-        if (contactId) {
+        if (previous_transaction) {
           this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
         }
       },
