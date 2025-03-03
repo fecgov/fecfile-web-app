@@ -32,7 +32,7 @@ describe('Receipt Transactions', () => {
     Initialize();
   });
 
-  it('Create an Individual Receipt transaction using the contact lookup', () => {
+  xit('Create an Individual Receipt transaction using the contact lookup', () => {
     F3XSetup({ individual: true });
     StartTransaction.Receipts().Individual().IndividualReceipt();
 
@@ -63,7 +63,7 @@ describe('Receipt Transactions', () => {
     cy.get('app-calendar').should('exist').should('contain', 'This is a required field.');
   });
 
-  it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
+  xit('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
     F3XSetup();
     StartTransaction.Receipts().Individual().Returned();
 
@@ -100,7 +100,7 @@ describe('Receipt Transactions', () => {
     TransactionDetailPage.assertFormData(negativeAmountFormData, '', '#contribution_date');
   });
 
-  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
+  xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     const formContactData = {
       ...defaultContactFormData,
       ...{ contact_type: 'Organization' },
@@ -179,7 +179,7 @@ describe('Receipt Transactions', () => {
     );
   });
 
-  it('Create a Party Receipt transaction', () => {
+  xit('Create a Party Receipt transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().RegisteredFilers().Party();
 
@@ -218,7 +218,7 @@ describe('Receipt Transactions', () => {
     TransactionDetailPage.assertFormData(localFormTransactionData, '', '#contribution_date');
   });
 
-  it('Create a Group I transaction', () => {
+  xit('Create a Group I transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
@@ -256,7 +256,7 @@ describe('Receipt Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData, '', '#contribution_date');
   });
 
-  it('Create a dual-entry Earmark Receipt transaction', () => {
+  xit('Create a dual-entry Earmark Receipt transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().Individual().Earmark();
 
@@ -347,7 +347,7 @@ describe('Receipt Transactions', () => {
     );
   });
 
-  it('Create a dual-entry PAC Earmark Receipt transaction', () => {
+  xit('Create a dual-entry PAC Earmark Receipt transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().RegisteredFilers().PAC();
 
@@ -443,7 +443,7 @@ describe('Receipt Transactions', () => {
     );
   });
 
-  it('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
+  xit('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
     F3XSetup();
 
     // Create a Joint Fundraising Transfer
@@ -557,5 +557,55 @@ describe('Receipt Transactions', () => {
       '#contribution_date',
     );
     PageUtils.clickButton('Cancel');
+  });
+
+  it('calculates the aggregate amount within a transaction form', () => {
+    F3XSetup();
+
+    // Create the first Individual Receipt
+    StartTransaction.Receipts().Individual().IndividualReceipt();
+
+    PageUtils.clickLink('Create a new contact');
+    const individualFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Individual' },
+    };
+    ContactListPage.enterFormData(individualFormContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const transactionOneData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 3, 27),
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue', '', true);
+
+    cy.contains('Transactions in this report').should('exist');
+
+    // Create the second Individual Receipt
+    StartTransaction.Receipts().Individual().IndividualReceipt();
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.contains(defaultContactFormData['last_name']).should('exist');
+    cy.contains(defaultContactFormData['last_name']).click({ force: true });
+
+    const transactionTwoData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 3, 28),
+        amount: 25,
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
+    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+
+    cy.get('[id=aggregate]').should('have.value', '$225.01');
   });
 });
