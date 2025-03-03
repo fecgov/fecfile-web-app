@@ -1,5 +1,5 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
-import { AggregationGroups, ScheduleIds } from './transaction.model';
+import { ScheduleIds } from './transaction.model';
 
 export abstract class SchFTransactionType extends TransactionType {
   scheduleId = ScheduleIds.F;
@@ -11,8 +11,6 @@ export abstract class SchFTransactionType extends TransactionType {
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
-    aggregation_group: AggregationGroups | undefined;
-
   // Form fields
     last_name: 'payee_last_name',
     first_name: 'payee_first_name',

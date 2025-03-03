@@ -1,5 +1,5 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { Transaction } from './transaction.model';
+import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -29,6 +29,7 @@ export class SchFTransaction extends Transaction {
   payee_zip: string | undefined;
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
   expenditure_amount: number | undefined;
+  aggregation_group: AggregationGroups | undefined;
   aggregate_general_elect_expended: number | undefined;
   expenditure_purpose_description: string | undefined;
   category_code: string | undefined;
