@@ -115,7 +115,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       if (this.report?.report_type === ReportTypes.F3X) {
         return [
           ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
-          ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+          ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS, // includes ScheduleFTransactionTypes.*
           ScheduleBTransactionGroups.OTHER_EXPENDITURES,
           ScheduleBTransactionGroups.REFUND,
           ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
@@ -233,6 +233,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
         ];
         break;
       case ScheduleBTransactionGroups.OTHER_EXPENDITURES:
