@@ -32,7 +32,7 @@ describe('Receipt Transactions', () => {
     Initialize();
   });
 
-  xit('Create an Individual Receipt transaction using the contact lookup', () => {
+  it('Create an Individual Receipt transaction using the contact lookup', () => {
     F3XSetup({ individual: true });
     StartTransaction.Receipts().Individual().IndividualReceipt();
 
@@ -63,7 +63,7 @@ describe('Receipt Transactions', () => {
     cy.get('app-calendar').should('exist').should('contain', 'This is a required field.');
   });
 
-  xit('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
+  it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
     F3XSetup();
     StartTransaction.Receipts().Individual().Returned();
 
@@ -100,7 +100,7 @@ describe('Receipt Transactions', () => {
     TransactionDetailPage.assertFormData(negativeAmountFormData, '', '#contribution_date');
   });
 
-  xit('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
+  it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     const formContactData = {
       ...defaultContactFormData,
       ...{ contact_type: 'Organization' },
@@ -179,7 +179,7 @@ describe('Receipt Transactions', () => {
     );
   });
 
-  xit('Create a Party Receipt transaction', () => {
+  it('Create a Party Receipt transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().RegisteredFilers().Party();
 
@@ -218,7 +218,7 @@ describe('Receipt Transactions', () => {
     TransactionDetailPage.assertFormData(localFormTransactionData, '', '#contribution_date');
   });
 
-  xit('Create a Group I transaction', () => {
+  it('Create a Group I transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
@@ -256,7 +256,7 @@ describe('Receipt Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData, '', '#contribution_date');
   });
 
-  xit('Create a dual-entry Earmark Receipt transaction', () => {
+  it('Create a dual-entry Earmark Receipt transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().Individual().Earmark();
 
@@ -347,7 +347,7 @@ describe('Receipt Transactions', () => {
     );
   });
 
-  xit('Create a dual-entry PAC Earmark Receipt transaction', () => {
+  it('Create a dual-entry PAC Earmark Receipt transaction', () => {
     F3XSetup();
     StartTransaction.Receipts().RegisteredFilers().PAC();
 
@@ -443,7 +443,7 @@ describe('Receipt Transactions', () => {
     );
   });
 
-  xit('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
+  it('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
     F3XSetup();
 
     // Create a Joint Fundraising Transfer
