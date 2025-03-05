@@ -361,7 +361,7 @@ export class TransactionFormUtils {
     }
   }
 
-  static async handleShowAggregateValueChanges(
+  static handleShowAggregateValueChanges(
     component: TransactionTypeBaseComponent,
     form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
     transaction: Transaction,
@@ -369,29 +369,29 @@ export class TransactionFormUtils {
     templateMap: TransactionTemplateMapType,
   ) {
     const contactId$ = contactIdMap['contact_1'].asObservable();
-    const contactIdStart = await firstValueFrom(contactId$);
-
-    (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
-      async ([contribution_date, amount, contactId]) => {
-        const previous_transaction = await component.transactionService.getPreviousTransactionForAggregate(
-          transaction,
-          contactId,
-          contribution_date,
-        );
-        if (previous_transaction) {
-          this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
-        }
-      },
-      component.destroy$,
-      [
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        combineLatestWith(form.get(templateMap.amount)?.valueChanges as Observable<any>, contactId$),
-        startWith<[Date, number, string]>([
-          form.get(templateMap.date)?.value,
-          form.get(templateMap.amount)?.value,
-          contactIdStart,
-        ]),
-      ],
-    );
+    firstValueFrom(contactId$).then((contactIdStart) => {
+      (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
+        async ([contribution_date, amount, contactId]) => {
+          const previous_transaction = await component.transactionService.getPreviousTransactionForAggregate(
+            transaction,
+            contactId,
+            contribution_date,
+          );
+          if (previous_transaction) {
+            this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
+          }
+        },
+        component.destroy$,
+        [
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          combineLatestWith(form.get(templateMap.amount)?.valueChanges as Observable<any>, contactId$),
+          startWith<[Date, number, string]>([
+            form.get(templateMap.date)?.value,
+            form.get(templateMap.amount)?.value,
+            contactIdStart,
+          ]),
+        ],
+      );
+    });
   }
 }
