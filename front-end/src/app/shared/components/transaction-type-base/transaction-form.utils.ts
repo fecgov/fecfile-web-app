@@ -377,9 +377,7 @@ export class TransactionFormUtils {
             contactId,
             contribution_date,
           );
-          if (previous_transaction) {
-            this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
-          }
+          this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
         },
         component.destroy$,
         [
