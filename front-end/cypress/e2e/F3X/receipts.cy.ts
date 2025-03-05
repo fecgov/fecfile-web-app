@@ -607,5 +607,10 @@ describe('Receipt Transactions', () => {
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$225.01');
+
+    TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 26), '');
+    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+
+    cy.get('[id=aggregate]').should('have.value', '$25.00');
   });
 });
