@@ -381,6 +381,9 @@ export class TransactionFormUtils {
         },
         component.destroy$,
         [
+          // Emit the initial value of the date since the combineLatestWith below won't emit
+          // if the date hasn't emitted.  That's good for a fresh form, but opening an
+          // existing transaction would not emit the date.
           startWith<Date>(form.get(templateMap.date)?.value),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           combineLatestWith(form.get(templateMap.amount)?.valueChanges as Observable<any>, contactId$),
