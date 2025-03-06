@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
   NavigationAction,
@@ -10,22 +10,23 @@ import {
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestIndividualReceipt, getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { Contact, ContactTypes } from '../../models/contact.model';
-import { TransactionContactUtils } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { TransactionType } from '../../models/transaction-type.model';
+import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
 import { ActivatedRoute, NavigationBehaviorOptions, Router } from '@angular/router';
-import { Transaction } from '../../models/transaction.model';
+import { AggregationGroups, Transaction } from '../../models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 
 let testTransaction: SchATransaction;
 
@@ -560,6 +561,38 @@ describe('TransactionTypeBaseComponent', () => {
       const res = await component.confirmation$;
       expect(res).toBeTruthy();
       expect(confirmSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('aggregate calculation', () => {
+    it('should request the previous transaction', async () => {
+      const form = new FormGroup(
+        {
+          expenditure_amount: new SubscriptionFormControl(),
+          expenditure_date: new SubscriptionFormControl(),
+        },
+        { updateOn: 'blur' },
+      );
+      const contactId$ = new Subject<string>();
+      const contactIdMap: ContactIdMapType = { contact_1: contactId$ };
+
+      const transaction = SchETransaction.fromJSON({
+        transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+        expenditure_amount: 50,
+      });
+
+      TransactionFormUtils.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, {
+        amount: 'expenditure_amount',
+        date: 'expenditure_date',
+      } as TransactionTemplateMapType);
+
+      form.get('expenditure_amount')?.setValue(25);
+      form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
+      expect(transactionServiceSpy.getPreviousTransactionForAggregate).not.toHaveBeenCalled();
+
+      await contactId$.next('1234-abcd-1234-abcd');
+      expect(transactionServiceSpy.getPreviousTransactionForAggregate).toHaveBeenCalled();
     });
   });
 });
