@@ -131,7 +131,11 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       }
     });
 
-    if (this.committeeAccount && this.transactionType instanceof SchETransactionType) {
+    if (
+      this.committeeAccount &&
+      this.transactionType instanceof SchETransactionType &&
+      !this.form.get(this.templateMap['signatory_1_last_name'])?.value
+    ) {
       this.form.patchValue({
         [this.templateMap['signatory_1_last_name']]: this.committeeAccount.treasurer_name_2,
         [this.templateMap['signatory_1_first_name']]: this.committeeAccount.treasurer_name_1,
