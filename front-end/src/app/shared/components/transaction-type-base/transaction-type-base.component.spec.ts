@@ -589,7 +589,8 @@ describe('TransactionTypeBaseComponent', () => {
     expect(component.form.get(component.templateMap['signatory_1_suffix'])!.value).toBe(
       testCommitteeAccount.treasurer_name_suffix,
     );
-    
+  });
+
   describe('aggregate calculation', () => {
     it('should request the previous transaction', async () => {
       const form = new FormGroup(
