@@ -6,7 +6,7 @@ import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.uti
 
 export class SchFTransaction extends Transaction {
   coordinated_expenditures: boolean | undefined;
-  designated_committee_id_number: string | undefined;
+  designating_committee_id_number: string | undefined;
   designating_committee_name: string | undefined;
   subordinate_committee_id_number: string | undefined;
   subordinate_committee_name: string | undefined;
@@ -73,8 +73,7 @@ export enum ScheduleFTransactionGroups {
   COORDINATED_EXPENDITURES = 'CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS',
 }
 
-export type ScheduleFTransactionGroupsType =
-  | ScheduleFTransactionGroups.COORDINATED_EXPENDITURES;
+export type ScheduleFTransactionGroupsType = ScheduleFTransactionGroups.COORDINATED_EXPENDITURES;
 
 export enum ScheduleFTransactionTypes {
   COORDINATED_PARTY_EXPENDITURE = 'COORDINATED_PARTY_EXPENDITURE',

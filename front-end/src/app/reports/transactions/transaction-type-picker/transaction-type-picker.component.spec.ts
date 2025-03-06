@@ -16,7 +16,6 @@ import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.m
 import { ScheduleATransactionGroups, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ScheduleFTransactionGroups, ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
