@@ -34,6 +34,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { SchETransactionType } from 'app/shared/models/sche-transaction-type.model';
 
 @Component({
   template: '',
@@ -129,6 +130,16 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         this.store.dispatch(navigationEventClearAction());
       }
     });
+
+    if (this.committeeAccount && this.transactionType instanceof SchETransactionType) {
+      this.form.patchValue({
+        [this.templateMap['signatory_1_last_name']]: this.committeeAccount.treasurer_name_2,
+        [this.templateMap['signatory_1_first_name']]: this.committeeAccount.treasurer_name_1,
+        [this.templateMap['signatory_1_middle_name']]: this.committeeAccount.treasurer_name_middle,
+        [this.templateMap['signatory_1_prefix']]: this.committeeAccount.treasurer_name_prefix,
+        [this.templateMap['signatory_1_suffix']]: this.committeeAccount.treasurer_name_suffix,
+      });
+    }
   }
 
   override ngOnDestroy(): void {

@@ -8,7 +8,13 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { getTestIndividualReceipt, getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
+import {
+  getTestIndividualReceipt,
+  getTestTransactionByType,
+  testCommitteeAccount,
+  testIndependentExpenditure,
+  testMockStore,
+} from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { of, Subject } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
@@ -562,6 +568,27 @@ describe('TransactionTypeBaseComponent', () => {
       expect(res).toBeTruthy();
       expect(confirmSpy).toHaveBeenCalled();
     });
+  });
+
+  it('should populate treasurer data from committee for schedule E', () => {
+    component.transaction = testIndependentExpenditure;
+    component.committeeAccount = testCommitteeAccount;
+    fixture.detectChanges();
+    expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(
+      testCommitteeAccount.treasurer_name_2,
+    );
+    expect(component.form.get(component.templateMap['signatory_1_first_name'])!.value).toBe(
+      testCommitteeAccount.treasurer_name_1,
+    );
+    expect(component.form.get(component.templateMap['signatory_1_middle_name'])!.value).toBe(
+      testCommitteeAccount.treasurer_name_middle,
+    );
+    expect(component.form.get(component.templateMap['signatory_1_prefix'])!.value).toBe(
+      testCommitteeAccount.treasurer_name_prefix,
+    );
+    expect(component.form.get(component.templateMap['signatory_1_suffix'])!.value).toBe(
+      testCommitteeAccount.treasurer_name_suffix,
+    );
   });
 
   describe('aggregate calculation', () => {
