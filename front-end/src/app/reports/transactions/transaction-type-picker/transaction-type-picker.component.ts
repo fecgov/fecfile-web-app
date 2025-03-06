@@ -48,6 +48,7 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccordionModule } from 'primeng/accordion';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
+import { environment } from '../../../../environments/environment';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -343,6 +344,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {
     return !getTransactionTypeClass(transactionTypeIdentifier);
+  }
+
+  showTransaction(transactionTypeIdentifier: string): boolean {
+    return !(!environment.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
   }
 
   getRouterLink(transactionType: string): string | undefined {
