@@ -11,7 +11,7 @@ export abstract class SchFTransactionType extends TransactionType {
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
-  // Form fields
+    // Form fields
     last_name: 'payee_last_name',
     first_name: 'payee_first_name',
     middle_name: 'payee_middle_name',
