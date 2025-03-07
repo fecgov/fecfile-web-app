@@ -46,8 +46,8 @@ def _detect_branch(repo):
 
 DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
-    ("test", lambda _, branch: branch == "test"),
-    ("stage", lambda _, branch: branch.startswith("release")),
+    ("test", lambda _, branch: branch == "release/test"),
+    ("stage", lambda _, branch: branch.startswith("release/sprint")),
     ("dev", lambda _, branch: branch == "develop"),
 )
 
@@ -211,6 +211,7 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
 
     Example usage: invoke deploy --space dev
     """
+    ctx.run(f"cf version", echo=True)
 
     if help:
         _print_help_text()

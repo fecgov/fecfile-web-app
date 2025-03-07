@@ -558,4 +558,59 @@ describe('Receipt Transactions', () => {
     );
     PageUtils.clickButton('Cancel');
   });
+
+  it('calculates the aggregate amount within a transaction form', () => {
+    F3XSetup();
+
+    // Create the first Individual Receipt
+    StartTransaction.Receipts().Individual().IndividualReceipt();
+
+    PageUtils.clickLink('Create a new contact');
+    const individualFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Individual' },
+    };
+    ContactListPage.enterFormData(individualFormContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const transactionOneData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 3, 27),
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue', '', true);
+
+    cy.contains('Transactions in this report').should('exist');
+
+    // Create the second Individual Receipt
+    StartTransaction.Receipts().Individual().IndividualReceipt();
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.contains(defaultContactFormData['last_name']).should('exist');
+    cy.contains(defaultContactFormData['last_name']).click({ force: true });
+
+    const transactionTwoData = {
+      ...formTransactionDataForSchedule,
+      ...{
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 3, 28),
+        amount: 25,
+      },
+    };
+    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
+    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+
+    cy.get('[id=aggregate]').should('have.value', '$225.01');
+
+    TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 26), '');
+    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+
+    cy.get('[id=aggregate]').should('have.value', '$25.00');
+  });
 });
