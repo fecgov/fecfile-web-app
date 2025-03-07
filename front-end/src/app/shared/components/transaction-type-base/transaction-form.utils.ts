@@ -385,9 +385,9 @@ export class TransactionFormUtils {
           // if the date hasn't emitted.  That's good for a fresh form, but opening an
           // existing transaction would not emit the date.
           startWith<Date>(form.get(templateMap.date)?.value),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           combineLatestWith(
             (form.get(templateMap.amount)?.valueChanges as Observable<any>).pipe(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               startWith(form.get(templateMap.amount)?.value),
             ),
             contactId$.pipe(startWith(contactIdStart)),
