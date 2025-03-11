@@ -1,0 +1,36 @@
+<p-dialog
+  [visible]="memberService.isOnlyOne()"
+  [modal]="true"
+  [dismissableMask]="true"
+  [closeOnEscape]="false"
+  [style]="{ width: '40%', minWidth: '600px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template #header>
+    <h1>Welcome to FECfile+</h1>
+  </ng-template>
+  <p><b> As the account creator, you are the default Committee Administrator. </b></p>
+  <p>This role has full system access, including the ability to manage filings and edit user access.</p>
+  <p>
+    For security and account recovery purposes, every committee account must have at least two committee administrators.
+    Please add the committee administrator to proceed.
+  </p>
+  <h2>Add a second committee administrator</h2>
+  <form [formGroup]="form">
+    <div class="field">
+      <label for="role">Role</label>
+      <input class="p-disabled" id="role" name="role" pInputText formControlName="role" readonly />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" pInputText formControlName="email" />
+      <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted"></app-error-messages>
+    </div>
+  </form>
+  <ng-template #footer>
+    <div class="flex w-full justify-content-end">
+      <p-button type="submit" (keydown.enter)="save()" (click)="save()" label="Save"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

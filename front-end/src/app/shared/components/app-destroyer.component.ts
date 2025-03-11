@@ -1,4 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -16,5 +17,7 @@ export abstract class DestroyerComponent implements OnDestroy {
   template: '',
 })
 export abstract class FormComponent extends DestroyerComponent {
+  protected readonly fb = inject(FormBuilder);
+  protected abstract form: FormGroup;
   formSubmitted = false;
 }

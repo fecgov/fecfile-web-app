@@ -1,7 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, resource } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService, QueryParams } from './api.service';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
+import { Store } from '@ngrx/store';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +12,33 @@ import { CommitteeMember, ListRestResponse, Roles } from '../models';
 export class CommitteeMemberService implements TableListService<CommitteeMember> {
   private readonly apiService = inject(ApiService);
   private readonly endpoint = '/committee-members/';
+
+  private readonly store = inject(Store);
+  private readonly committee$ = this.store.selectSignal(selectCommitteeAccount);
+  private readonly user$ = this.store.selectSignal(selectUserLoginData);
+
+  public readonly members$ = resource({
+    request: () => ({ committee: this.committee$() }),
+    loader: ({ request }) => {
+      if (request.committee) {
+        return this.getMembers();
+      }
+      return Promise.resolve([]);
+    },
+    defaultValue: [],
+  });
+
+  public readonly isOnlyOne = computed(() => {
+    if (
+      Roles[this.user$().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR ||
+      this.members$.value().length < 1
+    )
+      return false;
+    return (
+      this.members$.value().filter((m) => Roles[m.role as keyof typeof Roles] === Roles.COMMITTEE_ADMINISTRATOR)
+        .length < 2
+    );
+  });
 
   public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
     let parameter_string = `?page=${pageNumber}`;
