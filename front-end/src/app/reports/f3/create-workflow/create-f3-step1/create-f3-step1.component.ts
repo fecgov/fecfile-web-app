@@ -1,56 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { F3xCoverageDates, F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import {
-  electionReportCodes,
-  F3xReportCodes,
-  monthlyElectionYearReportCodes,
-  monthlyNonElectionYearReportCodes,
-  quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes,
-  getCoverageDatesFunction,
-} from 'app/shared/utils/report-code.utils';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { environment } from 'environments/environment';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { MessageService } from 'primeng/api';
-import { combineLatest, startWith, takeUntil } from 'rxjs';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { SelectButton } from 'primeng/selectbutton';
-import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
-import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
-import { Select } from 'primeng/select';
-import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
-import { TextareaModule } from 'primeng/textarea';
-import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
-  selector: 'app-create-f3x-step1',
-  templateUrl: './create-f3x-step1.component.html',
-  styleUrl: './create-f3x-step1.component.scss',
-  imports: [
-    ReactiveFormsModule,
-    RadioButtonModule,
-    SelectButton,
-    ErrorMessagesComponent,
-    CalendarComponent,
-    Select,
-    SaveCancelComponent,
-    TextareaModule,
-  ],
+  selector: 'app-create-f3-step1',
+  imports: [],
+  templateUrl: './create-f3-step1.component.html',
+  styleUrl: './create-f3-step1.component.scss',
 })
-export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
+export class CreateF3Step1Component extends FormComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly fb = inject(FormBuilder);
   private readonly form3XService = inject(Form3XService);
@@ -69,12 +28,11 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
-  formSubmitted = false;
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });
 
-  readonly F3xReportTypeCategories = F3xReportTypeCategories;
+  readonly F3ReportTypeCategories = F3ReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;
   public usedReportCodes?: F3xReportCodes[];
   public thisYear = new Date().getFullYear();
@@ -136,7 +94,7 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
       const coverageDatesFunction = getCoverageDatesFunction(reportCode);
       if (coverageDatesFunction) {
-        const isElectionYear = F3xReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
+        const isElectionYear = F3ReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
         const [coverage_from_date, coverage_through_date] = coverageDatesFunction(
           this.thisYear,
           isElectionYear,
@@ -151,16 +109,16 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
-  public getReportTypeCategories(): F3xReportTypeCategoryType[] {
-    return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
+  public getReportTypeCategories(): F3ReportTypeCategoryType[] {
+    return [F3ReportTypeCategories.ELECTION_YEAR, F3ReportTypeCategories.NON_ELECTION_YEAR];
   }
 
   public getReportCodes(): F3xReportCodes[] {
     const isMonthly = this.form?.get('filing_frequency')?.value === 'M';
     switch (this.form.get('report_type_category')?.value) {
-      case F3xReportTypeCategories.ELECTION_YEAR:
+      case F3ReportTypeCategories.ELECTION_YEAR:
         return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
-      case F3xReportTypeCategories.NON_ELECTION_YEAR:
+      case F3ReportTypeCategories.NON_ELECTION_YEAR:
         return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
       default:
         return [];
@@ -225,13 +183,13 @@ export class CreateF3XStep1Component extends DestroyerComponent implements OnIni
   }
 }
 
-export enum F3xReportTypeCategories {
+export enum F3ReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
   NON_ELECTION_YEAR = 'Non-Election Year',
   SPECIAL = 'Special',
 }
 
-export type F3xReportTypeCategoryType =
-  | F3xReportTypeCategories.ELECTION_YEAR
-  | F3xReportTypeCategories.NON_ELECTION_YEAR
-  | F3xReportTypeCategories.SPECIAL;
+export type F3ReportTypeCategoryType =
+  | F3ReportTypeCategories.ELECTION_YEAR
+  | F3ReportTypeCategories.NON_ELECTION_YEAR
+  | F3ReportTypeCategories.SPECIAL;

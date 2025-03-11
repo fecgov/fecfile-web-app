@@ -27,6 +27,33 @@ export enum F3xReportCodes {
   M11 = 'M11',
   M12 = 'M12',
 }
+export enum F3ReportCodes {
+  Q1 = 'Q1',
+  Q2 = 'Q2',
+  Q3 = 'Q3',
+  YE = 'YE',
+  TER = 'TER',
+  MY = 'MY',
+  TwelveG = '12G',
+  TwelveP = '12P',
+  TwelveR = '12R',
+  TwelveS = '12S',
+  TwelveC = '12C',
+  ThirtyG = '30G',
+  ThirtyR = '30R',
+  ThirtyS = '30S',
+  M2 = 'M2',
+  M3 = 'M3',
+  M4 = 'M4',
+  M5 = 'M5',
+  M6 = 'M6',
+  M7 = 'M7',
+  M8 = 'M8',
+  M9 = 'M9',
+  M10 = 'M10',
+  M11 = 'M11',
+  M12 = 'M12',
+}
 
 export function getCoverageDatesFunction(
   reportCode: F3xReportCodes,

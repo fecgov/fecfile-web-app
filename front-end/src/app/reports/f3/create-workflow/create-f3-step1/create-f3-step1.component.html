@@ -1,0 +1,148 @@
+<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+  <div class="grid">
+    <div class="col-12">
+      <h1>FEC Form 3</h1>
+      <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+  @if (userCanSetFilingFrequency) {
+    <div class="grid">
+      <div class="col-12">
+        <h3>Reporting frequency</h3>
+      </div>
+
+      <div class="col-12">
+        <div class="field grid" data-cy="filing_frequency">
+          <div class="col-12">
+            <label for="type">(CHOOSE ONE)</label>
+          </div>
+          <div class="col-12 flex">
+            <p-radioButton
+              inputId="Q"
+              name="filing_frequency"
+              value="Q"
+              formControlName="filing_frequency"
+            ></p-radioButton>
+            <label for="Q" class="ml-2">QUARTERLY REPORTING</label>
+          </div>
+          <div class="col-12 flex">
+            <p-radioButton
+              inputId="M"
+              name="filing_frequency"
+              value="M"
+              formControlName="filing_frequency"
+            ></p-radioButton>
+            <label for="M" class="ml-2">MONTHLY REPORTING</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  <div class="grid">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <h3>Report type</h3>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="report_type_category">TIME PERIOD</label>
+        <p-selectButton
+          data-cy="report-type-category"
+          [options]="getReportTypeCategories()"
+          [allowEmpty]="false"
+          formControlName="report_type_category"
+        ></p-selectButton>
+        <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+    <div class="col-6"></div>
+    <div class="col-6">
+      <div class="field grid" data-cy="report_code">
+        <label for="type">(CHOOSE ONE)</label>
+        @for (reportCode of getReportCodes(); track reportCode) {
+          <div class="p-field-checkbox col-12 flex">
+            <p-radioButton
+              [inputId]="reportCode"
+              name="report_code"
+              [value]="reportCode"
+              [class]="
+                usedReportCodes?.includes(reportCode)
+                  ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
+                  : ''
+              "
+              formControlName="report_code"
+            ></p-radioButton>
+            <label [for]="reportCode" class="ml-2" [class]="usedReportCodes?.includes(reportCode) ? 'p-disabled' : ''">
+              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
+            </label>
+          </div>
+        }
+      </div>
+    </div>
+    @if (isElectionReport()) {
+      <div class="election-info col-6 grid">
+        <div class="col-12">
+          <app-calendar
+            data-cy="date_of_election"
+            fieldName="date_of_election"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            label="ELECTION ON"
+          ></app-calendar>
+        </div>
+        <div class="col-12">
+          <div class="field flex flex-column" data-cy="state_of_election">
+            <label for="state_of_election">IN THE STATE/PROVINCE OF</label>
+            <p-select
+              inputId="state_of_election"
+              formControlName="state_of_election"
+              [options]="stateOptions"
+              [autoDisplayFirst]="false"
+              appendTo="body"
+            ></p-select>
+            <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <h3 class="m-0">Covering period</h3>
+      <span>Please verify coverage dates since the dates cannot be changed once the report is created.</span>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <app-calendar
+        fieldName="coverage_from_date"
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        label="FROM"
+      ></app-calendar>
+    </div>
+    <div class="col-6">
+      <app-calendar
+        fieldName="coverage_through_date"
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        label="TO"
+      ></app-calendar>
+    </div>
+  </div>
+</form>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
