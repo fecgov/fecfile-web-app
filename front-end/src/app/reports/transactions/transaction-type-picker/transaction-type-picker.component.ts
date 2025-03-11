@@ -335,7 +335,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         return debtPaymentLines.includes(lineNumber);
       });
     }
-    return transactionTypes;
+    return transactionTypes.filter((transactionType) => this.showTransaction(transactionType));
   }
 
   hasTransactions(group: TransactionGroupTypes): boolean {
@@ -347,6 +347,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   }
 
   showTransaction(transactionTypeIdentifier: string): boolean {
+    // currently we only hide SchedF in some ɵnvironments, but in the future?
     return !(!environment.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
   }
 
