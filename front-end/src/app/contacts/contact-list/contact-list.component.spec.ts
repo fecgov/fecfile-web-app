@@ -10,7 +10,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ContactListComponent } from './contact-list.component';
 import { ActivatedRoute } from '@angular/router';
-import { DeletedContactService } from 'app/shared/services/contact.service';
+import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
@@ -20,6 +20,7 @@ import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
   let fixture: ComponentFixture<ContactListComponent>;
+  let service: ContactService;
 
   const contact = new Contact();
   contact.first_name = 'Jane';
@@ -56,6 +57,7 @@ describe('ContactListComponent', () => {
         DeletedContactService,
         FormBuilder,
         MessageService,
+        ContactService,
         provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
@@ -69,6 +71,7 @@ describe('ContactListComponent', () => {
   });
 
   beforeEach(() => {
+    service = TestBed.inject(ContactService);
     fixture = TestBed.createComponent(ContactListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -124,7 +127,7 @@ describe('ContactListComponent', () => {
   });
 
   it('#onSelectAllChange set properties', async () => {
-    spyOn(component.itemService, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
+    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
     await component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeFalse();
     expect(component.selectedItems).toEqual([]);
@@ -174,14 +177,14 @@ describe('ContactListComponent', () => {
   });
 
   it('#saveContact calls itemService', () => {
-    spyOn(component.itemService, 'update').and.returnValue(Promise.resolve(testContact));
-    spyOn(component.itemService, 'create').and.returnValue(Promise.resolve(testContact));
-    spyOn(component.itemService, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
+    spyOn(service, 'update').and.returnValue(Promise.resolve(testContact));
+    spyOn(service, 'create').and.returnValue(Promise.resolve(testContact));
+    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
     const contact = testContact;
     component.saveContact(contact);
-    expect(component.itemService.update).toHaveBeenCalledTimes(1);
+    expect(service.update).toHaveBeenCalledTimes(1);
     contact.id = undefined;
     component.saveContact(contact);
-    expect(component.itemService.create).toHaveBeenCalledTimes(1);
+    expect(service.create).toHaveBeenCalledTimes(1);
   });
 });

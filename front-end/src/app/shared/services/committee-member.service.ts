@@ -27,17 +27,12 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     },
     defaultValue: [],
   });
+  public readonly admins$ = computed(() => this.members$.value().filter((m) => m.isAdmin));
 
   public readonly isOnlyOne = computed(() => {
-    if (
-      Roles[this.user$().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR ||
-      this.members$.value().length < 1
-    )
+    if (Roles[this.user$().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR || this.admins$().length < 1)
       return false;
-    return (
-      this.members$.value().filter((m) => Roles[m.role as keyof typeof Roles] === Roles.COMMITTEE_ADMINISTRATOR)
-        .length < 2
-    );
+    return this.admins$().length < 2;
   });
 
   public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {

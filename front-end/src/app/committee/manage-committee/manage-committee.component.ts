@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -23,18 +23,20 @@ import { ButtonDirective } from 'primeng/button';
     CommitteeMemberDialogComponent,
   ],
 })
-export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements OnInit {
+export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
   private readonly store = inject(Store);
-  override readonly itemService = inject(CommitteeMemberService);
+  protected readonly itemService = inject(CommitteeMemberService);
+  readonly user$ = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
 
   protected readonly rowActions: TableAction[] = [
     new TableAction('Edit Role', this.openEdit.bind(this), undefined),
-    new TableAction('Delete', this.confirmDelete.bind(this), undefined),
+    new TableAction('Delete', this.confirmDelete.bind(this), (member: CommitteeMember) => this.canDeleteMember(member)),
   ];
-  currentUserEmail?: string;
-  currentUserRole?: Roles;
+  private readonly currentUserEmail = computed(() => this.user$().email ?? '');
+  readonly currentUserRole = computed(() => Roles[this.user$().role as keyof typeof Roles]);
+  readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
 
   override rowsPerPage = 10;
@@ -46,22 +48,21 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     { field: 'is_active', label: 'Status' },
   ];
 
-  async ngOnInit() {
-    this.store.select(selectUserLoginData).subscribe((user) => {
-      this.currentUserEmail = user.email;
-      this.currentUserRole = Roles[user.role as keyof typeof Roles];
-    });
-  }
-
   public userAdded(email: string) {
     if (email) {
-      this.loadTableItems({});
+      this.refreshTable();
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
         detail: 'Membership Created',
       });
     }
+  }
+
+  canDeleteMember(member: CommitteeMember): boolean {
+    if (!this.isCommitteeAdministrator()) return false;
+    if (!member.isAdmin) return true;
+    return this.itemService.admins$().length > 2;
   }
 
   public confirmDelete(member: CommitteeMember) {
@@ -78,7 +79,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   roleEdited() {
-    this.loadTableItems({});
+    this.refreshTable();
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
@@ -94,11 +95,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   isNotCurrentUser(member: CommitteeMember): boolean {
-    return member.email.toLowerCase() !== this.currentUserEmail?.toLowerCase();
-  }
-
-  isCommitteeAdministrator(): boolean {
-    return isCommitteeAdministrator(this.currentUserRole);
+    return member.email.toLowerCase() !== this.currentUserEmail().toLowerCase();
   }
 
   override async deleteItem(member: CommitteeMember) {
@@ -124,5 +121,10 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   protected getEmptyItem(): CommitteeMember {
     return new CommitteeMember();
+  }
+
+  override refreshTable(): Promise<void> {
+    this.itemService.members$.reload();
+    return super.refreshTable();
   }
 }
