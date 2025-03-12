@@ -14,7 +14,18 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import { BehaviorSubject, combineLatestWith, from, merge, Observable, of, startWith, switchMap, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatestWith,
+  firstValueFrom,
+  from,
+  merge,
+  Observable,
+  of,
+  startWith,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
@@ -350,32 +361,39 @@ export class TransactionFormUtils {
     }
   }
 
-  private static handleShowAggregateValueChanges(
+  static handleShowAggregateValueChanges(
     component: TransactionTypeBaseComponent,
     form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
   ) {
-    const previous_transaction$: Observable<Transaction | undefined> =
-      form.get(templateMap.date)?.valueChanges.pipe(
-        startWith(form.get(templateMap.date)?.value),
-        combineLatestWith(contactIdMap['contact_1']),
-        switchMap(([contribution_date, contactId]) =>
-          from(
-            component.transactionService.getPreviousTransactionForAggregate(transaction, contactId, contribution_date),
+    const contactId$ = contactIdMap['contact_1'].asObservable();
+    firstValueFrom(contactId$).then((contactIdStart) => {
+      (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
+        async ([contribution_date, amount, contactId]) => {
+          const previous_transaction = await component.transactionService.getPreviousTransactionForAggregate(
+            transaction,
+            contactId,
+            contribution_date,
+          );
+          this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
+        },
+        component.destroy$,
+        [
+          // Emit the initial value of the date since the combineLatestWith below won't emit
+          // if the date hasn't emitted.  That's good for a fresh form, but opening an
+          // existing transaction would not emit the date.
+          startWith<Date>(form.get(templateMap.date)?.value),
+          combineLatestWith(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (form.get(templateMap.amount)?.valueChanges as Observable<any>).pipe(
+              startWith(form.get(templateMap.amount)?.value),
+            ),
+            contactId$.pipe(startWith(contactIdStart)),
           ),
-        ),
-      ) || of(undefined);
-    form
-      .get(templateMap.amount)
-      ?.valueChanges.pipe(
-        startWith(form.get(templateMap.amount)?.value),
-        combineLatestWith(previous_transaction$, of(transaction)),
-        takeUntil(component.destroy$),
-      )
-      .subscribe(([amount, previous_transaction, transaction]) => {
-        this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
-      });
+        ],
+      );
+    });
   }
 }

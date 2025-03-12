@@ -13,6 +13,7 @@ export abstract class SchETransactionType extends TransactionType {
   override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
   override signatoryOneHeader = 'Committee treasurer';
   override committeeCandidateHeader = 'Candidate information';
+  override populateSignatoryOneWithTreasurer = true;
 
   override hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS) && !!form?.get('support_oppose_code')?.value;
