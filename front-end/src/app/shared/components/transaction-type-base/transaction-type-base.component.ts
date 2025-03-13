@@ -90,7 +90,10 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
+    this.form = this.fb.group(
+      SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.transaction.transactionType.schema),
+      { updateOn: 'blur' },
+    );
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
