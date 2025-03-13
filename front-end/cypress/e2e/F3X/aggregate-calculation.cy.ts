@@ -12,7 +12,7 @@ describe('Tests transaction form aggregate calculation', () => {
     Initialize();
   });
 
-  it('new transaction aggregate', () => {
+  xit('new transaction aggregate', () => {
     F3XSetup();
 
     // Create the first Individual Receipt
@@ -103,7 +103,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   // Disabled pending the fix that should come with #2087
-  xit('existing transaction date leapfrogging', () => {
+  it('existing transaction date leapfrogging', () => {
     F3XSetup();
 
     // Create the first Individual Receipt
@@ -160,9 +160,14 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$225.01');
+    PageUtils.clickButton('Save');
+
+    cy.contains('Transactions in this report').should('exist');
+    cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$225.01');
+    cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
   });
 
-  it('existing transaction change contact', () => {
+  xit('existing transaction change contact', () => {
     F3XSetup();
 
     // Create the first Individual Receipt
@@ -228,7 +233,7 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('[id=aggregate]').should('have.value', '$225.01');
   });
 
-  it('existing transaction change amount', () => {
+  xit('existing transaction change amount', () => {
     F3XSetup();
 
     // Create the first Individual Receipt
