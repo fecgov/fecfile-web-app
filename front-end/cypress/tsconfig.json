@@ -1,9 +1,10 @@
 {
-  "extends": "../tsconfig.json",
-  "include": ["**/*.ts"],
-  "compilerOptions": {
-    "sourceMap": false,
-    "types": ["cypress"],
-    "target": "ES6"
-  }
+    "extends": "../tsconfig.json",
+    "include": ["**/*.ts", "./support/e2e.ts"],
+    "compilerOptions": {
+        "sourceMap": false,
+        "target": "ES2024",
+        "lib": ["ES2024", "dom"],
+        "types": ["node"]
+    }
 }
