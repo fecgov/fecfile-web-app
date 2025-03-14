@@ -157,15 +157,18 @@ export abstract class DoubleTransactionTypeBaseComponent
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
   }
 
-  override get confirmation$(): Promise<boolean> {
-    if (!this.childTransaction) return Promise.resolve(false);
-
-    return Promise.all([
-      super.confirmation$,
-      this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog'),
-    ]).then((results) => {
-      return results.every((confirmed) => confirmed);
-    });
+  override async getConfirmations(): Promise<boolean> {
+    if (!this.childTransaction) return false;
+    const result = await super.getConfirmations();
+    if (!result) return false;
+    return this.confirmationService.confirmWithUser(
+      this.childForm,
+      this.childTransaction.transactionType?.contactConfig ?? {},
+      this.getContact,
+      this.getTemplateMap,
+      'childDialog',
+      this.childTransaction,
+    );
   }
 
   override resetForm() {

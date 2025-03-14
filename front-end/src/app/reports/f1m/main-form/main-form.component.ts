@@ -13,7 +13,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputText } from 'primeng/inputtext';
 import { RadioButton } from 'primeng/radiobutton';
@@ -26,6 +25,7 @@ import { NameInputComponent } from '../../../shared/components/inputs/name-input
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   selector: 'app-main-form',
@@ -47,7 +47,7 @@ import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags,
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   protected override reportService: Form1MService = inject(Form1MService);
-  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly confirmationService = inject(ConfirmationWrapperService);
   readonly formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',
@@ -137,9 +137,25 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   report = new Form1M();
 
-  get confirmation$(): Observable<boolean> {
-    if (!this.report) return of(false);
-    return this.confirmWithUser(this.report, this.form);
+  get confirmation$(): Promise<boolean> {
+    if (!this.report) return Promise.resolve(false);
+    return this.confirmationService.confirmWithUser(
+      this.form,
+      this.contactConfigs,
+      this.getContact,
+      this.getTemplateMap,
+    );
+  }
+
+  getContact(contactKey: string) {
+    if (this.report[contactKey as keyof Form1M]) {
+      return this.report[contactKey as keyof Form1M] as Contact;
+    }
+    return null;
+  }
+
+  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
+    return this.templateMapConfigs[contactKey];
   }
 
   override ngOnInit(): void {
@@ -250,48 +266,10 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       return;
     }
 
-    this.confirmation$.subscribe((confirmed: boolean) => {
-      // if every confirmation was accepted
-      if (confirmed) super.save(jump);
-      else this.store.dispatch(singleClickEnableAction());
-    });
-  }
-
-  confirmWithUser(report: Form1M, form: FormGroup) {
-    const confirmations$ = Object.entries(this.contactConfigs)
-      .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
-        if (report[contactKey as keyof Form1M]) {
-          const contact = report[contactKey as keyof Form1M] as Contact;
-          if (!contact.id) {
-            return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-              contact.type,
-              form,
-              this.templateMapConfigs[contactKey],
-              contactKey,
-              'By saving this report',
-            );
-          }
-          const changes = TransactionContactUtils.getContactChanges(
-            form,
-            contact,
-            this.templateMapConfigs[contactKey],
-            config,
-          );
-          if (changes.length > 0) {
-            return TransactionContactUtils.getContactChangesMessage(contact, changes);
-          }
-        }
-        return '';
-      })
-      .filter((message) => !!message)
-      .map((message: string) => {
-        return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, 'dialog');
-      });
-
-    return from([of(true), ...confirmations$]).pipe(
-      concatAll(),
-      reduce((accumulator, confirmed) => accumulator && confirmed),
-    );
+    const confirmed = await this.confirmation$;
+    // if every confirmation was accepted
+    if (confirmed) super.save(jump);
+    else this.store.dispatch(singleClickEnableAction());
   }
 
   updateContactsWithForm(report: Form1M, form: FormGroup) {

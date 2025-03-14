@@ -145,15 +145,18 @@ export abstract class TripleTransactionTypeBaseComponent
     return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 
-  override get confirmation$(): Promise<boolean> {
-    if (!this.childTransaction_2) return Promise.resolve(false);
-
-    return Promise.all([
-      super.confirmation$,
-      this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2'),
-    ]).then((results) => {
-      return results.every((confirmed) => confirmed);
-    });
+  override async getConfirmations(): Promise<boolean> {
+    if (!this.childTransaction_2) return false;
+    const result = await super.getConfirmations();
+    if (!result) return false;
+    return this.confirmationService.confirmWithUser(
+      this.childForm_2,
+      this.childTransaction_2.transactionType?.contactConfig ?? {},
+      this.getContact,
+      this.getTemplateMap,
+      'childDialog_2',
+      this.childTransaction_2,
+    );
   }
 
   override resetForm() {

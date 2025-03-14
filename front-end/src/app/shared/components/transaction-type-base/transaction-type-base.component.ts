@@ -12,7 +12,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { ConfirmationService, MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
+import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
 import { map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -34,6 +34,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   template: '',
@@ -42,7 +43,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
-  protected confirmationService = inject(ConfirmationService);
+  protected readonly confirmationService = inject(ConfirmationWrapperService);
   protected readonly fb = inject(FormBuilder);
   protected readonly router = inject(Router);
   protected readonly fecDatePipe = inject(FecDatePipe);
@@ -173,59 +174,37 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     }
   }
 
-  async confirmWithUser(
-    transaction: Transaction,
-    form: FormGroup,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
-  ): Promise<boolean> {
-    const templateMap = transaction.transactionType.templateMap;
-    if (!templateMap) {
-      throw new Error('Fecfile: Cannot find template map when confirming transaction');
-    }
-
-    const confirmations = Object.entries(transaction.transactionType?.contactConfig ?? {}).map(
-      async ([contactKey, config]: [string, { [formField: string]: string }]) => {
-        if (transaction[contactKey as keyof Transaction]) {
-          if (transaction.transactionType?.getUseParentContact(transaction) && contactKey === 'contact_1') {
-            return true;
-          }
-
-          const contact = transaction[contactKey as keyof Transaction] as Contact;
-          if (!contact.id) {
-            const message = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-              contact.type,
-              form,
-              templateMap,
-              contactKey,
-            );
-            return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, targetDialog);
-          }
-
-          const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config, transaction);
-          if (changes.length > 0) {
-            const message = TransactionContactUtils.getContactChangesMessage(contact, changes);
-            return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, targetDialog);
-          }
-        }
-        return true; // If no confirmation is needed, return `true`
-      },
-    );
-
-    // Await all confirmations
-    const results = await Promise.all(confirmations);
-
-    // Reduce to a single boolean value (similar to RxJS `reduce()`)
-    return results.every((confirmed) => confirmed);
-  }
-
   isInvalid(): boolean {
     blurActiveInput(this.form);
     return this.form.invalid || !this.transaction;
   }
 
-  get confirmation$(): Promise<boolean> {
-    if (!this.transaction) return Promise.resolve(false);
-    return this.confirmWithUser(this.transaction, this.form);
+  async getConfirmations(): Promise<boolean> {
+    if (!this.transaction) return false;
+    return this.confirmationService.confirmWithUser(
+      this.form,
+      this.transaction.transactionType?.contactConfig ?? {},
+      this.getContact,
+      this.getTemplateMap,
+      'dialog',
+      this.transaction,
+    );
+  }
+
+  getContact(contactKey: string, transaction?: Transaction) {
+    if (!transaction) return null;
+    if (transaction[contactKey as keyof Transaction]) {
+      if (transaction.transactionType?.getUseParentContact(transaction) && contactKey === 'contact_1') {
+        return null;
+      }
+
+      return transaction[contactKey as keyof Transaction] as Contact;
+    }
+    return null;
+  }
+
+  getTemplateMap(contactKey: string, transaction?: Transaction): TransactionTemplateMapType | undefined {
+    return transaction?.transactionType?.templateMap;
   }
 
   async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {
@@ -236,7 +215,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         this.store.dispatch(singleClickEnableAction());
         return;
       }
-      const confirmed = await this.confirmation$;
+      const confirmed = await this.getConfirmations();
       // if every confirmation was accepted
       if (confirmed) await this.save(navigationEvent);
       else this.store.dispatch(singleClickEnableAction());
