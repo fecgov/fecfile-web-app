@@ -1,4 +1,5 @@
 import { ContactListPage } from './contactListPage';
+import { PageUtils } from './pageUtils';
 import { ReportListPage } from './reportListPage';
 
 export class LoginPage {
@@ -67,7 +68,20 @@ function loginDotGovLogin() {
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
-  //cy.visit('/dashboard');
+
+  // Create second create admin after logging in to make pop-up go away
+  cy.visit('/dashboard');
+  cy.wait(500);
+  const alias = PageUtils.getAlias('');
+  cy.get(alias)
+    .find('[data-cy="second-committee-email"]')
+    .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
+    .then(($email) => {
+      if ($email.length) {
+        cy.wrap($email).type('admin@admin.com');
+        cy.get('[data-cy="second-committee-save"]').click();
+      }
+    });
 }
 
 function retrieveAuthToken() {

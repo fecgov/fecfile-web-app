@@ -24,13 +24,19 @@
     </div>
     <div class="field">
       <label for="email">Email</label>
-      <input id="email" name="email" pInputText formControlName="email" />
+      <input id="email" name="email" pInputText formControlName="email" data-cy="second-committee-email" />
       <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted"></app-error-messages>
     </div>
   </form>
   <ng-template #footer>
     <div class="flex w-full justify-content-end">
-      <p-button type="submit" (keydown.enter)="save()" (click)="save()" label="Save"></p-button>
+      <p-button
+        type="submit"
+        (keydown.enter)="save()"
+        (click)="save()"
+        label="Save"
+        data-cy="second-committee-save"
+      ></p-button>
     </div>
   </ng-template>
 </p-dialog>
