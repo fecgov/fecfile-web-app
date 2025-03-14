@@ -147,9 +147,9 @@ describe('ManageCommitteeComponent', () => {
       }),
     );
 
-    expect(component.canDeleteMember(committeeMembers[0])).toBeFalse(); // Admin
-    expect(component.canDeleteMember(committeeMembers[1])).toBeFalse(); // Admin
-    expect(component.canDeleteMember(committeeMembers[2])).toBeTrue(); // Manager
+    expect(component.canEditMember(committeeMembers[0])).toBeFalse(); // Admin
+    expect(component.canEditMember(committeeMembers[1])).toBeFalse(); // Admin
+    expect(component.canEditMember(committeeMembers[2])).toBeTrue(); // Manager
   });
 
   it('should do it', () => {
@@ -164,9 +164,9 @@ describe('ManageCommitteeComponent', () => {
     );
     spyOn(service.members$, 'value').and.returnValue(committeeMembers);
 
-    expect(component.canDeleteMember(committeeMembers[0])).toBeTrue();
-    expect(component.canDeleteMember(committeeMembers[1])).toBeTrue();
-    expect(component.canDeleteMember(committeeMembers[2])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[0])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[1])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[2])).toBeTrue();
   });
 
   it('should confirm before delete', () => {

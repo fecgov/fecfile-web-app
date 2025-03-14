@@ -32,7 +32,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   protected readonly rowActions: TableAction[] = [
     new TableAction('Edit Role', this.openEdit.bind(this), undefined),
-    new TableAction('Delete', this.confirmDelete.bind(this), (member: CommitteeMember) => this.canDeleteMember(member)),
+    new TableAction('Delete', this.confirmDelete.bind(this)),
   ];
   private readonly currentUserEmail = computed(() => this.user$().email ?? '');
   readonly currentUserRole = computed(() => Roles[this.user$().role as keyof typeof Roles]);
@@ -59,7 +59,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     }
   }
 
-  canDeleteMember(member: CommitteeMember): boolean {
+  canEditMember(member: CommitteeMember): boolean {
     if (!this.isCommitteeAdministrator()) return false;
     if (!member.isAdmin) return true;
     return this.itemService.admins$().length > 2;
