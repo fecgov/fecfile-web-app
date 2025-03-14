@@ -3,6 +3,10 @@ export enum Roles {
   MANAGER = 'Manager',
 }
 
+export function getRoleKey(role: Roles): typeof Roles {
+  return Object.keys(Roles).find((key) => Roles[key as keyof typeof Roles] === role) as unknown as typeof Roles;
+}
+
 export function getRoleLabel(roleKey: keyof typeof Roles): string {
   return Roles[roleKey];
 }
