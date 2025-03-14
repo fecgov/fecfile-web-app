@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -42,7 +42,6 @@ import { CommitteeAccount, Report, Form3X } from 'app/shared/models';
 export class SubmitReportStep2Component extends FormComponent implements OnInit {
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
-  private readonly fb = inject(FormBuilder);
   private readonly store = inject(Store);
   private readonly messageService = inject(MessageService);
   public readonly confirmationService = inject(ConfirmationService);

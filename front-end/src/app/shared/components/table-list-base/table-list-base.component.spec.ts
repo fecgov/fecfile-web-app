@@ -5,6 +5,7 @@ import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListBaseComponent } from './table-list-base.component';
 
 class TestTableListBaseComponent extends TableListBaseComponent<string> {
+  protected readonly itemService: TestTableListService = TestBed.inject(TestTableListService);
   protected getEmptyItem(): string {
     return '';
   }
@@ -49,7 +50,6 @@ describe('TableListBaseComponent', () => {
     testTableListService = TestBed.inject(TestTableListService);
     fixture = TestBed.createComponent(TestTableListBaseComponent);
     component = fixture.componentInstance;
-    component.itemService = testTableListService;
     fixture.detectChanges();
   });
 

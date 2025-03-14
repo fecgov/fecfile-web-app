@@ -130,7 +130,7 @@ describe('CommitteeMemberDialogComponent', () => {
       component.form.get('role')?.setValue('MANAGER');
       await component.editRole();
 
-      expect(updateSpy).toHaveBeenCalledWith({ ...johnSmith, role: 'MANAGER' });
+      expect(updateSpy).toHaveBeenCalledWith({ ...johnSmith, role: 'MANAGER' } as CommitteeMember);
       expect(resetSpy).toHaveBeenCalled();
     });
 
