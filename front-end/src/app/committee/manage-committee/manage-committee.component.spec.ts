@@ -136,7 +136,7 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should not be able to remove committee admin if less than 3 committee admins', () => {
-    spyOn(service.members$, 'value').and.returnValue(committeeMembers);
+    spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
     committeeMembers.push(
       CommitteeMember.fromJSON({
         first_name: 'Man',
@@ -162,7 +162,7 @@ describe('ManageCommitteeComponent', () => {
         is_active: true,
       }),
     );
-    spyOn(service.members$, 'value').and.returnValue(committeeMembers);
+    spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
 
     expect(component.canEditMember(committeeMembers[0])).toBeTrue();
     expect(component.canEditMember(committeeMembers[1])).toBeTrue();

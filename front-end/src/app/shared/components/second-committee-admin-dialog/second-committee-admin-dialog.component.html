@@ -1,11 +1,12 @@
 <p-dialog
-  [visible]="memberService.isOnlyOne()"
+  [visible]="memberService.needsSecondAdmin()"
   [modal]="true"
   [dismissableMask]="true"
   [closeOnEscape]="false"
   [style]="{ width: '40%', minWidth: '600px' }"
   [draggable]="false"
   [resizable]="false"
+  closable="false"
 >
   <ng-template #header>
     <h1>Welcome to FECfile+</h1>

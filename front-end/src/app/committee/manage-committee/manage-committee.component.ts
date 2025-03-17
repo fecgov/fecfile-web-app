@@ -62,7 +62,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   canEditMember(member: CommitteeMember): boolean {
     if (!this.isCommitteeAdministrator()) return false;
     if (!member.isAdmin) return true;
-    return this.itemService.admins$().length > 2;
+    return this.itemService.adminsSignal().length > 2;
   }
 
   public confirmDelete(member: CommitteeMember) {
@@ -124,7 +124,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   override refreshTable(): Promise<void> {
-    this.itemService.members$.reload();
+    this.itemService.getMembers();
     return super.refreshTable();
   }
 }
