@@ -1,11 +1,10 @@
-import { computed, inject, Injectable, Resource, ResourceStatus } from '@angular/core';
+import { computed, effect, inject, Injectable, Resource, ResourceStatus, signal } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService, QueryParams } from './api.service';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
 import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { createResource } from '../utils/resource';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -15,32 +14,32 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   private readonly endpoint = '/committee-members/';
 
   private readonly store = inject(Store);
-  private readonly committee$ = this.store.selectSignal(selectCommitteeAccount);
-  private readonly user$ = this.store.selectSignal(selectUserLoginData);
+  private readonly userSignal = this.store.selectSignal(selectUserLoginData);
+  private readonly committeeSignal = this.store.selectSignal(selectCommitteeAccount);
 
-  public membersResource = createResource({
-    request: () => ({ committee: this.committee$() }),
-    loader: ({ request }) => {
-      if (request.committee) {
-        console.log('getting members');
-        return this.getMembers();
-      }
-      return Promise.resolve([]);
-    },
-    defaultValue: [],
-  });
+  public readonly membersSignal = signal<CommitteeMember[]>([]);
 
   public readonly needsSecondAdmin = computed(() => {
     if (
-      Roles[this.user$().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR ||
-      this.membersResource.value().length < 1
+      Roles[this.userSignal().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR ||
+      this.membersSignal().length < 1
     )
       return false;
     return (
-      this.membersResource.value().filter((m) => Roles[m.role as keyof typeof Roles] === Roles.COMMITTEE_ADMINISTRATOR)
-        .length < 2
+      this.membersSignal().filter((m) => Roles[m.role as keyof typeof Roles] === Roles.COMMITTEE_ADMINISTRATOR).length <
+      2
     );
   });
+
+  constructor() {
+    effect(() => {
+      if (this.committeeSignal()) {
+        this.getMembers();
+      } else {
+        this.membersSignal.set([]);
+      }
+    });
+  }
 
   public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
     let parameter_string = `?page=${pageNumber}`;
@@ -54,17 +53,23 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
 
   public async getMembers(): Promise<CommitteeMember[]> {
     const response = await this.apiService.get<Array<CommitteeMember>>(this.endpoint);
-    return response.map((item) => CommitteeMember.fromJSON(item));
+    const members = response.map((item) => CommitteeMember.fromJSON(item));
+    this.membersSignal.set(members);
+    return members;
   }
 
   public async addMember(email: string, role: typeof Roles): Promise<CommitteeMember> {
     const response = await this.apiService.post(`${this.endpoint}add-member/`, { email: email, role: role });
-    return CommitteeMember.fromJSON(response);
+    const member = CommitteeMember.fromJSON(response);
+    this.membersSignal.update((members) => [...members, member]);
+    return member;
   }
 
   //prettier-ignore
-  public delete(member: CommitteeMember): Promise<null> {
-    return this.apiService.delete<null>(`/committee-members/${member.id}/remove-member/`);
+  public async delete(member: CommitteeMember): Promise<null> {
+    await this.apiService.delete<null>(`/committee-members/${member.id}/remove-member/`);
+    this.membersSignal.update((members) => members.filter(m => m.email !== member.email));
+    return null;
   }
 
   update(member: CommitteeMember): Promise<CommitteeMember> {

@@ -4,7 +4,6 @@ import { committeeOwnerGuard } from './committee-owner.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { createResource } from '../utils/resource';
 
 describe('committeeOwnerGuard', () => {
   let mockMemberService: jasmine.SpyObj<CommitteeMemberService>;
@@ -15,20 +14,13 @@ describe('committeeOwnerGuard', () => {
   const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   beforeEach(() => {
-    mockMemberService = jasmine.createSpyObj('CommitteeMemberService', [
-      'needsSecondAdmin',
-      'getMembers',
-      'membersResource',
-    ]);
+    mockMemberService = jasmine.createSpyObj('CommitteeMemberService', ['needsSecondAdmin', 'getMembers']);
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: CommitteeMemberService, useValue: mockMemberService },
       ],
-    });
-    TestBed.runInInjectionContext(() => {
-      mockMemberService.membersResource = createResource({ loader: () => mockMemberService.getMembers() });
     });
   });
 

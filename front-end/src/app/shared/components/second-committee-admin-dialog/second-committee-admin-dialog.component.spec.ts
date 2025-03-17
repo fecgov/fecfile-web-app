@@ -78,12 +78,10 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     const addMemberSpy = spyOn(component.memberService, 'addMember').and.returnValue(
       Promise.resolve(new CommitteeMember()),
     );
-    const membersReloadSpy = spyOn(component.memberService.membersResource, 'reload');
     component.save();
     tick();
 
     expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', 'COMMITTEE_ADMINISTRATOR' as unknown as typeof Roles);
-    expect(membersReloadSpy).toHaveBeenCalled();
     expect(messageService.add).toHaveBeenCalledWith({
       severity: 'success',
       summary: 'Successful',

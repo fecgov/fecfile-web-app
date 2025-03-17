@@ -6,7 +6,7 @@ import { CommitteeMemberService } from '../services/committee-member.service';
 export const committeeOwnerGuard: CanActivateFn = async () => {
   const router = inject(Router);
   const memberService = inject(CommitteeMemberService);
-  await memberService.membersResource.reloadAsync();
+  await memberService.getMembers();
 
   if (memberService.needsSecondAdmin()) {
     return router.createUrlTree(['/reports']);
