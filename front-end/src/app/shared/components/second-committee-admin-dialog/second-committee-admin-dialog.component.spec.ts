@@ -78,7 +78,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     const addMemberSpy = spyOn(component.memberService, 'addMember').and.returnValue(
       Promise.resolve(new CommitteeMember()),
     );
-    const membersReloadSpy = spyOn(component.memberService.members$, 'reload');
+    const membersReloadSpy = spyOn(component.memberService.membersResource, 'reload');
     component.save();
     tick();
 

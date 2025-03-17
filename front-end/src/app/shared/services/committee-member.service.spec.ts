@@ -84,32 +84,32 @@ describe('CommitteeMemberService', () => {
     expect(member).toEqual(newMember);
   });
 
-  it('should return true for isOnlyOne() if only one committee admin exists', () => {
-    spyOn(service.members$, 'value').and.returnValue([
+  it('should return true for needsSecondAdmin() if only one committee admin exists', () => {
+    spyOn(service.membersResource, 'value').and.returnValue([
       CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData);
     mockStore.refreshState();
 
-    expect(service.isOnlyOne()).toBeTrue();
+    expect(service.needsSecondAdmin()).toBeTrue();
   });
 
-  it('should return false for isOnlyOne() if more than one committee admin exists', () => {
+  it('should return false for needsSecondAdmin() if more than one committee admin exists', () => {
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData);
     mockStore.refreshState();
-    spyOn(service.members$, 'value').and.returnValue([
+    spyOn(service.membersResource, 'value').and.returnValue([
       CommitteeMember.fromJSON({ email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
       CommitteeMember.fromJSON({ email: 'admin2@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
 
-    expect(service.isOnlyOne()).toBeFalse();
+    expect(service.needsSecondAdmin()).toBeFalse();
   });
 
-  it('should return false for isOnlyOne() if user is not a committee admin', () => {
-    spyOn(service.members$, 'value').and.returnValue([
+  it('should return false for needsSecondAdmin() if user is not a committee admin', () => {
+    spyOn(service.membersResource, 'value').and.returnValue([
       CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
 
-    expect(service.isOnlyOne()).toBeFalse();
+    expect(service.needsSecondAdmin()).toBeFalse();
   });
 });

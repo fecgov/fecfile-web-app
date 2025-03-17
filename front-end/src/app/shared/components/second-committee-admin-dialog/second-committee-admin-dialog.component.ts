@@ -46,7 +46,7 @@ export class SecondCommitteeAdminDialogComponent extends FormComponent {
     const role: Roles = this.form.get('role')?.value;
     const key = getRoleKey(role);
     await this.memberService.addMember(email, key);
-    this.memberService.members$.reload();
+    this.memberService.membersResource.reload();
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',

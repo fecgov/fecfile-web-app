@@ -1,10 +1,11 @@
-import { computed, inject, Injectable, resource } from '@angular/core';
+import { computed, inject, Injectable, Resource, ResourceStatus } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService, QueryParams } from './api.service';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { createResource } from '../utils/resource';
 
 @Injectable({
   providedIn: 'root',
@@ -17,10 +18,11 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   private readonly committee$ = this.store.selectSignal(selectCommitteeAccount);
   private readonly user$ = this.store.selectSignal(selectUserLoginData);
 
-  public readonly members$ = resource({
+  public membersResource = createResource({
     request: () => ({ committee: this.committee$() }),
     loader: ({ request }) => {
       if (request.committee) {
+        console.log('getting members');
         return this.getMembers();
       }
       return Promise.resolve([]);
@@ -28,14 +30,14 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     defaultValue: [],
   });
 
-  public readonly isOnlyOne = computed(() => {
+  public readonly needsSecondAdmin = computed(() => {
     if (
       Roles[this.user$().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR ||
-      this.members$.value().length < 1
+      this.membersResource.value().length < 1
     )
       return false;
     return (
-      this.members$.value().filter((m) => Roles[m.role as keyof typeof Roles] === Roles.COMMITTEE_ADMINISTRATOR)
+      this.membersResource.value().filter((m) => Roles[m.role as keyof typeof Roles] === Roles.COMMITTEE_ADMINISTRATOR)
         .length < 2
     );
   });
@@ -52,8 +54,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
 
   public async getMembers(): Promise<CommitteeMember[]> {
     const response = await this.apiService.get<Array<CommitteeMember>>(this.endpoint);
-    const members = response.map((item) => CommitteeMember.fromJSON(item));
-    return members;
+    return response.map((item) => CommitteeMember.fromJSON(item));
   }
 
   public async addMember(email: string, role: typeof Roles): Promise<CommitteeMember> {
@@ -68,5 +69,12 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
 
   update(member: CommitteeMember): Promise<CommitteeMember> {
     return this.apiService.put(`${this.endpoint}${member.id}/`, member);
+  }
+
+  async waitForResource<T>(resource: Resource<T>): Promise<void> {
+    resource.reload();
+    while (resource.status() === ResourceStatus.Reloading) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
   }
 }
