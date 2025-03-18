@@ -73,9 +73,6 @@ export class TransactionContactUtils {
   ): any[] {
     return Object.entries(contactConfig)
       .map(([field, property]: string[]) => {
-        // For Senate, 00 is used for district but not displayed in form, treated as NULL. It cannot be changed.
-        if (field === 'candidate_district' && form.get(templateMap.candidate_office)?.value === 'S') return undefined;
-
         const contactValue = contact[property as keyof Contact];
         const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
         let formFieldValue = formField?.value;

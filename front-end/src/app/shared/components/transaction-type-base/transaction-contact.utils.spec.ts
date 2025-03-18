@@ -262,35 +262,4 @@ describe('ContactUtils', () => {
 
     expect(Object.values(changesC)).toContain(['candidate_state', 'AK']);
   });
-
-  fit('does not trip over senate entries with district 00', () => {
-    const transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE) as SchETransaction;
-    const formProperties = transaction.transactionType.getFormControlNames();
-    const formBuilder = new FormBuilder();
-    const form = formBuilder.group(SchemaUtils.getFormGroupFields(formProperties));
-    transaction.contact_2 = Contact.fromJSON({
-      first_name: 'Changed',
-      candidate_state: 'GA',
-      candidate_office: 'S',
-      candidate_district: '00',
-    });
-
-    form.patchValue({
-      so_candidate_last_name: 'Last',
-      so_candidate_first_name: 'First',
-      so_candidate_office: CandidateOfficeTypes.SENATE,
-      so_candidate_state: 'AK',
-      election_code: 'P1912',
-    });
-
-    const changes = TransactionContactUtils.getContactChanges(
-      form,
-      transaction.contact_2,
-      transaction.transactionType.templateMap,
-      transaction.transactionType.contactConfig['contact_2'],
-      transaction,
-    );
-
-    expect(Object.values(changes)).not.toContain(['candidate_district', '']);
-  });
 });
