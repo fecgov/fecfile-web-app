@@ -69,9 +69,10 @@ function loginDotGovLogin() {
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
 
+  // Wait for the reports page to load
+  cy.contains('Manage reports').should('exist');
+
   // Create second create admin after logging in to make pop-up go away
-  cy.visit('/dashboard');
-  cy.wait(500);
   const alias = PageUtils.getAlias('');
   cy.get(alias)
     .find('[data-cy="second-committee-email"]')
@@ -82,6 +83,9 @@ function loginDotGovLogin() {
         cy.get('[data-cy="second-committee-save"]').click();
       }
     });
+  cy.contains('Welcome to FECfile').should('not.exist');
+  cy.visit('/dashboard');
+  cy.contains('In-progress reports').should('exist');
 }
 
 function retrieveAuthToken() {
