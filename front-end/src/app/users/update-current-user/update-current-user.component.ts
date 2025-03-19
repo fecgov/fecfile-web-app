@@ -1,14 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject } from '@angular/core';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { takeUntil } from 'rxjs';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Card } from 'primeng/card';
@@ -23,24 +21,24 @@ import { ButtonModule } from 'primeng/button';
   styleUrls: ['./update-current-user.component.scss'],
   imports: [Card, ReactiveFormsModule, ErrorMessagesComponent, SingleClickDirective, ButtonModule],
 })
-export class UpdateCurrentUserComponent extends FormComponent implements OnInit {
-  private readonly store = inject(Store);
-  private readonly fb = inject(FormBuilder);
+export class UpdateCurrentUserComponent extends FormComponent {
   private readonly router = inject(Router);
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);
+  private readonly userSignal = this.store.selectSignal(selectUserLoginData);
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
 
-  ngOnInit(): void {
-    this.store
-      .select(selectUserLoginData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((userLoginData: UserLoginData) => {
-        this.form.setControl('last_name', new SubscriptionFormControl(userLoginData.last_name, Validators.required));
-        this.form.setControl('first_name', new SubscriptionFormControl(userLoginData.first_name, Validators.required));
-        this.form.setControl('email', new SubscriptionFormControl(userLoginData.email, Validators.required));
-        this.formSubmitted = false;
-      });
+  constructor() {
+    super();
+    effect(() => {
+      this.form.setControl('last_name', new SubscriptionFormControl(this.userSignal().last_name, Validators.required));
+      this.form.setControl(
+        'first_name',
+        new SubscriptionFormControl(this.userSignal().first_name, Validators.required),
+      );
+      this.form.setControl('email', new SubscriptionFormControl(this.userSignal().email, Validators.required));
+      this.formSubmitted = false;
+    });
   }
 
   async continue() {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
@@ -24,6 +24,8 @@ import { SignatureInputComponent } from '../../../shared/components/inputs/signa
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
 import { CandidateInputComponent } from '../../../shared/components/inputs/candidate-input/candidate-input.component';
 import { ElectionInputComponent } from '../../../shared/components/inputs/election-input/election-input.component';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 @Component({
   selector: 'app-transaction-input',
@@ -53,7 +55,6 @@ import { ElectionInputComponent } from '../../../shared/components/inputs/electi
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
   @Input() formSubmitted = false;
-  @Input() activeReport$?: Observable<Report>;
   @Input() transaction?: Transaction;
   @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);

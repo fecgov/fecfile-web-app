@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -14,6 +14,8 @@ import { CommitteeMemberDialogComponent } from 'app/shared/components/committee-
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 
 describe('ManageCommitteeComponent', () => {
   let component: ManageCommitteeComponent;
@@ -26,8 +28,10 @@ describe('ManageCommitteeComponent', () => {
     is_active: true,
     id: 'TEST',
   });
+  let mockStore: MockStore;
 
   let committeeMembers: CommitteeMember[];
+  let service: CommitteeMemberService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,21 +52,18 @@ describe('ManageCommitteeComponent', () => {
         MessageService,
         FormBuilder,
         provideMockStore(testMockStore),
+        CommitteeMemberService,
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    service = TestBed.inject(CommitteeMemberService);
+    mockStore = TestBed.inject(MockStore);
+    mockStore.overrideSelector(selectUserLoginData, johnSmith);
     fixture = TestBed.createComponent(ManageCommitteeComponent);
     committeeMembers = [
       johnSmith,
-      CommitteeMember.fromJSON({
-        first_name: 'Jane',
-        last_name: 'Doe',
-        email: 'JD_Test@test.com',
-        role: 'COMMITTEE_ADMINISTRATOR',
-        is_active: true,
-      }),
       CommitteeMember.fromJSON({
         first_name: 'test_first_name',
         last_name: 'test_last_name',
@@ -71,6 +72,7 @@ describe('ManageCommitteeComponent', () => {
         is_active: true,
       }),
     ];
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -129,9 +131,42 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should not be able to remove self from committee', () => {
-    component.currentUserEmail = committeeMembers[2].email;
-    expect(component.isNotCurrentUser(committeeMembers[0])).toBeTrue();
-    expect(component.isNotCurrentUser(committeeMembers[2])).toBeFalse();
+    expect(component.isNotCurrentUser(committeeMembers[0])).toBeFalse();
+    expect(component.isNotCurrentUser(committeeMembers[1])).toBeTrue();
+  });
+
+  it('should not be able to remove committee admin if less than 3 committee admins', () => {
+    spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
+    committeeMembers.push(
+      CommitteeMember.fromJSON({
+        first_name: 'Man',
+        last_name: 'Agar',
+        email: 'manager@test.com',
+        role: 'MANAGER',
+        is_active: true,
+      }),
+    );
+
+    expect(component.canEditMember(committeeMembers[0])).toBeFalse(); // Admin
+    expect(component.canEditMember(committeeMembers[1])).toBeFalse(); // Admin
+    expect(component.canEditMember(committeeMembers[2])).toBeTrue(); // Manager
+  });
+
+  it('should do it', () => {
+    committeeMembers.push(
+      CommitteeMember.fromJSON({
+        first_name: 'Jane',
+        last_name: 'Doe',
+        email: 'JD_Test@test.com',
+        role: 'COMMITTEE_ADMINISTRATOR',
+        is_active: true,
+      }),
+    );
+    spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
+
+    expect(component.canEditMember(committeeMembers[0])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[1])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[2])).toBeTrue();
   });
 
   it('should confirm before delete', () => {
@@ -142,7 +177,7 @@ describe('ManageCommitteeComponent', () => {
 
   it('should delete member', fakeAsync(async () => {
     const messageSpy = spyOn(component.messageService, 'add');
-    const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(async (member) => {
+    const deleteSpy = spyOn(service, 'delete').and.callFake(async (member: CommitteeMember) => {
       committeeMembers = committeeMembers.filter((m) => m.email !== member.email);
       return null;
     });
@@ -159,7 +194,7 @@ describe('ManageCommitteeComponent', () => {
 
   it('should show error on fail', fakeAsync(async () => {
     const messageSpy = spyOn(component.messageService, 'add');
-    const deleteSpy = spyOn(component.itemService, 'delete').and.callFake(() => {
+    const deleteSpy = spyOn(service, 'delete').and.callFake(() => {
       throw new Error('Failed');
     });
     await component.deleteItem(committeeMembers[0]);

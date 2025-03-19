@@ -30,7 +30,7 @@
           [showErrors]="!templateMap['date2']"
         ></app-calendar>
       </div>
-      @if ((activeReport$ | async)?.report_type === reportTypes.F24) {
+      @if (activeReportSignal().report_type === reportTypes.F24) {
         <div class="col-4">
           <app-linked-report-input [form]="form" [templateMap]="templateMap"></app-linked-report-input>
         </div>

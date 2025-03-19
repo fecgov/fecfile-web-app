@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
@@ -13,6 +14,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   readonly messageService = inject(MessageService);
   readonly confirmationService = inject(ConfirmationService);
   protected readonly elementRef = inject(ElementRef);
+  protected abstract readonly itemService: TableListService<T>;
 
   item!: T;
   items: T[] = [];
@@ -24,7 +26,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   selectedItems: T[] = [];
   detailVisible = false;
   isNewItem = true;
-  itemService!: TableListService<T>;
 
   protected caption?: string;
 
@@ -139,7 +140,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     this.isNewItem = true;
   }
 
-  public editItem(item: T) {
+  public editItem(item: T): Promise<boolean> | void {
     this.item = item;
     this.detailVisible = true;
     this.isNewItem = false;
@@ -215,13 +216,13 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
 export class TableAction {
   label: string;
-  action: (item?: any) => void | Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  action: (item?: any) => void | Promise<void> | Promise<boolean>;
 
   constructor(
     label: string,
-    action: (item?: any) => void | Promise<void>, // eslint-disable-line @typescript-eslint/no-explicit-any
-    isAvailable?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
-    isEnabled?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
+    action: (item?: any) => void | Promise<void> | Promise<boolean>,
+    isAvailable?: (item?: any) => boolean,
+    isEnabled?: (item?: any) => boolean,
   ) {
     this.label = label;
     this.action = action;
@@ -229,7 +230,7 @@ export class TableAction {
     this.isEnabled = isEnabled || this.isEnabled;
   }
 
-  isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isAvailable: (item?: any) => boolean = () => true;
 
-  isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isEnabled: (item?: any) => boolean = () => true;
 }

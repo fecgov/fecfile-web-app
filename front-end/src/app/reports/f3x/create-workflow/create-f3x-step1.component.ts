@@ -1,7 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
@@ -14,12 +13,10 @@ import {
   getCoverageDatesFunction,
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { combineLatest, startWith, takeUntil } from 'rxjs';
+import { combineLatest, startWith } from 'rxjs';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
@@ -50,8 +47,6 @@ import { F3xCoverageDates, CommitteeAccount, Form3X, F3xFormTypes } from 'app/sh
   ],
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {
-  private readonly store = inject(Store);
-  private readonly fb = inject(FormBuilder);
   private readonly form3XService = inject(Form3XService);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -67,55 +62,56 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     'form_type',
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
-  stateOptions: PrimeOptions = [];
+  stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
-  public existingCoverage: F3xCoverageDates[] | undefined;
+  public existingCoverageSignal = signal<F3xCoverageDates[] | undefined>(undefined);
   public usedReportCodes?: F3xReportCodes[];
   public thisYear = new Date().getFullYear();
-  committeeAccount?: CommitteeAccount;
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
 
-  ngOnInit(): void {
-    const reportId = this.activatedRoute.snapshot.data['reportId'];
+  readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
+
+  constructor() {
+    super();
     this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (reportId && report) {
-          this.form.patchValue(report);
-        }
-      });
+    this.form3XService.getF3xCoverageDates().then((coverageDates) => this.existingCoverageSignal.set(coverageDates));
+    effect(() => {
+      const reportId = this.activatedRoute.snapshot.data['reportId'];
+      const report = this.activeReportSignal();
+      if (reportId && report) {
+        this.form.patchValue(report);
+      }
+    });
 
-    combineLatest([this.store.select(selectCommitteeAccount), this.form3XService.getF3xCoverageDates()])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([committeeAccount, existingCoverage]) => {
-        this.committeeAccount = committeeAccount;
-        const filingFrequency = committeeAccount?.filing_frequency === 'M' ? 'M' : 'Q';
-        this.form.addControl('filing_frequency', new SubscriptionFormControl());
-        this.form.addControl('report_type_category', new SubscriptionFormControl());
-        this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
-        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
-        this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
+    effect(() => {
+      const existingCoverage = this.existingCoverageSignal();
+      if (!existingCoverage) return;
+      const filingFrequency = this.committeeAccountSignal().filing_frequency === 'M' ? 'M' : 'Q';
+      this.form.addControl('filing_frequency', new SubscriptionFormControl());
+      this.form.addControl('report_type_category', new SubscriptionFormControl());
+      this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
+      this.form?.patchValue({ report_type_category: this.reportTypeCategories[0] });
+      this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
+      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
+        this.form.patchValue({
+          report_type_category: this.reportTypeCategories[0],
+        });
         this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
-          this.form.patchValue({
-            report_type_category: this.getReportTypeCategories()[0],
-          });
-          this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        }, this.destroy$);
-        (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
-          this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        }, this.destroy$);
+      }, this.destroy$);
+      (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+        this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      }, this.destroy$);
 
-        this.existingCoverage = existingCoverage;
-        this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
-      });
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+      this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+    });
+  }
+
+  ngOnInit(): void {
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
@@ -147,10 +143,6 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
-  }
-
-  public getReportTypeCategories(): F3xReportTypeCategoryType[] {
-    return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   }
 
   public getReportCodes(): F3xReportCodes[] {
@@ -233,3 +225,6 @@ export type F3xReportTypeCategoryType =
   | F3xReportTypeCategories.ELECTION_YEAR
   | F3xReportTypeCategories.NON_ELECTION_YEAR
   | F3xReportTypeCategories.SPECIAL;
+function WritableSignal<T>(arg0: never[]) {
+  throw new Error('Function not implemented.');
+}

@@ -1,7 +1,6 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -10,10 +9,8 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { ConfirmationService, MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, Observable, of, startWith, takeUntil } from 'rxjs';
+import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
+import { map, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
@@ -24,16 +21,15 @@ import { FormComponent } from '../app-destroyer.component';
 import {
   TransactionType,
   ContactTypeLabels,
-  Report,
   ReportTypes,
   TransactionTemplateMapType,
-  CommitteeAccount,
   Contact,
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   template: '',
@@ -42,23 +38,21 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
-  protected confirmationService = inject(ConfirmationService);
-  protected readonly fb = inject(FormBuilder);
+  protected readonly confirmationService = inject(ConfirmationWrapperService);
   protected readonly router = inject(Router);
   protected readonly fecDatePipe = inject(FecDatePipe);
-  protected readonly store = inject(Store);
   protected readonly reportService = inject(ReportService);
   protected readonly activatedRoute = inject(ActivatedRoute);
+
+  protected readonly navigationEventSignal = this.store.selectSignal(selectNavigationEvent);
 
   @Input() transaction: Transaction | undefined;
   formProperties: string[] = [];
   transactionType?: TransactionType;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  readonly activeReport$: Observable<Report> = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
+
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
-  readonly navigationEvent$: Observable<NavigationEvent> = this.store
-    .select(selectNavigationEvent)
-    .pipe(takeUntil(this.destroy$));
+
   readonly reportTypes = ReportTypes;
   readonly saveSuccessMessage: ToastMessageOptions = {
     severity: 'success',
@@ -70,20 +64,33 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   contactIdMap: ContactIdMapType = {};
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
-  isEditable = true;
+  isEditable = computed(
+    () =>
+      this.reportService.isEditable(this.activeReportSignal()) &&
+      !ReattRedesUtils.isCopyFromPreviousReport(this.transaction),
+  );
   memoCodeCheckboxLabel$ = of('');
-  committeeAccount?: CommitteeAccount;
+
+  constructor() {
+    super();
+    effect(() => {
+      if (!this.isEditable()) this.form.disable();
+    });
+
+    effect(() => {
+      const navEvent = this.navigationEventSignal();
+      if (navEvent) {
+        const navigationEvent = { ...navEvent };
+        this.handleNavigate(navigationEvent);
+        this.store.dispatch(navigationEventClearAction());
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
-        this.committeeAccount = committeeAccount;
-      });
 
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
@@ -115,25 +122,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.initInheritedFieldsFromParent();
     }
 
-    this.activeReport$.subscribe((report) => {
-      this.isEditable =
-        this.reportService.isEditable(report) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
-      if (!this.isEditable) this.form.disable();
-    });
-
     this.store.dispatch(navigationEventClearAction());
-    this.navigationEvent$.subscribe((navEvent) => {
-      if (navEvent) {
-        const navigationEvent = { ...navEvent };
-        this.handleNavigate(navigationEvent);
-        this.store.dispatch(navigationEventClearAction());
-      }
-    });
-  }
-
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-    Object.values(this.contactIdMap).forEach((id$) => id$.complete());
   }
 
   writeToApi(payload: Transaction): Promise<Transaction> {
@@ -173,59 +162,37 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     }
   }
 
-  async confirmWithUser(
-    transaction: Transaction,
-    form: FormGroup,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
-  ): Promise<boolean> {
-    const templateMap = transaction.transactionType.templateMap;
-    if (!templateMap) {
-      throw new Error('Fecfile: Cannot find template map when confirming transaction');
-    }
-
-    const confirmations = Object.entries(transaction.transactionType?.contactConfig ?? {}).map(
-      async ([contactKey, config]: [string, { [formField: string]: string }]) => {
-        if (transaction[contactKey as keyof Transaction]) {
-          if (transaction.transactionType?.getUseParentContact(transaction) && contactKey === 'contact_1') {
-            return true;
-          }
-
-          const contact = transaction[contactKey as keyof Transaction] as Contact;
-          if (!contact.id) {
-            const message = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-              contact.type,
-              form,
-              templateMap,
-              contactKey,
-            );
-            return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, targetDialog);
-          }
-
-          const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config, transaction);
-          if (changes.length > 0) {
-            const message = TransactionContactUtils.getContactChangesMessage(contact, changes);
-            return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, targetDialog);
-          }
-        }
-        return true; // If no confirmation is needed, return `true`
-      },
-    );
-
-    // Await all confirmations
-    const results = await Promise.all(confirmations);
-
-    // Reduce to a single boolean value (similar to RxJS `reduce()`)
-    return results.every((confirmed) => confirmed);
-  }
-
   isInvalid(): boolean {
     blurActiveInput(this.form);
     return this.form.invalid || !this.transaction;
   }
 
-  get confirmation$(): Promise<boolean> {
-    if (!this.transaction) return Promise.resolve(false);
-    return this.confirmWithUser(this.transaction, this.form);
+  async getConfirmations(): Promise<boolean> {
+    if (!this.transaction) return false;
+    return this.confirmationService.confirmWithUser(
+      this.form,
+      this.transaction.transactionType?.contactConfig ?? {},
+      this.getContact.bind(this),
+      this.getTemplateMap.bind(this),
+      'dialog',
+      this.transaction,
+    );
+  }
+
+  getContact(contactKey: string, transaction?: Transaction) {
+    if (!transaction) return null;
+    if (transaction[contactKey as keyof Transaction]) {
+      if (transaction.transactionType?.getUseParentContact(transaction) && contactKey === 'contact_1') {
+        return null;
+      }
+
+      return transaction[contactKey as keyof Transaction] as Contact;
+    }
+    return null;
+  }
+
+  getTemplateMap(contactKey: string, transaction?: Transaction): TransactionTemplateMapType | undefined {
+    return transaction?.transactionType?.templateMap;
   }
 
   async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {
@@ -236,7 +203,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         this.store.dispatch(singleClickEnableAction());
         return;
       }
-      const confirmed = await this.confirmation$;
+      const confirmed = await this.getConfirmations();
       // if every confirmation was accepted
       if (confirmed) await this.save(navigationEvent);
       else this.store.dispatch(singleClickEnableAction());
@@ -290,7 +257,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactTypeOptions,
-      this.committeeAccount,
+      this.committeeAccountSignal(),
     );
   }
 

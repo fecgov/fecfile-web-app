@@ -93,11 +93,6 @@ export abstract class TripleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
   }
 
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-    Object.values(this.childContactIdMap_2).forEach((id$) => id$.complete());
-  }
-
   override async save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction && this.childTransaction_2) {
@@ -145,15 +140,18 @@ export abstract class TripleTransactionTypeBaseComponent
     return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 
-  override get confirmation$(): Promise<boolean> {
-    if (!this.childTransaction_2) return Promise.resolve(false);
-
-    return Promise.all([
-      super.confirmation$,
-      this.confirmWithUser(this.childTransaction_2, this.childForm_2, 'childDialog_2'),
-    ]).then((results) => {
-      return results.every((confirmed) => confirmed);
-    });
+  override async getConfirmations(): Promise<boolean> {
+    if (!this.childTransaction_2) return false;
+    const result = await super.getConfirmations();
+    if (!result) return false;
+    return this.confirmationService.confirmWithUser(
+      this.childForm_2,
+      this.childTransaction_2.transactionType?.contactConfig ?? {},
+      this.getContact.bind(this),
+      this.getTemplateMap.bind(this),
+      'childDialog_2',
+      this.childTransaction_2,
+    );
   }
 
   override resetForm() {
@@ -162,7 +160,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childForm_2,
       this.childTransaction_2,
       this.childContactTypeOptions_2,
-      this.committeeAccount,
+      this.committeeAccountSignal(),
     );
   }
 

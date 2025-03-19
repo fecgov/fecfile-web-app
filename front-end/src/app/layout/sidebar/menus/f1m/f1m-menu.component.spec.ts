@@ -42,15 +42,11 @@ describe('F1MMenuComponent', () => {
   });
 
   xit('should set the sidebar state to REVIEW A REPORT', () => {
-    component.items$.subscribe((items) => {
-      expect(items[1].expanded).toBeTrue();
-    });
+    expect(component.itemsSignal()[1].expanded).toBeTrue();
   });
 
   xit('should get report from url', () => {
     router.navigateByUrl('/reports/f1m/edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-    component.activeReport$?.subscribe((report) => {
-      expect(report?.id).toBe('999');
-    });
+    expect(component.activeReportSignal().id).toBe('999');
   });
 });

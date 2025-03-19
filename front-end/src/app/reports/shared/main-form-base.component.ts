@@ -1,52 +1,49 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, effect, inject, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
-import { combineLatest, takeUntil } from 'rxjs';
-
 @Component({
   template: '',
 })
-export abstract class MainFormBaseComponent extends DestroyerComponent implements OnInit {
-  protected readonly store = inject(Store);
-  protected readonly fb = inject(FormBuilder);
+export abstract class MainFormBaseComponent extends FormComponent implements OnInit {
   protected abstract reportService: ReportService;
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   protected readonly activatedRoute = inject(ActivatedRoute);
-  abstract formProperties: string[];
-  abstract schema: JsonSchema;
+  abstract readonly formProperties: string[];
+  abstract readonly schema: JsonSchema;
   abstract getReportPayload(): Report;
   abstract webprintURL: string;
 
-  formSubmitted = false;
   form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   reportId?: string;
 
-  ngOnInit(): void {
-    this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
-    const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
-    const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
+  constructor() {
+    super();
 
-    combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
-      this.setConstantFormValues(committeeAccount);
+    effect(() => {
+      this.setConstantFormValues(this.committeeAccountSignal());
       if (this.reportId) {
-        this.form.patchValue(activeReport);
+        this.form.patchValue(this.activeReportSignal());
       }
     });
+  }
 
+  ngOnInit(): void {
+    this.reportId = this.activatedRoute.snapshot.params['reportId'];
+    this.initForm();
+  }
+
+  initForm() {
+    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 

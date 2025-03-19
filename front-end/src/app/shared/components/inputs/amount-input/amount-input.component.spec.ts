@@ -101,7 +101,7 @@ describe('AmountInputComponent', () => {
     component.transaction = transaction;
     component.templateMap = transaction.transactionType.templateMap;
     const store = TestBed.inject(MockStore);
-    component.activeReport$ = store.select(selectActiveReport);
+    component.activeReportSignal = store.select(selectActiveReport);
     component.ngOnInit();
     const dateFormControl = component.form.get(component.templateMap.date);
 

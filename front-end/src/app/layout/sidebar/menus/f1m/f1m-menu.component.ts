@@ -1,30 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Report } from '../../../../shared/models/report.model';
 import { FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.utils';
 import { SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
 import { PanelMenu } from 'primeng/panelmenu';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-f1m-menu',
   templateUrl: './f1m-menu.component.html',
   styleUrls: ['../menu-report.component.scss'],
-  imports: [PanelMenu, AsyncPipe],
+  imports: [PanelMenu],
 })
-export class F1MMenuComponent extends AbstractMenuComponent implements OnInit {
-  subHeading: string = FORM_TYPES.get(FormTypes.F1M)?.description as string;
-  override reportString = 'f1m';
+export class F1MMenuComponent extends AbstractMenuComponent {
+  readonly subHeading: string = FORM_TYPES.get(FormTypes.F1M)?.description as string;
+  override readonly reportString = 'f1m';
 
-  getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {
+  getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[] {
     const reviewReport = this.reviewReport(sidebarState);
-    reviewReport.items = [this.printPreview(activeReport), this.addReportLevelMenu(activeReport, isEditable)];
+    reviewReport.items = [this.printPreview(), this.addReportLevelMenu(isEditable)];
 
-    return [
-      this.editReport(sidebarState, activeReport),
-      reviewReport,
-      this.signAndSubmit(sidebarState, activeReport, isEditable),
-    ];
+    return [this.editReport(sidebarState), reviewReport, this.signAndSubmit(sidebarState, isEditable)];
   }
 }

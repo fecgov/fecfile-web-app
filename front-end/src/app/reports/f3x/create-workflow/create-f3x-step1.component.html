@@ -57,7 +57,7 @@
         <label for="report_type_category">TIME PERIOD</label>
         <p-selectButton
           data-cy="report-type-category"
-          [options]="getReportTypeCategories()"
+          [options]="reportTypeCategories"
           [allowEmpty]="false"
           formControlName="report_type_category"
         ></p-selectButton>

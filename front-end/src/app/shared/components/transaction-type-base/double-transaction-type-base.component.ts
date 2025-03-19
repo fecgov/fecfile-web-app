@@ -96,11 +96,6 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-    Object.values(this.childContactIdMap).forEach((id$) => id$.complete());
-  }
-
   /**
    * For certain transactions, like CONDUIT_EARMARK_OUT, the transaction_type_identifier
    * will not match the transaction type model name because it is assigned DEPOSITED
@@ -157,15 +152,18 @@ export abstract class DoubleTransactionTypeBaseComponent
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
   }
 
-  override get confirmation$(): Promise<boolean> {
-    if (!this.childTransaction) return Promise.resolve(false);
-
-    return Promise.all([
-      super.confirmation$,
-      this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog'),
-    ]).then((results) => {
-      return results.every((confirmed) => confirmed);
-    });
+  override async getConfirmations(): Promise<boolean> {
+    if (!this.childTransaction) return false;
+    const result = await super.getConfirmations();
+    if (!result) return false;
+    return this.confirmationService.confirmWithUser(
+      this.childForm,
+      this.childTransaction.transactionType?.contactConfig ?? {},
+      this.getContact.bind(this),
+      this.getTemplateMap.bind(this),
+      'childDialog',
+      this.childTransaction,
+    );
   }
 
   override resetForm() {
@@ -174,7 +172,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactTypeOptions,
-      this.committeeAccount,
+      this.committeeAccountSignal(),
     );
   }
 

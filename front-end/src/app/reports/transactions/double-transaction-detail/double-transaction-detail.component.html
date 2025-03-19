@@ -2,10 +2,10 @@
 @if (transactionType?.subTitle) {
   <div>{{ transactionType?.subTitle }}</div>
 }
-@if ((activeReport$ | async)?.report_type === reportTypes.F24) {
+@if (activeReportSignal().report_type === reportTypes.F24) {
   <app-independent-expenditure-create-f3x-input></app-independent-expenditure-create-f3x-input>
 }
-@if (isEditable) {
+@if (isEditable()) {
   <h4 class="read-only-tag subtitle">READ ONLY</h4>
 }
 
@@ -30,8 +30,7 @@
       <h3>{{ transactionType?.contactTitle }}</h3>
       <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
-          [activeReport$]="activeReport$"
-          [isEditable]="isEditable"
+          [isEditable]="isEditable()"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [transaction]="transaction"
@@ -67,7 +66,7 @@
       <h3>{{ childTransactionType?.contactTitle }}</h3>
       <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
-          [isEditable]="isEditable"
+          [isEditable]="isEditable()"
           [form]="childForm"
           [formSubmitted]="formSubmitted"
           [transaction]="childTransaction"

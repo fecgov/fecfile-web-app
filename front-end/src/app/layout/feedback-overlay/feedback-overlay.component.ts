@@ -1,6 +1,5 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
@@ -32,8 +31,6 @@ enum SubmissionStates {
   ],
 })
 export class FeedbackOverlayComponent extends FormComponent {
-  private readonly fb = inject(FormBuilder);
-  private readonly store = inject(Store);
   public readonly feedbackService = inject(FeedbackService);
   @ViewChild('op') op!: Popover;
 
