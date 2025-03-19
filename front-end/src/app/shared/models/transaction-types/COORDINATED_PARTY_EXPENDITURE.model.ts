@@ -49,7 +49,7 @@ export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
   override aggregateLabel = 'AGGREGATE GENERAL ELECTION EXPENDITURE FOR THIS CANDIDATE';
-  override showAggregate = true;
+  override showAggregate = false;
   override dateLabel = 'DATE';
 
   getNewTransaction() {

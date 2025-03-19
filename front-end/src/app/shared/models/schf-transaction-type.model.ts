@@ -50,7 +50,7 @@ export abstract class SchFTransactionType extends TransactionType {
     interest_rate_setting: '',
     due_date_setting: '',
     secured: '',
-    aggregate: 'aggregate_general_elect_expended',
+    aggregate: 'aggregate_general_elec_expended',
     calendar_ytd: '',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',

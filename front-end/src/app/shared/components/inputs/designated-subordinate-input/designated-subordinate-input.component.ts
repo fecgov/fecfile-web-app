@@ -39,6 +39,7 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
       this.clearDesignatingCommittee();
       this.clearDesignatingCommittee();
     }
+    this.form.updateValueAndValidity();
   }
 
   onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
