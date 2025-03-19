@@ -165,26 +165,29 @@
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType?.committeeCandidateHeader"></app-section-header>
     @if (transactionType?.contact3IsRequired) {
-      <app-transaction-contact-lookup
-        contactProperty="contact_3"
-        [transaction]="transaction"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        [contactTypeOptions]="committeeContactTypeOptions"
-        (contactSelect)="updateFormWithTertiaryContact($event)"
-      ></app-transaction-contact-lookup>
-      @if (transaction?.contact_3) {
-        <app-committee-input
+      <div class="candidate_committee_lookup">
+        <label for="contact_3">LOOKUP </label>
+        <app-transaction-contact-lookup
+          contactProperty="contact_3"
+          [transaction]="transaction"
           [form]="form"
           [formSubmitted]="formSubmitted"
-          [templateMap]="templateMap"
-          entityRole="COMMITTEE"
-          [includeFecId]="true"
-          [readonly]="false"
-          [transaction]="transaction"
-          [tertiaryContact]="true"
-        ></app-committee-input>
-      }
+          [contactTypeOptions]="committeeContactTypeOptions"
+          (contactSelect)="updateFormWithTertiaryContact($event)"
+        ></app-transaction-contact-lookup>
+        @if (transaction?.contact_3) {
+          <app-committee-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMap"
+            entityRole="COMMITTEE"
+            [includeFecId]="true"
+            [readonly]="false"
+            [transaction]="transaction"
+            [tertiaryContact]="true"
+          ></app-committee-input>
+        }
+      </div>
     } @else if (transaction?.transactionType?.hasCandidateCommittee) {
       <app-committee-input
         [form]="form"
@@ -202,29 +205,33 @@
 
     @if (transaction?.transactionType?.hasCandidateInformation(form)) {
       @if (!transactionType?.hideContactLookup) {
-        <label for="contact_2"
-          >LOOKUP
-          @if (!transaction?.transactionType?.contact2IsRequired(form)) {
-            (OPTIONAL)
-          }
-        </label>
-        <app-transaction-contact-lookup
-          contactProperty="contact_2"
-          [transaction]="transaction"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [contactTypeOptions]="candidateContactTypeOptions"
-          (contactSelect)="updateFormWithCandidateContact($event)"
-        ></app-transaction-contact-lookup>
+        <div class="candidate_committee_lookup">
+          <label for="contact_2"
+            >LOOKUP
+            @if (!transaction?.transactionType?.contact2IsRequired(form)) {
+              (OPTIONAL)
+            }
+          </label>
+          <app-transaction-contact-lookup
+            contactProperty="contact_2"
+            [transaction]="transaction"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [contactTypeOptions]="candidateContactTypeOptions"
+            (contactSelect)="updateFormWithCandidateContact($event)"
+          ></app-transaction-contact-lookup>
+        </div>
       }
       @if (transaction?.contact_2) {
-        <app-candidate-input
-          [transaction]="transaction"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [templateMap]="templateMap"
-          [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
-        ></app-candidate-input>
+        <div class="candidate_committee_lookup">
+          <app-candidate-input
+            [transaction]="transaction"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMap"
+            [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
+          ></app-candidate-input>
+        </div>
       }
     }
   }
