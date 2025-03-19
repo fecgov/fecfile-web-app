@@ -16,10 +16,11 @@ describe('AdditionalInfoInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        TextareaModule, 
-        ReactiveFormsModule, 
-        AdditionalInfoInputComponent, 
-        ErrorMessagesComponent, DesignatedSubordinateInputComponent
+        TextareaModule,
+        ReactiveFormsModule,
+        AdditionalInfoInputComponent,
+        ErrorMessagesComponent,
+        DesignatedSubordinateInputComponent,
       ],
     }).compileComponents();
 

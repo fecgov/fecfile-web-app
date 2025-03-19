@@ -9,7 +9,7 @@ import {
   COM_FIELDS,
   INDIVIDUAL_FIELDS,
   ORGANIZATION_INDIVIDUAL,
-  ORG_FIELDS
+  ORG_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COORDINATED_PARTY_EXPENDITURES';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';

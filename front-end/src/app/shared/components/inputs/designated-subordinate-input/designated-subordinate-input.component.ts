@@ -20,7 +20,7 @@ import { BaseInputComponent } from '../base-input.component';
     ReactiveFormsModule,
     Select,
     ErrorMessagesComponent,
-    InputText
+    InputText,
   ],
 })
 export class DesignatedSubordinateInputComponent extends BaseInputComponent {
@@ -64,5 +64,4 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     this.form.get('subordinate_state')?.setValue(contact.state);
     this.form.get('subordinate_zip')?.setValue(contact.zip);
   }
-
 }

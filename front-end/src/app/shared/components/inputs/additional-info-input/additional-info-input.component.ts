@@ -14,13 +14,7 @@ import { DesignatedSubordinateInputComponent } from '../designated-subordinate-i
   selector: 'app-additional-info-input',
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
-  imports: [
-    ReactiveFormsModule, 
-    ErrorMessagesComponent, 
-    Select, 
-    TextareaModule, 
-    DesignatedSubordinateInputComponent,
-  ],
+  imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule, DesignatedSubordinateInputComponent],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
