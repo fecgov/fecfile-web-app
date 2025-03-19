@@ -7,6 +7,7 @@ import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 
 describe('AdditionalInfoInputComponent', () => {
   let component: AdditionalInfoInputComponent;
@@ -14,13 +15,19 @@ describe('AdditionalInfoInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextareaModule, ReactiveFormsModule, AdditionalInfoInputComponent, ErrorMessagesComponent],
+      imports: [
+        TextareaModule, 
+        ReactiveFormsModule, 
+        AdditionalInfoInputComponent, 
+        ErrorMessagesComponent, DesignatedSubordinateInputComponent
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdditionalInfoInputComponent);
     component = fixture.componentInstance;
     component.form = new FormGroup(
       {
+        filer_designated_to_make_coordinated_expenditures: new SubscriptionFormControl(''),
         contribution_purpose_descrip: new SubscriptionFormControl(''),
         text4000: new SubscriptionFormControl(''),
       },

@@ -32,8 +32,13 @@
       </div>
     </div>
   }
-  @if (transaction?.transactionType?.scheduleId === 'F') {
-    
+  @if (transaction?.transactionType?.hasDesignatedSubordinate) {
+    <app-designated-subordinate-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [templateMap]="templateMap"
+      [transaction]="transaction"
+    ></app-designated-subordinate-input>
   }
   @if (transaction?.transactionType?.hasMemoText()) {
     <div class="grid">

@@ -50,7 +50,7 @@ export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
   override contact2IsRequired = () => true;
   override aggregateLabel = 'AGGREGATE GENERAL ELECTION EXPENDITURE FOR THIS CANDIDATE';
   override showAggregate = true;
-  override dateLabel = 'DATE2';
+  override dateLabel = 'DATE';
 
   getNewTransaction() {
     return SchFTransaction.fromJSON({

@@ -8,12 +8,19 @@ import { Select } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { BaseInputComponent } from '../base-input.component';
+import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 
 @Component({
   selector: 'app-additional-info-input',
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
-  imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule],
+  imports: [
+    ReactiveFormsModule, 
+    ErrorMessagesComponent, 
+    Select, 
+    TextareaModule, 
+    DesignatedSubordinateInputComponent,
+  ],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);

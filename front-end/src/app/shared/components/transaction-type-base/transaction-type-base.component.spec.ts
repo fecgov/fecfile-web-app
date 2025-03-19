@@ -105,7 +105,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('init', () => {
     it('should initialize Individual Receipt', () => {
-      fixture.detectChanges();
+      component.ngOnInit();
       expect(component).toBeTruthy();
       expect(component.transactionType?.title).toBe('Individual Receipt');
     });

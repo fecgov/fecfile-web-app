@@ -1,0 +1,140 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-12">
+      <div class="field">
+        <label for="designated_or_subordinate_dropdown">
+          <strong>ADD DESIGNATING COMMITTEE OR SUBORDINATE COMMITTEE?</strong> (OPTIONAL)
+        </label>
+        <p-select
+          inputId="designated_or_subordinate_dropdown"
+          class="col-4"
+          formControlName="filer_designated_to_make_coordinated_expenditures"
+          [options]="designatedOrSubordinateOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-select>
+        <app-error-messages
+          [form]="form"
+          fieldName="filer_designated_to_make_coordinated_expenditures"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  @if (designatedOrSubordinate === true) {
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="entity_type">LOOKUP</label>
+          <app-transaction-contact-lookup
+            contactProperty="contact_4"
+            [transaction]="transaction"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [contactTypeOptions]="committeeContactTypeOptions"
+            (contactSelect)="updateFormWithDesignatingCommittee($event)"
+          ></app-transaction-contact-lookup>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-9">
+        <div class="field">
+          <label for="designating_committee_name">
+            DESIGNATING COMMITTEE NAME
+          </label>
+          <input
+            type="text"
+            pInputText
+            id="designating_committee_name"
+            formControlName="designating_committee_name"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="designating_committee_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="designating_committee_id_number">
+            DESIGNATING COMMITTEE ID
+          </label>
+          <input
+            type="text"
+            pInputText
+            id="designating_committee_id_number"
+            formControlName="designating_committee_id_number"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="designating_committee_id_number"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+  }
+  @if (designatedOrSubordinate === false) {
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="entity_type">LOOKUP</label>
+          <app-transaction-contact-lookup
+            contactProperty="contact_5"
+            [transaction]="transaction"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [contactTypeOptions]="committeeContactTypeOptions"
+            (contactSelect)="updateFormWithSubordinateCommittee($event)"
+          ></app-transaction-contact-lookup>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-9">
+        <div class="field">
+          <label for="subordinate_committee_name">
+            SUBORDINATE COMMITTEE NAME
+          </label>
+          <input
+            type="text"
+            pInputText
+            id="subordinate_committee_name"
+            formControlName="subordinate_committee_name"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="subordinate_committee_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="subordinate_committee_id_number">
+            SUBORDINATE COMMITTEE ID
+          </label>
+          <input
+            type="text"
+            pInputText
+            id="subordinate_committee_id_number"
+            formControlName="subordinate_committee_id_number"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="subordinate_committee_id_number"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <app-address-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [templateMap]="templateMap"
+      keyPrefix="subordinate_"
+    ></app-address-input>
+  }
+</div>

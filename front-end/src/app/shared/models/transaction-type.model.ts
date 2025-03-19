@@ -168,6 +168,10 @@ export abstract class TransactionType {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
 
+  hasDesignatedSubordinate(): boolean {
+    return hasFields(this.formFields, ['filer_designated_to_make_coordinated_expenditures']);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
