@@ -11,7 +11,6 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 describe('F3XMenuComponent', () => {
   let component: F3XMenuComponent;
   let fixture: ComponentFixture<F3XMenuComponent>;
-  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,7 +30,6 @@ describe('F3XMenuComponent', () => {
   });
 
   beforeEach(() => {
-    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(F3XMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -39,14 +37,5 @@ describe('F3XMenuComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  xit('should set the sidebar state to TRANSACTIONS', () => {
-    expect(component.itemsSignal()[1].visible).toBeTrue();
-  });
-
-  xit('should get report from url', () => {
-    router.navigateByUrl('/reports/transactions/report/999/list');
-    expect(component.activeReportSignal().id).toBe('999');
   });
 });

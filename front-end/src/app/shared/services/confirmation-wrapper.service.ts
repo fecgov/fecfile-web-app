@@ -42,7 +42,7 @@ export class ConfirmationWrapperService {
 
   private async contactChangesConfirmation(
     contact: Contact,
-    form: FormGroup<any>,
+    form: FormGroup,
     templateMap: TransactionTemplateMapType,
     targetDialog: dialogs,
     config: { [formField: string]: string },
@@ -96,7 +96,7 @@ export class ConfirmationWrapperService {
    * @param templateMap
    * @returns {string}
    */
-  private getCreateTransactionContactConfirmationMessage(
+  getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
     templateMap: TransactionTemplateMapType,

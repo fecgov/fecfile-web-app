@@ -38,7 +38,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
-  protected readonly confirmationService = inject(ConfirmationWrapperService);
+  readonly confirmationService = inject(ConfirmationWrapperService);
   protected readonly router = inject(Router);
   protected readonly fecDatePipe = inject(FecDatePipe);
   protected readonly reportService = inject(ReportService);

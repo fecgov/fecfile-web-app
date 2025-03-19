@@ -22,6 +22,7 @@ import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'p
 import { TransactionType } from '../../models/transaction-type.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   override formProperties: string[] = [
@@ -103,6 +104,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         FormBuilder,
         TransactionService,
         ConfirmationService,
+        ConfirmationWrapperService,
         provideMockStore(testMockStore),
         FecDatePipe,
         ReportService,
@@ -309,11 +311,23 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     });
   });
 
-  describe('confirmation$', () => {
+  describe('getConfirmations()', () => {
     it('should return false if not child transaction', async () => {
       component.childTransaction = undefined;
-      const v = await component.confirmation$;
+      const v = await component.getConfirmations();
       expect(v).toBeFalse();
+    });
+
+    it('should return false if reject parent confirmation', async () => {
+      component.transaction = undefined;
+      const v = await component.getConfirmations();
+      expect(v).toBeFalse();
+    });
+
+    it('should confirm with user', async () => {
+      const confirmSpy = spyOn(component.confirmationService, 'confirmWithUser').and.returnValue(Promise.resolve(true));
+      const v = await component.getConfirmations();
+      expect(confirmSpy).toHaveBeenCalled();
     });
   });
 

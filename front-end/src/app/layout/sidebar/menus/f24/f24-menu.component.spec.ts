@@ -41,11 +41,11 @@ describe('F24MenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should set the sidebar state to TRANSACTIONS', () => {
+  it('should set the sidebar state to TRANSACTIONS', () => {
     expect(component.itemsSignal()[1].visible).toBeTrue();
   });
 
-  xit('should get report from url', () => {
+  it('should get report from url', () => {
     router.navigateByUrl('/reports/transactions/report/999/list');
     expect(component.activeReportSignal().id).toBe('999');
   });

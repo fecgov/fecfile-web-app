@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
@@ -6,7 +6,6 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/cont
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { Report } from 'app/shared/models/report.model';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { CommitteeInputComponent } from '../../../shared/components/inputs/committee-input/committee-input.component';
@@ -24,8 +23,6 @@ import { SignatureInputComponent } from '../../../shared/components/inputs/signa
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
 import { CandidateInputComponent } from '../../../shared/components/inputs/candidate-input/candidate-input.component';
 import { ElectionInputComponent } from '../../../shared/components/inputs/election-input/election-input.component';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 
 @Component({
   selector: 'app-transaction-input',
