@@ -12,6 +12,7 @@
           [options]="designatedOrSubordinateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
+          (onChange)="onDesignatedOrSubordinateChange($event.value)"
         ></p-select>
         <app-error-messages
           [form]="form"
@@ -21,7 +22,7 @@
       </div>
     </div>
   </div>
-  @if (designatedOrSubordinate === true) {
+  @if (this.form.get("filer_designated_to_make_coordinated_expenditures")?.value === true) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -32,7 +33,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
-            (contactSelect)="updateFormWithDesignatingCommittee($event)"
+            (contactSelect)="onDesignatingCommitteeSelect($event)"
           ></app-transaction-contact-lookup>
         </div>
       </div>
@@ -67,7 +68,7 @@
       </div>
     </div>
   }
-  @if (designatedOrSubordinate === false) {
+  @if (this.form.get("filer_designated_to_make_coordinated_expenditures")?.value === false) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -78,7 +79,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
-            (contactSelect)="updateFormWithSubordinateCommittee($event)"
+            (contactSelect)="onSubordinateCommitteeSelect($event)"
           ></app-transaction-contact-lookup>
         </div>
       </div>

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { SelectItem } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -31,30 +30,29 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     [false as any, 'Subordinate committee'],
   ]);
 
-  get designatedOrSubordinateField(): SubscriptionFormControl | null {
-    return this.form.get('filer_designated_to_make_coordinated_expenditures') as SubscriptionFormControl;
+  onDesignatedOrSubordinateChange(value: boolean | null) {
+    if (value === true) {
+      this.clearSubordinateCommittee();
+    } else if (value === false) {
+      this.clearDesignatingCommittee();
+    } else {
+      this.clearDesignatingCommittee();
+      this.clearDesignatingCommittee();
+    }
   }
 
-  set designatedOrSubordinateField(control: SubscriptionFormControl) {
-    control.markAsPristine();
-    this.form.setControl('filer_designated_to_make_coordinated_expenditures', control);
-  }
-
-  get designatedOrSubordinate(): boolean {
-    return this.designatedOrSubordinateField?.value ?? '';
-  }
-
-  set designatedOrSubordinate(value: boolean | null) {
-    this.designatedOrSubordinateField?.setValue(value);
-  }
-
-  updateFormWithDesignatingCommittee(selectItem: SelectItem<Contact>) {
+  onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
     const contact: Contact = selectItem?.value;
     this.form.get('designating_committee_id_number')?.setValue(contact.committee_id);
     this.form.get('designating_committee_name')?.setValue(contact.name);
   }
 
-  updateFormWithSubordinateCommittee(selectItem: SelectItem<Contact>) {
+  clearDesignatingCommittee() {
+    this.form.get('designating_committee_id_number')?.setValue(null);
+    this.form.get('designating_committee_name')?.setValue(null);
+  }
+
+  onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
     const contact: Contact = selectItem?.value;
     this.form.get('subordinate_committee_id_number')?.setValue(contact.committee_id);
     this.form.get('subordinate_committee_name')?.setValue(contact.name);
@@ -63,5 +61,15 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     this.form.get('subordinate_city')?.setValue(contact.city);
     this.form.get('subordinate_state')?.setValue(contact.state);
     this.form.get('subordinate_zip')?.setValue(contact.zip);
+  }
+
+  clearSubordinateCommittee() {
+    this.form.get('subordinate_committee_id_number')?.setValue(null);
+    this.form.get('subordinate_committee_name')?.setValue(null);
+    this.form.get('subordinate_street_1')?.setValue(null);
+    this.form.get('subordinate_street_2')?.setValue(null);
+    this.form.get('subordinate_city')?.setValue(null);
+    this.form.get('subordinate_state')?.setValue(null);
+    this.form.get('subordinate_zip')?.setValue(null);
   }
 }
