@@ -76,9 +76,9 @@ describe('ReportListComponent', () => {
     expect(item.id).toBe(undefined);
   });
 
-  it('#editItem should route properly', () => {
+  it('#editItem should route properly', async () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.editItem({ id: '888', report_type: ReportTypes.F3X } as Report);
+    await component.editItem({ id: '888', report_type: ReportTypes.F3X } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
     component.editItem({
       id: '777',
@@ -145,7 +145,7 @@ describe('ReportListComponent', () => {
     });
 
     it('should delete', fakeAsync(async () => {
-      const deleteSpy = spyOn(component.itemService, 'delete').and.returnValue(Promise.resolve(null));
+      const deleteSpy = spyOn(reportService, 'delete').and.returnValue(Promise.resolve(null));
       const messageServiceSpy = spyOn(component.messageService, 'add');
       await component.delete(testActiveReport);
       expect(deleteSpy).toHaveBeenCalledOnceWith(testActiveReport);
