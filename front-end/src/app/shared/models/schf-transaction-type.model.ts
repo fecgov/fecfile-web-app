@@ -4,6 +4,10 @@ import { ScheduleIds } from './transaction.model';
 export abstract class SchFTransactionType extends TransactionType {
   scheduleId = ScheduleIds.F;
 
+  // Form layout
+  override contact3IsRequired = true;
+  override candidateInfoPosition = 'high';
+
   //Labels
   override amountInputHeader = 'Expenditure information';
   override purposeDescripLabel = 'PURPOSE OF DISBURSEMENT';

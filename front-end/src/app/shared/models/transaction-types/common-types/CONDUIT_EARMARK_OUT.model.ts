@@ -5,6 +5,7 @@ export abstract class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   override isDependentChild = () => true;
   override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
   override hasCandidateCommittee = true;
+  override candidateInfoPosition = 'high';
   override contact2IsRequired = () => true;
 
   override description = undefined;

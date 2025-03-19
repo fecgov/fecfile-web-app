@@ -76,6 +76,7 @@ export class TransactionInputComponent implements OnInit {
   ngOnInit(): void {
     if (this.transaction) {
       this.transactionType = this.transaction.transactionType;
+      this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
       throw new Error('FECfile: No transaction passed to TransactionInputComponent');
