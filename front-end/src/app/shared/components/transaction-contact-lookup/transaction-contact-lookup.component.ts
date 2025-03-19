@@ -99,6 +99,24 @@ export class TransactionContactLookupComponent implements OnInit {
       });
       this.form.addControl('contact_3_lookup', this.errorMessageFormControl);
     }
+    if (this.contactProperty === 'contact_4') {
+      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
+        if (!this.transaction?.contact_4 && this.transaction?.transactionType?.contact4IsRequired(this.form)) {
+          return { required: true };
+        }
+        return null;
+      });
+      this.form.addControl('contact_4_lookup', this.errorMessageFormControl);
+    }
+    if (this.contactProperty === 'contact_5') {
+      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
+        if (!this.transaction?.contact_5 && this.transaction?.transactionType?.contact5IsRequired(this.form)) {
+          return { required: true };
+        }
+        return null;
+      });
+      this.form.addControl('contact_5_lookup', this.errorMessageFormControl);
+    }
   }
 
   /**

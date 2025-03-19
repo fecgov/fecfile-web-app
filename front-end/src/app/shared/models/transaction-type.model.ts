@@ -40,10 +40,13 @@ export abstract class TransactionType {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  contact5IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
   candidateInfoPosition = 'low'; // Position of candidate info in the form. 'low' or 'high'
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
-
   // Double-entry settings
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isDependentChild = (transaction: Transaction) => false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page

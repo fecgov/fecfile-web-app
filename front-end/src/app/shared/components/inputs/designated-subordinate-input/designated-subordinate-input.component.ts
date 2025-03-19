@@ -36,21 +36,30 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     } else if (value === false) {
       this.clearDesignatingCommittee();
     } else {
-      this.clearDesignatingCommittee();
+      this.clearSubordinateCommittee();
       this.clearDesignatingCommittee();
     }
-    this.form.updateValueAndValidity();
   }
 
   onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
     const contact: Contact = selectItem?.value;
     this.form.get('designating_committee_id_number')?.setValue(contact.committee_id);
     this.form.get('designating_committee_name')?.setValue(contact.name);
+    if (this.transaction) {
+      this.transaction.contact_4 = contact;
+    }
+    this.form.get('contact_4_lookup')?.enable();
+    this.form.updateValueAndValidity();
   }
 
   clearDesignatingCommittee() {
     this.form.get('designating_committee_id_number')?.setValue(null);
     this.form.get('designating_committee_name')?.setValue(null);
+    if (this.transaction) {
+      this.transaction.contact_4 = undefined;
+    }
+    this.form.get('contact_4_lookup')?.disable();
+    this.form.updateValueAndValidity();
   }
 
   onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
@@ -62,6 +71,11 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     this.form.get('subordinate_city')?.setValue(contact.city);
     this.form.get('subordinate_state')?.setValue(contact.state);
     this.form.get('subordinate_zip')?.setValue(contact.zip);
+    if (this.transaction) {
+      this.transaction.contact_5 = contact;
+    }
+    this.form.get('contact_5_lookup')?.enable();
+    this.form.updateValueAndValidity();
   }
 
   clearSubordinateCommittee() {
@@ -72,5 +86,10 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     this.form.get('subordinate_city')?.setValue(null);
     this.form.get('subordinate_state')?.setValue(null);
     this.form.get('subordinate_zip')?.setValue(null);
+    if (this.transaction) {
+      this.transaction.contact_5 = undefined;
+    }
+    this.form.get('contact_5_lookup')?.disable();
+    this.form.updateValueAndValidity();
   }
 }
