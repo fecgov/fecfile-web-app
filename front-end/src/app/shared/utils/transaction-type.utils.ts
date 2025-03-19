@@ -197,6 +197,7 @@ import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from '../models/tran
 import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
 import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
 import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/MULTISTATE_INDEPENDENT_EXPENDITURE.model';
+import { COORDINATED_PARTY_EXPENDITURE } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -308,6 +309,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
   IN_KIND_CONTRIBUTION_TO_CANDIDATE,
   IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
+  COORDINATED_PARTY_EXPENDITURE,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
   OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,

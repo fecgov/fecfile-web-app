@@ -32,6 +32,9 @@
       </div>
     </div>
   }
+  @if (transaction?.transactionType?.scheduleId === 'F') {
+    
+  }
   @if (transaction?.transactionType?.hasMemoText()) {
     <div class="grid">
       <div class="col-12">
