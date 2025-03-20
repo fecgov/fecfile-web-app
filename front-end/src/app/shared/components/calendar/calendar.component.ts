@@ -24,10 +24,9 @@ export class CalendarComponent extends DestroyerComponent implements OnInit {
   control!: SubscriptionFormControl<Date | null>;
 
   ngOnInit(): void {
-    const originalControl = this.form?.get(this.fieldName) as SubscriptionFormControl;
-    const date = DateUtils.parseDate(originalControl.value);
-    this.control = originalControl.copy<Date | null>(date, 'submit');
-    this.form.setControl(this.fieldName, this.control);
+    this.control = this.form?.get(this.fieldName) as SubscriptionFormControl;
+    const date = DateUtils.parseDate(this.control.value);
+    this.control.setValue(date);
   }
 
   validateDate(calendarUpdate: boolean) {

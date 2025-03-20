@@ -18,7 +18,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   private readonly committeeSignal = this.store.selectSignal(selectCommitteeAccount);
 
   public readonly membersSignal = signal<CommitteeMember[]>([]);
-
+  public readonly adminsSignal = computed(() => this.membersSignal().filter((m) => m.isAdmin));
   public readonly needsSecondAdmin = computed(() => {
     if (
       Roles[this.userSignal().role as keyof typeof Roles] !== Roles.COMMITTEE_ADMINISTRATOR ||
