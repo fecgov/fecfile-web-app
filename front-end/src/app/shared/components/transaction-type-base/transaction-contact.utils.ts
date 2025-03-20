@@ -73,9 +73,9 @@ export class TransactionContactUtils {
   ): any[] {
     return Object.entries(contactConfig)
       .map(([field, property]: string[]) => {
-        const contactValue = contact[property as keyof Contact];
+        const contactValue = contact[property as keyof Contact] ?? undefined;
         const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
-        let formFieldValue = formField?.value;
+        let formFieldValue = formField?.value ?? undefined;
 
         // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
         // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"

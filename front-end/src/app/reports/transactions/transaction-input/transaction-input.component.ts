@@ -6,7 +6,6 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/cont
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { Report } from 'app/shared/models/report.model';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { CommitteeInputComponent } from '../../../shared/components/inputs/committee-input/committee-input.component';
@@ -53,7 +52,6 @@ import { ElectionInputComponent } from '../../../shared/components/inputs/electi
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
   @Input() formSubmitted = false;
-  @Input() activeReport$?: Observable<Report>;
   @Input() transaction?: Transaction;
   @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);

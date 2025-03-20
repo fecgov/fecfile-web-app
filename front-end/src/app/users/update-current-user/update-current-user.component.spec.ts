@@ -36,7 +36,6 @@ describe('UpdateCurrentUserComponent', () => {
     fixture = TestBed.createComponent(UpdateCurrentUserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.ngOnInit();
   });
 
   it('should create', () => {

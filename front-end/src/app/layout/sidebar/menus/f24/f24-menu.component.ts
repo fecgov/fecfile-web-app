@@ -1,53 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Report } from '../../../../shared/models/report.model';
 import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
-import { takeUntil } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-f24-menu',
   templateUrl: './f24-menu.component.html',
   styleUrls: ['../menu-report.component.scss'],
-  imports: [PanelMenu, AsyncPipe],
+  imports: [PanelMenu],
 })
-export class F24MenuComponent extends AbstractMenuComponent implements OnInit {
-  override reportString = 'f24';
-  formLabel?: string;
-  subLabel?: string;
+export class F24MenuComponent extends AbstractMenuComponent {
+  override readonly reportString = 'f24';
+  readonly formLabelSignal = computed(() => this.activeReportSignal().formLabel);
+  readonly subLabelSignal = computed(() => this.activeReportSignal().formSubLabel);
 
-  override ngOnInit() {
-    super.ngOnInit();
-    if (!this.activeReport$) return;
-    this.activeReport$.pipe(takeUntil(this.destroy$)).subscribe((report) => {
-      this.formLabel = report?.formLabel;
-      this.subLabel = report?.formSubLabel;
-    });
-  }
-
-  getMenuItems(sidebarState: SidebarState, activeReport: Report | undefined, isEditable: boolean): MenuItem[] {
+  getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[] {
     const transactionItems = [
       {
         label: 'Manage your transactions',
-        routerLink: `/reports/transactions/report/${activeReport?.id}/list`,
+        routerLink: `/reports/transactions/report/${this.activeReportSignal().id}/list`,
       },
       {
         label: 'Add an independent expenditure',
-        routerLink: `/reports/f24/report/${activeReport?.id}/transactions/select/independent-expenditures`,
+        routerLink: `/reports/f24/report/${this.activeReportSignal().id}/transactions/select/independent-expenditures`,
       },
     ];
     const reviewReport = this.reviewReport(sidebarState);
-    reviewReport.items = [this.printPreview(activeReport), this.addReportLevelMenu(activeReport, isEditable)];
+    reviewReport.items = [this.printPreview(), this.addReportLevelMenu(isEditable)];
     return [
       this.enterTransaction(sidebarState, isEditable, transactionItems),
-      this.reviewTransactions(sidebarState, activeReport, isEditable),
+      this.reviewTransactions(sidebarState, isEditable),
       reviewReport,
       {
         label: 'SIGN & SUBMIT',
         expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
-        items: this.submitReportArray(activeReport, isEditable),
+        items: this.submitReportArray(isEditable),
       },
     ] as MenuItem[];
   }

@@ -1,10 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { Report } from 'app/shared/models/report.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { Card } from 'primeng/card';
@@ -23,21 +21,17 @@ export class SubmitReportStatusComponent extends DestroyerComponent implements O
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   private readonly form3XService = inject(Form3XService);
-  report?: Report;
-  reportCode?: F3xReportCodes;
-  coverageDates?: { [key: string]: Date | undefined };
+  readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
+  readonly reportCodeSignal = computed(() => this.activeReportSignal().report_code as F3xReportCodes);
+  readonly coverageDatesSignal = computed(() => this.activeReportSignal().coverageDates);
+  readonly fecStatusSignal = computed(() => this.activeReportSignal().upload_submission?.fec_status);
+  readonly taskStateSignal = computed(() => this.activeReportSignal().upload_submission?.fecfile_task_state);
+  readonly fecMessageSignal = computed(() => this.activeReportSignal().upload_submission?.fec_message);
+
   reportCodeLabelMap?: { [key in F3xReportCodes]: string };
 
   ngOnInit(): void {
     this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report;
-        this.reportCode = report.report_code as F3xReportCodes;
-        this.coverageDates = report.coverageDates;
-      });
   }
 
   public backToReports() {
