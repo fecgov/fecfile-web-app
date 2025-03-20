@@ -456,6 +456,28 @@ describe('ContactLookupComponent', () => {
         }),
       );
     }));
+
+    it('should not populate district if Senate', fakeAsync(() => {
+      testCandidate(
+        Candidate.fromJSON(
+          Candidate.fromJSON({
+            ...baseCandidate,
+            office: 'S',
+            state: 'AZ',
+            district: '00',
+          }),
+        ),
+      );
+
+      expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
+        Contact.fromJSON({
+          ...baseContact,
+          candidate_office: 'S',
+          candidate_state: 'AZ',
+          candidate_district: '',
+        }),
+      );
+    }));
   });
 
   it('#onCreateNewContactSelect Contact happy path', fakeAsync(() => {
