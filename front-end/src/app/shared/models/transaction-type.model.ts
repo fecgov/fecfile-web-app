@@ -306,6 +306,15 @@ export type TransactionTemplateMapType = {
   signatory_2_suffix: string;
   signatory_2_title: string;
   signatory_2_date: string;
+  quaternary_committee_fec_id: string;
+  quaternary_committee_name: string;
+  quinary_committee_fec_id: string;
+  quinary_committee_name: string;
+  quinary_street_1: string;
+  quinary_street_2: string;
+  quinary_city: string;
+  quinary_state: string;
+  quinary_zip: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;

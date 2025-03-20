@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Contact } from 'app/shared/models';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
+import { SelectItem } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -17,6 +19,11 @@ import { DesignatedSubordinateInputComponent } from '../designated-subordinate-i
   imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule, DesignatedSubordinateInputComponent],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
+  @Output() designatingCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() designatingCommitteeClear = new EventEmitter<void>();
+  @Output() subordinateCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() subordinateCommitteeClear = new EventEmitter<void>();
+
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {
@@ -58,5 +65,21 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     if (!this.form.get(field)?.value) {
       this.form.get(field)?.setValue(prefix);
     }
+  }
+
+  onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
+    this.designatingCommitteeSelect.emit(selectItem);
+  }
+
+  onDesignatingCommitteeClear() {
+    this.designatingCommitteeClear.emit();
+  }
+
+  onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
+    this.subordinateCommitteeSelect.emit(selectItem);
+  }
+
+  onSubordinateCommitteeClear() {
+    this.subordinateCommitteeClear.emit();
   }
 }

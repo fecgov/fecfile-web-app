@@ -126,6 +126,10 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
+      (designatingCommitteeSelect)="updateFormWithQuaternaryContact($event)"
+      (designatingCommitteeClear)="clearFormQuaternaryContact()"
+      (subordinateCommitteeSelect)="updateFormWithQuinaryContact($event)"
+      (subordinateCommitteeClear)="clearFormQuinaryContact()"
     ></app-additional-info-input>
   }
   @if (transactionType?.hasSignature1()) {

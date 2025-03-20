@@ -7,8 +7,10 @@ export abstract class SchFTransactionType extends TransactionType {
 
   // Form layout
   override contact3IsRequired = true;
-  override contact4IsRequired = (form: FormGroup) => form.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
-  override contact5IsRequired = (form: FormGroup) => form.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
+  override contact4IsRequired = (form: FormGroup) =>
+    form.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
+  override contact5IsRequired = (form: FormGroup) =>
+    form.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
   override candidateInfoPosition = 'high';
 
   //Labels
@@ -79,5 +81,14 @@ export abstract class SchFTransactionType extends TransactionType {
     signatory_2_suffix: '',
     signatory_2_title: '',
     signatory_2_date: '',
+    quaternary_committee_fec_id: 'designating_committee_id_number',
+    quaternary_committee_name: 'designating_committee_name',
+    quinary_committee_fec_id: 'subordinate_committee_id_number',
+    quinary_committee_name: 'subordinate_committee_name',
+    quinary_street_1: 'subordinate_street_1',
+    quinary_street_2: 'subordinate_street_2',
+    quinary_city: 'subordinate_city',
+    quinary_state: 'subordinate_state',
+    quinary_zip: 'subordinate_zip',
   };
 }

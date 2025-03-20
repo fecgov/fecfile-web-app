@@ -38,6 +38,10 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
+      (designatingCommitteeSelect)="onDesignatingCommitteeSelect($event)"
+      (designatingCommitteeClear)="onDesignatingCommitteeClear()"
+      (subordinateCommitteeSelect)="onSubordinateCommitteeSelect($event)"
+      (subordinateCommitteeClear)="onSubordinateCommitteeClear()"
     ></app-designated-subordinate-input>
   }
   @if (transaction?.transactionType?.hasMemoText()) {

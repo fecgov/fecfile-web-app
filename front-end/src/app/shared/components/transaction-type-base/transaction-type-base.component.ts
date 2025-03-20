@@ -329,6 +329,32 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     );
   }
 
+  updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithQuaternaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_4'],
+    );
+  }
+
+  clearFormQuaternaryContact() {
+    TransactionContactUtils.clearFormQuaternaryContact(this.form, this.transaction, this.contactIdMap['contact_4']);
+  }
+
+  updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithQuinaryContact(
+      selectItem,
+      this.form,
+      this.transaction,
+      this.contactIdMap['contact_5'],
+    );
+  }
+
+  clearFormQuinaryContact() {
+    TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction, this.contactIdMap['contact_5']);
+  }
+
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
     const requiredLabel = 'MEMO ITEM';
     const optionalLabel = requiredLabel + ' (OPTIONAL)';
