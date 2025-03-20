@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F3XMenuComponent } from './f3x-menu.component';
 import { provideMockStore } from '@ngrx/store/testing';

@@ -63,7 +63,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
     updateOn: 'blur',
   });
 
