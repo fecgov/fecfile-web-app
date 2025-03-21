@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -43,7 +43,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
   protected confirmationService = inject(ConfirmationService);
-  protected readonly fb = inject(FormBuilder);
   protected readonly router = inject(Router);
   protected readonly fecDatePipe = inject(FecDatePipe);
   protected readonly store = inject(Store);
@@ -90,7 +89,10 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     this.formProperties = this.transactionType.getFormControlNames();
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
+    this.form = this.fb.group(
+      SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.transaction.transactionType.schema),
+      { updateOn: 'blur' },
+    );
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 

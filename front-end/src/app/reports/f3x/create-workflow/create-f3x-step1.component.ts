@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -51,7 +51,6 @@ import { F3xCoverageDates, CommitteeAccount, Form3X, F3xFormTypes } from 'app/sh
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {
   private readonly store = inject(Store);
-  private readonly fb = inject(FormBuilder);
   private readonly form3XService = inject(Form3XService);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -68,7 +67,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
     updateOn: 'blur',
   });
 

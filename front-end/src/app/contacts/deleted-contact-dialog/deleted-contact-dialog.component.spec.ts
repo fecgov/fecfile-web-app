@@ -11,10 +11,12 @@ import { Contact, ContactTypes } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { DeletedContactService } from 'app/shared/services/contact.service';
 
 describe('DeletedContactDialogComponent', () => {
   let component: DeletedContactDialogComponent;
   let fixture: ComponentFixture<DeletedContactDialogComponent>;
+  let service: DeletedContactService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,20 +28,13 @@ describe('DeletedContactDialogComponent', () => {
         ConfirmationService,
         MessageService,
         provideMockStore(testMockStore),
+        DeletedContactService,
       ],
     }).compileComponents();
-
+    service = TestBed.inject(DeletedContactService);
     fixture = TestBed.createComponent(DeletedContactDialogComponent);
     component = fixture.componentInstance;
-    spyOn(component.itemService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 2,
-        pageNumber: 1,
-        next: 'https://next',
-        previous: 'https://previous',
-        results: [Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })],
-      }),
-    );
+
     fixture.detectChanges();
   });
 
@@ -55,7 +50,7 @@ describe('DeletedContactDialogComponent', () => {
   });
 
   it('should restore', async () => {
-    spyOn(component.itemService, 'restore').and.returnValue(Promise.resolve(['1']));
+    spyOn(service, 'restore').and.returnValue(Promise.resolve(['1']));
     component.visible = true;
     component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     await component.restoreSelected();

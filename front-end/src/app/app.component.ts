@@ -4,11 +4,19 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Toast } from 'primeng/toast';
 import { DownloadTrayComponent } from './shared/components/download-tray/download-tray.component';
 import { RouterOutlet } from '@angular/router';
+import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [PollerComponent, ConfirmDialog, Toast, DownloadTrayComponent, RouterOutlet],
+  imports: [
+    PollerComponent,
+    ConfirmDialog,
+    Toast,
+    DownloadTrayComponent,
+    RouterOutlet,
+    SecondCommitteeAdminDialogComponent,
+  ],
 })
 export class AppComponent {}

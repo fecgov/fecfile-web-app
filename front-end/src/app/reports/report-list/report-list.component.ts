@@ -32,6 +32,12 @@ import { ReportService } from 'app/shared/services/report.service';
   ],
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
+  public readonly router = inject(Router);
+  protected readonly itemService = inject(ReportService);
+  private readonly store = inject(Store);
+  private readonly form3XService = inject(Form3XService);
+  public readonly dotFecService = inject(DotFecService);
+
   dialogVisible = false;
   committeeAccount?: CommitteeAccount;
   public rowActions: TableAction[] = [
@@ -60,12 +66,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     { field: 'upload_submission__created', label: 'Filed' },
   ];
 
-  public readonly router = inject(Router);
-  override readonly itemService = inject(ReportService);
-  private readonly store = inject(Store);
-  private readonly form3XService = inject(Form3XService);
-  public readonly dotFecService = inject(DotFecService);
-
   override readonly caption =
     'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
 
@@ -79,26 +79,22 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     return new Form3X();
   }
 
-  public override async editItem(item: Report): Promise<void> {
+  public override async editItem(item: Report): Promise<boolean> {
     if (!this.itemService.isEditable(item)) {
-      await this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
-      return;
+      return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
     }
 
     switch (item.report_type) {
       case ReportTypes.F3X:
-        await this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-        break;
+        return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
       case ReportTypes.F99:
-        await this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
-        break;
+        return this.router.navigateByUrl(`/reports/f99/edit/${item.id}`);
       case ReportTypes.F24:
-        await this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-        break;
+        return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
       case ReportTypes.F1M:
-        await this.router.navigateByUrl(`/reports/f1m/edit/${item.id}`);
-        break;
+        return this.router.navigateByUrl(`/reports/f1m/edit/${item.id}`);
     }
+    return false;
   }
 
   async amendReport(report: Report) {

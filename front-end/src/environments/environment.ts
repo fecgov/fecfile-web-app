@@ -17,6 +17,7 @@ export const environment = {
   committee_data_source: 'test',
   form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
   showForm3: false,
+  showSchedF: false,
 };
 
 /*
