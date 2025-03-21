@@ -229,17 +229,18 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return params;
   }
 
-  override async editItem(item: Transaction): Promise<void> {
-    await this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
+  override editItem(item: Transaction): Promise<boolean> {
+    return this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
   }
 
-  public async editLoanAgreement(transaction: Transaction): Promise<void> {
+  public async editLoanAgreement(transaction: Transaction): Promise<boolean> {
     if (transaction.loan_agreement_id)
-      await this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
+      return this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
+    return false;
   }
 
-  public async createLoanAgreement(transaction: Transaction): Promise<void> {
-    await this.router.navigateByUrl(
+  public createLoanAgreement(transaction: Transaction): Promise<boolean> {
+    return this.router.navigateByUrl(
       `/reports/transactions/report/${this.reportId}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
     );
   }

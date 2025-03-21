@@ -31,6 +31,8 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
   ],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
+  protected readonly itemService = inject(ContactService);
+  public readonly deletedContactService = inject(DeletedContactService);
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
@@ -61,9 +63,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'employer', label: 'Employer' },
     { field: 'occupation', label: 'Occupation' },
   ];
-
-  public override itemService = inject(ContactService);
-  public readonly deletedContactService = inject(DeletedContactService);
 
   ngOnInit() {
     this.checkForDeletedContacts();

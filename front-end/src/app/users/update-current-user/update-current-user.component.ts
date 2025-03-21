@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -25,7 +25,6 @@ import { ButtonModule } from 'primeng/button';
 })
 export class UpdateCurrentUserComponent extends FormComponent implements OnInit {
   private readonly store = inject(Store);
-  private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);

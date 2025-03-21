@@ -1,10 +1,9 @@
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, model, Signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { combineLatest, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report, ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/report.model';
 import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
@@ -18,8 +17,8 @@ import {
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import {
-  PACRestricted,
-  PTYRestricted,
+  PAC_ONLY,
+  PTY_ONLY,
   TransactionTypeUtils,
   getTransactionTypeClass,
 } from 'app/shared/utils/transaction-type.utils';
@@ -45,9 +44,10 @@ import {
   ScheduleFTransactionTypes,
 } from 'app/shared/models/schf-transaction.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccordionModule } from 'primeng/accordion';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
+import { environment } from '../../../../environments/environment';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -57,7 +57,7 @@ type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
   styleUrls: ['./transaction-type-picker.component.scss'],
   imports: [RouterLink, LabelPipe, AccordionModule],
 })
-export class TransactionTypePickerComponent extends DestroyerComponent implements OnInit {
+export class TransactionTypePickerComponent extends DestroyerComponent {
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
   private readonly titleService = inject(Title);
@@ -70,62 +70,43 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     ...ScheduleETransactionTypeLabels,
     ...ScheduleFTransactionTypeLabels,
   ];
-  report?: Report;
-  category: Categories = 'receipt';
-  title: string = this.getCategoryTitle();
-  debtId?: string;
-  committeeAccount?: CommitteeAccount;
-
-  active = model<number>(-1);
-
-  ngOnInit(): void {
-    combineLatest([
-      this.store.select(selectActiveReport),
-      this.route.params,
-      this.route.queryParamMap,
-      this.store.select(selectCommitteeAccount),
-    ])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([report, params, queryParamMap, committeeAccount]) => {
-        this.report = report;
-        this.committeeAccount = committeeAccount;
-        this.category = params['category'];
-        this.active.set(-1);
-        this.debtId = queryParamMap.get('debt') ?? undefined;
-        this.title = this.getCategoryTitle();
-        this.titleService.setTitle(this.title);
-      });
-  }
-
-  getCategoryTitle(): string {
-    switch (this.category) {
+  private readonly report = this.store.selectSignal(selectActiveReport);
+  private readonly params$ = toSignal(this.route.params, { initialValue: { category: 'receipt' } });
+  private readonly queryParams$ = toSignal(this.route.queryParamMap);
+  readonly category: Signal<Categories> = computed(() => this.params$().category);
+  readonly title: Signal<string> = computed(() => {
+    switch (this.category()) {
       case 'receipt':
-        return this.debtId ? 'Report debt repayment' : 'Add a receipt';
+        return this.debtId() ? 'Report debt repayment' : 'Add a receipt';
       case 'disbursement':
-        return this.debtId ? 'Report debt repayment' : 'Add a disbursement';
+        return this.debtId() ? 'Report debt repayment' : 'Add a disbursement';
       case 'loans-and-debts':
         return 'Add loans and debts';
       default:
-        return this.category;
+        return this.category();
     }
-  }
+  });
+  readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
+  private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
-  getTransactionGroups(): TransactionGroupTypes[] {
-    if (this.category === 'disbursement') {
-      if (this.report?.report_type === ReportTypes.F3X) {
+  active = model<number>(-1);
+
+  transactionGroups: Signal<TransactionGroupTypes[]> = computed(() => {
+    if (this.category() === 'disbursement') {
+      if (this.report().report_type === ReportTypes.F3X) {
         return [
           ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
-          ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+          ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS, // includes ScheduleFTransactionTypes.*
           ScheduleBTransactionGroups.OTHER_EXPENDITURES,
           ScheduleBTransactionGroups.REFUND,
           ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
           ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES,
         ];
-      } else if (this.report?.report_type === ReportTypes.F24) {
+      } else if (this.report().report_type === ReportTypes.F24) {
         return [ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES];
       }
     }
-    if (this.category === 'loans-and-debts') {
+    if (this.category() === 'loans-and-debts') {
       return [ScheduleCTransactionGroups.LOANS, ScheduleDTransactionGroups.DEBTS];
     }
     return [
@@ -135,6 +116,16 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       ScheduleATransactionGroups.REFUNDS,
       ScheduleATransactionGroups.OTHER,
     ];
+  });
+
+  constructor() {
+    super();
+    effect(() => {
+      this.titleService.setTitle(this.title());
+    });
+    effect(() => {
+      if (this.params$() || this.queryParams$()) this.active.set(-1);
+    });
   }
 
   getTransactionTypes(group: TransactionGroupTypes): TransactionTypes[] {
@@ -233,6 +224,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+          ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
         ];
         break;
       case ScheduleBTransactionGroups.OTHER_EXPENDITURES:
@@ -318,10 +311,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         break;
     }
 
-    if (this.committeeAccount?.isPAC) transactionTypes = transactionTypes.filter((tt) => !PACRestricted().includes(tt));
-    if (this.committeeAccount?.isPTY) transactionTypes = transactionTypes.filter((tt) => !PTYRestricted().includes(tt));
+    if (!this.committeeAccount().isPAC) transactionTypes = transactionTypes.filter((tt) => !PAC_ONLY().includes(tt));
+    if (!this.committeeAccount().isPTY) transactionTypes = transactionTypes.filter((tt) => !PTY_ONLY().includes(tt));
 
-    if (this.debtId) {
+    if (this.debtId()) {
       const debtPaymentLines = [
         ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SE', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
         ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
@@ -332,7 +325,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         return debtPaymentLines.includes(lineNumber);
       });
     }
-    return transactionTypes;
+    return transactionTypes.filter((transactionType) => this.showTransaction(transactionType));
   }
 
   hasTransactions(group: TransactionGroupTypes): boolean {
@@ -343,9 +336,14 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
     return !getTransactionTypeClass(transactionTypeIdentifier);
   }
 
+  showTransaction(transactionTypeIdentifier: string): boolean {
+    // currently we only hide SchedF in some ɵnvironments, but in the future?
+    return !(!environment.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
+  }
+
   getRouterLink(transactionType: string): string | undefined {
     if (this.report && !this.isTransactionDisabled(transactionType)) {
-      return `/reports/transactions/report/${this.report?.id}/create/${transactionType}`;
+      return `/reports/transactions/report/${this.report().id}/create/${transactionType}`;
     }
     return undefined;
   }

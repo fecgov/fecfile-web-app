@@ -424,10 +424,9 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
 
   const transactionType = json.transaction_type_identifier ? TransactionTypeUtils.factory(json.transaction_type_identifier) : undefined;
   return getfromJsonByType(json, transactionType, depth);
-  // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
 }
 
-export function PACRestricted(): TransactionTypes[] {
+export function PTY_ONLY(): TransactionTypes[] {
   return [
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
@@ -478,7 +477,7 @@ export function PACRestricted(): TransactionTypes[] {
   ];
 }
 
-export function PTYRestricted(): TransactionTypes[] {
+export function PAC_ONLY(): TransactionTypes[] {
   return [
     ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
