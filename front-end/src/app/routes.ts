@@ -6,6 +6,7 @@ import { nameGuard } from './shared/guards/name.guard';
 import { loggedInGuard } from './shared/guards/logged-in.guard';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
+import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 
 export const ROUTES: Route[] = [
   {
@@ -17,6 +18,7 @@ export const ROUTES: Route[] = [
       {
         path: 'committee',
         loadChildren: () => import('./committee/routes').then((mod) => mod.COMMITTEE_ROUTES),
+        canActivate: [committeeOwnerGuard],
       },
       {
         path: '',
@@ -27,7 +29,7 @@ export const ROUTES: Route[] = [
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
       {
         path: 'login',
@@ -44,22 +46,22 @@ export const ROUTES: Route[] = [
       {
         path: 'contacts',
         loadChildren: () => import('./contacts/routes').then((mod) => mod.CONTACTS_ROUTES),
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
       {
         path: 'tools',
         loadChildren: () => import('./tools/routes').then((mod) => mod.TOOLS_ROUTES),
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
       {
         path: 'help',
         loadChildren: () => import('./help/routes').then((mod) => mod.HELP_ROUTES),
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/routes').then((mod) => mod.NOTIFICATION_ROUTES),
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
     ],
   },

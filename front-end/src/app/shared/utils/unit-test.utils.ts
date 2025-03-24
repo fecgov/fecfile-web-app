@@ -92,6 +92,11 @@ export const testUserLoginData: UserLoginData = {
   email: 'test_email@testhost.com',
 };
 
+export const testCommitteeAdminLoginData: UserLoginData = {
+  ...testUserLoginData,
+  role: 'COMMITTEE_ADMINISTRATOR',
+};
+
 export const testActiveReport: Form3X = Form3X.fromJSON({
   id: '999',
   coverage_from_date: '2022-05-25',

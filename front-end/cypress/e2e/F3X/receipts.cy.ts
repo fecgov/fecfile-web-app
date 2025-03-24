@@ -6,7 +6,7 @@ import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 
 const scheduleData = {
   ...defaultScheduleFormData,

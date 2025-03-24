@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -28,7 +28,6 @@ import { takeUntil } from 'rxjs';
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   private readonly store = inject(Store);
-  protected readonly fb = inject(FormBuilder);
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
   public readonly memoTextService = inject(MemoTextService);
