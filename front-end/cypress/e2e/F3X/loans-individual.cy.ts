@@ -1,10 +1,10 @@
 import { Initialize } from '../pages/loginPage';
-import { currentYear, PageUtils } from '../pages/pageUtils';
+import { PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { defaultFormData as individualContactFormData } from '../models/ContactFormModel';
 import { F3XSetup } from './f3x-setup';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 
 const formData = {
   ...defaultLoanFormData,
