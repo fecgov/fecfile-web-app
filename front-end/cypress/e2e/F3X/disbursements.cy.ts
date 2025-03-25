@@ -12,7 +12,7 @@ import {
   formTransactionDataForSchedule,
 } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
 import { ReportListPage } from '../pages/reportListPage';
 import { F24Setup } from '../F24/f24-setup';

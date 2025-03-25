@@ -1,4 +1,4 @@
-import { PageUtils } from '../../pages/pageUtils';
+import { PageUtils } from '../../../pages/pageUtils';
 
 export class Receipts {
   static Individual() {
