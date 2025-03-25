@@ -33,7 +33,7 @@
         "@ngrx/store": "^19.0.1",
         "@primeng/themes": "^19.0.9",
         "class-transformer": "^0.5.1",
-        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#361c3bd8f6252007baeeb686e450bfc4ca8bd550",
+        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#deb27cdb84ca93ebd26c048618fd1300bc5c43ed",
         "intl-tel-input": "^23.0.4",
         "lodash": "^4.17.21",
         "luxon": "^3.5.0",

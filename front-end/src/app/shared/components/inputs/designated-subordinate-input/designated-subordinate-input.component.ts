@@ -35,30 +35,60 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     [false as any, 'Subordinate committee'],
   ]);
 
+  onSubordinateCommitteeIdBlur() {
+    this.updateSubordinateValueAndValidity();
+  }
+
   onDesignatedOrSubordinateChange(value: boolean | null) {
     if (value === true) {
       this.clearSubordinateCommittee();
     } else if (value === false) {
       this.clearDesignatingCommittee();
-    } else {
-      this.clearSubordinateCommittee();
+    } else if (value === null) {
+      this.form.get('filer_designated_to_make_coordinated_expenditures')?.setValue(null);
       this.clearDesignatingCommittee();
+      this.clearSubordinateCommittee();
+      this.updateDesignatedValueAndValidity();
+      this.updateSubordinateValueAndValidity();
     }
+  }
+
+  updateDesignatedValueAndValidity() {
+    this.form.get('designating_committee_id_number')?.updateValueAndValidity();
+    this.form.get('designating_committee_name')?.updateValueAndValidity();
+    this.form.updateValueAndValidity();
+  }
+
+  updateSubordinateValueAndValidity() {
+    this.form.get('subordinate_committee_id_number')?.updateValueAndValidity();
+    this.form.get('subordinate_committee_name')?.updateValueAndValidity();
+    this.form.get('subordinate_street_1')?.updateValueAndValidity();
+    this.form.get('subordinate_street_2')?.updateValueAndValidity();
+    this.form.get('subordinate_city')?.updateValueAndValidity();
+    this.form.get('subordinate_state')?.updateValueAndValidity();
+    this.form.get('subordinate_zip')?.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
     this.designatingCommitteeSelect.emit(selectItem);
+    this.form.get("contact_4_lookup")?.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   clearDesignatingCommittee() {
+    this.form.removeControl("contact_4_lookup");
     this.designatingCommitteeClear.emit();
   }
 
   onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
     this.subordinateCommitteeSelect.emit(selectItem);
+    this.form.get("contact_5_lookup")?.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   clearSubordinateCommittee() {
+    this.form.removeControl("contact_5_lookup");
     this.subordinateCommitteeClear.emit();
   }
 }

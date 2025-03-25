@@ -198,6 +198,7 @@ import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from '../models/trans
 import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
 import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/MULTISTATE_INDEPENDENT_EXPENDITURE.model';
 import { COORDINATED_PARTY_EXPENDITURE } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE.model';
+import { SchFTransaction } from '../models/schf-transaction.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -529,6 +530,7 @@ function getfromJsonByType(
     if (transactionType.scheduleId === ScheduleIds.C2) return SchC2Transaction.fromJSON(json, depth);
     if (transactionType.scheduleId === ScheduleIds.D) return SchDTransaction.fromJSON(json, depth);
     if (transactionType.scheduleId === ScheduleIds.E) return SchETransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === ScheduleIds.F) return SchFTransaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
 }
