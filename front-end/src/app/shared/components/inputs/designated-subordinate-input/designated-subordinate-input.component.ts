@@ -48,15 +48,7 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
       this.form.get('filer_designated_to_make_coordinated_expenditures')?.setValue(null);
       this.clearDesignatingCommittee();
       this.clearSubordinateCommittee();
-      this.updateDesignatedValueAndValidity();
-      this.updateSubordinateValueAndValidity();
     }
-  }
-
-  updateDesignatedValueAndValidity() {
-    this.form.get('designating_committee_id_number')?.updateValueAndValidity();
-    this.form.get('designating_committee_name')?.updateValueAndValidity();
-    this.form.updateValueAndValidity();
   }
 
   updateSubordinateValueAndValidity() {
