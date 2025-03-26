@@ -36,7 +36,9 @@ export abstract class MainFormBaseComponent extends DestroyerComponent implement
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
+    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.schema), {
+      updateOn: 'blur',
+    });
     const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
     const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
 

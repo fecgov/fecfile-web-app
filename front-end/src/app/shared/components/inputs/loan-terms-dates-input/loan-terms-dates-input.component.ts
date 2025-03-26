@@ -183,7 +183,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
       this.dueDate = null;
     } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-      this.dueDateField = this.dueDateField!.copy<string>('');
+      this.dueDate = '';
     }
   }
 
@@ -204,17 +204,12 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
       const value =
         previous_due_date instanceof Date ? DateUtils.convertDateToFecFormat(previous_due_date) : previous_due_date;
-      this.dueDateField = this.dueDateField!.copy<string>(value ?? '');
+      this.dueDate = value ?? '';
     }
   }
 
   get dueDateField(): SubscriptionFormControl | null {
     return this.form.get(this.templateMap['due_date']) as SubscriptionFormControl;
-  }
-
-  set dueDateField(control: SubscriptionFormControl) {
-    control.markAsPristine();
-    this.form.setControl(this.templateMap['due_date'], control);
   }
 
   get dueDate(): Date | string | null {
@@ -223,10 +218,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   set dueDate(value: Date | string | null) {
     this.dueDateField?.setValue(value);
-    if (value === null) {
-      this.dueDateField?.markAsPristine();
-      this.dueDateField?.markAsUntouched();
-    }
+    this.dueDateField?.markAsPristine();
+    this.dueDateField?.markAsUntouched();
   }
 
   get dueDateSettingField(): SubscriptionFormControl | null {

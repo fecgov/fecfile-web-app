@@ -3,10 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { AccordionModule } from 'primeng/accordion';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionGroups, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
@@ -16,10 +16,13 @@ import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.m
 import { ScheduleATransactionGroups, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
   let fixture: ComponentFixture<TransactionTypePickerComponent>;
+  let mockStore: MockStore;
+  const routeParams$ = new BehaviorSubject({ category: 'receipt' });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,9 +41,7 @@ describe('TransactionTypePickerComponent', () => {
                 }),
               },
             },
-            params: of({
-              catalog: 'receipt',
-            }),
+            params: routeParams$.asObservable(),
             queryParamMap: of({ get: (key: string) => (key === 'param1' ? 'value1' : undefined) }),
           },
         },
@@ -52,9 +53,7 @@ describe('TransactionTypePickerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionTypePickerComponent);
     component = fixture.componentInstance;
-    component.report = Form3X.fromJSON({
-      report_type: ReportTypes.F3X,
-    });
+    mockStore = TestBed.inject(MockStore);
     fixture.detectChanges();
   });
 
@@ -62,27 +61,33 @@ describe('TransactionTypePickerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should change for disbursement category', () => {
-    component.category = 'disbursement';
+  it('should change for disbursement category', fakeAsync(() => {
+    routeParams$.next({ category: 'disbursement' });
     fixture.detectChanges();
-    const groups = component.getTransactionGroups();
+    tick(500);
+    const groups = component.transactionGroups();
     expect(groups[0]).toBe(ScheduleBTransactionGroups.OPERATING_EXPENDITURES);
-  });
+  }));
 
   it('should show only independent expenditures when in an F24', () => {
-    component.category = 'disbursement';
+    mockStore.overrideSelector(
+      selectActiveReport,
+      Form24.fromJSON({
+        report_type: ReportTypes.F24,
+      }),
+    );
+    mockStore.refreshState();
+    routeParams$.next({ category: 'disbursement' });
     fixture.detectChanges();
-    component.report = Form24.fromJSON({
-      report_type: ReportTypes.F24,
-    });
-    const groups = component.getTransactionGroups();
+
+    const groups = component.transactionGroups();
     expect(groups[0]).toBe(ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES);
     expect(groups.length).toEqual(1);
   });
 
   it('should change for loans and debts category', () => {
-    component.category = 'loans-and-debts';
-    const groups = component.getTransactionGroups();
+    routeParams$.next({ category: 'loans-and-debts' });
+    const groups = component.transactionGroups();
     expect(groups[0]).toBe(ScheduleCTransactionGroups.LOANS);
 
     let types = component.getTransactionTypes(groups[0]);
@@ -92,39 +97,21 @@ describe('TransactionTypePickerComponent', () => {
   });
 
   it('should set the title correctly', () => {
-    component.category = 'receipt';
-    expect(component.getCategoryTitle()).toEqual('Add a receipt');
-    component.category = 'disbursement';
-    expect(component.getCategoryTitle()).toEqual('Add a disbursement');
-    component.category = 'loans-and-debts';
-    expect(component.getCategoryTitle()).toEqual('Add loans and debts');
+    routeParams$.next({ category: 'receipt' });
+    expect(component.title()).toEqual('Add a receipt');
+    routeParams$.next({ category: 'disbursement' });
+    expect(component.title()).toEqual('Add a disbursement');
+    routeParams$.next({ category: 'loans-and-debts' });
+    expect(component.title()).toEqual('Add loans and debts');
   });
-
-  it('should get committee account', fakeAsync(() => {
-    component.ngOnInit();
-    tick(500);
-    expect(component.committeeAccount).toBeTruthy();
-  }));
 
   describe('getTransactionTypes', () => {
     it('should limit by PACRestricted if Committee type is PAC', fakeAsync(() => {
-      component.ngOnInit();
-      tick(500);
-      if (component.committeeAccount) {
-        component.committeeAccount.isPAC = true;
-        component.committeeAccount.isPTY = false;
-      }
       const types = component.getTransactionTypes(ScheduleATransactionGroups.TRANSFERS);
       expect(types.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
     }));
 
-    it('should limit by PTYRestricted if Committee type is PTY', fakeAsync(() => {
-      component.ngOnInit();
-      tick(500);
-      if (component.committeeAccount) {
-        component.committeeAccount.isPAC = false;
-        component.committeeAccount.isPTY = true;
-      }
+    it('should limit by PTY_ONLY if Committee type is PTY', fakeAsync(() => {
       const testTypes = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
       expect(testTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
     }));

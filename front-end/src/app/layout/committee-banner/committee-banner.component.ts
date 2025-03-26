@@ -5,12 +5,12 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 const committeeStatusCodes: { [key: string]: string } = {
-  T: 'Terminated',
-  A: 'Administratively terminated',
-  D: 'Active - Debt',
-  W: 'Active - Waived',
-  M: 'Active - Monthly',
-  Q: 'Active - Quarterly',
+  T: 'Terminated (T)',
+  A: 'Administratively Terminated (A)',
+  D: 'Debt (D)',
+  W: 'Waived (W)',
+  M: 'Monthly (M)',
+  Q: 'Quarterly (Q)',
 };
 
 const activeStatusCodes = ['M', 'Q', 'W', 'D'];
