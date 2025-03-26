@@ -30,8 +30,11 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
 
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
   designatedOrSubordinateOptions = LabelUtils.getPrimeOptions([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [null as any, 'Neither'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [true as any, 'Designating committee'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [false as any, 'Subordinate committee'],
   ]);
 
