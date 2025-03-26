@@ -173,7 +173,7 @@ export abstract class TransactionType {
   }
 
   hasDesignatedSubordinate(): boolean {
-    return hasFields(this.formFields, ['filer_designated_to_make_coordinated_expenditures']);
+    return this.formFields.includes('filer_designated_to_make_coordinated_expenditures');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

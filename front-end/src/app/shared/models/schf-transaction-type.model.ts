@@ -6,6 +6,7 @@ export abstract class SchFTransactionType extends TransactionType {
   scheduleId = ScheduleIds.F;
 
   // Form layout
+  override contact2IsRequired = () => true;
   override contact3IsRequired = true;
   override contact4IsRequired = (form: FormGroup) =>
     form.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
@@ -34,7 +35,7 @@ export abstract class SchFTransactionType extends TransactionType {
     occupation: '',
     organization_name: 'payee_organization_name',
     committee_fec_id: 'payee_committee_id_number',
-    committee_name: '',
+    committee_name: 'payee_committee_name',
     candidate_fec_id: 'payee_candidate_id_number',
     candidate_last_name: 'payee_candidate_last_name',
     candidate_first_name: 'payee_candidate_first_name',

@@ -6,6 +6,7 @@ import {
   CANDIDATE_OFFICE_FIELDS,
   CATEGORY_CODE,
   COMMON_FIELDS,
+  COM_FIELDS_SHORT,
   INDIVIDUAL_FIELDS,
   ORGANIZATION_INDIVIDUAL,
   ORG_FIELDS,
@@ -24,7 +25,7 @@ export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
     ...INDIVIDUAL_FIELDS,
     ...ADDRESS_FIELDS,
     ...ORG_FIELDS,
-    'committee_fec_id',
+    ...COM_FIELDS_SHORT,
     ...CANDIDATE_FIELDS,
     ...CANDIDATE_OFFICE_FIELDS,
     ...COMMON_FIELDS,
@@ -40,7 +41,6 @@ export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
   title = LabelUtils.get(ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override contact2IsRequired = () => true;
   override aggregateLabel = 'AGGREGATE GENERAL ELECTION EXPENDITURE FOR THIS CANDIDATE';
   override showAggregate = false;
   override dateLabel = 'DATE';

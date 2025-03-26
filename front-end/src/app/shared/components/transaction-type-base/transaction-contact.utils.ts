@@ -27,9 +27,8 @@ export class TransactionContactUtils {
     }
     switch (contactType) {
       case ContactTypes.INDIVIDUAL:
-        confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${
-          form.get(templateMap.first_name)?.value
-        }</b>`;
+        confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${form.get(templateMap.first_name)?.value
+          }</b>`;
         break;
       case ContactTypes.COMMITTEE:
         if (contactKey === 'contact_1') {
@@ -39,16 +38,14 @@ export class TransactionContactUtils {
         }
         break;
       case ContactTypes.ORGANIZATION:
-        confirmationContactTitle = `organization contact for <b> ${
-          contactKey === 'contact_2'
-            ? form.get(templateMap.secondary_name)?.value
-            : form.get(templateMap.organization_name)?.value
-        }</b>`;
+        confirmationContactTitle = `organization contact for <b> ${contactKey === 'contact_2'
+          ? form.get(templateMap.secondary_name)?.value
+          : form.get(templateMap.organization_name)?.value
+          }</b>`;
         break;
       case ContactTypes.CANDIDATE:
-        confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${
-          form.get(templateMap.candidate_first_name)?.value
-        }</b>`;
+        confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${form.get(templateMap.candidate_first_name)?.value
+          }</b>`;
         break;
     }
     return `${messagePrologue}, you're also creating a new ${confirmationContactTitle}.`;
@@ -308,6 +305,7 @@ export class TransactionContactUtils {
     form.get(templateMap.quaternary_committee_name)?.setValue(contact.name);
     if (transaction) {
       transaction.contact_4 = contact;
+      transaction.contact_4_id = contact.id;
     }
     contactId$.next(contact.id ?? '');
   }
@@ -322,7 +320,9 @@ export class TransactionContactUtils {
     form.get(templateMap.quaternary_committee_fec_id)?.setValue(null);
     form.get(templateMap.quaternary_committee_name)?.setValue(null);
     if (transaction) {
-      transaction.contact_4 = undefined;
+      // force serializer to send nulls
+      transaction.contact_4 = null as unknown as undefined;
+      transaction.contact_4_id = null as unknown as undefined;
     }
     contactId$.next('');
   }
@@ -345,6 +345,7 @@ export class TransactionContactUtils {
     form.get(templateMap.quinary_zip)?.setValue(contact.zip);
     if (transaction) {
       transaction.contact_5 = contact;
+      transaction.contact_5_id = contact.id;
     }
     contactId$.next(contact.id ?? '');
   }
@@ -360,7 +361,9 @@ export class TransactionContactUtils {
     form.get(templateMap.quinary_state)?.setValue(null);
     form.get(templateMap.quinary_zip)?.setValue(null);
     if (transaction) {
-      transaction.contact_5 = undefined;
+      // force serializer to send nulls
+      transaction.contact_5 = null as unknown as undefined;
+      transaction.contact_5_id = null as unknown as undefined;
     }
     contactId$.next('');
   }

@@ -69,8 +69,8 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
   }
 
   clearDesignatingCommittee() {
-    this.form.removeControl("contact_4_lookup");
     this.designatingCommitteeClear.emit();
+    this.form.removeControl("contact_4_lookup");
   }
 
   onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
@@ -80,7 +80,7 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
   }
 
   clearSubordinateCommittee() {
-    this.form.removeControl("contact_5_lookup");
     this.subordinateCommitteeClear.emit();
+    this.form.removeControl("contact_5_lookup");
   }
 }

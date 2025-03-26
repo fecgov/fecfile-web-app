@@ -32,7 +32,7 @@
       </div>
     </div>
   }
-  @if (transaction?.transactionType?.hasDesignatedSubordinate) {
+  @if (transaction?.transactionType?.hasDesignatedSubordinate()) {
     <app-designated-subordinate-input
       [form]="form"
       [formSubmitted]="formSubmitted"
