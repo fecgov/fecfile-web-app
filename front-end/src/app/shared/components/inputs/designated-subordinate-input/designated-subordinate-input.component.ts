@@ -64,23 +64,23 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
 
   onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
     this.designatingCommitteeSelect.emit(selectItem);
-    this.form.get("contact_4_lookup")?.updateValueAndValidity();
+    this.form.get('contact_4_lookup')?.updateValueAndValidity();
     this.form.updateValueAndValidity();
   }
 
   clearDesignatingCommittee() {
     this.designatingCommitteeClear.emit();
-    this.form.removeControl("contact_4_lookup");
+    this.form.removeControl('contact_4_lookup');
   }
 
   onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
     this.subordinateCommitteeSelect.emit(selectItem);
-    this.form.get("contact_5_lookup")?.updateValueAndValidity();
+    this.form.get('contact_5_lookup')?.updateValueAndValidity();
     this.form.updateValueAndValidity();
   }
 
   clearSubordinateCommittee() {
     this.subordinateCommitteeClear.emit();
-    this.form.removeControl("contact_5_lookup");
+    this.form.removeControl('contact_5_lookup');
   }
 }

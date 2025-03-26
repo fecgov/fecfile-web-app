@@ -27,8 +27,9 @@ export class TransactionContactUtils {
     }
     switch (contactType) {
       case ContactTypes.INDIVIDUAL:
-        confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${form.get(templateMap.first_name)?.value
-          }</b>`;
+        confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${
+          form.get(templateMap.first_name)?.value
+        }</b>`;
         break;
       case ContactTypes.COMMITTEE:
         if (contactKey === 'contact_1') {
@@ -38,14 +39,16 @@ export class TransactionContactUtils {
         }
         break;
       case ContactTypes.ORGANIZATION:
-        confirmationContactTitle = `organization contact for <b> ${contactKey === 'contact_2'
-          ? form.get(templateMap.secondary_name)?.value
-          : form.get(templateMap.organization_name)?.value
-          }</b>`;
+        confirmationContactTitle = `organization contact for <b> ${
+          contactKey === 'contact_2'
+            ? form.get(templateMap.secondary_name)?.value
+            : form.get(templateMap.organization_name)?.value
+        }</b>`;
         break;
       case ContactTypes.CANDIDATE:
-        confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${form.get(templateMap.candidate_first_name)?.value
-          }</b>`;
+        confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${
+          form.get(templateMap.candidate_first_name)?.value
+        }</b>`;
         break;
     }
     return `${messagePrologue}, you're also creating a new ${confirmationContactTitle}.`;
