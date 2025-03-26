@@ -52,11 +52,6 @@ export class MainFormComponent extends MainFormBaseComponent {
   } as TransactionTemplateMapType;
   readonly textCodes = textCodes;
 
-  constructor() {
-    super();
-    console.log(this.schema.required);
-  }
-
   getReportPayload(): Report {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
