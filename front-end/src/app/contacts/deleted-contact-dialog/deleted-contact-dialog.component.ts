@@ -15,6 +15,9 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
   imports: [Dialog, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
 export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnChanges {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  protected readonly itemService = inject(DeletedContactService);
+
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() contactsRestored = new EventEmitter<string[]>();
@@ -26,9 +29,6 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     { field: 'employer', label: 'Employer' },
     { field: 'occupation', label: 'Occupation' },
   ];
-
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  public override itemService = inject(DeletedContactService);
 
   ngOnChanges(): void {
     this.changeDetectorRef.detectChanges();
