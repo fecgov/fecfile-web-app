@@ -3,13 +3,13 @@ import { PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { candidateFormData, committeeFormData } from '../models/ContactFormModel';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
 import {
   ContributionFormData,
   defaultScheduleFormData as defaultTransactionFormData,
 } from '../models/TransactionFormModel';
-import { Contributions } from './start-transaction/disbursements';
+import { Contributions } from './utils/start-transaction/disbursements';
 
 const APRIL_15 = 'APRIL 15';
 
