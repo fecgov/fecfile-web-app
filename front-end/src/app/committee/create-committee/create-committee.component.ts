@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { UsersService } from 'app/shared/services/users.service';
+import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 
 @Component({
   selector: 'app-create-committee',
@@ -23,16 +25,16 @@ import { ButtonModule } from 'primeng/button';
 export class CreateCommitteeComponent extends DestroyerComponent {
   private readonly router = inject(Router);
   protected readonly store = inject(Store);
+  protected readonly committeeAccountService = inject(CommitteeAccountService);
+  protected readonly messageService = inject(MessageService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  private readonly userService = inject(UsersService);
   suggestions?: FecFiling[];
   selectedCommittee?: CommitteeAccount;
   explanationVisible = false;
   unableToCreateAccount = false;
 
   searchBoxFormControl = new SubscriptionFormControl('');
-
-  protected readonly committeeAccountService = inject(CommitteeAccountService);
-  protected readonly messageService = inject(MessageService);
-  protected readonly confirmationService = inject(ConfirmationService);
 
   search(committeeId: string | null) {
     this.selectedCommittee = undefined;
@@ -67,6 +69,8 @@ export class CreateCommitteeComponent extends DestroyerComponent {
       });
       await this.committeeAccountService.activateCommittee(committeeAccount.id);
       this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
+      const userLoginData = await this.userService.getCurrentUser();
+      this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
       await this.router.navigateByUrl(``);
     } catch {
       this.handleFailedSearch();
