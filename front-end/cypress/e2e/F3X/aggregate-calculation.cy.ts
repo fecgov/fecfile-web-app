@@ -2,10 +2,16 @@ import { ContactListPage } from '../pages/contactListPage';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
-import { formTransactionDataForSchedule } from '../models/TransactionFormModel';
+import { candidateFormData, defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { F3XSetup } from './f3x-setup';
-import { StartTransaction } from './start-transaction/start-transaction';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
+import { defaultForm3XData } from '../models/ReportFormModel';
+import {
+  defaultScheduleFormData as defaultTransactionFormData,
+  DisbursementFormData,
+  formTransactionDataForSchedule,
+} from '../models/TransactionFormModel';
+import { faker } from '@faker-js/faker';
 
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
@@ -400,5 +406,140 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
     cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
+  });
+
+  it('existing IE date leapfrogging', () => {
+    const individualFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Individual', first_name: 'A', last_name: 'A' },
+    };
+    const individualTwoFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Individual', first_name: 'Z', last_name: 'Z' },
+    };
+
+    cy.visit('/dashboard');
+    ContactListPage.createIndividual(individualFormContactData);
+    ContactListPage.createIndividual(individualTwoFormContactData);
+
+    const f3x_report_data = {
+      ...defaultForm3XData,
+    };
+    F3XSetup({ candidate: true, report: f3x_report_data });
+
+    // Create the first Independent Expenditure
+    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+
+    PageUtils.dropdownSetValue('#entity_type_dropdown', individualFormContactData.contact_type, '');
+    cy.contains('LOOKUP').should('exist');
+    cy.get('[id="searchBox"]').type(individualFormContactData.last_name.slice(0, 1));
+    cy.contains('A, A').should('exist');
+    cy.contains('A, A').click();
+
+    const independentExpenditureData: DisbursementFormData = {
+      ...defaultTransactionFormData,
+      ...{
+        date_received: new Date(currentYear, 4 - 1, 5),
+        supportOpposeCode: 'SUPPORT',
+        amount: 100,
+        signatoryDateSigned: new Date(currentYear, 4 - 1, 5),
+        signatoryFirstName: faker.person.firstName(),
+        signatoryLastName: faker.person.lastName(),
+      },
+    };
+
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpenditureData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
+
+    cy.get('h1').click();
+    cy.get('#calendar_ytd').should('have.value', '$100.00');
+    PageUtils.clickButton('Save');
+    cy.contains('Transactions in this report').should('exist');
+
+    // Create the second Independent Expenditure
+    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+
+    PageUtils.dropdownSetValue('#entity_type_dropdown', individualTwoFormContactData.contact_type, '');
+    cy.contains('LOOKUP').should('exist');
+    cy.get('[id="searchBox"]').type(individualTwoFormContactData.last_name.slice(0, 1));
+    cy.contains('Z, Z').should('exist');
+    cy.contains('Z, Z').click();
+
+    const independentExpenditureTwoData: DisbursementFormData = {
+      ...defaultTransactionFormData,
+      ...{
+        date_received: new Date(currentYear, 4 - 1, 15),
+        supportOpposeCode: 'SUPPORT',
+        amount: 50,
+        signatoryDateSigned: new Date(currentYear, 4 - 1, 15),
+        signatoryFirstName: faker.person.firstName(),
+        signatoryLastName: faker.person.lastName(),
+      },
+    };
+
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpenditureTwoData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
+
+    cy.get('h1').click();
+    cy.get('#calendar_ytd').should('have.value', '$150.00');
+    PageUtils.clickButton('Save');
+    cy.contains('Transactions in this report').should('exist');
+
+    // Create the third Independent Expenditure
+    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+
+    PageUtils.dropdownSetValue('#entity_type_dropdown', individualFormContactData.contact_type, '');
+    cy.contains('LOOKUP').should('exist');
+    cy.get('[id="searchBox"]').type(individualFormContactData.last_name.slice(0, 1));
+    cy.contains('A, A').should('exist');
+    cy.contains('A, A').click();
+
+    const independentExpenditureThreeData: DisbursementFormData = {
+      ...defaultTransactionFormData,
+      ...{
+        date_reveived: new Date(currentYear, 4 - 1, 27),
+        supportOpposeCode: 'SUPPORT',
+        amount: 25,
+        signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
+        signatoryFirstName: faker.person.firstName(),
+        signatoryLastName: faker.person.lastName(),
+      },
+    };
+
+    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+      independentExpenditureThreeData,
+      candidateFormData,
+      false,
+      '',
+      'date_signed',
+    );
+
+    cy.get('h1').click();
+    cy.get('#calendar_ytd').should('have.value', '$175.00');
+    PageUtils.clickButton('Save');
+    cy.contains('Transactions in this report').should('exist');
+
+    // Test aggregation re-calculation from date leapfrogging
+    cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
+    cy.contains('Payee').should('exist');
+    TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
+    cy.get('h1').click();
+    cy.get('#calendar_ytd').should('have.value', '$150.00');
+    PageUtils.clickButton('Save');
+    cy.contains('Transactions in this report').should('exist');
+
+    cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+    cy.contains('Payee').should('exist');
+    cy.get('#calendar_ytd').should('have.value', '$50.00');
   });
 });
