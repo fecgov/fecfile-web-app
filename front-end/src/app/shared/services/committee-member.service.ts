@@ -33,7 +33,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
 
   constructor() {
     effect(() => {
-      if (this.committeeSignal()) {
+      if (this.committeeSignal().committee_id) {
         this.getMembers();
       } else {
         this.membersSignal.set([]);
