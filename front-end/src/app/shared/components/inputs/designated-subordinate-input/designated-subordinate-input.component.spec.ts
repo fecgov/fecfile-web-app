@@ -48,13 +48,33 @@ describe('DesignatedSubordinateInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update subordinate form value/validity on subordinate committee id blur', () => {
+  it('#onSubordinateCommitteeIdBlur should update subordinate form value/validity on subordinate committee id blur', () => {
     const formUpdateValueAndValiditySpy = spyOn(component.form, 'updateValueAndValidity');
     component.onSubordinateCommitteeIdBlur();
     expect(formUpdateValueAndValiditySpy).toHaveBeenCalledTimes(8);
   });
 
-  it('should set designating committee', () => {
+  it('#onDesignatedOrSubordinateChange should clear subordinate committee on true', () => {
+    const clearSubordinateCommitteeSpy = spyOn(component, 'clearSubordinateCommittee');
+    component.onDesignatedOrSubordinateChange(true);
+    expect(clearSubordinateCommitteeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#onDesignatedOrSubordinateChange should clear designating committee on false', () => {
+    const clearDesignatingCommitteeSpy = spyOn(component, 'clearDesignatingCommittee');
+    component.onDesignatedOrSubordinateChange(false);
+    expect(clearDesignatingCommitteeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#onDesignatedOrSubordinateChange should clear designating and subordinate committee on null', () => {
+    const clearSubordinateCommitteeSpy = spyOn(component, 'clearSubordinateCommittee');
+    const clearDesignatingCommitteeSpy = spyOn(component, 'clearDesignatingCommittee');
+    component.onDesignatedOrSubordinateChange(null);
+    expect(clearSubordinateCommitteeSpy).toHaveBeenCalledTimes(1);
+    expect(clearDesignatingCommitteeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#onDesignatingCommitteeSelect should set designating committee', () => {
     const designatingCommitteeSelectEmitSpy = spyOn(component.designatingCommitteeSelect, 'emit');
     const selectItem = {
       label: '',
@@ -68,13 +88,13 @@ describe('DesignatedSubordinateInputComponent', () => {
     expect(designatingCommitteeSelectEmitSpy).toHaveBeenCalledWith(selectItem);
   });
 
-  it('should clear subordinate committee', () => {
+  it('#clearDesignatingCommittee should clear subordinate committee', () => {
     const designatingCommitteeClearEmitSpy = spyOn(component.designatingCommitteeClear, 'emit');
     component.clearDesignatingCommittee();
     expect(designatingCommitteeClearEmitSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should set subordinate committee', () => {
+  it('#onSubordinateCommitteeSelect should set subordinate committee', () => {
     const subordinateCommitteeSelectEmitSpy = spyOn(component.subordinateCommitteeSelect, 'emit');
     const selectItem = {
       label: '',
@@ -88,7 +108,7 @@ describe('DesignatedSubordinateInputComponent', () => {
     expect(subordinateCommitteeSelectEmitSpy).toHaveBeenCalledWith(selectItem);
   });
 
-  it('should clear subordinate committee', () => {
+  it('#clearSubordinateCommittee should clear subordinate committee', () => {
     const subordinateCommitteeClearEmitSpy = spyOn(component.subordinateCommitteeClear, 'emit');
     component.clearSubordinateCommittee();
     expect(subordinateCommitteeClearEmitSpy).toHaveBeenCalledTimes(1);
