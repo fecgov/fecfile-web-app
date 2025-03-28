@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/double-transaction-type-base.component';
-import { AsyncPipe } from '@angular/common';
 import { IndependentExpenditureCreateF3xInputComponent } from '../../../shared/components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 import { AccordionModule } from 'primeng/accordion';
 import { Ripple } from 'primeng/ripple';
@@ -17,7 +16,6 @@ import { TransactionInputComponent } from '../transaction-input/transaction-inpu
     Ripple,
     ReactiveFormsModule,
     TransactionInputComponent,
-    AsyncPipe,
   ],
 })
 export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseComponent {}

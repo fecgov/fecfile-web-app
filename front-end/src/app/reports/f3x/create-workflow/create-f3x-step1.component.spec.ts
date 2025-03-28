@@ -12,7 +12,7 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -27,6 +27,7 @@ describe('CreateF3XStep1Component', () => {
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let form3XService: Form3XService;
   let reportService: ReportService;
+
   const f3x: Form3X = Form3X.fromJSON({
     id: '999',
     coverage_from_date: '2022-05-25',
@@ -68,6 +69,8 @@ describe('CreateF3XStep1Component', () => {
   });
 
   beforeEach(async () => {
+    testMockStore.initialState.fecfile_online_activeReport = testActiveReport;
+
     await TestBed.configureTestingModule({
       imports: [SelectButtonModule, RadioButtonModule, DatePickerModule, ReactiveFormsModule, CreateF3XStep1Component],
       providers: [
@@ -100,14 +103,18 @@ describe('CreateF3XStep1Component', () => {
 
   it('should update form when filing frequency changes', () => {
     component.form.controls['filing_frequency'].setValue('M');
+    fixture.detectChanges();
     expect(component.form.controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
   });
 
   it('should update codes when report_type_category changes', () => {
     component.form.controls['filing_frequency'].setValue('Q');
+    fixture.detectChanges();
     component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    fixture.detectChanges();
     expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.MY);
     component.form.controls['report_type_category'].setValue(undefined);
+    fixture.detectChanges();
     expect(component.form.controls['report_code'].value).toEqual(undefined);
   });
 
@@ -125,6 +132,7 @@ describe('CreateF3XStep1Component', () => {
     it('should pick first unused report code', () => {
       component.form.controls['filing_frequency'].setValue('Q');
       component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
+      fixture.detectChanges();
       expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q2);
     });
   });

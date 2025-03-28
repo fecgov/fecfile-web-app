@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { ButtonModule } from 'primeng/button';
@@ -19,7 +18,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
   imports: [ReactiveFormsModule, DialogModule, ButtonModule, ErrorMessagesComponent],
 })
 export class SecondCommitteeAdminDialogComponent extends FormComponent {
-  private readonly store = inject(Store);
   readonly memberService = inject(CommitteeMemberService);
   private readonly messageService = inject(MessageService);
   private readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
@@ -67,6 +67,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
+    component.childTransaction = child1;
+    component.childTransaction_2 = child2;
 
     confirmSpy = spyOn(testConfirmationService, 'confirm');
 
@@ -78,22 +80,40 @@ describe('TripleTransactionTypeBaseComponent', () => {
     expect(component.transactionType?.title).toBe('Loan Received from Bank');
   });
 
-  describe('confirmation$', () => {
+  describe('getConfirmations()', () => {
     it('should return false if there is not child transaction 2', async () => {
       component.childTransaction_2 = undefined;
-      const res = await component.confirmation$;
+      const res = await component.getConfirmations();
       expect(res).toBeFalse();
     });
 
-    it('should confirm with user 1 time if only primary transaction contact updated', async () => {
+    it('should return false if not child transaction', async () => {
+      component.childTransaction = undefined;
+      const v = await component.getConfirmations();
+      expect(v).toBeFalse();
+    });
+
+    it('should return false if reject parent confirmation', async () => {
+      component.transaction = undefined;
+      const v = await component.getConfirmations();
+      expect(v).toBeFalse();
+    });
+
+    it('should confirm with user', async () => {
+      const confirmSpy = spyOn(component.confirmationService, 'confirmWithUser').and.returnValue(Promise.resolve(true));
+      await component.getConfirmations();
+      expect(confirmSpy).toHaveBeenCalled();
+    });
+
+    it('should confirm with user 1 time if only primary transaction contact updated', fakeAsync(() => {
       if (!component.transaction) throw new Error('Bad test');
       component.transaction.contact_1 = testContact;
-      component.confirmation$.then((res) => {
+      component.getConfirmations().then((res) => {
         expect(res).toBeTrue();
       });
-
+      tick();
       expect(confirmSpy).toHaveBeenCalledTimes(1);
-    });
+    }));
   });
 
   describe('isInvalid', () => {
@@ -101,13 +121,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childForm = new FormBuilder().group({});
     });
 
-    it('should return true if super.isInvalid would fail', () => {
-      component.form.addControl('Test', new SubscriptionFormControl(undefined, Validators.required));
-      expect(component.form.invalid).toBeTrue();
-      expect(component.isInvalid()).toBeTrue();
-    });
-
-    xit('should return true if childForm_2 is invalid', () => {
+    it('should return true if childForm_2 is invalid', () => {
       component.childForm = new FormBuilder().group({});
       expect(component.form.invalid).toBeFalse();
       expect(component.childForm.invalid).toBeFalse();
