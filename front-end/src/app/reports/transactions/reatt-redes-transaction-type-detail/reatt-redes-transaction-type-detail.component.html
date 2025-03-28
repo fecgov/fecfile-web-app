@@ -29,12 +29,8 @@
         <app-transaction-input
           [activeReport$]="activeReport$"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
-          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-          (quaternaryContactSelect)="updateFormWithQuaternaryContact($event)"
+          (contactSelect)="updateFormWithContact($event[0], $event[1])"
           (quaternaryContactClear)="clearFormQuaternaryContact()"
-          (quinaryContactSelect)="updateFormWithQuinaryContact($event)"
           (quinaryContactClear)="clearFormQuinaryContact()"
           [contactTypeOptions]="contactTypeOptions"
           [formSubmitted]="formSubmitted"
@@ -70,9 +66,7 @@
         @if (childTransaction) {
           <app-transaction-input
             (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
-            (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
-            (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
-            (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
+            (contactSelect)="childUpdateFormWithContact($event[0], $event[1])"
             [contactTypeOptions]="childContactTypeOptions"
             [contributionAmountReadOnly]="true"
             [formSubmitted]="formSubmitted"

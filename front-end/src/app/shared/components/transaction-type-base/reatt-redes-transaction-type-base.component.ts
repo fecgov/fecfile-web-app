@@ -33,20 +33,20 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.childUpdateFormWithPrimaryContact({
+    this.childUpdateFormWithContact(0, {
       value: this.transaction?.reatt_redes?.contact_1,
     } as SelectItem);
     if (
       (this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag ===
       ReattRedesTypes.REDESIGNATION_TO
     ) {
-      this.updateFormWithPrimaryContact({
+      this.updateFormWithContact(0, {
         value: this.transaction?.reatt_redes?.contact_1,
       } as SelectItem);
-      this.updateFormWithSecondaryContact({
+      this.updateFormWithContact(1, {
         value: this.transaction?.reatt_redes?.contact_2,
       } as SelectItem);
-      this.childUpdateFormWithSecondaryContact({
+      this.childUpdateFormWithContact(1, {
         value: this.transaction?.reatt_redes?.contact_2,
       } as SelectItem);
       this.updateElectionData();

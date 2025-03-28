@@ -178,11 +178,12 @@ export class TransactionContactUtils {
    * @param contactId$
    * @returns
    */
-  static updateFormWithPrimaryContact(
+  static updateFormWithContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactIdMap: ContactIdMapType,
+    index: number,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -206,14 +207,49 @@ export class TransactionContactUtils {
         form.get(templateMap.organization_name)?.setValue(contact.name);
         break;
     }
-    form.get(templateMap.street_1)?.setValue(contact.street_1);
-    form.get(templateMap.street_2)?.setValue(contact.street_2);
-    form.get(templateMap.city)?.setValue(contact.city);
-    form.get(templateMap.state)?.setValue(contact.state);
-    form.get(templateMap.zip)?.setValue(contact.zip);
-    if (transaction) {
-      transaction.contact_1 = contact;
+    switch (index) {
+      case 0: {
+        form.get(templateMap.street_1)?.setValue(contact.street_1);
+        form.get(templateMap.street_2)?.setValue(contact.street_2);
+        form.get(templateMap.city)?.setValue(contact.city);
+        form.get(templateMap.state)?.setValue(contact.state);
+        form.get(templateMap.zip)?.setValue(contact.zip);
+        break;
+      }
+      case 1: {
+        form.get(templateMap.secondary_name)?.setValue(contact.name);
+        form.get(templateMap.secondary_street_1)?.setValue(contact.street_1);
+        form.get(templateMap.secondary_street_2)?.setValue(contact.street_2);
+        form.get(templateMap.secondary_city)?.setValue(contact.city);
+        form.get(templateMap.secondary_state)?.setValue(contact.state);
+        form.get(templateMap.secondary_zip)?.setValue(contact.zip);
+        break;
+      }
+      case 2: {
+        form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
+        form.get(templateMap.committee_name)?.setValue(contact.name);
+        break;
+      }
+      case 3: {
+        form.get(templateMap.quaternary_committee_fec_id)?.setValue(contact.committee_id);
+        form.get(templateMap.quaternary_committee_name)?.setValue(contact.name);
+        break;
+      }
+      case 4: {
+        form.get(templateMap.quinary_committee_fec_id)?.setValue(contact.committee_id);
+        form.get(templateMap.quinary_committee_name)?.setValue(contact.name);
+        form.get(templateMap.quinary_street_1)?.setValue(contact.street_1);
+        form.get(templateMap.quinary_street_2)?.setValue(contact.street_2);
+        form.get(templateMap.quinary_city)?.setValue(contact.city);
+        form.get(templateMap.quinary_state)?.setValue(contact.state);
+        form.get(templateMap.quinary_zip)?.setValue(contact.zip);
+      }
     }
+
+    if (transaction) {
+      transaction.updateContact(index, contact, contact.id);
+    }
+    const contactId$ = contactIdMap[`contact_${index + 1}`];
     contactId$.next(contact.id ?? '');
   }
 
@@ -249,70 +285,6 @@ export class TransactionContactUtils {
     contactId$.next(contact.id ?? '');
   }
 
-  /**
-   * Update the transaction form values for the SECONDARY contact form fields (i.e. 'contact_2')
-   * when a user has selected a contact from a contact lookup on the form.
-   * @param selectItem
-   * @param form
-   * @param transaction
-   * @returns
-   */
-  static updateFormWithSecondaryContact(
-    selectItem: SelectItem<Contact>,
-    form: FormGroup,
-    transaction: Transaction | undefined,
-    contactId$: Subject<string>,
-  ) {
-    const contact: Contact = selectItem?.value;
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!(contact && templateMap)) return;
-    form.get(templateMap.secondary_name)?.setValue(contact.name);
-    form.get(templateMap.secondary_street_1)?.setValue(contact.street_1);
-    form.get(templateMap.secondary_street_2)?.setValue(contact.street_2);
-    form.get(templateMap.secondary_city)?.setValue(contact.city);
-    form.get(templateMap.secondary_state)?.setValue(contact.state);
-    form.get(templateMap.secondary_zip)?.setValue(contact.zip);
-    if (transaction) {
-      transaction.contact_2 = contact;
-    }
-    contactId$.next(contact.id ?? '');
-  }
-
-  static updateFormWithTertiaryContact(
-    selectItem: SelectItem<Contact>,
-    form: FormGroup,
-    transaction: Transaction | undefined,
-    contactId$: Subject<string>,
-  ) {
-    const contact: Contact = selectItem?.value;
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!(contact && templateMap)) return;
-    form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
-    form.get(templateMap.committee_name)?.setValue(contact.name);
-    if (transaction) {
-      transaction.contact_3 = contact;
-    }
-    contactId$.next(contact.id ?? '');
-  }
-
-  static updateFormWithQuaternaryContact(
-    selectItem: SelectItem<Contact>,
-    form: FormGroup,
-    transaction: Transaction | undefined,
-    contactId$: Subject<string>,
-  ) {
-    const contact: Contact = selectItem?.value;
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!(contact && templateMap)) return;
-    form.get(templateMap.quaternary_committee_fec_id)?.setValue(contact.committee_id);
-    form.get(templateMap.quaternary_committee_name)?.setValue(contact.name);
-    if (transaction) {
-      transaction.contact_4 = contact;
-      transaction.contact_4_id = contact.id;
-    }
-    contactId$.next(contact.id ?? '');
-  }
-
   static clearFormQuaternaryContact(
     form: FormGroup,
     transaction: Transaction | undefined,
@@ -328,29 +300,6 @@ export class TransactionContactUtils {
       transaction.contact_4_id = null as unknown as undefined;
     }
     contactId$.next('');
-  }
-
-  static updateFormWithQuinaryContact(
-    selectItem: SelectItem<Contact>,
-    form: FormGroup,
-    transaction: Transaction | undefined,
-    contactId$: Subject<string>,
-  ) {
-    const contact: Contact = selectItem?.value;
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!(contact && templateMap)) return;
-    form.get(templateMap.quinary_committee_fec_id)?.setValue(contact.committee_id);
-    form.get(templateMap.quinary_committee_name)?.setValue(contact.name);
-    form.get(templateMap.quinary_street_1)?.setValue(contact.street_1);
-    form.get(templateMap.quinary_street_2)?.setValue(contact.street_2);
-    form.get(templateMap.quinary_city)?.setValue(contact.city);
-    form.get(templateMap.quinary_state)?.setValue(contact.state);
-    form.get(templateMap.quinary_zip)?.setValue(contact.zip);
-    if (transaction) {
-      transaction.contact_5 = contact;
-      transaction.contact_5_id = contact.id;
-    }
-    contactId$.next(contact.id ?? '');
   }
 
   static clearFormQuinaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {

@@ -47,15 +47,15 @@ describe('TransactionInputComponent', () => {
   });
 
   it('updateFormWithPrimaryContact should call emit', () => {
-    spyOn(component.primaryContactSelect, 'emit');
-    component.updateFormWithPrimaryContact(selectItem);
-    expect(component.primaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
+    spyOn(component.contactSelect, 'emit');
+    component.updateFormWithContact(selectItem, 0);
+    expect(component.contactSelect.emit).toHaveBeenCalledWith([0, selectItem]);
   });
 
   it('updateFormWithSecondaryContact should call emit', () => {
-    spyOn(component.secondaryContactSelect, 'emit');
-    component.updateFormWithSecondaryContact(selectItem);
-    expect(component.secondaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
+    spyOn(component.contactSelect, 'emit');
+    component.updateFormWithContact(selectItem, 1);
+    expect(component.contactSelect.emit).toHaveBeenCalledWith([1, selectItem]);
   });
 
   it('updateFormWithCandidateContact should call emit', () => {
@@ -65,9 +65,9 @@ describe('TransactionInputComponent', () => {
   });
 
   it('updateFormWithTertiaryContact should call emit', () => {
-    spyOn(component.tertiaryContactSelect, 'emit');
-    component.updateFormWithTertiaryContact(selectItem);
-    expect(component.tertiaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
+    spyOn(component.contactSelect, 'emit');
+    component.updateFormWithContact(selectItem, 2);
+    expect(component.contactSelect.emit).toHaveBeenCalledWith([2, selectItem]);
   });
 
   it('contactTypeSelected should update entity_type form control', () => {

@@ -169,23 +169,25 @@ export abstract class TripleTransactionTypeBaseComponent
     );
   }
 
-  override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
-    super.updateFormWithPrimaryContact(selectItem);
+  override updateFormWithContact(index: number, contact: SelectItem<Contact>): void {
+    super.updateFormWithContact(index, contact);
     if (
+      index === 0 &&
       this.childTransaction_2?.transactionType?.getUseParentContact(this.childTransaction_2) &&
       this.transaction?.contact_1
     ) {
       this.childTransaction_2.contact_1 = this.transaction.contact_1;
-      this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
+      this.childForm_2.get('entity_type')?.setValue(contact.value.type);
     }
   }
 
-  childUpdateFormWithPrimaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(
-      selectItem,
+  childUpdateFormWithContact_2(index: number, contact: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithContact(
+      contact,
       this.childForm_2,
       this.childTransaction_2,
-      this.childContactIdMap_2['contact_1'],
+      this.childContactIdMap_2,
+      index,
     );
 
     if (this.childTransaction_2) {
@@ -201,24 +203,6 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childForm_2,
       this.childTransaction_2,
       this.childContactIdMap_2['contact_2'],
-    );
-  }
-
-  childUpdateFormWithSecondaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.childForm_2,
-      this.childTransaction_2,
-      this.childContactIdMap_2['contact_2'],
-    );
-  }
-
-  childUpdateFormWithTertiaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.childForm_2,
-      this.childTransaction_2,
-      this.childContactIdMap_2['contact_3'],
     );
   }
 }

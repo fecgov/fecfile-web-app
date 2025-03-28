@@ -33,13 +33,9 @@
     [transaction]="transaction"
     [contactTypeOptions]="contactTypeOptions"
     [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-    (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+    (contactSelect)="updateFormWithContact($event[0], $event[1])"
     (candidateContactSelect)="updateFormWithCandidateContact($event)"
-    (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-    (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-    (quaternaryContactSelect)="updateFormWithQuaternaryContact($event)"
     (quaternaryContactClear)="clearFormQuaternaryContact()"
-    (quinaryContactSelect)="updateFormWithQuinaryContact($event)"
     (quinaryContactClear)="clearFormQuinaryContact()"
   >
   </app-transaction-input>

@@ -475,29 +475,19 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('updateFormWithSecondaryContact', () => {
     it('should call updateFormWithSecondaryContact', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
+      const spy = spyOn(TransactionContactUtils, 'updateFormWithContact');
       const selectItem: SelectItem<Contact> = { value: new Contact() };
-      component.updateFormWithSecondaryContact(selectItem);
-      expect(spy).toHaveBeenCalledWith(
-        selectItem,
-        component.form,
-        component.transaction,
-        component.contactIdMap['contact_2'],
-      );
+      component.updateFormWithContact(1, selectItem);
+      expect(spy).toHaveBeenCalledWith(selectItem, component.form, component.transaction, component.contactIdMap, 1);
     });
   });
 
   describe('updateFormWithTertiaryContact', () => {
     it('should call updateFormWithTertiaryContact', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithTertiaryContact');
+      const spy = spyOn(TransactionContactUtils, 'updateFormWithContact');
       const selectItem: SelectItem<Contact> = { value: new Contact() };
-      component.updateFormWithTertiaryContact(selectItem);
-      expect(spy).toHaveBeenCalledWith(
-        selectItem,
-        component.form,
-        component.transaction,
-        component.contactIdMap['contact_2'],
-      );
+      component.updateFormWithContact(2, selectItem);
+      expect(spy).toHaveBeenCalledWith(selectItem, component.form, component.transaction, component.contactIdMap, 2);
     });
   });
 

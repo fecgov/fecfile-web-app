@@ -16,7 +16,7 @@
           [formSubmitted]="formSubmitted"
           [contactTypeOptions]="contactTypeOptions"
           (contactTypeSelect)="contactTypeSelected($event)"
-          (contactSelect)="updateFormWithPrimaryContact($event)"
+          (contactSelect)="updateFormWithContact($event, 0)"
         >
         </app-transaction-contact-lookup>
       </div>
@@ -112,7 +112,7 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
-      (contactSelect)="updateFormWithSecondaryContact($event)"
+      (contactSelect)="updateFormWithContact($event, 1)"
     ></app-loan-agreement-input>
   }
   @if (candidateInfoPosition === 'low') {
@@ -126,9 +126,9 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
-      (designatingCommitteeSelect)="updateFormWithQuaternaryContact($event)"
+      (designatingCommitteeSelect)="updateFormWithContact($event, 3)"
       (designatingCommitteeClear)="clearFormQuaternaryContact()"
-      (subordinateCommitteeSelect)="updateFormWithQuinaryContact($event)"
+      (subordinateCommitteeSelect)="updateFormWithContact($event, 4)"
       (subordinateCommitteeClear)="clearFormQuinaryContact()"
     ></app-additional-info-input>
   }
@@ -177,7 +177,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [contactTypeOptions]="committeeContactTypeOptions"
-          (contactSelect)="updateFormWithTertiaryContact($event)"
+          (contactSelect)="updateFormWithContact($event, 2)"
         ></app-transaction-contact-lookup>
         @if (transaction?.contact_3) {
           <app-committee-input
