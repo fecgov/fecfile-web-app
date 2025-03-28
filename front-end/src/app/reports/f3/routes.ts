@@ -17,7 +17,7 @@ import { CreateF3Step1Component } from './create-workflow/create-f3-step1.compon
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
-export const f3_ROUTES: Route[] = [
+export const F3_ROUTES: Route[] = [
   {
     path: 'create/step1',
     title: 'Create a report',
