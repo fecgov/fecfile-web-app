@@ -150,9 +150,9 @@ describe('TripleTransactionTypeBaseComponent', () => {
         component.childTransaction_2?.transactionType?.getUseParentContact(component.childTransaction_2),
       ).toBeTruthy();
       expect(component.transaction.contact_1).toBeTruthy();
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
+      const spy = spyOn(TransactionContactUtils, 'updateFormWithContact');
       const selectItem: SelectItem<Contact> = { value: testContact };
-      component.updateFormWithPrimaryContact(selectItem);
+      component.updateFormWithContact(0, selectItem);
       expect(spy).toHaveBeenCalled();
       expect(component.childTransaction_2.contact_1).toEqual(component.transaction.contact_1);
     });
@@ -160,14 +160,15 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithPrimaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
+      const spy = spyOn(TransactionContactUtils, 'updateFormWithContact');
       const selectItem: SelectItem<Contact> = { value: testContact };
-      component.childUpdateFormWithPrimaryContact_2(selectItem);
+      component.childUpdateFormWithContact_2(0, selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
         component.childForm_2,
         component.childTransaction_2,
-        component.childContactIdMap_2['contact_1'],
+        component.childContactIdMap_2,
+        0,
       );
     });
   });
@@ -188,28 +189,30 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithSecondaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
+      const spy = spyOn(TransactionContactUtils, 'updateFormWithContact');
       const selectItem: SelectItem<Contact> = { value: testContact };
-      component.childUpdateFormWithSecondaryContact_2(selectItem);
+      component.childUpdateFormWithContact_2(1, selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
         component.childForm_2,
         component.childTransaction_2,
-        component.childContactIdMap_2['contact_2'],
+        component.childContactIdMap_2,
+        1,
       );
     });
   });
 
   describe('childUpdateFormWithTertiaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
+      const spy = spyOn(TransactionContactUtils, 'updateFormWithContact');
       const selectItem: SelectItem<Contact> = { value: testContact };
-      component.childUpdateFormWithTertiaryContact_2(selectItem);
+      component.childUpdateFormWithContact_2(2, selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
         component.childForm_2,
         component.childTransaction_2,
-        component.childContactIdMap_2['contact_3'],
+        component.childContactIdMap_2,
+        2,
       );
     });
   });

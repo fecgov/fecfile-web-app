@@ -24,6 +24,9 @@ import { Report, ReportTypes } from './report.model';
 import { Form3X } from './form-3x.model';
 import { Form24 } from './form-24.model';
 
+const contactKeys = ['contact_1', 'contact_2', 'contact_3', 'contact_4', 'contact_5'] as const;
+const contactIdKeys = ['contact_1_id', 'contact_2_id', 'contact_3_id', 'contact_4_id', 'contact_5_id'] as const;
+
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
 
@@ -144,6 +147,11 @@ export abstract class Transaction extends BaseModel {
 
   getForm24(): Form24 | undefined {
     return (this.getReport(ReportTypes.F24) as Form24) ?? undefined;
+  }
+
+  updateContact(index: number, contact: Contact, id: string | undefined): void {
+    this[contactKeys[index]] = contact;
+    this[contactIdKeys[index]] = id;
   }
 }
 

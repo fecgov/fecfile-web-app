@@ -144,7 +144,13 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithPrimaryContact', () => {
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      testScheduleATransaction,
+      { contact_1: contactId$ },
+      0,
+    );
     expect(form.get('contributor_last_name')?.value).toBe('Smith');
     expect(form.get('contributor_first_name')?.value).toBe('Joe');
     expect(form.get('contributor_middle_name')?.value).toBe('James');
@@ -159,13 +165,25 @@ describe('ContactUtils', () => {
     expect(form.get('contributor_zip')?.value).toBe('22201');
 
     selectItem.value.type = ContactTypes.COMMITTEE;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      testScheduleATransaction,
+      { contact_1: contactId$ },
+      0,
+    );
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
     expect(form.get('donor_committee_fec_id')?.value).toBe('888');
     expect(form.get('donor_committee_name')?.value).toBe('Organization LLC');
 
     selectItem.value.type = ContactTypes.ORGANIZATION;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      testScheduleATransaction,
+      { contact_1: contactId$ },
+      0,
+    );
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
   });
 
@@ -190,7 +208,13 @@ describe('ContactUtils', () => {
 
   it('test updateFormWithSecondaryContact', () => {
     const transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
-    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      transaction,
+      { contact_2: new Subject<string>() },
+      1,
+    );
     expect(form.get('ind_name_account_location')?.value).toBe('Organization LLC');
     expect(form.get('account_street_1')?.value).toBe('123 Main St');
     expect(form.get('account_street_2')?.value).toBe('Apt B');
@@ -204,7 +228,13 @@ describe('ContactUtils', () => {
     const transaction = getTestTransactionByType(
       ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
     ) as SchBTransaction;
-    TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      transaction,
+      { contact_3: new Subject<string>() },
+      2,
+    );
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
     expect(transaction.contact_3).toBeTruthy();
@@ -214,7 +244,13 @@ describe('ContactUtils', () => {
     const transaction = getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
-    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      transaction,
+      { contact_4: new Subject<string>() },
+      3,
+    );
     expect(form.get('designating_committee_id_number')?.value).toBe('888');
     expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
     expect(transaction.contact_4).toBeTruthy();
@@ -225,7 +261,13 @@ describe('ContactUtils', () => {
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
     // updateFormWithQuaternaryContact
-    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      transaction,
+      { contact_4: new Subject<string>() },
+      3,
+    );
     expect(form.get('designating_committee_id_number')?.value).toBe('888');
     expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
     expect(transaction.contact_4).toBeTruthy();
@@ -241,7 +283,13 @@ describe('ContactUtils', () => {
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
     // updateFormWithQuaternaryContact
-    TransactionContactUtils.updateFormWithQuinaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithContact(
+      selectItem,
+      form,
+      transaction,
+      { contact_5: new Subject<string>() },
+      4,
+    );
     expect(form.get('subordinate_committee_id_number')?.value).toBe('888');
     expect(form.get('subordinate_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('subordinate_street_1')?.value).toBe('123 Main St');

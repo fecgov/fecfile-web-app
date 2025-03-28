@@ -87,18 +87,18 @@ describe('ReattTransactionTypeBaseComponent', () => {
   });
 
   describe('reattribution and redesignation', () => {
-    it('should update child primary contacts', () => {
+    it('should update child primary and secondary contacts', () => {
       if (!component.transaction) throw Error('Bad test setup');
       const overlaySpy = spyOn(ReattRedesUtils, 'overlayForms').and.callThrough();
-      const childFormSpy = spyOn(component, 'childUpdateFormWithPrimaryContact');
-      const primaryContactSpy = spyOn(component, 'updateFormWithPrimaryContact');
+      const childFormSpy = spyOn(component, 'childUpdateFormWithContact');
+      const contactSpy = spyOn(component, 'updateFormWithContact');
       const updateElectionDataSpy = spyOn(component, 'updateElectionData');
 
       (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
       component.ngOnInit();
       expect(overlaySpy).toHaveBeenCalledTimes(1);
-      expect(childFormSpy).toHaveBeenCalledTimes(1);
-      expect(primaryContactSpy).toHaveBeenCalledTimes(1);
+      expect(childFormSpy).toHaveBeenCalledTimes(2);
+      expect(contactSpy).toHaveBeenCalledTimes(2);
       expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
     });
 

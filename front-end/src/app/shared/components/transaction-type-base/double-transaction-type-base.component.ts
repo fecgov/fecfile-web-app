@@ -181,29 +181,15 @@ export abstract class DoubleTransactionTypeBaseComponent
     );
   }
 
-  override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
-    super.updateFormWithPrimaryContact(selectItem);
+  override updateFormWithContact(index: number, contact: SelectItem<Contact>): void {
+    super.updateFormWithContact(index, contact);
     if (
+      index === 0 &&
       this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
       this.transaction?.contact_1
     ) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
-    }
-  }
-
-  childUpdateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(
-      selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap['contact_1'],
-    );
-
-    if (this.childTransaction) {
-      this.updateInheritedFields(this.childForm, this.childTransaction);
-    } else {
-      throw new Error('Fecfile: Missing child transaction.');
+      this.childForm.get('entity_type')?.setValue(contact.value.type);
     }
   }
 
@@ -237,21 +223,21 @@ export abstract class DoubleTransactionTypeBaseComponent
     );
   }
 
-  childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
+  childUpdateFormWithContact(index: number, contact: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithContact(
+      contact,
       this.childForm,
       this.childTransaction,
-      this.childContactIdMap['contact_2'],
+      this.childContactIdMap,
+      index,
     );
-  }
 
-  childUpdateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithTertiaryContact(
-      selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap['contact_3'],
-    );
+    if (index === 0) {
+      if (this.childTransaction) {
+        this.updateInheritedFields(this.childForm, this.childTransaction);
+      } else {
+        throw new Error('Fecfile: Missing child transaction.');
+      }
+    }
   }
 }

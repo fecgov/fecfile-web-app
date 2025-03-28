@@ -37,10 +37,8 @@
           [transaction]="transaction"
           [contactTypeOptions]="contactTypeOptions"
           [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
-          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
+          (contactSelect)="updateFormWithContact($event[0], $event[1])"
         >
         </app-transaction-input>
       </form>
@@ -74,10 +72,8 @@
           [contactTypeOptions]="childContactTypeOptions"
           [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
           [contributionAmountReadOnly]="true"
-          (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
+          (contactSelect)="childUpdateFormWithContact($event[0], $event[1])"
           (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
-          (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>

@@ -192,7 +192,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       value: contact,
     };
     fixture.detectChanges();
-    component.updateFormWithPrimaryContact(selectContact);
+    component.updateFormWithContact(0, selectContact);
     expect(component.childTransaction.contact_1?.name).toEqual('Name');
   });
 
@@ -319,23 +319,23 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithPrimaryContact', () => {
     it('should throw an error if no child transaction', () => {
-      spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').and.callFake(() => {
+      spyOn(TransactionContactUtils, 'updateFormWithContact').and.callFake(() => {
         return;
       });
       const contact = new Contact();
       component.childTransaction = undefined;
       expect(function () {
-        component.childUpdateFormWithPrimaryContact({ value: contact });
+        component.childUpdateFormWithContact(0, { value: contact });
       }).toThrow(new Error('Fecfile: Missing child transaction.'));
     });
 
     it('should call updateInheritedFields', () => {
       const updateInheritedFieldsSpy = spyOn(component, 'updateInheritedFields');
-      spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').and.callFake(() => {
+      spyOn(TransactionContactUtils, 'updateFormWithContact').and.callFake(() => {
         return;
       });
       const contact = new Contact();
-      component.childUpdateFormWithPrimaryContact({ value: contact });
+      component.childUpdateFormWithContact(0, { value: contact });
       expect(updateInheritedFieldsSpy).toHaveBeenCalledTimes(1);
     });
   });
