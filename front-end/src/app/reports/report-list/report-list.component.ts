@@ -85,6 +85,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     }
 
     switch (item.report_type) {
+      case ReportTypes.F3:
+        return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
       case ReportTypes.F3X:
         return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
       case ReportTypes.F99:

@@ -58,7 +58,9 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
       (report: Report) => {
-        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
+        return (
+          report.report_status === ReportStatus.IN_PROGRESS && report.report_type in [ReportTypes.F3, ReportTypes.F3X]
+        );
       },
       () => true,
     ),
@@ -66,7 +68,9 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
       (report: Report) => {
-        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
+        return (
+          report.report_status === ReportStatus.IN_PROGRESS && report.report_type in [ReportTypes.F3, ReportTypes.F3X]
+        );
       },
       () => true,
     ),
@@ -74,7 +78,9 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
       (report: Report) => {
-        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
+        return (
+          report.report_status === ReportStatus.IN_PROGRESS && report.report_type in [ReportTypes.F3, ReportTypes.F3X]
+        );
       },
       () => true,
     ),
@@ -82,7 +88,9 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
       (report: Report) => {
-        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F3X;
+        return (
+          report.report_status === ReportStatus.IN_PROGRESS && report.report_type in [ReportTypes.F3, ReportTypes.F3X]
+        );
       },
       () => false,
     ),

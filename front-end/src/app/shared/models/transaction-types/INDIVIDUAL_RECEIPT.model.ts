@@ -19,9 +19,6 @@ export class INDIVIDUAL_RECEIPT extends SchATransactionType {
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       aggregation_group: AggregationGroups.GENERAL,
-      report: {
-        report_type: ReportTypes.F3X,
-      },
     });
   }
 }

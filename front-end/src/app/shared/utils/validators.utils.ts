@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { F3xCoverageDates } from '../models/form-3x.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { DateUtils } from './date.utils';
 import { isEmpty, omit } from 'lodash';
+import { CoverageDates } from '../models';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;
@@ -64,7 +64,7 @@ export function buildGuaranteeUniqueValuesValidator(
   };
 }
 
-export function buildNonOverlappingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
+export function buildNonOverlappingCoverageValidator(existingCoverage: CoverageDates[]): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const fromControl = control.get('coverage_from_date');
     const throughControl = control.get('coverage_through_date');
@@ -83,7 +83,7 @@ export function buildNonOverlappingCoverageValidator(existingCoverage: F3xCovera
 }
 
 function validateDateWithinCoverage(
-  existingCoverage: F3xCoverageDates[],
+  existingCoverage: CoverageDates[],
   control: AbstractControl | null,
 ): ValidationErrors | null {
   return existingCoverage.reduce((error: ValidationErrors | null, coverage) => {
@@ -99,11 +99,7 @@ function getErrors(errors: ValidationErrors | null, newError: ValidationErrors |
   return otherErrors || newError ? { ...otherErrors, ...newError } : null;
 }
 
-function findSurrounding(
-  from: Date,
-  through: Date,
-  existingCoverage: F3xCoverageDates[],
-): F3xCoverageDates | undefined {
+function findSurrounding(from: Date, through: Date, existingCoverage: CoverageDates[]): CoverageDates | undefined {
   return existingCoverage.find((coverage) => {
     const coverageFrom = coverage.coverage_from_date;
     const coverageThrough = coverage.coverage_through_date;
@@ -111,7 +107,7 @@ function findSurrounding(
   });
 }
 
-function getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors {
+function getCoverageOverlapError(collision: CoverageDates): ValidationErrors {
   const fecDatePipe = new FecDatePipe();
   const message =
     `You have entered coverage dates that overlap ` +

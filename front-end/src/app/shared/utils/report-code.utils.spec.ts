@@ -1,10 +1,10 @@
 import { DateUtils } from './date.utils';
-import { getCoverageDatesFunction, F3xReportCodes } from './report-code.utils';
+import { getCoverageDatesFunction, ReportCodes } from './report-code.utils';
 
 describe('ReportCodeUtils', () => {
   describe('getCoverageDatesFunction', () => {
     it('should return correct function for Q1', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.Q1);
+      const result = getCoverageDatesFunction(ReportCodes.Q1);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'Q');
@@ -16,7 +16,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for Q2', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.Q2);
+      const result = getCoverageDatesFunction(ReportCodes.Q2);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'Q');
@@ -28,7 +28,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for Q3', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.Q3);
+      const result = getCoverageDatesFunction(ReportCodes.Q3);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'Q');
@@ -40,7 +40,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for YE when current month is January', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.YE);
+      const result = getCoverageDatesFunction(ReportCodes.YE);
       if (result) {
         expect(typeof result).toBe('function');
         spyOn(DateUtils, 'isCurrentMonthJanuary').and.returnValue(true);
@@ -75,7 +75,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for YE when current month is not January', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.YE);
+      const result = getCoverageDatesFunction(ReportCodes.YE);
       if (result) {
         expect(typeof result).toBe('function');
         spyOn(DateUtils, 'isCurrentMonthJanuary').and.returnValue(false);
@@ -110,7 +110,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M2', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M2);
+      const result = getCoverageDatesFunction(ReportCodes.M2);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -122,7 +122,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M3', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M3);
+      const result = getCoverageDatesFunction(ReportCodes.M3);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -134,7 +134,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M4', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M4);
+      const result = getCoverageDatesFunction(ReportCodes.M4);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -146,7 +146,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M5', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M5);
+      const result = getCoverageDatesFunction(ReportCodes.M5);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -158,7 +158,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M6', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M6);
+      const result = getCoverageDatesFunction(ReportCodes.M6);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -170,7 +170,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M7', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M7);
+      const result = getCoverageDatesFunction(ReportCodes.M7);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -182,7 +182,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M8', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M8);
+      const result = getCoverageDatesFunction(ReportCodes.M8);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -194,7 +194,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M9', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M9);
+      const result = getCoverageDatesFunction(ReportCodes.M9);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -206,7 +206,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M10', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M10);
+      const result = getCoverageDatesFunction(ReportCodes.M10);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -218,7 +218,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M11', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M11);
+      const result = getCoverageDatesFunction(ReportCodes.M11);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -230,7 +230,7 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M12', () => {
-      const result = getCoverageDatesFunction(F3xReportCodes.M12);
+      const result = getCoverageDatesFunction(ReportCodes.M12);
       expect(typeof result).toBe('function');
       if (result) {
         const [startDate, endDate] = result(2024, true, 'M');
@@ -242,31 +242,31 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return undefined for all others', () => {
-      let result = getCoverageDatesFunction(F3xReportCodes.TER);
+      let result = getCoverageDatesFunction(ReportCodes.TER);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.TwelveG);
+      result = getCoverageDatesFunction(ReportCodes.TwelveG);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.TwelveP);
+      result = getCoverageDatesFunction(ReportCodes.TwelveP);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.TwelveR);
+      result = getCoverageDatesFunction(ReportCodes.TwelveR);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.TwelveS);
+      result = getCoverageDatesFunction(ReportCodes.TwelveS);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.TwelveC);
+      result = getCoverageDatesFunction(ReportCodes.TwelveC);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.ThirtyG);
+      result = getCoverageDatesFunction(ReportCodes.ThirtyG);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.ThirtyR);
+      result = getCoverageDatesFunction(ReportCodes.ThirtyR);
       expect(result).toBeUndefined();
 
-      result = getCoverageDatesFunction(F3xReportCodes.ThirtyS);
+      result = getCoverageDatesFunction(ReportCodes.ThirtyS);
       expect(result).toBeUndefined();
     });
   });

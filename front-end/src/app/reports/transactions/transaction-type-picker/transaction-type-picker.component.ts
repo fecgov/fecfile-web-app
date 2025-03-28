@@ -93,7 +93,15 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
 
   transactionGroups: Signal<TransactionGroupTypes[]> = computed(() => {
     if (this.category() === 'disbursement') {
-      if (this.report().report_type === ReportTypes.F3X) {
+      if (this.report().report_type === ReportTypes.F3) {
+        return [
+          ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
+          ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS, // includes ScheduleFTransactionTypes.*
+          ScheduleBTransactionGroups.OTHER_EXPENDITURES,
+          ScheduleBTransactionGroups.REFUND,
+          ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+        ];
+      } else if (this.report().report_type === ReportTypes.F3X) {
         return [
           ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
           ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS, // includes ScheduleFTransactionTypes.*
