@@ -30,7 +30,7 @@ export class SchFTransaction extends Transaction {
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
   expenditure_amount: number | undefined;
   aggregation_group: AggregationGroups | undefined;
-  aggregate_general_elect_expended: number | undefined;
+  aggregate_general_elec_expended: number | undefined;
   expenditure_purpose_description: string | undefined;
   category_code: string | undefined;
   payee_committee_id_number: string | undefined;

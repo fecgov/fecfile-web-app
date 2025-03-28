@@ -2,8 +2,9 @@ import { initialState as initActiveReport } from 'app/store/active-report.reduce
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
 import { initialState as initNavigationEvent } from 'app/store/navigation-event.reducer';
+import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
+import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
@@ -11,18 +12,17 @@ import { Form3X } from '../models/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { TransactionTemplateMapType } from '../models/transaction-type.model';
-import { AggregationGroups, Transaction, TransactionTypes } from '../models/transaction.model';
-import { UploadSubmission } from '../models/upload-submission.model';
-import { UserLoginData } from '../models/user.model';
-import { TransactionTypeUtils } from './transaction-type.utils';
-import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
+import { ScheduleETransactionTypes, SchETransaction } from '../models/sche-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
 } from '../models/transaction-navigation-controls.model';
-import { ScheduleETransactionTypes, SchETransaction } from '../models/sche-transaction.model';
+import { TransactionTemplateMapType } from '../models/transaction-type.model';
+import { AggregationGroups, Transaction, TransactionTypes } from '../models/transaction.model';
+import { UploadSubmission } from '../models/upload-submission.model';
+import { UserLoginData } from '../models/user.model';
+import { TransactionTypeUtils } from './transaction-type.utils';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -336,4 +336,13 @@ export const testTemplateMap: TransactionTemplateMapType = {
   signatory_2_suffix: 'authorized_suffix',
   signatory_2_title: 'authorized_title',
   signatory_2_date: 'authorized_date_signed',
+  quaternary_committee_fec_id: 'designating_committee_id_number',
+  quaternary_committee_name: 'designating_committee_name',
+  quinary_committee_fec_id: 'subordinate_committee_id_number',
+  quinary_committee_name: 'subordinate_committee_name',
+  quinary_street_1: 'subordinate_street_1',
+  quinary_street_2: 'subordinate_street_2',
+  quinary_city: 'subordinate_city',
+  quinary_state: 'subordinate_state',
+  quinary_zip: 'subordinate_zip',
 };

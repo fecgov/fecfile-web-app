@@ -72,5 +72,14 @@ export abstract class SchDTransactionType extends TransactionType {
     signatory_2_suffix: '',
     signatory_2_title: '',
     signatory_2_date: '',
+    quaternary_committee_fec_id: '',
+    quaternary_committee_name: '',
+    quinary_committee_fec_id: '',
+    quinary_committee_name: '',
+    quinary_street_1: '',
+    quinary_street_2: '',
+    quinary_city: '',
+    quinary_state: '',
+    quinary_zip: '',
   };
 }

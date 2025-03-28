@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
@@ -12,14 +13,13 @@ import {
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItemGroup, PrimeTemplate } from 'primeng/api';
-import { AutoComplete } from 'primeng/autocomplete';
-import { takeUntil } from 'rxjs';
-import { DestroyerComponent } from '../app-destroyer.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
+import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
+import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',

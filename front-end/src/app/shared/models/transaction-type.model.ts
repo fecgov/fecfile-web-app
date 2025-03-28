@@ -40,9 +40,13 @@ export abstract class TransactionType {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  contact5IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
+  candidateInfoPosition = 'low'; // Position of candidate info in the form. 'low' or 'high'
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
-
   // Double-entry settings
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isDependentChild = (transaction: Transaction) => false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -166,6 +170,10 @@ export abstract class TransactionType {
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   hasElectionInformation(): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
+  }
+
+  hasDesignatedSubordinate(): boolean {
+    return this.formFields.includes('filer_designated_to_make_coordinated_expenditures');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -298,6 +306,15 @@ export type TransactionTemplateMapType = {
   signatory_2_suffix: string;
   signatory_2_title: string;
   signatory_2_date: string;
+  quaternary_committee_fec_id: string;
+  quaternary_committee_name: string;
+  quinary_committee_fec_id: string;
+  quinary_committee_name: string;
+  quinary_street_1: string;
+  quinary_street_2: string;
+  quinary_city: string;
+  quinary_state: string;
+  quinary_zip: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;
