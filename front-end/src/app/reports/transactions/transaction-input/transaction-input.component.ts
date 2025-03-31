@@ -62,13 +62,9 @@ export class TransactionInputComponent implements OnInit {
   @Input() candidateInfoPosition = 'low';
   @Input() isSingle = false;
 
-  @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() contactSelect = new EventEmitter<[number, SelectItem<Contact>]>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quaternaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() quaternaryContactClear = new EventEmitter<void>();
-  @Output() quinaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() quinaryContactClear = new EventEmitter<void>();
 
   ContactTypes = ContactTypes;
@@ -97,33 +93,17 @@ export class TransactionInputComponent implements OnInit {
     this.form.get('entity_type')?.setValue(contactType);
   }
 
-  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    this.form.get('entity_type')?.setValue(selectItem.value.type);
-    this.primaryContactSelect.emit(selectItem);
+  updateFormWithContact(contact: SelectItem<Contact>, index: number) {
+    if (index === 0) this.form.get('entity_type')?.setValue(contact.value.type);
+    this.contactSelect.emit([index, contact]);
   }
 
   updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
     this.candidateContactSelect.emit(selectItem);
   }
 
-  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    this.secondaryContactSelect.emit(selectItem);
-  }
-
-  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
-    this.tertiaryContactSelect.emit(selectItem);
-  }
-
-  updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
-    this.quaternaryContactSelect.emit(selectItem);
-  }
-
   clearFormQuaternaryContact() {
     this.quaternaryContactClear.emit();
-  }
-
-  updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
-    this.quinaryContactSelect.emit(selectItem);
   }
 
   clearFormQuinaryContact() {

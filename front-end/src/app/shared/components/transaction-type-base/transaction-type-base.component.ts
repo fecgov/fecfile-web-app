@@ -296,13 +296,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     );
   }
 
-  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_1'],
-    );
+  updateFormWithContact(index: number, contact: SelectItem<Contact>) {
+    TransactionContactUtils.updateFormWithContact(contact, this.form, this.transaction, this.contactIdMap, index);
   }
 
   updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
@@ -314,44 +309,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     );
   }
 
-  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_2'],
-    );
-  }
-
-  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithTertiaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_3'],
-    );
-  }
-
-  updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithQuaternaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_4'],
-    );
-  }
-
   clearFormQuaternaryContact() {
     TransactionContactUtils.clearFormQuaternaryContact(this.form, this.transaction, this.contactIdMap['contact_4']);
-  }
-
-  updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithQuinaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_5'],
-    );
   }
 
   clearFormQuinaryContact() {
