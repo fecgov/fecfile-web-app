@@ -96,6 +96,16 @@ export const SIGNATORY_2_FIELDS: string[] = [
   'signatory_2_title',
   'signatory_2_date',
 ];
+export const QUATERNARY_FIELDS: string[] = ['quaternary_committee_fec_id', 'quaternary_committee_name'];
+export const QUINARY_FIELDS: string[] = [
+  'quinary_committee_fec_id',
+  'quinary_committee_name',
+  'quinary_street_1',
+  'quinary_street_2',
+  'quinary_city',
+  'quinary_state',
+  'quinary_zip',
+];
 
 export function hasFields(formFields: string[], fieldsToHave: string[]): boolean {
   return fieldsToHave.reduce((result, election_field) => result && formFields.includes(election_field), true);
