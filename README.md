@@ -26,14 +26,18 @@ A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN e
 
 ### Running the Front-End locally
 
-From within the front-end directory, install packages with 
+From within the front-end directory, install packages with
+
 ```
 npm install
-````
+```
+
 and run the application with the command:
+
 ```
 npx -p @angular/cli ng serve
 ```
+
 to start a local server for the application. The front-end can then be accessed through your browser at port 4200.
 
 ### Running end-to-end (E2E) tests
@@ -59,5 +63,9 @@ The following events occur for fecfile-web-api and fecfile-web-app independently
   - The Production environment will be used by end users once the application launches.
 
 ## Additional developer notes
+
+- When making CSP changes, make sure to keep nginx and localhost in sync.
+  - [NGINX](https://github.com/fecgov/fecfile-web-app/blob/develop/deploy-config/front-end-nginx-config/nginx.conf)
+  - [local](https://github.com/fecgov/fecfile-web-app/blob/develop/front-end/angular.json)
 
 See [Additional Developer Notes](https://github.com/fecgov/fecfile-web-api/wiki/Additional-Developer-Notes).
