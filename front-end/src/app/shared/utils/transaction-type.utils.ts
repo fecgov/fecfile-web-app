@@ -5,6 +5,7 @@ import { SchC1Transaction } from '../models/schc1-transaction.model';
 import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { SchDTransaction } from '../models/schd-transaction.model';
 import { SchETransaction } from '../models/sche-transaction.model';
+import { SchFTransaction, ScheduleFTransactionTypes } from '../models/schf-transaction.model';
 import { ScheduleIds, ScheduleTransaction, TransactionTypes } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
@@ -188,9 +189,6 @@ import { DEBT_OWED_BY_COMMITTEE } from '../models/transaction-types/DEBT_OWED_BY
 import { DEBT_OWED_TO_COMMITTEE } from '../models/transaction-types/DEBT_OWED_TO_COMMITTEE.model';
 
 // Schedule E ////////////////////////////////////////////////////
-import { SchFTransaction } from '../models/schf-transaction.model';
-import { COORDINATED_PARTY_EXPENDITURE } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE.model';
-import { COORDINATED_PARTY_EXPENDITURE_VOID } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE_VOID.model';
 import { INDEPENDENT_EXPENDITURE } from '../models/transaction-types/INDEPENDENT_EXPENDITURE.model';
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
@@ -200,6 +198,10 @@ import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transacti
 import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
 import { INDEPENDENT_EXPENDITURE_VOID } from '../models/transaction-types/INDEPENDENT_EXPENDITURE_VOID.model';
 import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/MULTISTATE_INDEPENDENT_EXPENDITURE.model';
+
+// Schedule F ////////////////////////////////////////////////////
+import { COORDINATED_PARTY_EXPENDITURE } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE.model';
+import { COORDINATED_PARTY_EXPENDITURE_VOID } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -479,6 +481,8 @@ export function PTY_ONLY(): TransactionTypes[] {
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
     ScheduleBTransactionTypes.PAC_IN_KIND_OUT,
+    ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+    ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
   ];
 }
 
