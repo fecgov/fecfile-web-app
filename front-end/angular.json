@@ -167,7 +167,10 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "buildTarget": "fecfile-web:build"
+                        "buildTarget": "fecfile-web:build",
+                        "headers": {
+                            "Content-Security-Policy": "default-src 'self'; script-src 'self' 'nonce-web_app_nonce'; style-src 'self' 'nonce-web_app_nonce'; connect-src 'self' http://localhost:* https://dev-api.fecfile.fec.gov https://stage-api.fecfile.fec.gov https://test-api.fecfile.fec.gov; frame-ancestors 'none'; object-src 'none'"
+                        }
                     },
                     "configurations": {
                         "local": {
