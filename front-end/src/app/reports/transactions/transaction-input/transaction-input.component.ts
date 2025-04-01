@@ -1,28 +1,28 @@
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SelectItem } from 'primeng/api';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { Observable } from 'rxjs';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
-import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
-import { CommitteeInputComponent } from '../../../shared/components/inputs/committee-input/committee-input.component';
-import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
-import { SectionHeaderComponent } from './section-header/section-header.component';
+import { SelectItem } from 'primeng/api';
+import { Observable } from 'rxjs';
+import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
-import { EmployerInputComponent } from '../../../shared/components/inputs/employer-input/employer-input.component';
 import { AmountInputComponent } from '../../../shared/components/inputs/amount-input/amount-input.component';
+import { CandidateInputComponent } from '../../../shared/components/inputs/candidate-input/candidate-input.component';
+import { CommitteeInputComponent } from '../../../shared/components/inputs/committee-input/committee-input.component';
 import { DebtInputComponent } from '../../../shared/components/inputs/debt-input/debt-input.component';
+import { ElectionInputComponent } from '../../../shared/components/inputs/election-input/election-input.component';
+import { EmployerInputComponent } from '../../../shared/components/inputs/employer-input/employer-input.component';
+import { LoanAgreementInputComponent } from '../../../shared/components/inputs/loan-agreement-input/loan-agreement-input.component';
 import { LoanInfoInputComponent } from '../../../shared/components/inputs/loan-info-input/loan-info-input.component';
 import { LoanTermsInputComponent } from '../../../shared/components/inputs/loan-terms-input/loan-terms-input.component';
-import { LoanAgreementInputComponent } from '../../../shared/components/inputs/loan-agreement-input/loan-agreement-input.component';
-import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
+import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
 import { SignatureInputComponent } from '../../../shared/components/inputs/signature-input/signature-input.component';
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
-import { CandidateInputComponent } from '../../../shared/components/inputs/candidate-input/candidate-input.component';
-import { ElectionInputComponent } from '../../../shared/components/inputs/election-input/election-input.component';
+import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
+import { SectionHeaderComponent } from './section-header/section-header.component';
 
 @Component({
   selector: 'app-transaction-input',
@@ -64,6 +64,10 @@ export class TransactionInputComponent implements OnInit {
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() quaternaryContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() quaternaryContactClear = new EventEmitter<void>();
+  @Output() quinaryContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() quinaryContactClear = new EventEmitter<void>();
 
   ContactTypes = ContactTypes;
   transactionType?: TransactionType;
@@ -74,6 +78,7 @@ export class TransactionInputComponent implements OnInit {
   ngOnInit(): void {
     if (this.transaction) {
       this.transactionType = this.transaction.transactionType;
+      this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
       throw new Error('FECfile: No transaction passed to TransactionInputComponent');
@@ -105,6 +110,22 @@ export class TransactionInputComponent implements OnInit {
 
   updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
     this.tertiaryContactSelect.emit(selectItem);
+  }
+
+  updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
+    this.quaternaryContactSelect.emit(selectItem);
+  }
+
+  clearFormQuaternaryContact() {
+    this.quaternaryContactClear.emit();
+  }
+
+  updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
+    this.quinaryContactSelect.emit(selectItem);
+  }
+
+  clearFormQuinaryContact() {
+    this.quinaryContactClear.emit();
   }
 
   get entityType(): ContactTypes {

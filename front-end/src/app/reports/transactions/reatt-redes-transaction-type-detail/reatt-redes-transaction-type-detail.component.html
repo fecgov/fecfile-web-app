@@ -31,6 +31,10 @@
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
           (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
+          (quaternaryContactSelect)="updateFormWithQuaternaryContact($event)"
+          (quaternaryContactClear)="clearFormQuaternaryContact()"
+          (quinaryContactSelect)="updateFormWithQuinaryContact($event)"
+          (quinaryContactClear)="clearFormQuinaryContact()"
           [contactTypeOptions]="contactTypeOptions"
           [formSubmitted]="formSubmitted"
           [form]="form"
@@ -75,7 +79,6 @@
             [isEditable]="isEditable()"
             [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
             [transaction]="childTransaction"
-            candidateInfoPosition="high"
           >
           </app-transaction-input>
         }

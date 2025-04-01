@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testCommitteeAdminLoginData, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
@@ -10,11 +10,13 @@ import { CreateCommitteeComponent } from './create-committee.component';
 import { NavigationBehaviorOptions, provideRouter, Router, UrlTree } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { UsersService } from 'app/shared/services/users.service';
 
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
   let fixture: ComponentFixture<CreateCommitteeComponent>;
   let testCommitteeAccountService: CommitteeAccountService;
+  let testUserService: UsersService;
   let router: Router;
   let routerSpy: jasmine.Spy<(url: string | UrlTree, extras?: NavigationBehaviorOptions) => Promise<boolean>>;
 
@@ -28,9 +30,11 @@ describe('CreateCommitteeComponent', () => {
         ConfirmationService,
         MessageService,
         provideMockStore(testMockStore),
+        UsersService,
       ],
     });
     testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
+    testUserService = TestBed.inject(UsersService);
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigateByUrl');
     fixture = TestBed.createComponent(CreateCommitteeComponent);
@@ -83,7 +87,7 @@ describe('CreateCommitteeComponent', () => {
   });
 
   it('should create committee and redirect to reports page', async () => {
-    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() => {
+    const createSpy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() => {
       const committeeAccount = new CommitteeAccount();
       committeeAccount.committee_id = 'C12345678';
       committeeAccount.id = '123';
@@ -92,6 +96,9 @@ describe('CreateCommitteeComponent', () => {
     const activateSpy = spyOn(testCommitteeAccountService, 'activateCommittee').and.callFake(() =>
       Promise.resolve(true),
     );
+    const userSpy = spyOn(testUserService, 'getCurrentUser').and.returnValue(
+      Promise.resolve(testCommitteeAdminLoginData),
+    );
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
@@ -99,8 +106,9 @@ describe('CreateCommitteeComponent', () => {
     component.selectedCommittee = testCommittee;
     await component.createAccount();
 
-    expect(spy).toHaveBeenCalledWith(testCommitteeId);
+    expect(createSpy).toHaveBeenCalledWith(testCommitteeId);
     expect(activateSpy).toHaveBeenCalledWith('123');
+    expect(userSpy).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('');
   });
 
