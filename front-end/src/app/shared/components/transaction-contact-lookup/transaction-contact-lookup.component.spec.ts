@@ -1,22 +1,22 @@
+import { DatePipe } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { SelectModule } from 'primeng/select';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { DialogModule } from 'primeng/dialog';
-import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
-import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
+import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService } from 'primeng/api';
-import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DialogModule } from 'primeng/dialog';
+import { SelectModule } from 'primeng/select';
+import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
+import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -74,6 +74,14 @@ describe('TransactionContactLookupComponent', () => {
     component.contactProperty = 'contact_3';
     component.ngOnInit();
     expect(component.form.get('contact_3_lookup')).toBeTruthy();
+
+    component.contactProperty = 'contact_4';
+    component.ngOnInit();
+    expect(component.form.get('contact_4_lookup')).toBeTruthy();
+
+    component.contactProperty = 'contact_5';
+    component.ngOnInit();
+    expect(component.form.get('contact_5_lookup')).toBeTruthy();
   });
 
   it('selecting a contactType should emit its value', () => {
