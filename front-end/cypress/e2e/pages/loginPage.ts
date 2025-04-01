@@ -73,6 +73,7 @@ function loginDotGovLogin() {
   cy.contains('Manage reports').should('exist');
 
   // Create second create admin after logging in to make pop-up go away
+  cy.wait(500);
   const alias = PageUtils.getAlias('');
   cy.get(alias)
     .find('[data-cy="second-committee-email"]')
