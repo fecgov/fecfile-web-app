@@ -58,7 +58,6 @@ function loginDotGovLogin() {
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
 
   cy.visit('/');
   cy.get('#loginButton').click();
@@ -72,19 +71,17 @@ function loginDotGovLogin() {
 
   // Wait for the reports page to load
   cy.contains('Manage reports').should('exist');
-  cy.wait('@GetCommitteeMembers');
 
   // Create second create admin after logging in to make pop-up go away
+  cy.wait(500);
   const alias = PageUtils.getAlias('');
   cy.get(alias)
     .find('[data-cy="second-committee-email"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
     .then(($email) => {
       if ($email.length) {
-        cy.contains('Welcome to FECfile').should('exist'); // Checks that the modal has rendered
         cy.wrap($email).type('admin@admin.com');
         cy.get('[data-cy="second-committee-save"]').click();
-        cy.pause();
       }
     });
   cy.contains('Welcome to FECfile').should('not.exist');
