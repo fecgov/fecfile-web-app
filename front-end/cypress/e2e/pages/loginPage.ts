@@ -75,17 +75,14 @@ function loginDotGovLogin() {
   cy.wait('@GetCommitteeMembers');
 
   // Create second create admin after logging in to make pop-up go away
-  const alias = PageUtils.getAlias('');
-  cy.get(alias)
+  cy.get(PageUtils.getAlias(''))
     .find('[data-cy="second-committee-email"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
     .then(($email) => {
-      if ($email.length) {
-        cy.contains('Welcome to FECfile').should('exist'); // Checks that the modal has rendered
-        cy.wrap($email).type('admin@admin.com');
-        cy.get('[data-cy="second-committee-save"]').click();
-        cy.pause();
-      }
+      cy.wrap($email).should('have.value', '');
+      cy.wrap($email).type('admin@admin.com').clear().type('admin@admin.com');
+      cy.wrap($email).should('have.value', 'admin@admin.com');
+      cy.wrap($email).click();
     });
   cy.contains('Welcome to FECfile').should('not.exist');
   cy.visit('/dashboard');
