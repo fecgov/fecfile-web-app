@@ -217,10 +217,7 @@ workflows:
       - lint
       - test
       - dependency-check
-      - e2e-test:
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+      - e2e-test
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:

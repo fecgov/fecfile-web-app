@@ -73,8 +73,8 @@ function loginDotGovLogin() {
   // Wait for the reports page to load
   cy.contains('Manage reports').should('exist');
 
-  // Create second create admin after logging in to make pop-up go away
-  cy.wait('@GetCommitteeMembers');
+  // Creates a second create admin after logging in if necessary
+  cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
   cy.get(PageUtils.getAlias(''))
     .find('[data-cy="second-committee-email"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
