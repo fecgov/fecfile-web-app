@@ -1,6 +1,5 @@
-import { plainToClass, plainToInstance, Transform } from 'class-transformer';
+import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { ReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
 

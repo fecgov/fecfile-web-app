@@ -12,7 +12,7 @@ export class RedesignatedUtils {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
         const report_code: string =
-          transaction.getForm3X()?.report_code ?? transaction.getForm3()?.report_code_label ?? '';
+          transaction.getForm3X()?.report_code_label ?? transaction.getForm3()?.report_code_label ?? '';
         transaction.expenditure_purpose_descrip = `(Originally disclosed on ${report_code}.) See redesignation below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
