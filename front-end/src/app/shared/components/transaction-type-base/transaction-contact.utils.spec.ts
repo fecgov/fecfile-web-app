@@ -1,19 +1,20 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import {
-  testTemplateMap,
+  getTestTransactionByType,
   testContact,
   testScheduleATransaction,
-  getTestTransactionByType,
+  testTemplateMap,
 } from 'app/shared/utils/unit-test.utils';
-import { TransactionContactUtils } from './transaction-contact.utils';
-import { Subject } from 'rxjs';
 import { SelectItem } from 'primeng/api';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { Subject } from 'rxjs';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -55,6 +56,15 @@ describe('ContactUtils', () => {
         account_zip: new SubscriptionFormControl(''),
         beneficiary_committee_fec_id: new SubscriptionFormControl(''),
         beneficiary_committee_name: new SubscriptionFormControl(''),
+        designating_committee_id_number: new SubscriptionFormControl(''),
+        designating_committee_name: new SubscriptionFormControl('test_designating_com_name'),
+        subordinate_committee_id_number: new SubscriptionFormControl(''),
+        subordinate_committee_name: new SubscriptionFormControl('test_subordinate_com_name'),
+        subordinate_street_1: new SubscriptionFormControl(''),
+        subordinate_street_2: new SubscriptionFormControl(''),
+        subordinate_city: new SubscriptionFormControl(''),
+        subordinate_state: new SubscriptionFormControl(''),
+        subordinate_zip: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
@@ -100,6 +110,26 @@ describe('ContactUtils', () => {
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new committee contact for <b> test_com_name</b>.",
+    );
+
+    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+      ContactTypes.COMMITTEE,
+      form,
+      testTemplateMap,
+      'contact_4',
+    );
+    expect(output).toBe(
+      "By saving this transaction, you're also creating a new committee contact for <b> test_designating_com_name</b>.",
+    );
+
+    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+      ContactTypes.COMMITTEE,
+      form,
+      testTemplateMap,
+      'contact_5',
+    );
+    expect(output).toBe(
+      "By saving this transaction, you're also creating a new committee contact for <b> test_subordinate_com_name</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
@@ -190,7 +220,7 @@ describe('ContactUtils', () => {
     expect(transaction.contact_2).toBeTruthy();
   });
 
-  it('test updateFormWithSecondaryContact', () => {
+  it('test updateFormWithTertiaryContact', () => {
     const transaction = getTestTransactionByType(
       ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
     ) as SchBTransaction;
@@ -198,6 +228,58 @@ describe('ContactUtils', () => {
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
     expect(transaction.contact_3).toBeTruthy();
+  });
+
+  it('test updateFormWithQuaternaryContact', () => {
+    const transaction = getTestTransactionByType(
+      ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+    ) as SchFTransaction;
+    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
+    expect(form.get('designating_committee_id_number')?.value).toBe('888');
+    expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
+    expect(transaction.contact_4).toBeTruthy();
+  });
+
+  it('test updateFormWithQuaternaryContact and clearFormQuaternaryContact', () => {
+    const transaction = getTestTransactionByType(
+      ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+    ) as SchFTransaction;
+    // updateFormWithQuaternaryContact
+    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
+    expect(form.get('designating_committee_id_number')?.value).toBe('888');
+    expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
+    expect(transaction.contact_4).toBeTruthy();
+    // clearFormQuaternaryContact
+    TransactionContactUtils.clearFormQuaternaryContact(form, transaction, new Subject<string>());
+    expect(form.get('designating_committee_id_number')?.value).toBe(null);
+    expect(form.get('designating_committee_name')?.value).toBe(null);
+    expect(transaction.contact_4).toBeFalsy();
+  });
+
+  it('test updateFormWithQuinaryContact and clearFormQuinaryContact', () => {
+    const transaction = getTestTransactionByType(
+      ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+    ) as SchFTransaction;
+    // updateFormWithQuaternaryContact
+    TransactionContactUtils.updateFormWithQuinaryContact(selectItem, form, transaction, new Subject<string>());
+    expect(form.get('subordinate_committee_id_number')?.value).toBe('888');
+    expect(form.get('subordinate_committee_name')?.value).toBe('Organization LLC');
+    expect(form.get('subordinate_street_1')?.value).toBe('123 Main St');
+    expect(form.get('subordinate_street_2')?.value).toBe('Apt B');
+    expect(form.get('subordinate_city')?.value).toBe('Anytown');
+    expect(form.get('subordinate_state')?.value).toBe('VA');
+    expect(form.get('subordinate_zip')?.value).toBe('22201');
+    expect(transaction.contact_5).toBeTruthy();
+    // clearFormQuaternaryContact
+    TransactionContactUtils.clearFormQuinaryContact(form, transaction, new Subject<string>());
+    expect(form.get('subordinate_committee_id_number')?.value).toBe(null);
+    expect(form.get('subordinate_committee_name')?.value).toBe(null);
+    expect(form.get('subordinate_street_1')?.value).toBe(null);
+    expect(form.get('subordinate_street_2')?.value).toBe(null);
+    expect(form.get('subordinate_city')?.value).toBe(null);
+    expect(form.get('subordinate_state')?.value).toBe(null);
+    expect(form.get('subordinate_zip')?.value).toBe(null);
+    expect(transaction.contact_5).toBeFalsy();
   });
 
   it('corrects contact changes for IE Presidential Races', () => {

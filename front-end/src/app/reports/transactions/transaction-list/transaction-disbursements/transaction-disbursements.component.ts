@@ -1,19 +1,20 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, forwardRef, inject, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
+import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ReportTypes } from 'app/shared/models/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
-import { LabelList } from 'app/shared/utils/label.utils';
-import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { DateUtils } from 'app/shared/utils/date.utils';
-import { ReportTypes } from 'app/shared/models/report.model';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
-import { TableComponent } from '../../../../shared/components/table/table.component';
-import { CurrencyPipe } from '@angular/common';
+import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
+import { DateUtils } from 'app/shared/utils/date.utils';
+import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
+import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { MemoCodePipe } from '../transaction-list.component';
 
 @Component({
@@ -35,6 +36,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleETransactionTypeLabels,
+    ...ScheduleFTransactionTypeLabels,
   ];
   readonly form24ReportType = ReportTypes.F24;
   override readonly caption =

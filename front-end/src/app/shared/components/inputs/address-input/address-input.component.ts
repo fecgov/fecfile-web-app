@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
-import { PrimeOptions, LabelUtils } from 'app/shared/utils/label.utils';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InputText } from 'primeng/inputtext';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Select } from 'primeng/select';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { FluidModule } from 'primeng/fluid';
+import { InputText } from 'primeng/inputtext';
+import { Select } from 'primeng/select';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-address-input',
@@ -16,6 +16,7 @@ export class AddressInputComponent extends BaseInputComponent implements OnInit 
   @Input() readonly = false;
   @Input() stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   @Input() templateMapKeyPrefix = '';
+  @Input() keyPrefix = '';
 
   streetOneFieldName = '';
   streetTwoFieldName = '';
@@ -30,12 +31,18 @@ export class AddressInputComponent extends BaseInputComponent implements OnInit 
       this.cityFieldName = this.templateMap['secondary_city'];
       this.stateFieldName = this.templateMap['secondary_state'];
       this.zipFieldName = this.templateMap['secondary_zip'];
-    } else {
+    } else if (!this.keyPrefix) {
       this.streetOneFieldName = this.templateMap['street_1'];
       this.streetTwoFieldName = this.templateMap['street_2'];
       this.cityFieldName = this.templateMap['city'];
       this.stateFieldName = this.templateMap['state'];
       this.zipFieldName = this.templateMap['zip'];
+    } else {
+      this.streetOneFieldName = `${this.keyPrefix}street_1`;
+      this.streetTwoFieldName = `${this.keyPrefix}street_2`;
+      this.cityFieldName = `${this.keyPrefix}city`;
+      this.stateFieldName = `${this.keyPrefix}state`;
+      this.zipFieldName = `${this.keyPrefix}zip`;
     }
   }
 }
