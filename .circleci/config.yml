@@ -120,7 +120,7 @@ jobs:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout develop
+            git checkout ${CIRCLE_BRANCH}
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" docker-compose up --build -d
             docker container run --network container:fecfile-api-proxy \
@@ -151,7 +151,6 @@ jobs:
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results
@@ -218,7 +217,10 @@ workflows:
       - lint
       - test
       - dependency-check
-      - e2e-test
+      - e2e-test:
+          filters:
+            branches:
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
