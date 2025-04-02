@@ -34,6 +34,10 @@ export class TransactionContactUtils {
       case ContactTypes.COMMITTEE:
         if (contactKey === 'contact_1') {
           confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        } else if (contactKey === 'contact_4') {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.quaternary_committee_name)?.value}</b>`;
+        } else if (contactKey === 'contact_5') {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.quinary_committee_name)?.value}</b>`;
         } else {
           confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.committee_name)?.value}</b>`;
         }

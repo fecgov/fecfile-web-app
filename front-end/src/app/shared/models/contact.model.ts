@@ -267,6 +267,7 @@ export const CONTACTS_ONE_THROUGH_FIVE = {
     candidate_district: 'candidate_district',
   },
   contact_3: {
+    committee_name: 'name',
     committee_fec_id: 'committee_id',
   },
   contact_4: {
