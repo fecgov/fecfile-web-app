@@ -72,17 +72,21 @@ function loginDotGovLogin() {
 
   // Wait for the reports page to load
   cy.contains('Manage reports').should('exist');
-  cy.wait('@GetCommitteeMembers');
 
   // Create second create admin after logging in to make pop-up go away
+  cy.wait('@GetCommitteeMembers');
   cy.get(PageUtils.getAlias(''))
     .find('[data-cy="second-committee-email"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
     .then(($email) => {
-      cy.wrap($email).should('have.value', '');
-      cy.wrap($email).type('admin@admin.com').clear().type('admin@admin.com');
-      cy.wrap($email).should('have.value', 'admin@admin.com');
-      cy.wrap($email).click();
+      if ($email.length) {
+        cy.contains('Welcome to FECfile').should('exist').click();
+        cy.wrap($email).should('have.value', '');
+        cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+        cy.wrap($email).should('have.value', 'admin@admin.com');
+        cy.wrap($email).click();
+        PageUtils.clickButton('Save');
+      }
     });
   cy.contains('Welcome to FECfile').should('not.exist');
   cy.visit('/dashboard');
