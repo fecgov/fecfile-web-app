@@ -44,9 +44,10 @@ to start a local server for the application. The front-end can then be accessed 
 
 To run the end-to-end tests locally: 
 
+- `cd` into the front-end directory
 - Update packages with `npm install`
 - Make sure your app isn't runnning locally
-- `cd` into the front-end directory and run `ng e2e` at the command line
+- Run `ng e2e` at the command line
 - When prompted, choose "Chrome" and "Start running E2E tests in Chrome"
 - In the newly opened Chrome window, under "Specs" click on any test (*.cy.ts)
 
