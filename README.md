@@ -42,14 +42,7 @@ to start a local server for the application. The front-end can then be accessed 
 
 ### Running end-to-end (E2E) tests
 
-To run the end-to-end tests locally: 
-
-- `cd` into the front-end directory
-- Update packages with `npm install`
-- Make sure your app isn't runnning locally
-- Run `ng e2e` at the command line
-- When prompted, choose "Chrome" and "Start running E2E tests in Chrome"
-- In the newly opened Chrome window, under "Specs" click on any test (*.cy.ts)
+Cypress is used for end-to-end (E2E) tests. [E2E instructions...](https://github.com/fecgov/fecfile-web-app/tree/develop/front-end/cypress#readme)
 
 # Deployment (FEC team only)
 
