@@ -11,7 +11,9 @@ export class RedesignatedUtils {
       if (transaction.report_ids?.includes(activeReportId as string)) {
         transaction.expenditure_purpose_descrip = 'See redesignation below.';
       } else {
-        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${transaction.getForm3X()?.report_code_label ?? ''}.) See redesignation below.`;
+        const report_code: string =
+          transaction.getForm3X()?.report_code_label ?? transaction.getForm3()?.report_code_label ?? '';
+        transaction.expenditure_purpose_descrip = `(Originally disclosed on ${report_code}.) See redesignation below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
     }

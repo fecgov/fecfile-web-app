@@ -2,13 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
   ReportCodes,
-  monthlyElectionYearReportCodes,
-  monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
   getCoverageDatesFunction,
@@ -17,7 +15,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { MessageService } from 'primeng/api';
 import { combineLatest, startWith, takeUntil } from 'rxjs';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -32,12 +30,12 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { CoverageDates, CommitteeAccount, Form3X, F3xFormTypes } from 'app/shared/models';
+import { CoverageDates, CommitteeAccount, Form3, F3FormTypes } from 'app/shared/models';
 
 @Component({
-  selector: 'app-create-f3x-step1',
-  templateUrl: './create-f3x-step1.component.html',
-  styleUrl: './create-f3x-step1.component.scss',
+  selector: 'app-create-f3-step1',
+  templateUrl: './create-f3-step1.component.html',
+  styleUrl: './create-f3-step1.component.scss',
   imports: [
     ReactiveFormsModule,
     RadioButtonModule,
@@ -49,14 +47,13 @@ import { CoverageDates, CommitteeAccount, Form3X, F3xFormTypes } from 'app/share
     TextareaModule,
   ],
 })
-export class CreateF3XStep1Component extends FormComponent implements OnInit {
+export class CreateF3Step1Component extends FormComponent implements OnInit {
   private readonly store = inject(Store);
-  private readonly form3XService = inject(Form3XService);
+  private readonly form3Service = inject(Form3Service);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
   readonly formProperties: string[] = [
-    'filing_frequency',
     'report_type_category',
     'report_code',
     'coverage_from_date',
@@ -67,11 +64,11 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
+  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3Schema), {
     updateOn: 'blur',
   });
 
-  readonly F3xReportTypeCategories = F3xReportTypeCategories;
+  readonly F3ReportTypeCategories = F3ReportTypeCategories;
   public existingCoverage: CoverageDates[] | undefined;
   public usedReportCodes?: ReportCodes[];
   public thisYear = new Date().getFullYear();
@@ -80,7 +77,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
-    this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
+    this.form3Service.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
@@ -90,23 +87,15 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         }
       });
 
-    combineLatest([this.store.select(selectCommitteeAccount), this.form3XService.getF3xCoverageDates()])
+    combineLatest([this.store.select(selectCommitteeAccount), this.form3Service.getF3CoverageDates()])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([committeeAccount, existingCoverage]) => {
         this.committeeAccount = committeeAccount;
-        const filingFrequency = committeeAccount?.filing_frequency === 'M' ? 'M' : 'Q';
-        this.form.addControl('filing_frequency', new SubscriptionFormControl());
-        this.form.addControl('report_type_category', new SubscriptionFormControl());
-        this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
+        this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
+        this.form?.patchValue({ form_type: 'F3N' });
         this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
         this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
-          this.form.patchValue({
-            report_type_category: this.getReportTypeCategories()[0],
-          });
-          this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        }, this.destroy$);
         (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
           this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
         }, this.destroy$);
@@ -126,39 +115,33 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
-      this.form.controls['filing_frequency'].valueChanges.pipe(startWith(this.form.controls['filing_frequency'].value)),
       this.form.controls['report_type_category'].valueChanges.pipe(
         startWith(this.form.controls['report_type_category'].value),
       ),
-    ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
+    ]).subscribe(([reportCode, reportTypeCategory]) => {
       const coverageDatesFunction = getCoverageDatesFunction(reportCode);
       if (coverageDatesFunction) {
-        const isElectionYear = F3xReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
-        const [coverage_from_date, coverage_through_date] = coverageDatesFunction(
-          this.thisYear,
-          isElectionYear,
-          filingFrequency,
-        );
+        const isElectionYear = F3ReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
+        const [coverage_from_date, coverage_through_date] = coverageDatesFunction(this.thisYear, isElectionYear, 'Q');
         this.form.patchValue({ coverage_from_date, coverage_through_date });
       } else {
         this.form.patchValue({ coverage_from_date: null, coverage_through_date: null });
       }
     });
 
-    SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form, f3Schema, false);
   }
 
-  public getReportTypeCategories(): F3xReportTypeCategoryType[] {
-    return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
+  public getReportTypeCategories(): F3ReportTypeCategoryType[] {
+    return [F3ReportTypeCategories.ELECTION_YEAR, F3ReportTypeCategories.NON_ELECTION_YEAR];
   }
 
   public getReportCodes(): ReportCodes[] {
-    const isMonthly = this.form?.get('filing_frequency')?.value === 'M';
     switch (this.form.get('report_type_category')?.value) {
-      case F3xReportTypeCategories.ELECTION_YEAR:
-        return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
-      case F3xReportTypeCategories.NON_ELECTION_YEAR:
-        return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
+      case F3ReportTypeCategories.ELECTION_YEAR:
+        return quarterlyElectionYearReportCodes;
+      case F3ReportTypeCategories.NON_ELECTION_YEAR:
+        return quarterlyNonElectionYearReportCodes;
       default:
         return [];
     }
@@ -196,14 +179,14 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
       return;
     }
 
-    const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
+    const report: Form3 = Form3.fromJSON(SchemaUtils.getFormValues(this.form, f3Schema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
-    if (summary.report_code === ReportCodes.TER) {
-      summary.form_type = F3xFormTypes.F3XT;
+    if (report.report_code === ReportCodes.TER) {
+      report.form_type = F3FormTypes.F3T;
     }
 
-    const create$ = this.form3XService.create(summary, this.formProperties);
+    const create$ = this.form3Service.create(report, this.formProperties);
 
     //Create the report
     create$.then((report) => {
@@ -222,13 +205,13 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   }
 }
 
-export enum F3xReportTypeCategories {
+export enum F3ReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
   NON_ELECTION_YEAR = 'Non-Election Year',
   SPECIAL = 'Special',
 }
 
-export type F3xReportTypeCategoryType =
-  | F3xReportTypeCategories.ELECTION_YEAR
-  | F3xReportTypeCategories.NON_ELECTION_YEAR
-  | F3xReportTypeCategories.SPECIAL;
+export type F3ReportTypeCategoryType =
+  | F3ReportTypeCategories.ELECTION_YEAR
+  | F3ReportTypeCategories.NON_ELECTION_YEAR
+  | F3ReportTypeCategories.SPECIAL;

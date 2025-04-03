@@ -1,9 +1,10 @@
-import { Transform, Type } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import { JsonSchema } from 'fecfile-validate';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
+import { ReportCodes } from '../utils/report-code.utils';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -60,6 +61,7 @@ export abstract class Report extends BaseModel {
 }
 
 export enum ReportTypes {
+  F3 = 'F3',
   F3X = 'F3X',
   F24 = 'F24',
   F99 = 'F99',
@@ -67,6 +69,7 @@ export enum ReportTypes {
 }
 
 export const reportLabelList: LabelList = [
+  [ReportTypes.F3, 'Form 3'],
   [ReportTypes.F3X, 'Form 3X'],
   [ReportTypes.F24, 'Form 24'],
   [ReportTypes.F99, 'Form 99'],
@@ -76,4 +79,17 @@ export const reportLabelList: LabelList = [
 export enum ReportStatus {
   IN_PROGRESS = 'In progress',
   SUBMIT_SUCCESS = 'Submission success',
+}
+
+export class CoverageDates {
+  @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
+  @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
+  report_code: ReportCodes | undefined;
+  report_code_label?: string;
+
+  // prettier-ignore
+  static fromJSON(json: any, reportCodeLabel: string): CoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
+    json.report_code_label = reportCodeLabel;
+    return plainToClass(CoverageDates, json);
+  }
 }

@@ -6,6 +6,7 @@ export * from './contact.model';
 export * from './fec-api.model';
 export * from './fec-filing.model';
 export * from './feedback.model';
+export * from './form-3.model';
 export * from './form-1m.model';
 export * from './form-24.model';
 export * from './form-3x.model';
