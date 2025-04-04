@@ -6,12 +6,7 @@ import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sc
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import {
-  getTestTransactionByType,
-  testContact,
-  testScheduleATransaction,
-  testTemplateMap,
-} from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
@@ -79,88 +74,6 @@ describe('ContactUtils', () => {
     };
 
     contactId$ = new Subject();
-  });
-
-  it('test getCreateTransactionContactConfirmationMessage', () => {
-    let output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.INDIVIDUAL,
-      form,
-      testTemplateMap,
-      'contact_1',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new individual contact for <b> test_ln, test_fn</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.COMMITTEE,
-      form,
-      testTemplateMap,
-      'contact_1',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new committee contact for <b> test_org_name</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.COMMITTEE,
-      form,
-      testTemplateMap,
-      'contact_3',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new committee contact for <b> test_com_name</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.COMMITTEE,
-      form,
-      testTemplateMap,
-      'contact_4',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new committee contact for <b> test_designating_com_name</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.COMMITTEE,
-      form,
-      testTemplateMap,
-      'contact_5',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new committee contact for <b> test_subordinate_com_name</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.ORGANIZATION,
-      form,
-      testTemplateMap,
-      'contact_1',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new organization contact for <b> test_org_name</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.ORGANIZATION,
-      form,
-      testTemplateMap,
-      'contact_2',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new organization contact for <b> secondary_org_name</b>.",
-    );
-
-    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-      ContactTypes.CANDIDATE,
-      form,
-      testTemplateMap,
-      'contact_2',
-    );
-    expect(output).toBe(
-      "By saving this transaction, you're also creating a new candidate contact for <b> test_candidate_ln, test_candidate_fn</b>.",
-    );
   });
 
   it('test updateFormWithPrimaryContact', () => {

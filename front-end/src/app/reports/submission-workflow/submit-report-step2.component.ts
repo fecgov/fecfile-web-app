@@ -1,7 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
@@ -9,10 +8,8 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { combineLatest, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
@@ -42,7 +39,6 @@ import { CommitteeAccount, Report, Form3X, Form3 } from 'app/shared/models';
 export class SubmitReportStep2Component extends FormComponent implements OnInit {
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
-  private readonly store = inject(Store);
   private readonly messageService = inject(MessageService);
   public readonly confirmationService = inject(ConfirmationService);
   public readonly apiService = inject(ApiService);
@@ -56,7 +52,6 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     'filingPassword',
     'userCertified',
   ];
-  report?: Report;
   form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
     updateOn: 'blur',
   });
@@ -66,18 +61,16 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
   showBackdoorCode = false;
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
-  committeeAccount?: CommitteeAccount;
+
+  constructor() {
+    super();
+    effect(() => {
+      SchemaUtils.addJsonSchemaValidators(this.form, this.activeReportSignal().schema, false);
+      this.initializeFormWithReport(this.activeReportSignal(), this.committeeAccountSignal());
+    });
+  }
 
   ngOnInit(): void {
-    const activeReport$ = this.store.select(selectActiveReport).pipe(takeUntil(this.destroy$));
-    const committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
-    combineLatest([activeReport$, committeeAccount$]).subscribe(([activeReport, committeeAccount]) => {
-      this.report = activeReport;
-      this.committeeAccount = committeeAccount;
-      SchemaUtils.addJsonSchemaValidators(this.form, this.report.schema, false);
-      this.initializeFormWithReport(this.report, committeeAccount);
-    });
-
     this.form.addControl('backdoorYesNo', new SubscriptionFormControl());
 
     // Initialize validation tracking of current JSON schema and form data
@@ -124,7 +117,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     }
 
     this.confirmationService.confirm({
-      message: this.report?.submitAlertText,
+      message: this.activeReportSignal().submitAlertText,
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -146,20 +139,19 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
   }
 
   async saveTreasurerName(): Promise<Report | undefined> {
-    if (!this.report) return undefined;
     this.loading = 1;
     const payload: Report = getReportFromJSON({
-      ...this.report,
-      ...SchemaUtils.getFormValues(this.form, this.report.schema, this.formProperties),
+      ...this.activeReportSignal(),
+      ...SchemaUtils.getFormValues(this.form, this.activeReportSignal().schema, this.formProperties),
     });
     if (payload instanceof Form3X || payload instanceof Form3) {
-      payload.qualified_committee = this.committeeAccount?.qualified;
-      payload.committee_name = this.committeeAccount?.name;
-      payload.street_1 = this.committeeAccount?.street_1;
-      payload.street_2 = this.committeeAccount?.street_2;
-      payload.city = this.committeeAccount?.city;
-      payload.state = this.committeeAccount?.state;
-      payload.zip = this.committeeAccount?.zip;
+      payload.qualified_committee = this.committeeAccountSignal().qualified;
+      payload.committee_name = this.committeeAccountSignal().name;
+      payload.street_1 = this.committeeAccountSignal().street_1;
+      payload.street_2 = this.committeeAccountSignal().street_2;
+      payload.city = this.committeeAccountSignal().city;
+      payload.state = this.committeeAccountSignal().state;
+      payload.zip = this.committeeAccountSignal().zip;
     }
 
     return this.reportService.update(payload, this.formProperties);
@@ -169,12 +161,12 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     this.loading = 2;
 
     const payload = {
-      report_id: this.report?.id,
+      report_id: this.activeReportSignal().id,
       password: this.form?.value['filingPassword'],
       backdoor_code: this.form?.value['backdoor_code'],
     };
     await this.apiService.post('/web-services/submit-to-fec/', payload);
     this.loading = 0;
-    return this.router.navigateByUrl(this.getContinueUrl?.(this.report) || '/reports/');
+    return this.router.navigateByUrl(this.getContinueUrl?.(this.activeReportSignal()) || '/reports/');
   }
 }

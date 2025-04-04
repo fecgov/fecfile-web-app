@@ -1,5 +1,8 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -18,6 +21,10 @@ export abstract class DestroyerComponent implements OnDestroy {
 })
 export abstract class FormComponent extends DestroyerComponent {
   protected readonly fb = inject(FormBuilder);
+  protected readonly store = inject(Store);
+  protected committeeAccountSignal = this.store.selectSignal(selectCommitteeAccount);
+  protected readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
+
   protected abstract form: FormGroup;
   formSubmitted = false;
 }

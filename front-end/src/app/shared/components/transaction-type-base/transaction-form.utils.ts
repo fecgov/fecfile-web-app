@@ -51,7 +51,7 @@ export class TransactionFormUtils {
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
   ): Promise<void> {
-    if (transaction && transaction.id) {
+    if (transaction?.id) {
       form.patchValue({ ...transaction });
 
       TransactionFormUtils.patchMemoText(transaction, form);

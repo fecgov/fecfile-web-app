@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TripleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/triple-transaction-type-base.component';
-import { AsyncPipe } from '@angular/common';
 import { AccordionModule } from 'primeng/accordion';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
@@ -15,7 +14,6 @@ import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/compon
     AccordionModule,
     ReactiveFormsModule,
     TransactionInputComponent,
-    AsyncPipe,
   ],
 })
 export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseComponent implements OnInit {

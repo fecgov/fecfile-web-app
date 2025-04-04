@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
@@ -48,7 +47,6 @@ import { CoverageDates, CommitteeAccount, Form3, F3FormTypes } from 'app/shared/
   ],
 })
 export class CreateF3Step1Component extends FormComponent implements OnInit {
-  private readonly store = inject(Store);
   private readonly form3Service = inject(Form3Service);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);

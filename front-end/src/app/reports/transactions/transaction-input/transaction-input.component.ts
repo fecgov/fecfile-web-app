@@ -2,7 +2,6 @@ import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { Report } from 'app/shared/models/report.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -53,7 +52,6 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
   @Input() formSubmitted = false;
-  @Input() activeReport$?: Observable<Report>;
   @Input() transaction?: Transaction;
   @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
