@@ -4,6 +4,9 @@
     [class.p-disabled]="disabled"
     #internationalPhoneInput
     type="tel"
+    id="telephone"
+    formControlName="telephone"
+    labelName="telephone-label"
     (keyup)="onKey($event)"
     (blur)="onBlur($event)"
   />
