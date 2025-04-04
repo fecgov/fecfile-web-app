@@ -6,3 +6,7 @@
 :host ::ng-deep .p-disabled > .p-radiobutton {
   opacity: 0.65;
 }
+
+:host ::ng-deep .no-expand {
+  max-width: 780.4px;
+}
