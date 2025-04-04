@@ -17,6 +17,8 @@ import intlTelInput, { Iti } from 'intl-tel-input';
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
+  @Input() fieldId = 'telephone';
+  @Input() fieldFormControlName = 'telephone';
   @Input() disabled = false;
   @Input() labelName = '';
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
