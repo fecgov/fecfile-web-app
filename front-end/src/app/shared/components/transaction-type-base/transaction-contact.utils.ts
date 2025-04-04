@@ -7,54 +7,6 @@ import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../.
 
 export class TransactionContactUtils {
   /**
-   * Generate a message string that alerts the user that a new contact will be created
-   * when the transaction is saved.
-   * @param contactType
-   * @param form
-   * @param templateMap
-   * @returns {string}
-   */
-  static getCreateTransactionContactConfirmationMessage(
-    contactType: ContactTypes,
-    form: FormGroup,
-    templateMap: TransactionTemplateMapType,
-    contactKey: string,
-    messagePrologue = 'By saving this transaction',
-  ): string {
-    let confirmationContactTitle = '';
-    if (!templateMap) {
-      throw new Error('Fecfile: templateMap not found in getCreateTransactionContactconfirmationMessage');
-    }
-    switch (contactType) {
-      case ContactTypes.INDIVIDUAL:
-        confirmationContactTitle = `individual contact for <b> ${form.get(templateMap.last_name)?.value}, ${
-          form.get(templateMap.first_name)?.value
-        }</b>`;
-        break;
-      case ContactTypes.COMMITTEE:
-        if (contactKey === 'contact_1') {
-          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
-        } else {
-          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.committee_name)?.value}</b>`;
-        }
-        break;
-      case ContactTypes.ORGANIZATION:
-        confirmationContactTitle = `organization contact for <b> ${
-          contactKey === 'contact_2'
-            ? form.get(templateMap.secondary_name)?.value
-            : form.get(templateMap.organization_name)?.value
-        }</b>`;
-        break;
-      case ContactTypes.CANDIDATE:
-        confirmationContactTitle = `candidate contact for <b> ${form.get(templateMap.candidate_last_name)?.value}, ${
-          form.get(templateMap.candidate_first_name)?.value
-        }</b>`;
-        break;
-    }
-    return `${messagePrologue}, you're also creating a new ${confirmationContactTitle}.`;
-  }
-
-  /**
    * Given a FormGroup and a Contact object, the method returns an array of data pairs (pairs in an array)
    * containing the contact property and the new contact property value from the form.
    * @param form

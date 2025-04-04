@@ -6,6 +6,7 @@ import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
+import { Form3 } from '../models/form-3.model';
 import { Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
@@ -14,6 +15,7 @@ import { Form1M } from '../models/form-1m.model';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON(json: any): Report {
   if (json.report_type) {
+    if (json.report_type === ReportTypes.F3) return Form3.fromJSON(json);
     if (json.report_type === ReportTypes.F1M) return Form1M.fromJSON(json);
     if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json);
     if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);

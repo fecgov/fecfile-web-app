@@ -18,7 +18,7 @@ import { Checkbox } from 'primeng/checkbox';
 import { Tooltip } from 'primeng/tooltip';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { CommitteeAccount, Report, Form3X } from 'app/shared/models';
+import { CommitteeAccount, Report, Form3X, Form3 } from 'app/shared/models';
 
 @Component({
   selector: 'app-submit-report-step2',
@@ -144,7 +144,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
       ...this.activeReportSignal(),
       ...SchemaUtils.getFormValues(this.form, this.activeReportSignal().schema, this.formProperties),
     });
-    if (payload instanceof Form3X) {
+    if (payload instanceof Form3X || payload instanceof Form3) {
       payload.qualified_committee = this.committeeAccountSignal().qualified;
       payload.committee_name = this.committeeAccountSignal().name;
       payload.street_1 = this.committeeAccountSignal().street_1;

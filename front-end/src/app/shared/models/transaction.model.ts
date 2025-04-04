@@ -20,9 +20,7 @@ import {
 import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
 import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
 import { SchFTransaction, ScheduleFTransactionGroupsType, ScheduleFTransactionTypes } from './schf-transaction.model';
-import { Report, ReportTypes } from './report.model';
-import { Form3X } from './form-3x.model';
-import { Form24 } from './form-24.model';
+import { Form3X, Form24, Form3, Report, ReportTypes } from './.';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -144,6 +142,10 @@ export abstract class Transaction extends BaseModel {
 
   getForm24(): Form24 | undefined {
     return (this.getReport(ReportTypes.F24) as Form24) ?? undefined;
+  }
+
+  getForm3(): Form3 | undefined {
+    return (this.getReport(ReportTypes.F3) as Form3) ?? undefined;
   }
 }
 

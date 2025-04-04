@@ -5,7 +5,7 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
-  F3xReportCodes,
+  ReportCodes,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
@@ -29,7 +29,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { F3xCoverageDates, Form3X, F3xFormTypes } from 'app/shared/models';
+import { CoverageDates, Form3X, F3xFormTypes } from 'app/shared/models';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -68,11 +68,11 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   });
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
-  public readonly existingCoverageSignal = signal<F3xCoverageDates[] | undefined>(undefined);
+  public readonly existingCoverageSignal = signal<CoverageDates[] | undefined>(undefined);
   readonly thisYear = new Date().getFullYear();
   readonly usedReportCodes = computed(() => this.getUsedReportCodes());
 
-  reportCodeLabelMap?: { [key in F3xReportCodes]: string };
+  reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   private readonly filingFrequencySignal = computed(() =>
@@ -160,7 +160,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
-  public getReportCodes(): F3xReportCodes[] {
+  public getReportCodes(): ReportCodes[] {
     const isMonthly = this.form?.get('filing_frequency')?.value === 'M';
     switch (this.form.get('report_type_category')?.value) {
       case F3xReportTypeCategories.ELECTION_YEAR:
@@ -197,7 +197,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
-    if (summary.report_code === F3xReportCodes.TER) {
+    if (summary.report_code === ReportCodes.TER) {
       summary.form_type = F3xFormTypes.F3XT;
     }
 
@@ -222,10 +222,10 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   private getUsedReportCodes() {
     const existingCoverage = this.existingCoverageSignal();
     if (!existingCoverage) return [];
-    return existingCoverage.reduce((codes: F3xReportCodes[], coverage) => {
+    return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
       const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
       if (years.includes(this.thisYear)) {
-        return [...codes, coverage.report_code] as F3xReportCodes[];
+        return [...codes, coverage.report_code] as ReportCodes[];
       }
       return codes;
     }, []);

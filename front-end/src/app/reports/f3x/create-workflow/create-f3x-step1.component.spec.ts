@@ -4,13 +4,13 @@ import { ComponentFixture, flush, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xCoverageDates, ListRestResponse } from 'app/shared/models';
+import { CoverageDates, ListRestResponse } from 'app/shared/models';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
@@ -47,7 +47,7 @@ describe('CreateF3XStep1Component', () => {
   const eighth = new Date(thisYear, 0, 8);
   const ninth = new Date(thisYear, 0, 9);
   const tenth = new Date(thisYear, 0, 10);
-  const thirdThroughFifth = F3xCoverageDates.fromJSON(
+  const thirdThroughFifth = CoverageDates.fromJSON(
     {
       report_code: 'Q1',
       coverage_from_date: third,
@@ -55,7 +55,7 @@ describe('CreateF3XStep1Component', () => {
     },
     'APRIL 15 QUARTERLY REPORT (Q1)',
   );
-  const seventhThroughNinth = F3xCoverageDates.fromJSON(
+  const seventhThroughNinth = CoverageDates.fromJSON(
     {
       report_code: 'Q2',
       coverage_from_date: seventh,
@@ -112,7 +112,7 @@ describe('CreateF3XStep1Component', () => {
     fixture.detectChanges();
     component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
     fixture.detectChanges();
-    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.MY);
+    expect(component.form.controls['report_code'].value).toEqual(ReportCodes.MY);
     component.form.controls['report_type_category'].setValue(undefined);
     fixture.detectChanges();
     expect(component.form.controls['report_code'].value).toEqual(undefined);
@@ -133,7 +133,7 @@ describe('CreateF3XStep1Component', () => {
       component.form.controls['filing_frequency'].setValue('Q');
       component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
       fixture.detectChanges();
-      expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q2);
+      expect(component.form.controls['report_code'].value).toEqual(ReportCodes.Q2);
     });
   });
 
@@ -181,7 +181,7 @@ describe('CreateF3XStep1Component', () => {
 
   it('#existingCoverageValidator should return errors', () => {
     const foo = (
-      existingCoverage: F3xCoverageDates[],
+      existingCoverage: CoverageDates[],
       controlFromDate: Date,
       controlThroughDate: Date,
       expectedFromMessage: string | null,

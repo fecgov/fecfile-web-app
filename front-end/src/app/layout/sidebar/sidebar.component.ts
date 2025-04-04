@@ -6,11 +6,12 @@ import { F3XMenuComponent } from './menus/f3x/f3x-menu.component';
 import { F99MenuComponent } from './menus/f99/f99-menu.component';
 import { F1MMenuComponent } from './menus/f1m/f1m-menu.component';
 import { F24MenuComponent } from './menus/f24/f24-menu.component';
+import { F3MenuComponent } from './menus/f3/f3-menu.component';
 @Component({
   selector: 'app-drawer',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  imports: [F3XMenuComponent, F99MenuComponent, F1MMenuComponent, F24MenuComponent],
+  imports: [F3MenuComponent, F3XMenuComponent, F99MenuComponent, F1MMenuComponent, F24MenuComponent],
 })
 export class SidebarComponent {
   private readonly store = inject(Store);

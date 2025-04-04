@@ -15,6 +15,7 @@ import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-amount-input',
@@ -22,6 +23,7 @@ import { Store } from '@ngrx/store';
   templateUrl: './amount-input.component.html',
   imports: [
     ReactiveFormsModule,
+    InputText,
     CalendarComponent,
     LinkedReportInputComponent,
     MemoCodeInputComponent,
