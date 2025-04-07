@@ -1,6 +1,6 @@
 import { DateUtils } from './date.utils';
 
-export enum F3xReportCodes {
+export enum ReportCodes {
   Q1 = 'Q1',
   Q2 = 'Q2',
   Q3 = 'Q3',
@@ -29,55 +29,55 @@ export enum F3xReportCodes {
 }
 
 export function getCoverageDatesFunction(
-  reportCode: F3xReportCodes,
+  reportCode: ReportCodes,
 ): ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date]) | undefined {
   switch (reportCode) {
-    case F3xReportCodes.Q1: {
+    case ReportCodes.Q1: {
       return createCoverageFunction(0, 2);
     }
-    case F3xReportCodes.Q2: {
+    case ReportCodes.Q2: {
       return createCoverageFunction(3, 5);
     }
-    case F3xReportCodes.Q3: {
+    case ReportCodes.Q3: {
       return createCoverageFunction(6, 8);
     }
-    case F3xReportCodes.YE: {
+    case ReportCodes.YE: {
       return getYearEndCoverageDates;
     }
-    case F3xReportCodes.MY: {
+    case ReportCodes.MY: {
       return createCoverageFunction(0, 5);
     }
-    case F3xReportCodes.M2: {
+    case ReportCodes.M2: {
       return createCoverageFunction(0, 0);
     }
-    case F3xReportCodes.M3: {
+    case ReportCodes.M3: {
       return createCoverageFunction(1, 1);
     }
-    case F3xReportCodes.M4: {
+    case ReportCodes.M4: {
       return createCoverageFunction(2, 2);
     }
-    case F3xReportCodes.M5: {
+    case ReportCodes.M5: {
       return createCoverageFunction(3, 3);
     }
-    case F3xReportCodes.M6: {
+    case ReportCodes.M6: {
       return createCoverageFunction(4, 4);
     }
-    case F3xReportCodes.M7: {
+    case ReportCodes.M7: {
       return createCoverageFunction(5, 5);
     }
-    case F3xReportCodes.M8: {
+    case ReportCodes.M8: {
       return createCoverageFunction(6, 6);
     }
-    case F3xReportCodes.M9: {
+    case ReportCodes.M9: {
       return createCoverageFunction(7, 7);
     }
-    case F3xReportCodes.M10: {
+    case ReportCodes.M10: {
       return createCoverageFunction(8, 8);
     }
-    case F3xReportCodes.M11: {
+    case ReportCodes.M11: {
       return createCoverageFunction(9, 9);
     }
-    case F3xReportCodes.M12: {
+    case ReportCodes.M12: {
       return createCoverageFunction(10, 10);
     }
     default:
@@ -104,70 +104,70 @@ function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFr
   return [new Date(year, 11, 1), new Date(year, 11, 31)];
 }
 
-export const monthlyElectionYearReportCodes: F3xReportCodes[] = [
-  F3xReportCodes.M2,
-  F3xReportCodes.M3,
-  F3xReportCodes.M4,
-  F3xReportCodes.M5,
-  F3xReportCodes.M6,
-  F3xReportCodes.M7,
-  F3xReportCodes.M8,
-  F3xReportCodes.M9,
-  F3xReportCodes.M10,
-  F3xReportCodes.TwelveG,
-  F3xReportCodes.ThirtyG,
-  F3xReportCodes.YE,
-  F3xReportCodes.TER,
+export const monthlyElectionYearReportCodes: ReportCodes[] = [
+  ReportCodes.M2,
+  ReportCodes.M3,
+  ReportCodes.M4,
+  ReportCodes.M5,
+  ReportCodes.M6,
+  ReportCodes.M7,
+  ReportCodes.M8,
+  ReportCodes.M9,
+  ReportCodes.M10,
+  ReportCodes.TwelveG,
+  ReportCodes.ThirtyG,
+  ReportCodes.YE,
+  ReportCodes.TER,
 ];
-export const monthlyNonElectionYearReportCodes: F3xReportCodes[] = [
-  F3xReportCodes.M2,
-  F3xReportCodes.M3,
-  F3xReportCodes.M4,
-  F3xReportCodes.M5,
-  F3xReportCodes.M6,
-  F3xReportCodes.M7,
-  F3xReportCodes.M8,
-  F3xReportCodes.M9,
-  F3xReportCodes.M10,
-  F3xReportCodes.M11,
-  F3xReportCodes.M12,
-  F3xReportCodes.YE,
-  F3xReportCodes.TER,
+export const monthlyNonElectionYearReportCodes: ReportCodes[] = [
+  ReportCodes.M2,
+  ReportCodes.M3,
+  ReportCodes.M4,
+  ReportCodes.M5,
+  ReportCodes.M6,
+  ReportCodes.M7,
+  ReportCodes.M8,
+  ReportCodes.M9,
+  ReportCodes.M10,
+  ReportCodes.M11,
+  ReportCodes.M12,
+  ReportCodes.YE,
+  ReportCodes.TER,
 ];
-export const quarterlyElectionYearReportCodes: F3xReportCodes[] = [
-  F3xReportCodes.Q1,
-  F3xReportCodes.Q2,
-  F3xReportCodes.Q3,
-  F3xReportCodes.TwelveG,
-  F3xReportCodes.ThirtyG,
-  F3xReportCodes.YE,
-  F3xReportCodes.TwelveP,
-  F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveS,
-  F3xReportCodes.TwelveC,
-  F3xReportCodes.ThirtyR,
-  F3xReportCodes.ThirtyS,
-  F3xReportCodes.TER,
+export const quarterlyElectionYearReportCodes: ReportCodes[] = [
+  ReportCodes.Q1,
+  ReportCodes.Q2,
+  ReportCodes.Q3,
+  ReportCodes.TwelveG,
+  ReportCodes.ThirtyG,
+  ReportCodes.YE,
+  ReportCodes.TwelveP,
+  ReportCodes.TwelveR,
+  ReportCodes.TwelveS,
+  ReportCodes.TwelveC,
+  ReportCodes.ThirtyR,
+  ReportCodes.ThirtyS,
+  ReportCodes.TER,
 ];
-export const quarterlyNonElectionYearReportCodes: F3xReportCodes[] = [
-  F3xReportCodes.MY,
-  F3xReportCodes.YE,
-  F3xReportCodes.TwelveP,
-  F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveS,
-  F3xReportCodes.TwelveC,
-  F3xReportCodes.ThirtyR,
-  F3xReportCodes.ThirtyS,
-  F3xReportCodes.TER,
+export const quarterlyNonElectionYearReportCodes: ReportCodes[] = [
+  ReportCodes.MY,
+  ReportCodes.YE,
+  ReportCodes.TwelveP,
+  ReportCodes.TwelveR,
+  ReportCodes.TwelveS,
+  ReportCodes.TwelveC,
+  ReportCodes.ThirtyR,
+  ReportCodes.ThirtyS,
+  ReportCodes.TER,
 ];
 
-export const electionReportCodes: F3xReportCodes[] = [
-  F3xReportCodes.ThirtyG,
-  F3xReportCodes.ThirtyR,
-  F3xReportCodes.ThirtyS,
-  F3xReportCodes.TwelveC,
-  F3xReportCodes.TwelveG,
-  F3xReportCodes.TwelveP,
-  F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveS,
+export const electionReportCodes: ReportCodes[] = [
+  ReportCodes.ThirtyG,
+  ReportCodes.ThirtyR,
+  ReportCodes.ThirtyS,
+  ReportCodes.TwelveC,
+  ReportCodes.TwelveG,
+  ReportCodes.TwelveP,
+  ReportCodes.TwelveR,
+  ReportCodes.TwelveS,
 ];

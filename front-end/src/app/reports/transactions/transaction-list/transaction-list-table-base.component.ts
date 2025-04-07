@@ -10,7 +10,6 @@ import {
   ScheduleCTransactionTypes,
   isPulledForwardLoan,
   ScheduleDTransactionTypes,
-  Form3X,
   ScheduleC1TransactionTypes,
   ScheduleATransactionTypes,
   ScheduleBTransactionTypes,
@@ -215,7 +214,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
   }
 
-  public onTableActionClick(action: TableAction, report?: Form3X) {
+  public onTableActionClick(action: TableAction, report?: Report) {
     action.action(report);
   }
 

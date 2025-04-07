@@ -11,7 +11,9 @@ export class ReattributedUtils {
       if (transaction.report_ids?.includes(activeReportId as string)) {
         transaction.contribution_purpose_descrip = 'See reattribution below.';
       } else {
-        transaction.contribution_purpose_descrip = `(Originally disclosed on ${transaction.getForm3X()?.report_code_label ?? ''}.) See reattribution below.`;
+        const report_code: string =
+          transaction.getForm3X()?.report_code_label ?? transaction.getForm3()?.report_code_label ?? '';
+        transaction.contribution_purpose_descrip = `(Originally disclosed on ${report_code}.) See reattribution below.`;
       }
       transaction.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
     }

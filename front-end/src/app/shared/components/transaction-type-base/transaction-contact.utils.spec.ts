@@ -57,9 +57,9 @@ describe('ContactUtils', () => {
         beneficiary_committee_fec_id: new SubscriptionFormControl(''),
         beneficiary_committee_name: new SubscriptionFormControl(''),
         designating_committee_id_number: new SubscriptionFormControl(''),
-        designating_committee_name: new SubscriptionFormControl(''),
+        designating_committee_name: new SubscriptionFormControl('test_designating_com_name'),
         subordinate_committee_id_number: new SubscriptionFormControl(''),
-        subordinate_committee_name: new SubscriptionFormControl(''),
+        subordinate_committee_name: new SubscriptionFormControl('test_subordinate_com_name'),
         subordinate_street_1: new SubscriptionFormControl(''),
         subordinate_street_2: new SubscriptionFormControl(''),
         subordinate_city: new SubscriptionFormControl(''),
@@ -110,6 +110,26 @@ describe('ContactUtils', () => {
     );
     expect(output).toBe(
       "By saving this transaction, you're also creating a new committee contact for <b> test_com_name</b>.",
+    );
+
+    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+      ContactTypes.COMMITTEE,
+      form,
+      testTemplateMap,
+      'contact_4',
+    );
+    expect(output).toBe(
+      "By saving this transaction, you're also creating a new committee contact for <b> test_designating_com_name</b>.",
+    );
+
+    output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
+      ContactTypes.COMMITTEE,
+      form,
+      testTemplateMap,
+      'contact_5',
+    );
+    expect(output).toBe(
+      "By saving this transaction, you're also creating a new committee contact for <b> test_subordinate_com_name</b>.",
     );
 
     output = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(

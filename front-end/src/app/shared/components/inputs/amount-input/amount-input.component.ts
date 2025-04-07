@@ -4,6 +4,7 @@ import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
+import { InputText } from 'primeng/inputtext';
 import { Observable } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
@@ -22,6 +23,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   templateUrl: './amount-input.component.html',
   imports: [
     ReactiveFormsModule,
+    InputText,
     CalendarComponent,
     LinkedReportInputComponent,
     MemoCodeInputComponent,
