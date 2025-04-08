@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,8 @@ import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
 import { ButtonDirective } from 'primeng/button';
+import { CommitteeManagementEventService } from 'app/shared/services/committee-management-event.service';
+import { CommitteeManagementEvent } from 'app/shared/models/committee-management-event.model';
 
 @Component({
   selector: 'app-manage-committee',
@@ -23,9 +25,10 @@ import { ButtonDirective } from 'primeng/button';
     CommitteeMemberDialogComponent,
   ],
 })
-export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
+export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements OnInit {
   private readonly store = inject(Store);
   protected readonly itemService = inject(CommitteeMemberService);
+  protected readonly managementEventService = inject(CommitteeManagementEventService);
   readonly user$ = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
@@ -47,6 +50,8 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     { field: 'role', label: 'Role' },
     { field: 'is_active', label: 'Status' },
   ];
+
+  public committeeManagementEvents: CommitteeManagementEvent[] = [];
 
   public userAdded(email: string) {
     if (email) {
@@ -126,5 +131,15 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   override refreshTable(): Promise<void> {
     this.itemService.getMembers();
     return super.refreshTable();
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+
+    this.managementEventService.getManagementEvents().then((events: CommitteeManagementEvent[]) => {
+      this.committeeManagementEvents = events;
+      console.log(events);
+    });
   }
 }

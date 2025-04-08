@@ -52,6 +52,15 @@
   </ng-template>
 </app-table>
 
+<br /><br />
+@if (committeeManagementEvents.length) {
+  <div class="committee-list">
+    @for (event of committeeManagementEvents; track event) {
+      <div class="flex items-center p-2" style="height: 50px">{{ event.created }} -- {{ event.event }}</div>
+    }
+  </div>
+}
+
 <app-committee-member-dialog
   (detailClose)="detailClose()"
   (userAdded)="userAdded($event)"
