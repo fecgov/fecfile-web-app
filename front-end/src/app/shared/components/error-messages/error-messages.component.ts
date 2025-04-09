@@ -2,10 +2,12 @@ import { Component, inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { formatCurrency } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { NgxControlError } from 'ngxtension/control-error';
 
 @Component({
   selector: 'app-error-messages',
   templateUrl: './error-messages.component.html',
+  imports: [NgxControlError]
 })
 export class ErrorMessagesComponent implements OnInit {
   private readonly localeId = inject(LOCALE_ID);

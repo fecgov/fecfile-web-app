@@ -1,58 +1,15 @@
-@if (formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn !== 'change')))) {
-  @if (control?.hasError('required')) {
-    <small class="p-error">{{ requiredErrorMessage }}</small>
-  }
-  @if (control?.hasError('fecIdMustBeUnique')) {
-    <small class="p-error">{{ uniqueFecIdMessage }}</small>
-  }
-  @if (control?.hasError('requiredTrue')) {
-    <small class="p-error">{{ requiredTrueErrorMessage }}</small>
-  }
-  @if (control?.hasError('minlength')) {
-    <small class="p-error">{{ minLengthErrorMessage }}</small>
-  }
-  @if (!control?.hasError('max') && control?.hasError('maxlength')) {
-    <small class="p-error">{{ maxLengthErrorMessage }}</small>
-  }
-  @if (control?.hasError('min')) {
-    <small class="p-error">{{ minErrorMessage }}</small>
-  }
-  @if (control?.hasError('max')) {
-    <small class="p-error">{{ maxErrorMessage }}</small>
-  }
-  @if (control?.hasError('exclusiveMax')) {
-    <small class="p-error">{{ exclusiveMaxErrorMessage }}</small>
-  }
-  @if (control?.hasError('exclusiveMin')) {
-    <small class="p-error">{{ exclusiveMinErrorMessage }}</small>
-  }
-  @if (control?.hasError('invaliddate')) {
-    <small class="p-error">{{ invalidDateErrorMessage }}</small>
-  }
-  @if (control?.hasError('noDateProvided')) {
-    <small class="p-error">{{ noDateProvidedErrorMessage }}</small>
-  }
-  @if (control?.hasError('noCorrespondingForm3X')) {
-    <small class="p-error">{{ noCorrespondingForm3XErrorMessage }}</small>
-  }
-  @if (!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')) {
-    <small class="p-error">{{ emailErrorMessage }}</small>
-  }
-  @if (control?.hasError('isAfter')) {
-    <small class="p-error">{{ isAfterMessage }}</small>
-  }
-  @if (
-    !control?.hasError('required') &&
-    !control?.hasError('minlength') &&
-    !control?.hasError('maxlength') &&
-    !control?.hasError('min') &&
-    !control?.hasError('max') &&
-    !control?.hasError('exclusiveMax') &&
-    !control?.hasError('exclusiveMin') &&
-    !control?.hasError('invaliddate') &&
-    !control?.hasError('isAfter') &&
-    control?.hasError('pattern')
-  ) {
-    <small class="p-error">{{ patternErrorMessage }}</small>
-  }
-}
+<small class="p-error" *ngxControlError="control; track: 'required'; order: 1">{{ requiredErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'fecIdMustBeUnique'; order: 2">{{ uniqueFecIdMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'requiredTrue'; order: 3">{{ requiredTrueErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'minlength'; order: 4">{{ minLengthErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'maxlength'; order: 5">{{ maxLengthErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'min'; order: 6">{{ minErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'max'; order: 7">{{ maxErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'exclusiveMin'; order: 8">{{ exclusiveMinErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'exclusiveMax'; order: 9">{{ exclusiveMaxErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'invaliddate'; order: 10">{{ invalidDateErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'noDateProvided'; order: 11">{{ noDateProvidedErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'noCorrespondingForm3X'; order: 12">{{ noCorrespondingForm3XErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'email'; order: 13">{{ emailErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'isAfter'; order: 14">{{ isAfterMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'pattern'; order: 15">{{ patternErrorMessage }}</small>
