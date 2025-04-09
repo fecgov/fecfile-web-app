@@ -176,7 +176,7 @@ export class PageUtils {
     cy.get(alias).find('.p-popover').contains('Switch Committees').click();
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
-    cy.wait(1000)
+    cy.wait(1000);
     this.enterSecondCommitteeEmailIfneeded();
   }
 
@@ -187,10 +187,10 @@ export class PageUtils {
       .then(($email) => {
         if ($email.length) {
           cy.contains('Welcome to FECfile').should('exist').click(); // Ensures that the modal is in focus
-          cy.get("#email").should('have.value', '');
-          cy.get("#email").clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-          cy.get("#email").should('have.value', 'admin@admin.com');
-          cy.get("#email").click();
+          cy.get('#email').should('have.value', '');
+          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+          cy.get('#email').should('have.value', 'admin@admin.com');
+          cy.get('#email').click();
           PageUtils.clickButton('Save');
         }
       });

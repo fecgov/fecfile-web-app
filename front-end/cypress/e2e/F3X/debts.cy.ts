@@ -32,9 +32,9 @@ describe('Debts', () => {
     PageUtils.searchBoxInput(candidateFormData.candidate_id, 'contact_2_lookup');
 
     TransactionDetailPage.enterDate(`[data-cy="expenditure_date"]`, new Date(currentYear, 4 - 1, 27));
-    cy.get("#general_election_year").safeType(currentYear);
-    cy.get('#amount').safeType(100.00);
-    cy.get('#purpose_description').first().safeType("test");
+    cy.get('#general_election_year').safeType(currentYear);
+    cy.get('#amount').safeType(100.0);
+    cy.get('#purpose_description').first().safeType('test');
 
     PageUtils.clickButton('Save');
   }
@@ -46,7 +46,7 @@ describe('Debts', () => {
   });
 
   it('should test Debt Owed By Committee loan - Report debt repayment', () => {
-    PageUtils.switchCommittee("7c176dc0-7062-49b5-bc35-58b4ef050d08")
+    PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
     cy.location('pathname').should('include', '/reports');
     setupDebtOwedByCommittee({
       candidate: true,
