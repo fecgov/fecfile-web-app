@@ -52,6 +52,20 @@ describe('Debts', () => {
     cy.contains('Coordinated Party Expenditure').should('not.exist'); // PAC committee
   });
 
+  it('should test Owed To Committee loan', () => {
+    F3XSetup({ committee: true });
+    StartTransaction.Debts().ToCommittee();
+
+    PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
+    PageUtils.containedOnPage('Debt Owed To Committee');
+
+    PageUtils.searchBoxInput(committeeFormData['committee_id']);
+    TransactionDetailPage.enterLoanFormData(debtFormData);
+    PageUtils.clickButton('Save');
+    PageUtils.urlCheck('/list');
+    cy.contains('Debt Owed To Committee').should('exist');
+  });
+
   it('should test Debt Owed By Committee loan - Report debt repayment', () => {
     PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
     cy.location('pathname').should('include', '/reports');
