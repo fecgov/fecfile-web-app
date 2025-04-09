@@ -1,17 +1,8 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import { Component, effect, ElementRef, inject, viewChildren } from '@angular/core';
 import { ReportService } from 'app/shared/services/report.service';
-import { Report } from 'app/shared/models/report.model';
 import { RouterLink } from '@angular/router';
 import { FormTypeDialogComponent } from '../reports/form-type-dialog/form-type-dialog.component';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,28 +10,22 @@ import { FormTypeDialogComponent } from '../reports/form-type-dialog/form-type-d
   styleUrls: ['./dashboard.component.scss'],
   imports: [RouterLink, FormTypeDialogComponent],
 })
-export class DashboardComponent implements AfterViewInit, OnInit {
+export class DashboardComponent {
   private readonly reportService = inject(ReportService);
-  private readonly cdr = inject(ChangeDetectorRef);
 
-  reports: Report[] = [];
+  readonly reports = derivedAsync(async () => {
+    return (await this.reportService.getAllReports()).filter((r) => r.report_status === 'In progress');
+  });
   dialogVisible = false;
-  @ViewChildren('reportText') elements?: QueryList<ElementRef<HTMLParagraphElement>>;
+  readonly elements = viewChildren<ElementRef<HTMLParagraphElement>>('reportText');
 
-  async ngOnInit() {
-    this.reports = (await this.reportService.getAllReports()).filter((r) => r.report_status === 'In progress');
-    this.cdr.detectChanges();
-  }
-
-  ngAfterViewInit() {
-    this.elements?.changes.subscribe(() => {
-      this.adjustHeight(this.elements);
+  constructor() {
+    effect(() => {
+      this.adjustHeight(this.elements());
     });
   }
 
-  adjustHeight(elements: QueryList<ElementRef<HTMLParagraphElement>> | ElementRef<HTMLParagraphElement>[] | undefined) {
-    if (!elements) return;
-
+  adjustHeight(elements: readonly ElementRef<HTMLParagraphElement>[]) {
     let height: string;
     switch (elements.length) {
       case 0:

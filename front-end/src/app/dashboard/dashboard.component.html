@@ -4,7 +4,7 @@
       <div class="card-body">
         <h2 class="card-title">In-progress reports</h2>
         <div id="report-container">
-          @for (report of reports; track report.report_code_label) {
+          @for (report of reports(); track report.report_code_label) {
             <p class="card-text" #reportText>{{ report.report_code_label }}</p>
           }
         </div>
