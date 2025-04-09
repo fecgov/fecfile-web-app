@@ -1,18 +1,10 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Optional,
-  Self,
-  ViewChild,
-} from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, inject, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import intlTelInput, { Iti } from 'intl-tel-input';
+import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
+
 @Component({
   selector: 'app-fec-international-phone-input',
+  hostDirectives: [NgxControlValueAccessor],
   templateUrl: './fec-international-phone-input.component.html',
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
@@ -22,8 +14,10 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   @Input() labelName = '';
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
-  private intlTelInput: Iti | undefined;
-  private intlTelInputOptions = {
+  protected cva = inject<NgxControlValueAccessor<string>>(NgxControlValueAccessor);
+
+  private intlTelInput?: Iti;
+  private readonly intlTelInputOptions = {
     separateDialCode: true,
     initialCountry: 'us',
     preferredCountries: ['us'],
@@ -32,37 +26,8 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   private countryCode: string | undefined;
   private number = '';
 
-  constructor(@Optional() @Self() public ngControl: NgControl) {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
-  }
-
   ngOnChanges(): void {
     this.intlTelInputOptions.allowDropdown = !this.disabled;
-  }
-
-  /**
-   * Write form value to the DOM element (model => view)
-   */
-  writeValue(value: string): void {
-    this.intlTelInput?.setNumber(value || '');
-    this.onChange(value);
-  }
-
-  /**
-   * Update form when DOM element value changes (view => model)
-   */
-  registerOnChange(fn: () => void): void {
-    this.onChange = fn;
-  }
-
-  /**
-   * Update form when DOM element is blurred (view => model)
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  registerOnTouched(fn: () => void): void {
-    // noop
   }
 
   ngAfterViewInit(): void {
@@ -71,33 +36,29 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
       this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
       this.internationalPhoneInputChild.nativeElement.addEventListener('countrychange', () => {
         this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
-        this.onChange('+' + this.countryCode + ' ' + this.number);
+        this.emitValue();
       });
     }
+
+    // Initialize the field with any existing value
+    this.intlTelInput?.setNumber(this.cva.value$() || '');
   }
 
   onKey(event: KeyboardEvent) {
-    // without type info
     this.number = (event.target as HTMLInputElement).value;
-    const fullNumber = this.number ? '+' + this.countryCode + ' ' + this.number : '';
-    this.onChange(fullNumber);
+    this.emitValue();
   }
 
   ngOnDestroy() {
     this.intlTelInput?.destroy();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private onChange(value: string) {
-    // noop
+  onBlur() {
+    this.cva.markAsTouched();
   }
 
-  onBlur(event: FocusEvent) {
-    const inputValue = (event.target as HTMLInputElement).value.trim();
-    const value = inputValue ? `+${this.countryCode} ${(event.target as HTMLInputElement).value}` : null;
-    this.ngControl.control?.setValue(value, { emitEvent: false });
-    this.ngControl.control?.updateValueAndValidity();
-    this.ngControl.control?.markAsTouched();
-    this.ngControl.control?.markAsDirty();
+  private emitValue() {
+    const fullNumber = this.number ? `+${this.countryCode} ${this.number}` : '';
+    this.cva.value = fullNumber;
   }
 }
