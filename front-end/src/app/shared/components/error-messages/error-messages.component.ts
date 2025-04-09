@@ -7,7 +7,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 @Component({
   selector: 'app-error-messages',
   templateUrl: './error-messages.component.html',
-  imports: [NgxControlError]
+  imports: [NgxControlError],
 })
 export class ErrorMessagesComponent implements OnInit {
   private readonly localeId = inject(LOCALE_ID);

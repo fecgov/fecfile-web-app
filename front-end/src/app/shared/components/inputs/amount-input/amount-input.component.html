@@ -75,7 +75,8 @@
         <p-inputnumber
           #amountInput
           inputId="amount"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           [formControlName]="templateMap['amount']"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
@@ -96,7 +97,8 @@
           <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
           <p-inputnumber
             inputId="aggregate"
-            mode="currency" currency="USD"
+            mode="currency"
+            currency="USD"
             [formControlName]="templateMap['aggregate']"
             [readonly]="true"
             inputStyleClass="readonly"
@@ -117,7 +119,8 @@
           <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
           <p-inputnumber
             inputId="calendar_ytd"
-            mode="currency" currency="USD"
+            mode="currency"
+            currency="USD"
             [formControlName]="templateMap['calendar_ytd']"
             [readonly]="true"
             inputStyleClass="readonly"

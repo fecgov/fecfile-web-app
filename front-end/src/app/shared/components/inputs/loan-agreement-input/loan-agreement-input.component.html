@@ -3,7 +3,12 @@
     <div class="col-8">
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
-        <p-inputnumber mode="currency" currency="USD" inputId="amount" [formControlName]="templateMap['amount']"></p-inputnumber>
+        <p-inputnumber
+          mode="currency"
+          currency="USD"
+          inputId="amount"
+          [formControlName]="templateMap['amount']"
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -55,7 +60,8 @@
           <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
           <p-inputnumber
             inputId="credit_amount_this_draw"
-            mode="currency" currency="USD"
+            mode="currency"
+            currency="USD"
             formControlName="credit_amount_this_draw"
           ></p-inputnumber>
           <app-error-messages
@@ -68,7 +74,12 @@
       <div class="col-4">
         <div class="field">
           <label for="balance">TOTAL BALANCE</label>
-          <p-inputnumber inputId="balance" mode="currency" currency="USD" [formControlName]="templateMap['balance']"></p-inputnumber>
+          <p-inputnumber
+            inputId="balance"
+            mode="currency"
+            currency="USD"
+            [formControlName]="templateMap['balance']"
+          ></p-inputnumber>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['balance']"
@@ -136,7 +147,8 @@
           <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
           <p-inputnumber
             inputId="collateral_value_amount"
-            mode="currency" currency="USD"
+            mode="currency"
+            currency="USD"
             formControlName="collateral_value_amount"
           ></p-inputnumber>
           <app-error-messages
@@ -191,7 +203,12 @@
       <div class="col-5">
         <div class="field">
           <label for="estimated_value">ESTIMATED VALUE</label>
-          <p-inputnumber inputId="estimated_value" mode="currency" currency="USD" formControlName="estimated_value"></p-inputnumber>
+          <p-inputnumber
+            inputId="estimated_value"
+            mode="currency"
+            currency="USD"
+            formControlName="estimated_value"
+          ></p-inputnumber>
           <app-error-messages
             [form]="form"
             fieldName="estimated_value"

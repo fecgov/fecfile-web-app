@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, viewChild, signal, effect, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import {  collectRouteData, RouteData } from 'app/shared/utils/route.utils';
+import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderStyles, HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -31,15 +31,15 @@ export enum BackgroundStyles {
     FeedbackOverlayComponent,
   ],
 })
-export class LayoutComponent extends DestroyerComponent implements AfterViewChecked{
+export class LayoutComponent extends DestroyerComponent implements AfterViewChecked {
   private readonly route = inject(ActivatedRoute);
-  readonly feedbackOverlay = viewChild.required<FeedbackOverlayComponent>(FeedbackOverlayComponent)
+  readonly feedbackOverlay = viewChild.required<FeedbackOverlayComponent>(FeedbackOverlayComponent);
   readonly footer = viewChild<FooterComponent>('footerRef');
   readonly contentOffset = viewChild<ElementRef>('contentOffset');
   readonly banner = viewChild.required<BannerComponent>('bannerRef');
 
   readonly layoutControls = signal(new LayoutControls());
-  
+
   readonly BackgroundStyles = BackgroundStyles;
 
   constructor() {
@@ -48,15 +48,13 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
     const source$ = injectNavigationEnd();
     source$.subscribe(() => this.layoutControls.set(new LayoutControls(collectRouteData(this.route.snapshot))));
 
-
     effect(() => {
       this.updateContentOffset();
     });
   }
   ngAfterViewChecked(): void {
-    this.updateContentOffset()
+    this.updateContentOffset();
   }
-
 
   updateContentOffset() {
     if (this.layoutControls().showSidebar) return;

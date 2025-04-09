@@ -5,7 +5,8 @@
         <label for="balance">BEGINNING BALANCE</label>
         <p-inputnumber
           inputId="balance"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           [formControlName]="templateMap['balance']"
           [readonly]="true"
           inputStyleClass="readonly"
@@ -22,8 +23,12 @@
     <div class="col-6">
       <div class="field">
         <label for="amount">INCURRED AMOUNT</label>
-        <p-inputnumber inputId="amount"
-        mode="currency" currency="USD" [formControlName]="templateMap['amount']"></p-inputnumber>
+        <p-inputnumber
+          inputId="amount"
+          mode="currency"
+          currency="USD"
+          [formControlName]="templateMap['amount']"
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -40,7 +45,8 @@
         <label for="payment_amount">PAYMENT AMOUNT</label>
         <p-inputnumber
           inputId="payment_amount"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           formControlName="payment_amount"
           [readonly]="true"
           inputStyleClass="readonly"
@@ -59,7 +65,8 @@
         <label for="balance_at_close">BALANCE AT CLOSE</label>
         <p-inputnumber
           inputId="balance_at_close"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           formControlName="balance_at_close"
           [readonly]="true"
           inputStyleClass="readonly"

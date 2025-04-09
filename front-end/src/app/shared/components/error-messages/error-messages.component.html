@@ -1,15 +1,25 @@
 <small class="p-error" *ngxControlError="control; track: 'required'; order: 1">{{ requiredErrorMessage }}</small>
 <small class="p-error" *ngxControlError="control; track: 'fecIdMustBeUnique'; order: 2">{{ uniqueFecIdMessage }}</small>
-<small class="p-error" *ngxControlError="control; track: 'requiredTrue'; order: 3">{{ requiredTrueErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'requiredTrue'; order: 3">{{
+  requiredTrueErrorMessage
+}}</small>
 <small class="p-error" *ngxControlError="control; track: 'minlength'; order: 4">{{ minLengthErrorMessage }}</small>
 <small class="p-error" *ngxControlError="control; track: 'maxlength'; order: 5">{{ maxLengthErrorMessage }}</small>
 <small class="p-error" *ngxControlError="control; track: 'min'; order: 6">{{ minErrorMessage }}</small>
 <small class="p-error" *ngxControlError="control; track: 'max'; order: 7">{{ maxErrorMessage }}</small>
-<small class="p-error" *ngxControlError="control; track: 'exclusiveMin'; order: 8">{{ exclusiveMinErrorMessage }}</small>
-<small class="p-error" *ngxControlError="control; track: 'exclusiveMax'; order: 9">{{ exclusiveMaxErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'exclusiveMin'; order: 8">{{
+  exclusiveMinErrorMessage
+}}</small>
+<small class="p-error" *ngxControlError="control; track: 'exclusiveMax'; order: 9">{{
+  exclusiveMaxErrorMessage
+}}</small>
 <small class="p-error" *ngxControlError="control; track: 'invaliddate'; order: 10">{{ invalidDateErrorMessage }}</small>
-<small class="p-error" *ngxControlError="control; track: 'noDateProvided'; order: 11">{{ noDateProvidedErrorMessage }}</small>
-<small class="p-error" *ngxControlError="control; track: 'noCorrespondingForm3X'; order: 12">{{ noCorrespondingForm3XErrorMessage }}</small>
+<small class="p-error" *ngxControlError="control; track: 'noDateProvided'; order: 11">{{
+  noDateProvidedErrorMessage
+}}</small>
+<small class="p-error" *ngxControlError="control; track: 'noCorrespondingForm3X'; order: 12">{{
+  noCorrespondingForm3XErrorMessage
+}}</small>
 <small class="p-error" *ngxControlError="control; track: 'email'; order: 13">{{ emailErrorMessage }}</small>
 <small class="p-error" *ngxControlError="control; track: 'isAfter'; order: 14">{{ isAfterMessage }}</small>
 <small class="p-error" *ngxControlError="control; track: 'pattern'; order: 15">{{ patternErrorMessage }}</small>

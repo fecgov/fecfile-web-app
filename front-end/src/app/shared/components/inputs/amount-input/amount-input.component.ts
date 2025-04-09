@@ -103,8 +103,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     this.changeDetectorRef.detectChanges();
   }
 
-
-
   protected readonly isLoanRepayment = isLoanRepayment;
   protected readonly isDebtRepayment = isDebtRepayment;
 }

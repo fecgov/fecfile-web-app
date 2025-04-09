@@ -38,7 +38,8 @@
             <label for="currentAmount">CURRENT LINE 6A, COLUMN B AMOUNT</label>
             <p-inputnumber
               inputId="currentAmount"
-              mode="currency" currency="USD"
+              mode="currency"
+              currency="USD"
               formControlName="currentAmount"
               [readonly]="true"
               inputStyleClass="readonly"
@@ -48,7 +49,12 @@
         <div class="col-6 pl-3">
           <div class="field">
             <label for="newAmount">NEW AMOUNT</label>
-            <p-inputnumber inputId="newAmount" mode="currency" currency="USD" formControlName="newAmount"></p-inputnumber>
+            <p-inputnumber
+              inputId="newAmount"
+              mode="currency"
+              currency="USD"
+              formControlName="newAmount"
+            ></p-inputnumber>
           </div>
         </div>
       </div>

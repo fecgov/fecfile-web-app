@@ -5,7 +5,8 @@
         <label for="amount">ORIGINAL AMOUNT</label>
         <p-inputnumber
           inputId="amount"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           [formControlName]="templateMap['amount']"
           [inputStyleClass]="readonly ? 'readonly' : ''"
           [readonly]="readonly"
@@ -22,7 +23,8 @@
         <label for="payment_to_date">PAYMENT TO DATE</label>
         <p-inputnumber
           inputId="payment_to_date"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           [formControlName]="templateMap['payment_to_date']"
           inputStyleClass="readonly"
           [readonly]="true"
@@ -39,7 +41,8 @@
         <label for="balance">BALANCE OUTSTANDING</label>
         <p-inputnumber
           inputId="balance"
-          mode="currency" currency="USD"
+          mode="currency"
+          currency="USD"
           [formControlName]="templateMap['balance']"
           inputStyleClass="readonly"
           [readonly]="true"
