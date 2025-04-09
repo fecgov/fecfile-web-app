@@ -43,6 +43,13 @@ describe('Debts', () => {
     setupDebtOwedByCommittee({ committee: true });
     PageUtils.urlCheck('/list');
     cy.contains('Debt Owed By Committee').should('exist');
+
+    PageUtils.clickElement('loans-and-debts-button');
+    cy.contains('Report debt repayment').click({ force: true });
+    PageUtils.urlCheck('select/disbursement?debt=');
+    cy.contains('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS').should('exist');
+    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+    cy.contains('Coordinated Party Expenditure').should('not.exist'); // PAC committee
   });
 
   it('should test Debt Owed By Committee loan - Report debt repayment', () => {
