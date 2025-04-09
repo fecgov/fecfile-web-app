@@ -324,8 +324,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
 
     if (this.debtId()) {
       const debtPaymentLines = [
-        ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SE', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
-        ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3', 'SF'],
+        ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SE', 'SF', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
+        ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
       ];
       return transactionTypes.filter((transactionType) => {
         if (this.isTransactionDisabled(transactionType)) return false;

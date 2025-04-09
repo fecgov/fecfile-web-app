@@ -21,7 +21,7 @@
       } @else if (committees?.length) {
         <div class="committee-list">
           @for (committee of committees; track committee) {
-            <div class="committee-card" (click)="activateCommittee(committee)">
+            <div id="{{committee.id}}" class="committee-card" (click)="activateCommittee(committee)">
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
               <div class="committee-info">
                 <h3>
