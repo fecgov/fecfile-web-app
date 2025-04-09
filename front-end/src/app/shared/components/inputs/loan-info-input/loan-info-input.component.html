@@ -3,12 +3,13 @@
     <div class="col-4">
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
-        <app-input-number
+        <p-inputnumber
           inputId="amount"
+          mode="currency" currency="USD"
           [formControlName]="templateMap['amount']"
           [inputStyleClass]="readonly ? 'readonly' : ''"
           [readonly]="readonly"
-        ></app-input-number>
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -19,12 +20,13 @@
     <div class="col-4">
       <div class="field">
         <label for="payment_to_date">PAYMENT TO DATE</label>
-        <app-input-number
+        <p-inputnumber
           inputId="payment_to_date"
+          mode="currency" currency="USD"
           [formControlName]="templateMap['payment_to_date']"
           inputStyleClass="readonly"
           [readonly]="true"
-        ></app-input-number>
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['payment_to_date']"
@@ -35,12 +37,13 @@
     <div class="col-4">
       <div class="field">
         <label for="balance">BALANCE OUTSTANDING</label>
-        <app-input-number
+        <p-inputnumber
           inputId="balance"
+          mode="currency" currency="USD"
           [formControlName]="templateMap['balance']"
           inputStyleClass="readonly"
           [readonly]="true"
-        ></app-input-number>
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['balance']"

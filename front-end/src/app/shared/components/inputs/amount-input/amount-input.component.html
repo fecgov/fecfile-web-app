@@ -72,14 +72,14 @@
     <div class="col-6">
       <div class="field">
         <label for="amount">{{ transaction?.transactionType?.amountLabel }}</label>
-        <app-input-number
+        <p-inputnumber
           #amountInput
           inputId="amount"
+          mode="currency" currency="USD"
           [formControlName]="templateMap['amount']"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
-          (inputEvent)="onInputAmount()"
-        ></app-input-number>
+        ></p-inputnumber>
 
         <app-error-messages
           [form]="form"
@@ -94,12 +94,13 @@
       <div class="col-6">
         <div class="field">
           <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
-          <app-input-number
+          <p-inputnumber
             inputId="aggregate"
+            mode="currency" currency="USD"
             [formControlName]="templateMap['aggregate']"
             [readonly]="true"
             inputStyleClass="readonly"
-          ></app-input-number>
+          ></p-inputnumber>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['aggregate']"
@@ -114,12 +115,13 @@
       <div class="col-6">
         <div class="field">
           <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
-          <app-input-number
+          <p-inputnumber
             inputId="calendar_ytd"
+            mode="currency" currency="USD"
             [formControlName]="templateMap['calendar_ytd']"
             [readonly]="true"
             inputStyleClass="readonly"
-          ></app-input-number>
+          ></p-inputnumber>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['calendar_ytd']"

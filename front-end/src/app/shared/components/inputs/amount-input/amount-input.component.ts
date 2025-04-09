@@ -11,7 +11,6 @@ import { ReportTypes } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { LinkedReportInputComponent } from '../linked-report-input/linked-report-input.component';
-import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
@@ -24,10 +23,10 @@ import { InputText } from 'primeng/inputtext';
   imports: [
     ReactiveFormsModule,
     InputText,
+    InputNumber,
     CalendarComponent,
     LinkedReportInputComponent,
     MemoCodeInputComponent,
-    InputNumberComponent,
     ErrorMessagesComponent,
   ],
 })
@@ -104,16 +103,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     this.changeDetectorRef.detectChanges();
   }
 
-  onInputAmount() {
-    if (this.negativeAmountValueOnly) {
-      // Automatically convert the amount value to a negative dollar amount.
-      const inputValue = this.amountInput.input.nativeElement.value;
-      if (inputValue.startsWith('$')) {
-        const value = Number(parseInt(inputValue.slice(1)).toFixed(2));
-        this.amountInput.updateInput(-1 * value, undefined, 'insert', undefined);
-      }
-    }
-  }
+
 
   protected readonly isLoanRepayment = isLoanRepayment;
   protected readonly isDebtRepayment = isDebtRepayment;

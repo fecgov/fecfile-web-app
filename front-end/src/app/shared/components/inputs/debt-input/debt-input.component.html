@@ -3,12 +3,13 @@
     <div class="col-6">
       <div class="field">
         <label for="balance">BEGINNING BALANCE</label>
-        <app-input-number
+        <p-inputnumber
           inputId="balance"
+          mode="currency" currency="USD"
           [formControlName]="templateMap['balance']"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></app-input-number>
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['balance']"
@@ -21,7 +22,8 @@
     <div class="col-6">
       <div class="field">
         <label for="amount">INCURRED AMOUNT</label>
-        <app-input-number inputId="amount" [formControlName]="templateMap['amount']"></app-input-number>
+        <p-inputnumber inputId="amount"
+        mode="currency" currency="USD" [formControlName]="templateMap['amount']"></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -36,12 +38,13 @@
     <div class="col-6">
       <div class="field">
         <label for="payment_amount">PAYMENT AMOUNT</label>
-        <app-input-number
+        <p-inputnumber
           inputId="payment_amount"
+          mode="currency" currency="USD"
           formControlName="payment_amount"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></app-input-number>
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           fieldName="payment_amount"
@@ -54,12 +57,13 @@
     <div class="col-6">
       <div class="field">
         <label for="balance_at_close">BALANCE AT CLOSE</label>
-        <app-input-number
+        <p-inputnumber
           inputId="balance_at_close"
+          mode="currency" currency="USD"
           formControlName="balance_at_close"
           [readonly]="true"
           inputStyleClass="readonly"
-        ></app-input-number>
+        ></p-inputnumber>
         <app-error-messages
           [form]="form"
           fieldName="balance_at_close"

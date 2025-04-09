@@ -6,7 +6,6 @@ import { Contact } from 'app/shared/models/contact.model';
 import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { LoanTermsDatesInputComponent } from '../loan-terms-dates-input/loan-terms-dates-input.component';
 import { YesNoRadioInputComponent } from '../yes-no-radio-input/yes-no-radio-input.component';
@@ -16,13 +15,13 @@ import { TransactionContactLookupComponent } from '../../transaction-contact-loo
 import { InputText } from 'primeng/inputtext';
 import { AddressInputComponent } from '../address-input/address-input.component';
 import { TextareaModule } from 'primeng/textarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-loan-agreement-input',
   templateUrl: './loan-agreement-input.component.html',
   imports: [
     ReactiveFormsModule,
-    InputNumberComponent,
     ErrorMessagesComponent,
     LoanTermsDatesInputComponent,
     YesNoRadioInputComponent,
@@ -31,6 +30,7 @@ import { TextareaModule } from 'primeng/textarea';
     TransactionContactLookupComponent,
     InputText,
     AddressInputComponent,
+    InputNumberModule,
     TextareaModule,
   ],
 })

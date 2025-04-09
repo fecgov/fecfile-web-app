@@ -10,13 +10,13 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 import { Select } from 'primeng/select';
-import { InputNumberComponent } from '../../shared/components/inputs/input-number/input-number.component';
 import { ButtonDirective } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-cash-on-hand-override',
   templateUrl: './cash-on-hand-override.component.html',
-  imports: [ReactiveFormsModule, Select, InputNumberComponent, ButtonDirective],
+  imports: [ReactiveFormsModule, Select, InputNumberModule, ButtonDirective],
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
   private readonly router = inject(Router);

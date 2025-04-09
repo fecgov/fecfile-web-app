@@ -36,18 +36,19 @@
         <div class="col-6">
           <div class="field">
             <label for="currentAmount">CURRENT LINE 6A, COLUMN B AMOUNT</label>
-            <app-input-number
+            <p-inputnumber
               inputId="currentAmount"
+              mode="currency" currency="USD"
               formControlName="currentAmount"
               [readonly]="true"
               inputStyleClass="readonly"
-            ></app-input-number>
+            ></p-inputnumber>
           </div>
         </div>
         <div class="col-6 pl-3">
           <div class="field">
             <label for="newAmount">NEW AMOUNT</label>
-            <app-input-number inputId="newAmount" formControlName="newAmount"></app-input-number>
+            <p-inputnumber inputId="newAmount" mode="currency" currency="USD" formControlName="newAmount"></p-inputnumber>
           </div>
         </div>
       </div>

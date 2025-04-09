@@ -3,7 +3,7 @@
     <div class="col-8">
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
-        <app-input-number inputId="amount" [formControlName]="templateMap['amount']"></app-input-number>
+        <p-inputnumber mode="currency" currency="USD" inputId="amount" [formControlName]="templateMap['amount']"></p-inputnumber>
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['amount']"
@@ -53,10 +53,11 @@
       <div class="col-4">
         <div class="field">
           <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
-          <app-input-number
+          <p-inputnumber
             inputId="credit_amount_this_draw"
+            mode="currency" currency="USD"
             formControlName="credit_amount_this_draw"
-          ></app-input-number>
+          ></p-inputnumber>
           <app-error-messages
             [form]="form"
             fieldName="credit_amount_this_draw"
@@ -67,7 +68,7 @@
       <div class="col-4">
         <div class="field">
           <label for="balance">TOTAL BALANCE</label>
-          <app-input-number inputId="balance" [formControlName]="templateMap['balance']"></app-input-number>
+          <p-inputnumber inputId="balance" mode="currency" currency="USD" [formControlName]="templateMap['balance']"></p-inputnumber>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['balance']"
@@ -133,10 +134,11 @@
       <div class="col-4">
         <div class="field">
           <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
-          <app-input-number
+          <p-inputnumber
             inputId="collateral_value_amount"
+            mode="currency" currency="USD"
             formControlName="collateral_value_amount"
-          ></app-input-number>
+          ></p-inputnumber>
           <app-error-messages
             [form]="form"
             fieldName="collateral_value_amount"
@@ -189,7 +191,7 @@
       <div class="col-5">
         <div class="field">
           <label for="estimated_value">ESTIMATED VALUE</label>
-          <app-input-number inputId="estimated_value" formControlName="estimated_value"></app-input-number>
+          <p-inputnumber inputId="estimated_value" mode="currency" currency="USD" formControlName="estimated_value"></p-inputnumber>
           <app-error-messages
             [form]="form"
             fieldName="estimated_value"
