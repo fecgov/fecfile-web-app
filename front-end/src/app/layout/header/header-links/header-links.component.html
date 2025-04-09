@@ -1,10 +1,15 @@
 <ul class="flex">
-  @switch (headerStyle) {
+  @switch (headerStyle()) {
     @case (headerStyles.DEFAULT) {
-      <li class="nav-item" routerLink="/dashboard" [style.fontSize]="fontSize">Dashboard</li>
-      <li class="nav-item" routerLink="/reports" [style.fontSize]="fontSize">Reports</li>
-      <li class="nav-item" routerLink="/contacts" [style.fontSize]="fontSize">Contacts</li>
-      <li class="nav-item" (click)="op.toggle($event)" (keydown.enter)="op.toggle($event)" [style.fontSize]="fontSize">
+      <li class="nav-item" routerLink="/dashboard" [style.fontSize]="fontSize()">Dashboard</li>
+      <li class="nav-item" routerLink="/reports" [style.fontSize]="fontSize()">Reports</li>
+      <li class="nav-item" routerLink="/contacts" [style.fontSize]="fontSize()">Contacts</li>
+      <li
+        class="nav-item"
+        (click)="op.toggle($event)"
+        (keydown.enter)="op.toggle($event)"
+        [style.fontSize]="fontSize()"
+      >
         <span>Tools</span>
         <i class="pi pi-sort-down-fill"></i>
         <p-popover #op>
@@ -25,7 +30,7 @@
         class="nav-item"
         (click)="op2.toggle($event)"
         (keydown.enter)="op2.toggle($event)"
-        [style.fontSize]="fontSize"
+        [style.fontSize]="fontSize()"
       >
         <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
         <i class="pi pi-sort-down-fill"></i>
@@ -62,13 +67,13 @@
         class="nav-item"
         (click)="navigateToLoginDotGov()"
         (keydown.enter)="navigateToLoginDotGov()"
-        [style.fontSize]="fontSize"
+        [style.fontSize]="fontSize()"
       >
         SIGN IN
       </li>
     }
     @case (headerStyles.LOGOUT) {
-      <li class="nav-item" (click)="logOut()" (keydown.enter)="logOut()" [style.fontSize]="fontSize">Log Out</li>
+      <li class="nav-item" (click)="logOut()" (keydown.enter)="logOut()" [style.fontSize]="fontSize()">Log Out</li>
     }
   }
 </ul>

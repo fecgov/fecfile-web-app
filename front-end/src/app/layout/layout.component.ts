@@ -61,7 +61,7 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
     const offset = this.contentOffset();
     if (!offset) return;
     const height = offset.nativeElement.offsetHeight;
-    const footerHeight = this.footer() ? this.footer()!.getFooterElement().offsetHeight : 0;
+    const footerHeight = this.footer() ? this.footer()!.footerElement().nativeElement.offsetHeight : 0;
     const bannerHeight = this.banner ? this.banner().getBannerElement().offsetHeight : 0;
     const currentPadding =
       this.contentOffset()?.nativeElement.style.paddingBottom === ''

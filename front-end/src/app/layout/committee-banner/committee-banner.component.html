@@ -1,21 +1,19 @@
-@if (committeeID) {
-  <div class="grid">
-    <div class="col-12 pt-0">
-      <div class="committee-name">{{ committeeName }}</div>
-      <div class="grid">
-        <div class="col-12 committee-info" aria-label="Committee Status">
-          <div
-            class="pi pi-circle-on status-circle"
-            [style]="{ color: committeeStatus === 'Active' ? '#4AA564' : '#AEB0B5' }"
-            [attr.aria-label]="committeeStatus === 'Active' ? 'Active' : 'Inactive'"
-          ></div>
-          <div class="sub-banner-item">{{ committeeFrequency }}</div>
-          |
-          <div class="sub-banner-item">{{ committeeTypeLabel }}</div>
-          |
-          <div class="sub-banner-item">ID: {{ committeeID }}</div>
-        </div>
+<div class="grid">
+  <div class="col-12 pt-0">
+    <div class="committee-name">{{ committeeName() }}</div>
+    <div class="grid">
+      <div class="col-12 committee-info" aria-label="Committee Status">
+        <div
+          class="pi pi-circle-on status-circle"
+          [style]="{ color: committeeStatus() === 'Active' ? '#4AA564' : '#AEB0B5' }"
+          [attr.aria-label]="committeeStatus() === 'Active' ? 'Active' : 'Inactive'"
+        ></div>
+        <div class="sub-banner-item">{{ committeeFrequency() }}</div>
+        |
+        <div class="sub-banner-item">{{ committeeTypeLabel() }}</div>
+        |
+        <div class="sub-banner-item">ID: {{ committeeID() }}</div>
       </div>
     </div>
   </div>
-}
+</div>

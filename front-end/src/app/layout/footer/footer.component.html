@@ -1,5 +1,5 @@
-<footer #footerElement [class.sidebar-version]="showSidebar" [class.full-version]="!showSidebar">
-  @if (showUpperFooter) {
+<footer #footerElement [class.sidebar-version]="showSidebar()" [class.full-version]="!showSidebar">
+  @if (showUpperFooter()) {
     <div id="footer-upper">
       <div class="upper-footer-section">
         <a

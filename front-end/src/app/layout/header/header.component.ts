@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './header-links/header-links.component';
 
@@ -15,5 +15,5 @@ export enum HeaderStyles {
   imports: [NgOptimizedImage, HeaderLinksComponent],
 })
 export class HeaderComponent {
-  @Input() headerStyle = HeaderStyles.DEFAULT;
+  headerStyle = input(HeaderStyles.DEFAULT);
 }

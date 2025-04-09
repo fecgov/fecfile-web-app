@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, viewChild, ViewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
@@ -32,7 +32,7 @@ enum SubmissionStates {
 })
 export class FeedbackOverlayComponent extends FormComponent {
   public readonly feedbackService = inject(FeedbackService);
-  @ViewChild('op') op!: Popover;
+  private readonly popover = viewChild.required<Popover>('op');
 
   form: FormGroup = this.fb.group(
     {
@@ -48,7 +48,7 @@ export class FeedbackOverlayComponent extends FormComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   show(event: any): void {
     this.reset();
-    this.op.show(event, 'anchor');
+    this.popover().show(event, 'anchor');
   }
 
   onHide() {

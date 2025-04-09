@@ -1,8 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
 import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
@@ -20,17 +19,10 @@ export class HeaderLinksComponent {
   readonly loginService = inject(LoginService);
   readonly store = inject(Store);
   readonly loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
-  @Input() ratio = 1;
-  @Input() full = false;
-  @Input() headerStyle = HeaderStyles.DEFAULT;
-
+  readonly ratio = input(1);
+  readonly headerStyle = input(HeaderStyles.DEFAULT);
+  readonly fontSize = computed(() => (12 * this.ratio()).toFixed() + 'px');
   headerStyles = HeaderStyles;
-
-  role?: Roles;
-
-  get fontSize(): string {
-    return (12 * this.ratio).toFixed() + 'px';
-  }
 
   navigateToLoginDotGov() {
     if (this.loginDotGovAuthUrl) {
