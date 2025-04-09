@@ -13,7 +13,7 @@ import { PanelMenu } from 'primeng/panelmenu';
 })
 export class F1MMenuComponent extends AbstractMenuComponent {
   readonly subHeading: string = FORM_TYPES.get(FormTypes.F1M)?.description as string;
-  override readonly reportString = 'f1m';
+  protected readonly reportString = 'f1m';
 
   getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[] {
     const reviewReport = this.reviewReport(sidebarState);

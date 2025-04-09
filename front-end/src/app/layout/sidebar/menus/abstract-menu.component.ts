@@ -1,13 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
 import { selectActiveReport } from '../../../store/active-report.selectors';
-import { filter, map, startWith } from 'rxjs';
 import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 import { MenuItem } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { ReportService } from '../../../shared/services/report.service';
 import { collectRouteData } from 'app/shared/utils/route.utils';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -16,34 +16,30 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export abstract class AbstractMenuComponent extends DestroyerComponent {
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);
-  private readonly router = inject(Router);
-  readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
-  protected readonly routeDataSignal = toSignal(
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      map(() => {
-        return collectRouteData(this.router);
-      }),
-      startWith(collectRouteData(this.router)),
-    ),
-  );
-  itemsSignal = computed(() => {
-    const routeData = this.routeDataSignal();
-    if (!routeData) return [];
-    const sidebarState = new SidebarState(routeData['sidebarSection']);
-    const isEditable = this.reportService.isEditable(this.activeReportSignal());
+  private readonly route = inject(ActivatedRoute);
+  protected readonly activeReport = this.store.selectSignal(selectActiveReport);
+
+  protected abstract readonly reportString: string;
+
+  navEnd = toSignal(injectNavigationEnd());
+  routeData = computed(() => {
+    this.navEnd();
+    return collectRouteData(this.route.snapshot);
+  });
+  items = computed(() => {
+    const sidebarState = new SidebarState(this.routeData()['sidebarSection']);
+    const isEditable = this.reportService.isEditable(this.activeReport());
     return this.getMenuItems(sidebarState, isEditable);
   });
-  reportString?: string;
 
-  createReport(sidebarState: SidebarState): MenuItem {
+  createReport(sidebarState: SidebarState, activeReport: Report | undefined): MenuItem {
     return {
       label: 'CREATE A REPORT',
       expanded: sidebarState?.section == ReportSidebarSection.CREATE,
       items: [
         {
           label: 'Edit your report',
-          routerLink: [`/reports/${this.reportString}/edit/${this.activeReportSignal().id}`],
+          routerLink: [`/reports/${this.reportString}/edit/${this.activeReport().id}`],
         },
       ],
     } as MenuItem;
@@ -53,7 +49,7 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
     return {
       label: 'EDIT A REPORT',
       styleClass: 'edit-report-menu-item',
-      routerLink: [`/reports/${this.reportString}/edit/${this.activeReportSignal().id}`],
+      routerLink: [`/reports/${this.reportString}/edit/${this.activeReport().id}`],
       expanded: sidebarState?.section === ReportSidebarSection.CREATE,
     };
   }
@@ -65,17 +61,17 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
       items: [
         {
           label: 'Confirm information',
-          routerLink: [`/reports/${this.reportString}/submit/step1/${this.activeReportSignal().id}`],
+          routerLink: [`/reports/${this.reportString}/submit/step1/${this.activeReport().id}`],
           visible: isEditable,
         },
         {
           label: 'Submit report',
-          routerLink: [`/reports/${this.reportString}/submit/step2/${this.activeReportSignal().id}`],
+          routerLink: [`/reports/${this.reportString}/submit/step2/${this.activeReport().id}`],
           visible: isEditable,
         },
         {
           label: 'Report status',
-          routerLink: [`/reports/${this.reportString}/submit/status/${this.activeReportSignal().id}`],
+          routerLink: [`/reports/${this.reportString}/submit/status/${this.activeReport().id}`],
         },
       ],
     } as MenuItem;
@@ -92,14 +88,14 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
   printPreview(): MenuItem {
     return {
       label: 'View print preview',
-      routerLink: [`/reports/${this.reportString}/web-print/${this.activeReportSignal().id}`],
+      routerLink: [`/reports/${this.reportString}/web-print/${this.activeReport().id}`],
     };
   }
 
   addReportLevelMenu(isEditable: boolean): MenuItem {
     return {
       label: 'Add a report level memo',
-      routerLink: `/reports/${this.reportString}/memo/${this.activeReportSignal().id}`,
+      routerLink: `/reports/${this.reportString}/memo/${this.activeReport().id}`,
       visible: isEditable,
     };
   }
@@ -118,14 +114,14 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
       label: 'REVIEW TRANSACTIONS',
       expanded: sidebarState?.section == ReportSidebarSection.TRANSACTIONS,
       visible: !isEditable,
-      routerLink: `/reports/transactions/report/${this.activeReportSignal().id}/list`,
+      routerLink: `/reports/transactions/report/${this.activeReport().id}/list`,
     };
   }
 
   confirmInformation(isEditable: boolean): MenuItem {
     return {
       label: 'Confirm information',
-      routerLink: `/reports/${this.reportString}/submit/step1/${this.activeReportSignal().id}`,
+      routerLink: `/reports/${this.reportString}/submit/step1/${this.activeReport().id}`,
       visible: isEditable,
     };
   }
@@ -133,7 +129,7 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
   submitReport(isEditable: boolean): MenuItem {
     return {
       label: 'Submit report',
-      routerLink: `/reports/${this.reportString}/submit/step2/${this.activeReportSignal().id}`,
+      routerLink: `/reports/${this.reportString}/submit/step2/${this.activeReport().id}`,
       visible: isEditable,
     };
   }
@@ -141,7 +137,7 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
   reportStatus(isEditable: boolean): MenuItem {
     return {
       label: 'Report Status',
-      routerLink: `/reports/${this.reportString}/submit/status/${this.activeReportSignal().id}`,
+      routerLink: `/reports/${this.reportString}/submit/status/${this.activeReport().id}`,
       visible: !isEditable,
     };
   }

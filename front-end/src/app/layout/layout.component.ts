@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, inject } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { Component, ElementRef, inject, viewChild, signal, effect, AfterViewChecked } from '@angular/core';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
-import { filter, takeUntil } from 'rxjs';
+import {  collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderStyles, HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -10,7 +9,7 @@ import { BannerComponent } from './banner/banner.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { ButtonDirective } from 'primeng/button';
-
+import { injectNavigationEnd } from 'ngxtension/navigation-end';
 export enum BackgroundStyles {
   'DEFAULT' = '',
   'LOGIN' = 'login-background',
@@ -32,54 +31,49 @@ export enum BackgroundStyles {
     FeedbackOverlayComponent,
   ],
 })
-export class LayoutComponent extends DestroyerComponent implements OnInit, AfterViewChecked {
-  @ViewChild(FeedbackOverlayComponent) feedbackOverlay!: FeedbackOverlayComponent;
-  readonly router: Router = inject(Router);
-  layoutControls = new LayoutControls();
+export class LayoutComponent extends DestroyerComponent implements AfterViewChecked{
+  private readonly route = inject(ActivatedRoute);
+  readonly feedbackOverlay = viewChild.required<FeedbackOverlayComponent>(FeedbackOverlayComponent)
+  readonly footer = viewChild<FooterComponent>('footerRef');
+  readonly contentOffset = viewChild<ElementRef>('contentOffset');
+  readonly banner = viewChild.required<BannerComponent>('bannerRef');
+
+  readonly layoutControls = signal(new LayoutControls());
+  
   readonly BackgroundStyles = BackgroundStyles;
 
-  @ViewChild('footerRef') footer!: FooterComponent;
-  @ViewChild('contentOffset') contentOffset!: ElementRef;
-  @ViewChild('bannerRef') banner!: BannerComponent;
+  constructor() {
+    super();
 
+    const source$ = injectNavigationEnd();
+    source$.subscribe(() => this.layoutControls.set(new LayoutControls(collectRouteData(this.route.snapshot))));
+
+
+    effect(() => {
+      this.updateContentOffset();
+    });
+  }
   ngAfterViewChecked(): void {
-    this.updateContentOffset();
+    this.updateContentOffset()
   }
 
+
   updateContentOffset() {
-    if (this.layoutControls.showSidebar) return;
-    if (!this.contentOffset) return;
-    const height = this.contentOffset.nativeElement.offsetHeight;
-    const footerHeight = this.footer ? this.footer.getFooterElement().offsetHeight : 0;
-    const bannerHeight = this.banner ? this.banner.getBannerElement().offsetHeight : 0;
+    if (this.layoutControls().showSidebar) return;
+    const offset = this.contentOffset();
+    if (!offset) return;
+    const height = offset.nativeElement.offsetHeight;
+    const footerHeight = this.footer() ? this.footer()!.getFooterElement().offsetHeight : 0;
+    const bannerHeight = this.banner ? this.banner().getBannerElement().offsetHeight : 0;
     const currentPadding =
-      this.contentOffset.nativeElement.style.paddingBottom === ''
+      this.contentOffset()?.nativeElement.style.paddingBottom === ''
         ? 0
-        : parseInt(this.contentOffset.nativeElement.style.paddingBottom, 10);
+        : parseInt(this.contentOffset()?.nativeElement.style.paddingBottom, 10);
 
     const paddingBottom = Math.max(64, window.innerHeight - height - footerHeight - bannerHeight + currentPadding);
 
     // Apply the margin-bottom to the div
-    this.contentOffset.nativeElement.style.paddingBottom = paddingBottom + 'px';
-  }
-
-  ngOnInit(): void {
-    this.onRouteChange();
-    this.router.events
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((event) => event instanceof NavigationEnd),
-      )
-      .subscribe(() => {
-        this.onRouteChange();
-      });
-  }
-
-  onRouteChange(): void {
-    const data = collectRouteData(this.router);
-
-    // Create a new LayoutControls instance so as to reset the controls to their default values
-    this.layoutControls = new LayoutControls(data);
+    offset.nativeElement.style.paddingBottom = paddingBottom + 'px';
   }
 }
 

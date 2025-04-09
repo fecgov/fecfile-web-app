@@ -2,11 +2,11 @@
   <div class="grid report-info">
     <div class="col-12">
       <div class="title-2">REPORT PROGRESS</div>
-      <div class="report-type">{{ activeReportSignal().formLabel }}</div>
+      <div class="report-type">{{ activeReport().formLabel }}</div>
       <div class="sub-heading">MISCELLANEOUS REPORT TO THE FEC</div>
     </div>
   </div>
   <div class="pl-1 pt-2">
-    <p-panelMenu [model]="itemsSignal()" [multiple]="false"></p-panelMenu>
+    <p-panelMenu [model]="items()" [multiple]="false"></p-panelMenu>
   </div>
 </div>

@@ -11,7 +11,7 @@ import { PanelMenu } from 'primeng/panelmenu';
   imports: [PanelMenu],
 })
 export class F99MenuComponent extends AbstractMenuComponent {
-  override reportString = 'f99';
+  protected readonly reportString = 'f99';
 
   getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[] {
     const reviewReport = this.reviewReport(sidebarState);
