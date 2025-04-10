@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { RadioButton } from 'primeng/radiobutton';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -11,17 +11,14 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   templateUrl: './yes-no-radio-input.component.html',
   imports: [ReactiveFormsModule, Tooltip, RadioButton, ErrorMessagesComponent],
 })
-export class YesNoRadioInputComponent extends BaseInputComponent implements OnInit {
-  control: AbstractControl | null = null;
-  @Input() controlName = '';
-  @Input() label = '';
-  @Input() ariaLabelYes = '';
-  @Input() ariaLabelNo = '';
-  @Input() errorMessage = 'An answer is required';
-  @Input() tooltipText = '';
-  @Input() tooltipEscape = true;
+export class YesNoRadioInputComponent extends BaseInputComponent {
+  readonly controlName = input('');
+  readonly label = input('');
+  readonly ariaLabelYes = input('');
+  readonly ariaLabelNo = input('');
+  readonly errorMessage = input('An answer is required');
+  readonly tooltipText = input('');
+  readonly tooltipEscape = input(true);
 
-  ngOnInit(): void {
-    this.control = this.form.get(this.controlName);
-  }
+  readonly control = computed(() => this.form().get(this.controlName()));
 }

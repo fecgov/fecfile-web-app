@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="field-row" data-cy="support_oppose_code">
     <div class="col-2 flex align-items-center">
       <p-radioButton
@@ -24,9 +24,9 @@
   <div class="grid">
     <div class="col-12">
       <app-error-messages
-        [form]="form"
+        [form]="form()"
         fieldName="support_oppose_code"
-        [formSubmitted]="formSubmitted"
+        [formSubmitted]="formSubmitted()"
         patternErrorMessage="An answer is required"
       ></app-error-messages>
     </div>

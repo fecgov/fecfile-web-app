@@ -1,20 +1,20 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <app-name-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
-    [templateMap]="templateMap"
-    [templateMapKeyPrefix]="templateMapKeyPrefix"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
+    [templateMap]="templateMap()"
+    [templateMapKeyPrefix]="templateMapKeyPrefix()"
   ></app-name-input>
   <div class="grid">
-    @if (titleFieldName) {
+    @if (titleFieldName()) {
       <div class="col-4">
         <div class="field">
           <label for="title">TITLE</label>
-          <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
+          <input type="text" pInputText id="title" [formControlName]="titleFieldName()" />
           <app-error-messages
-            [form]="form"
-            [fieldName]="titleFieldName"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="titleFieldName()"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -22,9 +22,9 @@
 
     <div class="col-4">
       <app-calendar
-        [fieldName]="dateSignedFieldName"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
+        [fieldName]="dateSignedFieldName()"
+        [form]="form()"
+        [formSubmitted]="formSubmitted()"
         label="DATE SIGNED"
       ></app-calendar>
     </div>

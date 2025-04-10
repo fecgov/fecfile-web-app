@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
@@ -11,5 +11,5 @@ import { CandidateOfficeInputComponent } from '../candidate-office-input/candida
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, CandidateOfficeInputComponent],
 })
 export class CandidateInputComponent extends BaseInputComponent {
-  @Input() hasCandidateOfficeInput = true;
+  hasCandidateOfficeInput = input(true);
 }

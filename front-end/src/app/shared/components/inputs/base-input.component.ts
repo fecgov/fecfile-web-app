@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from '../../models/transaction-type.model';
 import { DestroyerComponent } from '../app-destroyer.component';
@@ -8,8 +8,8 @@ import { Transaction } from 'app/shared/models/transaction.model';
   template: '',
 })
 export abstract class BaseInputComponent extends DestroyerComponent {
-  @Input() transaction?: Transaction;
-  @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
-  @Input() formSubmitted = false;
-  @Input() templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  transaction = input<Transaction>();
+  form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
+  formSubmitted = input(false);
+  templateMap = input<TransactionTemplateMapType>({} as TransactionTemplateMapType);
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -10,34 +10,42 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   templateUrl: './name-input.component.html',
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent],
 })
-export class NameInputComponent extends BaseInputComponent implements OnInit {
-  @Input() templateMapKeyPrefix = '';
-  @Input() labelPrefix = '';
+export class NameInputComponent extends BaseInputComponent {
+  readonly templateMapKeyPrefix = input('');
+  readonly labelPrefix = input('');
 
-  lastNameFieldName = '';
-  firstNameFieldName = '';
-  middleNameFieldName = '';
-  prefixFieldName = '';
-  suffixFieldName = '';
-
-  ngOnInit(): void {
-    if (this.templateMapKeyPrefix) {
-      this.lastNameFieldName =
-        this.templateMap[`${this.templateMapKeyPrefix}_last_name` as keyof TransactionTemplateMapType];
-      this.firstNameFieldName =
-        this.templateMap[`${this.templateMapKeyPrefix}_first_name` as keyof TransactionTemplateMapType];
-      this.middleNameFieldName =
-        this.templateMap[`${this.templateMapKeyPrefix}_middle_name` as keyof TransactionTemplateMapType];
-      this.prefixFieldName =
-        this.templateMap[`${this.templateMapKeyPrefix}_prefix` as keyof TransactionTemplateMapType];
-      this.suffixFieldName =
-        this.templateMap[`${this.templateMapKeyPrefix}_suffix` as keyof TransactionTemplateMapType];
-    } else {
-      this.lastNameFieldName = this.templateMap['last_name'];
-      this.firstNameFieldName = this.templateMap['first_name'];
-      this.middleNameFieldName = this.templateMap['middle_name'];
-      this.prefixFieldName = this.templateMap['prefix'];
-      this.suffixFieldName = this.templateMap['suffix'];
+  readonly lastNameFieldName = computed(() => {
+    if (this.templateMapKeyPrefix()) {
+      return this.templateMap()[`${this.templateMapKeyPrefix}_last_name` as keyof TransactionTemplateMapType];
     }
-  }
+    return this.templateMap()['last_name'];
+  });
+
+  readonly firstNameFieldName = computed(() => {
+    if (this.templateMapKeyPrefix()) {
+      return this.templateMap()[`${this.templateMapKeyPrefix}_first_name` as keyof TransactionTemplateMapType];
+    }
+    return this.templateMap()['first_name'];
+  });
+
+  readonly middleNameFieldName = computed(() => {
+    if (this.templateMapKeyPrefix()) {
+      return this.templateMap()[`${this.templateMapKeyPrefix}_middle_name` as keyof TransactionTemplateMapType];
+    }
+    return this.templateMap()['middle_name'];
+  });
+
+  readonly prefixFieldName = computed(() => {
+    if (this.templateMapKeyPrefix()) {
+      return this.templateMap()[`${this.templateMapKeyPrefix}_prefix` as keyof TransactionTemplateMapType];
+    }
+    return this.templateMap()['prefix'];
+  });
+
+  readonly suffixFieldName = computed(() => {
+    if (this.templateMapKeyPrefix()) {
+      return this.templateMap()[`${this.templateMapKeyPrefix}_suffix` as keyof TransactionTemplateMapType];
+    }
+    return this.templateMap()['suffix'];
+  });
 }

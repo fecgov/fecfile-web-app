@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
       <div class="field">
@@ -11,9 +11,9 @@
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           [fieldName]="officeFormControlName()"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -25,20 +25,20 @@
           [formControlName]="stateFormControlName()"
           [options]="candidateStateOptions()"
           [autoDisplayFirst]="false"
-          [class.disabled]="form.get(stateFormControlName())?.disabled"
+          [class.disabled]="stateFormControl().disabled"
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           [fieldName]="stateFormControlName()"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
         <label for="candidate_district">CANDIDATE DISTRICT</label>
-        @if (candidateDistrictOptions.length === 1) {
+        @if (candidateDistrictOptions().length === 1) {
           <input
             type="text"
             pInputText
@@ -51,15 +51,15 @@
             inputId="candidate_district"
             [formControlName]="districtFormControlName()"
             [options]="candidateDistrictOptions()"
-            [class.disabled]="form.get(stateFormControlName())?.disabled"
+            [class.disabled]="districtFormControl().disabled"
             appendTo="body"
             [autoDisplayFirst]="false"
           ></p-select>
         }
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           [fieldName]="districtFormControlName()"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>

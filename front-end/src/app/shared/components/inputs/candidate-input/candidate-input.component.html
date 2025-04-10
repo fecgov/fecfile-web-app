@@ -1,13 +1,13 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
       <div class="field">
         <label for="candidate_id">CANDIDATE ID</label>
-        <input type="text" pInputText id="candidate_id" [formControlName]="templateMap['candidate_fec_id']" />
+        <input type="text" pInputText id="candidate_id" [formControlName]="templateMap()['candidate_fec_id']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['candidate_fec_id']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['candidate_fec_id']"
+          [formSubmitted]()="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
@@ -17,33 +17,33 @@
     <div class="col-4">
       <div class="field">
         <label for="last_name">LAST NAME</label>
-        <input type="text" pInputText id="last_name" [formControlName]="templateMap['candidate_last_name']" />
+        <input type="text" pInputText id="last_name" [formControlName]="templateMap()['candidate_last_name']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['candidate_last_name']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['candidate_last_name']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="first_name">FIRST NAME</label>
-        <input type="text" pInputText id="first_name" [formControlName]="templateMap['candidate_first_name']" />
+        <input type="text" pInputText id="first_name" [formControlName]="templateMap()['candidate_first_name']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['candidate_first_name']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['candidate_first_name']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-        <input type="text" pInputText id="middle_name" [formControlName]="templateMap['candidate_middle_name']" />
+        <input type="text" pInputText id="middle_name" [formControlName]="templateMap()['candidate_middle_name']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['candidate_middle_name']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['candidate_middle_name']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -52,35 +52,35 @@
     <div class="col-3">
       <div class="field">
         <label for="prefix">PREFIX (OPTIONAL)</label>
-        <input type="text" pInputText id="prefix" [formControlName]="templateMap['candidate_prefix']" />
+        <input type="text" pInputText id="prefix" [formControlName]="templateMap()['candidate_prefix']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['candidate_prefix']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['candidate_prefix']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
         <label for="suffix">SUFFIX (OPTIONAL)</label>
-        <input type="text" pInputText id="suffix" [formControlName]="templateMap['candidate_suffix']" />
+        <input type="text" pInputText id="suffix" [formControlName]="templateMap()['candidate_suffix']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['candidate_suffix']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['candidate_suffix']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-6"></div>
   </div>
-  @if (hasCandidateOfficeInput) {
+  @if (hasCandidateOfficeInput()) {
     <app-candidate-office-input
-      [transaction]="transaction"
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [officeFormControlName]="templateMap['candidate_office']"
-      [stateFormControlName]="templateMap['candidate_state']"
-      [districtFormControlName]="templateMap['candidate_district']"
+      [transaction]="transaction()"
+      [form]="form()"
+      [formSubmitted]="formSubmitted()"
+      [officeFormControlName]="templateMap()['candidate_office']"
+      [stateFormControlName]="templateMap()['candidate_state']"
+      [districtFormControlName]="templateMap()['candidate_district']"
     >
     </app-candidate-office-input>
   }

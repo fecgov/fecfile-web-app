@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, OnInit, ViewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
@@ -50,13 +50,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   addValidators() {
     // Add the date range validation check to the DATE INCURRED input
-    if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
+    if (!isPulledForwardLoan(this.transaction()) && !isPulledForwardLoan(this.transaction()?.parent_transaction)) {
       this.store
         .select(selectActiveReport)
         .pipe(take(1))
         .subscribe((report) => {
-          this.form
-            .get(this.templateMap.date)
+          this.form()
+            .get(this.templateMap().date)
             ?.addValidators(
               buildWithinReportDatesValidator(
                 (report as Form3X).coverage_from_date,
@@ -66,34 +66,34 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         });
     }
 
-    this.interestRateSettingField?.addValidators([Validators.required]);
-    this.dueDateSettingField?.addValidators([Validators.required]);
+    this.interestRateSettingField()?.addValidators([Validators.required]);
+    this.dueDateSettingField()?.addValidators([Validators.required]);
   }
 
   addSubscriptions() {
-    this.dueDateSettingField?.addSubscription((dueDateSetting) => {
+    this.dueDateSettingField()?.addSubscription((dueDateSetting) => {
       this.convertDueDate(dueDateSetting);
     });
 
     this.onInterestRateInput(this.interestRate);
-    this.interestRateSettingField?.addSubscription((interestRateSetting) => {
+    this.interestRateSettingField()?.addSubscription((interestRateSetting) => {
       if (!this.interestRateField) return;
       if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-        this.interestRateField.addValidators(percentageValidator);
+        this.interestRateField().addValidators(percentageValidator);
       } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-        this.interestRateField.removeValidators(percentageValidator);
+        this.interestRateField().removeValidators(percentageValidator);
       }
       if (this.clearValuesOnChange) {
         this.interestRate = '';
-        this.interestRateField.markAsPristine();
-        this.interestRateField.markAsUntouched();
+        this.interestRateField().markAsPristine();
+        this.interestRateField().markAsUntouched();
       } else {
         this.onInterestRateInput(interestRateSetting);
       }
     });
 
     // Watch changes to purpose description to make sure prefix is maintained
-    this.interestRateField?.addSubscription(() => this.onInterestRateInput(this.interestRateSetting), this.destroy$);
+    this.interestRateField()?.addSubscription(() => this.onInterestRateInput(this.interestRateSetting), this.destroy$);
   }
 
   ngAfterViewInit(): void {
@@ -144,14 +144,14 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         newInterestRate = validNumber;
 
         textInput?.setSelectionRange(initialSelectionStart - lengthDifference, initialSelectionEnd - lengthDifference);
-        this.interestRateField?.markAsTouched();
+        this.interestRateField().markAsTouched();
       }
 
       if (newInterestRate.length > 0) {
         if (!newInterestRate.endsWith('%')) {
           this.interestRate = newInterestRate + '%';
           textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
-          this.interestRateField?.markAsTouched();
+          this.interestRateField()?.markAsTouched();
         }
       }
       if (this.interestRate === '%') {
@@ -208,53 +208,49 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     }
   }
 
-  get dueDateField(): SubscriptionFormControl | null {
-    return this.form.get(this.templateMap['due_date']) as SubscriptionFormControl;
-  }
+  readonly dueDateField = computed(() => this.form().get(this.templateMap()['due_date']) as SubscriptionFormControl);
 
   get dueDate(): Date | string | null {
-    return this.dueDateField?.value ?? null;
+    return this.dueDateField().value ?? null;
   }
 
   set dueDate(value: Date | string | null) {
-    this.dueDateField?.setValue(value);
-    this.dueDateField?.markAsPristine();
-    this.dueDateField?.markAsUntouched();
+    this.dueDateField().setValue(value);
+    this.dueDateField().markAsPristine();
+    this.dueDateField().markAsUntouched();
   }
 
-  get dueDateSettingField(): SubscriptionFormControl | null {
-    return this.form.get(this.templateMap.due_date_setting) as SubscriptionFormControl;
-  }
+  dueDateSettingField = computed(() => this.form().get(this.templateMap().due_date_setting) as SubscriptionFormControl);
 
   get dueDateSetting(): string {
-    return this.dueDateSettingField?.value ?? '';
+    return this.dueDateSettingField().value ?? '';
   }
 
   set dueDateSetting(value: string) {
-    this.dueDateSettingField?.setValue(value);
+    this.dueDateSettingField().setValue(value);
   }
 
-  get interestRateField(): SubscriptionFormControl | null {
-    return this.form.get(this.templateMap['interest_rate']) as SubscriptionFormControl;
-  }
+  readonly interestRateField = computed(
+    () => this.form().get(this.templateMap()['interest_rate']) as SubscriptionFormControl,
+  );
 
   get interestRate(): string {
-    return this.interestRateField?.value ?? '';
+    return this.interestRateField().value ?? '';
   }
 
   set interestRate(value: string) {
-    this.interestRateField?.setValue(value);
+    this.interestRateField().setValue(value);
   }
 
-  get interestRateSettingField(): SubscriptionFormControl | null {
-    return this.form.get(this.templateMap['interest_rate_setting']) as SubscriptionFormControl;
-  }
+  readonly interestRateSettingField = computed(
+    () => this.form().get(this.templateMap()['interest_rate_setting']) as SubscriptionFormControl,
+  );
 
   get interestRateSetting(): string {
-    return this.interestRateSettingField?.value ?? '';
+    return this.interestRateSettingField().value ?? '';
   }
 
   set interestRateSetting(value: string) {
-    this.interestRateSettingField?.setValue(value);
+    this.interestRateSettingField().setValue(value);
   }
 }

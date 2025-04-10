@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,18 +12,18 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent],
 })
 export class CommitteeInputComponent extends BaseInputComponent implements OnInit {
-  @Input() entityRole = 'CONTACT';
-  @Input() includeFecId = false;
-  @Input() readonly = false;
-  @Input() tertiaryContact = false;
+  readonly entityRole = input('CONTACT');
+  readonly includeFecId = input(false);
+  readonly readonly = input(false);
+  readonly tertiaryContact = input(false);
 
   ngOnInit(): void {
-    if (this.transaction?.transactionType?.synchronizeOrgComNameValues) {
-      this.form
-        .get(this.templateMap.organization_name)
+    if (this.transaction()?.transactionType?.synchronizeOrgComNameValues) {
+      this.form()
+        .get(this.templateMap().organization_name)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((value) => {
-          this.form.get(this.templateMap.committee_name)?.setValue(value);
+          this.form().get(this.templateMap().committee_name)?.setValue(value);
         });
     }
   }

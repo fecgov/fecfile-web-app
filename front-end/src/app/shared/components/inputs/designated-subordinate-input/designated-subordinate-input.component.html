@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-12">
       <div class="field">
@@ -15,23 +15,23 @@
           (onChange)="onDesignatedOrSubordinateChange($event.value)"
         ></p-select>
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           fieldName="filer_designated_to_make_coordinated_expenditures"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
   </div>
-  @if (this.form.get('filer_designated_to_make_coordinated_expenditures')?.value === true) {
+  @if (this.form().get('filer_designated_to_make_coordinated_expenditures')?.value === true) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
           <label for="entity_type">LOOKUP</label>
           <app-transaction-contact-lookup
             contactProperty="contact_4"
-            [transaction]="transaction"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
+            [transaction]="transaction()"
+            [form]="form()"
+            [formSubmitted]="formSubmitted()"
             [contactTypeOptions]="committeeContactTypeOptions"
             (contactSelect)="onDesignatingCommitteeSelect($event)"
           ></app-transaction-contact-lookup>
@@ -44,9 +44,9 @@
           <label for="designating_committee_name">DESIGNATING COMMITTEE NAME</label>
           <input type="text" pInputText id="designating_committee_name" formControlName="designating_committee_name" />
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="designating_committee_name"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -60,24 +60,24 @@
             formControlName="designating_committee_id_number"
           />
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="designating_committee_id_number"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
     </div>
   }
-  @if (this.form.get('filer_designated_to_make_coordinated_expenditures')?.value === false) {
+  @if (this.form().get('filer_designated_to_make_coordinated_expenditures')?.value === false) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
           <label for="entity_type">LOOKUP</label>
           <app-transaction-contact-lookup
             contactProperty="contact_5"
-            [transaction]="transaction"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
+            [transaction]="transaction()"
+            [form]="form()"
+            [formSubmitted]="formSubmitted()"
             [contactTypeOptions]="committeeContactTypeOptions"
             (contactSelect)="onSubordinateCommitteeSelect($event)"
           ></app-transaction-contact-lookup>
@@ -90,9 +90,9 @@
           <label for="subordinate_committee_name">SUBORDINATE COMMITTEE NAME</label>
           <input type="text" pInputText id="subordinate_committee_name" formControlName="subordinate_committee_name" />
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="subordinate_committee_name"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -107,17 +107,17 @@
             (blur)="onSubordinateCommitteeIdBlur()"
           />
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="subordinate_committee_id_number"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
     </div>
     <app-address-input
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
+      [form]="form()"
+      [formSubmitted]="formSubmitted()"
+      [templateMap]="templateMap()"
       keyPrefix="subordinate_"
     ></app-address-input>
   }

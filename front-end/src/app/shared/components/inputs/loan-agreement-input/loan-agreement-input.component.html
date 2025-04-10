@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-8">
       <div class="field">
@@ -7,12 +7,12 @@
           mode="currency"
           currency="USD"
           inputId="amount"
-          [formControlName]="templateMap['amount']"
+          [formControlName]="templateMap()['amount']"
         ></p-inputnumber>
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['amount']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -20,14 +20,14 @@
   <hr type="solid" />
   <h3>Terms</h3>
   <app-loan-terms-dates-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
-    [templateMap]="templateMap"
-    [transaction]="transaction"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
+    [templateMap]="templateMap()"
+    [transaction]="transaction()"
   ></app-loan-terms-dates-input>
   <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
     controlName="loan_restructured"
     label="Has loan been restructured?"
     ariaLabelYes="This loan has been restructured"
@@ -38,16 +38,16 @@
       <div class="col-4">
         <app-calendar
           fieldName="loan_originally_incurred_date"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [formSubmitted]="formSubmitted()"
           label="DATE OF ORIGINAL LOAN"
         ></app-calendar>
       </div>
     </div>
   }
   <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
     controlName="line_of_credit"
     label="Is there a line of credit? (OPTIONAL)"
     ariaLabelYes="There is a line of credit"
@@ -65,9 +65,9 @@
             formControlName="credit_amount_this_draw"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="credit_amount_this_draw"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -78,12 +78,12 @@
             inputId="balance"
             mode="currency"
             currency="USD"
-            [formControlName]="templateMap['balance']"
+            [formControlName]="templateMap()['balance']"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['balance']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['balance']"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -92,8 +92,8 @@
   <hr type="solid" />
   <h3>Others liable</h3>
   <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
     controlName="others_liable"
     label="Are other parties secondarily liable for the debt incurred?"
     ariaLabelYes="Other parties are secondarily liable"
@@ -113,9 +113,9 @@
   <hr type="solid" />
   <h3>Collateral</h3>
   <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
-    [controlName]="templateMap['secured']"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
+    [controlName]="templateMap()['secured']"
     label="Are any of the following pledged as collateral for the loan: real estate, personal property, goods, negotiable instruments, certificates of deposit, chattel papers, stocks, accounts receivable, cash on deposit, or other similar traditional collateral?"
     ariaLabelYes="Collateral has been pledged"
     ariaLabelNo="Collateral has not been pledged"
@@ -134,9 +134,9 @@
             formControlName="desc_collateral"
           ></textarea>
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="desc_collateral"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -152,16 +152,16 @@
             formControlName="collateral_value_amount"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="collateral_value_amount"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
     </div>
     <app-yes-no-radio-input
-      [form]="form"
-      [formSubmitted]="formSubmitted"
+      [form]="form()"
+      [formSubmitted]="formSubmitted()"
       controlName="perfected_interest"
       label="Does the lender have a perfected security interest in it? (OPTIONAL)"
       ariaLabelYes="Lender has a perfected security interest"
@@ -171,8 +171,8 @@
   <hr type="solid" />
   <h3>Future income</h3>
   <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
+    [form]="form()"
+    [formSubmitted]="formSubmitted()"
     controlName="future_income"
     label="Are any future contributions or future receipts of interest income, pledged as collateral for the loan?"
     ariaLabelYes="Future income has been pledged"
@@ -192,9 +192,9 @@
             formControlName="desc_specification_of_the_above"
           ></textarea>
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="desc_specification_of_the_above"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
@@ -210,17 +210,17 @@
             formControlName="estimated_value"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form"
+            [form]="form()"
             fieldName="estimated_value"
-            [formSubmitted]="formSubmitted"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
       <div class="col-5">
         <app-calendar
           fieldName="depository_account_established_date"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [formSubmitted]="formSubmitted()"
           label="DEPOSITORY ACCOUNT ESTABLISHED"
         ></app-calendar>
       </div>
@@ -232,9 +232,9 @@
           <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
           <app-transaction-contact-lookup
             contactProperty="contact_2"
-            [transaction]="transaction"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
+            [transaction]="transaction()"
+            [form]="form()"
+            [formSubmitted]="formSubmitted()"
             [contactTypeOptions]="contactTypeOptions"
             (contactSelect)="updateFormWithLocationOfAccountContact($event)"
           ></app-transaction-contact-lookup>
@@ -246,19 +246,19 @@
         <div class="col-12">
           <div class="field">
             <label for="secondary_name">ORGANIZATION NAME</label>
-            <input type="text" pInputText id="secondary_name" [formControlName]="templateMap['secondary_name']" />
+            <input type="text" pInputText id="secondary_name" [formControlName]="templateMap()['secondary_name']" />
             <app-error-messages
-              [form]="form"
-              [fieldName]="templateMap['secondary_name']"
-              [formSubmitted]="formSubmitted"
+              [form]="form()"
+              [fieldName]="templateMap()['secondary_name']"
+              [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
         </div>
       </div>
       <app-address-input
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        [templateMap]="templateMap"
+        [form]="form()"
+        [formSubmitted]="formSubmitted()"
+        [templateMap]="templateMap()"
         templateMapKeyPrefix="secondary"
       ></app-address-input>
     }
@@ -283,9 +283,9 @@
           formControlName="basis_of_loan_description"
         ></textarea>
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           fieldName="basis_of_loan_description"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>

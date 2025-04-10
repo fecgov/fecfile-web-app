@@ -32,14 +32,14 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     'corresponding coverage dates.';
 
   ngOnInit(): void {
-    this.form.addControl('linkedF3x', this.linkedF3xControl);
-    this.form.addControl('linkedF3xId', new SubscriptionFormControl());
+    this.form().addControl('linkedF3x', this.linkedF3xControl);
+    this.form().addControl('linkedF3xId', new SubscriptionFormControl());
     const dateControl =
-      (this.form.get(this.templateMap['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
+      (this.form().get(this.templateMap()['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
     const date2Control =
-      (this.form.get(this.templateMap['date2']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
+      (this.form().get(this.templateMap()['date2']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
     this.linkedF3xControl.addValidators(
-      buildCorrespondingForm3XValidator(this.form, this.templateMap['date'], this.templateMap['date2']),
+      buildCorrespondingForm3XValidator(this.form(), this.templateMap()['date'], this.templateMap()['date2']),
     );
 
     dateControl.valueChanges
@@ -53,9 +53,9 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
 
   setLinkedForm3X([disbursementDate, disseminationDate]: (Date | undefined)[]): void {
     this.getLinkedForm3X(disbursementDate, disseminationDate).then((report) => {
-      this.form.get('linkedF3x')?.setValue(this.getForm3XLabel(report));
-      this.form.get('linkedF3xId')?.setValue(report?.id);
-      this.form.get('linkedF3x')?.markAsTouched();
+      this.form().get('linkedF3x')?.setValue(this.getForm3XLabel(report));
+      this.form().get('linkedF3xId')?.setValue(report?.id);
+      this.form().get('linkedF3x')?.markAsTouched();
     });
   }
 

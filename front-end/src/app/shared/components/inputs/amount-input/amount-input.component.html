@@ -1,6 +1,6 @@
-<div [formGroup]="form">
-  @if (transaction?.transactionType?.hasDate()) {
-    @if (templateMap['date2']) {
+<div [formGroup]="form()">
+  @if (transaction()?.transactionType?.hasDate()) {
+    @if (templateMap()['date2']) {
       <div class="grid">
         <div class="col-12">
           <em>Only one date is required, but both dates can be entered.</em>
@@ -9,13 +9,13 @@
     }
 
     <div class="grid">
-      @if (templateMap['date2']) {
+      @if (templateMap()['date2']) {
         <div class="col-4">
           <app-calendar
-            [fieldName]="templateMap['date2']"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            [label]="transaction?.transactionType?.date2Label || ''"
+            [fieldName]="templateMap()['date2']"
+            [form]="form()"
+            [formSubmitted]="formSubmitted()"
+            [label]="transaction()?.transactionType?.date2Label || ''"
             requiredErrorMessage="At least ONE date field must be entered."
           ></app-calendar>
         </div>
@@ -23,27 +23,27 @@
 
       <div class="col-4">
         <app-calendar
-          [fieldName]="templateMap['date']"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [label]="transaction?.transactionType?.dateLabel || ''"
-          [showErrors]="!templateMap['date2']"
+          [fieldName]="templateMap()['date']"
+          [form]="form()"
+          [formSubmitted]="formSubmitted()"
+          [label]="transaction()?.transactionType?.dateLabel || ''"
+          [showErrors]="!templateMap()['date2']"
         ></app-calendar>
       </div>
       @if (report().report_type === reportTypes.F24) {
         <div class="col-4">
-          <app-linked-report-input [form]="form" [templateMap]="templateMap"></app-linked-report-input>
+          <app-linked-report-input [form]="form()" [templateMap]="templateMap()"></app-linked-report-input>
         </div>
       }
-      @if (transaction?.transactionType?.scheduleId === 'F') {
+      @if (transaction()?.transactionType?.scheduleId === 'F') {
         <div class="col-4">
           <div class="field">
             <label for="general_election_year">GENERAL ELECTION YEAR</label>
             <input type="text" pInputText id="general_election_year" formControlName="general_election_year" />
             <app-error-messages
-              [form]="form"
+              [form]="form()"
               fieldName="general_election_year"
-              [formSubmitted]="formSubmitted"
+              [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
         </div>
@@ -51,18 +51,20 @@
     </div>
   }
 
-  @if (transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)) {
+  @if (
+    transaction()?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction()) && !isLoanRepayment(transaction())
+  ) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
           <app-memo-code
             #memoCode
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            [templateMap]="templateMap"
-            [overrideMemoItemHelpText]="memoItemHelpText"
-            [transaction]="transaction"
-            [checkboxLabel]="memoCodeCheckboxLabel"
+            [form]="form()"
+            [formSubmitted]="formSubmitted()"
+            [templateMap]="templateMap()"
+            [overrideMemoItemHelpText]="memoItemHelpText()"
+            [transaction]="transaction()"
+            [checkboxLabel]="memoCodeCheckboxLabel()"
           ></app-memo-code>
         </div>
       </div>
@@ -71,64 +73,64 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="amount">{{ transaction?.transactionType?.amountLabel }}</label>
+        <label for="amount">{{ transaction()?.transactionType?.amountLabel }}</label>
         <p-inputnumber
           #amountInput
           inputId="amount"
           mode="currency"
           currency="USD"
-          [formControlName]="templateMap['amount']"
+          [formControlName]="templateMap()['amount']"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
         ></p-inputnumber>
 
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['amount']"
+          [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The amount can be 12 digits max"
         ></app-error-messages>
       </div>
     </div>
-    @if (showAggregate) {
+    @if (showAggregate()) {
       <div class="col-6">
         <div class="field">
-          <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
+          <label for="aggregate">{{ transaction()?.transactionType?.aggregateLabel }}</label>
           <p-inputnumber
             inputId="aggregate"
             mode="currency"
             currency="USD"
-            [formControlName]="templateMap['aggregate']"
+            [formControlName]="templateMap()['aggregate']"
             [readonly]="true"
             inputStyleClass="readonly"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['aggregate']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['aggregate']"
+            [formSubmitted]="formSubmitted()"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The aggregate can be 12 digits max"
           ></app-error-messages>
         </div>
       </div>
     }
-    @if (showCalendarYTD) {
+    @if (showCalendarYTD()) {
       <div class="col-6">
         <div class="field">
-          <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
+          <label for="calendar_ytd">{{ transaction()?.transactionType?.calendarYTDLabel }}</label>
           <p-inputnumber
             inputId="calendar_ytd"
             mode="currency"
             currency="USD"
-            [formControlName]="templateMap['calendar_ytd']"
+            [formControlName]="templateMap()['calendar_ytd']"
             [readonly]="true"
             inputStyleClass="readonly"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['calendar_ytd']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['calendar_ytd']"
+            [formSubmitted]="formSubmitted()"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
           ></app-error-messages>

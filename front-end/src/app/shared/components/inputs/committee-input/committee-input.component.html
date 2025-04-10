@@ -1,39 +1,39 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-8">
       <div class="field">
-        <label for="organization_name">{{ entityRole }} NAME</label>
+        <label for="organization_name">{{ entityRole() }} NAME</label>
         <input
           type="text"
           pInputText
           id="organization_name"
-          [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
-          [class.readonly]="readonly"
-          [readonly]="readonly"
+          [formControlName]="tertiaryContact() ? templateMap()['committee_name'] : templateMap()['organization_name']"
+          [class.readonly]="readonly()"
+          [readonly]="readonly()"
         />
         <app-error-messages
-          [form]="form"
-          [fieldName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="tertiaryContact() ? templateMap()['committee_name'] : templateMap()['organization_name']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
-    @if (includeFecId && (form.get('entity_type')?.value === 'COM' || tertiaryContact)) {
+    @if (includeFecId() && (form().get('entity_type')?.value === 'COM' || tertiaryContact())) {
       <div class="col-4">
         <div class="field">
-          <label for="committee_fec_id">{{ entityRole }} FEC ID</label>
+          <label for="committee_fec_id">{{ entityRole() }} FEC ID</label>
           <input
             type="text"
             pInputText
             id="committee_fec_id"
-            [formControlName]="templateMap['committee_fec_id']"
-            [class.readonly]="readonly"
-            [readonly]="readonly"
+            [formControlName]="templateMap()['committee_fec_id']"
+            [class.readonly]="readonly()"
+            [readonly]="readonly()"
           />
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['committee_fec_id']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['committee_fec_id']"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>

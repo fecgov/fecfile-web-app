@@ -1,14 +1,14 @@
-<div [formGroup]="form">
-  @if (templateMap.purpose_description) {
+<div [formGroup]="form()">
+  @if (templateMap().purpose_description) {
     <div class="grid">
       <div class="col-12">
         <label for="purpose_description">
-          {{ transaction?.transactionType?.purposeDescripLabel }}
-          {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
+          {{ transaction()?.transactionType?.purposeDescripLabel }}
+          {{ transaction()?.transactionType?.generatePurposeDescriptionLabel() }}
         </label>
-        @if (transaction?.transactionType?.purposeDescriptionLabelNotice) {
+        @if (transaction()?.transactionType?.purposeDescriptionLabelNotice) {
           <em>
-            {{ transaction?.transactionType?.purposeDescriptionLabelNotice }}
+            {{ transaction()?.transactionType?.purposeDescriptionLabelNotice }}
           </em>
         }
 
@@ -19,36 +19,36 @@
             [cols]="30"
             pTextarea
             [autoResize]="true"
-            [formControlName]="templateMap['purpose_description']"
+            [formControlName]="templateMap()['purpose_description']"
             [class.readonly]="isDescriptionSystemGenerated()"
             [readonly]="isDescriptionSystemGenerated()"
           ></textarea>
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['purpose_description']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['purpose_description']"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
     </div>
   }
-  @if (transaction?.transactionType?.hasDesignatedSubordinate()) {
+  @if (transaction()?.transactionType?.hasDesignatedSubordinate()) {
     <app-designated-subordinate-input
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      [transaction]="transaction"
+      [form]="form()"
+      [formSubmitted]="formSubmitted()"
+      [templateMap]="templateMap()"
+      [transaction]="transaction()"
       (designatingCommitteeSelect)="onDesignatingCommitteeSelect($event)"
       (designatingCommitteeClear)="onDesignatingCommitteeClear()"
       (subordinateCommitteeSelect)="onSubordinateCommitteeSelect($event)"
       (subordinateCommitteeClear)="onSubordinateCommitteeClear()"
     ></app-designated-subordinate-input>
   }
-  @if (transaction?.transactionType?.hasMemoText()) {
+  @if (transaction()?.transactionType?.hasMemoText()) {
     <div class="grid">
       <div class="col-12">
         <label for="text4000"
-          >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
+          >NOTE OR MEMO TEXT {{ transaction()?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
         >
         <div>
           <textarea
@@ -57,25 +57,25 @@
             [cols]="30"
             pTextarea
             [autoResize]="true"
-            [formControlName]="templateMap['text4000']"
+            [formControlName]="templateMap()['text4000']"
           ></textarea>
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['text4000']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['text4000']"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>
     </div>
   }
-  @if (transaction?.transactionType?.hasCategoryCode()) {
+  @if (transaction()?.transactionType?.hasCategoryCode()) {
     <div class="grid">
       <div class="col-6">
         <div class="field flex flex-column">
           <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
           <p-select
             inputId="category_code"
-            [formControlName]="templateMap['category_code']"
+            [formControlName]="templateMap()['category_code']"
             [options]="categoryCodeOptions"
             [autoDisplayFirst]="false"
             appendTo="body"
@@ -83,9 +83,9 @@
             [showClear]="true"
           ></p-select>
           <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['category_code']"
-            [formSubmitted]="formSubmitted"
+            [form]="form()"
+            [fieldName]="templateMap()['category_code']"
+            [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
       </div>

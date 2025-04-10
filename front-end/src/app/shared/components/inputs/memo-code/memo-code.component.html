@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid memo-container">
     @if (memoCodeMapOptions.length === 0) {
       <div class="col-12 field-row">
@@ -6,23 +6,21 @@
           #memoCode
           [binary]="true"
           inputId="memo_code"
-          [formControlName]="templateMap['memo_code']"
+          [formControlName]="templateMap()['memo_code']"
           ariaLabel="have memo item"
           [trueValue]="true"
           [falseValue]="false"
-          [readonly]="form.controls[templateMap['memo_code']].disabled"
+          [readonly]="memoControl().disabled"
           (click)="onMemoItemClick()"
         ></p-checkbox>
-        <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">{{
-          checkboxLabel
-        }}</label>
-        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText }}"></span>
+        <label for="memo_code" [class.p-disabled]="memoControl().disabled" class="ml-2">{{ checkboxLabel() }}</label>
+        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
       <div class="col-12">
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['memo_code']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     } @else {
@@ -30,32 +28,32 @@
         <p-selectButton
           #memoCode
           inputId="memo_code"
-          [formControlName]="templateMap['memo_code']"
+          [formControlName]="templateMap()['memo_code']"
           [options]="memoCodeMapOptions"
           optionLabel="label"
           optionValue="value"
         ></p-selectButton>
       </div>
       <div class="col-12">
-        @if (memoControl.value) {
-          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText }}"></span>
+        @if (memoControl().value) {
+          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM
         }
-        @if (memoControl.value !== undefined) {
+        @if (memoControl().value !== undefined) {
           <span
             class="pi pi-info-circle"
             style="font-size: 1.5rem; margin-left: 0.5rem"
-            pTooltip="{{ memoItemHelpText }}"
+            pTooltip="{{ memoItemHelpText() }}"
           ></span>
         }
       </div>
       <div class="col-12">
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['memo_code']"
+          [formSubmitted]="formSubmitted()"
           [patternErrorMessage]="'This is a required field.'"
         ></app-error-messages>
       </div>

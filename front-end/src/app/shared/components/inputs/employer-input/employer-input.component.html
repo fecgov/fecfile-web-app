@@ -1,24 +1,24 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
       <div class="field">
         <label for="employer">EMPLOYER</label>
-        <input type="text" pInputText id="employer" [formControlName]="templateMap['employer']" />
+        <input type="text" pInputText id="employer" [formControlName]="templateMap()['employer']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['employer']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['employer']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-6">
       <div class="field">
         <label for="occupation">OCCUPATION</label>
-        <input type="text" pInputText id="occupation" [formControlName]="templateMap['occupation']" />
+        <input type="text" pInputText id="occupation" [formControlName]="templateMap()['occupation']" />
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['occupation']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['occupation']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>

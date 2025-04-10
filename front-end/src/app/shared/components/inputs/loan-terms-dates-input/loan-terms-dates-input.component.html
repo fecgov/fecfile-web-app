@@ -1,10 +1,10 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
       <app-calendar
-        [fieldName]="templateMap['date']"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
+        [fieldName]="templateMap()['date']"
+        [form]="form()"
+        [formSubmitted]="formSubmitted()"
         label="DATE INCURRED"
       ></app-calendar>
     </div>
@@ -15,15 +15,15 @@
         <p-select
           inputId="due_date_setting"
           class="w-full"
-          [formControlName]="templateMap['due_date_setting']"
+          [formControlName]="templateMap()['due_date_setting']"
           [options]="dueDateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['due_date_setting']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['due_date_setting']"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -32,19 +32,19 @@
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
             <label for="due_date">DATE DUE (USER DEFINED)</label>
-            <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
+            <input type="text" pInputText inputId="due_date" [formControlName]="templateMap()['due_date']" />
             <app-error-messages
-              [form]="form"
-              [fieldName]="templateMap['due_date']"
-              [formSubmitted]="formSubmitted"
+              [form]="form()"
+              [fieldName]="templateMap()['due_date']"
+              [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
         }
         @case (termFieldSettings.SPECIFIC_DATE) {
           <app-calendar
-            [fieldName]="templateMap['due_date']"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
+            [fieldName]="templateMap()['due_date']"
+            [form]="form()"
+            [formSubmitted]="formSubmitted()"
             label="SPECIFIC DATE"
           ></app-calendar>
         }
@@ -58,15 +58,15 @@
         <p-select
           inputId="interest_rate_setting"
           class="w-full"
-          [formControlName]="templateMap['interest_rate_setting']"
+          [formControlName]="templateMap()['interest_rate_setting']"
           [options]="interestRateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['interest_rate_setting']"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="templateMap()['interest_rate_setting']"
+          [formSubmitted]="formSubmitted()"
         >
         </app-error-messages>
       </div>
@@ -76,11 +76,11 @@
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
             <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
-            <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
+            <input type="text" pInputText id="interest_rate" [formControlName]="templateMap()['interest_rate']" />
             <app-error-messages
-              [form]="form"
-              [fieldName]="templateMap['interest_rate']"
-              [formSubmitted]="formSubmitted"
+              [form]="form()"
+              [fieldName]="templateMap()['interest_rate']"
+              [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
         }
@@ -92,12 +92,12 @@
               type="text"
               pInputText
               id="interest_rate"
-              [formControlName]="templateMap['interest_rate']"
+              [formControlName]="templateMap()['interest_rate']"
             />
             <app-error-messages
-              [form]="form"
-              [fieldName]="templateMap['interest_rate']"
-              [formSubmitted]="formSubmitted"
+              [form]="form()"
+              [fieldName]="templateMap()['interest_rate']"
+              [formSubmitted]="formSubmitted()"
               patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
             ></app-error-messages>
           </div>
