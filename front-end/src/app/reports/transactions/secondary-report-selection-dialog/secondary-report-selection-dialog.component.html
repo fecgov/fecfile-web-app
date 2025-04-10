@@ -1,6 +1,6 @@
 <p-dialog
   [modal]="true"
-  [(visible)]="dialogVisible"
+  [visible]="dialogVisible()"
   (onHide)="closeDialog()"
   [style]="{ width: '512px' }"
   (onShow)="showDialog()"
@@ -10,17 +10,17 @@
   </ng-template>
   <div class="dialog-body">
     <p class="dialog-text">
-      <b>This independent expenditure will be added to the following {{ reportType | label: reportTypeLabels }}:</b>
+      <b>This independent expenditure will be added to the following {{ reportType() | label: reportTypeLabels }}:</b>
     </p>
 
     <p-select
       #select
-      [options]="reports"
+      [options]="reports()"
       [(ngModel)]="selectedReport"
       class="w-full"
       appendTo="body"
       data-cy="select-form-24"
-      [placeholder]="placeholder"
+      [placeholder]="placeholder()"
       [disabled]="reports.length === 0"
     >
       <ng-template #dropdownicon>
@@ -28,17 +28,17 @@
       </ng-template>
       <ng-template #selectedItem let-selectedOption>
         <span class="option">
-          {{ dropDownFieldText }}
+          {{ dropDownFieldText() }}
         </span>
       </ng-template>
       <ng-template let-report #item>
         <span class="option">
-          <b>{{ report.id | label: reportLabels }}</b>
+          <b>{{ report.id | label: reportLabels() }}</b>
         </span>
       </ng-template>
     </p-select>
 
-    @if (reportType === reportTypes.F24) {
+    @if (reportType() === reportTypes.F24) {
       <p class="dialog-text dialog-note">
         <i>
           <b>Note:</b> Unitemized IEs on Form 3X will appear itemized on Form 24.<br />

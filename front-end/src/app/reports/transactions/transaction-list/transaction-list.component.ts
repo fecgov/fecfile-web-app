@@ -1,10 +1,8 @@
-import { Component, ElementRef, inject, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
-import { takeUntil } from 'rxjs';
+import { Component, inject, Pipe, PipeTransform, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { Transaction } from '../../../shared/models/transaction.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
@@ -35,14 +33,13 @@ import { SecondaryReportSelectionDialogComponent } from '../secondary-report-sel
     SecondaryReportSelectionDialogComponent,
   ],
 })
-export class TransactionListComponent extends DestroyerComponent implements OnInit {
+export class TransactionListComponent {
   private readonly router = inject(Router);
   private readonly store = inject(Store);
   readonly reportTypes = ReportTypes;
   readonly reportStatus = ReportStatus;
 
-  @ViewChild('reportSelectDialog') reportSelectDialog?: ElementRef;
-  report: Report | undefined;
+  readonly selectActiveReport = this.store.selectSignal(selectActiveReport);
 
   reportSelectDialogVisible = false;
   reportSelectFormType: ReportTypes | undefined;
@@ -109,16 +106,9 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   ];
   transaction?: Transaction;
 
-  @ViewChild(TransactionReceiptsComponent) receipts!: TransactionReceiptsComponent;
-  @ViewChild(TransactionDisbursementsComponent) disbursements!: TransactionDisbursementsComponent;
-  @ViewChild(TransactionLoansAndDebtsComponent) loans!: TransactionLoansAndDebtsComponent;
-
-  ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report));
-  }
+  readonly receipts = viewChild.required(TransactionReceiptsComponent);
+  readonly disbursements = viewChild.required(TransactionDisbursementsComponent);
+  readonly loans = viewChild.required(TransactionLoansAndDebtsComponent);
 
   async createTransactions(transactionCategory: string, report?: Report): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
@@ -140,9 +130,9 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   }
 
   refreshTables() {
-    this.receipts.refreshTable();
-    this.disbursements.refreshTable();
-    this.loans.refreshTable();
+    this.receipts().refreshTable();
+    this.disbursements().refreshTable();
+    this.loans().refreshTable();
   }
 }
 

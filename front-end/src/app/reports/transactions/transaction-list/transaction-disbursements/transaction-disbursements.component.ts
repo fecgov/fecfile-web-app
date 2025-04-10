@@ -64,8 +64,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     );
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  ngOnInit(): void {
     this.rowActions.push(
       new TableAction(
         'Add to Form24 Report',
@@ -74,7 +73,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
         },
         (transaction) => {
           return (
-            this.report?.report_type === ReportTypes.F3X &&
+            this.report().report_type === ReportTypes.F3X &&
             transaction.report_ids?.length === 1 &&
             transaction.transactionType?.scheduleId === ScheduleIds.E
           );

@@ -23,8 +23,8 @@ export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseC
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
 
-    if (this.childTransaction_2 && transactionId && this.childTransaction_2?.id === transactionId) {
-      this.accordion?.value.set(2);
+    if (this.childTransaction_2() && transactionId && this.childTransaction_2()?.id === transactionId) {
+      this.accordion()?.value.set(2);
     }
   }
 }

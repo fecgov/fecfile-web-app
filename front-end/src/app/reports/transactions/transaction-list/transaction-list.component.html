@@ -4,16 +4,16 @@
       <div class="flex flex-column">
         <h1 class="gandhi-bold size-36">Transactions in this report</h1>
         <span class="subtitle">
-          <strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}
+          <strong>{{ selectActiveReport().formLabel }}: </strong>{{ selectActiveReport().formSubLabel }}
         </span>
       </div>
     </ng-template>
 
     <ng-template pTemplate="right">
-      @if (report?.report_status === reportStatus.IN_PROGRESS) {
+      @if (selectActiveReport().report_status === reportStatus.IN_PROGRESS) {
         <app-table-actions-button
           [tableActions]="tableActions"
-          [actionItem]="report"
+          [actionItem]="selectActiveReport()"
           [rounded]="false"
           (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
           buttonIcon="pi pi-plus"
@@ -24,20 +24,16 @@
       }
     </ng-template>
   </p-toolbar>
-  @if (report?.report_type !== reportTypes.F24) {
-    <app-transaction-receipts [report]="report" (reloadTables)="refreshTables()"></app-transaction-receipts>
+  @if (selectActiveReport().report_type !== reportTypes.F24) {
+    <app-transaction-receipts (reloadTables)="refreshTables()"></app-transaction-receipts>
   }
 
   <app-transaction-disbursements
-    [report]="report"
     [openReportSelectionDialog]="openReportSelectDialog"
     (reloadTables)="refreshTables()"
   ></app-transaction-disbursements>
-  @if (report?.report_type !== reportTypes.F24) {
-    <app-transaction-loans-and-debts
-      [report]="report"
-      (reloadTables)="refreshTables()"
-    ></app-transaction-loans-and-debts>
+  @if (selectActiveReport().report_type !== reportTypes.F24) {
+    <app-transaction-loans-and-debts (reloadTables)="refreshTables()"></app-transaction-loans-and-debts>
   }
 </div>
 

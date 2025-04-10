@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -36,7 +36,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  @ViewChild(Accordion) accordion?: Accordion;
+  accordion = viewChild.required(Accordion);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -51,8 +51,8 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    if (this.transaction) {
-      this.childTransaction = this.getChildTransaction(this.transaction, 0);
+    if (this.transaction()) {
+      this.childTransaction = this.getChildTransaction(this.transaction()!, 0);
     } else {
       throw new Error('Fecfile: Transaction not found for double-entry transaction form');
     }
@@ -77,7 +77,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransactionType
         ?.getInheritedFields(this.childTransaction)
         ?.includes('memo_code' as TemplateMapKeyType) &&
-      this.transactionType
+      this.transactionType()
     ) {
       this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
     } else {
@@ -95,7 +95,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
-      this.accordion.value.set(1);
+      this.accordion().value.set(1);
     }
   }
 
@@ -122,8 +122,8 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
-    if (this.transaction && this.childTransaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+    if (this.transaction() && this.childTransaction) {
+      TransactionContactUtils.updateContactsWithForm(this.transaction()!, this.templateMap()!, this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
       this.store.dispatch(singleClickEnableAction());
@@ -131,10 +131,10 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
-      this.transaction,
+      this.transaction(),
       this.activeReportId,
       this.form,
-      this.formProperties,
+      this.formProperties(),
     );
 
     payload.children = [
@@ -175,7 +175,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactTypeOptions,
-      this.committeeAccountSignal(),
+      this.committeeAccount(),
     );
   }
 
@@ -183,9 +183,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.updateFormWithPrimaryContact(selectItem);
     if (
       this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
-      this.transaction?.contact_1
+      this.transaction()?.contact_1
     ) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childTransaction.contact_1 = this.transaction()?.contact_1;
       this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
@@ -214,7 +214,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       if (childTransaction.transactionType) {
         const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
         childFieldControl?.enable();
-        const value = this.form.get(this.templateMap[inherittedField])?.value;
+        const value = this.form.get(this.templateMap()![inherittedField])?.value;
         if (value !== undefined) {
           childFieldControl?.setValue(value);
           childFieldControl?.updateValueAndValidity();

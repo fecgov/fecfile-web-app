@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -17,12 +17,12 @@ import { CurrencyPipe } from '@angular/common';
   styleUrls: ['../../transaction.scss'],
   imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe],
 })
-export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchC2Service);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 
-  @Input() loan?: Transaction;
+  loan = input<Transaction>();
 
   override sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
@@ -30,13 +30,13 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   ];
 
   override getParams(): QueryParams {
-    if (this.loan?.id) {
-      return { ...super.getParams(), parent: this.loan.id };
+    if (this.loan()?.id) {
+      return { ...super.getParams(), parent: this.loan()?.id ?? '' };
     }
     return super.getParams();
   }
   override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
-    if (!this.loan?.id) {
+    if (!this.loan()?.id) {
       this.items = [];
       this.totalItems = 0;
       this.loading = false;
@@ -50,19 +50,19 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     new TableAction(
       'View',
       this.editItem.bind(this),
-      () => !this.reportIsEditable,
+      () => !this.reportIsEditable(),
       () => true,
     ),
     new TableAction(
       'Edit',
       this.editItem.bind(this),
-      () => this.reportIsEditable,
+      () => this.reportIsEditable(),
       () => true,
     ),
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
-      () => this.reportIsEditable,
+      () => this.reportIsEditable(),
       () => true,
     ),
   ];

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -19,7 +19,7 @@ import { LabelPipe } from '../../../../shared/pipes/label.pipe';
   styleUrls: ['../../transaction.scss'],
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, CurrencyPipe, FecDatePipe, LabelPipe],
 })
-export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchCService);
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleCTransactionTypeLabels,

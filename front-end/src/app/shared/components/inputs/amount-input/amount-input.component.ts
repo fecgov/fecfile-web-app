@@ -4,6 +4,7 @@ import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
+import { InputText } from 'primeng/inputtext';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -14,7 +15,6 @@ import { LinkedReportInputComponent } from '../linked-report-input/linked-report
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
-import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-amount-input',
@@ -34,6 +34,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   private readonly store = inject(Store);
   readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  readonly report = this.store.selectSignal(selectActiveReport);
+
   @Input() contributionAmountReadOnly = false;
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
@@ -54,9 +56,15 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     effect(() => {
       if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
         this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
-          const form3X = this.activeReportSignal() as Form3X;
           const date = control.value;
-          if (date && !DateUtils.isWithin(date, form3X.coverage_from_date, form3X.coverage_through_date)) {
+          if (
+            date &&
+            !DateUtils.isWithin(
+              date,
+              (this.report() as Form3X).coverage_from_date,
+              (this.report() as Form3X).coverage_through_date,
+            )
+          ) {
             const message = 'Date must fall within the report date range.';
             return { invaliddate: { msg: message } };
           }

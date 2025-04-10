@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -6,7 +6,6 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
@@ -15,21 +14,21 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { FormComponent } from '../app-destroyer.component';
 import {
   TransactionType,
-  ContactTypeLabels,
   ReportTypes,
-  TransactionTemplateMapType,
   Contact,
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
+  TransactionTemplateMapType,
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 
 @Component({
   template: '',
@@ -44,13 +43,12 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   protected readonly reportService = inject(ReportService);
   protected readonly activatedRoute = inject(ActivatedRoute);
 
-  protected readonly navigationEventSignal = this.store.selectSignal(selectNavigationEvent);
+  readonly transaction = input<Transaction>();
+  readonly formProperties = computed(() => this.transactionType()?.getFormControlNames() ?? []);
+  readonly transactionType = computed(() => this.transaction()?.transactionType);
+  readonly contactTypeOptions = computed(() => getContactTypeOptions(this.transactionType()?.contactTypeOptions ?? []));
 
-  @Input() transaction: Transaction | undefined;
-  formProperties: string[] = [];
-  transactionType?: TransactionType;
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-
+  readonly report = this.store.selectSignal(selectActiveReport);
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
 
   readonly reportTypes = ReportTypes;
@@ -62,58 +60,44 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   };
 
   contactIdMap: ContactIdMapType = {};
-  templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  readonly templateMap = computed(() => this.transactionType()?.templateMap);
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   isEditable = computed(
-    () =>
-      this.reportService.isEditable(this.activeReportSignal()) &&
-      !ReattRedesUtils.isCopyFromPreviousReport(this.transaction),
+    () => this.reportService.isEditable(this.report()) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()),
   );
   memoCodeCheckboxLabel$ = of('');
+  readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   constructor() {
     super();
     effect(() => {
       if (!this.isEditable()) this.form.disable();
     });
-
-    effect(() => {
-      const navEvent = this.navigationEventSignal();
-      if (navEvent) {
-        const navigationEvent = { ...navEvent };
-        this.handleNavigate(navigationEvent);
-        this.store.dispatch(navigationEventClearAction());
-      }
-    });
   }
 
   ngOnInit(): void {
-    if (!this.transaction?.transactionType?.templateMap) {
+    const transaction = this.transaction();
+    if (!transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
 
-    this.transactionType = this.transaction.transactionType;
-    this.templateMap = this.transactionType.templateMap;
-    this.formProperties = this.transactionType.getFormControlNames();
-    this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
-
     this.form = this.fb.group(
-      SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.transaction.transactionType.schema),
+      SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties(), this.transactionType()?.schema),
       { updateOn: 'blur' },
     );
 
-    this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
+    this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, transaction.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
+    TransactionFormUtils.onInit(this, this.form, transaction, this.contactIdMap, this.contactService);
 
     // Determine if amount should always be negative and then force it to be so if needed
-    if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+    if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
       this.form
-        .get(this.templateMap.amount)
+        .get(this.templateMap()!.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
+            this.form.patchValue({ [this.templateMap()!.amount]: -1 * amount });
           }
         });
     }
@@ -121,7 +105,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     // If this single-entry transaction has inherited fields from its parent, load values
     // from parent on create and set field to read-only. For edit, just make
     // the fields read-only
-    if (this.transaction?.transactionType?.getInheritedFields(this.transaction)) {
+    if (transaction.transactionType?.getInheritedFields(transaction)) {
       this.initInheritedFieldsFromParent();
     }
 
@@ -137,19 +121,21 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   async save(navigationEvent: NavigationEvent): Promise<void> {
+    const transaction = this.transaction();
+    const templateMap = this.templateMap();
     // update all contacts with changes from form.
-    if (this.transaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+    if (transaction && templateMap) {
+      TransactionContactUtils.updateContactsWithForm(transaction, templateMap, this.form);
     } else {
       this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
-      this.transaction,
+      this.transaction(),
       this.activeReportId,
       this.form,
-      this.formProperties,
+      this.formProperties(),
     );
     await this.processPayload(payload, navigationEvent);
   }
@@ -171,14 +157,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   async getConfirmations(): Promise<boolean> {
-    if (!this.transaction) return false;
+    if (!this.transaction()) return false;
     return this.confirmationService.confirmWithUser(
       this.form,
-      this.transaction.transactionType?.contactConfig ?? {},
+      this.transaction()!.transactionType?.contactConfig ?? {},
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
       'dialog',
-      this.transaction,
+      this.transaction(),
     );
   }
 
@@ -258,9 +244,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     this.formSubmitted = false;
     this.form = TransactionFormUtils.resetForm(
       this.form,
-      this.transaction,
-      this.contactTypeOptions,
-      this.committeeAccountSignal(),
+      this.transaction(),
+      this.contactTypeOptions(),
+      this.committeeAccount(),
     );
   }
 
@@ -268,7 +254,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.updateFormWithPrimaryContact(
       selectItem,
       this.form,
-      this.transaction,
+      this.transaction(),
       this.contactIdMap['contact_1'],
     );
   }
@@ -277,7 +263,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.updateFormWithCandidateContact(
       selectItem,
       this.form,
-      this.transaction,
+      this.transaction(),
       this.contactIdMap['contact_2'],
     );
   }
@@ -286,7 +272,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.updateFormWithSecondaryContact(
       selectItem,
       this.form,
-      this.transaction,
+      this.transaction(),
       this.contactIdMap['contact_2'],
     );
   }
@@ -295,7 +281,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.updateFormWithTertiaryContact(
       selectItem,
       this.form,
-      this.transaction,
+      this.transaction(),
       this.contactIdMap['contact_3'],
     );
   }
@@ -304,26 +290,26 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.updateFormWithQuaternaryContact(
       selectItem,
       this.form,
-      this.transaction,
+      this.transaction(),
       this.contactIdMap['contact_4'],
     );
   }
 
   clearFormQuaternaryContact() {
-    TransactionContactUtils.clearFormQuaternaryContact(this.form, this.transaction, this.contactIdMap['contact_4']);
+    TransactionContactUtils.clearFormQuaternaryContact(this.form, this.transaction(), this.contactIdMap['contact_4']);
   }
 
   updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithQuinaryContact(
       selectItem,
       this.form,
-      this.transaction,
+      this.transaction(),
       this.contactIdMap['contact_5'],
     );
   }
 
   clearFormQuinaryContact() {
-    TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction, this.contactIdMap['contact_5']);
+    TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction(), this.contactIdMap['contact_5']);
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
@@ -350,21 +336,22 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
    * The entity_type is handled as a special case because it does not exist in the templateMap.
    */
   initInheritedFieldsFromParent(): void {
-    if (!this.transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
+    const transaction = this.transaction();
+    if (!transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
 
     // If creating a new transaction, set both form and contact_1 values from parent transaction
-    if (!this.transaction.id) {
-      const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
-      this.transaction.contact_1 = ancestor?.contact_1;
-      this.transaction.contact_1_id = ancestor?.contact_1_id;
+    if (!transaction.id) {
+      const ancestor = transaction.parent_transaction ?? transaction.debt ?? transaction.loan;
+      transaction.contact_1 = ancestor?.contact_1;
+      transaction.contact_1_id = ancestor?.contact_1_id;
 
       const entityTypeValue = ancestor?.contact_1?.type;
       if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);
       this.form.get('entity_type')?.updateValueAndValidity();
 
-      this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
-        if (ancestor && this.transaction) {
-          const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
+      transaction.transactionType.getInheritedFields(transaction)?.forEach((inherittedField) => {
+        if (ancestor && transaction) {
+          const fieldControl = this.form.get(transaction.transactionType.templateMap[inherittedField]);
           const value = ancestor[`${ancestor?.transactionType.templateMap[inherittedField]}` as keyof Transaction];
           if (value !== undefined) {
             fieldControl?.setValue(value);
@@ -376,11 +363,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     // Set fields to read-only
     this.form.get('entity_type')?.disable();
-    this.transaction.transactionType.getInheritedFields(this.transaction)?.forEach((inherittedField) => {
-      if (this.transaction) {
-        const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
-        fieldControl?.disable();
-      }
+    transaction.transactionType.getInheritedFields(transaction)?.forEach((inherittedField) => {
+      const fieldControl = this.form.get(transaction.transactionType.templateMap[inherittedField]);
+      fieldControl?.disable();
     });
   }
 }

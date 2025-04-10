@@ -1,40 +1,40 @@
-<h1>{{ transaction?.transactionType?.title }}</h1>
-@if (transactionType?.subTitle) {
-  <div>{{ transactionType?.subTitle }}</div>
+<h1>{{ transaction()?.transactionType?.title }}</h1>
+@if (transactionType()?.subTitle) {
+  <div>{{ transactionType()?.subTitle }}</div>
 }
-@if (activeReportSignal().report_type === reportTypes.F24) {
+@if (report().report_type === reportTypes.F24) {
   <app-independent-expenditure-create-f3x-input></app-independent-expenditure-create-f3x-input>
 }
 @if (isEditable()) {
   <h4 class="read-only-tag subtitle">READ ONLY</h4>
 }
 
-<p class="group-description">{{ transactionType?.description }}</p>
+<p class="group-description">{{ transactionType()?.description }}</p>
 <p-accordion expandIcon="pi pi-angle-right" value="0">
   <p-accordion-panel value="0">
     <p-accordion-header>
       <div class="flex align-items-center">
-        <strong>{{ transactionType?.accordionTitle }}:</strong>
+        <strong>{{ transactionType()?.accordionTitle }}:</strong>
         <p class="accordion-subtext">
-          {{ transactionType?.accordionSubText }}
+          {{ transactionType()?.accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      @if (transactionType?.formTitle) {
+      @if (transactionType()?.formTitle) {
         <h2>
-          {{ transactionType?.formTitle }}
+          {{ transactionType()?.formTitle }}
         </h2>
       }
 
-      <h3>{{ transactionType?.contactTitle }}</h3>
+      <h3>{{ transactionType()?.contactTitle }}</h3>
       <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [isEditable]="isEditable()"
           [form]="form"
           [formSubmitted]="formSubmitted"
-          [transaction]="transaction"
-          [contactTypeOptions]="contactTypeOptions"
+          [transaction]="transaction()"
+          [contactTypeOptions]="contactTypeOptions()"
           [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
