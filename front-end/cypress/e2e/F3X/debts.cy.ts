@@ -1,7 +1,9 @@
 import { candidateFormData, committeeFormData, organizationFormData } from '../models/ContactFormModel';
 import { defaultDebtFormData as debtFormData } from '../models/TransactionFormModel';
+import { ContactListPage } from '../pages/contactListPage';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { F3XSetup, Setup } from './f3x-setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
@@ -68,7 +70,10 @@ describe('Debts', () => {
 
   it('should test Debt Owed By Committee loan - Report debt repayment', () => {
     PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
+    ReportListPage.deleteAllReports();
+    ContactListPage.deleteAllContacts();
     cy.location('pathname').should('include', '/reports');
+
     setupDebtOwedByCommittee({
       candidate: true,
       organization: true,
@@ -84,8 +89,9 @@ describe('Debts', () => {
     PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
     cy.contains('Coordinated Party Expenditure').click({ force: true });
     setupCoordinatedPartyExpenditure();
-
     PageUtils.urlCheck('/list');
     cy.contains('Coordinated Party Expenditure').should('exist');
+
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 });
