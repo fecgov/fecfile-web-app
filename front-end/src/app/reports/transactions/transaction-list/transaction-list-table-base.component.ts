@@ -296,7 +296,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
       );
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
+      ReattRedesUtils.selectReportDialog.set([transaction, ReattRedesTypes.REATTRIBUTED]);
     }
   }
 
@@ -306,7 +306,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
       );
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
+      ReattRedesUtils.selectReportDialog.set([transaction, ReattRedesTypes.REDESIGNATED]);
     }
   }
 

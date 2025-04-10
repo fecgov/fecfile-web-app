@@ -4,11 +4,11 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
-import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
 import { cloneDeep } from 'lodash';
+import { signal } from '@angular/core';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -20,7 +20,7 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static readonly selectReportDialogSubject = new Subject<[Transaction, ReattRedesTypes]>();
+  public static readonly selectReportDialog = signal<[Transaction, ReattRedesTypes] | undefined>(undefined);
 
   public static isReattRedes(transaction: Transaction | undefined, types: ReattRedesTypes[] = []): boolean {
     if (!transaction || !('reattribution_redesignation_tag' in transaction)) return false;

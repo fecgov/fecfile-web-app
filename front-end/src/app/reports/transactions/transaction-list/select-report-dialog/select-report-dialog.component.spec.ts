@@ -41,7 +41,7 @@ describe('SelectReportDialogComponent', () => {
 
   it('should get a list of available reports', fakeAsync(() => {
     component.ngOnInit();
-    ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
+    ReattRedesUtils.selectReportDialog.set([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
     tick(500);
 
     expect(futureSpy).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe('SelectReportDialogComponent', () => {
 
   it('should clear and close on cancel', async () => {
     component.ngOnInit();
-    ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
+    ReattRedesUtils.selectReportDialog.set([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
     expect(component.transaction).toBeTruthy();
 
     component.cancel();
@@ -86,7 +86,7 @@ describe('SelectReportDialogComponent', () => {
     it('should redirect based on the selected report and transaction', async () => {
       const routerSpy = spyOn(component.router, 'navigateByUrl');
       component.ngOnInit();
-      ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
+      ReattRedesUtils.selectReportDialog.set([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
       component.selectedReport = component.availableReports[0];
       component.selectedReport = testActiveReport;
       try {
