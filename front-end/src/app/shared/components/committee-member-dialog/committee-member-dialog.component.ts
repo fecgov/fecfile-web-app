@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  inject,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, effect, ElementRef, inject, input, output, viewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -28,7 +18,7 @@ import { Roles, CommitteeMember } from 'app/shared/models';
   styleUrls: ['./committee-member-dialog.component.scss'],
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select, ButtonDirective, Ripple],
 })
-export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges, AfterViewInit {
+export class CommitteeMemberDialogComponent extends FormComponent {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly committeeMemberService = inject(CommitteeMemberService);
   protected readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
@@ -40,12 +30,21 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     };
   });
 
-  @Input() detailVisible = false;
-  @Input() member?: CommitteeMember = undefined;
-  @Output() readonly detailVisibleChange = new EventEmitter<boolean>();
-  @Output() readonly userAdded = new EventEmitter<string>();
-  @Output() readonly roleEdited = new EventEmitter<undefined>();
-  @Output() readonly detailClose = new EventEmitter<undefined>();
+  readonly detailVisible = input(false, {
+    transform: (value: boolean) => {
+      if (value) {
+        this.resetForm();
+        this.dialog()?.nativeElement.showModal();
+      }
+
+      return value;
+    },
+  });
+  readonly member = input.required<CommitteeMember>();
+
+  readonly userAdded = output<string>();
+  readonly roleEdited = output<undefined>();
+  readonly detailClose = output<undefined>();
 
   readonly form: FormGroup = new FormGroup(
     {
@@ -59,17 +58,13 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     { updateOn: 'blur' },
   );
 
-  @ViewChild('dialog') dialog?: ElementRef;
+  private readonly dialog = viewChild<ElementRef>('dialog');
 
-  ngAfterViewInit() {
-    this.dialog?.nativeElement.addEventListener('close', () => this.detailClose.emit());
-  }
-
-  ngOnChanges(): void {
-    if (this.detailVisible) {
-      this.resetForm();
-      this.dialog?.nativeElement.showModal();
-    }
+  constructor() {
+    super();
+    effect(() => {
+      this.dialog()?.nativeElement.addEventListener('close', () => this.detailClose.emit(undefined));
+    });
   }
 
   updateSelected(roleOption: (typeof this.roleOptions)[0]) {
@@ -78,7 +73,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
 
   public submit() {
     this.formSubmitted = true;
-    if (this.member) {
+    if (this.member().id) {
       this.editRole();
     } else {
       this.addUser();
@@ -95,9 +90,9 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
       const role = this.form.get('role')?.value;
       if (this.form.get('role')?.valid) {
         try {
-          await this.committeeMemberService.update({ ...this.member, role } as CommitteeMember);
-          this.dialog?.nativeElement.close();
-          this.roleEdited.emit();
+          await this.committeeMemberService.update({ ...this.member(), role } as CommitteeMember);
+          this.dialog()?.nativeElement.close();
+          this.roleEdited.emit(undefined);
           this.resetForm();
         } catch (error) {
           console.error('Error updating member', error);
@@ -117,7 +112,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     if (this.form.valid && email) {
       try {
         const newUser = await this.committeeMemberService.addMember(email, role);
-        this.dialog?.nativeElement.close();
+        this.dialog()?.nativeElement.close();
         this.userAdded.emit(newUser.email);
         this.resetForm();
       } catch (error) {
@@ -127,7 +122,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
   }
 
   get role(): string {
-    if (!this.member) return '';
-    return Roles[this.member.role as keyof typeof Roles];
+    if (!this.member().id) return '';
+    return Roles[this.member().role as keyof typeof Roles];
   }
 }

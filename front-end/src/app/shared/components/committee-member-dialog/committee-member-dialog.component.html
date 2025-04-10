@@ -1,12 +1,12 @@
 <dialog #dialog tabindex="-1" aria-labelledby="dialog-title">
   <div class="dialog-header">
-    <h1 class="dialog-title" id="dialog-title">{{ member ? 'Edit' : 'Add' }} User</h1>
+    <h1 class="dialog-title" id="dialog-title">{{ member() ? 'Edit' : 'Add' }} User</h1>
     <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
   </div>
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
     <div class="dialog-body">
       <div class="grid">
-        @if (member) {
+        @if (member().id) {
           <div class="col-12">
             <div class="field">
               <label id="role-label" for="role">CURRENT ROLE</label>
@@ -30,7 +30,7 @@
               formControlName="role"
               [options]="roleOptions"
               [autoDisplayFirst]="true"
-              [autofocus]="!!member"
+              [autofocus]="!!member()"
             ></p-select>
             <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
@@ -56,7 +56,7 @@
             data-cy="membership-submit"
             pButton
             pRipple
-            [label]="member ? 'Change' : 'Add'"
+            [label]="member().id ? 'Change' : 'Add'"
             class="p-button-primary float-right"
           ></button>
         </div>
