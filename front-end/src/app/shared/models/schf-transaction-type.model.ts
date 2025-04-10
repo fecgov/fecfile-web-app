@@ -1,13 +1,22 @@
+import { FormGroup } from '@angular/forms';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
 
 export abstract class SchFTransactionType extends TransactionType {
   scheduleId = ScheduleIds.F;
 
+  // Form layout
+  override contact2IsRequired = () => true;
+  override contact3IsRequired = true;
+  override contact4IsRequired = (form: FormGroup) =>
+    form.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
+  override contact5IsRequired = (form: FormGroup) =>
+    form.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
+  override candidateInfoPosition = 'high';
+
   //Labels
-  override dateLabel = 'DATE EXPENDED';
   override amountInputHeader = 'Expenditure information';
-  override purposeDescripLabel = 'PURPOSE OF EXPENDITURE';
+  override purposeDescripLabel = 'PURPOSE OF DISBURSEMENT';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
@@ -26,7 +35,7 @@ export abstract class SchFTransactionType extends TransactionType {
     occupation: '',
     organization_name: 'payee_organization_name',
     committee_fec_id: 'payee_committee_id_number',
-    committee_name: '',
+    committee_name: 'payee_committee_name',
     candidate_fec_id: 'payee_candidate_id_number',
     candidate_last_name: 'payee_candidate_last_name',
     candidate_first_name: 'payee_candidate_first_name',
@@ -47,11 +56,11 @@ export abstract class SchFTransactionType extends TransactionType {
     interest_rate_setting: '',
     due_date_setting: '',
     secured: '',
-    aggregate: 'aggregate_general_elect_expended',
+    aggregate: 'aggregate_general_elec_expended',
     calendar_ytd: '',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',
-    category_code: '',
+    category_code: 'category_code',
     election_code: 'election_code',
     election_other_description: 'election_other_description',
     secondary_name: '',
@@ -73,5 +82,14 @@ export abstract class SchFTransactionType extends TransactionType {
     signatory_2_suffix: '',
     signatory_2_title: '',
     signatory_2_date: '',
+    quaternary_committee_fec_id: 'designating_committee_id_number',
+    quaternary_committee_name: 'designating_committee_name',
+    quinary_committee_fec_id: 'subordinate_committee_id_number',
+    quinary_committee_name: 'subordinate_committee_name',
+    quinary_street_1: 'subordinate_street_1',
+    quinary_street_2: 'subordinate_street_2',
+    quinary_city: 'subordinate_city',
+    quinary_state: 'subordinate_state',
+    quinary_zip: 'subordinate_zip',
   };
 }

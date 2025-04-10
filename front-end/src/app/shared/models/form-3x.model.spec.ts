@@ -1,4 +1,4 @@
-import { F3xReportCodes } from '../utils/report-code.utils';
+import { ReportCodes } from '../utils/report-code.utils';
 import { F3xFormTypes, Form3X } from './form-3x.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
@@ -74,7 +74,7 @@ describe('Form3X', () => {
         id: '999',
         form_type: F3xFormTypes.F3XT,
         committee_name: 'foo',
-        report_code: F3xReportCodes.Q1,
+        report_code: ReportCodes.Q1,
         report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
       };
       const form3X = Form3X.fromJSON(data);

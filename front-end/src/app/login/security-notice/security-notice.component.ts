@@ -71,6 +71,6 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
 
     const retval = await this.usersService.updateCurrentUser(updatedUserLoginData);
     this.store.dispatch(userLoginDataUpdatedAction({ payload: retval }));
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/select-committee']);
   }
 }

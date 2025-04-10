@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { F3xCoverageDates, Form3X } from '../models/form-3x.model';
+import { Form3X, CoverageDates } from '../models';
 import { Report } from '../models/report.model';
-import { F3xReportCodes } from '../utils/report-code.utils';
+import { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
 
 @Injectable({
@@ -12,22 +12,22 @@ import { ReportService } from './report.service';
 export class Form3XService extends ReportService {
   override apiEndpoint = '/reports/form-3x';
 
-  f3xReportCodeLabelMap$ = new BehaviorSubject<{ [key in F3xReportCodes]: string } | undefined>(undefined);
+  f3xReportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
 
-  public async getF3xCoverageDates(): Promise<F3xCoverageDates[]> {
+  public async getF3xCoverageDates(): Promise<CoverageDates[]> {
     const [response, reportCodeLabelMap] = await Promise.all([
-      this.apiService.get<F3xCoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
+      this.apiService.get<CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
       this.getReportCodeLabelMap(),
     ]);
     return response.map((fx3CoverageDate) =>
-      F3xCoverageDates.fromJSON(fx3CoverageDate, reportCodeLabelMap[fx3CoverageDate.report_code!]),
+      CoverageDates.fromJSON(fx3CoverageDate, reportCodeLabelMap[fx3CoverageDate.report_code!]),
     );
   }
 
-  public async getReportCodeLabelMap(): Promise<{ [key in F3xReportCodes]: string }> {
+  public async getReportCodeLabelMap(): Promise<{ [key in ReportCodes]: string }> {
     let map = this.f3xReportCodeLabelMap$.getValue();
     if (!map) {
-      map = await this.apiService.get<{ [key in F3xReportCodes]: string }>(`${this.apiEndpoint}/report_code_map/`);
+      map = await this.apiService.get<{ [key in ReportCodes]: string }>(`${this.apiEndpoint}/report_code_map/`);
 
       this.f3xReportCodeLabelMap$.next(map);
     }

@@ -9,7 +9,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
 import { firstValueFrom, of } from 'rxjs';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -61,7 +61,7 @@ describe('LinkedReportInputComponent', () => {
     const testF3X = Form3X.fromJSON({
       coverage_from_date: '2020-01-15',
       coverage_through_date: '2020-04-29',
-      report_code: F3xReportCodes.Q1,
+      report_code: ReportCodes.Q1,
       report_code_label: 'APRIL 15 (Q1)',
     });
 
