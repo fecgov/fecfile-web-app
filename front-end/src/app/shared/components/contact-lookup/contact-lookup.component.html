@@ -1,27 +1,27 @@
-@if (candidateOffice && contactType === contactTypes.CANDIDATE) {
+@if (candidateOffice() && contactType() === contactTypes.CANDIDATE) {
   <div class="grid">
-    <em>{{ candidateOfficeLabel }} candidates only</em>
+    <em>{{ candidateOfficeLabel() }} candidates only</em>
   </div>
 }
 <div class="grid contact-lookup-container">
-  <div class="px-0" [class.dropdown-with-search]="showSearchBoxCallback()">
+  <div class="px-0" [class.dropdown-with-search]="showSearchBox()">
     <p-select
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
-      [options]="contactTypeOptions"
-      [readonly]="contactTypeReadOnly"
-      styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
+      [options]="contactTypeOptions()"
+      [readonly]="contactTypeReadOnly()"
+      styleClass="{{ contactTypeReadOnly() ? 'readonly' : '' }}"
       id="entity_type_dropdown"
       appendTo="body"
     >
       <ng-template pTemplate="dropdownicon">
-        @if (contactTypeOptions.length > 1) {
+        @if (contactTypeOptions().length > 1) {
           <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="11px" width="11px" />
         }
       </ng-template>
     </p-select>
   </div>
-  @if (showSearchBoxCallback()) {
+  @if (showSearchBox()) {
     <div class="pl-0">
       <p-autoComplete
         id="searchBox"
@@ -57,7 +57,7 @@
       </p-autoComplete>
     </div>
   }
-  @if (showCreateNewContactButton) {
+  @if (showCreateNewContactButton()) {
     <div class="add-contact-container">
       or
       <span [style.verticalAlign]="'middle'"

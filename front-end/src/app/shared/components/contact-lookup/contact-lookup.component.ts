@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, output, viewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -30,55 +30,56 @@ import { DestroyerComponent } from '../app-destroyer.component';
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
   public readonly contactService = inject(ContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
-  @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() showCreateNewContactButton = true;
-  @Input() showSearchBoxCallback = () => true;
+  readonly contactTypeOptions = input.required<PrimeOptions>();
+  readonly showCreateNewContactButton = input(true);
 
-  @Input() maxFecCommitteeResults = 10;
-  @Input() maxFecfileCommitteeResults = 5;
-  @Input() maxFecfileIndividualResults = 10;
-  @Input() maxFecfileOrganizationResults = 10;
-  @Input() includeFecfileResults = true;
-  @Input() candidateOffice?: CandidateOfficeType;
-  @Input() excludeFecIds: string[] = [];
-  @Input() excludeIds: string[] = [];
+  readonly showSearchBox = input<boolean>(true);
 
-  @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
-  @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
-  @Output() readonly createNewContactSelect = new EventEmitter<void>();
+  readonly maxFecCommitteeResults = input(10);
+  readonly maxFecfileCommitteeResults = input(5);
+  readonly maxFecfileIndividualResults = input(10);
+  readonly maxFecfileOrganizationResults = input(10);
+  readonly includeFecfileResults = input(true);
+  readonly candidateOffice = input<CandidateOfficeType>();
+  readonly excludeFecIds = input<string[]>([]);
+  readonly excludeIds = input<string[]>([]);
 
-  @ViewChild(AutoComplete)
-  set autoComplete(ac: AutoComplete) {
-    setTimeout(() => {
-      if (ac?.dropdownButton) {
-        ac.dropdownButton.nativeElement.tabIndex = -1;
-      }
-    }, 0);
-  }
+  readonly contactTypeSelect = output<ContactTypes>();
+  readonly contactLookupSelect = output<Contact>();
+  readonly createNewContactSelect = output<void>();
 
-  contactType = ContactTypes.INDIVIDUAL;
-  contactTypes = ContactTypes;
-  contactTypeReadOnly = false;
+  readonly autoComplete = viewChild<AutoComplete>(AutoComplete);
+
+  readonly contactType = model(ContactTypes.INDIVIDUAL);
+  readonly contactTypes = ContactTypes;
+  readonly contactTypeReadOnly = computed(() => this.contactTypeOptions().length < 2);
   contactLookupList: SelectItemGroup[] = [];
-  candidateOfficeLabel?: string;
+  readonly candidateOfficeLabel = computed(() => LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice()));
   contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
   searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   searchTerm = '';
 
+  constructor() {
+    super();
+    effect(() => {
+      const ac = this.autoComplete();
+      if (ac?.dropdownButton) {
+        queueMicrotask(() => {
+          if (ac.dropdownButton) ac.dropdownButton.nativeElement.tabIndex = -1;
+        });
+      }
+    });
+  }
+
   ngOnInit(): void {
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
-    this.contactTypeFormControl.setValue(this.contactType);
-    this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
-    if (this.candidateOffice) {
-      this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
-    }
+    this.contactTypeFormControl.setValue(this.contactType());
 
     this.contactTypeFormControl.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((contactType: ContactTypes | null) => {
         if (!contactType) return;
-        this.contactType = contactType;
+        this.contactType.set(contactType);
         this.contactTypeSelect.emit(contactType);
       });
   }
@@ -93,40 +94,42 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
           this.contactLookupList = (
             await this.contactService.candidateLookup(
               searchTerm,
-              this.maxFecCommitteeResults,
-              this.maxFecfileCommitteeResults,
-              this.candidateOffice,
-              this.excludeFecIds,
-              this.excludeIds,
+              this.maxFecCommitteeResults(),
+              this.maxFecfileCommitteeResults(),
+              this.candidateOffice(),
+              this.excludeFecIds(),
+              this.excludeIds(),
             )
-          ).toSelectItemGroups(this.includeFecfileResults);
+          ).toSelectItemGroups(this.includeFecfileResults());
           break;
         case ContactTypes.COMMITTEE:
-          this.contactService
-            .committeeLookup(
+          this.contactLookupList = (
+            await this.contactService.committeeLookup(
               searchTerm,
-              this.maxFecCommitteeResults,
-              this.maxFecfileCommitteeResults,
-              this.excludeFecIds,
-              this.excludeIds,
+              this.maxFecCommitteeResults(),
+              this.maxFecfileCommitteeResults(),
+              this.excludeFecIds(),
+              this.excludeIds(),
             )
-            .then((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
-            });
+          ).toSelectItemGroups(this.includeFecfileResults());
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService
-            .individualLookup(searchTerm, this.maxFecfileIndividualResults, this.excludeIds)
-            .then((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups();
-            });
+          this.contactLookupList = (
+            await this.contactService.individualLookup(
+              searchTerm,
+              this.maxFecfileIndividualResults(),
+              this.excludeIds(),
+            )
+          ).toSelectItemGroups();
           break;
         case ContactTypes.ORGANIZATION:
-          this.contactService
-            .organizationLookup(searchTerm, this.maxFecfileOrganizationResults, this.excludeIds)
-            .then((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups();
-            });
+          this.contactLookupList = (
+            await this.contactService.organizationLookup(
+              searchTerm,
+              this.maxFecfileOrganizationResults(),
+              this.excludeIds(),
+            )
+          ).toSelectItemGroups();
           break;
       }
     } else {

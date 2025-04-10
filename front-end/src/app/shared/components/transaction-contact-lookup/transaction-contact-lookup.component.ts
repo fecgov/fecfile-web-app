@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, viewChild, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -32,7 +32,7 @@ export class TransactionContactLookupComponent implements OnInit {
   @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() readonly contactSelect = new EventEmitter<SelectItem<Contact>>();
 
-  @ViewChild(ContactDialogComponent) contactDialog!: ContactDialogComponent;
+  contactDialog = viewChild(ContactDialogComponent);
 
   detailVisible = false;
   dialogContactTypeOptions: PrimeOptions = [];
@@ -126,9 +126,9 @@ export class TransactionContactLookupComponent implements OnInit {
    * @param contactType
    */
   contactTypeSelected(contactType: ContactTypes) {
-    this.contactDialog.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]);
-    this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
-    this.currentType = this.contactDialog.contactTypeOptions[0].value as ContactTypes;
+    this.contactDialog()!.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]));
+    this.currentContactLabel = this.contactDialog()!.contactTypeOptions()[0].label;
+    this.currentType = this.contactDialog()!.contactTypeOptions()[0].value as ContactTypes;
     this.contactTypeSelect.emit(contactType);
   }
 
@@ -138,13 +138,13 @@ export class TransactionContactLookupComponent implements OnInit {
         value: contact,
       });
     } else {
-      this.contactDialog.updateContact(contact);
+      this.contactDialog()?.updateContact(contact);
       this.detailVisible = true;
     }
   }
 
   createNewContactSelected() {
-    this.contactDialog.updateContact(Contact.fromJSON({ type: this.currentType }));
+    this.contactDialog()?.updateContact(Contact.fromJSON({ type: this.currentType }));
     this.detailVisible = true;
   }
 

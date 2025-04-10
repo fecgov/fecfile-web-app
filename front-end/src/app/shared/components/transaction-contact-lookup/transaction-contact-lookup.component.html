@@ -1,6 +1,7 @@
 <div class="p-fluid">
   <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'">
     <app-contact-lookup
+      [contactType]="currentType"
       [contactTypeOptions]="contactTypeOptions"
       [candidateOffice]="mandatoryCandidateOffice"
       [excludeFecIds]="excludeFecIds"

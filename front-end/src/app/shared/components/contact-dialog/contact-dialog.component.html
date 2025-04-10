@@ -1,8 +1,8 @@
 <div [style]="{ display: dialogVisible ? '' : 'none' }" [class.contact-dialog-not-submitted]="!formSubmitted">
   <p-dialog
-    [visible]="detailVisible"
+    [visible]="detailVisible()"
     [style]="{ width: '90%' }"
-    [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
+    [header]="headerTitle() ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
@@ -19,11 +19,12 @@
           <div class="field">
             <label for="type">CONTACT TYPE</label>
             <app-contact-lookup
-              [contactTypeOptions]="contactTypeOptions"
-              [showSearchBoxCallback]="showSearchBox"
+              [contactType]="contactType()"
+              [contactTypeOptions]="contactTypeOptions()"
+              [showSearchBox]="showSearchBox()"
               [showCreateNewContactButton]="false"
               [includeFecfileResults]="false"
-              [candidateOffice]="defaultCandidateOffice"
+              [candidateOffice]="defaultCandidateOffice()"
               (contactTypeSelect)="contactTypeChanged($event)"
               (contactLookupSelect)="updateContact($event)"
             >
@@ -32,7 +33,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if (contactType === ContactTypes.CANDIDATE) {
+      @if (isCand()) {
         <div class="grid">
           <div class="col-6">
             <div class="field">
@@ -48,9 +49,9 @@
           <div class="col-4"></div>
         </div>
       }
-      @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
+      @if (isCom() || isOrg()) {
         <div class="grid">
-          @if (contactType === ContactTypes.COMMITTEE) {
+          @if (isCom()) {
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
@@ -70,12 +71,12 @@
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
-          @if (contactType === ContactTypes.ORGANIZATION) {
+          @if (isOrg()) {
             <div class="col-4"></div>
           }
         </div>
       }
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (isInd() || isCand()) {
         <div class="grid">
           <div class="col-4">
             <div class="field">
@@ -178,7 +179,7 @@
             <p-select
               inputId="state"
               formControlName="state"
-              [options]="stateOptions"
+              [options]="stateOptions()"
               [autoDisplayFirst]="false"
               appendTo="body"
             ></p-select>
@@ -208,7 +209,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (isInd() || isCand()) {
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -244,7 +245,7 @@
           </div>
         </div>
       }
-      @if (contactType === ContactTypes.CANDIDATE) {
+      @if (isCand()) {
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -266,7 +267,7 @@
       }
     </form>
 
-    @if (showHistory && !isNewItem) {
+    @if (showHistory() && !isNewItem) {
       <div>
         <app-table
           title="Transaction history"
@@ -306,7 +307,7 @@
           class="p-button-secondary mr-4"
           (click)="closeDialog()"
         ></button>
-        @if (headerTitle) {
+        @if (headerTitle()) {
           <button
             type="button"
             pButton

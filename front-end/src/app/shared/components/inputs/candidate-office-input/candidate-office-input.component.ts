@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, OnInit, signal } from '@angular/core';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { BaseInputComponent } from '../base-input.component';
@@ -16,23 +16,19 @@ import { InputText } from 'primeng/inputtext';
   imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText],
 })
 export class CandidateOfficeInputComponent extends BaseInputComponent implements OnInit {
-  @Input() officeFormControlName = '';
-  @Input() stateFormControlName = '';
-  @Input() districtFormControlName = '';
+  readonly officeFormControlName = input.required<string>();
+  readonly stateFormControlName = input.required<string>();
+  readonly districtFormControlName = input.required<string>();
 
-  candidateOfficeTypeOptions: PrimeOptions = [];
-  candidateStateOptions: PrimeOptions = [];
-  candidateDistrictOptions: PrimeOptions = [];
+  readonly candidateOfficeTypeOptions = signal(LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels));
+  readonly candidateStateOptions = signal(LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary()));
+  readonly candidateDistrictOptions = signal<PrimeOptions>([]);
 
-  electionCodeField: string | undefined = undefined;
+  electionCodeField = this.transaction?.transactionType.templateMap.election_code;
 
   ngOnInit(): void {
-    this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
-    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-    this.electionCodeField = this.transaction?.transactionType.templateMap.election_code;
-
     // Update the enabled/disabled state on candidate fields whenever the candidate office changes.
-    (this.form?.get(this.officeFormControlName) as SubscriptionFormControl).addSubscription(() => {
+    (this.form?.get(this.officeFormControlName()) as SubscriptionFormControl).addSubscription(() => {
       this.updateCandidateFieldAvailability();
     });
 
@@ -45,7 +41,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     }
 
     // Update the candidate district options and value every time the candidate state field changes.
-    (this.form.get(this.stateFormControlName) as SubscriptionFormControl).addSubscription(() => {
+    (this.form.get(this.stateFormControlName()) as SubscriptionFormControl).addSubscription(() => {
       this.updateCandidateDistrict();
     });
 
@@ -56,8 +52,8 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     ) {
       this.form.get(this.transaction.transactionType.templateMap.election_code)?.updateValueAndValidity();
     }
-    this.form.get(this.officeFormControlName)?.updateValueAndValidity();
-    this.form.get(this.stateFormControlName)?.updateValueAndValidity();
+    this.form.get(this.officeFormControlName())?.updateValueAndValidity();
+    this.form.get(this.stateFormControlName())?.updateValueAndValidity();
   }
 
   /**
@@ -79,7 +75,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
    * - State is enabled
    */
   updateCandidateFieldAvailability() {
-    const officeValue = (this.form.get(this.officeFormControlName)?.value ?? '') as string;
+    const officeValue = (this.form.get(this.officeFormControlName())?.value ?? '') as string;
     let electionCode: string = '';
     if (this.electionCodeField) {
       electionCode = (this.form.get(this.electionCodeField)?.value ?? '') as string;
@@ -87,33 +83,29 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
 
     if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
       // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
-      if (
-        this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
-        electionCode &&
-        electionCode.startsWith('P')
-      ) {
+      if (this.transaction?.transactionType.scheduleId === ScheduleIds.E && electionCode.startsWith('P')) {
         this.form.patchValue({
-          [this.districtFormControlName]: null,
+          [this.districtFormControlName()]: null,
         });
-        this.form.get(this.stateFormControlName)?.enable();
-        this.form.get(this.districtFormControlName)?.disable();
+        this.form.get(this.stateFormControlName())?.enable();
+        this.form.get(this.districtFormControlName())?.disable();
       } else {
         this.form.patchValue({
-          [this.stateFormControlName]: null,
-          [this.districtFormControlName]: null,
+          [this.stateFormControlName()]: null,
+          [this.districtFormControlName()]: null,
         });
-        this.form.get(this.stateFormControlName)?.disable();
-        this.form.get(this.districtFormControlName)?.disable();
+        this.form.get(this.stateFormControlName())?.disable();
+        this.form.get(this.districtFormControlName())?.disable();
       }
     } else if (officeValue === CandidateOfficeTypes.SENATE) {
       this.form.patchValue({
-        [this.districtFormControlName]: null,
+        [this.districtFormControlName()]: null,
       });
-      this.form.get(this.stateFormControlName)?.enable();
-      this.form.get(this.districtFormControlName)?.disable();
+      this.form.get(this.stateFormControlName())?.enable();
+      this.form.get(this.districtFormControlName())?.disable();
     } else if (!this.transaction?.reatt_redes) {
-      this.form.get(this.stateFormControlName)?.enable();
-      this.form.get(this.districtFormControlName)?.enable();
+      this.form.get(this.stateFormControlName())?.enable();
+      this.form.get(this.districtFormControlName())?.enable();
     }
   }
 
@@ -127,18 +119,22 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
    * no districts.
    */
   updateCandidateDistrict() {
-    const state = this.form.get(this.stateFormControlName)?.value as string | undefined;
+    const state = this.form.get(this.stateFormControlName())?.value as string | undefined;
 
-    if (!!state && this.form.get(this.officeFormControlName)?.value === CandidateOfficeTypes.HOUSE) {
-      this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(state));
+    if (!!state && this.form.get(this.officeFormControlName())?.value === CandidateOfficeTypes.HOUSE) {
+      this.candidateDistrictOptions.set(LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(state)));
     } else {
-      this.candidateDistrictOptions = [];
+      this.candidateDistrictOptions.set([]);
     }
-    const currentDistrictValue = this.form.get(this.districtFormControlName)?.value;
-    if (!this.candidateDistrictOptions.map((option) => option.value).includes(currentDistrictValue)) {
+    const currentDistrictValue = this.form.get(this.districtFormControlName())?.value;
+    if (
+      !this.candidateDistrictOptions()
+        .map((option) => option.value)
+        .includes(currentDistrictValue)
+    ) {
       this.form
-        .get(this.districtFormControlName)
-        ?.setValue(this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0]?.value : null);
+        .get(this.districtFormControlName())
+        ?.setValue(this.candidateDistrictOptions().length === 1 ? this.candidateDistrictOptions()[0]?.value : null);
     }
   }
 }
