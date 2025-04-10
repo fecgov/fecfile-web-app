@@ -94,8 +94,8 @@ export class Contact extends BaseModel {
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
-        return plainToInstance(Contact, json);
-    }
+    return plainToInstance(Contact, json);
+  }
 
   getNameString(): string {
     return this.name ? this.name : `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
@@ -241,6 +241,50 @@ export const STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE = {
   },
 };
 
+export const CONTACTS_ONE_THROUGH_FIVE = {
+  contact_1: {
+    organization_name: 'name',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+  },
+  contact_2: {
+    candidate_fec_id: 'candidate_id',
+    candidate_last_name: 'last_name',
+    candidate_first_name: 'first_name',
+    candidate_middle_name: 'middle_name',
+    candidate_prefix: 'prefix',
+    candidate_suffix: 'suffix',
+    candidate_office: 'candidate_office',
+    candidate_state: 'candidate_state',
+    candidate_district: 'candidate_district',
+  },
+  contact_3: {
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+  },
+  contact_4: {
+    quaternary_committee_fec_id: 'committee_id',
+    quaternary_committee_name: 'name',
+  },
+  contact_5: {
+    quinary_committee_fec_id: 'committee_id',
+    quinary_committee_name: 'name',
+    quinary_street_1: 'street_1',
+    quinary_street_2: 'street_2',
+    quinary_city: 'city',
+    quinary_state: 'state',
+    quinary_zip: 'zip',
+  },
+};
+
 export class FecApiLookupData {}
 
 export class FecApiCandidateLookupData extends FecApiLookupData {
@@ -283,8 +327,8 @@ export class CandidateLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): CandidateLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-        return plainToClass(CandidateLookupResponse, json);
-    }
+    return plainToClass(CandidateLookupResponse, json);
+  }
 
   toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
     const fecApiSelectItems =
@@ -350,8 +394,8 @@ export class CommitteeLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-        return plainToClass(CommitteeLookupResponse, json);
-    }
+    return plainToClass(CommitteeLookupResponse, json);
+  }
 
   toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
     const fecApiSelectItems =
@@ -398,8 +442,8 @@ export class IndividualLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-        return plainToClass(IndividualLookupResponse, json);
-    }
+    return plainToClass(IndividualLookupResponse, json);
+  }
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecfileSelectItems =
@@ -434,8 +478,8 @@ export class OrganizationLookupResponse {
 
   // prettier-ignore
   static fromJSON(json: any): OrganizationLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
-        return plainToClass(OrganizationLookupResponse, json);
-    }
+    return plainToClass(OrganizationLookupResponse, json);
+  }
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecfileSelectItems =

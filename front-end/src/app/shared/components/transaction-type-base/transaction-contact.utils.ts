@@ -34,6 +34,10 @@ export class TransactionContactUtils {
       case ContactTypes.COMMITTEE:
         if (contactKey === 'contact_1') {
           confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.organization_name)?.value}</b>`;
+        } else if (contactKey === 'contact_4') {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.quaternary_committee_name)?.value}</b>`;
+        } else if (contactKey === 'contact_5') {
+          confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.quinary_committee_name)?.value}</b>`;
         } else {
           confirmationContactTitle = `committee contact for <b> ${form.get(templateMap.committee_name)?.value}</b>`;
         }
@@ -293,6 +297,82 @@ export class TransactionContactUtils {
       transaction.contact_3 = contact;
     }
     contactId$.next(contact.id ?? '');
+  }
+
+  static updateFormWithQuaternaryContact(
+    selectItem: SelectItem<Contact>,
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>,
+  ) {
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    form.get(templateMap.quaternary_committee_fec_id)?.setValue(contact.committee_id);
+    form.get(templateMap.quaternary_committee_name)?.setValue(contact.name);
+    if (transaction) {
+      transaction.contact_4 = contact;
+      transaction.contact_4_id = contact.id;
+    }
+    contactId$.next(contact.id ?? '');
+  }
+
+  static clearFormQuaternaryContact(
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>,
+  ) {
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!templateMap) return;
+    form.get(templateMap.quaternary_committee_fec_id)?.setValue(null);
+    form.get(templateMap.quaternary_committee_name)?.setValue(null);
+    if (transaction) {
+      // force serializer to send nulls
+      transaction.contact_4 = null as unknown as undefined;
+      transaction.contact_4_id = null as unknown as undefined;
+    }
+    contactId$.next('');
+  }
+
+  static updateFormWithQuinaryContact(
+    selectItem: SelectItem<Contact>,
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>,
+  ) {
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    form.get(templateMap.quinary_committee_fec_id)?.setValue(contact.committee_id);
+    form.get(templateMap.quinary_committee_name)?.setValue(contact.name);
+    form.get(templateMap.quinary_street_1)?.setValue(contact.street_1);
+    form.get(templateMap.quinary_street_2)?.setValue(contact.street_2);
+    form.get(templateMap.quinary_city)?.setValue(contact.city);
+    form.get(templateMap.quinary_state)?.setValue(contact.state);
+    form.get(templateMap.quinary_zip)?.setValue(contact.zip);
+    if (transaction) {
+      transaction.contact_5 = contact;
+      transaction.contact_5_id = contact.id;
+    }
+    contactId$.next(contact.id ?? '');
+  }
+
+  static clearFormQuinaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!templateMap) return;
+    form.get(templateMap.quinary_committee_fec_id)?.setValue(null);
+    form.get(templateMap.quinary_committee_name)?.setValue(null);
+    form.get(templateMap.quinary_street_1)?.setValue(null);
+    form.get(templateMap.quinary_street_2)?.setValue(null);
+    form.get(templateMap.quinary_city)?.setValue(null);
+    form.get(templateMap.quinary_state)?.setValue(null);
+    form.get(templateMap.quinary_zip)?.setValue(null);
+    if (transaction) {
+      // force serializer to send nulls
+      transaction.contact_5 = null as unknown as undefined;
+      transaction.contact_5_id = null as unknown as undefined;
+    }
+    contactId$.next('');
   }
 }
 

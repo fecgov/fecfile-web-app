@@ -9,7 +9,7 @@ export class MemoText extends BaseModel {
   text4000: string | undefined;
   text_prefix: string | undefined;
 
-  report_id: string | undefined; // Foreign key to the Form3X model
+  report_id: string | undefined; // Foreign key to the report model
 
   fields_to_validate: string[] = ['rec_type', 'report_id', 'text4000'];
 
