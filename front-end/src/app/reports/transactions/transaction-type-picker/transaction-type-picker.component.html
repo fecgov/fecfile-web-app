@@ -13,7 +13,7 @@
               @if (!isTransactionDisabled(transactionType)) {
                 <a
                   [routerLink]="getRouterLink(transactionType)"
-                  [queryParams]="debtId() ? { debt: debtId } : undefined"
+                  [queryParams]="debtId() ? { debt: debtId() } : undefined"
                 >
                   {{ transactionType | label: transactionTypeLabels }}
                 </a>

@@ -109,8 +109,12 @@ export class PageUtils {
     );
   }
 
-  static searchBoxInput(input: string) {
-    cy.get('[id="searchBox"]').type(input.slice(0, 3));
+  static searchBoxInput(input: string, parentId?: string) {
+    if (parentId) {
+      cy.get(`[id="${parentId}"]`).find('[id="searchBox"]').type(input.slice(0, 3));
+    } else {
+      cy.get('[id="searchBox"]').type(input.slice(0, 3));
+    }
     cy.intercept({
       method: 'Get',
     }).as('search');
@@ -162,5 +166,34 @@ export class PageUtils {
 
   static clickKababItem(identifier: string, item: string) {
     PageUtils.getKabob(identifier).contains(item).first().click({ force: true });
+  }
+
+  static switchCommittee(committeeId: string) {
+    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+    const alias = PageUtils.getAlias('');
+    cy.visit('/dashboard');
+    cy.get('#navbarProfileDropdownMenuLink').click();
+    cy.get(alias).find('.p-popover').contains('Switch Committees').click();
+    cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
+    cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
+    cy.wait(1000);
+    this.enterSecondCommitteeEmailIfneeded();
+  }
+
+  static enterSecondCommitteeEmailIfneeded() {
+    cy.get(PageUtils.getAlias(''))
+      .find('[id="second-committee-admin-dialog"]')
+      .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
+      .then(($email) => {
+        if ($email.length) {
+          cy.contains('Welcome to FECfile').should('exist').click(); // Ensures that the modal is in focus
+          cy.get('#email').should('have.value', '');
+          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+          cy.get('#email').should('have.value', 'admin@admin.com');
+          cy.get('#email').click();
+          PageUtils.clickButton('Save');
+        }
+      });
+    cy.contains('Welcome to FECfile').should('not.exist');
   }
 }
