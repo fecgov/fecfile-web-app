@@ -80,8 +80,8 @@
           mode="currency"
           currency="USD"
           [formControlName]="templateMap()['amount']"
-          [readonly]="contributionAmountReadOnly"
-          inputStyleClass="{{ contributionAmountInputStyleClass }}"
+          [readonly]="contributionAmountReadOnly()"
+          [inputStyleClass]="contributionAmountInputStyleClass()"
         ></p-inputnumber>
 
         <app-error-messages

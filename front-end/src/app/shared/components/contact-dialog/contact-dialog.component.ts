@@ -364,8 +364,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     const contact: Contact = Contact.fromJSON({
-      ...this.contact,
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType()!)),
+      ...this.contact(),
+      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
     });
     contact.type = this.contactType()!;
     this.savedContact.emit(contact);

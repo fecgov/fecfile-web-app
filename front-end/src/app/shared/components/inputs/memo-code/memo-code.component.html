@@ -12,6 +12,7 @@
           [falseValue]="false"
           [readonly]="memoControl().disabled"
           (click)="onMemoItemClick()"
+          (keydown.enter)="onMemoItemClick()"
         ></p-checkbox>
         <label for="memo_code" [class.p-disabled]="memoControl().disabled" class="ml-2">{{ checkboxLabel() }}</label>
         <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
@@ -68,7 +69,7 @@
         {{ coverageDate | fecDate }}
       </b>
       falls outside the report coverages dates of
-      <b> {{ report?.coverage_from_date | fecDate }}-{{ report?.coverage_through_date | fecDate }}</b
+      <b> {{ coverageFrom() | fecDate }}-{{ coverageThrough() | fecDate }}</b
       >. {{ coverageDateQuestion }} <br /><br />
       If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>

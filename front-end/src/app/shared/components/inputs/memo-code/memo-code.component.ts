@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, inject, input, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, input, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -31,8 +31,7 @@ import { FecDatePipe } from '../../../pipes/fec-date.pipe';
     CheckboxModule,
   ],
 })
-export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+export class MemoCodeInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);
   readonly overrideMemoItemHelpText = input<string>();
   readonly checkboxLabel = input('');
@@ -41,37 +40,39 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     if (this.overrideMemoItemHelpText()) return this.overrideMemoItemHelpText();
     return 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   });
-  memoCodeReadOnly = false;
+  readonly memoCodeReadOnly = computed(() =>
+    TransactionFormUtils.isMemoCodeReadOnly(this.transaction()?.transactionType),
+  );
   coverageDate: Date = new Date();
   coverageDateQuestion = 'Did you mean to date this transaction outside of the report coverage period?';
   reportTypes = ReportTypes;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  report?: Form3X;
+  readonly activeReport = this.store.selectSignal(selectActiveReport);
+  readonly report = computed(() => this.activeReport() as Form3X);
+  readonly coverageFrom = computed(() => this.report().coverage_from_date);
+  readonly coverageThrough = computed(() => this.report().coverage_through_date);
 
   readonly memoControl = computed(() => this.form().get(this.templateMap().memo_code) as SubscriptionFormControl);
   outOfDateDialogVisible = false;
   memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
+  readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SubscriptionFormControl);
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.dateControl()?.enabled) {
+        this.dateControl().valueChanges.subscribe((date: Date) => {
+          this.coverageDate = date;
+          this.updateMemoItemWithDate(date);
+        });
+      }
+    });
+  }
+
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report as Form3X;
-      });
-
-    const dateControl = this.form().get(this.templateMap().date) as SubscriptionFormControl;
-    if (dateControl?.enabled) {
-      dateControl.addSubscription((date: Date) => {
-        this.coverageDate = date;
-        this.updateMemoItemWithDate(date);
-      }, this.destroy$);
-    }
-
-    this.memoCodeReadOnly = TransactionFormUtils.isMemoCodeReadOnly(this.transaction()?.transactionType);
-
-    const savedDate: Date | null = this.form().get(this.templateMap().date)?.value as Date | null;
+    const savedDate: Date | null = this.dateControl()?.value as Date | null;
     if (savedDate) {
       this.updateMemoItemWithDate(savedDate);
     }
@@ -102,10 +103,6 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     this.updateTransactionTypeIdentifier();
   }
 
-  ngOnChanges(): void {
-    this.changeDetectorRef.detectChanges();
-  }
-
   updateTransactionTypeIdentifier(): void {
     if (this.transaction()?.transactionType?.memoCodeTransactionTypes) {
       const memo_code = this.memoControl().value as boolean;
@@ -130,12 +127,14 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   }
 
   updateMemoItemWithDate(date: Date) {
-    if (
-      this.transaction()?.transactionType?.doMemoCodeDateCheck &&
-      this.report?.coverage_from_date &&
-      this.report?.coverage_through_date
-    ) {
-      if (date && (date < this.report.coverage_from_date || date > this.report.coverage_through_date)) {
+    const coverageFrom = this.coverageFrom();
+    const coverageThrough = this.coverageThrough();
+    if (this.transaction()?.transactionType?.doMemoCodeDateCheck && coverageFrom && coverageThrough) {
+      if (
+        date &&
+        !this.memoControl().hasValidator(Validators.requiredTrue) &&
+        (date < coverageFrom || date > coverageThrough)
+      ) {
         this.memoControl().addValidators(Validators.requiredTrue);
         this.memoControl().markAsTouched();
         this.memoControl().markAsDirty();

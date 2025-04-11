@@ -8,7 +8,7 @@ import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
   templateUrl: './fec-international-phone-input.component.html',
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
-export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() id = 'telephone';
   @Input() disabled = false;
   @Input() labelName = '';
