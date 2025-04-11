@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, OnInit, viewChild, ViewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
@@ -28,7 +28,7 @@ enum LoanTermsFieldSettings {
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);
-  @ViewChild('interestRatePercentage') interestInput!: InputText;
+  interestInput = viewChild<InputText>('interestRatePercentage');
   clearValuesOnChange = true;
 
   readonly termFieldSettings = LoanTermsFieldSettings;
@@ -130,9 +130,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       let textInput!: HTMLInputElement;
       let initialSelectionStart = 0;
       let initialSelectionEnd = 0;
-      if (this.interestInput) {
+      if (this.interestInput()) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        textInput = (this.interestInput as any).nativeElement as HTMLInputElement;
+        textInput = (this.interestInput() as any).nativeElement as HTMLInputElement;
         initialSelectionStart = textInput.selectionStart ?? 0;
         initialSelectionEnd = textInput.selectionEnd ?? 0;
       }

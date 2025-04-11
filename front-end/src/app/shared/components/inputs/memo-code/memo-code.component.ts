@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, effect, inject, input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, computed, effect, inject, input, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -31,7 +31,7 @@ import { FecDatePipe } from '../../../pipes/fec-date.pipe';
     CheckboxModule,
   ],
 })
-export class MemoCodeInputComponent extends BaseInputComponent implements OnInit {
+export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);
   readonly overrideMemoItemHelpText = input<string>();
   readonly checkboxLabel = input('');
@@ -59,16 +59,13 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SubscriptionFormControl);
 
-  constructor() {
-    super();
-    effect(() => {
-      if (this.dateControl()?.enabled) {
-        this.dateControl().valueChanges.subscribe((date: Date) => {
-          this.coverageDate = date;
-          this.updateMemoItemWithDate(date);
-        });
-      }
-    });
+  ngAfterViewInit() {
+    if (this.dateControl()?.enabled) {
+      this.dateControl().valueChanges.subscribe((date: Date) => {
+        this.coverageDate = date;
+        this.updateMemoItemWithDate(date);
+      });
+    }
   }
 
   ngOnInit(): void {
