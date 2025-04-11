@@ -18,7 +18,7 @@
             <div class="field">
               <label for="email">ENTER EMAIL</label>
               <input autofocus type="text" pInputText id="email" formControlName="email" />
-              <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [control]="form.get('email')!" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         }
@@ -32,7 +32,7 @@
               [autoDisplayFirst]="true"
               [autofocus]="!!member()"
             ></p-select>
-            <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [control]="form.get('role')!" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
       </div>

@@ -18,11 +18,7 @@
         <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
       <div class="col-12">
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['memo_code']"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="memoControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     } @else {
       <div class="col-3">
@@ -52,8 +48,7 @@
       </div>
       <div class="col-12">
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['memo_code']"
+          [control]="memoControl()"
           [formSubmitted]="formSubmitted()"
           [patternErrorMessage]="'This is a required field.'"
         ></app-error-messages>

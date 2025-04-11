@@ -23,7 +23,10 @@
           [allowEmpty]="false"
           formControlName="report_type_category"
         ></p-selectButton>
-        <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
+        <app-error-messages
+          [control]="form.get('report_type_category')!"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
     </div>
     <div class="col-6"></div>
@@ -71,7 +74,10 @@
               [autoDisplayFirst]="false"
               appendTo="body"
             ></p-select>
-            <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages
+              [control]="form.get('state_of_election')!"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
           </div>
         </div>
       </div>

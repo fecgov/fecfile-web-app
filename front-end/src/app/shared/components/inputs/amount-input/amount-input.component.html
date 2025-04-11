@@ -41,8 +41,7 @@
             <label for="general_election_year">GENERAL ELECTION YEAR</label>
             <input type="text" pInputText id="general_election_year" formControlName="general_election_year" />
             <app-error-messages
-              [form]="form()"
-              fieldName="general_election_year"
+              [control]="form().get('general_election_year')!"
               [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
@@ -85,8 +84,7 @@
         ></p-inputnumber>
 
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['amount']"
+          [control]="form().get(templateMap()['amount'])!"
           [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The amount can be 12 digits max"
@@ -106,8 +104,7 @@
             inputStyleClass="readonly"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form()"
-            [fieldName]="templateMap()['aggregate']"
+            [control]="form().get(templateMap()['aggregate'])!"
             [formSubmitted]="formSubmitted()"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The aggregate can be 12 digits max"
@@ -128,8 +125,7 @@
             inputStyleClass="readonly"
           ></p-inputnumber>
           <app-error-messages
-            [form]="form()"
-            [fieldName]="templateMap()['calendar_ytd']"
+            [control]="form().get(templateMap()['calendar_ytd'])!"
             [formSubmitted]="formSubmitted()"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"

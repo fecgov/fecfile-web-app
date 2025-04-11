@@ -21,8 +21,7 @@
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['due_date_setting']"
+          [control]="form().get(templateMap()['due_date_setting'])!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -34,8 +33,7 @@
             <label for="due_date">DATE DUE (USER DEFINED)</label>
             <input type="text" pInputText inputId="due_date" [formControlName]="templateMap()['due_date']" />
             <app-error-messages
-              [form]="form()"
-              [fieldName]="templateMap()['due_date']"
+              [control]="form().get(templateMap()['due_date'])!"
               [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
@@ -64,8 +62,7 @@
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['interest_rate_setting']"
+          [control]="form().get(templateMap()['interest_rate_setting'])!"
           [formSubmitted]="formSubmitted()"
         >
         </app-error-messages>
@@ -78,8 +75,7 @@
             <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
             <input type="text" pInputText id="interest_rate" [formControlName]="templateMap()['interest_rate']" />
             <app-error-messages
-              [form]="form()"
-              [fieldName]="templateMap()['interest_rate']"
+              [control]="form().get(templateMap()['interest_rate'])!"
               [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
@@ -95,8 +91,7 @@
               [formControlName]="templateMap()['interest_rate']"
             />
             <app-error-messages
-              [form]="form()"
-              [fieldName]="templateMap()['interest_rate']"
+              [control]="form().get(templateMap()['interest_rate'])!"
               [formSubmitted]="formSubmitted()"
               patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
             ></app-error-messages>

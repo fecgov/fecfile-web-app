@@ -12,8 +12,7 @@
           <label for="title">TITLE</label>
           <input type="text" pInputText id="title" [formControlName]="titleFieldName()" />
           <app-error-messages
-            [form]="form()"
-            [fieldName]="titleFieldName()"
+            [control]="form().get(titleFieldName())!"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>

@@ -15,8 +15,7 @@
           (onChange)="onDesignatedOrSubordinateChange($event.value)"
         ></p-select>
         <app-error-messages
-          [form]="form()"
-          fieldName="filer_designated_to_make_coordinated_expenditures"
+          [control]="form().get('filer_designated_to_make_coordinated_expenditures')!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -44,8 +43,7 @@
           <label for="designating_committee_name">DESIGNATING COMMITTEE NAME</label>
           <input type="text" pInputText id="designating_committee_name" formControlName="designating_committee_name" />
           <app-error-messages
-            [form]="form()"
-            fieldName="designating_committee_name"
+            [control]="form().get('designating_committee_name')!"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -60,8 +58,7 @@
             formControlName="designating_committee_id_number"
           />
           <app-error-messages
-            [form]="form()"
-            fieldName="designating_committee_id_number"
+            [control]="form().get('designating_committee_id_number')!"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -90,8 +87,7 @@
           <label for="subordinate_committee_name">SUBORDINATE COMMITTEE NAME</label>
           <input type="text" pInputText id="subordinate_committee_name" formControlName="subordinate_committee_name" />
           <app-error-messages
-            [form]="form()"
-            fieldName="subordinate_committee_name"
+            [control]="form().get('subordinate_committee_name')!"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -107,8 +103,7 @@
             (blur)="onSubordinateCommitteeIdBlur()"
           />
           <app-error-messages
-            [form]="form()"
-            fieldName="subordinate_committee_id_number"
+            [control]="form().get('subordinate_committee_id_number')!"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>

@@ -10,11 +10,7 @@
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="officeFormControlName()"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="officeFormControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-3">
@@ -28,11 +24,7 @@
           [class.disabled]="stateFormControl().disabled"
           appendTo="body"
         ></p-select>
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="stateFormControlName()"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="stateFormControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-3">
@@ -56,11 +48,7 @@
             [autoDisplayFirst]="false"
           ></p-select>
         }
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="districtFormControlName()"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="districtFormControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
   </div>

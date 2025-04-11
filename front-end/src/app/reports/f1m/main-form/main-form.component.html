@@ -29,8 +29,7 @@
             formControlName="committee_name"
           />
           <app-error-messages
-            [form]="form"
-            fieldName="committee_name"
+            [control]="form.get('committee_name')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -48,8 +47,7 @@
             formControlName="filer_committee_id_number"
           />
           <app-error-messages
-            [form]="form"
-            fieldName="committee_id"
+            [control]="form.get('committee_id')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -100,8 +98,7 @@
     <div class="grid">
       <div class="col-12">
         <app-error-messages
-          [form]="form"
-          fieldName="committee_type"
+          [control]="form.get('committee_type')!"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
         ></app-error-messages>
@@ -170,8 +167,7 @@
     <div class="grid">
       <div class="col-12">
         <app-error-messages
-          [form]="form"
-          fieldName="statusBy"
+          [control]="form.get('statusBy')!"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
         ></app-error-messages>
@@ -199,8 +195,7 @@
             >
             </app-transaction-contact-lookup>
             <app-error-messages
-              [form]="form"
-              [fieldName]="affiliatedContact.contactLookupKey"
+              [control]="form.get(affiliatedContact.contactLookupKey)!"
               [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
@@ -218,8 +213,7 @@
                 formControlName="affiliated_committee_name"
               />
               <app-error-messages
-                [form]="form"
-                fieldName="affiliated_committee_name"
+                [control]="form.get('affiliated_committee_name')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -234,8 +228,7 @@
                 formControlName="affiliated_committee_fec_id"
               />
               <app-error-messages
-                [form]="form"
-                fieldName="affiliated_committee_fec_id"
+                [control]="form.get('affiliated_committee_fec_id')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -316,8 +309,7 @@
                 >
                 </app-transaction-contact-lookup>
                 <app-error-messages
-                  [form]="form"
-                  [fieldName]="candidateContact.contactLookupKey"
+                  [control]="form.get(candidateContact.contactLookupKey)!"
                   [formSubmitted]="formSubmitted"
                   requiredErrorMessage="Candidate information is required"
                 ></app-error-messages>
@@ -345,8 +337,7 @@
                     [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
                   />
                   <app-error-messages
-                    [form]="form"
-                    [fieldName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [control]="form.get(templateMapConfigs[candidateContact.contactKey]['candidate_fec_id'])!"
                     [formSubmitted]="formSubmitted"
                     uniqueFecIdMessage="Candidate already entered in form."
                   ></app-error-messages>

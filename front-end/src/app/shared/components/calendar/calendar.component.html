@@ -12,7 +12,6 @@
   @if (control && showErrors) {
     <app-error-messages
       [attr.data-cy]="fieldName + '-error'"
-      [form]="form"
       [control]="control"
       [formSubmitted]="formSubmitted"
       [requiredErrorMessage]="requiredErrorMessage"

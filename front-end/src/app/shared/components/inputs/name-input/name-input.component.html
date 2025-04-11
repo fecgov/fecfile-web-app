@@ -5,8 +5,7 @@
         <label for="last_name">{{ labelPrefix() }} LAST NAME</label>
         <input type="text" pInputText id="last_name" [formControlName]="lastNameFieldName()" data-cy="last-name" />
         <app-error-messages
-          [form]="form()"
-          [fieldName]="lastNameFieldName()"
+          [control]="form().get(lastNameFieldName())!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -16,8 +15,7 @@
         <label for="first_name">{{ labelPrefix() }} FIRST NAME</label>
         <input type="text" pInputText id="first_name" [formControlName]="firstNameFieldName()" />
         <app-error-messages
-          [form]="form()"
-          [fieldName]="firstNameFieldName()"
+          [control]="form().get(firstNameFieldName())!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -27,8 +25,7 @@
         <label for="middle_name">{{ labelPrefix() }} MIDDLE NAME (OPTIONAL)</label>
         <input type="text" pInputText id="middle_name" [formControlName]="middleNameFieldName()" />
         <app-error-messages
-          [form]="form()"
-          [fieldName]="middleNameFieldName()"
+          [control]="form().get(middleNameFieldName())!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -40,8 +37,7 @@
         <label for="prefix">{{ labelPrefix() }} PREFIX (OPTIONAL)</label>
         <input type="text" pInputText id="prefix" [formControlName]="prefixFieldName()" />
         <app-error-messages
-          [form]="form()"
-          [fieldName]="prefixFieldName()"
+          [control]="form().get(prefixFieldName())!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -51,8 +47,7 @@
         <label for="suffix">{{ labelPrefix() }} SUFFIX (OPTIONAL)</label>
         <input type="text" pInputText id="suffix" [formControlName]="suffixFieldName()" />
         <app-error-messages
-          [form]="form()"
-          [fieldName]="suffixFieldName()"
+          [control]="form().get(suffixFieldName())!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

@@ -24,8 +24,7 @@
   <div class="grid">
     <div class="col-12">
       <app-error-messages
-        [form]="form()"
-        fieldName="support_oppose_code"
+        [control]="form().get('support_oppose_code')!"
         [formSubmitted]="formSubmitted()"
         patternErrorMessage="An answer is required"
       ></app-error-messages>

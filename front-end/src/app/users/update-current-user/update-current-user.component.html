@@ -25,7 +25,7 @@
                 <label for="first_name"><strong>FIRST NAME</strong></label>
                 <input type="text" pInputText id="first_name" formControlName="first_name" />
                 <app-error-messages
-                  [form]="form"
+                  [control]="form.get('first_name')!"
                   fieldName="first_name"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -38,8 +38,7 @@
                 <label for="last_name"><strong>LAST NAME</strong></label>
                 <input type="text" pInputText id="last_name" formControlName="last_name" />
                 <app-error-messages
-                  [form]="form"
-                  fieldName="last_name"
+                  [control]="form.get('last_name')!"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
               </div>
@@ -50,11 +49,7 @@
               <div class="field">
                 <label for="email"><strong>EMAIL</strong></label>
                 <input class="readonly" type="text" pInputText id="email" [readonly]="true" formControlName="email" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="email"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
+                <app-error-messages [control]="form.get('email')!" [formSubmitted]="formSubmitted"></app-error-messages>
               </div>
             </div>
           </div>

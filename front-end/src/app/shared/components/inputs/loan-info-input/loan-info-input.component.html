@@ -12,8 +12,7 @@
           [readonly]="readonly()"
         ></p-inputnumber>
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['amount']"
+          [control]="form().get(templateMap()['amount'])!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -30,8 +29,7 @@
           [readonly]="true"
         ></p-inputnumber>
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['payment_to_date']"
+          [control]="form().get(templateMap()['payment_to_date'])!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -48,8 +46,7 @@
           [readonly]="true"
         ></p-inputnumber>
         <app-error-messages
-          [form]="form()"
-          [fieldName]="templateMap()['balance']"
+          [control]="form().get(templateMap()['balance'])!"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

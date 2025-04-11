@@ -42,8 +42,7 @@
   <div class="grid">
     <div class="col-12">
       <app-error-messages
-        [form]="form()"
-        [fieldName]="controlName()"
+        [control]="form().get(controlName())!"
         [formSubmitted]="formSubmitted()"
         [patternErrorMessage]="errorMessage()"
       ></app-error-messages>
