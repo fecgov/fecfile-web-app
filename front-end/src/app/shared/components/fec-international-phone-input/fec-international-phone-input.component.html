@@ -1,9 +1,9 @@
 <input
-  [attr.aria-labelledby]="labelName"
-  [class.p-disabled]="disabled"
+  [attr.aria-labelledby]="labelName()"
+  [class.p-disabled]="disabled()"
   #internationalPhoneInput
-  [id]="id"
-  [attr.labelName]="labelName"
+  [id]="id()"
+  [attr.labelName]="labelName()"
   type="tel"
   (keyup)="onKey($event)"
   (blur)="onBlur()"

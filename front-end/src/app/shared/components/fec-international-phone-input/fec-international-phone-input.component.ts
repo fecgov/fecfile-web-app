@@ -1,64 +1,64 @@
-import { AfterViewInit, Component, ElementRef, inject, Input, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, effect, input, viewChild, OnDestroy, inject, signal, computed } from '@angular/core';
 import intlTelInput, { Iti } from 'intl-tel-input';
 import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 
 @Component({
   selector: 'app-fec-international-phone-input',
   hostDirectives: [NgxControlValueAccessor],
+  standalone: true,
   templateUrl: './fec-international-phone-input.component.html',
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
-export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @Input() id = 'telephone';
-  @Input() disabled = false;
-  @Input() labelName = '';
-  @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
+export class FecInternationalPhoneInputComponent implements OnDestroy {
+  readonly id = input('telephone');
+  readonly disabled = input(false);
+  readonly labelName = input('');
+  readonly internationalPhoneInput = viewChild.required<ElementRef<HTMLInputElement>>('internationalPhoneInput');
 
   protected cva = inject<NgxControlValueAccessor<string>>(NgxControlValueAccessor);
 
-  private intlTelInput?: Iti;
   private readonly intlTelInputOptions = {
     separateDialCode: true,
     initialCountry: 'us',
     preferredCountries: ['us'],
-    allowDropdown: !this.disabled,
+    allowDropdown: !this.disabled(),
   };
-  private countryCode: string | undefined;
-  private number = '';
 
-  ngOnChanges(): void {
-    this.intlTelInputOptions.allowDropdown = !this.disabled;
+  private intlTelInput?: Iti;
+  private readonly countryCode = signal<string | undefined>(undefined);
+  private readonly number = signal('');
+  private readonly fullNumber = computed(() => (this.number() ? `+${this.countryCode()} ${this.number()}` : ''));
+
+  constructor() {
+    effect(() => {
+      this.cva.value = this.fullNumber();
+    });
   }
 
   ngAfterViewInit(): void {
-    if (this.internationalPhoneInputChild) {
-      this.intlTelInput = intlTelInput(this.internationalPhoneInputChild.nativeElement, this.intlTelInputOptions);
-      this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
-      this.internationalPhoneInputChild.nativeElement.addEventListener('countrychange', () => {
-        this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
-        this.emitValue();
-      });
-    }
+    const inputEl = this.internationalPhoneInput();
+    if (!inputEl) return;
 
-    // Initialize the field with any existing value
-    this.intlTelInput?.setNumber(this.cva.value$() || '');
+    this.intlTelInput = intlTelInput(inputEl.nativeElement, this.intlTelInputOptions);
+
+    this.countryCode.set(this.intlTelInput.getSelectedCountryData().dialCode);
+
+    inputEl.nativeElement.addEventListener('countrychange', () => {
+      this.countryCode.set(this.intlTelInput?.getSelectedCountryData().dialCode);
+    });
+
+    this.intlTelInput.setNumber(this.cva.value$() || '');
   }
 
   onKey(event: KeyboardEvent) {
-    this.number = (event.target as HTMLInputElement).value;
-    this.emitValue();
-  }
-
-  ngOnDestroy() {
-    this.intlTelInput?.destroy();
+    this.number.set((event.target as HTMLInputElement).value);
   }
 
   onBlur() {
     this.cva.markAsTouched();
   }
 
-  private emitValue() {
-    const fullNumber = this.number ? `+${this.countryCode} ${this.number}` : '';
-    this.cva.value = fullNumber;
+  ngOnDestroy() {
+    this.intlTelInput?.destroy();
   }
 }
