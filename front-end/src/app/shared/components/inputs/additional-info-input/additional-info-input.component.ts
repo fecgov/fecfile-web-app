@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Contact } from 'app/shared/models';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -19,10 +19,10 @@ import { DesignatedSubordinateInputComponent } from '../designated-subordinate-i
   imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule, DesignatedSubordinateInputComponent],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
-  @Output() designatingCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() designatingCommitteeClear = new EventEmitter<void>();
-  @Output() subordinateCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() subordinateCommitteeClear = new EventEmitter<void>();
+  readonly designatingCommitteeSelect = output<SelectItem<Contact>>();
+  readonly designatingCommitteeClear = output<void>();
+  readonly subordinateCommitteeSelect = output<SelectItem<Contact>>();
+  readonly subordinateCommitteeClear = output<void>();
 
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 

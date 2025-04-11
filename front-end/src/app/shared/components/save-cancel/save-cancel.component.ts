@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
@@ -9,6 +9,6 @@ import { SingleClickDirective } from '../../directives/single-click.directive';
   imports: [ButtonDirective, Ripple, SingleClickDirective],
 })
 export class SaveCancelComponent {
-  @Output() save = new EventEmitter<'continue' | undefined>();
-  @Output() cancelForm = new EventEmitter();
+  readonly save = output<'continue' | undefined>();
+  readonly cancelForm = output<void>();
 }

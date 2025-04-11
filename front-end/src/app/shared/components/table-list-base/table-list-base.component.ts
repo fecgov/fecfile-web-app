@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { DestroyerComponent } from '../app-destroyer.component';
@@ -29,7 +29,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
   protected caption?: string;
 
-  @Output() readonly reloadTables = new EventEmitter();
+  readonly reloadTables = output<void>();
 
   ngAfterViewInit(): void {
     // Fix accessibility issues in paginator buttons.
