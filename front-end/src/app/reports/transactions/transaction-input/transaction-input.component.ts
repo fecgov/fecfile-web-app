@@ -1,5 +1,17 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  effect,
+  EventEmitter,
+  input,
+  Input,
+  model,
+  OnInit,
+  output,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
@@ -49,54 +61,53 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
     AsyncPipe,
   ],
 })
-export class TransactionInputComponent implements OnInit {
-  @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
-  @Input() formSubmitted = false;
-  @Input() transaction?: Transaction;
-  @Input() isEditable = true;
-  @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  @Input() memoCodeCheckboxLabel$?: Observable<string>;
-  @Input() contributionAmountReadOnly = false;
-  @Input() candidateInfoPosition = 'low';
-  @Input() isSingle = false;
+export class TransactionInputComponent implements AfterViewInit {
+  readonly form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
+  readonly formSubmitted = input(false);
+  readonly transaction = input<Transaction>();
+  readonly isEditable = input(true);
+  readonly contactTypeOptions = input(LabelUtils.getPrimeOptions(ContactTypeLabels));
+  readonly memoCodeCheckboxLabel$ = input<Observable<string>>();
+  readonly contributionAmountReadOnly = input(false);
+  readonly candidateInfoPosition = model('low');
+  readonly isSingle = input(false);
 
-  @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quaternaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quaternaryContactClear = new EventEmitter<void>();
-  @Output() quinaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quinaryContactClear = new EventEmitter<void>();
+  readonly primaryContactSelect = output<SelectItem<Contact>>();
+  readonly candidateContactSelect = output<SelectItem<Contact>>();
+  readonly secondaryContactSelect = output<SelectItem<Contact>>();
+  readonly tertiaryContactSelect = output<SelectItem<Contact>>();
+  readonly quaternaryContactSelect = output<SelectItem<Contact>>();
+  readonly quaternaryContactClear = output<void>();
+  readonly quinaryContactSelect = output<SelectItem<Contact>>();
+  readonly quinaryContactClear = output<void>();
 
-  ContactTypes = ContactTypes;
-  transactionType?: TransactionType;
-  templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  readonly ContactTypes = ContactTypes;
+  readonly transactionType = computed(() => this.transaction()?.transactionType);
+  readonly templateMap = computed(() => this.transactionType()?.templateMap ?? ({} as TransactionTemplateMapType));
   candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
-  ngOnInit(): void {
-    if (this.transaction) {
-      this.transactionType = this.transaction.transactionType;
-      this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
-      this.templateMap = this.transaction.transactionType.templateMap;
-    } else {
-      throw new Error('FECfile: No transaction passed to TransactionInputComponent');
-    }
+  constructor() {
+    effect(() => {
+      this.candidateInfoPosition.set(this.transactionType()?.candidateInfoPosition ?? 'low');
+    });
+  }
 
-    // If there are mandatory values for any form fields, populate the form field and make it read-only
-    for (const field in this.transaction.transactionType.mandatoryFormValues) {
-      this.form.get(field)?.setValue(this.transaction.transactionType.mandatoryFormValues[field]);
-      this.form.get(field)?.disable();
+  ngAfterViewInit() {
+    const type = this.transactionType();
+    if (!type) return;
+    for (const field in type.mandatoryFormValues) {
+      this.form().get(field)?.setValue(type.mandatoryFormValues[field]);
+      this.form().get(field)?.disable();
     }
   }
 
   contactTypeSelected(contactType: ContactTypes) {
-    this.form.get('entity_type')?.setValue(contactType);
+    this.form().get('entity_type')?.setValue(contactType);
   }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    this.form.get('entity_type')?.setValue(selectItem.value.type);
+    this.form().get('entity_type')?.setValue(selectItem.value.type);
     this.primaryContactSelect.emit(selectItem);
   }
 
@@ -129,6 +140,6 @@ export class TransactionInputComponent implements OnInit {
   }
 
   get entityType(): ContactTypes {
-    return this.form.get('entity_type')?.value;
+    return this.form().get('entity_type')?.value;
   }
 }

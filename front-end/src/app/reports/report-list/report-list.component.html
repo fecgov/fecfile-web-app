@@ -69,8 +69,4 @@
     </ng-template>
   </app-table>
 </div>
-<app-form-type-dialog
-  [noReports]="totalItems === 0"
-  (dialogClose)="dialogVisible = false"
-  [dialogVisible]="dialogVisible"
-></app-form-type-dialog>
+<app-form-type-dialog (dialogClose)="dialogVisible = false" [dialogVisible]="dialogVisible"></app-form-type-dialog>

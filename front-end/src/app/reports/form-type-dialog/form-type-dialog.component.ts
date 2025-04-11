@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, model, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -23,16 +23,17 @@ export class FormTypeDialogComponent extends DestroyerComponent {
   public readonly router = inject(Router);
   private readonly form24Service = inject(Form24Service);
   private readonly store = inject(Store);
-  formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
+
   readonly formTypes = FormTypes;
+
+  readonly dialogVisible = model(false);
+  readonly dialogClose = output<void>();
+  readonly refreshReports = output<void>();
+
+  formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
   committeeAccountSignal = this.store.selectSignal(selectCommitteeAccount);
   street = undefined;
-  @Input() noReports = true;
-  @Input() dialogVisible = false;
-  @Output() dialogClose = new EventEmitter<undefined>();
-
-  @Output() readonly refreshReports = new EventEmitter();
 
   selectedForm24Type: '24' | '48' | null = null;
 

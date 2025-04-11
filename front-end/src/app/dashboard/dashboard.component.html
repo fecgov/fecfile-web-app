@@ -38,8 +38,4 @@
   </div>
 </div>
 
-<app-form-type-dialog
-  [noReports]="reports.length === 0"
-  (dialogClose)="dialogVisible = false"
-  [dialogVisible]="dialogVisible"
-></app-form-type-dialog>
+<app-form-type-dialog (dialogClose)="dialogVisible = false" [dialogVisible]="dialogVisible"></app-form-type-dialog>
