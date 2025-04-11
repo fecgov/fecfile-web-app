@@ -61,7 +61,7 @@
   }
   @if (transactionType()?.hasAmountInput) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle()" [text]="transactionType()?.amountInputHeader"></app-section-header>
+    <app-section-header [isSingle]="isSingle()" [text]="amountInputHeader()"></app-section-header>
     <app-amount-input
       [form]="form()"
       [formSubmitted]="formSubmitted()"
@@ -76,7 +76,7 @@
   }
   @if (transactionType()?.hasDebtInput) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle()" [text]="transactionType()?.debtInputHeader"></app-section-header>
+    <app-section-header [isSingle]="isSingle()" [text]="debtInputHeader()"></app-section-header>
     <app-debt-input
       [form]="form()"
       [formSubmitted]="formSubmitted()"
@@ -86,7 +86,7 @@
   }
   @if (transactionType()?.hasLoanFinanceFields()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle()" [text]="transactionType()?.amountInputHeader"></app-section-header>
+    <app-section-header [isSingle]="isSingle()" [text]="amountInputHeader()"></app-section-header>
     <app-loan-info-input
       [form]="form()"
       [formSubmitted]="formSubmitted()"
@@ -135,7 +135,7 @@
   }
   @if (transactionType()?.hasSignature1()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle()" [text]="transactionType()?.signatoryOneHeader"></app-section-header>
+    <app-section-header [isSingle]="isSingle()" [text]="signatoryOneHeader()"></app-section-header>
     <app-signature-input
       [form]="form()"
       [formSubmitted]="formSubmitted()"
@@ -146,7 +146,7 @@
   }
   @if (transactionType()?.hasSignature2()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle()" [text]="transactionType()?.signatoryTwoHeader"></app-section-header>
+    <app-section-header [isSingle]="isSingle()" [text]="signatoryTwoHeader()"></app-section-header>
     <app-signature-input
       [form]="form()"
       [formSubmitted]="formSubmitted()"
@@ -168,10 +168,7 @@
 <ng-template #candidateInfo>
   @if (transactionType()?.hasCommitteeOrCandidateInformation()) {
     <hr class="solid" />
-    <app-section-header
-      [isSingle]="isSingle()"
-      [text]="transactionType()?.committeeCandidateHeader"
-    ></app-section-header>
+    <app-section-header [isSingle]="isSingle()" [text]="committeeCandidateHeader()"></app-section-header>
     @if (transactionType()?.contact3IsRequired) {
       <div class="candidate_committee_lookup">
         <label for="contact_3">LOOKUP </label>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-section-header',
@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrl: '../../transaction.scss',
 })
 export class SectionHeaderComponent {
-  @Input() isSingle = false;
-  @Input() text? = '';
+  readonly isSingle = input(false);
+  readonly text = input('');
 }

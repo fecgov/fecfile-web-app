@@ -142,4 +142,10 @@ export class TransactionInputComponent implements AfterViewInit {
   get entityType(): ContactTypes {
     return this.form().get('entity_type')?.value;
   }
+
+  readonly signatoryOneHeader = computed(() => this.transactionType()?.signatoryOneHeader ?? '');
+  readonly signatoryTwoHeader = computed(() => this.transactionType()?.signatoryTwoHeader ?? '');
+  readonly amountInputHeader = computed(() => this.transactionType()?.amountInputHeader ?? '');
+  readonly debtInputHeader = computed(() => this.transactionType()?.debtInputHeader ?? '');
+  readonly committeeCandidateHeader = computed(() => this.transactionType()?.committeeCandidateHeader ?? '');
 }
