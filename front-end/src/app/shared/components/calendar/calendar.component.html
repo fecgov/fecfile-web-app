@@ -1,20 +1,23 @@
 <div class="field">
-  <label [for]="fieldName" [innerHTML]="label"></label>
+  <label [attr.for]="fieldName()" [innerHTML]="label()"></label>
+
   <p-datepicker
+    [inputId]="fieldName()"
+    [id]="fieldName()"
+    [name]="fieldName()"
+    [formControl]="control"
+    [attr.data-cy]="fieldName()"
     (onFocus)="calendarOpened = true"
     (onClose)="validateDate(false)"
     (onBlur)="validateDate(calendarOpened)"
-    [inputId]="fieldName"
-    [name]="fieldName"
-    [formControl]="control"
-    [attr.data-cy]="fieldName"
   ></p-datepicker>
-  @if (control && showErrors) {
+
+  @if (control && showErrors()) {
     <app-error-messages
-      [attr.data-cy]="fieldName + '-error'"
+      [attr.data-cy]="fieldName() + '-error'"
       [control]="control"
-      [formSubmitted]="formSubmitted"
-      [requiredErrorMessage]="requiredErrorMessage"
+      [formSubmitted]="formSubmitted()"
+      [requiredErrorMessage]="requiredErrorMessage()"
     ></app-error-messages>
   }
 </div>
