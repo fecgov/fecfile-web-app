@@ -1,7 +1,7 @@
-@if (transaction?.contact_1 && isEditable && getInlineControls().length > 0) {
+@if (transaction()?.contact_1 && isEditable() && getInlineControls().length > 0) {
   @for (control of getInlineControls(); track control) {
     <div class="p-2">
-      <app-navigation-control [navigationControl]="control" [transaction]="transaction"></app-navigation-control>
+      <app-navigation-control [navigationControl]="control" [transaction]="transaction()"></app-navigation-control>
     </div>
   }
 }
@@ -9,6 +9,6 @@
 <hr type="solid" />
 <app-navigation-control-bar
   [navigationControls]="getNavigationControls()"
-  [transaction]="transaction"
-  [class]="isEditable ? '' : 'flex-center'"
+  [transaction]="transaction()"
+  [class]="isEditable() ? '' : 'flex-center'"
 ></app-navigation-control-bar>

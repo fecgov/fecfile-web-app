@@ -2,10 +2,10 @@
   <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'">
     <app-contact-lookup
       [contactType]="currentType"
-      [contactTypeOptions]="contactTypeOptions"
+      [contactTypeOptions]="contactTypeOptions()"
       [candidateOffice]="mandatoryCandidateOffice"
-      [excludeFecIds]="excludeFecIds"
-      [excludeIds]="excludeIds"
+      [excludeFecIds]="excludeFecIds()"
+      [excludeIds]="excludeIds()"
       (contactTypeSelect)="contactTypeSelected($event)"
       (contactLookupSelect)="contactLookupSelected($event)"
       (createNewContactSelect)="createNewContactSelected()"
@@ -23,7 +23,7 @@
 @if (errorMessageFormControl) {
   <app-error-messages
     [control]="errorMessageFormControl"
-    [formSubmitted]="formSubmitted"
+    [formSubmitted]="formSubmitted()"
     [requiredErrorMessage]="currentContactLabel + ' information is required'"
   ></app-error-messages>
 }

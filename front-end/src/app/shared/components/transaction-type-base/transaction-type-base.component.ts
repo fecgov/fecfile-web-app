@@ -29,6 +29,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 
 @Component({
   template: '',
@@ -42,7 +43,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   protected readonly fecDatePipe = inject(FecDatePipe);
   protected readonly reportService = inject(ReportService);
   protected readonly activatedRoute = inject(ActivatedRoute);
-
+  protected readonly navigationEventSignal = this.store.selectSignal(selectNavigationEvent);
   readonly transaction = input<Transaction>();
   readonly formProperties = computed(() => this.transactionType()?.getFormControlNames() ?? []);
   readonly transactionType = computed(() => this.transaction()?.transactionType);
@@ -70,8 +71,18 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   constructor() {
     super();
+    this.store.dispatch(navigationEventClearAction());
     effect(() => {
       if (!this.isEditable()) this.form.disable();
+    });
+
+    effect(() => {
+      const navEvent = this.navigationEventSignal();
+      if (navEvent) {
+        const navigationEvent = { ...navEvent };
+        this.handleNavigate(navigationEvent);
+        this.store.dispatch(navigationEventClearAction());
+      }
     });
   }
 
