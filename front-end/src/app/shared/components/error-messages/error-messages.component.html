@@ -1,4 +1,4 @@
-@if (formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn !== 'change')))) {
+@if (formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn === 'blur')))) {
   @if (control?.hasError('required')) {
     <small class="p-error">{{ requiredErrorMessage }}</small>
   }
