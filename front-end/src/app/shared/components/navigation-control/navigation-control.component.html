@@ -1,12 +1,12 @@
 <div>
-  @switch (controlType) {
+  @switch (controlType()) {
     @case ('button') {
       <button
         pButton
         pRipple
-        [label]="navigationControl?.label || ''"
-        [icon]="navigationControl?.icon || ''"
-        [class]="navigationControl?.ngClass || ''"
+        [label]="navigationControl().label || ''"
+        [icon]="navigationControl().icon || ''"
+        [class]="navigationControl().ngClass || ''"
         (click)="clickButton()"
         [disabled]="isDisabled()"
         data-cy="navigation-control-button"
@@ -22,11 +22,11 @@
         (click)="op.toggle($event)"
         data-cy="navigation-control-dropdown"
       >
-        <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
+        <i [class]="navigationControl().icon || ''"></i><span>{{ navigationControl().label || '' }}</span>
       </button>
       <p-popover #op>
         <div class="p-3">
-          @for (option of dropdownOptions; track option) {
+          @for (option of dropdownOptions(); track option) {
             @if (option.items) {
               <span class="dropdown-header">{{ option.label }}</span>
               <hr />

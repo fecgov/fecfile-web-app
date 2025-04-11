@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   ControlType,
@@ -33,38 +33,26 @@ import { PopoverModule } from 'primeng/popover';
   styleUrls: ['./navigation-control.component.scss'],
   imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule],
 })
-export class NavigationControlComponent implements OnInit {
+export class NavigationControlComponent {
   private readonly store = inject(Store);
-  @Input() navigationControl?: NavigationControl;
-  @Input() transaction?: Transaction;
-  public controlType: 'button' | 'dropdown' = 'button';
-  public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  readonly navigationControl = input.required<NavigationControl>();
+  readonly transaction = input<Transaction>();
+  readonly controlType = computed(() =>
+    this.navigationControl().controlType == ControlType.DROPDOWN ? 'dropdown' : 'button',
+  );
+  public dropdownOptions = computed(() => {
+    if (this.navigationControl().controlType != ControlType.DROPDOWN) return undefined;
+    return this.getOptions(
+      this.transaction()?.transactionType,
+      this.transaction()?.parent_transaction?.transactionType,
+    );
+  });
   dropdownControl = new SubscriptionFormControl('');
-
-  ngOnInit(): void {
-    /**
-     * If the navigation control is a dropdown, we need to extract
-     * the options from the config in the transaction type
-     */
-    if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
-      this.controlType = 'dropdown';
-      this.dropdownOptions = this.getOptions(
-        this.transaction?.transactionType,
-        this.transaction?.parent_transaction?.transactionType,
-      );
-      /**
-       * If the navigation control is a button, we'll just establish
-       * the destination in the click handler
-       */
-    } else {
-      this.controlType = 'button';
-    }
-  }
 
   isVisible = true;
 
   isDisabled(): boolean {
-    return !!this.navigationControl?.disabledCondition(this.transaction);
+    return !!this.navigationControl().disabledCondition(this.transaction());
   }
 
   clickButton(): void {
@@ -78,24 +66,24 @@ export class NavigationControlComponent implements OnInit {
     let destinationTransactionType: TransactionTypes | undefined;
     // Handle CHILD case by determining child TransactionType
     if (
-      this.navigationControl?.navigationDestination === NavigationDestination.CHILD &&
-      this.transaction?.transactionType.subTransactionConfig
+      this.navigationControl().navigationDestination === NavigationDestination.CHILD &&
+      this.transaction()?.transactionType.subTransactionConfig
     ) {
-      destinationTransactionType = (this.transaction.transactionType.subTransactionConfig as TransactionTypes[])[0];
+      destinationTransactionType = (this.transaction()?.transactionType.subTransactionConfig as TransactionTypes[])[0];
     }
 
     // Handle ANOTHER case by determining child TransactionType
     if (
-      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER &&
-      this.transaction?.transaction_type_identifier
+      this.navigationControl().navigationDestination === NavigationDestination.ANOTHER &&
+      this.transaction()?.transaction_type_identifier
     ) {
-      destinationTransactionType = this.transaction.transaction_type_identifier as TransactionTypes;
+      destinationTransactionType = this.transaction()?.transaction_type_identifier as TransactionTypes;
     }
 
     const navigationEvent = new NavigationEvent(
-      this.navigationControl?.navigationAction,
-      this.navigationControl?.navigationDestination,
-      cloneDeep(this.transaction),
+      this.navigationControl().navigationAction,
+      this.navigationControl().navigationDestination,
+      cloneDeep(this.transaction()),
       destinationTransactionType,
     );
     this.store.dispatch(navigationEventSetAction(navigationEvent));
@@ -144,7 +132,7 @@ export class NavigationControlComponent implements OnInit {
         NavigationAction.SAVE,
         // If this control came from the parent, the desination is ANOTHER
         isParentConfig ? NavigationDestination.ANOTHER : NavigationDestination.CHILD,
-        this.transaction,
+        this.transaction(),
         typeId,
       ),
     };
