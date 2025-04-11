@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, effect, model, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -15,7 +15,7 @@ import { InputText } from 'primeng/inputtext';
   imports: [ReactiveFormsModule, Select, PrimeTemplate, ErrorMessagesComponent, InputText],
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
-  @Input() labelPrefix = '';
+  readonly labelPrefix = model('');
 
   electionTypeOptions = [
     { label: 'Primary (P)', value: 'P' },
@@ -27,13 +27,16 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     { label: 'Other (O)', value: 'O' },
   ];
 
+  constructor() {
+    super();
+    effect(() => {
+      if (this.transaction()?.transactionType.electionLabelPrefix) {
+        this.labelPrefix.set(this.transaction()!.transactionType.electionLabelPrefix);
+      }
+    });
+  }
+
   ngOnInit(): void {
-    if (this.transaction()?.transactionType.electionLabelPrefix) {
-      this.labelPrefix = this.transaction()!.transactionType.electionLabelPrefix;
-    }
-
-    // Get inital values for election type and year for additional form inputs
-
     const election_code = this.form().get('election_code');
     const electionType = election_code?.value?.slice(0, 1) || '';
     const electionYear = election_code?.value?.slice(1, 5) || '';
@@ -93,7 +96,7 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   formatElectionYear(event: Event) {
     const enteredYear = (event.target as HTMLInputElement).value;
     const formattedYear = enteredYear
-      .replace(/[^0-9]/g, '')
+      .replace(/\D/g, '')
       .replace(/(\..*)\./g, '$1')
       .slice(0, 4);
     this.form().get('electionYear')?.setValue(formattedYear);
