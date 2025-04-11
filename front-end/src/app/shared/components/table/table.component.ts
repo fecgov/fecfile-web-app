@@ -1,15 +1,4 @@
-import {
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  Output,
-  TemplateRef,
-  ViewChild,
-  OnInit,
-  OnChanges,
-  AfterContentChecked,
-} from '@angular/core';
+import { Component, TemplateRef, input, output, viewChild, contentChild, computed, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table, TableModule } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
@@ -33,77 +22,58 @@ import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.compo
     TableSortIconComponent,
   ],
 })
-export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges {
-  @Input() title?: string;
-  @Input() itemName = 'entries';
-  @Input() items: T[] = [];
-  @Input() globalFilterFields = [''];
-  @Input() totalItems = 0;
-  @Input() loading = false;
-  @Input() rowsPerPage = 5;
-  @Input() selectAll = false;
-  @Input() selectedItems: T[] = [];
-  @Input() currentPageReportTemplate = 'Showing {first} to {last} of {totalRecords} items';
-  @Input() sortField = '';
-  @Input() sortableHeaders: { field: string; label: string }[] = [];
-  @Input() hasCheckbox = false;
-  @Input() checkboxLabel?: (item: T) => string;
-  @Input() emptyMessage = 'No data available in table';
+export class TableComponent<T> {
+  readonly title = input<string>();
+  readonly itemName = input('entries');
+  readonly items = input<T[]>([]);
+  readonly globalFilterFields = input(['']);
+  readonly totalItems = model(0);
+  readonly loading = input(false);
+  readonly rowsPerPage = model(5);
+  readonly selectAll = input(false);
+  readonly selectedItems = input<T[]>([]);
+  readonly currentPageReportTemplate = input('Showing {first} to {last} of {totalRecords} items');
+  readonly sortField = input('');
+  readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
+  readonly hasCheckbox = input(false);
+  readonly checkboxLabel = input<(item: T) => string>();
+  readonly emptyMessage = input('No data available in table');
 
-  @Output() loadTableItems = new EventEmitter<TableLazyLoadEvent>();
-  @Output() selectionChange = new EventEmitter<T[]>();
-  @Output() selectAllChange = new EventEmitter<TableSelectAllChangeEvent>();
-  @Output() rowsPerPageChange = new EventEmitter<number>();
-  @Output() pageChange = new EventEmitter<PageTransitionEvent>();
+  readonly loadTableItems = output<TableLazyLoadEvent>();
+  readonly selectionChange = output<T[]>();
+  readonly selectAllChange = output<TableSelectAllChangeEvent>();
+  readonly rowsPerPageChange = output<number>();
+  readonly pageChange = output<PageTransitionEvent>();
 
   paginationPageSizeOptions = [5, 10, 15, 20];
 
-  @ViewChild('dt') dt?: Table;
+  readonly dt = viewChild<Table>('dt');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('toolbar') toolbar!: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('caption') caption!: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('header') header!: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('body') body!: TemplateRef<any>;
+  readonly toolbar = contentChild<TemplateRef<any>>('tooldbar');
+  readonly caption = contentChild<TemplateRef<any>>('caption');
+  readonly header = contentChild<TemplateRef<any>>('header');
+  readonly body = contentChild<TemplateRef<any>>('body');
 
-  showing = 'Showing 0 to 0 of 0 entries';
-
-  ngOnInit() {
-    this.updateShowing();
-  }
-
-  ngAfterContentChecked() {
-    this.updateShowing();
-  }
-
-  ngOnChanges() {
-    this.updateShowing();
-  }
-
-  updateShowing() {
-    if (!this.dt) return;
-    const from = this.totalItems === 0 ? 0 : this.first + 1;
+  readonly showing = computed(() => {
+    const dt = this.dt();
+    if (!dt) return 'No data available in table';
+    const from = this.totalItems() === 0 ? 0 : this.first + 1;
     let to = this.first;
-    if (this.dt.rows) to += this.dt.rows;
-    const total = this.dt.totalRecords ?? 0;
+    if (dt.rows) to += dt.rows;
+    const total = dt.totalRecords ?? 0;
     if (to > total) to = total;
-    this.showing = `Showing ${from} to ${to} of ${total} ${this.itemName}`;
-  }
+    return `Showing ${from} to ${to} of ${total} ${this.itemName()}`;
+  });
 
   get first(): number {
-    return this.dt?.first ?? 0;
+    return this.dt()?.first ?? 0;
   }
 
   set first(first: number) {
-    if (!this.dt) return;
-    this.dt.first = first;
+    this.dt()!.first = first;
   }
 
   changePage(value: PaginatorState) {
-    if (!this.dt) return;
-    this.dt.onPageChange({ first: value.first ?? 0, rows: value.rows ?? 0 });
+    this.dt()!.onPageChange({ first: value.first ?? 0, rows: value.rows ?? 0 });
   }
 }

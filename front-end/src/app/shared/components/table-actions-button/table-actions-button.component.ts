@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, computed, input, output, viewChild } from '@angular/core';
 import { TableAction } from '../table-list-base/table-list-base.component';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -10,23 +10,25 @@ import { Popover, PopoverModule } from 'primeng/popover';
   styleUrls: ['./table-actions-button.component.scss'],
   imports: [ButtonModule, Ripple, PopoverModule],
 })
-export class TableActionsButtonComponent {
-  @ViewChild(Popover) op!: Popover;
-  @Input() tableActions: TableAction[] = [];
-  @Input() actionItem: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  @Input() buttonIcon = '';
-  @Input() buttonLabel = '';
-  @Input() buttonStyleClass = '';
-  @Input() buttonAriaLabel = '';
-  @Input() rounded = true;
-  @Output() tableActionClick = new EventEmitter<{ action: TableAction; actionItem: any }>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+export class TableActionsButtonComponent<T> {
+  readonly popover = viewChild<Popover>(Popover);
 
-  get filteredActions(): TableAction[] {
-    return this.tableActions.filter((action) => !action.isAvailable || action.isAvailable(this.actionItem));
-  }
+  readonly tableActions = input<TableAction[]>([]);
+  readonly actionItem = input<T>();
+  readonly buttonIcon = input('');
+  readonly buttonLabel = input('');
+  readonly buttonStyleClass = input('');
+  readonly buttonAriaLabel = input('');
+  readonly rounded = input(true);
+
+  readonly tableActionClick = output<{ action: TableAction; actionItem: T | undefined }>();
+
+  readonly filteredActions = computed(() =>
+    this.tableActions().filter((action) => !action.isAvailable || action.isAvailable(this.actionItem())),
+  );
 
   performAction(action: TableAction) {
-    this.tableActionClick.emit({ action, actionItem: this.actionItem });
-    this.op.hide();
+    this.tableActionClick.emit({ action, actionItem: this.actionItem() });
+    this.popover()?.hide();
   }
 }

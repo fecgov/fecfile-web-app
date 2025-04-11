@@ -1,43 +1,43 @@
 <div class="card">
-  <ng-container *ngTemplateOutlet="toolbar"></ng-container>
+  <ng-container *ngTemplateOutlet="toolbar()!"></ng-container>
   <p-table
     #dt
-    [value]="items"
+    [value]="items()"
     [lazy]="true"
     (onLazyLoad)="loadTableItems.emit($event)"
     responsiveLayout="scroll"
     dataKey="id"
-    [selection]="selectedItems"
+    [selection]="selectedItems()"
     (selectionChange)="selectionChange.emit($event)"
-    [selectAll]="selectAll"
+    [selectAll]="selectAll()"
     (selectAllChange)="selectAllChange.emit($event)"
-    [rows]="rowsPerPage"
-    [totalRecords]="totalItems"
-    [loading]="loading"
-    [globalFilterFields]="globalFilterFields"
-    [currentPageReportTemplate]="currentPageReportTemplate"
-    [sortField]="sortField"
+    [rows]="rowsPerPage()"
+    [totalRecords]="totalItems()"
+    [loading]="loading()"
+    [globalFilterFields]="globalFilterFields()"
+    [currentPageReportTemplate]="currentPageReportTemplate()"
+    [sortField]="sortField()"
     [showCurrentPageReport]="true"
     stripedRows
     showGridlines
   >
     <ng-template pTemplate="caption">
-      @if (title) {
+      @if (title()) {
         <div class="flex align-items-center justify-content-between">
-          <h2 class="m-0">{{ title }}</h2>
+          <h2 class="m-0">{{ title() }}</h2>
         </div>
       }
-      <ng-container *ngTemplateOutlet="caption"></ng-container>
+      <ng-container *ngTemplateOutlet="caption()!"></ng-container>
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        @if (hasCheckbox) {
+        @if (hasCheckbox()) {
           <th id="header-checkbox" role="columnheader">
             <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
           </th>
         }
-        @if (sortableHeaders) {
-          @for (h of sortableHeaders; track h) {
+        @if (sortableHeaders()) {
+          @for (h of sortableHeaders(); track h) {
             <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
               <div class="flex justify-content-between">
                 <span>{{ h.label }}</span>
@@ -47,17 +47,17 @@
           }
         }
 
-        <ng-container *ngTemplateOutlet="header"></ng-container>
+        <ng-container *ngTemplateOutlet="header()!"></ng-container>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        @if (hasCheckbox) {
+        @if (hasCheckbox()) {
           <td>
-            <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel!(item)"></p-tableCheckbox>
+            <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel()!(item)"></p-tableCheckbox>
           </td>
         }
-        <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
+        <ng-container *ngTemplateOutlet="body()!; context: { $implicit: item }"></ng-container>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
@@ -76,7 +76,7 @@
           </p-select>
         </div>
         <div class="responsive-container">
-          <span class="paginator-text">{{ showing }}:</span>
+          <span class="paginator-text">{{ showing() }}:</span>
           <p-paginator
             [rows]="rowsPerPage"
             [totalRecords]="totalItems"
@@ -105,7 +105,11 @@
     <ng-template pTemplate="paginatorleft">
       <div class="responsive-container">
         <span>Results per table:</span>
-        <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" (onChange)="rowsPerPageChange.emit()">
+        <p-select
+          [options]="paginationPageSizeOptions"
+          [(ngModel)]="rowsPerPage"
+          (onChange)="rowsPerPageChange.emit($event.value)"
+        >
           <ng-template pTemplate="dropdownicon">
             <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
           </ng-template>
@@ -125,7 +129,7 @@
       <img alt="last page icon" src="/assets/img/last_arrow.svg" />
     </ng-template>
     <ng-template pTemplate="emptymessage">
-      <td colspan="100" class="mx-3 empty-message">{{ emptyMessage }}</td>
+      <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
     </ng-template>
   </p-table>
 </div>
