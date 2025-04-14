@@ -47,6 +47,6 @@ describe('F99MenuComponent', () => {
 
   xit('should get report from url', () => {
     router.navigateByUrl('/reports/transactions/report/999/list');
-    expect(component.activeReportSignal().id).toBe('999');
+    expect(component.report().id).toBe('999');
   });
 });

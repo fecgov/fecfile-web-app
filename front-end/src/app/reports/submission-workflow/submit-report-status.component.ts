@@ -1,8 +1,7 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { Card } from 'primeng/card';
@@ -17,22 +16,16 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
   styleUrls: ['./submit-report-status.component.scss'],
   imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, LongDatePipe],
 })
-export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
+export class SubmitReportStatusComponent {
   private readonly store = inject(Store);
   public readonly router = inject(Router);
-  private readonly form3XService = inject(Form3XService);
-  readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
-  readonly reportCodeSignal = computed(() => this.activeReportSignal().report_code as ReportCodes);
-  readonly coverageDatesSignal = computed(() => this.activeReportSignal().coverageDates);
-  readonly fecStatusSignal = computed(() => this.activeReportSignal().upload_submission?.fec_status);
-  readonly taskStateSignal = computed(() => this.activeReportSignal().upload_submission?.fecfile_task_state);
-  readonly fecMessageSignal = computed(() => this.activeReportSignal().upload_submission?.fec_message);
-
-  reportCodeLabelMap?: { [key in ReportCodes]: string };
-
-  ngOnInit(): void {
-    this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-  }
+  readonly form3XService = inject(Form3XService);
+  readonly report = this.store.selectSignal(selectActiveReport);
+  readonly reportCode = computed(() => this.report().report_code as ReportCodes);
+  readonly coverageDates = computed(() => this.report().coverageDates);
+  readonly fecStatus = computed(() => this.report().upload_submission?.fec_status);
+  readonly taskState = computed(() => this.report().upload_submission?.fecfile_task_state);
+  readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
 
   public backToReports() {
     this.router.navigateByUrl('/reports');

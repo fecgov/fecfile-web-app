@@ -201,7 +201,7 @@
           </div>
         </div>
       </div>
-      @if (report.contact_affiliated) {
+      @if (form1M.contact_affiliated) {
         <div class="grid">
           <div class="col-9">
             <div class="field">
@@ -316,7 +316,7 @@
               </div>
             </div>
           </div>
-          @if (report[candidateContact.contactKey]) {
+          @if (form1M[candidateContact.contactKey]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"

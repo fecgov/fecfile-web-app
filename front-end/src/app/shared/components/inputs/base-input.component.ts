@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from '../../models/transaction-type.model';
 import { DestroyerComponent } from '../app-destroyer.component';

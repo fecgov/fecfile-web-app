@@ -47,7 +47,7 @@ export class CommitteeInfoComponent extends FormComponent implements OnInit, Aft
     effect(() => {
       this.mostRecentFilingPdfUrl = undefined; // undefined until requirements are defined https://fecgov.atlassian.net/browse/FECFILE-1704
       this.form.enable();
-      const entries = Object.entries(this.committeeAccountSignal());
+      const entries = Object.entries(this.committeeAccount());
       for (const [key, value] of entries) {
         if (this.formProperties.includes(key)) {
           this.form.get(key)?.setValue(value);

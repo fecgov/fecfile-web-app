@@ -27,8 +27,6 @@ import {
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 
 @Component({
@@ -49,7 +47,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   readonly transactionType = computed(() => this.transaction()?.transactionType);
   readonly contactTypeOptions = computed(() => getContactTypeOptions(this.transactionType()?.contactTypeOptions ?? []));
 
-  readonly report = this.store.selectSignal(selectActiveReport);
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
 
   readonly reportTypes = ReportTypes;
@@ -67,7 +64,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     () => this.reportService.isEditable(this.report()) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()),
   );
   memoCodeCheckboxLabel$ = of('');
-  readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   constructor() {
     super();

@@ -1,19 +1,16 @@
 <h1>Report status</h1>
 <h5>
-  <strong>{{ activeReportSignal().formLabel }}:</strong> {{ activeReportSignal().formSubLabel }}
+  <strong>{{ report().formLabel }}:</strong> {{ report().formSubLabel }}
 </h5>
 <hr type="solid" />
 <p-card>
   <div class="grid">
     <div class="col-12">
-      @if (fecStatusSignal() === 'ACCEPTED') {
+      @if (fecStatus() === 'ACCEPTED') {
         <h2 class="super-header">Congratulations. Your report was accepted by the FEC.</h2>
-      } @else if (fecStatusSignal() === 'REJECTED') {
+      } @else if (fecStatus() === 'REJECTED') {
         <h2 class="super-header">Your report has been rejected.</h2>
-      } @else if (
-        fecStatusSignal() === 'PROCESSING' ||
-        (!fecStatusSignal() && taskStateSignal() && taskStateSignal() !== 'FAILED')
-      ) {
+      } @else if (fecStatus() === 'PROCESSING' || (!fecStatus() && taskState() && taskState() !== 'FAILED')) {
         <h2 class="super-header">Thank you for submitting your report. It is currently being processed.</h2>
       }
     </div>
@@ -24,26 +21,26 @@
         <div class="col-12">
           <h5>YOUR FORM TYPE:</h5>
           <h3>
-            {{ activeReportSignal().formLabel }}
+            {{ report().formLabel }}
           </h3>
           <br />
         </div>
-        @if (reportCodeSignal()) {
+        @if (reportCode()) {
           <div class="col-12">
             <h5>YOUR REPORT TYPE:</h5>
             <h3>
-              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCodeSignal()] : '' }}
+              {{ form3XService.reportType() }}
             </h3>
             <br />
           </div>
         }
-        @if (coverageDatesSignal()) {
+        @if (coverageDates()) {
           <div class="col-12">
             <h5>YOUR COVERAGE DATES:</h5>
             <h3 class="no-wrap">
-              {{ coverageDatesSignal()!['coverage_from_date'] || null | longDate }} —
+              {{ coverageDates()!['coverage_from_date'] || null | longDate }} —
               <wbr />
-              {{ coverageDatesSignal()!['coverage_through_date'] || null | longDate }}
+              {{ coverageDates()!['coverage_through_date'] || null | longDate }}
             </h3>
             <br />
           </div>
@@ -52,23 +49,23 @@
         <div class="col-12">
           <h5 class="word-break">CONFIRMATION EMAILS:</h5>
           <h3 class="word-break">
-            {{ activeReportSignal().confirmation_email_1 }} <br />
-            {{ activeReportSignal().confirmation_email_2 }}
+            {{ report().confirmation_email_1 }} <br />
+            {{ report().confirmation_email_2 }}
           </h3>
           <br />
         </div>
-        @if (activeReportSignal().upload_submission?.fec_report_id) {
+        @if (report().upload_submission?.fec_report_id) {
           <div class="col-12">
             <h5>FILING ID:</h5>
             <h3>
-              {{ activeReportSignal().upload_submission?.fec_report_id }}
+              {{ report().upload_submission?.fec_report_id }}
             </h3>
           </div>
         }
       </div>
     </div>
     <div class="col-8">
-      @switch (fecStatusSignal()) {
+      @switch (fecStatus()) {
         @case ('ACCEPTED') {
           <img
             class="image-max-width"
@@ -104,15 +101,15 @@
   </div>
   <div class="grid">
     <div class="col-12">
-      @if (!['ACCEPTED', 'REJECTED'].includes(fecStatusSignal() || '')) {
+      @if (!['ACCEPTED', 'REJECTED'].includes(fecStatus() || '')) {
         <p>
           The FEC will send a report status message to the confirmation emails you provided during the submission
           process. If any problems are encountered during the process, Web Upload will terminate the upload session and
           relay the specifics of the error.
         </p>
       }
-      @if (fecStatusSignal() === 'REJECTED' && fecMessageSignal()) {
-        <p>FEC Error Message: {{ fecMessageSignal() }}</p>
+      @if (fecStatus() === 'REJECTED' && fecMessage()) {
+        <p>FEC Error Message: {{ fecMessage() }}</p>
       }
     </div>
   </div>

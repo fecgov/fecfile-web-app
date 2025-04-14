@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { computed, Injectable } from '@angular/core';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { Form3X, CoverageDates } from '../models';
 import { Report } from '../models/report.model';
 import { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Injectable({
   providedIn: 'root',
@@ -12,27 +12,26 @@ import { ReportService } from './report.service';
 export class Form3XService extends ReportService {
   override apiEndpoint = '/reports/form-3x';
 
-  f3xReportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
-
-  public async getF3xCoverageDates(): Promise<CoverageDates[]> {
-    const [response, reportCodeLabelMap] = await Promise.all([
-      this.apiService.get<CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
-      this.getReportCodeLabelMap(),
-    ]);
-    return response.map((fx3CoverageDate) =>
-      CoverageDates.fromJSON(fx3CoverageDate, reportCodeLabelMap[fx3CoverageDate.report_code!]),
+  readonly reportCodeLabelMap = derivedAsync(() =>
+    this.apiService.get<{ [key in ReportCodes]: string }>(`${this.apiEndpoint}/report_code_map/`),
+  );
+  private readonly coverage = derivedAsync(() =>
+    this.apiService.get<CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
+  );
+  readonly existingCoverage = computed(() => {
+    const map = this.reportCodeLabelMap();
+    const coverage = this.coverage();
+    if (!map || !coverage) return undefined;
+    return coverage.map((fx3CoverageDate) =>
+      CoverageDates.fromJSON(fx3CoverageDate, map[fx3CoverageDate.report_code!]),
     );
-  }
+  });
 
-  public async getReportCodeLabelMap(): Promise<{ [key in ReportCodes]: string }> {
-    let map = this.f3xReportCodeLabelMap$.getValue();
-    if (!map) {
-      map = await this.apiService.get<{ [key in ReportCodes]: string }>(`${this.apiEndpoint}/report_code_map/`);
-
-      this.f3xReportCodeLabelMap$.next(map);
-    }
-    return map;
-  }
+  readonly reportType = computed(() => {
+    const map = this.reportCodeLabelMap();
+    if (!map) return '';
+    return map[this.reportCode()];
+  });
 
   public async getFutureReports(coverage_through_date: string): Promise<Form3X[]> {
     const response = await this.apiService.get<Form3X[]>(`${this.apiEndpoint}/future/?after=${coverage_through_date}`);

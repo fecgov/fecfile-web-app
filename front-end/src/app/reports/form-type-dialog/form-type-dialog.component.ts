@@ -32,7 +32,7 @@ export class FormTypeDialogComponent extends DestroyerComponent {
 
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
-  committeeAccountSignal = this.store.selectSignal(selectCommitteeAccount);
+  committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   street = undefined;
 
   selectedForm24Type: '24' | '48' | null = null;
@@ -62,13 +62,13 @@ export class FormTypeDialogComponent extends DestroyerComponent {
   createForm24() {
     const form24 = Form24.fromJSON({
       report_type_24_48: this.selectedForm24Type,
-      street_1: this.committeeAccountSignal().street_1,
-      street_2: this.committeeAccountSignal().street_2,
-      city: this.committeeAccountSignal().city,
-      state: this.committeeAccountSignal().state,
-      zip: this.committeeAccountSignal().zip,
-      filer_committee_id_number: this.committeeAccountSignal().committee_id,
-      committee_name: this.committeeAccountSignal().name,
+      street_1: this.committeeAccount().street_1,
+      street_2: this.committeeAccount().street_2,
+      city: this.committeeAccount().city,
+      state: this.committeeAccount().state,
+      zip: this.committeeAccount().zip,
+      filer_committee_id_number: this.committeeAccount().committee_id,
+      committee_name: this.committeeAccount().name,
     });
     const create$ = this.form24Service.create(form24, ['report_type_24_48']);
 

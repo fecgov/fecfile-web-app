@@ -30,6 +30,8 @@ import { CalendarComponent } from 'app/shared/components/calendar/calendar.compo
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 import { CoverageDates, Form3X, F3xFormTypes } from 'app/shared/models';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -47,7 +49,7 @@ import { CoverageDates, Form3X, F3xFormTypes } from 'app/shared/models';
   ],
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {
-  private readonly form3XService = inject(Form3XService);
+  readonly form3XService = inject(Form3XService);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -62,47 +64,43 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     'form_type',
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
-  stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+  readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
     updateOn: 'blur',
   });
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
-  public readonly existingCoverageSignal = signal<CoverageDates[] | undefined>(undefined);
   readonly thisYear = new Date().getFullYear();
-  readonly usedReportCodes = computed(() => this.getUsedReportCodes());
-
-  reportCodeLabelMap?: { [key in ReportCodes]: string };
+  readonly usedReportCodes = derivedAsync(() => this.getUsedReportCodes(this.form3XService.existingCoverage()));
 
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   private readonly filingFrequencySignal = computed(() =>
-    this.committeeAccountSignal().filing_frequency === 'M' ? 'M' : 'Q',
+    this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q',
   );
 
   constructor() {
     super();
-    this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-    this.form3XService.getF3xCoverageDates().then((coverageDates) => this.existingCoverageSignal.set(coverageDates));
-    effect(() => {
-      const reportId = this.activatedRoute.snapshot.data['reportId'];
-      const report = this.activeReportSignal();
-      if (reportId && report) {
-        this.form.patchValue(report);
-      }
-    });
+    const reportId = this.activatedRoute.snapshot.data['reportId'];
+    effectOnceIf(
+      () => this.report() && reportId,
+      () => this.form.patchValue(this.report()),
+    );
 
     this.addFilingFrequency();
     this.addReportTypeCategory();
 
-    effect(() => {
-      const existingCoverage = this.existingCoverageSignal();
-      if (!existingCoverage) return;
+    effectOnceIf(
+      () => this.getUsedReportCodes(this.form3XService.existingCoverage()),
+      () => {
+        const existingCoverage = this.form3XService.existingCoverage();
+        if (!existingCoverage) return;
 
-      this.form?.patchValue({ report_type_category: this.reportTypeCategories[0] });
-      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        this.form?.patchValue({ report_type_category: this.reportTypeCategories[0] });
+        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
 
-      this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
-    });
+        this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+      },
+    );
   }
 
   private addReportTypeCategory() {
@@ -174,7 +172,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
 
   public getFirstEnabledReportCode() {
     return this.getReportCodes().find((reportCode) => {
-      return !this.usedReportCodes().includes(reportCode);
+      return !this.usedReportCodes()?.includes(reportCode);
     });
   }
 
@@ -219,8 +217,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     });
   }
 
-  private getUsedReportCodes() {
-    const existingCoverage = this.existingCoverageSignal();
+  private getUsedReportCodes(existingCoverage: CoverageDates[] | undefined): ReportCodes[] | undefined {
     if (!existingCoverage) return [];
     return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
       const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];

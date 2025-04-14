@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form3Service } from 'app/shared/services/form-3.service';
@@ -30,7 +30,8 @@ import { CalendarComponent } from 'app/shared/components/calendar/calendar.compo
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 import { CoverageDates, CommitteeAccount, Form3, F3FormTypes } from 'app/shared/models';
-
+import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { derivedAsync } from 'ngxtension/derived-async';
 @Component({
   selector: 'app-create-f3-step1',
   templateUrl: './create-f3-step1.component.html',
@@ -46,7 +47,7 @@ import { CoverageDates, CommitteeAccount, Form3, F3FormTypes } from 'app/shared/
     TextareaModule,
   ],
 })
-export class CreateF3Step1Component extends FormComponent implements OnInit {
+export class CreateF3Step1Component extends FormComponent {
   private readonly form3Service = inject(Form3Service);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -61,47 +62,39 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     'form_type',
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
-  stateOptions: PrimeOptions = [];
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3Schema), {
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+  readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3Schema), {
     updateOn: 'blur',
   });
 
   readonly F3ReportTypeCategories = F3ReportTypeCategories;
-  public existingCoverage: CoverageDates[] | undefined;
-  public usedReportCodes?: ReportCodes[];
-  public thisYear = new Date().getFullYear();
-  committeeAccount?: CommitteeAccount;
-  reportCodeLabelMap?: { [key in ReportCodes]: string };
+  readonly existingCoverage = derivedAsync(async () => await this.form3Service.getF3CoverageDates());
+  readonly usedReportCodes = derivedAsync(() => this.getUsedReportCodes(this.existingCoverage()));
+  readonly thisYear = new Date().getFullYear();
+  readonly reportCodeLabelMap = derivedAsync(async () => await this.form3Service.getReportCodeLabelMap());
 
-  ngOnInit(): void {
+  constructor() {
+    super();
     const reportId = this.activatedRoute.snapshot.data['reportId'];
-    this.form3Service.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (reportId && report) {
-          this.form.patchValue(report);
-        }
-      });
+    effectOnceIf(
+      () => this.report() && reportId,
+      () => this.form.patchValue(this.report()),
+    );
 
-    combineLatest([this.store.select(selectCommitteeAccount), this.form3Service.getF3CoverageDates()])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([committeeAccount, existingCoverage]) => {
-        this.committeeAccount = committeeAccount;
-        this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
-        this.form?.patchValue({ form_type: 'F3N' });
-        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
-        this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
+    effectOnceIf(
+      () => this.getUsedReportCodes(this.existingCoverage()),
+      () => {
         this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
         (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
           this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
         }, this.destroy$);
+        this.form.addValidators(buildNonOverlappingCoverageValidator(this.existingCoverage()!));
+      },
+    );
 
-        this.existingCoverage = existingCoverage;
-        this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
-      });
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+    this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
+    this.form?.patchValue({ form_type: 'F3N' });
+    this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
@@ -110,6 +103,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
     });
+
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
@@ -145,7 +139,8 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     }
   }
 
-  public getUsedReportCodes(existingCoverage: CoverageDates[]): ReportCodes[] {
+  public getUsedReportCodes(existingCoverage: CoverageDates[] | undefined): ReportCodes[] | undefined {
+    if (!existingCoverage) return undefined;
     return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
       const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
       if (years.includes(this.thisYear)) {
@@ -157,7 +152,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
 
   public getFirstEnabledReportCode() {
     return this.getReportCodes().find((reportCode) => {
-      return !(this.usedReportCodes && this.usedReportCodes.includes(reportCode));
+      return !this.usedReportCodes()?.includes(reportCode);
     });
   }
 

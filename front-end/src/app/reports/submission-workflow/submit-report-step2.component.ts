@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -19,6 +19,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { CommitteeAccount, Report, Form3X, Form3 } from 'app/shared/models';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-submit-report-step2',
@@ -36,7 +37,7 @@ import { CommitteeAccount, Report, Form3X, Form3 } from 'app/shared/models';
     Ripple,
   ],
 })
-export class SubmitReportStep2Component extends FormComponent implements OnInit {
+export class SubmitReportStep2Component extends FormComponent {
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
   private readonly messageService = inject(MessageService);
@@ -64,16 +65,15 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
 
   constructor() {
     super();
-    effect(() => {
-      SchemaUtils.addJsonSchemaValidators(this.form, this.activeReportSignal().schema, false);
-      this.initializeFormWithReport(this.activeReportSignal(), this.committeeAccountSignal());
-    });
-  }
+    effectOnceIf(
+      () => this.report() && this.committeeAccount(),
+      () => {
+        SchemaUtils.addJsonSchemaValidators(this.form, this.report().schema, false);
+        this.initializeFormWithReport(this.report(), this.committeeAccount());
+      },
+    );
 
-  ngOnInit(): void {
     this.form.addControl('backdoorYesNo', new SubscriptionFormControl());
-
-    // Initialize validation tracking of current JSON schema and form data
     this.form.controls['filingPassword'].addValidators(passwordValidator);
     this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form
@@ -104,7 +104,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
       treasurer_prefix: committeeAccount?.treasurer_name_prefix,
       treasurer_suffix: committeeAccount?.treasurer_name_suffix,
     });
-    if (report && report['treasurer_last_name' as keyof Report]) {
+    if (report['treasurer_last_name' as keyof Report]) {
       this.form.patchValue(report);
     }
   }
@@ -117,7 +117,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     }
 
     this.confirmationService.confirm({
-      message: this.activeReportSignal().submitAlertText,
+      message: this.report().submitAlertText,
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -141,17 +141,17 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
   async saveTreasurerName(): Promise<Report | undefined> {
     this.loading = 1;
     const payload: Report = getReportFromJSON({
-      ...this.activeReportSignal(),
-      ...SchemaUtils.getFormValues(this.form, this.activeReportSignal().schema, this.formProperties),
+      ...this.report(),
+      ...SchemaUtils.getFormValues(this.form, this.report().schema, this.formProperties),
     });
     if (payload instanceof Form3X || payload instanceof Form3) {
-      payload.qualified_committee = this.committeeAccountSignal().qualified;
-      payload.committee_name = this.committeeAccountSignal().name;
-      payload.street_1 = this.committeeAccountSignal().street_1;
-      payload.street_2 = this.committeeAccountSignal().street_2;
-      payload.city = this.committeeAccountSignal().city;
-      payload.state = this.committeeAccountSignal().state;
-      payload.zip = this.committeeAccountSignal().zip;
+      payload.qualified_committee = this.committeeAccount().qualified;
+      payload.committee_name = this.committeeAccount().name;
+      payload.street_1 = this.committeeAccount().street_1;
+      payload.street_2 = this.committeeAccount().street_2;
+      payload.city = this.committeeAccount().city;
+      payload.state = this.committeeAccount().state;
+      payload.zip = this.committeeAccount().zip;
     }
 
     return this.reportService.update(payload, this.formProperties);
@@ -161,12 +161,12 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     this.loading = 2;
 
     const payload = {
-      report_id: this.activeReportSignal().id,
+      report_id: this.report().id,
       password: this.form?.value['filingPassword'],
       backdoor_code: this.form?.value['backdoor_code'],
     };
     await this.apiService.post('/web-services/submit-to-fec/', payload);
     this.loading = 0;
-    return this.router.navigateByUrl(this.getContinueUrl?.(this.activeReportSignal()) || '/reports/');
+    return this.router.navigateByUrl(this.getContinueUrl?.(this.report()) ?? '/reports/');
   }
 }

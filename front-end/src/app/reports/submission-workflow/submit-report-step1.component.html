@@ -1,7 +1,7 @@
 <div class="confirm-information">
   <h1>Confirm information</h1>
   <h5>
-    <strong>{{ activeReportSignal().formLabel }}:</strong> {{ activeReportSignal().formSubLabel }}
+    <strong>{{ report().formLabel }}:</strong> {{ report().formSubLabel }}
   </h5>
   <hr type="solid" />
   <p-card>
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      @if (activeReportSignal().hasChangeOfAddress) {
+      @if (report().hasChangeOfAddress) {
         <hr type="solid" />
         <div class="grid">
           <div class="col-12">
@@ -149,7 +149,7 @@
           pRipple
           label="Back"
           class="p-button-secondary"
-          (click)="router.navigateByUrl(getBackUrl?.(activeReportSignal()) ?? '')"
+          (click)="router.navigateByUrl(getBackUrl?.(report()) ?? '')"
         ></button>
         <button
           pButton

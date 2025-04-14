@@ -24,6 +24,7 @@ import { SaveCancelComponent } from '../../../shared/components/save-cancel/save
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-main-form',
@@ -134,41 +135,42 @@ export class MainFormComponent extends MainFormBaseComponent {
   excludeFecIds: string[] = [];
   excludeIds: string[] = [];
 
-  report = new Form1M();
+  form1M = new Form1M();
 
   constructor() {
     super();
 
-    effect(() => {
-      if (this.reportId) {
+    effectOnceIf(
+      () => this.reportId && this.report(),
+      () => {
         // A deep copy of activeReport has to be made because the actual activeReport
         // object is set to read-only by the NgRx store.
-        this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReportSignal())));
+        this.form1M = Form1M.fromJSON(JSON.parse(JSON.stringify(this.report())));
 
         // Set the statusBy radio button based on form values
-        if (this.report.affiliated_committee_name) {
+        if (this.form1M.affiliated_committee_name) {
           this.form.get('statusBy')?.setValue('affiliation');
         } else {
           this.form.get('statusBy')?.setValue('qualification');
         }
 
         // If this is an edit, update the lookup ids to exclude
-        if (this.report.id) {
-          if (this.report.affiliated_committee_name) {
-            if (this.report?.contact_affiliated?.committee_id)
-              this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
-            if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
+        if (this.form1M.id) {
+          if (this.form1M.affiliated_committee_name) {
+            if (this.form1M?.contact_affiliated?.committee_id)
+              this.excludeFecIds.push(this.form1M.contact_affiliated.committee_id);
+            if (this.form1M.contact_affiliated_id) this.excludeIds.push(this.form1M.contact_affiliated_id);
           } else {
             f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-              if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
-                this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
-              if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
-                this.excludeIds.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
+              if (this.form1M[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
+                this.excludeFecIds.push(this.form1M[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
+              if (this.form1M[`contact_candidate_${tag}_id` as keyof Form1M])
+                this.excludeIds.push(this.form1M[`contact_candidate_${tag}_id` as keyof Form1M]);
             });
           }
         }
-      }
-    });
+      },
+    );
   }
 
   async getConfirmations(): Promise<boolean> {
@@ -182,8 +184,8 @@ export class MainFormComponent extends MainFormBaseComponent {
   }
 
   getContact(contactKey: string) {
-    if (this.report[contactKey as keyof Form1M]) {
-      return this.report[contactKey as keyof Form1M] as Contact;
+    if (this.form1M[contactKey as keyof Form1M]) {
+      return this.form1M[contactKey as keyof Form1M] as Contact;
     }
     return null;
   }
@@ -253,7 +255,7 @@ export class MainFormComponent extends MainFormBaseComponent {
 
   getReportPayload(): Report {
     const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
-    this.updateContactsWithForm(this.report, this.form);
+    this.updateContactsWithForm(this.form1M, this.form);
     return Object.assign(this.report, formValues);
   }
 

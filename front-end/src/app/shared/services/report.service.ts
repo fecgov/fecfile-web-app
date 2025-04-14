@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { CommitteeAccount } from '../models/committee-account.model';
@@ -11,6 +11,8 @@ import { Form3X } from '../models/form-3x.model';
 import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
 import { Form1M } from '../models/form-1m.model';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ReportCodes } from '../utils/report-code.utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON(json: any): Report {
@@ -28,8 +30,11 @@ export function getReportFromJSON(json: any): Report {
   providedIn: 'root',
 })
 export class ReportService implements TableListService<Report> {
-  protected readonly apiService = inject(ApiService);
   protected readonly store = inject(Store);
+  readonly report = this.store.selectSignal(selectActiveReport);
+  readonly reportCode = computed(() => this.report().report_code as ReportCodes);
+
+  protected readonly apiService = inject(ApiService);
   apiEndpoint = '/reports';
 
   public async getTableData(
