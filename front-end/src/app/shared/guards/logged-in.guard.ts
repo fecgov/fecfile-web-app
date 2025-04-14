@@ -8,7 +8,7 @@ export const loggedInGuard: CanActivateFn = () => {
   const loginService = inject(LoginService);
   const cookieService = inject(CookieService);
 
-  if (!loginService.userIsAuthenticated()) {
+  if (!loginService.userIsAuthenticated) {
     cookieService.deleteAll();
     return router.createUrlTree(['login']);
   } else {

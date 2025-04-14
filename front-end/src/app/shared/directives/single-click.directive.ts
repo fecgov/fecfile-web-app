@@ -1,16 +1,17 @@
-import { Directive, ElementRef, HostListener, inject, OnDestroy } from '@angular/core';
+import { Directive, effect, ElementRef, HostListener, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectSingleClickDisabled } from '../../store/single-click.selectors';
 import { singleClickDisableAction, singleClickEnableAction } from '../../store/single-click.actions';
 
 @Directive({ selector: '[appSingleClick]' })
-export class SingleClickDirective implements OnDestroy {
+export class SingleClickDirective {
   private readonly el = inject(ElementRef);
   private readonly store = inject(Store);
+  private readonly clickDisabled = this.store.selectSignal(selectSingleClickDisabled);
 
   constructor() {
-    this.store.select(selectSingleClickDisabled).subscribe((disabled) => {
-      if (disabled) this.el.nativeElement.setAttribute('disabled', 'true');
+    effect(() => {
+      if (this.clickDisabled()) this.el.nativeElement.setAttribute('disabled', 'true');
       else this.el.nativeElement.removeAttribute('disabled');
     });
   }

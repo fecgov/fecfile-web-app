@@ -5,8 +5,7 @@ import { LoginService } from '../services/login.service';
 export const nameGuard: CanActivateFn = async () => {
   const router = inject(Router);
   const loginService = inject(LoginService);
-  const userHasProfileData = await loginService.userHasProfileData();
-  if (!userHasProfileData) {
+  if (!loginService.userHasProfileData()) {
     return router.createUrlTree(['/login/create-profile']);
   }
   return true;

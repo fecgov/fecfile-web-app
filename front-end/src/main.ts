@@ -43,7 +43,7 @@ import Aura from '@primeng/themes/aura';
 function initializeAppFactory(loginService: LoginService, router: Router): () => Promise<void> {
   return async () => {
     function checkSession(this: SchedulerAction<undefined>) {
-      if (router.url !== '/login' && !loginService.userIsAuthenticated()) loginService.logOut();
+      if (router.url !== '/login' && !loginService.userIsAuthenticated) loginService.logOut();
       this.schedule(undefined, 1000);
     }
     asyncScheduler.schedule(checkSession, 1000);
