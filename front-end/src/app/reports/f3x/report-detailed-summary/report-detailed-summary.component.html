@@ -2,11 +2,11 @@
   <div class="summary-header">
     <h1>Detailed summary page</h1>
     <div>
-      <strong>{{ report.formLabel }}</strong
-      >{{ report.formSubLabel }}
+      <strong>{{ form3x().formLabel }}</strong
+      >{{ form3x().formSubLabel }}
     </div>
   </div>
-  @if (calculationFinished$ | async) {
+  @if (calculationFinished()) {
     <div>
       <table>
         <caption>
@@ -35,14 +35,14 @@
           <td class="justify-left right-border indent-2">
             <em>Itemized<span class="parenthesis-text"> (use Schedule A)</span></em>
           </td>
-          <td class="right-border">{{ report.L11ai_itemized_period | defaultZero | currency }}</td>
-          <td>{{ report.L11ai_itemized_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L11ai_itemized_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L11ai_itemized_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(a)(ii)</td>
           <td class="justify-left right-border indent-2"><em>Unitemized</em></td>
-          <td class="right-border">{{ report.L11aii_unitemized_period | defaultZero | currency }}</td>
-          <td>{{ report.L11aii_unitemized_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L11aii_unitemized_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L11aii_unitemized_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(a)(iii)</td>
@@ -52,22 +52,22 @@
               >Lines 11(a)(i) <b>+</b> 11(a)(ii) <b>=</b> Line 11(a)(iii)</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L11aiii_total_period | defaultZero | currency }}</td>
-          <td>{{ report.L11aiii_total_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L11aiii_total_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L11aiii_total_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1">Political party committees</td>
-          <td class="right-border">{{ report.L11b_political_party_committees_period | defaultZero | currency }}</td>
-          <td>{{ report.L11b_political_party_committees_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L11b_political_party_committees_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L11b_political_party_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
           <td class="justify-left right-border indent-1">Other political committees (Such as PACs)</td>
           <td class="right-border">
-            {{ report.L11c_other_political_committees_pacs_period | defaultZero | currency }}
+            {{ form3x().L11c_other_political_committees_pacs_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L11c_other_political_committees_pacs_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L11c_other_political_committees_pacs_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(d)</td>
@@ -78,28 +78,28 @@
               33).</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L11d_total_contributions_period | defaultZero | currency }}</td>
-          <td>{{ report.L11d_total_contributions_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L11d_total_contributions_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L11d_total_contributions_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">12</td>
           <td class="justify-left right-border bold">TRANSFERS FROM AFFILIATED/OTHER PARTY COMMITTEES</td>
           <td class="right-border">
-            {{ report.L12_transfers_from_affiliated_other_party_cmtes_period | defaultZero | currency }}
+            {{ form3x().L12_transfers_from_affiliated_other_party_cmtes_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L12_transfers_from_affiliated_other_party_cmtes_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L12_transfers_from_affiliated_other_party_cmtes_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">13</td>
           <td class="justify-left right-border bold">ALL LOANS RECEIVED</td>
-          <td class="right-border">{{ report.L13_all_loans_received_period | defaultZero | currency }}</td>
-          <td>{{ report.L13_all_loans_received_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L13_all_loans_received_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L13_all_loans_received_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">14</td>
           <td class="justify-left right-border bold">LOAN REPAYMENTS RECEIVED</td>
-          <td class="right-border">{{ report.L14_loan_repayments_received_period | defaultZero | currency }}</td>
-          <td>{{ report.L14_loan_repayments_received_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L14_loan_repayments_received_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L14_loan_repayments_received_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">15</td>
@@ -108,9 +108,9 @@
             <app-calculation-overlay>(This total will also appear on Line 37).</app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L15_offsets_to_operating_expenditures_refunds_period | defaultZero | currency }}
+            {{ form3x().L15_offsets_to_operating_expenditures_refunds_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L15_offsets_to_operating_expenditures_refunds_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L15_offsets_to_operating_expenditures_refunds_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">16</td>
@@ -118,17 +118,17 @@
             REFUNDS OF CONTRIBUTIONS MADE TO FEDERAL CANDIDATES AND OTHER POLITICAL COMMITTEES
           </td>
           <td class="right-border">
-            {{ report.L16_refunds_of_federal_contributions_period | defaultZero | currency }}
+            {{ form3x().L16_refunds_of_federal_contributions_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L16_refunds_of_federal_contributions_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L16_refunds_of_federal_contributions_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">17</td>
           <td class="justify-left right-border bold">OTHER FEDERAL RECEIPTS (DIVIDENDS, INTEREST, ETC.)</td>
           <td class="right-border">
-            {{ report.L17_other_federal_receipts_dividends_period | defaultZero | currency }}
+            {{ form3x().L17_other_federal_receipts_dividends_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L17_other_federal_receipts_dividends_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L17_other_federal_receipts_dividends_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">18</td>
@@ -142,9 +142,9 @@
             Non-federal account <span class="parenthesis-text">(from Schedule H3)</span>
           </td>
           <td class="right-border">
-            {{ report.L18a_transfers_from_nonfederal_account_h3_period | defaultZero | currency }}
+            {{ form3x().L18a_transfers_from_nonfederal_account_h3_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L18a_transfers_from_nonfederal_account_h3_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L18a_transfers_from_nonfederal_account_h3_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
@@ -152,9 +152,9 @@
             Levin funds <span class="parenthesis-text">(from Schedule H5)</span>
           </td>
           <td class="right-border">
-            {{ report.L18b_transfers_from_nonfederal_levin_h5_period | defaultZero | currency }}
+            {{ form3x().L18b_transfers_from_nonfederal_levin_h5_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L18b_transfers_from_nonfederal_levin_h5_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L18b_transfers_from_nonfederal_levin_h5_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
@@ -163,9 +163,9 @@
             <app-calculation-overlay>Lines 18(a) <b>+</b> 18(b) <b>=</b> Line 18(c)</app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L18c_total_nonfederal_transfers_18a_18b_period | defaultZero | currency }}
+            {{ form3x().L18c_total_nonfederal_transfers_18a_18b_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L18c_total_nonfederal_transfers_18a_18b_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L18c_total_nonfederal_transfers_18a_18b_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">19</td>
@@ -176,8 +176,8 @@
               <b>=</b> Line 19</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
-          <td>{{ report.L19_total_receipts_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L19_total_receipts_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L19_total_receipts_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="dark-gray last">
           <td class="right-border bold">20</td>
@@ -185,8 +185,8 @@
             TOTAL FEDERAL RECEIPTS
             <app-calculation-overlay>Lines 19 <b>-</b> 18(c) <b>=</b> Line 20</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L20_total_federal_receipts_period | defaultZero | currency }}</td>
-          <td class="bold">{{ report.L20_total_federal_receipts_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L20_total_federal_receipts_period | defaultZero | currency }}</td>
+          <td class="bold">{{ form3x().L20_total_federal_receipts_ytd | defaultZero | currency }}</td>
         </tr>
       </table>
 
@@ -219,22 +219,22 @@
         <tr>
           <td class="right-border">(a)(i)</td>
           <td class="justify-left right-border indent-2"><em>Federal Share</em></td>
-          <td class="right-border">{{ report.L21ai_federal_share_period | defaultZero | currency }}</td>
-          <td>{{ report.L21ai_federal_share_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L21ai_federal_share_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L21ai_federal_share_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(a)(ii)</td>
           <td class="justify-left right-border indent-2"><em>Non-Federal Share</em></td>
-          <td class="right-border">{{ report.L21aii_nonfederal_share_period | defaultZero | currency }}</td>
-          <td>{{ report.L21aii_nonfederal_share_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L21aii_nonfederal_share_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L21aii_nonfederal_share_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1">Other federal operating expenditures</td>
           <td class="right-border">
-            {{ report.L21b_other_federal_operating_expenditures_period | defaultZero | currency }}
+            {{ form3x().L21b_other_federal_operating_expenditures_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L21b_other_federal_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L21b_other_federal_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
@@ -244,16 +244,16 @@
               >Lines 21(a)(i) <b>+</b> 21(a)(ii) <b>+</b> 21(b) <b>=</b> Line 21(c)</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L21c_total_operating_expenditures_period | defaultZero | currency }}</td>
-          <td>{{ report.L21c_total_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L21c_total_operating_expenditures_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L21c_total_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">22</td>
           <td class="justify-left right-border bold">TRANSFERS FROM AFFILIATED/OTHER PARTY COMMITTEES</td>
           <td class="right-border">
-            {{ report.L22_transfers_to_affiliated_other_party_cmtes_period | defaultZero | currency }}
+            {{ form3x().L22_transfers_to_affiliated_other_party_cmtes_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L22_transfers_to_affiliated_other_party_cmtes_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L22_transfers_to_affiliated_other_party_cmtes_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">23</td>
@@ -261,17 +261,17 @@
             CONTRIBUTIONS TO FEDERAL CANDIDATES/COMMITTEES AND OTHER POLITICAL COMMITTEES
           </td>
           <td class="right-border">
-            {{ report.L23_contributions_to_federal_candidates_cmtes_period | defaultZero | currency }}
+            {{ form3x().L23_contributions_to_federal_candidates_cmtes_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L23_contributions_to_federal_candidates_cmtes_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L23_contributions_to_federal_candidates_cmtes_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">24</td>
           <td class="justify-left right-border bold">
             INDEPENDENT EXPENDITURES <span class="parenthesis-text">(use Schedule E)</span>
           </td>
-          <td class="right-border">{{ report.L24_independent_expenditures_period | defaultZero | currency }}</td>
-          <td>{{ report.L24_independent_expenditures_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L24_independent_expenditures_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L24_independent_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">25</td>
@@ -279,21 +279,21 @@
             COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D)) <span class="parenthesis-text">(use Schedule F)</span>
           </td>
           <td class="right-border">
-            {{ report.L25_coordinated_expend_made_by_party_cmtes_period | defaultZero | currency }}
+            {{ form3x().L25_coordinated_expend_made_by_party_cmtes_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L25_coordinated_expend_made_by_party_cmtes_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L25_coordinated_expend_made_by_party_cmtes_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">26</td>
           <td class="justify-left right-border bold">LOANS REPAYMENTS MADE</td>
-          <td class="right-border">{{ report.L26_loan_repayments_period | defaultZero | currency }}</td>
-          <td>{{ report.L26_loan_repayments_made_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L26_loan_repayments_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L26_loan_repayments_made_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">27</td>
           <td class="justify-left right-border bold">LOAN MADE</td>
-          <td class="right-border">{{ report.L27_loans_made_period | defaultZero | currency }}</td>
-          <td>{{ report.L27_loans_made_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L27_loans_made_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L27_loans_made_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">28</td>
@@ -304,20 +304,20 @@
         <tr>
           <td class="right-border">(a)</td>
           <td class="justify-left right-border indent-1">Individuals/persons other than political committees</td>
-          <td class="right-border">{{ report.L28a_individuals_persons_period | defaultZero | currency }}</td>
-          <td>{{ report.L28a_individuals_persons_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L28a_individuals_persons_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L28a_individuals_persons_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1">Political Party Committees</td>
-          <td class="right-border">{{ report.L28b_political_party_committees_period | defaultZero | currency }}</td>
-          <td>{{ report.L28b_political_party_committees_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L28b_political_party_committees_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L28b_political_party_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
           <td class="justify-left right-border indent-1">Other Political Committees (such as PACs)</td>
-          <td class="right-border">{{ report.L28c_other_political_committees_period | defaultZero | currency }}</td>
-          <td>{{ report.L28c_other_political_committees_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L28c_other_political_committees_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L28c_other_political_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(d)</td>
@@ -327,14 +327,14 @@
               >Lines 28(a) <b>+</b> 28(b) <b>+</b> 28(c) <b>=</b> Line 28(d)</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L28d_total_contributions_refunds_period | defaultZero | currency }}</td>
-          <td>{{ report.L28d_total_contributions_refunds_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L28d_total_contributions_refunds_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L28d_total_contributions_refunds_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">29</td>
           <td class="justify-left right-border bold">OTHER DISBURSEMENTS (INCLUDING NON-FEDERAL DONATIONS)</td>
-          <td class="right-border">{{ report.L29_other_disbursements_period | defaultZero | currency }}</td>
-          <td>{{ report.L29_other_disbursements_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L29_other_disbursements_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L29_other_disbursements_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">30</td>
@@ -354,25 +354,25 @@
           <td class="right-border">(a)(i)</td>
           <td class="justify-left right-border indent-2">Federal share</td>
           <td class="right-border">
-            {{ report.L30ai_shared_federal_activity_h6_fed_share_period | defaultZero | currency }}
+            {{ form3x().L30ai_shared_federal_activity_h6_fed_share_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L30ai_shared_federal_activity_h6_fed_share_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L30ai_shared_federal_activity_h6_fed_share_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(a)(ii)</td>
           <td class="justify-left right-border indent-2">"Levin" share</td>
           <td class="right-border">
-            {{ report.L30aii_shared_federal_activity_h6_nonfed_period | defaultZero | currency }}
+            {{ form3x().L30aii_shared_federal_activity_h6_nonfed_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L30aii_shared_federal_activity_h6_nonfed_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L30aii_shared_federal_activity_h6_nonfed_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1">Federal Election Activity Paid Entirely With Federal Funds</td>
           <td class="right-border">
-            {{ report.L30b_nonallocable_fed_election_activity_period | defaultZero | currency }}
+            {{ form3x().L30b_nonallocable_fed_election_activity_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L30b_nonallocable_fed_election_activity_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L30b_nonallocable_fed_election_activity_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
@@ -383,9 +383,9 @@
             </app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L30c_total_federal_election_activity_period | defaultZero | currency }}
+            {{ form3x().L30c_total_federal_election_activity_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L30c_total_federal_election_activity_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L30c_total_federal_election_activity_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">31</td>
@@ -396,8 +396,8 @@
               <b>+</b> 29 <b>+</b> 30(c) <b>=</b> Line 31
             </app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L31_total_disbursements_period | defaultZero | currency }}</td>
-          <td>{{ report.L31_total_disbursements_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L31_total_disbursements_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L31_total_disbursements_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="dark-gray last">
           <td class="right-border bold">32</td>
@@ -407,8 +407,8 @@
               >Lines 31 <b>-</b> 21(a)(ii) <b>+</b> 30(a)(ii) <b>=</b> Line 32</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L32_total_federal_disbursements_period | defaultZero | currency }}</td>
-          <td>{{ report.L32_total_federal_disbursements_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L32_total_federal_disbursements_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L32_total_federal_disbursements_ytd | defaultZero | currency }}</td>
         </tr>
       </table>
 
@@ -430,16 +430,16 @@
             TOTAL CONTRIBUTIONS
             <app-calculation-overlay>Carried from Line 11(d).</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L33_total_contributions_period | defaultZero | currency }}</td>
-          <td>{{ report.L33_total_contributions_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L33_total_contributions_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L33_total_contributions_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">34</td>
           <td class="justify-left right-border bold cell-with-overlay">
             TOTAL CONTRIBUTION REFUNDS <app-calculation-overlay>Carried from Line 28(d).</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L34_total_contribution_refunds_period | defaultZero | currency }}</td>
-          <td>{{ report.L34_total_contribution_refunds_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L34_total_contribution_refunds_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L34_total_contribution_refunds_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">35</td>
@@ -448,8 +448,8 @@
               >Line 33 <b>-</b> 34 <b>=</b> Line 35</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L35_net_contributions_period | defaultZero | currency }}</td>
-          <td>{{ report.L35_net_contributions_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L35_net_contributions_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L35_net_contributions_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">36</td>
@@ -458,9 +458,9 @@
             <app-calculation-overlay>Line 21(a)(i) <b>+</b> 21(b) <b>=</b> Line 36</app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L36_total_federal_operating_expenditures_period | defaultZero | currency }}
+            {{ form3x().L36_total_federal_operating_expenditures_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L36_total_federal_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L36_total_federal_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">37</td>
@@ -468,9 +468,9 @@
             OFFSETS TO OPERATING EXPENDITURES <app-calculation-overlay>Carried from Line 15.</app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L37_offsets_to_operating_expenditures_period | defaultZero | currency }}
+            {{ form3x().L37_offsets_to_operating_expenditures_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L37_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td>{{ form3x().L37_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">38</td>
@@ -478,8 +478,8 @@
             NET OPERATING EXPENDITURE
             <app-calculation-overlay>Line 37 <b>-</b> 36 <b>=</b> Line 38</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L38_net_operating_expenditures_period | defaultZero | currency }}</td>
-          <td>{{ report.L38_net_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ form3x().L38_net_operating_expenditures_period | defaultZero | currency }}</td>
+          <td>{{ form3x().L38_net_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
       </table>
     </div>
@@ -502,7 +502,7 @@
           pRipple
           label="Back"
           class="p-button-secondary"
-          (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
+          (click)="router.navigateByUrl('/reports/f3x/summary/' + form3x().id)"
         ></button>
       </div>
     </div>
@@ -514,7 +514,7 @@
           pRipple
           label="See print preview"
           class="p-button-primary"
-          (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
+          (click)="router.navigateByUrl('/reports/f3x/web-print/' + form3x().id)"
         ></button>
       </div>
     </div>

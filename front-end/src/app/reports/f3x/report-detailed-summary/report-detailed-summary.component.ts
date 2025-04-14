@@ -1,14 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { BehaviorSubject, delay, of, takeUntil } from 'rxjs';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Card } from 'primeng/card';
-import { AsyncPipe, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { CalculationOverlayComponent } from '../../../shared/components/calculation-overlay/calculation-overlay.component';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -18,39 +16,35 @@ import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
   styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
-  imports: [Card, CalculationOverlayComponent, ButtonDirective, Ripple, AsyncPipe, CurrencyPipe, DefaultZeroPipe],
+  imports: [Card, CalculationOverlayComponent, ButtonDirective, Ripple, CurrencyPipe, DefaultZeroPipe],
 })
-export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
+export class ReportDetailedSummaryComponent {
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   private readonly apiService = inject(ApiService);
   private readonly reportService = inject(ReportService);
-  protected readonly calculationFinished$ = new BehaviorSubject<boolean>(false);
-  report: Form3X = new Form3X();
+  protected readonly calculationFinished = signal(false);
+  readonly form3x = computed(() => this.report() as Form3X);
+  readonly report = this.store.selectSignal(selectActiveReport);
 
-  ngOnInit(): void {
-    this.calculationFinished$.pipe(takeUntil(this.destroy$)).subscribe();
+  constructor() {
+    effect(() => {
+      const f3x = this.form3x();
+      if (!f3x) return;
 
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.report = report as Form3X;
-        if (!(report as Form3X).calculation_status) {
-          this.apiService
-            .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })
-            .then(() => this.refreshSummary());
-        } else if ((report as Form3X).calculation_status != 'SUCCEEDED') {
-          of(true)
-            .pipe(delay(1000), takeUntil(this.destroy$))
-            .subscribe(() => this.refreshSummary());
-        } else {
-          this.calculationFinished$.next(true);
-        }
-      });
+      if (!f3x.calculation_status) {
+        this.apiService
+          .post(`/web-services/summary/calculate-summary/`, { report_id: f3x.id })
+          .then(() => this.refreshSummary());
+      } else if (f3x.calculation_status !== 'SUCCEEDED') {
+        setTimeout(() => this.refreshSummary(), 1000);
+      } else {
+        this.calculationFinished.set(true);
+      }
+    });
   }
 
   refreshSummary(): void {
-    this.reportService.setActiveReportById(this.report.id);
+    this.reportService.setActiveReportById(this.form3x().id);
   }
 }

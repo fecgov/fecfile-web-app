@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -48,7 +48,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
     TextareaModule,
   ],
 })
-export class CreateF3XStep1Component extends FormComponent implements OnInit {
+export class CreateF3XStep1Component extends FormComponent {
   readonly form3XService = inject(Form3XService);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -101,30 +101,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
       },
     );
-  }
 
-  private addReportTypeCategory() {
-    this.form.addControl('report_type_category', new SubscriptionFormControl());
-    (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
-      this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
-    }, this.destroy$);
-  }
-
-  private addFilingFrequency() {
-    this.form.addControl('filing_frequency', new SubscriptionFormControl());
-    (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
-      this.form.patchValue({
-        report_type_category: this.reportTypeCategories[0],
-      });
-      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-    }, this.destroy$);
-
-    effect(() => {
-      this.form?.patchValue({ filing_frequency: this.filingFrequencySignal(), form_type: 'F3XN' });
-    });
-  }
-
-  ngOnInit(): void {
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
@@ -133,6 +110,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
     });
+
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
@@ -156,6 +134,27 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+  }
+
+  private addReportTypeCategory() {
+    this.form.addControl('report_type_category', new SubscriptionFormControl());
+    (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+      this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+    }, this.destroy$);
+  }
+
+  private addFilingFrequency() {
+    this.form.addControl('filing_frequency', new SubscriptionFormControl());
+    (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
+      this.form.patchValue({
+        report_type_category: this.reportTypeCategories[0],
+      });
+      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+    }, this.destroy$);
+
+    effect(() => {
+      this.form?.patchValue({ filing_frequency: this.filingFrequencySignal(), form_type: 'F3XN' });
+    });
   }
 
   public getReportCodes(): ReportCodes[] {

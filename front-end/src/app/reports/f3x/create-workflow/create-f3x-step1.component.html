@@ -89,7 +89,7 @@
               class="ml-2"
               [class]="usedReportCodes()?.includes(reportCode) ? 'p-disabled' : ''"
             >
-              {{ form3XService.reportType() }}
+              {{ form3XService.reportCodeLabelMap() ? form3XService.reportCodeLabelMap()![reportCode] : '' }}
             </label>
           </div>
         }

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form3Service } from 'app/shared/services/form-3.service';
@@ -11,12 +11,10 @@ import {
   getCoverageDatesFunction,
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { MessageService } from 'primeng/api';
-import { combineLatest, startWith, takeUntil } from 'rxjs';
+import { combineLatest, startWith } from 'rxjs';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
@@ -29,7 +27,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { CoverageDates, CommitteeAccount, Form3, F3FormTypes } from 'app/shared/models';
+import { CoverageDates, Form3, F3FormTypes } from 'app/shared/models';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { derivedAsync } from 'ngxtension/derived-async';
 @Component({

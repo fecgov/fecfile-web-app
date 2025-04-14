@@ -27,12 +27,6 @@ export class Form3XService extends ReportService {
     );
   });
 
-  readonly reportType = computed(() => {
-    const map = this.reportCodeLabelMap();
-    if (!map) return '';
-    return map[this.reportCode()];
-  });
-
   public async getFutureReports(coverage_through_date: string): Promise<Form3X[]> {
     const response = await this.apiService.get<Form3X[]>(`${this.apiEndpoint}/future/?after=${coverage_through_date}`);
     return response.map((r) => Form3X.fromJSON(r));

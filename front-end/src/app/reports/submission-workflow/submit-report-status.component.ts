@@ -27,6 +27,12 @@ export class SubmitReportStatusComponent {
   readonly taskState = computed(() => this.report().upload_submission?.fecfile_task_state);
   readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
 
+  readonly reportType = computed(() => {
+    const map = this.form3XService.reportCodeLabelMap();
+    if (!map) return '';
+    return map[this.reportCode()];
+  });
+
   public backToReports() {
     this.router.navigateByUrl('/reports');
   }

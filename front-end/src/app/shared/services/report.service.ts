@@ -32,7 +32,6 @@ export function getReportFromJSON(json: any): Report {
 export class ReportService implements TableListService<Report> {
   protected readonly store = inject(Store);
   readonly report = this.store.selectSignal(selectActiveReport);
-  readonly reportCode = computed(() => this.report().report_code as ReportCodes);
 
   protected readonly apiService = inject(ApiService);
   apiEndpoint = '/reports';

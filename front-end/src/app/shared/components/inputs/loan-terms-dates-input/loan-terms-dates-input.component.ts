@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, computed, inject, OnInit, viewChild, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
-import { take } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
@@ -14,6 +13,7 @@ import { DateUtils } from 'app/shared/utils/date.utils';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -26,7 +26,7 @@ enum LoanTermsFieldSettings {
   templateUrl: './loan-terms-dates-input.component.html',
   imports: [ReactiveFormsModule, CalendarComponent, Select, ErrorMessagesComponent, InputText],
 })
-export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
+export class LoanTermsDatesInputComponent extends BaseInputComponent implements AfterViewInit {
   private readonly store = inject(Store);
   interestInput = viewChild<InputText>('interestRatePercentage');
   clearValuesOnChange = true;
@@ -43,29 +43,32 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
-  ngOnInit(): void {
+  readonly report = this.store.selectSignal(selectActiveReport);
+
+  constructor() {
+    super();
+    this.interestRateSettingField()?.addValidators([Validators.required]);
+    this.dueDateSettingField()?.addValidators([Validators.required]);
+
+    // Add the date range validation check to the DATE INCURRED input
+    effectOnceIf(
+      () =>
+        !isPulledForwardLoan(this.transaction()) &&
+        !isPulledForwardLoan(this.transaction()?.parent_transaction) &&
+        this.report(),
+      () => {
+        const f3x = this.report() as Form3X;
+        this.form()
+          .get(this.templateMap().date)
+          ?.addValidators(buildWithinReportDatesValidator(f3x.coverage_from_date, f3x.coverage_through_date));
+      },
+    );
+
     this.addValidators();
     this.addSubscriptions();
   }
 
   addValidators() {
-    // Add the date range validation check to the DATE INCURRED input
-    if (!isPulledForwardLoan(this.transaction()) && !isPulledForwardLoan(this.transaction()?.parent_transaction)) {
-      this.store
-        .select(selectActiveReport)
-        .pipe(take(1))
-        .subscribe((report) => {
-          this.form()
-            .get(this.templateMap().date)
-            ?.addValidators(
-              buildWithinReportDatesValidator(
-                (report as Form3X).coverage_from_date,
-                (report as Form3X).coverage_through_date,
-              ),
-            );
-        });
-    }
-
     this.interestRateSettingField()?.addValidators([Validators.required]);
     this.dueDateSettingField()?.addValidators([Validators.required]);
   }
@@ -220,8 +223,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.dueDateField().markAsUntouched();
   }
 
-  dueDateSettingField = computed(() => this.form().get(this.templateMap().due_date_setting) as SubscriptionFormControl);
-
+  readonly dueDateSettingField = computed(
+    () => this.form().get(this.templateMap().due_date_setting) as SubscriptionFormControl,
+  );
   get dueDateSetting(): string {
     return this.dueDateSettingField().value ?? '';
   }
@@ -233,7 +237,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   readonly interestRateField = computed(
     () => this.form().get(this.templateMap()['interest_rate']) as SubscriptionFormControl,
   );
-
   get interestRate(): string {
     return this.interestRateField().value ?? '';
   }
@@ -245,7 +248,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   readonly interestRateSettingField = computed(
     () => this.form().get(this.templateMap()['interest_rate_setting']) as SubscriptionFormControl,
   );
-
   get interestRateSetting(): string {
     return this.interestRateSettingField().value ?? '';
   }
