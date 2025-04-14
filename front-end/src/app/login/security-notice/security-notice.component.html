@@ -1,5 +1,5 @@
-<div [class.security-container]="showForm">
-  @if (showForm) {
+<div [class.security-container]="showForm()">
+  @if (showForm()) {
     <div>
       <img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
 
@@ -9,7 +9,7 @@
     </div>
   }
 
-  <div [class.notice-box-form]="showForm" [class.notice-box]="!showForm">
+  <div [class.notice-box-form]="showForm()" [class.notice-box]="!showForm()">
     <h1>Security notification</h1>
     <hr type="solid" class="top-line" />
 
@@ -45,7 +45,7 @@
     </p>
   </div>
 
-  @if (showForm) {
+  @if (showForm()) {
     <div class="footer">
       <hr type="solid" />
       <form [formGroup]="form">
