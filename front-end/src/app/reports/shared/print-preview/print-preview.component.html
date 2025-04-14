@@ -6,20 +6,20 @@
 <div class="grid">
   <div class="col-12">
     <h3 class="no-vert-margins">
-      <strong>{{ report.formLabel }}:</strong> {{ report.formSubLabel }}
+      <strong>{{ report().formLabel }}:</strong> {{ report().formSubLabel }}
     </h3>
     <hr class="black-line" />
   </div>
 </div>
 <p-card>
   <div class="grid">
-    @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
+    @if (webPrintStage() === 'not-submitted' || webPrintStage() === 'failure') {
       <div class="col-12">
         <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
       </div>
     }
 
-    @if (webPrintStage === 'checking') {
+    @if (webPrintStage() === 'checking') {
       <div class="col-12 flex justify-content-center">
         <div class="fec-loader-div col-12">
           <img
@@ -51,10 +51,10 @@
     }
   </div>
   <div class="grid">
-    @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
-      @if (webPrintStage === 'failure') {
+    @if (webPrintStage() === 'not-submitted' || webPrintStage() === 'failure') {
+      @if (webPrintStage() === 'failure') {
         <div class="col-12">
-          <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
+          <h2 class="align-center">Printing error:<br />{{ printError() }}</h2>
         </div>
       }
       <div class="col-5"></div>
@@ -69,10 +69,10 @@
         ></button>
       </div>
     }
-    @if (webPrintStage === 'success') {
+    @if (webPrintStage() === 'success') {
       <h2 class="col-12 align-center h1">PDF compiled</h2>
       <div class="bold col-12 align-center">SUBMITTED ON:</div>
-      <div class="col-12 align-center">{{ submitDate }}</div>
+      <div class="col-12 align-center">{{ submitDate() }}</div>
       <div class="col-3"></div>
       <div class="col-2">
         <button
@@ -106,7 +106,7 @@
         pRipple
         label="Back"
         class="p-button-secondary p-button-outlined button-full-width"
-        (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
+        (click)="router.navigateByUrl(getBackUrl()(report()))"
       ></button>
     </div>
     <div class="col-7"></div>
@@ -116,7 +116,7 @@
         pRipple
         label="Sign & submit report"
         class="p-button-secondary button-full-width"
-        (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
+        (click)="router.navigateByUrl(getContinueUrl()(report()))"
       ></button>
     </div>
   </div>

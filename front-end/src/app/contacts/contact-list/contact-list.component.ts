@@ -33,7 +33,7 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
-  contactTypeLabels: LabelList = ContactTypeLabels;
+  readonly contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
@@ -41,7 +41,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   searchTerm = '';
 
   // contact lookup
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+  readonly contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
     ContactTypes.COMMITTEE,
     ContactTypes.INDIVIDUAL,
   ]);
@@ -76,9 +76,8 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   }
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
-    await super.loadTableItems(event);
-
-    await this.checkForDeletedContacts();
+    super.loadTableItems(event);
+    this.checkForDeletedContacts();
   }
 
   protected getEmptyItem(): Contact {
@@ -105,7 +104,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
       return `${item.last_name}, ${item.first_name}`;
     } else {
-      return item.name || '';
+      return item.name ?? '';
     }
   }
 

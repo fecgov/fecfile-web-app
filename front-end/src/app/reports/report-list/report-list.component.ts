@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
@@ -13,7 +13,7 @@ import { FecDatePipe } from '../../shared/pipes/fec-date.pipe';
 import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
 import { TableListBaseComponent, TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
-import { CommitteeAccount, ReportStatus, Form3X, Report, ReportTypes } from 'app/shared/models';
+import { ReportStatus, Form3X, Report, ReportTypes } from 'app/shared/models';
 import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
@@ -31,7 +31,7 @@ import { ReportService } from 'app/shared/services/report.service';
     FecDatePipe,
   ],
 })
-export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
+export class ReportListComponent extends TableListBaseComponent<Report> {
   public readonly router = inject(Router);
   protected readonly itemService = inject(ReportService);
   private readonly store = inject(Store);
@@ -39,7 +39,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   public readonly dotFecService = inject(DotFecService);
 
   dialogVisible = false;
-  committeeAccount?: CommitteeAccount;
+  readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   public rowActions: TableAction[] = [
     new TableAction(
       'Edit',
@@ -68,12 +68,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   override readonly caption =
     'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
-
-  ngOnInit() {
-    this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
-      this.committeeAccount = committeeAccount;
-    });
-  }
 
   protected getEmptyItem(): Report {
     return new Form3X();
@@ -141,7 +135,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     if (report instanceof Form3X) {
       const payload: Form3X = Form3X.fromJSON({
         ...report,
-        qualified_committee: this.committeeAccount?.qualified,
+        qualified_committee: this.committeeAccount()?.qualified,
       });
       await this.form3XService.update(payload, ['qualified_committee']);
     }
