@@ -34,7 +34,7 @@ export class FeedbackOverlayComponent extends FormComponent {
   public readonly feedbackService = inject(FeedbackService);
   private readonly popover = viewChild.required<Popover>('op');
 
-  form: FormGroup = this.fb.group(
+  readonly form: FormGroup = this.fb.group(
     {
       action: ['', [Validators.required, Validators.maxLength(2000)]],
       feedback: ['', [Validators.maxLength(2000)]],
@@ -42,7 +42,7 @@ export class FeedbackOverlayComponent extends FormComponent {
     },
     { updateOn: 'blur' },
   );
-  SubmissionStatesEnum = SubmissionStates;
+  readonly SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

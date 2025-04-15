@@ -24,7 +24,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   abstract webprintURL: string;
 
   form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
-  reportId?: string;
+  reportId = this.activatedRoute.snapshot.params['reportId'];
 
   constructor() {
     super();
@@ -38,7 +38,6 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   }
 
   ngOnInit(): void {
-    this.reportId = this.activatedRoute.snapshot.params['reportId'];
     this.initForm();
   }
 

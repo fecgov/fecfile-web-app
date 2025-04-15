@@ -32,7 +32,7 @@ import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 @Component({
   template: '',
 })
-export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
+export abstract class TransactionTypeBaseComponent extends FormComponent {
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -59,7 +59,10 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   contactIdMap: ContactIdMapType = {};
   readonly templateMap = computed(() => this.transactionType()?.templateMap);
-  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
+  form: FormGroup = this.fb.group(
+    SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties(), this.transactionType()?.schema),
+    { updateOn: 'blur' },
+  );
   isEditable = computed(
     () => this.reportService.isEditable(this.report()) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()),
   );
@@ -80,18 +83,11 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         this.store.dispatch(navigationEventClearAction());
       }
     });
-  }
 
-  ngOnInit(): void {
     const transaction = this.transaction();
     if (!transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-
-    this.form = this.fb.group(
-      SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties(), this.transactionType()?.schema),
-      { updateOn: 'blur' },
-    );
 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, transaction.transactionType);
 

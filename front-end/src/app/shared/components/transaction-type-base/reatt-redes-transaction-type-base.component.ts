@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
@@ -24,15 +24,12 @@ interface AccordionData {
 @Component({
   template: '',
 })
-export abstract class ReattRedesTransactionTypeBaseComponent
-  extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   pullForward = false;
   reattributedData = {} as AccordionData;
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  constructor() {
+    super();
     this.childUpdateFormWithPrimaryContact({
       value: this.transaction()?.reatt_redes?.contact_1,
     } as SelectItem);

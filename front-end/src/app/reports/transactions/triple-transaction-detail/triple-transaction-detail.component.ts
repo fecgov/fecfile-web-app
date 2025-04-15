@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TripleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/triple-transaction-type-base.component';
 import { AccordionModule } from 'primeng/accordion';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,10 +16,9 @@ import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/compon
     TransactionInputComponent,
   ],
 })
-export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseComponent implements OnInit {
-  override ngOnInit(): void {
-    super.ngOnInit();
-
+export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseComponent {
+  constructor() {
+    super();
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
 

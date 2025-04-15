@@ -1,6 +1,6 @@
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
@@ -21,7 +21,7 @@ import { TextareaModule } from 'primeng/textarea';
   styleUrls: ['../../styles.scss'],
   imports: [ReactiveFormsModule, ErrorMessagesComponent, ButtonDirective, Ripple, SingleClickDirective, TextareaModule],
 })
-export class ReportLevelMemoComponent extends FormComponent implements OnInit {
+export class ReportLevelMemoComponent extends FormComponent {
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
   public readonly memoTextService = inject(MemoTextService);
@@ -31,6 +31,7 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly text4kFormProperty = 'text4000';
 
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
+  readonly form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
 
   committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
   routeDataSignal = toSignal(this.route.data);
@@ -41,8 +42,6 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   });
 
   assignedMemoText: MemoText = new MemoText();
-
-  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
 
   constructor() {
     super();
@@ -57,10 +56,6 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
         });
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
     this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -37,7 +37,7 @@ import { SingleClickDirective } from '../../shared/directives/single-click.direc
     SingleClickDirective,
   ],
 })
-export class SubmitReportStep1Component extends FormComponent implements OnInit {
+export class SubmitReportStep1Component extends FormComponent {
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
   private readonly reportService = inject(ReportService);
@@ -67,9 +67,7 @@ export class SubmitReportStep1Component extends FormComponent implements OnInit 
       SchemaUtils.addJsonSchemaValidators(this.form, this.report().schema, false);
       this.initializeFormWithReport(this.report(), this.committeeAccount());
     });
-  }
 
-  ngOnInit(): void {
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['confirmation_email_1'].addValidators([
       Validators.required,

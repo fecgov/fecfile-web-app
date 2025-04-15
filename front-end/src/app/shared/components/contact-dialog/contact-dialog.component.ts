@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -94,7 +94,7 @@ export class TransactionData {
     LabelPipe,
   ],
 })
-export class ContactDialogComponent extends FormComponent implements OnInit {
+export class ContactDialogComponent extends FormComponent {
   private readonly contactService = inject(ContactService);
   private readonly transactionService = inject(TransactionService);
   protected readonly confirmationService = inject(ConfirmationService);
@@ -201,7 +201,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  constructor() {
+    super();
     this.form
       ?.get('country')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -227,7 +228,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
     this.contactTypeChanged(this.contactType());
   }
-
   /**
    * On ngOnInit and when a user changes the selection of the ContactType for the contact
    * entry form (as known by the emitter from the contact-lookup component), update the necessary

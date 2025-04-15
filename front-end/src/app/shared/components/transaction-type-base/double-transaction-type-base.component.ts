@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -32,10 +32,7 @@ import { Accordion } from 'primeng/accordion';
 @Component({
   template: '',
 })
-export abstract class DoubleTransactionTypeBaseComponent
-  extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+export abstract class DoubleTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   accordion = viewChild.required(Accordion);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
@@ -46,10 +43,8 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel$ = of('');
 
-  override ngOnInit(): void {
-    // Initialize primary form.
-    super.ngOnInit();
-
+  constructor() {
+    super();
     // Initialize child form.
     if (this.transaction()) {
       this.childTransaction = this.getChildTransaction(this.transaction()!, 0);

@@ -25,6 +25,6 @@ export abstract class FormComponent extends DestroyerComponent {
   protected readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   protected readonly report = this.store.selectSignal(selectActiveReport);
 
-  protected abstract form: FormGroup;
+  protected abstract readonly form: FormGroup;
   formSubmitted = false;
 }

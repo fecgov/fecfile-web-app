@@ -1,12 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, effect, inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, effect, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { LabelUtils, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { environment } from 'environments/environment';
 import { Select } from 'primeng/select';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
 import { ButtonModule } from 'primeng/button';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-committee-info',
@@ -14,13 +15,10 @@ import { ButtonModule } from 'primeng/button';
   styleUrls: ['./committee-info.component.scss'],
   imports: [ReactiveFormsModule, Select, FecInternationalPhoneInputComponent, ButtonModule],
 })
-export class CommitteeInfoComponent extends FormComponent implements OnInit, AfterViewInit {
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
+export class CommitteeInfoComponent extends FormComponent {
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
-  stateOptions: PrimeOptions = [];
-  form = this.fb.group({}, { updateOn: 'blur' });
-  formProperties: string[] = [
+  readonly stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+  private readonly formProperties = [
     'name',
     'committee_id',
     'committee_type_label',
@@ -41,29 +39,23 @@ export class CommitteeInfoComponent extends FormComponent implements OnInit, Aft
     'treasurer_phone',
     'custodian_name_full',
   ];
+  readonly form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
 
   constructor() {
     super();
-    effect(() => {
-      this.mostRecentFilingPdfUrl = undefined; // undefined until requirements are defined https://fecgov.atlassian.net/browse/FECFILE-1704
-      this.form.enable();
-      const entries = Object.entries(this.committeeAccount());
-      for (const [key, value] of entries) {
-        if (this.formProperties.includes(key)) {
-          this.form.get(key)?.setValue(value);
+    effectOnceIf(
+      () => this.committeeAccount(),
+      () => {
+        this.form.enable();
+        const entries = Object.entries(this.committeeAccount());
+        for (const [key, value] of entries) {
+          if (this.formProperties.includes(key)) {
+            this.form.get(key)?.setValue(value);
+          }
         }
-      }
-      this.form.disable();
-    });
-  }
-
-  ngOnInit(): void {
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-  }
-
-  ngAfterViewInit(): void {
-    this.changeDetectorRef.detectChanges();
+        this.form.disable();
+      },
+    );
   }
 
   /**

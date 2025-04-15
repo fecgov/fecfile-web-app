@@ -1,11 +1,7 @@
-import { Component, computed, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import {
-  TemplateMapKeyType,
-  TransactionTemplateMapType,
-  TransactionType,
-} from 'app/shared/models/transaction-type.model';
+import { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
@@ -32,10 +28,7 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
 @Component({
   template: '',
 })
-export abstract class TripleTransactionTypeBaseComponent
-  extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+export abstract class TripleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   readonly childFormProperties_2 = computed(() => this.childTransactionType_2()?.getFormControlNames() ?? []);
   readonly childTransactionType_2 = computed(() => this.childTransaction_2()?.transactionType);
   readonly childTransaction_2 = computed(() => {
@@ -53,10 +46,8 @@ export abstract class TripleTransactionTypeBaseComponent
   );
   childMemoCodeCheckboxLabel_2$ = of('');
 
-  override ngOnInit(): void {
-    // Initialize primary and secondary forms.
-    super.ngOnInit();
-
+  constructor() {
+    super();
     this.childForm_2 = this.fb.group(
       SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties_2(), this.childTransactionType_2()?.schema),
       {
