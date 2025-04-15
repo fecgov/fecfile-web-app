@@ -52,9 +52,9 @@ export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTrans
     // If the parent is a reattribution/redesignation transaction, initialize
     // its specialized validation rules and form element behavior.
     ReattRedesUtils.overlayForms(
-      this.form,
+      this.form(),
       this.transaction() as SchATransaction | SchBTransaction,
-      this.childForm,
+      this.childForm(),
       this.childTransaction as SchATransaction | SchBTransaction,
     );
   }
@@ -72,7 +72,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTrans
   updateElectionData() {
     const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
     if (!schedB) return;
-    const forms = [this.form, this.childForm];
+    const forms = [this.form(), this.childForm()];
     forms.forEach((form) => {
       form.get('category_code')?.setValue(schedB.category_code);
       form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
@@ -86,8 +86,8 @@ export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTrans
       form.get('beneficiary_candidate_district')?.setValue(schedB.beneficiary_candidate_district);
     });
 
-    this.childForm.get('election_code')?.setValue(schedB.election_code);
-    this.childForm.get('election_other_description')?.setValue(schedB.election_other_description);
+    this.childForm().get('election_code')?.setValue(schedB.election_code);
+    this.childForm().get('election_other_description')?.setValue(schedB.election_other_description);
   }
 
   private async initializePullForward() {

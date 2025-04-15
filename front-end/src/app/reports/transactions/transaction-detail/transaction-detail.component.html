@@ -23,11 +23,11 @@
 }
 
 <h2 class="top-margin-32">{{ transactionType()?.contactTitle || 'Contact' }}</h2>
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
   <app-transaction-input
     [isEditable]="isEditable()"
     [isSingle]="true"
-    [form]="form"
+    [form]="form()"
     [formSubmitted]="formSubmitted"
     [transaction]="transaction()"
     [contactTypeOptions]="contactTypeOptions()"

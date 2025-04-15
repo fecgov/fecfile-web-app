@@ -8,7 +8,7 @@
     (onHide)="closeDialog()"
     (visibleChange)="closeDialog($event)"
   >
-    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
       <div class="grid">
         <div class="col-12">
           <h3>Contact</h3>
@@ -40,7 +40,7 @@
               <label for="candidate_id">CANDIDATE ID</label>
               <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
               <app-error-messages
-                [control]="form.get('candidate_id')!"
+                [control]="form().get('candidate_id')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -56,7 +56,7 @@
                 <label for="committee_id">COMMITTEE ID</label>
                 <input type="text" pInputText id="committee_id" formControlName="committee_id" />
                 <app-error-messages
-                  [control]="form.get('committee_id')!"
+                  [control]="form().get('committee_id')!"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
               </div>
@@ -66,7 +66,7 @@
             <div class="field">
               <label for="name">NAME</label>
               <input type="text" pInputText id="name" formControlName="name" />
-              <app-error-messages [control]="form.get('name')!" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [control]="form().get('name')!" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           @if (isOrg()) {
@@ -81,7 +81,7 @@
               <label for="last_name">LAST NAME</label>
               <input type="text" pInputText id="last_name" formControlName="last_name" />
               <app-error-messages
-                [control]="form.get('last_name')!"
+                [control]="form().get('last_name')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -91,7 +91,7 @@
               <label for="first_name">FIRST NAME</label>
               <input type="text" pInputText id="first_name" formControlName="first_name" />
               <app-error-messages
-                [control]="form.get('first_name')!"
+                [control]="form().get('first_name')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -101,7 +101,7 @@
               <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
               <input type="text" pInputText id="middle_name" formControlName="middle_name" />
               <app-error-messages
-                [control]="form.get('middle_name')!"
+                [control]="form().get('middle_name')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -112,14 +112,20 @@
             <div class="field">
               <label for="prefix">PREFIX (OPTIONAL)</label>
               <input type="text" pInputText id="prefix" formControlName="prefix" />
-              <app-error-messages [control]="form.get('prefix')!" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages
+                [control]="form().get('prefix')!"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="suffix">SUFFIX (OPTIONAL)</label>
               <input type="text" pInputText id="suffix" formControlName="suffix" />
-              <app-error-messages [control]="form.get('suffix')!" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages
+                [control]="form().get('suffix')!"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
           <div class="col-6"></div>
@@ -149,14 +155,20 @@
           <div class="field">
             <label for="street_1">STREET ADDRESS</label>
             <input type="text" pInputText id="street_1" formControlName="street_1" />
-            <app-error-messages [control]="form.get('street_1')!" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages
+              [control]="form().get('street_1')!"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
           </div>
         </div>
         <div class="col-6">
           <div class="field">
             <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
             <input type="text" pInputText id="street_2" formControlName="street_2" />
-            <app-error-messages [control]="form.get('street_2')!" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages
+              [control]="form().get('street_2')!"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
           </div>
         </div>
       </div>
@@ -165,7 +177,7 @@
           <div class="field">
             <label for="city">CITY</label>
             <input type="text" pInputText id="city" formControlName="city" />
-            <app-error-messages [control]="form.get('city')!" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [control]="form().get('city')!" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
         <div class="col-3">
@@ -178,14 +190,14 @@
               [autoDisplayFirst]="false"
               appendTo="body"
             ></p-select>
-            <app-error-messages [control]="form.get('state')!" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [control]="form().get('state')!" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
         <div class="col-3">
           <div class="field">
             <label for="zip">ZIP/POSTAL CODE</label>
             <input type="text" pInputText id="zip" formControlName="zip" />
-            <app-error-messages [control]="form.get('zip')!" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [control]="form().get('zip')!" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
       </div>
@@ -195,7 +207,7 @@
             <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
             <app-fec-international-phone-input formControlName="telephone"> </app-fec-international-phone-input>
             <app-error-messages
-              [control]="form.get('telephone')!"
+              [control]="form().get('telephone')!"
               [formSubmitted]="formSubmitted"
               patternErrorMessage="This field must contain 10 numeric characters."
             ></app-error-messages>
@@ -220,7 +232,7 @@
               <label for="employer">EMPLOYER (OPTIONAL)</label>
               <input type="text" pInputText id="employer" formControlName="employer" />
               <app-error-messages
-                [control]="form.get('employer')!"
+                [control]="form().get('employer')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -230,7 +242,7 @@
               <label for="occupation">OCCUPATION (OPTIONAL)</label>
               <input type="text" pInputText id="occupation" formControlName="occupation" />
               <app-error-messages
-                [control]="form.get('occupation')!"
+                [control]="form().get('occupation')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -249,7 +261,7 @@
           </div>
         </div>
         <app-candidate-office-input
-          [form]="form"
+          [form]="form()"
           [formSubmitted]="formSubmitted"
           officeFormControlName="candidate_office"
           stateFormControlName="candidate_state"

@@ -4,7 +4,7 @@
 </h5>
 <hr type="solid" />
 <p-card>
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+  <form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -18,7 +18,7 @@
           <label for="treasurer_last_name"><strong>LAST NAME</strong></label>
           <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
           <app-error-messages
-            [control]="form.get('treasurer_last_name')!"
+            [control]="form().get('treasurer_last_name')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -28,7 +28,7 @@
           <label for="treasurer_first_name"><strong>FIRST NAME</strong></label>
           <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
           <app-error-messages
-            [control]="form.get('treasurer_first_name')!"
+            [control]="form().get('treasurer_first_name')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -38,7 +38,7 @@
           <label for="treasurer_middle_name"><strong>MIDDLE NAME</strong> (OPTIONAL)</label>
           <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
           <app-error-messages
-            [control]="form.get('treasurer_middle_name')!"
+            [control]="form().get('treasurer_middle_name')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -50,7 +50,7 @@
           <label for="treasurer_prefix"><strong>PREFIX</strong> (OPTIONAL)</label>
           <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
           <app-error-messages
-            [control]="form.get('treasurer_prefix')!"
+            [control]="form().get('treasurer_prefix')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -60,7 +60,7 @@
           <label for="treasurer_suffix"><strong>SUFFIX</strong> (OPTIONAL)</label>
           <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
           <app-error-messages
-            [control]="form.get('treasurer_suffix')!"
+            [control]="form().get('treasurer_suffix')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -96,7 +96,7 @@
             autocomplete="new-password"
           />
           <app-error-messages
-            [control]="form.get('filingPassword')!"
+            [control]="form().get('filingPassword')!"
             [formSubmitted]="formSubmitted"
             patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
           ></app-error-messages>
@@ -119,7 +119,7 @@
                     <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
                     <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
                     <app-error-messages
-                      [control]="form.get('backdoor_code')!"
+                      [control]="form().get('backdoor_code')!"
                       [formSubmitted]="formSubmitted"
                     ></app-error-messages>
                   </div>
@@ -170,7 +170,7 @@
           type="submit"
           class="p-button"
           (click)="submitClicked()"
-          [disabled]="!form.value.userCertified || loading > 0"
+          [disabled]="!form().value.userCertified || loading > 0"
         ></button>
       </div>
       @if (loading > 0) {

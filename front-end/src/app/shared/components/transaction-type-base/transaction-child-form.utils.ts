@@ -46,7 +46,7 @@ export class TransactionChildFormUtils {
           ((childTransaction as ScheduleTransaction)[key] as string) = value;
           (childTransaction as ScheduleTransaction).entity_type = childForm.get('entity_type')?.value;
           if (component.transaction()) {
-            updatePurposeDescription(component.form, component.transaction()!);
+            updatePurposeDescription(component.form(), component.transaction()!);
           } else {
             throw new Error('Fecfile: Parent transaction not found for component');
           }
@@ -57,13 +57,13 @@ export class TransactionChildFormUtils {
     // Child contribution purpose description updates with configured parent fields update.
     childTransaction.transactionType?.parentTriggerFields?.forEach((triggerField) => {
       const key = component.templateMap()![triggerField] as keyof ScheduleTransaction;
-      const control = component.form.get(key) as SubscriptionFormControl;
+      const control = component.form().get(key) as SubscriptionFormControl;
       control?.addSubscription((value) => {
         /** Before updating the parent description, manually update the child
          * fields because they will not be updated by the time this hook is called
          **/
         ((component.transaction() as ScheduleTransaction)[key] as string) = value;
-        (component.transaction() as ScheduleTransaction).entity_type = component.form.get('entity_type')?.value;
+        (component.transaction() as ScheduleTransaction).entity_type = component.form().get('entity_type')?.value;
         updatePurposeDescription(childForm, childTransaction);
       }, component.destroy$);
     });
@@ -71,7 +71,7 @@ export class TransactionChildFormUtils {
     // Inheritted fields must match parent values
     childTransaction.transactionType?.getInheritedFields(childTransaction)?.forEach((inherittedField) => {
       if (childTransaction.transactionType) {
-        (component.form.get(component.templateMap()![inherittedField]) as SubscriptionFormControl)?.addSubscription(
+        (component.form().get(component.templateMap()![inherittedField]) as SubscriptionFormControl)?.addSubscription(
           (value) => {
             if (childTransaction.transactionType) {
               childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.setValue(value);

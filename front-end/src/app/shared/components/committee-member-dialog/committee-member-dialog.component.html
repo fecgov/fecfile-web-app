@@ -3,7 +3,7 @@
     <h1 class="dialog-title" id="dialog-title">{{ member() ? 'Edit' : 'Add' }} User</h1>
     <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
   </div>
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
+  <form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
     <div class="dialog-body">
       <div class="grid">
         @if (member().id) {
@@ -18,7 +18,7 @@
             <div class="field">
               <label for="email">ENTER EMAIL</label>
               <input autofocus type="text" pInputText id="email" formControlName="email" />
-              <app-error-messages [control]="form.get('email')!" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [control]="form().get('email')!" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         }
@@ -32,7 +32,7 @@
               [autoDisplayFirst]="true"
               [autofocus]="!!member()"
             ></p-select>
-            <app-error-messages [control]="form.get('role')!" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [control]="form().get('role')!" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
       </div>

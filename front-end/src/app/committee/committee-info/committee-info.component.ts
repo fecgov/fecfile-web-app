@@ -1,5 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, effect, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, effect, inject, signal } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -39,21 +39,23 @@ export class CommitteeInfoComponent extends FormComponent {
     'treasurer_phone',
     'custodian_name_full',
   ];
-  readonly form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
+  readonly form = signal<FormGroup>(
+    this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' }),
+  );
 
   constructor() {
     super();
     effectOnceIf(
       () => this.committeeAccount(),
       () => {
-        this.form.enable();
+        this.form().enable();
         const entries = Object.entries(this.committeeAccount());
         for (const [key, value] of entries) {
           if (this.formProperties.includes(key)) {
-            this.form.get(key)?.setValue(value);
+            this.form().get(key)?.setValue(value);
           }
         }
-        this.form.disable();
+        this.form().disable();
       },
     );
   }

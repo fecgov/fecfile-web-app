@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, Signal, signal, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -20,6 +20,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -38,7 +39,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  childForm: FormGroup = this.fb.group({}, { updateOn: 'blur' });
+  childForm = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel$ = of('');
@@ -46,52 +47,61 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   constructor() {
     super();
     // Initialize child form.
-    if (this.transaction()) {
-      this.childTransaction = this.getChildTransaction(this.transaction()!, 0);
-    } else {
-      throw new Error('Fecfile: Transaction not found for double-entry transaction form');
-    }
-    if (!this.childTransaction) {
-      throw new Error('Fecfile: Child transaction not found for double-entry transaction form');
-    }
-    this.childTransactionType = this.childTransaction?.transactionType;
-    if (!this.childTransactionType?.templateMap) {
-      throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
-    }
-    this.childTemplateMap = this.childTransactionType.templateMap;
-    this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
-    this.childFormProperties = this.childTransactionType.getFormControlNames();
-    this.childForm = this.fb.group(
-      SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties, this.childTransactionType.schema),
-      {
-        updateOn: 'blur',
+    effectOnceIf(
+      () => this.transaction(),
+      () => {
+        const transaction = this.transaction();
+        if (transaction) {
+          this.childTransaction = this.getChildTransaction(transaction, 0);
+        }
+        if (!this.childTransaction) {
+          throw new Error('Fecfile: Child transaction not found for double-entry transaction form');
+        }
+        this.childTransactionType = this.childTransaction?.transactionType;
+        if (!this.childTransactionType?.templateMap) {
+          throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
+        }
+        this.childTemplateMap = this.childTransactionType.templateMap;
+        this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
+        this.childFormProperties = this.childTransactionType.getFormControlNames();
+        this.childForm.set(
+          this.fb.group(
+            SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties, this.childTransactionType.schema),
+            {
+              updateOn: 'blur',
+            },
+          ),
+        );
+
+        if (
+          this.childTransactionType
+            ?.getInheritedFields(this.childTransaction)
+            ?.includes('memo_code' as TemplateMapKeyType) &&
+          this.transactionType()
+        ) {
+          this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
+        } else {
+          this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
+            this.childForm(),
+            this.childTransactionType,
+          );
+        }
+
+        TransactionFormUtils.onInit(
+          this,
+          this.childForm(),
+          this.childTransaction,
+          this.childContactIdMap,
+          this.contactService,
+        );
+        TransactionChildFormUtils.childOnInit(this, this.childForm(), this.childTransaction);
+        // Determine which accordion pane to open initially based on transaction id in page URL
+        const transactionId = this.activatedRoute.snapshot.params['transactionId'];
+        if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
+          this.accordion().value.set(1);
+        }
       },
     );
-
-    if (
-      this.childTransactionType
-        ?.getInheritedFields(this.childTransaction)
-        ?.includes('memo_code' as TemplateMapKeyType) &&
-      this.transactionType()
-    ) {
-      this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
-    } else {
-      this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
-    }
-
-    TransactionFormUtils.onInit(
-      this,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap,
-      this.contactService,
-    );
-    TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
-    // Determine which accordion pane to open initially based on transaction id in page URL
-    const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
-      this.accordion().value.set(1);
-    }
   }
 
   /**
@@ -117,9 +127,10 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
 
   override save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
-    if (this.transaction() && this.childTransaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction()!, this.templateMap()!, this.form);
-      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+    const transaction = this.transaction();
+    if (transaction && this.childTransaction) {
+      TransactionContactUtils.updateContactsWithForm(transaction, this.templateMap()!, this.form());
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm());
     } else {
       this.store.dispatch(singleClickEnableAction());
       throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
@@ -128,7 +139,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction(),
       this.activeReportId,
-      this.form,
+      this.form(),
       this.formProperties(),
     );
 
@@ -136,7 +147,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
       TransactionFormUtils.getPayloadTransaction(
         this.childTransaction,
         this.activeReportId,
-        this.childForm,
+        this.childForm(),
         this.childFormProperties,
       ),
     ];
@@ -146,8 +157,8 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   }
 
   override isInvalid(): boolean {
-    blurActiveInput(this.childForm);
-    return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
+    blurActiveInput(this.childForm());
+    return super.isInvalid() || this.childForm().invalid || !this.childTransaction;
   }
 
   override async getConfirmations(): Promise<boolean> {
@@ -155,7 +166,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     const result = await super.getConfirmations();
     if (!result) return false;
     return this.confirmationService.confirmWithUser(
-      this.childForm,
+      this.childForm(),
       this.childTransaction.transactionType?.contactConfig ?? {},
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
@@ -167,7 +178,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   override resetForm() {
     super.resetForm();
     TransactionFormUtils.resetForm(
-      this.childForm,
+      this.childForm(),
       this.childTransaction,
       this.childContactTypeOptions,
       this.committeeAccount(),
@@ -181,20 +192,20 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
       this.transaction()?.contact_1
     ) {
       this.childTransaction.contact_1 = this.transaction()?.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+      this.childForm().get('entity_type')?.setValue(selectItem.value.type);
     }
   }
 
   childUpdateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithPrimaryContact(
       selectItem,
-      this.childForm,
+      this.childForm(),
       this.childTransaction,
       this.childContactIdMap['contact_1'],
     );
 
     if (this.childTransaction) {
-      this.updateInheritedFields(this.childForm, this.childTransaction);
+      this.updateInheritedFields(this.childForm(), this.childTransaction);
     } else {
       throw new Error('Fecfile: Missing child transaction.');
     }
@@ -209,7 +220,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
       if (childTransaction.transactionType) {
         const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
         childFieldControl?.enable();
-        const value = this.form.get(this.templateMap()![inherittedField])?.value;
+        const value = this.form().get(this.templateMap()![inherittedField])?.value;
         if (value !== undefined) {
           childFieldControl?.setValue(value);
           childFieldControl?.updateValueAndValidity();
@@ -224,7 +235,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithCandidateContact(
       selectItem,
-      this.childForm,
+      this.childForm(),
       this.childTransaction,
       this.childContactIdMap['contact_2'],
     );
@@ -233,7 +244,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithSecondaryContact(
       selectItem,
-      this.childForm,
+      this.childForm(),
       this.childTransaction,
       this.childContactIdMap['contact_2'],
     );
@@ -242,7 +253,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
   childUpdateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithTertiaryContact(
       selectItem,
-      this.childForm,
+      this.childForm(),
       this.childTransaction,
       this.childContactIdMap['contact_3'],
     );

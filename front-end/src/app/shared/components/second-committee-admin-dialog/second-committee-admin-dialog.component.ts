@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
@@ -21,27 +21,29 @@ export class SecondCommitteeAdminDialogComponent extends FormComponent {
   readonly memberService = inject(CommitteeMemberService);
   private readonly messageService = inject(MessageService);
   private readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
-  readonly form: FormGroup = new FormGroup(
-    {
-      role: new SubscriptionFormControl({ value: Roles.COMMITTEE_ADMINISTRATOR, disabled: true }),
-      email: new SubscriptionFormControl('', {
-        validators: [Validators.required, emailValidator],
-        asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
-        updateOn: 'change',
-      }),
-    },
-    { updateOn: 'blur' },
+  readonly form = signal(
+    new FormGroup(
+      {
+        role: new SubscriptionFormControl({ value: Roles.COMMITTEE_ADMINISTRATOR, disabled: true }),
+        email: new SubscriptionFormControl('', {
+          validators: [Validators.required, emailValidator],
+          asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
+          updateOn: 'change',
+        }),
+      },
+      { updateOn: 'blur' },
+    ),
   );
 
   async save() {
     this.formSubmitted = true;
-    if (this.form.invalid) {
+    if (this.form().invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
 
-    const email = this.form.get('email')?.value as string;
-    const role: Roles = this.form.get('role')?.value;
+    const email = this.form().get('email')?.value as string;
+    const role: Roles = this.form().get('role')?.value;
     const key = getRoleKey(role);
     await this.memberService.addMember(email, key);
     this.messageService.add({

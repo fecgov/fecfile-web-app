@@ -149,9 +149,9 @@ export class MainFormComponent extends MainFormBaseComponent {
 
         // Set the statusBy radio button based on form values
         if (this.form1M.affiliated_committee_name) {
-          this.form.get('statusBy')?.setValue('affiliation');
+          this.form().get('statusBy')?.setValue('affiliation');
         } else {
-          this.form.get('statusBy')?.setValue('qualification');
+          this.form().get('statusBy')?.setValue('qualification');
         }
 
         // If this is an edit, update the lookup ids to exclude
@@ -176,7 +176,7 @@ export class MainFormComponent extends MainFormBaseComponent {
   async getConfirmations(): Promise<boolean> {
     if (!this.report) return false;
     return this.confirmationService.confirmWithUser(
-      this.form,
+      this.form(),
       this.contactConfigs,
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
@@ -196,53 +196,53 @@ export class MainFormComponent extends MainFormBaseComponent {
 
   override initForm() {
     super.initForm();
-    this.committeeTypeControl = this.form.get('committee_type');
-    this.statusByControl = this.form.get('statusBy');
+    this.committeeTypeControl = this.form().get('committee_type');
+    this.statusByControl = this.form().get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
     this.affiliatedContact = new AffiliatedContact(this);
     this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
 
     // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
     f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-      (this.form.get(`${tag}_candidate_id_number`) as SubscriptionFormControl)?.addSubscription(() => {
+      (this.form().get(`${tag}_candidate_id_number`) as SubscriptionFormControl)?.addSubscription(() => {
         f1mCandidateTags
           .filter((t) => t !== tag)
           .forEach((t) => {
-            const control = this.form.get(`${t}_candidate_id_number`);
+            const control = this.form().get(`${t}_candidate_id_number`);
             if (control?.invalid && control.errors && 'fecIdMustBeUnique' in control.errors) {
-              this.form.get(`${t}_candidate_id_number`)?.updateValueAndValidity();
+              this.form().get(`${t}_candidate_id_number`)?.updateValueAndValidity();
             }
           });
       });
     });
 
-    (this.form.get('statusBy') as SubscriptionFormControl)?.addSubscription(
+    (this.form().get('statusBy') as SubscriptionFormControl)?.addSubscription(
       (value: 'affiliation' | 'qualification') => {
-        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
+        SchemaUtils.addJsonSchemaValidators(this.form(), this.schema, true);
         if (value === 'affiliation') {
           this.enableValidation([this.affiliatedContact]);
           this.disableValidation(this.candidateContacts);
-          this.form.get('date_of_original_registration')?.clearValidators();
-          this.form.get('date_of_51st_contributor')?.clearValidators();
-          this.form.get('date_committee_met_requirements')?.clearValidators();
-          this.form.get('date_of_original_registration')?.setValue(undefined);
-          this.form.get('date_of_51st_contributor')?.setValue(undefined);
-          this.form.get('date_committee_met_requirements')?.setValue(undefined);
+          this.form().get('date_of_original_registration')?.clearValidators();
+          this.form().get('date_of_51st_contributor')?.clearValidators();
+          this.form().get('date_committee_met_requirements')?.clearValidators();
+          this.form().get('date_of_original_registration')?.setValue(undefined);
+          this.form().get('date_of_51st_contributor')?.setValue(undefined);
+          this.form().get('date_committee_met_requirements')?.setValue(undefined);
         } else {
           this.enableValidation(this.candidateContacts);
-          this.form.get('date_of_original_registration')?.addValidators(Validators.required);
-          this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
-          this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
+          this.form().get('date_of_original_registration')?.addValidators(Validators.required);
+          this.form().get('date_of_51st_contributor')?.addValidators(Validators.required);
+          this.form().get('date_committee_met_requirements')?.addValidators(Validators.required);
           this.disableValidation([this.affiliatedContact]);
         }
         this.excludeIds = [];
         this.excludeFecIds = [];
-        this.form.get('date_of_original_registration')?.updateValueAndValidity();
-        this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
-        this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
+        this.form().get('date_of_original_registration')?.updateValueAndValidity();
+        this.form().get('date_of_51st_contributor')?.updateValueAndValidity();
+        this.form().get('date_committee_met_requirements')?.updateValueAndValidity();
       },
     );
-    this.form.get('statusBy')?.updateValueAndValidity();
+    this.form().get('statusBy')?.updateValueAndValidity();
   }
 
   enableValidation(contacts: F1MContact[]) {
@@ -254,15 +254,15 @@ export class MainFormComponent extends MainFormBaseComponent {
   }
 
   getReportPayload(): Report {
-    const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
-    this.updateContactsWithForm(this.form1M, this.form);
+    const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form(), this.schema, this.formProperties));
+    this.updateContactsWithForm(this.form1M, this.form());
     return Object.assign(this.report, formValues);
   }
 
   public override async save(jump: 'continue' | undefined = undefined): Promise<void> {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    if (this.form().invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
@@ -301,7 +301,7 @@ export class MainFormComponent extends MainFormBaseComponent {
   getSelectedContactIds(excludeContactTag: F1MCandidateTag | undefined = undefined) {
     return f1mCandidateTags
       .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
-      .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
+      .map((tag: F1MCandidateTag) => this.form().get(`${tag}_candidate_id_number`)?.value)
       .filter((id) => !!id);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -23,7 +23,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   abstract getReportPayload(): Report;
   abstract webprintURL: string;
 
-  form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
+  form = signal<FormGroup>(new FormGroup({}, { updateOn: 'blur' }));
   reportId = this.activatedRoute.snapshot.params['reportId'];
 
   constructor() {
@@ -32,7 +32,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     effect(() => {
       this.setConstantFormValues(this.committeeAccount());
       if (this.reportId) {
-        this.form.patchValue(this.report());
+        this.form().patchValue(this.report());
       }
     });
   }
@@ -42,13 +42,13 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   }
 
   initForm() {
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
-    SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
+    this.form.set(this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' }));
+    SchemaUtils.addJsonSchemaValidators(this.form(), this.schema, false);
   }
 
   setConstantFormValues(committeeAccount?: CommitteeAccount) {
     if (!committeeAccount) return;
-    this.form.patchValue({
+    this.form().patchValue({
       street_1: committeeAccount.street_1,
       street_2: committeeAccount.street_2,
       city: committeeAccount.city,
@@ -65,8 +65,8 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
 
   public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    if (this.form().invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }

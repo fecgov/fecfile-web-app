@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, input, output, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -46,16 +46,18 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   readonly roleEdited = output<undefined>();
   readonly detailClose = output<undefined>();
 
-  readonly form: FormGroup = new FormGroup(
-    {
-      role: new SubscriptionFormControl(),
-      email: new SubscriptionFormControl('', {
-        validators: [Validators.required, emailValidator],
-        asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
-        updateOn: 'change',
-      }),
-    },
-    { updateOn: 'blur' },
+  readonly form = signal(
+    new FormGroup(
+      {
+        role: new SubscriptionFormControl(),
+        email: new SubscriptionFormControl('', {
+          validators: [Validators.required, emailValidator],
+          asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
+          updateOn: 'change',
+        }),
+      },
+      { updateOn: 'blur' },
+    ),
   );
 
   private readonly dialog = viewChild<ElementRef>('dialog');
@@ -68,7 +70,7 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   }
 
   updateSelected(roleOption: (typeof this.roleOptions)[0]) {
-    this.form.get('role')?.setValue(roleOption);
+    this.form().get('role')?.setValue(roleOption);
   }
 
   public submit() {
@@ -81,14 +83,14 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   }
 
   resetForm() {
-    this.form.reset({ role: this.roleOptions[0].value, email: '' });
+    this.form().reset({ role: this.roleOptions[0].value, email: '' });
     this.formSubmitted = false;
   }
 
   async editRole() {
-    if (this.form.get('role')?.valid) {
-      const role = this.form.get('role')?.value;
-      if (this.form.get('role')?.valid) {
+    if (this.form().get('role')?.valid) {
+      const role = this.form().get('role')?.value;
+      if (this.form().get('role')?.valid) {
         try {
           await this.committeeMemberService.update({ ...this.member(), role } as CommitteeMember);
           this.dialog()?.nativeElement.close();
@@ -102,14 +104,14 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   }
 
   async addUser() {
-    const email = this.form.get('email')?.value as string;
-    const role = this.form.get('role')?.value;
-    this.form.updateValueAndValidity();
-    Object.values(this.form.controls).forEach((control) => {
+    const email = this.form().get('email')?.value as string;
+    const role = this.form().get('role')?.value;
+    this.form().updateValueAndValidity();
+    Object.values(this.form().controls).forEach((control) => {
       control.markAsDirty();
     });
 
-    if (this.form.valid && email) {
+    if (this.form().valid && email) {
       try {
         const newUser = await this.committeeMemberService.addMember(email, role);
         this.dialog()?.nativeElement.close();

@@ -25,7 +25,7 @@
       }
 
       <h3>{{ transactionType()?.contactTitle }}</h3>
-      <form [formGroup]="form" [class.ng-submitted]="formSubmitted" id="form">
+      <form [formGroup]="form()" [class.ng-submitted]="formSubmitted" id="form">
         <app-transaction-input
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
@@ -37,7 +37,7 @@
           (quinaryContactClear)="clearFormQuinaryContact()"
           [contactTypeOptions]="contactTypeOptions()"
           [formSubmitted]="formSubmitted"
-          [form]="form"
+          [form]="form()"
           [isEditable]="isEditable()"
           [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
           [transaction]="transaction()"
@@ -65,7 +65,7 @@
       }
 
       <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form [formGroup]="childForm" [class.ng-submitted]="formSubmitted" id="childForm">
+      <form [formGroup]="childForm()" [class.ng-submitted]="formSubmitted" id="childForm">
         @if (childTransaction) {
           <app-transaction-input
             (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
@@ -75,7 +75,7 @@
             [contactTypeOptions]="childContactTypeOptions"
             [contributionAmountReadOnly]="true"
             [formSubmitted]="formSubmitted"
-            [form]="childForm"
+            [form]="childForm()"
             [isEditable]="isEditable()"
             [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
             [transaction]="childTransaction"

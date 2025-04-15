@@ -1,5 +1,5 @@
 <div data-cy="form-1m-component">
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+  <form id="form()" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
         <h1>FORM 1M</h1>
@@ -29,7 +29,7 @@
             formControlName="committee_name"
           />
           <app-error-messages
-            [control]="form.get('committee_name')!"
+            [control]="form().get('committee_name')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -47,7 +47,7 @@
             formControlName="filer_committee_id_number"
           />
           <app-error-messages
-            [control]="form.get('committee_id')!"
+            [control]="form().get('committee_id')!"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -98,7 +98,7 @@
     <div class="grid">
       <div class="col-12">
         <app-error-messages
-          [control]="form.get('committee_type')!"
+          [control]="form().get('committee_type')!"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
         ></app-error-messages>
@@ -114,7 +114,7 @@
         <h2>Address</h2>
       </div>
     </div>
-    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
+    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form()"></app-address-input>
     <div class="grid">
       <div class="col-12">
         <hr />
@@ -167,7 +167,7 @@
     <div class="grid">
       <div class="col-12">
         <app-error-messages
-          [control]="form.get('statusBy')!"
+          [control]="form().get('statusBy')!"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
         ></app-error-messages>
@@ -188,14 +188,14 @@
           <div class="field" [class.transaction-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
             <label for="entity_type">LOOKUP</label>
             <app-transaction-contact-lookup
-              [form]="form"
+              [form]="form()"
               [formSubmitted]="formSubmitted"
               [contactTypeOptions]="affiliatedContact.contactTypeOptions"
               (contactSelect)="affiliatedContact.update($event)"
             >
             </app-transaction-contact-lookup>
             <app-error-messages
-              [control]="form.get(affiliatedContact.contactLookupKey)!"
+              [control]="form().get(affiliatedContact.contactLookupKey)!"
               [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
@@ -213,7 +213,7 @@
                 formControlName="affiliated_committee_name"
               />
               <app-error-messages
-                [control]="form.get('affiliated_committee_name')!"
+                [control]="form().get('affiliated_committee_name')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -228,7 +228,7 @@
                 formControlName="affiliated_committee_fec_id"
               />
               <app-error-messages
-                [control]="form.get('affiliated_committee_fec_id')!"
+                [control]="form().get('affiliated_committee_fec_id')!"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -238,7 +238,7 @@
           <div class="col-3">
             <app-calendar
               fieldName="affiliated_date_form_f1_filed"
-              [form]="form"
+              [form]="form()"
               [formSubmitted]="formSubmitted"
               label="AFFILIATED DATE"
             ></app-calendar>
@@ -261,7 +261,7 @@
         <div class="col-4">
           <app-calendar
             fieldName="date_of_51st_contributor"
-            [form]="form"
+            [form]="form()"
             [formSubmitted]="formSubmitted"
             label="DATE OF 51<sup>st</sup> CONTRIBUTION"
           ></app-calendar>
@@ -269,7 +269,7 @@
         <div class="col-4">
           <app-calendar
             fieldName="date_of_original_registration"
-            [form]="form"
+            [form]="form()"
             [formSubmitted]="formSubmitted"
             label="DATE OF ORIGINAL REGISTRATION"
           ></app-calendar>
@@ -277,7 +277,7 @@
         <div class="col-4">
           <app-calendar
             fieldName="date_committee_met_requirements"
-            [form]="form"
+            [form]="form()"
             [formSubmitted]="formSubmitted"
             label="DATE COMMITTEE MET REQUIREMENTS"
           ></app-calendar>
@@ -300,7 +300,7 @@
               <div class="field" [class.transaction-contact-invalid]="candidateContact.control?.status === 'INVALID'">
                 <label for="entity_type">LOOKUP</label>
                 <app-transaction-contact-lookup
-                  [form]="form"
+                  [form]="form()"
                   [formSubmitted]="formSubmitted"
                   [contactTypeOptions]="candidateContact.contactTypeOptions"
                   [excludeFecIds]="excludeFecIds"
@@ -309,7 +309,7 @@
                 >
                 </app-transaction-contact-lookup>
                 <app-error-messages
-                  [control]="form.get(candidateContact.contactLookupKey)!"
+                  [control]="form().get(candidateContact.contactLookupKey)!"
                   [formSubmitted]="formSubmitted"
                   requiredErrorMessage="Candidate information is required"
                 ></app-error-messages>
@@ -318,7 +318,7 @@
           </div>
           @if (form1M[candidateContact.contactKey]) {
             <app-name-input
-              [form]="form"
+              [form]="form()"
               [formSubmitted]="formSubmitted"
               [templateMap]="templateMapConfigs[candidateContact.contactKey]"
               templateMapKeyPrefix="candidate"
@@ -337,15 +337,15 @@
                     [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
                   />
                   <app-error-messages
-                    [control]="form.get(templateMapConfigs[candidateContact.contactKey]['candidate_fec_id'])!"
+                    [control]="form().get(templateMapConfigs[candidateContact.contactKey]['candidate_fec_id'])!"
                     [formSubmitted]="formSubmitted"
-                    uniqueFecIdMessage="Candidate already entered in form."
+                    uniqueFecIdMessage="Candidate already entered in form()."
                   ></app-error-messages>
                 </div>
               </div>
               <div class="col-9 co-input-container">
                 <app-candidate-office-input
-                  [form]="form"
+                  [form]="form()"
                   [formSubmitted]="formSubmitted"
                   [officeFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_office']"
                   [stateFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_state']"
@@ -358,7 +358,7 @@
               <div class="col-3">
                 <app-calendar
                   [fieldName]="candidateContact.dateOfContributionField"
-                  [form]="form"
+                  [form]="form()"
                   [formSubmitted]="formSubmitted"
                   label="DATE OF CONTRIBUTION"
                 ></app-calendar>

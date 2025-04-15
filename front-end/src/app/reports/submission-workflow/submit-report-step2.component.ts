@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -53,9 +53,11 @@ export class SubmitReportStep2Component extends FormComponent {
     'filingPassword',
     'userCertified',
   ];
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
-    updateOn: 'blur',
-  });
+  form = signal<FormGroup>(
+    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+      updateOn: 'blur',
+    }),
+  );
   loading: 0 | 1 | 2 = 0;
   backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
@@ -68,26 +70,26 @@ export class SubmitReportStep2Component extends FormComponent {
     effectOnceIf(
       () => this.report() && this.committeeAccount(),
       () => {
-        SchemaUtils.addJsonSchemaValidators(this.form, this.report().schema, false);
+        SchemaUtils.addJsonSchemaValidators(this.form(), this.report().schema, false);
         this.initializeFormWithReport(this.report(), this.committeeAccount());
       },
     );
 
-    this.form.addControl('backdoorYesNo', new SubscriptionFormControl());
-    this.form.controls['filingPassword'].addValidators(passwordValidator);
-    this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
-    this.form
+    this.form().addControl('backdoorYesNo', new SubscriptionFormControl());
+    this.form().controls['filingPassword'].addValidators(passwordValidator);
+    this.form().controls['userCertified'].addValidators(Validators.requiredTrue);
+    this.form()
       .get('backdoorYesNo')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
         this.showBackdoorCode = value;
         if (value) {
-          this.form.addControl(
+          this.form().addControl(
             'backdoor_code',
             new SubscriptionFormControl('', [Validators.required, Validators.maxLength(16)]),
           );
         } else {
-          this.form.removeControl('backdoor_code');
+          this.form().removeControl('backdoor_code');
         }
       });
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
@@ -97,7 +99,7 @@ export class SubmitReportStep2Component extends FormComponent {
   }
 
   initializeFormWithReport(report: Report, committeeAccount: CommitteeAccount) {
-    this.form.patchValue({
+    this.form().patchValue({
       treasurer_first_name: committeeAccount?.treasurer_name_1,
       treasurer_last_name: committeeAccount?.treasurer_name_2,
       treasurer_middle_name: committeeAccount?.treasurer_name_middle,
@@ -105,14 +107,14 @@ export class SubmitReportStep2Component extends FormComponent {
       treasurer_suffix: committeeAccount?.treasurer_name_suffix,
     });
     if (report['treasurer_last_name' as keyof Report]) {
-      this.form.patchValue(report);
+      this.form().patchValue(report);
     }
   }
 
   submitClicked(): void {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    if (this.form().invalid) {
       return;
     }
 
@@ -142,7 +144,7 @@ export class SubmitReportStep2Component extends FormComponent {
     this.loading = 1;
     const payload: Report = getReportFromJSON({
       ...this.report(),
-      ...SchemaUtils.getFormValues(this.form, this.report().schema, this.formProperties),
+      ...SchemaUtils.getFormValues(this.form(), this.report().schema, this.formProperties),
     });
     if (payload instanceof Form3X || payload instanceof Form3) {
       payload.qualified_committee = this.committeeAccount().qualified;
@@ -162,8 +164,8 @@ export class SubmitReportStep2Component extends FormComponent {
 
     const payload = {
       report_id: this.report().id,
-      password: this.form?.value['filingPassword'],
-      backdoor_code: this.form?.value['backdoor_code'],
+      password: this.form().value['filingPassword'],
+      backdoor_code: this.form().value['backdoor_code'],
     };
     await this.apiService.post('/web-services/submit-to-fec/', payload);
     this.loading = 0;

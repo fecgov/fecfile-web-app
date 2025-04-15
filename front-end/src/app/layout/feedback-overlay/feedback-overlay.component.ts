@@ -1,4 +1,4 @@
-import { Component, inject, viewChild, ViewChild } from '@angular/core';
+import { Component, inject, signal, viewChild, ViewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
@@ -34,13 +34,15 @@ export class FeedbackOverlayComponent extends FormComponent {
   public readonly feedbackService = inject(FeedbackService);
   private readonly popover = viewChild.required<Popover>('op');
 
-  readonly form: FormGroup = this.fb.group(
-    {
-      action: ['', [Validators.required, Validators.maxLength(2000)]],
-      feedback: ['', [Validators.maxLength(2000)]],
-      about: ['', Validators.maxLength(2000)],
-    },
-    { updateOn: 'blur' },
+  readonly form = signal<FormGroup>(
+    this.fb.group(
+      {
+        action: ['', [Validators.required, Validators.maxLength(2000)]],
+        feedback: ['', [Validators.maxLength(2000)]],
+        about: ['', Validators.maxLength(2000)],
+      },
+      { updateOn: 'blur' },
+    ),
   );
   readonly SubmissionStatesEnum = SubmissionStates;
   submitStatus = this.SubmissionStatesEnum.DRAFT;
@@ -57,15 +59,15 @@ export class FeedbackOverlayComponent extends FormComponent {
 
   save() {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    if (this.form().invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
     const feedback: Feedback = {
-      action: this.form.get('action')?.value,
-      feedback: this.form.get('feedback')?.value,
-      about: this.form.get('about')?.value,
+      action: this.form().get('action')?.value,
+      feedback: this.form().get('feedback')?.value,
+      about: this.form().get('about')?.value,
       location: window.location.href,
     };
     this.feedbackService.submitFeedback(feedback).then(
@@ -79,7 +81,7 @@ export class FeedbackOverlayComponent extends FormComponent {
   }
 
   reset() {
-    this.form.reset();
+    this.form().reset();
     this.formSubmitted = false;
     this.submitStatus = this.SubmissionStatesEnum.DRAFT;
   }

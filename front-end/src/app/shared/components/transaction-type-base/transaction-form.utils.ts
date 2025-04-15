@@ -315,7 +315,6 @@ export class TransactionFormUtils {
         });
       }
     }
-    return form;
   }
 
   static getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {

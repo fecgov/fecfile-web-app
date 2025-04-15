@@ -28,10 +28,10 @@
       }
 
       <h3>{{ transactionType()?.contactTitle }}</h3>
-      <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+      <form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [isEditable]="isEditable()"
-          [form]="form"
+          [form]="form()"
           [formSubmitted]="formSubmitted"
           [transaction]="transaction()"
           [contactTypeOptions]="contactTypeOptions()"
@@ -64,10 +64,10 @@
       }
 
       <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
+      <form id="childForm" [formGroup]="childForm()" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [isEditable]="isEditable()"
-          [form]="childForm"
+          [form]="childForm()"
           [formSubmitted]="formSubmitted"
           [transaction]="childTransaction"
           [contactTypeOptions]="childContactTypeOptions"

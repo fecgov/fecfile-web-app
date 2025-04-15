@@ -25,8 +25,8 @@ export abstract class F1MContact {
   constructor(contactKey: keyof Form1M, component: MainFormComponent) {
     this.contactKey = contactKey;
     this.component = component;
-    component.form.addControl(this.contactLookupKey, new SubscriptionFormControl(''));
-    this.control = component.form.get(this.contactLookupKey);
+    component.form().addControl(this.contactLookupKey, new SubscriptionFormControl(''));
+    this.control = component.form().get(this.contactLookupKey);
   }
 
   /**
@@ -62,15 +62,16 @@ export abstract class F1MContact {
     (this.component.form1M[this.contactKey] as Contact) = $event.value;
     (this.component.form1M[`${this.contactKey}_id` as keyof Form1M] as string | null) = currentId;
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.contactKey])) {
-      this.component.form
+      this.component
+        .form()
         .get(this.component.templateMapConfigs[this.contactKey][key as keyof TransactionTemplateMapType])
         ?.setValue($event.value[value as keyof Contact]);
     }
 
     // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.
-    const candidateIdControl = this.component.form.get(
-      this.component.templateMapConfigs[this.contactKey]['candidate_fec_id'],
-    );
+    const candidateIdControl = this.component
+      .form()
+      .get(this.component.templateMapConfigs[this.contactKey]['candidate_fec_id']);
     if (candidateIdControl?.invalid) {
       candidateIdControl.markAsTouched();
     }
@@ -86,8 +87,8 @@ export abstract class F1MContact {
 
     this.formFields.forEach((field: string) => {
       (this.component.form1M[field as keyof Form1M] as string | undefined) = undefined;
-      this.component.form.get(field)?.clearValidators();
-      this.component.form.get(field)?.setValue(undefined);
+      this.component.form().get(field)?.clearValidators();
+      this.component.form().get(field)?.setValue(undefined);
     });
 
     this.updateValueAndValidity();
@@ -95,7 +96,7 @@ export abstract class F1MContact {
 
   updateValueAndValidity() {
     this.control?.updateValueAndValidity();
-    this.formFields.forEach((field: string) => this.component.form.get(field)?.updateValueAndValidity());
+    this.formFields.forEach((field: string) => this.component.form().get(field)?.updateValueAndValidity());
   }
 }
 
@@ -123,7 +124,7 @@ export class AffiliatedContact extends F1MContact {
       this.control?.addValidators(Validators.required);
     }
 
-    this.formFields.forEach((field: string) => this.component.form.get(field)?.addValidators(Validators.required));
+    this.formFields.forEach((field: string) => this.component.form().get(field)?.addValidators(Validators.required));
     this.updateValueAndValidity();
   }
 }
@@ -138,7 +139,7 @@ export class CandidateContact extends F1MContact {
   }
 
   get candidateId() {
-    return this.component.form.get(`${this.tag}_candidate_id_number`)?.value;
+    return this.component.form().get(`${this.tag}_candidate_id_number`)?.value;
   }
 
   constructor(tag: F1MCandidateTag, component: MainFormComponent) {
@@ -198,21 +199,22 @@ export class CandidateContact extends F1MContact {
 
     const candidateIdField = `${this.tag}_candidate_id_number`;
 
-    this.component.form
+    this.component
+      .form()
       .get(`${this.tag}_candidate_id_number`)
       ?.addValidators([
         Validators.required,
         buildGuaranteeUniqueValuesValidator(
-          this.component.form,
+          this.component.form(),
           candidateIdField,
           otherCandidateIdFields,
           'fecIdMustBeUnique',
         ),
       ]);
-    this.component.form.get(`${this.tag}_candidate_last_name`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.tag}_candidate_first_name`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.tag}_candidate_office`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.tag}_date_of_contribution`)?.addValidators(Validators.required);
+    this.component.form().get(`${this.tag}_candidate_last_name`)?.addValidators(Validators.required);
+    this.component.form().get(`${this.tag}_candidate_first_name`)?.addValidators(Validators.required);
+    this.component.form().get(`${this.tag}_candidate_office`)?.addValidators(Validators.required);
+    this.component.form().get(`${this.tag}_date_of_contribution`)?.addValidators(Validators.required);
     this.updateValueAndValidity();
   }
 }

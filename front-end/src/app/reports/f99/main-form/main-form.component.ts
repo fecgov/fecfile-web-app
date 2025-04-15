@@ -53,6 +53,6 @@ export class MainFormComponent extends MainFormBaseComponent {
   readonly textCodes = textCodes;
 
   getReportPayload(): Report {
-    return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
+    return Form99.fromJSON(SchemaUtils.getFormValues(this.form(), this.schema, this.formProperties));
   }
 }

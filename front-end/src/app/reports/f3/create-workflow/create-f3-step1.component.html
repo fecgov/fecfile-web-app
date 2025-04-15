@@ -1,4 +1,4 @@
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<form id="form()" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
   <div class="grid">
     <div class="col-12">
       <h1>FEC Form 3</h1>
@@ -24,7 +24,7 @@
           formControlName="report_type_category"
         ></p-selectButton>
         <app-error-messages
-          [control]="form.get('report_type_category')!"
+          [control]="form().get('report_type_category')!"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -63,7 +63,7 @@
           <app-calendar
             data-cy="date_of_election"
             fieldName="date_of_election"
-            [form]="form"
+            [form]="form()"
             [formSubmitted]="formSubmitted"
             label="ELECTION ON"
           ></app-calendar>
@@ -79,7 +79,7 @@
               appendTo="body"
             ></p-select>
             <app-error-messages
-              [control]="form.get('state_of_election')!"
+              [control]="form().get('state_of_election')!"
               [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
@@ -102,7 +102,7 @@
     <div class="col-6">
       <app-calendar
         fieldName="coverage_from_date"
-        [form]="form"
+        [form]="form()"
         [formSubmitted]="formSubmitted"
         label="FROM"
       ></app-calendar>
@@ -110,7 +110,7 @@
     <div class="col-6">
       <app-calendar
         fieldName="coverage_through_date"
-        [form]="form"
+        [form]="form()"
         [formSubmitted]="formSubmitted"
         label="TO"
       ></app-calendar>

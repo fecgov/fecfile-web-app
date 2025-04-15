@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -65,9 +65,11 @@ export class CreateF3XStep1Component extends FormComponent {
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-  readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
-    updateOn: 'blur',
-  });
+  readonly form = signal<FormGroup>(
+    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
+      updateOn: 'blur',
+    }),
+  );
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   readonly thisYear = new Date().getFullYear();
@@ -83,7 +85,7 @@ export class CreateF3XStep1Component extends FormComponent {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
     effectOnceIf(
       () => this.report() && reportId,
-      () => this.form.patchValue(this.report()),
+      () => this.form().patchValue(this.report()),
     );
 
     this.addFilingFrequency();
@@ -95,28 +97,30 @@ export class CreateF3XStep1Component extends FormComponent {
         const existingCoverage = this.form3XService.existingCoverage();
         if (!existingCoverage) return;
 
-        this.form?.patchValue({ report_type_category: this.reportTypeCategories[0] });
-        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        this.form().patchValue({ report_type_category: this.reportTypeCategories[0] });
+        this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
 
-        this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+        this.form().addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
       },
     );
 
-    this.form.controls['coverage_from_date'].addValidators([Validators.required]);
-    this.form.controls['coverage_through_date'].addValidators([
+    this.form().controls['coverage_from_date'].addValidators([Validators.required]);
+    this.form().controls['coverage_through_date'].addValidators([
       Validators.required,
-      buildAfterDateValidator(this.form, 'coverage_from_date'),
+      buildAfterDateValidator(this.form(), 'coverage_from_date'),
     ]);
-    (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form.controls['coverage_through_date'].updateValueAndValidity();
+    (this.form().controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
+      this.form().controls['coverage_through_date'].updateValueAndValidity();
     });
 
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
-      this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
-      this.form.controls['filing_frequency'].valueChanges.pipe(startWith(this.form.controls['filing_frequency'].value)),
-      this.form.controls['report_type_category'].valueChanges.pipe(
-        startWith(this.form.controls['report_type_category'].value),
+      this.form().controls['report_code'].valueChanges.pipe(startWith(this.form().controls['report_code'].value)),
+      this.form().controls['filing_frequency'].valueChanges.pipe(
+        startWith(this.form().controls['filing_frequency'].value),
+      ),
+      this.form().controls['report_type_category'].valueChanges.pipe(
+        startWith(this.form().controls['report_type_category'].value),
       ),
     ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
       const coverageDatesFunction = getCoverageDatesFunction(reportCode);
@@ -127,39 +131,39 @@ export class CreateF3XStep1Component extends FormComponent {
           isElectionYear,
           filingFrequency,
         );
-        this.form.patchValue({ coverage_from_date, coverage_through_date });
+        this.form().patchValue({ coverage_from_date, coverage_through_date });
       } else {
-        this.form.patchValue({ coverage_from_date: null, coverage_through_date: null });
+        this.form().patchValue({ coverage_from_date: null, coverage_through_date: null });
       }
     });
 
-    SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+    SchemaUtils.addJsonSchemaValidators(this.form(), f3xSchema, false);
   }
 
   private addReportTypeCategory() {
-    this.form.addControl('report_type_category', new SubscriptionFormControl());
-    (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
-      this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+    this.form().addControl('report_type_category', new SubscriptionFormControl());
+    (this.form().get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+      this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
     }, this.destroy$);
   }
 
   private addFilingFrequency() {
-    this.form.addControl('filing_frequency', new SubscriptionFormControl());
-    (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
-      this.form.patchValue({
+    this.form().addControl('filing_frequency', new SubscriptionFormControl());
+    (this.form().get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
+      this.form().patchValue({
         report_type_category: this.reportTypeCategories[0],
       });
-      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
     }, this.destroy$);
 
     effect(() => {
-      this.form?.patchValue({ filing_frequency: this.filingFrequencySignal(), form_type: 'F3XN' });
+      this.form().patchValue({ filing_frequency: this.filingFrequencySignal(), form_type: 'F3XN' });
     });
   }
 
   public getReportCodes(): ReportCodes[] {
-    const isMonthly = this.form?.get('filing_frequency')?.value === 'M';
-    switch (this.form.get('report_type_category')?.value) {
+    const isMonthly = this.form().get('filing_frequency')?.value === 'M';
+    switch (this.form().get('report_type_category')?.value) {
       case F3xReportTypeCategories.ELECTION_YEAR:
         return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
       case F3xReportTypeCategories.NON_ELECTION_YEAR:
@@ -176,7 +180,7 @@ export class CreateF3XStep1Component extends FormComponent {
   }
 
   public isElectionReport() {
-    return electionReportCodes.includes(this.form.get('report_code')?.value);
+    return electionReportCodes.includes(this.form().get('report_code')?.value);
   }
 
   public goBack() {
@@ -185,13 +189,13 @@ export class CreateF3XStep1Component extends FormComponent {
 
   public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    if (this.form().invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
 
-    const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
+    const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form(), f3xSchema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === ReportCodes.TER) {

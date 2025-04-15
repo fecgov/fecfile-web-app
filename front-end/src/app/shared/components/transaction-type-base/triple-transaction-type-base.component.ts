@@ -81,9 +81,9 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
 
   override async save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
-    if (this.transaction && this.childTransaction && this.childTransaction_2) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction()!, this.templateMap()!, this.form);
-      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+    if (this.transaction() && this.childTransaction && this.childTransaction_2) {
+      TransactionContactUtils.updateContactsWithForm(this.transaction()!, this.templateMap()!, this.form());
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm());
       TransactionContactUtils.updateContactsWithForm(
         this.childTransaction_2()!,
         this.childTemplateMap_2(),
@@ -97,7 +97,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction(),
       this.activeReportId,
-      this.form,
+      this.form(),
       this.formProperties(),
     );
 
@@ -105,7 +105,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
       TransactionFormUtils.getPayloadTransaction(
         this.childTransaction,
         this.activeReportId,
-        this.childForm,
+        this.childForm(),
         this.childFormProperties,
       ),
       TransactionFormUtils.getPayloadTransaction(

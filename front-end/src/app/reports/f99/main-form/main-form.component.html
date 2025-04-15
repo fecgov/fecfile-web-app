@@ -1,4 +1,4 @@
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<form id="form()" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
   <h1>Form 99</h1>
   <h5>MISCELLANEOUS REPORT TO THE FEC</h5>
   <hr />
@@ -14,7 +14,7 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [control]="form.get('committee_name')!" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [control]="form().get('committee_name')!" [formSubmitted]="formSubmitted"></app-error-messages>
   </div>
   <div class="field w-3">
     <label for="filer_committee_id_number">COMMITTEE ID</label>
@@ -26,13 +26,13 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [control]="form.get('committee_id')!" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [control]="form().get('committee_id')!" [formSubmitted]="formSubmitted"></app-error-messages>
   </div>
 
   <hr type="solid" />
   <h3>Address</h3>
 
-  <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
+  <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form()"></app-address-input>
 
   <hr type="solid" />
   <h3>Text Information</h3>
@@ -46,7 +46,7 @@
       [autoDisplayFirst]="false"
       appendTo="body"
     ></p-select>
-    <app-error-messages [control]="form.get('text_code')!" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [control]="form().get('text_code')!" [formSubmitted]="formSubmitted"></app-error-messages>
   </div>
 
   <div class="field w-full">
@@ -59,7 +59,7 @@
       [autoResize]="true"
       formControlName="message_text"
     ></textarea>
-    <app-error-messages [control]="form.get('message_text')!" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [control]="form().get('message_text')!" [formSubmitted]="formSubmitted"></app-error-messages>
   </div>
 
   <hr type="solid" />

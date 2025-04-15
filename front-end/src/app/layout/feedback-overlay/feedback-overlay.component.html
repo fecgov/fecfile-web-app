@@ -22,7 +22,7 @@
               </p>
             </div>
           </div>
-          <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+          <form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
             <div class="grid">
               <div class="col-12">
                 <div class="field">
@@ -32,7 +32,7 @@
                   >
                   <textarea id="action" [rows]="3" pTextarea [autoResize]="true" formControlName="action"></textarea>
                   <app-error-messages
-                    [control]="form.get('action')!"
+                    [control]="form().get('action')!"
                     [formSubmitted]="formSubmitted"
                   ></app-error-messages>
                 </div>
@@ -50,7 +50,7 @@
                     formControlName="feedback"
                   ></textarea>
                   <app-error-messages
-                    [control]="form.get('feedback')!"
+                    [control]="form().get('feedback')!"
                     [formSubmitted]="formSubmitted"
                   ></app-error-messages>
                 </div>
@@ -69,7 +69,7 @@
                   </label>
                   <textarea id="about" [rows]="3" pTextarea [autoResize]="true" formControlName="about"></textarea>
                   <app-error-messages
-                    [control]="form.get('about')!"
+                    [control]="form().get('about')!"
                     [formSubmitted]="formSubmitted"
                   ></app-error-messages>
                 </div>

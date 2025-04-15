@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, Signal, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
@@ -63,40 +63,58 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           ?.addValidators(buildWithinReportDatesValidator(f3x.coverage_from_date, f3x.coverage_through_date));
       },
     );
-
-    this.addValidators();
-    this.addSubscriptions();
+    this.setupDueDate();
+    this.setupInterestRate();
   }
 
-  addValidators() {
-    this.interestRateSettingField()?.addValidators([Validators.required]);
-    this.dueDateSettingField()?.addValidators([Validators.required]);
+  setupDueDate() {
+    effectOnceIf(
+      () => this.dueDateSettingField(),
+      () => {
+        this.dueDateSettingField()?.addValidators([Validators.required]);
+        this.dueDateSettingField()?.addSubscription((dueDateSetting) => {
+          this.convertDueDate(dueDateSetting);
+        });
+      },
+    );
   }
 
-  addSubscriptions() {
-    this.dueDateSettingField()?.addSubscription((dueDateSetting) => {
-      this.convertDueDate(dueDateSetting);
-    });
-
+  setupInterestRate() {
     this.onInterestRateInput(this.interestRate);
-    this.interestRateSettingField()?.addSubscription((interestRateSetting) => {
-      if (!this.interestRateField) return;
-      if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-        this.interestRateField().addValidators(percentageValidator);
-      } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-        this.interestRateField().removeValidators(percentageValidator);
-      }
-      if (this.clearValuesOnChange) {
-        this.interestRate = '';
-        this.interestRateField().markAsPristine();
-        this.interestRateField().markAsUntouched();
-      } else {
-        this.onInterestRateInput(interestRateSetting);
-      }
-    });
+
+    effectOnceIf(
+      () => this.interestRateSettingField(),
+      () => {
+        this.interestRateSettingField()!.addValidators([Validators.required]);
+        this.interestRateSettingField()!.addSubscription((interestRateSetting) => {
+          const interestRateField = this.interestRateField();
+          if (!interestRateField) return;
+          if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
+            interestRateField.addValidators(percentageValidator);
+          } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
+            interestRateField.removeValidators(percentageValidator);
+          }
+          if (this.clearValuesOnChange) {
+            this.interestRate = '';
+            interestRateField.markAsPristine();
+            interestRateField.markAsUntouched();
+          } else {
+            this.onInterestRateInput(interestRateSetting);
+          }
+        });
+      },
+    );
 
     // Watch changes to purpose description to make sure prefix is maintained
-    this.interestRateField()?.addSubscription(() => this.onInterestRateInput(this.interestRateSetting), this.destroy$);
+    effectOnceIf(
+      () => this.interestRateField(),
+      () => {
+        this.interestRateField()!.addSubscription(
+          () => this.onInterestRateInput(this.interestRateSetting),
+          this.destroy$,
+        );
+      },
+    );
   }
 
   ngAfterViewInit(): void {
@@ -147,7 +165,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         newInterestRate = validNumber;
 
         textInput?.setSelectionRange(initialSelectionStart - lengthDifference, initialSelectionEnd - lengthDifference);
-        this.interestRateField().markAsTouched();
+        this.interestRateField()?.markAsTouched();
       }
 
       if (newInterestRate.length > 0) {
@@ -234,25 +252,25 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.dueDateSettingField().setValue(value);
   }
 
-  readonly interestRateField = computed(
+  readonly interestRateField: Signal<SubscriptionFormControl | undefined> = computed(
     () => this.form().get(this.templateMap()['interest_rate']) as SubscriptionFormControl,
   );
   get interestRate(): string {
-    return this.interestRateField().value ?? '';
+    return this.interestRateField()?.value ?? '';
   }
 
   set interestRate(value: string) {
-    this.interestRateField().setValue(value);
+    this.interestRateField()?.setValue(value);
   }
 
-  readonly interestRateSettingField = computed(
+  readonly interestRateSettingField: Signal<SubscriptionFormControl | undefined> = computed(
     () => this.form().get(this.templateMap()['interest_rate_setting']) as SubscriptionFormControl,
   );
   get interestRateSetting(): string {
-    return this.interestRateSettingField().value ?? '';
+    return this.interestRateSettingField()?.value ?? '';
   }
 
   set interestRateSetting(value: string) {
-    this.interestRateSettingField().setValue(value);
+    this.interestRateSettingField()?.setValue(value);
   }
 }

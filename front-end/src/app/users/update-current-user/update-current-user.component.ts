@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -26,33 +26,36 @@ export class UpdateCurrentUserComponent extends FormComponent {
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);
   private readonly userSignal = this.store.selectSignal(selectUserLoginData);
-  form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
+  form = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
 
   constructor() {
     super();
     effect(() => {
-      this.form.setControl('last_name', new SubscriptionFormControl(this.userSignal().last_name, Validators.required));
-      this.form.setControl(
+      this.form().setControl(
+        'last_name',
+        new SubscriptionFormControl(this.userSignal().last_name, Validators.required),
+      );
+      this.form().setControl(
         'first_name',
         new SubscriptionFormControl(this.userSignal().first_name, Validators.required),
       );
-      this.form.setControl('email', new SubscriptionFormControl(this.userSignal().email, Validators.required));
+      this.form().setControl('email', new SubscriptionFormControl(this.userSignal().email, Validators.required));
       this.formSubmitted = false;
     });
   }
 
   async continue() {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    if (this.form().invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
 
     const updatedUserLoginData = {
-      first_name: this.form.get('first_name')?.value,
-      last_name: this.form.get('last_name')?.value,
-      email: this.form.get('email')?.value,
+      first_name: this.form().get('first_name')?.value,
+      last_name: this.form().get('last_name')?.value,
+      email: this.form().get('email')?.value,
     } as UserLoginData;
     const response = await this.usersService.updateCurrentUser(updatedUserLoginData);
     this.store.dispatch(userLoginDataUpdatedAction({ payload: response }));

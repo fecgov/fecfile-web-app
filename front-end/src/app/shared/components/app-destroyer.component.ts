@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, Signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -25,6 +25,6 @@ export abstract class FormComponent extends DestroyerComponent {
   protected readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   protected readonly report = this.store.selectSignal(selectActiveReport);
 
-  protected abstract readonly form: FormGroup;
+  protected abstract readonly form: Signal<FormGroup>;
   formSubmitted = false;
 }

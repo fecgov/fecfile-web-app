@@ -1,6 +1,6 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
@@ -31,7 +31,9 @@ export class ReportLevelMemoComponent extends FormComponent {
   readonly text4kFormProperty = 'text4000';
 
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
-  readonly form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
+  readonly form = signal<FormGroup>(
+    this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' }),
+  );
 
   committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
   routeDataSignal = toSignal(this.route.data);
@@ -51,22 +53,22 @@ export class ReportLevelMemoComponent extends FormComponent {
         this.memoTextService.getForReportId(report.id).then((memoTextList) => {
           if (memoTextList && memoTextList.length > 0) {
             this.assignedMemoText = memoTextList[0];
-            this.form.get(this.text4kFormProperty)?.setValue(this.assignedMemoText.text4000);
+            this.form().get(this.text4kFormProperty)?.setValue(this.assignedMemoText.text4000);
           }
         });
       }
     });
-    this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
-    SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
+    this.form().addControl(this.recTypeFormProperty, new SubscriptionFormControl());
+    SchemaUtils.addJsonSchemaValidators(this.form(), textSchema, false);
   }
 
   async save(): Promise<void> {
     this.formSubmitted = true;
-    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
+    this.form().get(this.recTypeFormProperty)?.setValue('TEXT');
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
-      ...SchemaUtils.getFormValues(this.form, textSchema, this.formProperties),
+      ...SchemaUtils.getFormValues(this.form(), textSchema, this.formProperties),
     });
     payload.report_id = this.report().id;
 

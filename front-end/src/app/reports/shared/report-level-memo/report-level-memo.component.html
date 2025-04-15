@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
   <div class="grid">
     <div class="col-11">
       <label for="{{ text4kFormProperty }}">
@@ -27,7 +27,7 @@
           formControlName="{{ text4kFormProperty }}"
         ></textarea>
         <app-error-messages
-          [control]="form.get(text4kFormProperty)!"
+          [control]="form().get(text4kFormProperty)!"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

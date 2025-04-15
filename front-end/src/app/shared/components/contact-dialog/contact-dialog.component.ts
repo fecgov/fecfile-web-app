@@ -126,16 +126,18 @@ export class ContactDialogComponent extends FormComponent {
 
   readonly contactLookup = viewChild.required<ContactLookupComponent>(ContactLookupComponent);
 
-  form: FormGroup = this.fb.group(
-    SchemaUtils.getFormGroupFields([
-      ...new Set([
-        ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
-        ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
-        ...SchemaUtils.getSchemaProperties(contactCommitteeSchema),
-        ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
+  form = signal<FormGroup>(
+    this.fb.group(
+      SchemaUtils.getFormGroupFields([
+        ...new Set([
+          ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
+          ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
+          ...SchemaUtils.getSchemaProperties(contactCommitteeSchema),
+          ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
+        ]),
       ]),
-    ]),
-    { updateOn: 'blur' },
+      { updateOn: 'blur' },
+    ),
   );
 
   isNewItem = true;
@@ -203,27 +205,27 @@ export class ContactDialogComponent extends FormComponent {
 
   constructor() {
     super();
-    this.form
+    this.form()
       ?.get('country')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
         if (value !== 'USA') {
-          this.form.patchValue({
+          this.form().patchValue({
             state: 'ZZ',
           });
           // ajv does not un-require zip when country is not USA
-          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
-          this.form.get('state')?.disable();
+          this.form().patchValue({ zip: this.form().get('zip')?.value || '' });
+          this.form().get('state')?.disable();
         } else {
-          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
-          this.form.get('state')?.enable();
+          this.form().patchValue({ zip: this.form().get('zip')?.value || null });
+          this.form().get('state')?.enable();
         }
       });
 
     // If there is a default candidate office (e.g. 'P') set, then make the
     // candidate office select read-only disabled.
     if (this.defaultCandidateOffice()) {
-      this.form.get('candidate_office')?.disable();
+      this.form().get('candidate_office')?.disable();
     }
 
     this.contactTypeChanged(this.contactType());
@@ -242,29 +244,29 @@ export class ContactDialogComponent extends FormComponent {
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
-    this.form.get('type')?.setValue(contactType);
+    this.form().get('type')?.setValue(contactType);
 
     const schema = ContactService.getSchemaByType(contactType);
-    SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
+    SchemaUtils.addJsonSchemaValidators(this.form(), schema, true);
     switch (contactType) {
       case ContactTypes.CANDIDATE:
-        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()?.id));
+        this.form().get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()?.id));
         break;
       case ContactTypes.COMMITTEE:
-        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()?.id));
+        this.form().get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()?.id));
         break;
     }
-    this.form.updateValueAndValidity();
+    this.form().updateValueAndValidity();
 
     // Clear out non-schema form values
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     const schemaProperties: string[] = SchemaUtils.getSchemaProperties(schema);
-    Object.keys(this.form.controls).forEach((property: string) => {
+    Object.keys(this.form().controls).forEach((property: string) => {
       if (!schemaProperties.includes(property)) {
         formValues[property] = null;
       }
     });
-    this.form.patchValue(formValues);
+    this.form().patchValue(formValues);
 
     if (contactType === ContactTypes.CANDIDATE) {
       this.stateOptions.set(LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary()));
@@ -282,7 +284,7 @@ export class ContactDialogComponent extends FormComponent {
 
   public openDialog() {
     this.resetForm();
-    this.form.patchValue(this.contact()!);
+    this.form().patchValue(this.contact()!);
     this.contactType.set(this.contactTypeOptions()[0].value as ContactTypes);
     if (this.contact()?.id) {
       this.isNewItem = false;
@@ -308,14 +310,14 @@ export class ContactDialogComponent extends FormComponent {
   readonly showSearchBox = computed(() => this.isCand() || this.isCom());
 
   private resetForm() {
-    this.form.reset();
-    this.form.get('country')?.setValue(this.countryOptions[0]['value']);
-    this.form.get('state')?.setValue(null);
+    this.form().reset();
+    this.form().get('country')?.setValue(this.countryOptions[0]['value']);
+    this.form().get('state')?.setValue(null);
     this.isNewItem = true;
     this.contactLookup().contactTypeFormControl.enable();
     this.contactLookup().contactTypeFormControl.setValue(this.contactType());
     if (this.defaultCandidateOffice) {
-      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
+      this.form().get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
     this.formSubmitted = false;
   }
@@ -326,13 +328,13 @@ export class ContactDialogComponent extends FormComponent {
     this.contactTypeOptions.set(
       LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type),
     );
-    this.form.patchValue(contact);
+    this.form().patchValue(contact);
   }
 
   public confirmPropagation() {
     const contact = this.contact();
     if (!contact) return;
-    const changes = Object.entries(this.form.controls)
+    const changes = Object.entries(this.form().controls)
       .map(([field, control]: [string, AbstractControl]) => {
         const contactValue = contact[field as keyof Contact];
         if (control?.value !== contactValue) {
@@ -357,15 +359,15 @@ export class ContactDialogComponent extends FormComponent {
 
   public saveContact(closeDialog = true) {
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    this.form.updateValueAndValidity();
-    if (this.form.invalid) {
+    blurActiveInput(this.form());
+    this.form().updateValueAndValidity();
+    if (this.form().invalid) {
       return;
     }
 
     const contact: Contact = Contact.fromJSON({
       ...this.contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
+      ...SchemaUtils.getFormValues(this.form(), ContactService.getSchemaByType(this.contactType())),
     });
     contact.type = this.contactType()!;
     this.savedContact.emit(contact);
