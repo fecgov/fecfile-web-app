@@ -10,7 +10,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { firstValueFrom, of } from 'rxjs';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 

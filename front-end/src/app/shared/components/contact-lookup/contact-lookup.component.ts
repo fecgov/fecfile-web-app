@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model, OnInit, output, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, Injector, input, model, OnInit, output, viewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -13,7 +13,7 @@ import {
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
@@ -28,6 +28,7 @@ import { DestroyerComponent } from '../app-destroyer.component';
   imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+  readonly injector = inject(Injector);
   public readonly contactService = inject(ContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
   readonly contactTypeOptions = input.required<PrimeOptions>();
@@ -55,8 +56,10 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   readonly contactTypeReadOnly = computed(() => this.contactTypeOptions().length < 2);
   contactLookupList: SelectItemGroup[] = [];
   readonly candidateOfficeLabel = computed(() => LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice()));
-  contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
-  searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
+  readonly contactTypeFormControl = new SignalFormControl<ContactTypes | null>(this.injector, null, {
+    updateOn: 'change',
+  });
+  readonly searchBoxFormControl = new SignalFormControl(this.injector, '', { updateOn: 'change' });
 
   searchTerm = '';
 

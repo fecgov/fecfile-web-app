@@ -14,7 +14,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('ReportLevelMemoComponent', () => {

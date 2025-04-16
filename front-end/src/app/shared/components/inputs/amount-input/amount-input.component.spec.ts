@@ -19,7 +19,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
 import { InputNumberComponent } from '../input-number/input-number.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { ScheduleATransactionTypes } from 'app/shared/models';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 

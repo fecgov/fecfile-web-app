@@ -4,7 +4,7 @@ import { LoanTermsInputComponent } from './loan-terms-input.component';
 
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('LoanTermsInputComponent', () => {
   let component: LoanTermsInputComponent;

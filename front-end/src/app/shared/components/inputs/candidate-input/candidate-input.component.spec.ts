@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from '../candidate-office-input/candidate-office-input.component';
 import { CandidateInputComponent } from './candidate-input.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('CandidateInputComponent', () => {
   let component: CandidateInputComponent;

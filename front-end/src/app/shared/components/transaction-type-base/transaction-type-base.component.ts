@@ -1,6 +1,6 @@
-import { Component, computed, effect, inject, input, OnDestroy, OnInit, Signal } from '@angular/core';
+import { Component, computed, effect, inject, input, Signal } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -29,8 +29,6 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
-import { TransactionTypeService } from './transaction-type.service';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   template: '',
@@ -58,7 +56,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
 
   contactIdMap: ContactIdMapType = {};
 
-  isEditable = computed(
+  readonly isEditable = computed(
     () => this.reportService.isEditable(this.report()) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()),
   );
   memoCodeCheckboxLabel$ = of('');
@@ -70,9 +68,12 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
   readonly templateMap = computed(() => this.transactionType()?.templateMap);
 
   readonly form: Signal<FormGroup> = computed(() =>
-    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties(), this.transactionType()?.schema), {
-      updateOn: 'blur',
-    }),
+    this.fb.group(
+      SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.formProperties(), this.transactionType()?.schema),
+      {
+        updateOn: 'blur',
+      },
+    ),
   );
 
   constructor() {
@@ -91,38 +92,47 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
       }
     });
 
-    effect(() => {
-      const transaction = this.transaction();
-      if (!transaction) return;
-      if (!transaction?.transactionType?.templateMap) {
-        throw new Error('Fecfile: Template map not found for transaction component');
-      }
+    effectOnceIf(
+      () => this.transaction(),
+      () => {
+        const transaction = this.transaction();
+        if (!transaction?.transactionType?.templateMap) {
+          throw new Error('Fecfile: Template map not found for transaction component');
+        }
 
-      this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form(), transaction.transactionType);
+        this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form(), transaction.transactionType);
 
-      TransactionFormUtils.onInit(this, this.form(), transaction, this.contactIdMap, this.contactService);
+        TransactionFormUtils.onInit(
+          this,
+          this.form(),
+          transaction,
+          this.contactIdMap,
+          this.contactService,
+          this.injector,
+        );
 
-      // Determine if amount should always be negative and then force it to be so if needed
-      if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
-        this.form()
-          .get(this.templateMap()!.amount)
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe((amount) => {
-            if (+amount > 0) {
-              this.form().patchValue({ [this.templateMap()!.amount]: -1 * amount });
-            }
-          });
-      }
+        // Determine if amount should always be negative and then force it to be so if needed
+        if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
+          this.form()
+            .get(this.templateMap()!.amount)
+            ?.valueChanges.pipe(takeUntil(this.destroy$))
+            .subscribe((amount) => {
+              if (+amount > 0) {
+                this.form().patchValue({ [this.templateMap()!.amount]: -1 * amount });
+              }
+            });
+        }
 
-      // If this single-entry transaction has inherited fields from its parent, load values
-      // from parent on create and set field to read-only. For edit, just make
-      // the fields read-only
-      if (transaction.transactionType?.getInheritedFields(transaction)) {
-        this.initInheritedFieldsFromParent();
-      }
+        // If this single-entry transaction has inherited fields from its parent, load values
+        // from parent on create and set field to read-only. For edit, just make
+        // the fields read-only
+        if (transaction.transactionType?.getInheritedFields(transaction)) {
+          this.initInheritedFieldsFromParent();
+        }
 
-      this.store.dispatch(navigationEventClearAction());
-    });
+        this.store.dispatch(navigationEventClearAction());
+      },
+    );
   }
 
   writeToApi(payload: Transaction): Promise<Transaction> {

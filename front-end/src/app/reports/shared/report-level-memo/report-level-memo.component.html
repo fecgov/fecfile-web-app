@@ -27,7 +27,7 @@
           formControlName="{{ text4kFormProperty }}"
         ></textarea>
         <app-error-messages
-          [control]="form().get(text4kFormProperty)!"
+          [control]="getControl(text4kFormProperty)"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Contact } from 'app/shared/models';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { SelectItem } from 'primeng/api';
 import { Select } from 'primeng/select';
@@ -52,7 +52,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
 
   initPrefix(field: string, prefix: string) {
     // Watch changes to form text field to make sure prefix is maintained
-    (this.form().get(field) as SubscriptionFormControl)?.addSubscription((value: string) => {
+    (this.form().get(field) as SignalFormControl)?.valueChanges.subscribe((value: string) => {
       if (value.length < prefix.length || value.indexOf(': ') < 0) {
         // Ensure prefix is the first part of the string in the textarea if no user text added
         this.form().get(field)?.setValue(prefix);
@@ -62,7 +62,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
           .get(field)
           ?.setValue(prefix + value.slice(value.indexOf(': ') + 2));
       }
-    }, this.destroy$);
+    });
 
     // Initialize value of form text field to prefix if empty
     if (!this.form().get(field)?.value) {

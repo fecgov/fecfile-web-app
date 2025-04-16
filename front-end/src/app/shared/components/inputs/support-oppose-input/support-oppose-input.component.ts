@@ -1,6 +1,6 @@
 import { Component, computed } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RadioButton } from 'primeng/radiobutton';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -11,5 +11,5 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   imports: [ReactiveFormsModule, RadioButton, ErrorMessagesComponent],
 })
 export class SupportOpposeInputComponent extends BaseInputComponent {
-  readonly control = computed(() => this.form().get('support_oppose_code') as SubscriptionFormControl);
+  readonly control = computed(() => this.form().get('support_oppose_code') as SignalFormControl);
 }

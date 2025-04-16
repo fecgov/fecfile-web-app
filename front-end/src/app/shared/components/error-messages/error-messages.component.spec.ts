@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/UNIT_TEST';
 
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { ErrorMessagesComponent } from './error-messages.component';
 
 describe('ErrorMessagesComponent', () => {

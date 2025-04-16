@@ -1,4 +1,4 @@
-import { Component, inject, input, model, OnInit, output, viewChild } from '@angular/core';
+import { Component, inject, Injector, input, model, OnInit, output, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -10,7 +10,7 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 
@@ -20,6 +20,7 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
   imports: [ContactLookupComponent, ContactDialogComponent, ErrorMessagesComponent],
 })
 export class TransactionContactLookupComponent implements OnInit {
+  private readonly injector = inject(Injector);
   private readonly formBuilder = inject(FormBuilder);
   readonly contactProperty = input('contact_1');
   readonly transaction = input<Transaction>();
@@ -37,7 +38,7 @@ export class TransactionContactLookupComponent implements OnInit {
   detailVisible = false;
   dialogContactTypeOptions: PrimeOptions = [];
   createContactForm: FormGroup = this.formBuilder.group(
-    SchemaUtils.getFormGroupFields([
+    SchemaUtils.getFormGroupFields(this.injector, [
       ...new Set([
         ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
         ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
@@ -46,7 +47,7 @@ export class TransactionContactLookupComponent implements OnInit {
       ]),
     ]),
   );
-  errorMessageFormControl?: SubscriptionFormControl;
+  errorMessageFormControl?: SignalFormControl;
   currentContactLabel = 'Individual';
   currentType = ContactTypes.INDIVIDUAL;
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
@@ -84,7 +85,7 @@ export class TransactionContactLookupComponent implements OnInit {
     // new form control to the parent form so that a validation check occurs
     // when the parent form is submitted and blocks submit if validation fails.
     if (this.contactProperty() === 'contact_2') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
+      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
         if (!this.transaction()?.contact_2 && this.transaction()?.transactionType?.contact2IsRequired(this.form())) {
           return { required: true };
         }
@@ -93,7 +94,7 @@ export class TransactionContactLookupComponent implements OnInit {
       this.form().addControl('contact_2_lookup', this.errorMessageFormControl);
     }
     if (this.contactProperty() === 'contact_3') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
+      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
         if (!this.transaction()?.contact_3 && this.transaction()?.transactionType?.contact3IsRequired) {
           return { required: true };
         }
@@ -102,7 +103,7 @@ export class TransactionContactLookupComponent implements OnInit {
       this.form().addControl('contact_3_lookup', this.errorMessageFormControl);
     }
     if (this.contactProperty() === 'contact_4') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
+      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
         if (!this.transaction()?.contact_4 && this.transaction()?.transactionType?.contact4IsRequired(this.form())) {
           return { required: true };
         }
@@ -111,7 +112,7 @@ export class TransactionContactLookupComponent implements OnInit {
       this.form().addControl('contact_4_lookup', this.errorMessageFormControl);
     }
     if (this.contactProperty() === 'contact_5') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
+      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
         if (!this.transaction()?.contact_5 && this.transaction()?.transactionType?.contact5IsRequired(this.form())) {
           return { required: true };
         }

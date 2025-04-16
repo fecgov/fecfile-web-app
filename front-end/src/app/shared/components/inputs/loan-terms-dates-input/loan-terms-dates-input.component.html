@@ -20,10 +20,7 @@
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
-        <app-error-messages
-          [control]="form().get(templateMap()['due_date_setting'])!"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="dueDateSettingField()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-6">
@@ -32,10 +29,7 @@
           <div class="field">
             <label for="due_date">DATE DUE (USER DEFINED)</label>
             <input type="text" pInputText inputId="due_date" [formControlName]="templateMap()['due_date']" />
-            <app-error-messages
-              [control]="form().get(templateMap()['due_date'])!"
-              [formSubmitted]="formSubmitted()"
-            ></app-error-messages>
+            <app-error-messages [control]="dueDateField()" [formSubmitted]="formSubmitted()"></app-error-messages>
           </div>
         }
         @case (termFieldSettings.SPECIFIC_DATE) {
@@ -61,10 +55,7 @@
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
-        <app-error-messages
-          [control]="form().get(templateMap()['interest_rate_setting'])!"
-          [formSubmitted]="formSubmitted()"
-        >
+        <app-error-messages [control]="interestRateSettingField()" [formSubmitted]="formSubmitted()">
         </app-error-messages>
       </div>
     </div>
@@ -74,10 +65,7 @@
           <div class="field">
             <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
             <input type="text" pInputText id="interest_rate" [formControlName]="templateMap()['interest_rate']" />
-            <app-error-messages
-              [control]="form().get(templateMap()['interest_rate'])!"
-              [formSubmitted]="formSubmitted()"
-            ></app-error-messages>
+            <app-error-messages [control]="interestRateField()" [formSubmitted]="formSubmitted()"></app-error-messages>
           </div>
         }
         @case (termFieldSettings.EXACT_PERCENTAGE) {
@@ -91,7 +79,7 @@
               [formControlName]="templateMap()['interest_rate']"
             />
             <app-error-messages
-              [control]="form().get(templateMap()['interest_rate'])!"
+              [control]="interestRateField()"
               [formSubmitted]="formSubmitted()"
               patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
             ></app-error-messages>

@@ -5,7 +5,7 @@ import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';

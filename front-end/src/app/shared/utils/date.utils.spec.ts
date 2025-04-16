@@ -1,7 +1,7 @@
 import { DateUtils } from './date.utils';
 
 import { buildAfterDateValidator } from './validators.utils';
-import { SubscriptionFormControl } from './subscription-form-control';
+import { SubscriptionFormControl } from './signal-form-control';
 import { FormGroup } from '@angular/forms';
 
 describe('DateUtils', () => {

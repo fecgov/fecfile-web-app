@@ -1,7 +1,8 @@
 import { Component, computed, inject, input, LOCALE_ID } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
 import { NgxControlError } from 'ngxtension/control-error';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 @Component({
   selector: 'app-error-messages',
@@ -11,7 +12,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 export class ErrorMessagesComponent {
   private readonly localeId = inject(LOCALE_ID);
   // Pass the form and fieldName OR pass the formControl itself.
-  readonly control = input.required<AbstractControl>();
+  readonly control = input<SignalFormControl>();
 
   // We need the submitted status of the parent form to control the hide/show
   // of the error message
@@ -25,10 +26,11 @@ export class ErrorMessagesComponent {
 
   readonly emailErrorMessageInput = input<string>('', { alias: 'emailErrorMessage' });
   readonly emailErrorMessage = computed(() => {
+    this.control()?.valueChangeSignal();
     const customMessage = this.emailErrorMessageInput();
     if (customMessage) return customMessage;
 
-    const emailErrors = this.control().errors?.['email'];
+    const emailErrors = this.control()?.errors?.['email'];
     switch (emailErrors) {
       case 'not-unique':
         return 'Confirmation emails cannot be identical';
@@ -45,14 +47,14 @@ export class ErrorMessagesComponent {
   readonly minLengthErrorMessage = computed(
     () =>
       this.minLengthErrorMessageInput() ||
-      `This field must contain at least ${this.control().errors?.['minlength']?.requiredLength} alphanumeric characters.`,
+      `This field must contain at least ${this.control()?.errors?.['minlength']?.requiredLength} alphanumeric characters.`,
   );
 
   readonly maxLengthErrorMessageInput = input<string>('', { alias: 'maxLengthErrorMessage' });
   readonly maxLengthErrorMessage = computed(
     () =>
       this.maxLengthErrorMessageInput() ||
-      `This field cannot contain more than ${this.control().errors?.['maxlength']?.requiredLength} alphanumeric characters.`,
+      `This field cannot contain more than ${this.control()?.errors?.['maxlength']?.requiredLength} alphanumeric characters.`,
   );
 
   readonly minErrorMessageInput = input<string>('', { alias: 'minErrorMessage' });
@@ -60,7 +62,7 @@ export class ErrorMessagesComponent {
     () =>
       this.minErrorMessageInput() ||
       `This field must be greater than or equal to ${formatCurrency(
-        this.control().errors?.['min']?.min,
+        this.control()?.errors?.['min']?.min,
         this.localeId,
         '$',
       )}.`,
@@ -72,7 +74,7 @@ export class ErrorMessagesComponent {
       return this.exclusiveMinErrorMessageInput();
     }
 
-    const exclusiveMin = this.control().errors?.['exclusiveMin']?.exclusiveMin;
+    const exclusiveMin = this.control()?.errors?.['exclusiveMin']?.exclusiveMin;
     if (exclusiveMin === 0) {
       return 'Amount must be negative (example: -$20.00)';
     }
@@ -84,7 +86,7 @@ export class ErrorMessagesComponent {
   readonly maxErrorMessage = computed(() => {
     if (this.maxErrorMessageInput()) return this.maxErrorMessageInput();
 
-    const error = this.control().errors?.['max'];
+    const error = this.control()?.errors?.['max'];
     const msgPrefix = error?.msgPrefix ?? 'This field must be less than or equal to';
     return `${msgPrefix} ${formatCurrency(error?.max, this.localeId, '$')}.`;
   });
@@ -93,7 +95,7 @@ export class ErrorMessagesComponent {
   readonly exclusiveMaxErrorMessage = computed(() => {
     if (this.exclusiveMaxErrorMessageInput()) return this.exclusiveMaxErrorMessageInput();
 
-    const exclusiveMax = this.control().errors?.['exclusiveMax']?.exclusiveMax;
+    const exclusiveMax = this.control()?.errors?.['exclusiveMax']?.exclusiveMax;
     if (exclusiveMax === 0) {
       return 'Amount must be negative (example: -$20.00)';
     }
@@ -103,7 +105,7 @@ export class ErrorMessagesComponent {
 
   readonly invalidDateErrorMessageInput = input<string>('', { alias: 'invalidDateErrorMessage' });
   readonly invalidDateErrorMessage = computed(
-    () => this.invalidDateErrorMessageInput() || this.control().errors?.['invaliddate']?.msg,
+    () => this.invalidDateErrorMessageInput() || this.control()?.errors?.['invaliddate']?.msg,
   );
 
   readonly noDateProvidedErrorMessageInput = input<string>('', { alias: 'noDateProvidedErrorMessage' });

@@ -11,7 +11,7 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';

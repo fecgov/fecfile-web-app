@@ -1,12 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent, FormComponent } from 'app/shared/components/app-destroyer.component';
 import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 import { Select } from 'primeng/select';
@@ -18,22 +18,24 @@ import { InputNumberModule } from 'primeng/inputnumber';
   templateUrl: './cash-on-hand-override.component.html',
   imports: [ReactiveFormsModule, Select, InputNumberModule, ButtonDirective],
 })
-export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
+export class CashOnHandOverrideComponent extends FormComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
   public readonly cashOnHandService = inject(CashOnHandService);
   public readonly form3XService = inject(Form3XService);
-  readonly yearFormControl = new SubscriptionFormControl<string | null>(null, Validators.required);
-  readonly currentAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
-  readonly newAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
+  readonly yearFormControl = new SignalFormControl<string | null>(this.injector, null, Validators.required);
+  readonly currentAmountFormControl = new SignalFormControl<number | null>(this.injector, null, Validators.required);
+  readonly newAmountFormControl = new SignalFormControl<number | null>(this.injector, null, Validators.required);
   yearOptions: string[] = [];
   numberOfYearOptions = 25;
 
-  form: FormGroup = new FormGroup({
-    year: this.yearFormControl,
-    currentAmount: this.currentAmountFormControl,
-    newAmount: this.newAmountFormControl,
-  });
+  form = signal(
+    new FormGroup({
+      year: this.yearFormControl,
+      currentAmount: this.currentAmountFormControl,
+      newAmount: this.newAmountFormControl,
+    }),
+  );
 
   ngOnInit(): void {
     this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((selectedYear) => {
@@ -63,7 +65,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   };
 
   updateLine6a(): void {
-    if (this.form.valid) {
+    if (this.form().valid) {
       if (this.yearFormControl.value !== null && this.newAmountFormControl.value !== null) {
         const year = parseInt(String(this.yearFormControl.value));
         this.cashOnHandService

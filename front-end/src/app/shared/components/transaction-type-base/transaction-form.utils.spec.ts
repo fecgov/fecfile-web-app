@@ -4,7 +4,7 @@ import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/sc
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();

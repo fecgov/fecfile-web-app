@@ -12,7 +12,7 @@
           inputStyleClass="readonly"
         ></p-inputnumber>
         <app-error-messages
-          [control]="form().get(templateMap()['balance'])!"
+          [control]="getControl(templateMap()['balance'])"
           [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The beginning balance can be 12 digits max"
@@ -29,7 +29,7 @@
           [formControlName]="templateMap()['amount']"
         ></p-inputnumber>
         <app-error-messages
-          [control]="form().get(templateMap()['amount'])!"
+          [control]="getControl(templateMap()['amount'])"
           [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The incurred amount can be 12 digits max"
@@ -50,7 +50,7 @@
           inputStyleClass="readonly"
         ></p-inputnumber>
         <app-error-messages
-          [control]="form().get('payment_amount')!"
+          [control]="getControl('payment_amount')"
           [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The payment amount can be 12 digits max"
@@ -69,7 +69,7 @@
           inputStyleClass="readonly"
         ></p-inputnumber>
         <app-error-messages
-          [control]="form().get('balance_at_close')!"
+          [control]="getControl('balance_at_close')!"
           [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The balance at close can be 12 digits max"

@@ -128,7 +128,7 @@ export class ContactDialogComponent extends FormComponent {
 
   form = signal<FormGroup>(
     this.fb.group(
-      SchemaUtils.getFormGroupFields([
+      SchemaUtils.getFormGroupFields(this.injector, [
         ...new Set([
           ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
           ...SchemaUtils.getSchemaProperties(contactCandidateSchema),

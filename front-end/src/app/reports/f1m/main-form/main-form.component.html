@@ -29,7 +29,7 @@
             formControlName="committee_name"
           />
           <app-error-messages
-            [control]="form().get('committee_name')!"
+            [control]="getControl('committee_name')"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -47,7 +47,7 @@
             formControlName="filer_committee_id_number"
           />
           <app-error-messages
-            [control]="form().get('committee_id')!"
+            [control]="getControl('committee_id')"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -69,8 +69,8 @@
           data-cy="state-party-radio"
           formControlName="committee_type"
           [class]="
-            committeeTypeControl?.invalid &&
-            (formSubmitted || committeeTypeControl?.dirty || committeeTypeControl?.touched)
+            committeeTypeControl()?.invalid &&
+            (formSubmitted || committeeTypeControl()?.dirty || committeeTypeControl()?.touched)
               ? 'ng-invalid ng-dirty'
               : ''
           "
@@ -86,8 +86,8 @@
           value="N"
           formControlName="committee_type"
           [class]="
-            committeeTypeControl?.invalid &&
-            (formSubmitted || committeeTypeControl?.dirty || committeeTypeControl?.touched)
+            committeeTypeControl()?.invalid &&
+            (formSubmitted || committeeTypeControl()?.dirty || committeeTypeControl()?.touched)
               ? 'ng-invalid ng-dirty'
               : ''
           "
@@ -98,7 +98,7 @@
     <div class="grid">
       <div class="col-12">
         <app-error-messages
-          [control]="form().get('committee_type')!"
+          [control]="committeeTypeControl()"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
         ></app-error-messages>
@@ -139,7 +139,7 @@
           data-cy="affiliation-radio"
           formControlName="statusBy"
           [class]="
-            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+            statusByControl()?.invalid && (formSubmitted || statusByControl()?.dirty || statusByControl()?.touched)
               ? 'ng-invalid ng-dirty'
               : ''
           "
@@ -156,7 +156,7 @@
           data-cy="qualification-radio"
           formControlName="statusBy"
           [class]="
-            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+            statusByControl()?.invalid && (formSubmitted || statusByControl()?.dirty || statusByControl()?.touched)
               ? 'ng-invalid ng-dirty'
               : ''
           "
@@ -167,13 +167,13 @@
     <div class="grid">
       <div class="col-12">
         <app-error-messages
-          [control]="form().get('statusBy')!"
+          [control]="statusByControl()"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
         ></app-error-messages>
       </div>
     </div>
-    @if (statusByControl?.value === 'affiliation') {
+    @if (statusByControl()?.value === 'affiliation') {
       <div class="grid">
         <div class="col-12">
           <h2>Affiliation</h2>
@@ -195,7 +195,7 @@
             >
             </app-transaction-contact-lookup>
             <app-error-messages
-              [control]="form().get(affiliatedContact.contactLookupKey)!"
+              [control]="getControl(affiliatedContact.contactLookupKey)"
               [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>
@@ -213,7 +213,7 @@
                 formControlName="affiliated_committee_name"
               />
               <app-error-messages
-                [control]="form().get('affiliated_committee_name')!"
+                [control]="getControl('affiliated_committee_name')"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -228,7 +228,7 @@
                 formControlName="affiliated_committee_fec_id"
               />
               <app-error-messages
-                [control]="form().get('affiliated_committee_fec_id')!"
+                [control]="getControl('affiliated_committee_fec_id')"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -251,7 +251,7 @@
         </div>
       }
     }
-    @if (statusByControl?.value === 'qualification') {
+    @if (statusByControl()?.value === 'qualification') {
       <div class="grid">
         <div class="col-12">
           <h2>Qualification</h2>
@@ -309,7 +309,7 @@
                 >
                 </app-transaction-contact-lookup>
                 <app-error-messages
-                  [control]="form().get(candidateContact.contactLookupKey)!"
+                  [control]="getControl(candidateContact.contactLookupKey)"
                   [formSubmitted]="formSubmitted"
                   requiredErrorMessage="Candidate information is required"
                 ></app-error-messages>
@@ -337,7 +337,7 @@
                     [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
                   />
                   <app-error-messages
-                    [control]="form().get(templateMapConfigs[candidateContact.contactKey]['candidate_fec_id'])!"
+                    [control]="getControl(templateMapConfigs[candidateContact.contactKey]['candidate_fec_id'])"
                     [formSubmitted]="formSubmitted"
                     uniqueFecIdMessage="Candidate already entered in form()."
                   ></app-error-messages>

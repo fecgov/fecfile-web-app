@@ -5,7 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AddressInputComponent } from './address-input.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('AddressInputComponent', () => {
   let component: AddressInputComponent;

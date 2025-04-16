@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form3Service } from 'app/shared/services/form-3.service';
@@ -19,7 +19,7 @@ import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { SelectButton } from 'primeng/selectbutton';
 import { Select } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
@@ -62,7 +62,7 @@ export class CreateF3Step1Component extends FormComponent {
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   readonly form = signal<FormGroup>(
-    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3Schema), {
+    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.formProperties, f3Schema), {
       updateOn: 'blur',
     }),
   );
@@ -85,14 +85,20 @@ export class CreateF3Step1Component extends FormComponent {
       () => this.getUsedReportCodes(this.existingCoverage()),
       () => {
         this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
-        (this.form().get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+        const reportTypeControl = this.form().get('report_type_category') as SignalFormControl;
+        effect(() => {
+          reportTypeControl.valueChangeSignal();
           this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
-        }, this.destroy$);
+        });
+
         this.form().addValidators(buildNonOverlappingCoverageValidator(this.existingCoverage()!));
       },
     );
 
-    this.form().addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
+    this.form().addControl(
+      'report_type_category',
+      new SignalFormControl(this.injector, this.getReportTypeCategories()[0]),
+    );
     this.form().patchValue({ form_type: 'F3N' });
     this.form().patchValue({ report_type_category: this.getReportTypeCategories()[0] });
     this.form().controls['coverage_from_date'].addValidators([Validators.required]);
@@ -100,8 +106,10 @@ export class CreateF3Step1Component extends FormComponent {
       Validators.required,
       buildAfterDateValidator(this.form(), 'coverage_from_date'),
     ]);
-    (this.form().controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form().controls['coverage_through_date'].updateValueAndValidity();
+
+    effect(() => {
+      this.getControl('coverage_from_date')?.valueChangeSignal();
+      this.getControl('coverage_through_date')?.updateValueAndValidity();
     });
 
     // Prepopulate coverage dates if the report code has rules to do so

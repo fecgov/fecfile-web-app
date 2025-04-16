@@ -1,11 +1,10 @@
 import { Component, computed, inject } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
@@ -32,7 +31,7 @@ export class SecurityNoticeComponent {
 
   form = new FormGroup(
     {
-      'security-consent-annual': new SubscriptionFormControl(false),
+      'security-consent-annual': new FormControl(false),
     },
     { updateOn: 'blur' },
   );

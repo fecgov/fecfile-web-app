@@ -7,7 +7,7 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { InputText } from 'primeng/inputtext';
@@ -23,7 +23,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   private readonly reportService = inject(ReportService);
   private readonly datePipe = inject(FecDatePipe);
   committeeF3xReports: Promise<Report[]> = this.reportService.getAllReports();
-  linkedF3xControl = new SubscriptionFormControl();
+  linkedF3xControl = new SignalFormControl(this.injector);
 
   readonly tooltipText =
     'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
@@ -33,11 +33,11 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
 
   ngOnInit(): void {
     this.form().addControl('linkedF3x', this.linkedF3xControl);
-    this.form().addControl('linkedF3xId', new SubscriptionFormControl());
+    this.form().addControl('linkedF3xId', new SignalFormControl(this.injector));
     const dateControl =
-      (this.form().get(this.templateMap()['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
+      (this.form().get(this.templateMap()['date']) as SignalFormControl) ?? new SignalFormControl(this.injector);
     const date2Control =
-      (this.form().get(this.templateMap()['date2']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
+      (this.form().get(this.templateMap()['date2']) as SignalFormControl) ?? new SignalFormControl(this.injector);
     this.linkedF3xControl.addValidators(
       buildCorrespondingForm3XValidator(this.form(), this.templateMap()['date'], this.templateMap()['date2']),
     );

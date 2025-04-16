@@ -40,7 +40,7 @@ export class CommitteeInfoComponent extends FormComponent {
     'custodian_name_full',
   ];
   readonly form = signal<FormGroup>(
-    this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' }),
+    this.fb.group(SchemaUtils.getFormGroupFields(this.injector, this.formProperties), { updateOn: 'blur' }),
   );
 
   constructor() {

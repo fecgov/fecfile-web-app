@@ -20,7 +20,7 @@
         [formControlName]="controlName()"
         [ariaLabel]="ariaLabelNo()"
         [class]="
-          control()?.invalid && (formSubmitted() || control()?.dirty || control()?.touched) ? 'ng-invalid ng-dirty' : ''
+          control().invalid && (formSubmitted() || control().dirty || control().touched) ? 'ng-invalid ng-dirty' : ''
         "
       ></p-radioButton>
       <label for="N" class="ml-2">NO</label>
@@ -33,7 +33,7 @@
         [formControlName]="controlName()"
         [ariaLabel]="ariaLabelYes()"
         [class]="
-          control()?.invalid && (formSubmitted || control()?.dirty || control()?.touched) ? 'ng-invalid ng-dirty' : ''
+          control().invalid && (formSubmitted || control().dirty || control().touched) ? 'ng-invalid ng-dirty' : ''
         "
       ></p-radioButton>
       <label for="Y" class="ml-2">YES</label>
@@ -42,7 +42,7 @@
   <div class="grid">
     <div class="col-12">
       <app-error-messages
-        [control]="form().get(controlName())!"
+        [control]="control()"
         [formSubmitted]="formSubmitted()"
         [patternErrorMessage]="errorMessage()"
       ></app-error-messages>

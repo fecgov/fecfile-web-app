@@ -23,8 +23,8 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   abstract getReportPayload(): Report;
   abstract webprintURL: string;
 
-  form = signal<FormGroup>(new FormGroup({}, { updateOn: 'blur' }));
-  reportId = this.activatedRoute.snapshot.params['reportId'];
+  readonly form = signal<FormGroup>(new FormGroup({}, { updateOn: 'blur' }));
+  readonly reportId = this.activatedRoute.snapshot.params['reportId'];
 
   constructor() {
     super();
@@ -38,11 +38,9 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   }
 
   ngOnInit(): void {
-    this.initForm();
-  }
-
-  initForm() {
-    this.form.set(this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' }));
+    this.form.set(
+      this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.formProperties), { updateOn: 'blur' }),
+    );
     SchemaUtils.addJsonSchemaValidators(this.form(), this.schema, false);
   }
 

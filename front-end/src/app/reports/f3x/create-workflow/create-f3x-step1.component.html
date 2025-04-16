@@ -62,7 +62,7 @@
           formControlName="report_type_category"
         ></p-selectButton>
         <app-error-messages
-          [control]="form().get('report_type_category')!"
+          [control]="getControl('report_type_category')"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -117,7 +117,7 @@
               appendTo="body"
             ></p-select>
             <app-error-messages
-              [control]="form().get('state_of_election')!"
+              [control]="getControl('state_of_election')"
               [formSubmitted]="formSubmitted"
             ></app-error-messages>
           </div>

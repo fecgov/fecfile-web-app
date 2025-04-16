@@ -6,7 +6,7 @@ import { combineLatest, of } from 'rxjs';
 import { ContactTypes } from '../../models/contact.model';
 
 export class ReattributionFromUtils {
-  private static readOnlyFields = [
+  static readonly readOnlyFields = [
     'organization_name',
     'last_name',
     'first_name',
@@ -65,36 +65,5 @@ export class ReattributionFromUtils {
     );
 
     return transaction;
-  }
-
-  public static overlayForm(fromForm: FormGroup, transaction: SchATransaction, toForm: FormGroup): FormGroup {
-    const purposeDescriptionControl = fromForm.get(transaction.transactionType.templateMap.purpose_description);
-    // Update purpose description for rules that are independent of the transaction date being in the report.
-    purposeDescriptionControl?.clearAsyncValidators();
-    fromForm.get('memo_code')?.clearAsyncValidators();
-
-    // Watch for changes to the "TO" transaction entity name and then update the "FROM" transaction expenditure purpose description.
-    combineLatest([
-      toForm.get(transaction.transactionType.templateMap.organization_name)?.valueChanges ?? of(null),
-      toForm.get(transaction.transactionType.templateMap.first_name)?.valueChanges ?? of(null),
-      toForm.get(transaction.transactionType.templateMap.last_name)?.valueChanges ?? of(null),
-    ]).subscribe(([orgName, firstName, lastName]) => {
-      if (toForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-        purposeDescriptionControl?.setValue(`Reattribution to ${firstName} ${lastName}`);
-      } else {
-        purposeDescriptionControl?.setValue(`Reattribution to ${orgName}`);
-      }
-    });
-
-    // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
-    toForm.get(transaction.transactionType.templateMap.amount)?.valueChanges.subscribe((amount) => {
-      fromForm.get(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
-    });
-
-    ReattributionFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
-    );
-
-    return fromForm;
   }
 }

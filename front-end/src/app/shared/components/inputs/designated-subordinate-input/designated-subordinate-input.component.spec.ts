@@ -3,7 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { testContact, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { DesignatedSubordinateInputComponent } from './designated-subordinate-input.component';
 
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';

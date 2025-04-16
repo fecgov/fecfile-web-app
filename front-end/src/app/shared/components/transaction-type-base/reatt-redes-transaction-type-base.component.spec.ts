@@ -20,7 +20,7 @@ import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-fr
 import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { ReattributedUtils } from '../../utils/reatt-redes/reattributed.utils';
 import { provideRouter } from '@angular/router';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';

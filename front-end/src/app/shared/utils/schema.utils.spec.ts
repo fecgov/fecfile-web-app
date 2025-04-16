@@ -2,7 +2,7 @@ import { AsyncValidatorFn, FormBuilder, ValidationErrors } from '@angular/forms'
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { SchemaUtils } from './schema.utils';
-import { SubscriptionFormControl } from './subscription-form-control';
+import { SubscriptionFormControl } from './signal-form-control';
 
 describe('ValidateUtils', () => {
   it('#formValidator should validate properties correctly', async () => {

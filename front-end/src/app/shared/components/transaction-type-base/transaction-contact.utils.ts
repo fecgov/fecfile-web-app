@@ -4,6 +4,7 @@ import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { Signal, WritableSignal } from '@angular/core';
 
 export class TransactionContactUtils {
   /**
@@ -134,7 +135,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -166,7 +167,7 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_1 = contact;
     }
-    contactId$.next(contact.id ?? '');
+    contactId.set(contact.id ?? '');
   }
 
   /**
@@ -181,7 +182,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -198,7 +199,7 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_2 = contact;
     }
-    contactId$.next(contact.id ?? '');
+    contactId.set(contact.id ?? '');
   }
 
   /**
@@ -213,7 +214,7 @@ export class TransactionContactUtils {
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -227,14 +228,14 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_2 = contact;
     }
-    contactId$.next(contact.id ?? '');
+    contactId.set(contact.id ?? '');
   }
 
   static updateFormWithTertiaryContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -244,14 +245,14 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_3 = contact;
     }
-    contactId$.next(contact.id ?? '');
+    contactId.set(contact.id ?? '');
   }
 
   static updateFormWithQuaternaryContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -262,13 +263,13 @@ export class TransactionContactUtils {
       transaction.contact_4 = contact;
       transaction.contact_4_id = contact.id;
     }
-    contactId$.next(contact.id ?? '');
+    contactId.set(contact.id ?? '');
   }
 
   static clearFormQuaternaryContact(
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const templateMap = transaction?.transactionType?.templateMap;
     if (!templateMap) return;
@@ -279,14 +280,14 @@ export class TransactionContactUtils {
       transaction.contact_4 = null as unknown as undefined;
       transaction.contact_4_id = null as unknown as undefined;
     }
-    contactId$.next('');
+    contactId.set('');
   }
 
   static updateFormWithQuinaryContact(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
     transaction: Transaction | undefined,
-    contactId$: Subject<string>,
+    contactId: WritableSignal<string>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -302,10 +303,14 @@ export class TransactionContactUtils {
       transaction.contact_5 = contact;
       transaction.contact_5_id = contact.id;
     }
-    contactId$.next(contact.id ?? '');
+    contactId.set(contact.id ?? '');
   }
 
-  static clearFormQuinaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
+  static clearFormQuinaryContact(
+    form: FormGroup,
+    transaction: Transaction | undefined,
+    contactId: WritableSignal<string>,
+  ) {
     const templateMap = transaction?.transactionType?.templateMap;
     if (!templateMap) return;
     form.get(templateMap.quinary_committee_fec_id)?.setValue(null);
@@ -320,8 +325,8 @@ export class TransactionContactUtils {
       transaction.contact_5 = null as unknown as undefined;
       transaction.contact_5_id = null as unknown as undefined;
     }
-    contactId$.next('');
+    contactId.set('');
   }
 }
 
-export type ContactIdMapType = { [contact: string]: Subject<string> };
+export type ContactIdMapType = { [contact: string]: WritableSignal<string> };

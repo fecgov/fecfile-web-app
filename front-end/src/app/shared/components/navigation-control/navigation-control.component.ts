@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, Injector, input } from '@angular/core';
 import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   ControlType,
@@ -20,7 +20,7 @@ import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transacti
 import { Store } from '@ngrx/store';
 import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
@@ -34,6 +34,7 @@ import { PopoverModule } from 'primeng/popover';
   imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule],
 })
 export class NavigationControlComponent {
+  private readonly injector = inject(Injector);
   private readonly store = inject(Store);
   readonly navigationControl = input.required<NavigationControl>();
   readonly transaction = input<Transaction>();
@@ -47,7 +48,7 @@ export class NavigationControlComponent {
       this.transaction()?.parent_transaction?.transactionType,
     );
   });
-  dropdownControl = new SubscriptionFormControl('');
+  dropdownControl = new SignalFormControl(this.injector, '');
 
   isVisible = true;
 

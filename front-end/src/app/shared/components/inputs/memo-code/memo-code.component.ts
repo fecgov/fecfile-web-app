@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Tooltip } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -53,11 +53,11 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   readonly coverageFrom = computed(() => this.report().coverage_from_date);
   readonly coverageThrough = computed(() => this.report().coverage_through_date);
 
-  readonly memoControl = computed(() => this.form().get(this.templateMap().memo_code) as SubscriptionFormControl);
+  readonly memoControl = computed(() => this.form().get(this.templateMap().memo_code) as SignalFormControl);
   outOfDateDialogVisible = false;
   memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SubscriptionFormControl);
+  readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SignalFormControl);
 
   ngAfterViewInit() {
     if (this.dateControl()?.enabled) {

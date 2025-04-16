@@ -12,7 +12,7 @@
           [class.readonly]="readonly"
         />
         <app-error-messages
-          [control]="form().get(streetOneFieldName())!"
+          [control]="getControl(streetOneFieldName())"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -29,7 +29,7 @@
           [class.readonly]="readonly"
         />
         <app-error-messages
-          [control]="form().get(streetTwoFieldName())!"
+          [control]="getControl(streetTwoFieldName())"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -48,7 +48,7 @@
           [class.readonly]="readonly()"
         />
         <app-error-messages
-          [control]="form().get(cityFieldName())!"
+          [control]="getControl(cityFieldName())"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -67,7 +67,7 @@
           fluid
         ></p-select>
         <app-error-messages
-          [control]="form().get(stateFieldName())!"
+          [control]="getControl(stateFieldName())"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -84,7 +84,7 @@
           [class.readonly]="readonly()"
         />
         <app-error-messages
-          [control]="form().get(zipFieldName())!"
+          [control]="getControl(zipFieldName())"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

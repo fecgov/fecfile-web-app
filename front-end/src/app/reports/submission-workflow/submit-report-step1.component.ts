@@ -56,7 +56,7 @@ export class SubmitReportStep1Component extends FormComponent {
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   readonly countryOptions: PrimeOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
   readonly form = signal<FormGroup>(
-    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.formProperties), {
       updateOn: 'blur',
     }),
   );

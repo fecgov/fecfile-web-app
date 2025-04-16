@@ -2,7 +2,8 @@ import { FormGroup } from '@angular/forms';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector, effect, runInInjectionContext } from '@angular/core';
 
 function updatePurposeDescription(form: FormGroup, transaction: Transaction) {
   if (transaction?.transactionType?.generatePurposeDescription) {
@@ -18,71 +19,80 @@ export class TransactionChildFormUtils {
     component: DoubleTransactionTypeBaseComponent | TripleTransactionTypeBaseComponent,
     childForm: FormGroup,
     childTransaction: Transaction,
+    injector: Injector, // 👈 you'll need to pass this in now
   ) {
-    // Determine if amount should always be negative and then force it to be so if needed
-    if (
-      childTransaction.transactionType?.negativeAmountValueOnly &&
-      childTransaction.transactionType.templateMap?.amount
-    ) {
-      (childForm.get(childTransaction.transactionType.templateMap.amount) as SubscriptionFormControl)?.addSubscription(
-        (amount) => {
-          if (+amount > 0 && childTransaction.transactionType) {
-            childForm.get(childTransaction.transactionType.templateMap.amount)?.setValue(-1 * amount);
-          }
-        },
-        component.destroy$,
-      );
+    const transactionType = childTransaction.transactionType;
+    const templateMap = transactionType?.templateMap;
+
+    if (!transactionType || !templateMap) {
+      throw new Error('Fecfile: Missing transactionType or templateMap');
     }
 
-    // Parent contribution purpose description updates with configured child fields update.
-    component.transaction()?.transactionType?.childTriggerFields?.forEach((triggerField) => {
-      if (childTransaction.transactionType) {
-        const control = childForm.get(childTransaction.transactionType.templateMap[triggerField]);
-        (control as SubscriptionFormControl)?.addSubscription((value) => {
-          /** Before updating the parent description, manually update the child
-           * fields because they will not be updated by the time this hook is called
-           **/
-          const key = childTransaction.transactionType?.templateMap[triggerField] as keyof ScheduleTransaction;
-          ((childTransaction as ScheduleTransaction)[key] as string) = value;
-          (childTransaction as ScheduleTransaction).entity_type = childForm.get('entity_type')?.value;
-          if (component.transaction()) {
-            updatePurposeDescription(component.form(), component.transaction()!);
-          } else {
-            throw new Error('Fecfile: Parent transaction not found for component');
+    runInInjectionContext(injector, () => {
+      // --- 1. Enforce negative amount logic ---
+      if (transactionType.negativeAmountValueOnly && templateMap.amount) {
+        const amountControl = childForm.get(templateMap.amount) as SignalFormControl<number>;
+        effect(() => {
+          const amount = amountControl.valueChangeSignal();
+          if (+amount > 0) {
+            amountControl.setValue(-1 * amount);
           }
-        }, component.destroy$);
+        });
       }
-    });
 
-    // Child contribution purpose description updates with configured parent fields update.
-    childTransaction.transactionType?.parentTriggerFields?.forEach((triggerField) => {
-      const key = component.templateMap()![triggerField] as keyof ScheduleTransaction;
-      const control = component.form().get(key) as SubscriptionFormControl;
-      control?.addSubscription((value) => {
-        /** Before updating the parent description, manually update the child
-         * fields because they will not be updated by the time this hook is called
-         **/
-        ((component.transaction() as ScheduleTransaction)[key] as string) = value;
-        (component.transaction() as ScheduleTransaction).entity_type = component.form().get('entity_type')?.value;
-        updatePurposeDescription(childForm, childTransaction);
-      }, component.destroy$);
-    });
+      // --- 2. Trigger parent purpose description when child fields change ---
+      component.transaction()?.transactionType?.childTriggerFields?.forEach((triggerField) => {
+        const control = childForm.get(templateMap[triggerField]) as SignalFormControl<string>;
+        if (control) {
+          effect(() => {
+            const value = control.valueChangeSignal();
+            const key = templateMap[triggerField] as keyof ScheduleTransaction;
 
-    // Inheritted fields must match parent values
-    childTransaction.transactionType?.getInheritedFields(childTransaction)?.forEach((inherittedField) => {
-      if (childTransaction.transactionType) {
-        (component.form().get(component.templateMap()![inherittedField]) as SubscriptionFormControl)?.addSubscription(
-          (value) => {
-            if (childTransaction.transactionType) {
-              childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.setValue(value);
+            ((childTransaction as ScheduleTransaction)[key] as string) = value;
+            (childTransaction as ScheduleTransaction).entity_type = childForm.get('entity_type')?.value;
+
+            if (component.transaction()) {
+              updatePurposeDescription(component.form(), component.transaction()!);
+            } else {
+              throw new Error('Fecfile: Parent transaction not found for component');
             }
-          },
-          component.destroy$,
-        );
-        childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.disable();
-      } else {
-        throw new Error('Fecfile: Template map not found for transaction component');
-      }
+          });
+        }
+      });
+
+      // --- 3. Trigger child purpose description when parent fields change ---
+      transactionType.parentTriggerFields?.forEach((triggerField) => {
+        const key = component.templateMap()![triggerField] as keyof ScheduleTransaction;
+        const control = component.form().get(key) as SignalFormControl<string>;
+
+        if (control) {
+          effect(() => {
+            const value = control.valueChangeSignal();
+
+            ((component.transaction() as ScheduleTransaction)[key] as string) = value;
+            (component.transaction() as ScheduleTransaction).entity_type = component.form().get('entity_type')?.value;
+
+            updatePurposeDescription(childForm, childTransaction);
+          });
+        }
+      });
+
+      // --- 4. Sync inherited fields from parent -> child ---
+      transactionType.getInheritedFields(childTransaction)?.forEach((inheritedField) => {
+        const parentControl = component.form().get(component.templateMap()![inheritedField]) as SignalFormControl;
+        const childControl = childForm.get(templateMap[inheritedField]) as SignalFormControl;
+
+        if (!parentControl || !childControl) {
+          throw new Error('Fecfile: Missing inherited field control');
+        }
+
+        effect(() => {
+          const value = parentControl.valueChangeSignal();
+          childControl.setValue(value);
+        });
+
+        childControl.disable();
+      });
     });
   }
 }

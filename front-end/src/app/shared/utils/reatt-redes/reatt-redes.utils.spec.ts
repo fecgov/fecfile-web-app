@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from '../subscription-form-control';
+import { SubscriptionFormControl } from '../signal-form-control';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {

@@ -21,7 +21,7 @@ import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { SelectButton } from 'primeng/selectbutton';
 import { Select } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
@@ -66,7 +66,7 @@ export class CreateF3XStep1Component extends FormComponent {
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   readonly form = signal<FormGroup>(
-    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
+    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.formProperties, f3xSchema), {
       updateOn: 'blur',
     }),
   );
@@ -109,10 +109,10 @@ export class CreateF3XStep1Component extends FormComponent {
       Validators.required,
       buildAfterDateValidator(this.form(), 'coverage_from_date'),
     ]);
-    (this.form().controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form().controls['coverage_through_date'].updateValueAndValidity();
+    effect(() => {
+      this.getControl('coverage_from_date')?.valueChangeSignal();
+      this.getControl('coverage_through_date')?.updateValueAndValidity();
     });
-
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
       this.form().controls['report_code'].valueChanges.pipe(startWith(this.form().controls['report_code'].value)),
@@ -141,20 +141,24 @@ export class CreateF3XStep1Component extends FormComponent {
   }
 
   private addReportTypeCategory() {
-    this.form().addControl('report_type_category', new SubscriptionFormControl());
-    (this.form().get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+    const reportTypeControl = new SignalFormControl(this.injector);
+    this.form().addControl('report_type_category', reportTypeControl);
+    effect(() => {
+      reportTypeControl.valueChangeSignal();
       this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
-    }, this.destroy$);
+    });
   }
 
   private addFilingFrequency() {
-    this.form().addControl('filing_frequency', new SubscriptionFormControl());
-    (this.form().get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
+    const filingFrequencyControl = new SignalFormControl(this.injector);
+    this.form().addControl('filing_frequency', filingFrequencyControl);
+    effect(() => {
+      filingFrequencyControl.valueChangeSignal();
       this.form().patchValue({
         report_type_category: this.reportTypeCategories[0],
+        report_code: this.getFirstEnabledReportCode(),
       });
-      this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
-    }, this.destroy$);
+    });
 
     effect(() => {
       this.form().patchValue({ filing_frequency: this.filingFrequencySignal(), form_type: 'F3XN' });

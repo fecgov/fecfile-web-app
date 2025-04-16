@@ -3,10 +3,11 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
-import { SubscriptionFormControl } from '../subscription-form-control';
+import { SignalFormControl } from '../signal-form-control';
+import { effect } from '@angular/core';
 
 export class RedesignationFromUtils {
-  private static readOnlyFields = [
+  static readonly readOnlyFields = [
     'organization_name',
     'last_name',
     'first_name',
@@ -79,30 +80,5 @@ export class RedesignationFromUtils {
       (field) => field !== 'expenditure_purpose_descrip' && field !== 'memo_code',
     );
     return transaction;
-  }
-
-  public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
-    const templateMap = transaction.transactionType.templateMap;
-    const purposeDescriptionControl = fromForm.get(templateMap.purpose_description);
-    // Update purpose description for rules that are independent of the transaction date being in the report.
-    purposeDescriptionControl?.clearAsyncValidators();
-    fromForm.get('memo_code')?.clearAsyncValidators();
-    fromForm.get('memo_code')?.addValidators(Validators.requiredTrue);
-    fromForm.get('memo_code')?.setValue(true);
-
-    // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
-    (toForm.get(templateMap.amount) as SubscriptionFormControl)?.addSubscription((amount) => {
-      fromForm.get(templateMap.amount)?.setValue(-1 * parseFloat(amount));
-    });
-
-    (toForm.get(templateMap.date) as SubscriptionFormControl)?.addSubscription((date) => {
-      fromForm.get(templateMap.date)?.setValue(date);
-    });
-
-    RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable(),
-    );
-
-    return fromForm;
   }
 }

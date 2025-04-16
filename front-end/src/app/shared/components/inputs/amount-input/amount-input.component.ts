@@ -9,7 +9,7 @@ import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { LinkedReportInputComponent } from '../linked-report-input/linked-report-input.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -48,8 +48,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
   reportTypes = ReportTypes;
 
-  readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SubscriptionFormControl);
-  readonly date2Control = computed(() => this.form().get(this.templateMap().date2) as SubscriptionFormControl);
+  readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SignalFormControl);
+  readonly date2Control = computed(() => this.form().get(this.templateMap().date2) as SignalFormControl);
 
   constructor() {
     super();

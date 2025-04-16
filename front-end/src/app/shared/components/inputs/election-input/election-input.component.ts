@@ -3,7 +3,7 @@ import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { Select } from 'primeng/select';
 import { PrimeTemplate } from 'primeng/api';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -42,10 +42,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     const electionYear = election_code?.value?.slice(1, 5) || '';
 
     // Create two additional form controls that will join values to populate the composit election_code form control value
-    this.form().addControl('electionType', new SubscriptionFormControl(electionType, Validators.required));
+    this.form().addControl('electionType', new SignalFormControl(electionType, Validators.required));
     this.form().addControl(
       'electionYear',
-      new SubscriptionFormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')]),
+      new SignalFormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')]),
     );
 
     if (election_code?.disabled) {

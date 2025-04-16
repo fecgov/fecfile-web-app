@@ -2,7 +2,8 @@ import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
 import { JsonSchema, validate } from 'fecfile-validate';
 import { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
-import { SubscriptionFormControl } from './subscription-form-control';
+import { SignalFormControl } from './signal-form-control';
+import { Injector } from '@angular/core';
 
 export class SchemaUtils {
   /**
@@ -23,9 +24,9 @@ export class SchemaUtils {
    * @param {string[]} properties
    * @returns data structure to pass to the FormBuilder group() method
    */
-  static getFormGroupFields(properties: string[]) {
+  static getFormGroupFields(injector: Injector, properties: string[]) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    properties.forEach((property) => (group[property] = new SubscriptionFormControl('')));
+    properties.forEach((property) => (group[property] = new SignalFormControl(injector, '')));
     return group;
   }
 
@@ -43,14 +44,14 @@ export class SchemaUtils {
   ];
   static readonly DATE_FORMAT = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$';
 
-  static getFormGroupFieldsNoBlur(properties: string[], jsonSchema?: JsonSchema) {
+  static getFormGroupFieldsNoBlur(injector: Injector, properties: string[], jsonSchema?: JsonSchema) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     const dateProps = Object.keys(jsonSchema?.properties ?? {}).filter(
       (key) => jsonSchema?.properties[key]?.pattern === SchemaUtils.DATE_FORMAT,
     );
     properties.forEach((property) => {
       const updateOn = SchemaUtils.getUpdateOn(property, dateProps);
-      group[property] = new SubscriptionFormControl<string | Date | null | undefined>('', {
+      group[property] = new SignalFormControl<string | Date | null | undefined>(injector, '', {
         updateOn,
       });
     });

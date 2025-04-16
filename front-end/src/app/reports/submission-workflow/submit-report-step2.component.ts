@@ -6,7 +6,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
@@ -54,7 +54,7 @@ export class SubmitReportStep2Component extends FormComponent {
     'userCertified',
   ];
   form = signal<FormGroup>(
-    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+    this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.formProperties), {
       updateOn: 'blur',
     }),
   );
@@ -75,7 +75,7 @@ export class SubmitReportStep2Component extends FormComponent {
       },
     );
 
-    this.form().addControl('backdoorYesNo', new SubscriptionFormControl());
+    this.form().addControl('backdoorYesNo', new SignalFormControl(this.injector));
     this.form().controls['filingPassword'].addValidators(passwordValidator);
     this.form().controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form()
@@ -86,7 +86,7 @@ export class SubmitReportStep2Component extends FormComponent {
         if (value) {
           this.form().addControl(
             'backdoor_code',
-            new SubscriptionFormControl('', [Validators.required, Validators.maxLength(16)]),
+            new SignalFormControl(this.injector, '', [Validators.required, Validators.maxLength(16)]),
           );
         } else {
           this.form().removeControl('backdoor_code');

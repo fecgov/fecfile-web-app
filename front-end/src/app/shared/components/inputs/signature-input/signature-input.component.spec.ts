@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 
 import { SignatureInputComponent } from './signature-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('SignatureInputComponent', () => {
   let component: SignatureInputComponent;

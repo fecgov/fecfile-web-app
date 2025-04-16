@@ -12,9 +12,7 @@
           [readonly]="readonly()"
         />
         <app-error-messages
-          [control]="
-            form().get(tertiaryContact() ? templateMap()['committee_name'] : templateMap()['organization_name'])!
-          "
+          [control]="tertiaryContact() ? committeeNameControl() : orgNameControl()"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -32,7 +30,7 @@
             [readonly]="readonly()"
           />
           <app-error-messages
-            [control]="form().get(templateMap()['committee_fec_id'])!"
+            [control]="getControl(templateMap()['committee_fec_id'])"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>

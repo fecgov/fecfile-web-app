@@ -1,6 +1,6 @@
 import { Component, input, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { DatePicker } from 'primeng/datepicker';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
@@ -20,13 +20,13 @@ export class CalendarComponent implements OnInit {
   readonly requiredErrorMessage = input('This is a required field.');
 
   calendarOpened = false;
-  control!: SubscriptionFormControl<Date | null>;
+  control!: SignalFormControl<Date | null>;
 
   ngOnInit(): void {
     const form = this.form();
     const field = this.fieldName();
 
-    this.control = form.get(field) as SubscriptionFormControl;
+    this.control = form.get(field) as SignalFormControl;
 
     const date = DateUtils.parseDate(this.control.value);
     this.control.setValue(date);

@@ -6,7 +6,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 
 describe('AdditionalInfoInputComponent', () => {

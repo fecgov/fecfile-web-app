@@ -54,7 +54,7 @@ export class RedesignationToUtils {
     return transaction;
   }
 
-  private static readOnlyFields = [
+  static readonly readOnlyFields = [
     'organization_name',
     'last_name',
     'first_name',

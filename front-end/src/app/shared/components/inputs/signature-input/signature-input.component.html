@@ -11,10 +11,7 @@
         <div class="field">
           <label for="title">TITLE</label>
           <input type="text" pInputText id="title" [formControlName]="titleFieldName()" />
-          <app-error-messages
-            [control]="form().get(titleFieldName())!"
-            [formSubmitted]="formSubmitted()"
-          ></app-error-messages>
+          <app-error-messages [control]="control()" [formSubmitted]="formSubmitted()"></app-error-messages>
         </div>
       </div>
     }

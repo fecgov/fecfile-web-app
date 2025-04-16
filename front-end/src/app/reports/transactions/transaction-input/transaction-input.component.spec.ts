@@ -5,7 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ConfirmationService } from 'primeng/api';

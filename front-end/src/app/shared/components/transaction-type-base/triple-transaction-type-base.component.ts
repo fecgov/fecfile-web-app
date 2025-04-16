@@ -3,13 +3,12 @@ import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { Contact } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -49,7 +48,11 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   constructor() {
     super();
     this.childForm_2 = this.fb.group(
-      SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties_2(), this.childTransactionType_2()?.schema),
+      SchemaUtils.getFormGroupFieldsNoBlur(
+        this.injector,
+        this.childFormProperties_2(),
+        this.childTransactionType_2()?.schema,
+      ),
       {
         updateOn: 'blur',
       },
@@ -75,8 +78,9 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
       this.childTransaction_2(),
       this.childContactIdMap_2,
       this.contactService,
+      this.injector,
     );
-    TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2()!);
+    TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2()!, this.injector);
   }
 
   override async save(navigationEvent: NavigationEvent): Promise<void> {

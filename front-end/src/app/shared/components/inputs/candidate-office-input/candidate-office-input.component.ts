@@ -3,7 +3,7 @@ import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/mode
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -26,26 +26,24 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
 
   electionCodeField = this.transaction()?.transactionType.templateMap.election_code;
 
-  readonly officeFormControl = computed(() => this.form().get(this.officeFormControlName()) as SubscriptionFormControl);
-  readonly stateFormControl = computed(() => this.form().get(this.stateFormControlName()) as SubscriptionFormControl);
-  readonly districtFormControl = computed(
-    () => this.form().get(this.districtFormControlName()) as SubscriptionFormControl,
-  );
+  readonly officeFormControl = computed(() => this.form().get(this.officeFormControlName()) as SignalFormControl);
+  readonly stateFormControl = computed(() => this.form().get(this.stateFormControlName()) as SignalFormControl);
+  readonly districtFormControl = computed(() => this.form().get(this.districtFormControlName()) as SignalFormControl);
 
   ngOnInit(): void {
     // Update the enabled/disabled state on candidate fields whenever the candidate office changes.
-    this.officeFormControl().addSubscription(() => this.updateCandidateFieldAvailability());
+    this.officeFormControl().valueChanges.subscribe(() => this.updateCandidateFieldAvailability());
 
     // For Schedule E transactions, update the enabled/disabled state on the
     // candidate fields whenever the election code changes value.
     if (this.transaction()?.transactionType.scheduleId === ScheduleIds.E && this.electionCodeField) {
-      (this.form().get(this.electionCodeField) as SubscriptionFormControl)?.addSubscription(() => {
+      (this.form().get(this.electionCodeField) as SignalFormControl)?.valueChanges.subscribe(() => {
         this.updateCandidateFieldAvailability();
       });
     }
 
     // Update the candidate district options and value every time the candidate state field changes.
-    this.stateFormControl().addSubscription(() => {
+    this.stateFormControl().valueChanges.subscribe(() => {
       this.updateCandidateDistrict();
     });
 

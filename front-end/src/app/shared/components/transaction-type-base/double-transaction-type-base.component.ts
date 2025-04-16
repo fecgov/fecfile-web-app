@@ -1,4 +1,4 @@
-import { Component, Signal, signal, viewChild } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -34,12 +34,12 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
   template: '',
 })
 export abstract class DoubleTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
-  accordion = viewChild.required(Accordion);
+  readonly accordion = viewChild.required(Accordion);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  childForm = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
+  readonly childForm = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoCodeCheckboxLabel$ = of('');
@@ -66,7 +66,11 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
         this.childFormProperties = this.childTransactionType.getFormControlNames();
         this.childForm.set(
           this.fb.group(
-            SchemaUtils.getFormGroupFieldsNoBlur(this.childFormProperties, this.childTransactionType.schema),
+            SchemaUtils.getFormGroupFieldsNoBlur(
+              this.injector,
+              this.childFormProperties,
+              this.childTransactionType.schema,
+            ),
             {
               updateOn: 'blur',
             },
@@ -93,8 +97,9 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
           this.childTransaction,
           this.childContactIdMap,
           this.contactService,
+          this.injector,
         );
-        TransactionChildFormUtils.childOnInit(this, this.childForm(), this.childTransaction);
+        TransactionChildFormUtils.childOnInit(this, this.childForm(), this.childTransaction, this.injector);
         // Determine which accordion pane to open initially based on transaction id in page URL
         const transactionId = this.activatedRoute.snapshot.params['transactionId'];
         if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {

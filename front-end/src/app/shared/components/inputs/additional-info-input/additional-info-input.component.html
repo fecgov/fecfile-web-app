@@ -24,7 +24,7 @@
             [readonly]="isDescriptionSystemGenerated()"
           ></textarea>
           <app-error-messages
-            [control]="form().get(templateMap()['purpose_description'])!"
+            [control]="getControl(templateMap()['purpose_description'])"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -59,7 +59,7 @@
             [formControlName]="templateMap()['text4000']"
           ></textarea>
           <app-error-messages
-            [control]="form().get(templateMap()['text4000'])!"
+            [control]="getControl(templateMap()['text4000'])"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -81,7 +81,7 @@
             [showClear]="true"
           ></p-select>
           <app-error-messages
-            [control]="form().get(templateMap()['category_code'])!"
+            [control]="getControl(templateMap()['category_code'])"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>

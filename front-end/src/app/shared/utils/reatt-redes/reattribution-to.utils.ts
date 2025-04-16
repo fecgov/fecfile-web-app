@@ -47,19 +47,4 @@ export class ReattributionToUtils {
 
     return transaction;
   }
-
-  public static overlayForm(form: FormGroup, transaction: SchATransaction): FormGroup {
-    // Add additional amount validation
-    form
-      .get(transaction.transactionType.templateMap.amount)
-      ?.addValidators([buildReattRedesTransactionValidator(transaction)]);
-
-    // Clear normal schema validation from reattribution TO form
-    form.get('contribution_purpose_descrip')?.clearAsyncValidators();
-    form.get('memo_code')?.clearAsyncValidators();
-    form.get('memo_code')?.setValue(true);
-    form.get('memo_code')?.disable();
-
-    return form;
-  }
 }

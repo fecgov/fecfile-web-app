@@ -52,22 +52,6 @@ export class ReattRedesUtils {
     return false;
   }
 
-  public static overlayForms(
-    toForm: FormGroup,
-    toTransaction: SchATransaction | SchBTransaction,
-    fromForm: FormGroup,
-    fromTransaction: SchATransaction | SchBTransaction,
-  ): void {
-    if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
-      ReattributionToUtils.overlayForm(toForm, toTransaction as SchATransaction);
-      ReattributionFromUtils.overlayForm(fromForm, fromTransaction as SchATransaction, toForm);
-    }
-    if (toTransaction.reattribution_redesignation_tag === ReattRedesTypes.REDESIGNATION_TO) {
-      RedesignationToUtils.overlayForm(toForm, toTransaction as SchBTransaction);
-      RedesignationFromUtils.overlayForm(fromForm, fromTransaction as SchBTransaction, toForm);
-    }
-  }
-
   public static getPayloads(
     payload: SchATransaction | SchBTransaction,
     pullForward: boolean,

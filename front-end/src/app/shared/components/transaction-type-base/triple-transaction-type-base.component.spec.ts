@@ -18,7 +18,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';

@@ -12,7 +12,7 @@ import { CommitteeMember, Roles } from 'app/shared/models';
 import { firstValueFrom, of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',

@@ -26,7 +26,7 @@
     <div class="field">
       <label for="email">Email</label>
       <input id="email" name="email" pInputText formControlName="email" data-cy="second-committee-email" />
-      <app-error-messages [control]="form().get('email')!" [formSubmitted]="formSubmitted"></app-error-messages>
+      <app-error-messages [control]="getControl('email')" [formSubmitted]="formSubmitted"></app-error-messages>
     </div>
   </form>
   <ng-template #footer>

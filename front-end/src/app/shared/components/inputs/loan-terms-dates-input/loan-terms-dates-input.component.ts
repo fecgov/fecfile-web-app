@@ -8,7 +8,7 @@ import { InputText } from 'primeng/inputtext';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { Select } from 'primeng/select';
@@ -72,7 +72,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       () => this.dueDateSettingField(),
       () => {
         this.dueDateSettingField()?.addValidators([Validators.required]);
-        this.dueDateSettingField()?.addSubscription((dueDateSetting) => {
+        this.dueDateSettingField()?.valueChanges.subscribe((dueDateSetting) => {
           this.convertDueDate(dueDateSetting);
         });
       },
@@ -86,7 +86,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       () => this.interestRateSettingField(),
       () => {
         this.interestRateSettingField()!.addValidators([Validators.required]);
-        this.interestRateSettingField()!.addSubscription((interestRateSetting) => {
+        this.interestRateSettingField()!.valueChanges.subscribe((interestRateSetting) => {
           const interestRateField = this.interestRateField();
           if (!interestRateField) return;
           if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
@@ -109,10 +109,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     effectOnceIf(
       () => this.interestRateField(),
       () => {
-        this.interestRateField()!.addSubscription(
-          () => this.onInterestRateInput(this.interestRateSetting),
-          this.destroy$,
-        );
+        this.interestRateField()!.valueChanges.subscribe(() => this.onInterestRateInput(this.interestRateSetting));
       },
     );
   }
@@ -229,7 +226,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     }
   }
 
-  readonly dueDateField = computed(() => this.form().get(this.templateMap()['due_date']) as SubscriptionFormControl);
+  readonly dueDateField = computed(() => this.form().get(this.templateMap()['due_date']) as SignalFormControl);
 
   get dueDate(): Date | string | null {
     return this.dueDateField().value ?? null;
@@ -242,7 +239,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   }
 
   readonly dueDateSettingField = computed(
-    () => this.form().get(this.templateMap().due_date_setting) as SubscriptionFormControl,
+    () => this.form().get(this.templateMap().due_date_setting) as SignalFormControl,
   );
   get dueDateSetting(): string {
     return this.dueDateSettingField().value ?? '';
@@ -252,8 +249,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.dueDateSettingField().setValue(value);
   }
 
-  readonly interestRateField: Signal<SubscriptionFormControl | undefined> = computed(
-    () => this.form().get(this.templateMap()['interest_rate']) as SubscriptionFormControl,
+  readonly interestRateField = computed(
+    () => this.form().get(this.templateMap()['interest_rate']) as SignalFormControl,
   );
   get interestRate(): string {
     return this.interestRateField()?.value ?? '';
@@ -263,8 +260,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.interestRateField()?.setValue(value);
   }
 
-  readonly interestRateSettingField: Signal<SubscriptionFormControl | undefined> = computed(
-    () => this.form().get(this.templateMap()['interest_rate_setting']) as SubscriptionFormControl,
+  readonly interestRateSettingField = computed(
+    () => this.form().get(this.templateMap()['interest_rate_setting']) as SignalFormControl,
   );
   get interestRateSetting(): string {
     return this.interestRateSettingField()?.value ?? '';

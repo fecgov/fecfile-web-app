@@ -5,7 +5,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { CommitteeInputComponent } from './committee-input.component';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('CommitteeInputComponent', () => {
   let component: CommitteeInputComponent;

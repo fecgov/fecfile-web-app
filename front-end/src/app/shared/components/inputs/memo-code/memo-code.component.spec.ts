@@ -18,7 +18,7 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('MemoCodeInputComponent', () => {
   let component: MemoCodeInputComponent;

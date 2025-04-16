@@ -28,7 +28,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
 import { ActivatedRoute, NavigationBehaviorOptions, Router } from '@angular/router';
 import { AggregationGroups, Transaction } from '../../models/transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';

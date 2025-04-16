@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, runInInjectionContext } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -9,7 +9,7 @@ import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.m
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -128,10 +128,18 @@ export class MainFormComponent extends MainFormBaseComponent {
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
 
-  committeeTypeControl: AbstractControl | null = null;
-  statusByControl: AbstractControl | null = null;
-  affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
-  candidateContacts: CandidateContact[] = [];
+  readonly committeeTypeControl = computed(() => {
+    const control = this.form().get('committee_type');
+    if (!control) return undefined;
+    return control as SignalFormControl;
+  });
+  readonly statusByControl = computed(() => {
+    const control = this.form().get('statusBy');
+    if (!control) return undefined;
+    return control as SignalFormControl;
+  });
+  affiliatedContact = new AffiliatedContact(this, this.injector);
+  candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this, this.injector));
   excludeFecIds: string[] = [];
   excludeIds: string[] = [];
 
@@ -149,9 +157,9 @@ export class MainFormComponent extends MainFormBaseComponent {
 
         // Set the statusBy radio button based on form values
         if (this.form1M.affiliated_committee_name) {
-          this.form().get('statusBy')?.setValue('affiliation');
+          this.statusByControl()?.setValue('affiliation');
         } else {
-          this.form().get('statusBy')?.setValue('qualification');
+          this.statusByControl()?.setValue('qualification');
         }
 
         // If this is an edit, update the lookup ids to exclude
@@ -171,53 +179,34 @@ export class MainFormComponent extends MainFormBaseComponent {
         }
       },
     );
-  }
 
-  async getConfirmations(): Promise<boolean> {
-    if (!this.report) return false;
-    return this.confirmationService.confirmWithUser(
-      this.form(),
-      this.contactConfigs,
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
+    effectOnceIf(
+      () => this.statusByControl(),
+      () => {
+        this.statusByControl()!.addValidators(Validators.required);
+        this.statusByControl()!.updateValueAndValidity();
+        this.setupStatusBySub();
+      },
+    );
+
+    effectOnceIf(
+      () => this.form(),
+      () => {
+        // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
+        f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+          const signalControl = this.form().get(`${tag}_candidate_id_number`) as SignalFormControl;
+          if (!signalControl) return;
+          this.setupTagSignal(signalControl, tag);
+        });
+      },
     );
   }
-
-  getContact(contactKey: string) {
-    if (this.form1M[contactKey as keyof Form1M]) {
-      return this.form1M[contactKey as keyof Form1M] as Contact;
-    }
-    return null;
-  }
-
-  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
-    return this.templateMapConfigs[contactKey];
-  }
-
-  override initForm() {
-    super.initForm();
-    this.committeeTypeControl = this.form().get('committee_type');
-    this.statusByControl = this.form().get('statusBy');
-    this.statusByControl?.addValidators(Validators.required);
-    this.affiliatedContact = new AffiliatedContact(this);
-    this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
-
-    // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
-    f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-      (this.form().get(`${tag}_candidate_id_number`) as SubscriptionFormControl)?.addSubscription(() => {
-        f1mCandidateTags
-          .filter((t) => t !== tag)
-          .forEach((t) => {
-            const control = this.form().get(`${t}_candidate_id_number`);
-            if (control?.invalid && control.errors && 'fecIdMustBeUnique' in control.errors) {
-              this.form().get(`${t}_candidate_id_number`)?.updateValueAndValidity();
-            }
-          });
-      });
-    });
-
-    (this.form().get('statusBy') as SubscriptionFormControl)?.addSubscription(
-      (value: 'affiliation' | 'qualification') => {
+  private setupStatusBySub() {
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const control = this.statusByControl();
+        if (!control) return;
+        const value = control.valueChangeSignal();
         SchemaUtils.addJsonSchemaValidators(this.form(), this.schema, true);
         if (value === 'affiliation') {
           this.enableValidation([this.affiliatedContact]);
@@ -240,9 +229,45 @@ export class MainFormComponent extends MainFormBaseComponent {
         this.form().get('date_of_original_registration')?.updateValueAndValidity();
         this.form().get('date_of_51st_contributor')?.updateValueAndValidity();
         this.form().get('date_committee_met_requirements')?.updateValueAndValidity();
-      },
+      });
+    });
+  }
+
+  private setupTagSignal(signalControl: SignalFormControl, tag: F1MCandidateTag) {
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        signalControl.valueChangeSignal();
+        f1mCandidateTags
+          .filter((t) => t !== tag)
+          .forEach((t) => {
+            const control = this.form().get(`${t}_candidate_id_number`);
+            if (control?.invalid && control.errors && 'fecIdMustBeUnique' in control.errors) {
+              this.form().get(`${t}_candidate_id_number`)?.updateValueAndValidity();
+            }
+          });
+      });
+    });
+  }
+
+  async getConfirmations(): Promise<boolean> {
+    if (!this.report) return false;
+    return this.confirmationService.confirmWithUser(
+      this.form(),
+      this.contactConfigs,
+      this.getContact.bind(this),
+      this.getTemplateMap.bind(this),
     );
-    this.form().get('statusBy')?.updateValueAndValidity();
+  }
+
+  getContact(contactKey: string) {
+    if (this.form1M[contactKey as keyof Form1M]) {
+      return this.form1M[contactKey as keyof Form1M] as Contact;
+    }
+    return null;
+  }
+
+  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
+    return this.templateMapConfigs[contactKey];
   }
 
   enableValidation(contacts: F1MContact[]) {

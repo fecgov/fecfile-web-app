@@ -3,10 +3,11 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/cont
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
 import { SelectItem } from 'primeng/api';
 import { MainFormComponent } from './main-form.component';
+import { Injector } from '@angular/core';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
@@ -22,10 +23,10 @@ export abstract class F1MContact {
   control: AbstractControl | null;
   abstract enableValidation(): void;
 
-  constructor(contactKey: keyof Form1M, component: MainFormComponent) {
+  constructor(contactKey: keyof Form1M, component: MainFormComponent, injector: Injector) {
     this.contactKey = contactKey;
     this.component = component;
-    component.form().addControl(this.contactLookupKey, new SubscriptionFormControl(''));
+    component.form().addControl(this.contactLookupKey, new SignalFormControl(injector, ''));
     this.control = component.form().get(this.contactLookupKey);
   }
 
@@ -104,8 +105,8 @@ export class AffiliatedContact extends F1MContact {
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
   formFields = ['affiliated_date_form_f1_filed', 'affiliated_committee_fec_id', 'affiliated_committee_name'];
 
-  constructor(component: MainFormComponent) {
-    super('contact_affiliated', component);
+  constructor(component: MainFormComponent, injector: Injector) {
+    super('contact_affiliated', component, injector);
 
     component.contactConfigs[this.contactKey] = {
       committee_name: 'name',
@@ -142,8 +143,8 @@ export class CandidateContact extends F1MContact {
     return this.component.form().get(`${this.tag}_candidate_id_number`)?.value;
   }
 
-  constructor(tag: F1MCandidateTag, component: MainFormComponent) {
-    super(`contact_candidate_${tag}` as keyof Form1M, component);
+  constructor(tag: F1MCandidateTag, component: MainFormComponent, injector: Injector) {
+    super(`contact_candidate_${tag}` as keyof Form1M, component, injector);
 
     this.tag = tag;
 

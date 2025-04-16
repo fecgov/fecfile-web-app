@@ -32,7 +32,7 @@
                   >
                   <textarea id="action" [rows]="3" pTextarea [autoResize]="true" formControlName="action"></textarea>
                   <app-error-messages
-                    [control]="form().get('action')!"
+                    [control]="getControl('action')"
                     [formSubmitted]="formSubmitted"
                   ></app-error-messages>
                 </div>
@@ -50,7 +50,7 @@
                     formControlName="feedback"
                   ></textarea>
                   <app-error-messages
-                    [control]="form().get('feedback')!"
+                    [control]="getControl('feedback')"
                     [formSubmitted]="formSubmitted"
                   ></app-error-messages>
                 </div>
@@ -69,7 +69,7 @@
                   </label>
                   <textarea id="about" [rows]="3" pTextarea [autoResize]="true" formControlName="about"></textarea>
                   <app-error-messages
-                    [control]="form().get('about')!"
+                    [control]="getControl('about')"
                     [formSubmitted]="formSubmitted"
                   ></app-error-messages>
                 </div>

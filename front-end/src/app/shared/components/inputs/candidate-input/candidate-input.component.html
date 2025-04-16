@@ -5,7 +5,7 @@
         <label for="candidate_id">CANDIDATE ID</label>
         <input type="text" pInputText id="candidate_id" [formControlName]="templateMap()['candidate_fec_id']" />
         <app-error-messages
-          [control]="form().get(templateMap()['candidate_fec_id'])!"
+          [control]="getControl(templateMap()['candidate_fec_id'])"
           [formSubmitted]()="formSubmitted"
         ></app-error-messages>
       </div>
@@ -18,7 +18,7 @@
         <label for="last_name">LAST NAME</label>
         <input type="text" pInputText id="last_name" [formControlName]="templateMap()['candidate_last_name']" />
         <app-error-messages
-          [control]="form().get(templateMap()['candidate_last_name'])!"
+          [control]="getControl(templateMap()['candidate_last_name'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -28,7 +28,7 @@
         <label for="first_name">FIRST NAME</label>
         <input type="text" pInputText id="first_name" [formControlName]="templateMap()['candidate_first_name']" />
         <app-error-messages
-          [control]="form().get(templateMap()['candidate_first_name'])!"
+          [control]="getControl(templateMap()['candidate_first_name'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -38,7 +38,7 @@
         <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
         <input type="text" pInputText id="middle_name" [formControlName]="templateMap()['candidate_middle_name']" />
         <app-error-messages
-          [control]="form().get(templateMap()['candidate_middle_name'])!"
+          [control]="getControl(templateMap()['candidate_middle_name'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -50,7 +50,7 @@
         <label for="prefix">PREFIX (OPTIONAL)</label>
         <input type="text" pInputText id="prefix" [formControlName]="templateMap()['candidate_prefix']" />
         <app-error-messages
-          [control]="form().get(templateMap()['candidate_prefix'])!"
+          [control]="getControl(templateMap()['candidate_prefix'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -60,7 +60,7 @@
         <label for="suffix">SUFFIX (OPTIONAL)</label>
         <input type="text" pInputText id="suffix" [formControlName]="templateMap()['candidate_suffix']" />
         <app-error-messages
-          [control]="form().get(templateMap()['candidate_suffix'])!"
+          [control]="getControl(templateMap()['candidate_suffix'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

@@ -7,7 +7,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ElectionInputComponent } from './election-input.component';
 import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('ElectionInputComponent', () => {
   let component: ElectionInputComponent;

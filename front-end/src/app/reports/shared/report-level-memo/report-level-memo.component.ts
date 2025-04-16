@@ -8,7 +8,7 @@ import { SingleClickDirective } from 'app/shared/directives/single-click.directi
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
@@ -32,7 +32,7 @@ export class ReportLevelMemoComponent extends FormComponent {
 
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
   readonly form = signal<FormGroup>(
-    this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' }),
+    this.fb.group(SchemaUtils.getFormGroupFields(this.injector, this.formProperties), { updateOn: 'blur' }),
   );
 
   committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
@@ -58,7 +58,7 @@ export class ReportLevelMemoComponent extends FormComponent {
         });
       }
     });
-    this.form().addControl(this.recTypeFormProperty, new SubscriptionFormControl());
+    this.form().addControl(this.recTypeFormProperty, new SignalFormControl(this.injector));
     SchemaUtils.addJsonSchemaValidators(this.form(), textSchema, false);
   }
 

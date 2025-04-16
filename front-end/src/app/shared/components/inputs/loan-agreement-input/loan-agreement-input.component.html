@@ -10,7 +10,7 @@
           [formControlName]="templateMap()['amount']"
         ></p-inputnumber>
         <app-error-messages
-          [control]="form().get(templateMap()['amount'])!"
+          [control]="getControl(templateMap()['amount'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -64,7 +64,7 @@
             formControlName="credit_amount_this_draw"
           ></p-inputnumber>
           <app-error-messages
-            [control]="form().get('credit_amount_this_draw')!"
+            [control]="getControl('credit_amount_this_draw')"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -79,7 +79,7 @@
             [formControlName]="templateMap()['balance']"
           ></p-inputnumber>
           <app-error-messages
-            [control]="form().get(templateMap()['balance'])!"
+            [control]="getControl(templateMap()['balance'])"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -131,7 +131,7 @@
             formControlName="desc_collateral"
           ></textarea>
           <app-error-messages
-            [control]="form().get('desc_collateral')!"
+            [control]="getControl('desc_collateral')"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -148,7 +148,7 @@
             formControlName="collateral_value_amount"
           ></p-inputnumber>
           <app-error-messages
-            [control]="form().get('collateral_value_amount')!"
+            [control]="getControl('collateral_value_amount')"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -187,7 +187,7 @@
             formControlName="desc_specification_of_the_above"
           ></textarea>
           <app-error-messages
-            [control]="form().get('desc_specification_of_the_above')!"
+            [control]="getControl('desc_specification_of_the_above')"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -204,7 +204,7 @@
             formControlName="estimated_value"
           ></p-inputnumber>
           <app-error-messages
-            [control]="form().get('estimated_value')!"
+            [control]="getControl('estimated_value')"
             [formSubmitted]="formSubmitted()"
           ></app-error-messages>
         </div>
@@ -241,7 +241,7 @@
             <label for="secondary_name">ORGANIZATION NAME</label>
             <input type="text" pInputText id="secondary_name" [formControlName]="templateMap()['secondary_name']" />
             <app-error-messages
-              [control]="form().get(templateMap()['secondary_name'])!"
+              [control]="getControl(templateMap()['secondary_name'])"
               [formSubmitted]="formSubmitted()"
             ></app-error-messages>
           </div>
@@ -275,7 +275,7 @@
           formControlName="basis_of_loan_description"
         ></textarea>
         <app-error-messages
-          [control]="form().get('basis_of_loan_description')!"
+          [control]="getControl('basis_of_loan_description')"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

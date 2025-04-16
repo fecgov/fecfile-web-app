@@ -4,30 +4,21 @@
       <div class="field">
         <label for="last_name">{{ labelPrefix() }} LAST NAME</label>
         <input type="text" pInputText id="last_name" [formControlName]="lastNameFieldName()" data-cy="last-name" />
-        <app-error-messages
-          [control]="form().get(lastNameFieldName())!"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="lastNameControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="first_name">{{ labelPrefix() }} FIRST NAME</label>
         <input type="text" pInputText id="first_name" [formControlName]="firstNameFieldName()" />
-        <app-error-messages
-          [control]="form().get(firstNameFieldName())!"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="firstNameControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
         <label for="middle_name">{{ labelPrefix() }} MIDDLE NAME (OPTIONAL)</label>
         <input type="text" pInputText id="middle_name" [formControlName]="middleNameFieldName()" />
-        <app-error-messages
-          [control]="form().get(middleNameFieldName())!"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="middleNameControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
   </div>
@@ -36,20 +27,14 @@
       <div class="field">
         <label for="prefix">{{ labelPrefix() }} PREFIX (OPTIONAL)</label>
         <input type="text" pInputText id="prefix" [formControlName]="prefixFieldName()" />
-        <app-error-messages
-          [control]="form().get(prefixFieldName())!"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="prefixControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
         <label for="suffix">{{ labelPrefix() }} SUFFIX (OPTIONAL)</label>
         <input type="text" pInputText id="suffix" [formControlName]="suffixFieldName()" />
-        <app-error-messages
-          [control]="form().get(suffixFieldName())!"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [control]="suffixControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
       </div>
     </div>
     <div class="col-6"></div>

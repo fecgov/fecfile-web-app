@@ -5,7 +5,7 @@
         <label for="employer">EMPLOYER</label>
         <input type="text" pInputText id="employer" [formControlName]="templateMap()['employer']" />
         <app-error-messages
-          [control]="form().get(templateMap()['employer'])!"
+          [control]="getControl(templateMap()['employer'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
@@ -15,7 +15,7 @@
         <label for="occupation">OCCUPATION</label>
         <input type="text" pInputText id="occupation" [formControlName]="templateMap()['occupation']" />
         <app-error-messages
-          [control]="form().get(templateMap()['occupation'])!"
+          [control]="getControl(templateMap()['occupation'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

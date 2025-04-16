@@ -12,23 +12,12 @@ import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import {
-  BehaviorSubject,
-  combineLatestWith,
-  firstValueFrom,
-  from,
-  merge,
-  Observable,
-  of,
-  startWith,
-  switchMap,
-  takeUntil,
-} from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { computed, effect, Injector, runInInjectionContext, signal } from '@angular/core';
 
 export type DateType = Date | string | undefined;
 
@@ -44,96 +33,95 @@ export class TransactionFormUtils {
    * @param contactIdMap - parent or child
    * @param contactService
    */
-  static async onInit(
+  static onInit(
     component: TransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
-  ): Promise<void> {
-    if (transaction?.id) {
-      form.patchValue({ ...transaction });
-
-      TransactionFormUtils.patchMemoText(transaction, form);
-      form.get('entity_type')?.disable();
-    } else {
-      component.resetForm();
-      form.get('entity_type')?.enable();
-    }
-
+    injector: Injector,
+  ) {
     const transactionType = transaction?.transactionType;
     const templateMap = transactionType?.templateMap;
+
     if (!transactionType || !templateMap) {
       throw new Error('Fecfile: Cannot find template map when initializing transaction form');
     }
 
+    // Initial form state
+    const entityTypeControl = form.get('entity_type') as SignalFormControl<string>;
+    if (transaction.id) {
+      form.patchValue({ ...transaction });
+      TransactionFormUtils.patchMemoText(transaction, form);
+      entityTypeControl?.disable();
+    } else {
+      component.resetForm();
+      entityTypeControl?.enable();
+    }
+
+    // Contact IDs into signals
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
       const id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
-      contactIdMap[contact] = new BehaviorSubject<string>(id);
+      contactIdMap[contact] = signal<string>(id); // <-- was BehaviorSubject before
     });
 
-    form
-      .get('entity_type')
-      ?.valueChanges.pipe(takeUntil(component.destroy$))
-      .subscribe((value: string) => {
+    // Handle entity type logic
+    const fields = ['last_name', 'first_name', 'middle_name', 'prefix', 'suffix', 'employer', 'occupation'];
+
+    runInInjectionContext(injector, () => {
+      effect(() => {
+        const value = entityTypeControl.valueChangeSignal();
         if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
           form.get(templateMap.organization_name)?.reset();
         }
         if (value === ContactTypes.ORGANIZATION || value === ContactTypes.COMMITTEE) {
-          form.get(templateMap.last_name)?.reset();
-          form.get(templateMap.first_name)?.reset();
-          form.get(templateMap.middle_name)?.reset();
-          form.get(templateMap.prefix)?.reset();
-          form.get(templateMap.suffix)?.reset();
-          form.get(templateMap.employer)?.reset();
-          form.get(templateMap.occupation)?.reset();
+          for (const field of fields) {
+            form.get(templateMap[field as TemplateMapKeyType])?.reset();
+          }
         }
       });
 
-    if ((transaction as SchATransaction).aggregation_group) {
-      form
-        ?.get(templateMap.aggregate)
-        ?.valueChanges.pipe(takeUntil(component.destroy$))
-        .subscribe(() => {
-          form.get(templateMap.employer)?.updateValueAndValidity();
-          form.get(templateMap.occupation)?.updateValueAndValidity();
-        });
-    } else {
-      form
-        ?.get(templateMap.amount)
-        ?.valueChanges.pipe(takeUntil(component.destroy$))
-        .subscribe(() => {
-          form.get(templateMap.employer)?.updateValueAndValidity();
-          form.get(templateMap.occupation)?.updateValueAndValidity();
-        });
-    }
+      // Handle employer/occupation validation triggers
+      const watchField = (transaction as SchATransaction).aggregation_group
+        ? templateMap.aggregate
+        : templateMap.amount;
 
-    if (transactionType.showAggregate) {
-      this.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, templateMap);
-    }
+      const validationTrigger = form.get(watchField) as SignalFormControl<unknown>;
+      effect(() => {
+        validationTrigger.valueChangeSignal(); // triggers effect
+        form.get(templateMap.employer)?.updateValueAndValidity();
+        form.get(templateMap.occupation)?.updateValueAndValidity();
+      });
 
-    if (transactionType.showCalendarYTD) {
-      await this.handleShowCalendarYTD(component, form, transaction, templateMap);
-    }
+      // Aggregate + Calendar YTD logic
+      if (transactionType.showAggregate) {
+        this.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, templateMap, injector);
+      }
 
-    const schema = transaction.transactionType?.schema;
-    if (schema) {
-      SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
-      form.updateValueAndValidity();
-    }
+      if (transactionType.showCalendarYTD) {
+        this.handleShowCalendarYTD(component, form, transaction, templateMap, injector);
+      }
 
-    Object.entries(contactIdMap).forEach(([contact, id$]) => {
-      const contactConfig = transactionType.contactConfig[contact];
-      id$.pipe(takeUntil(component.destroy$)).subscribe((id) => {
-        for (const field of ['committee_fec_id', 'candidate_fec_id']) {
-          if (contactConfig[field]) {
-            form.get(templateMap[field as keyof TransactionTemplateMapType])?.clearAsyncValidators();
-            form
-              .get(templateMap[field as keyof TransactionTemplateMapType])
-              ?.addAsyncValidators(contactService.getFecIdValidator(id));
-            form.get(templateMap[field as keyof TransactionTemplateMapType])?.updateValueAndValidity();
+      // Schema validation
+      const schema = transaction.transactionType?.schema;
+      if (schema) {
+        SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
+        form.updateValueAndValidity();
+      }
+
+      Object.entries(contactIdMap).forEach(([contact, contactSignal]) => {
+        const contactConfig = transactionType.contactConfig[contact];
+        effect(() => {
+          const id = contactSignal();
+          for (const field of ['committee_fec_id', 'candidate_fec_id']) {
+            if (contactConfig[field]) {
+              const control = form.get(templateMap[field as keyof TransactionTemplateMapType]);
+              control?.clearAsyncValidators();
+              control?.addAsyncValidators(contactService.getFecIdValidator(id));
+              control?.updateValueAndValidity();
+            }
           }
-        }
+        });
       });
     });
   }
@@ -141,59 +129,51 @@ export class TransactionFormUtils {
   // Only dynamically update non-inherited calendar_ytd values on the form input.
   // Inherited calendar_ytd display the value of the parent transaction and do not
   // include or change with the amount value of the child transaction.
-  private static async handleShowCalendarYTD(
+  private static handleShowCalendarYTD(
     component: TransactionTypeBaseComponent,
     form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
     transaction: Transaction,
     templateMap: TransactionTemplateMapType,
+    injector: Injector,
   ) {
     if (!transaction.transactionType.inheritCalendarYTD) {
-      const previous_election$: Observable<Transaction | undefined> =
-        merge(
-          (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.election_code) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.candidate_office) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.candidate_state) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.candidate_district) as SubscriptionFormControl).valueChanges,
-        ).pipe(
-          switchMap(() => {
-            const disbursement_date = form.get(templateMap.date)?.value as DateType;
-            const dissemination_date = form.get(templateMap.date2)?.value as DateType;
-            const election_code = form.get(templateMap.election_code)?.value;
-            const candidate_office = form.get(templateMap.candidate_office)?.value;
-            const candidate_state = form.get(templateMap.candidate_state)?.value;
-            const candidate_district = form.get(templateMap.candidate_district)?.value;
+      const dateCtrl = form.get(templateMap.date) as SignalFormControl;
+      const date2Ctrl = form.get(templateMap.date2) as SignalFormControl;
+      const electionCodeCtrl = form.get(templateMap.election_code) as SignalFormControl;
+      const officeCtrl = form.get(templateMap.candidate_office) as SignalFormControl;
+      const stateCtrl = form.get(templateMap.candidate_state) as SignalFormControl;
+      const districtCtrl = form.get(templateMap.candidate_district) as SignalFormControl;
+      const amountCtrl = form.get(templateMap.amount) as SignalFormControl;
+      runInInjectionContext(injector, () => {
+        effect(() => {
+          const disbursement_date = dateCtrl.valueChangeSignal();
+          const dissemination_date = date2Ctrl.valueChangeSignal();
+          const election_code = electionCodeCtrl.valueChangeSignal();
+          const candidate_office = officeCtrl.valueChangeSignal();
+          const candidate_state = stateCtrl.valueChangeSignal();
+          const candidate_district = districtCtrl.valueChangeSignal();
+          const amount = amountCtrl.valueChangeSignal();
 
-            return from(
-              component.transactionService.getPreviousTransactionForCalendarYTD(
-                transaction,
-                disbursement_date,
-                dissemination_date,
-                election_code,
-                candidate_office,
-                candidate_state,
-                candidate_district,
-              ),
-            );
-          }),
-        ) || of(undefined);
-      form
-        .get(templateMap.amount)
-        ?.valueChanges.pipe(
-          startWith(form.get(templateMap.amount)?.value),
-          combineLatestWith(previous_election$, of(transaction)),
-          takeUntil(component.destroy$),
-        )
-        .subscribe(([amount, previous_election, transaction]) => {
-          this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previous_election, amount);
+          component.transactionService
+            .getPreviousTransactionForCalendarYTD(
+              transaction,
+              disbursement_date,
+              dissemination_date,
+              election_code,
+              candidate_office,
+              candidate_state,
+              candidate_district,
+            )
+            .then((previous) => this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previous, amount));
         });
+      });
     } else {
-      const parent = await component.transactionService.get(transaction.parent_transaction?.id ?? '');
-      const inheritedElectionAggregate = (parent as SchETransaction).calendar_ytd_per_election_office;
-      if (inheritedElectionAggregate) {
-        this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, undefined, inheritedElectionAggregate);
-      }
+      component.transactionService.get(transaction.parent_transaction?.id ?? '').then((parent) => {
+        const inherited = (parent as SchETransaction).calendar_ytd_per_election_office;
+        if (inherited) {
+          this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, undefined, inherited);
+        }
+      });
     }
   }
 
@@ -362,37 +342,32 @@ export class TransactionFormUtils {
 
   static handleShowAggregateValueChanges(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup,
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
+    injector: Injector,
   ) {
-    const contactId$ = contactIdMap['contact_1'].asObservable();
-    firstValueFrom(contactId$).then((contactIdStart) => {
-      (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
-        async ([contribution_date, amount, contactId]) => {
-          const previous_transaction = await component.transactionService.getPreviousTransactionForAggregate(
-            transaction,
-            contactId,
-            contribution_date,
-          );
-          this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
-        },
-        component.destroy$,
-        [
-          // Emit the initial value of the date since the combineLatestWith below won't emit
-          // if the date hasn't emitted.  That's good for a fresh form, but opening an
-          // existing transaction would not emit the date.
-          startWith<Date>(form.get(templateMap.date)?.value),
-          combineLatestWith(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (form.get(templateMap.amount)?.valueChanges as Observable<any>).pipe(
-              startWith(form.get(templateMap.amount)?.value),
-            ),
-            contactId$.pipe(startWith(contactIdStart)),
-          ),
-        ],
-      );
-    });
+    const contactIdSignal = contactIdMap['contact_1'];
+    const dateControl = form.get(templateMap.date) as SignalFormControl<Date>;
+    const amountControl = form.get(templateMap.amount) as SignalFormControl<number>;
+
+    // Ensure initial values exist (you could guard more defensively if needed)
+    effect(
+      () => {
+        const contribution_date = dateControl.valueChangeSignal();
+        const amount = amountControl.valueChangeSignal();
+        const contactId = contactIdSignal();
+
+        if (!contribution_date || !amount || !contactId) return;
+
+        component.transactionService
+          .getPreviousTransactionForAggregate(transaction, contactId, contribution_date)
+          .then((previous_transaction) => {
+            this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_transaction, amount);
+          });
+      },
+      { injector },
+    );
   }
 }

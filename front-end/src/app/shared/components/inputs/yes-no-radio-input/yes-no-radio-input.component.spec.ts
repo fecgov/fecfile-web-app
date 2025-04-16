@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 
 import { YesNoRadioInputComponent } from './yes-no-radio-input.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('YesNoRadioInputComponent', () => {
   let component: YesNoRadioInputComponent;

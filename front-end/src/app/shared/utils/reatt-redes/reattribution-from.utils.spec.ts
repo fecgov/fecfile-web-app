@@ -2,7 +2,7 @@ import { ReattributionFromUtils } from './reattribution-from.utils';
 import { getTestTransactionByType, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { FormGroup } from '@angular/forms';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
-import { SubscriptionFormControl } from '../subscription-form-control';
+import { SubscriptionFormControl } from '../signal-form-control';
 
 describe('Reattribution From', () => {
   describe('overlayTransactionProperties', () => {

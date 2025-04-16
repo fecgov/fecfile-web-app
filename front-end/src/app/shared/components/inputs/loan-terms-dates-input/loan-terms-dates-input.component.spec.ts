@@ -5,7 +5,7 @@ import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils
 import { LoanTermsDatesInputComponent } from './loan-terms-dates-input.component';
 
 import { percentageValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('LoanTermsDatesInputComponent', () => {
   let component: LoanTermsDatesInputComponent;

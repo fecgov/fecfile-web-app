@@ -8,12 +8,13 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { Card } from 'primeng/card';
 import { UserLoginData } from 'app/shared/models';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { ButtonModule } from 'primeng/button';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-update-current-user',
@@ -30,18 +31,24 @@ export class UpdateCurrentUserComponent extends FormComponent {
 
   constructor() {
     super();
-    effect(() => {
-      this.form().setControl(
-        'last_name',
-        new SubscriptionFormControl(this.userSignal().last_name, Validators.required),
-      );
-      this.form().setControl(
-        'first_name',
-        new SubscriptionFormControl(this.userSignal().first_name, Validators.required),
-      );
-      this.form().setControl('email', new SubscriptionFormControl(this.userSignal().email, Validators.required));
-      this.formSubmitted = false;
-    });
+    effectOnceIf(
+      () => this.userSignal(),
+      () => {
+        this.form().setControl(
+          'last_name',
+          new SignalFormControl(this.injector, this.userSignal().last_name, Validators.required),
+        );
+        this.form().setControl(
+          'first_name',
+          new SignalFormControl(this.injector, this.userSignal().first_name, Validators.required),
+        );
+        this.form().setControl(
+          'email',
+          new SignalFormControl(this.injector, this.userSignal().email, Validators.required),
+        );
+        this.formSubmitted = false;
+      },
+    );
   }
 
   async continue() {

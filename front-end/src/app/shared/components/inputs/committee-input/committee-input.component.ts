@@ -1,9 +1,11 @@
-import { Component, input, Input, OnInit } from '@angular/core';
+import { Component, computed, effect, input, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 @Component({
   selector: 'app-committee-input',
@@ -11,20 +13,28 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   styleUrls: ['./committee-input.component.scss'],
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent],
 })
-export class CommitteeInputComponent extends BaseInputComponent implements OnInit {
+export class CommitteeInputComponent extends BaseInputComponent {
   readonly entityRole = input('CONTACT');
   readonly includeFecId = input(false);
   readonly readonly = input(false);
   readonly tertiaryContact = input(false);
 
-  ngOnInit(): void {
-    if (this.transaction()?.transactionType?.synchronizeOrgComNameValues) {
-      this.form()
-        .get(this.templateMap().organization_name)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          this.form().get(this.templateMap().committee_name)?.setValue(value);
-        });
-    }
+  readonly orgNameControl = computed(() => this.form().get(this.templateMap().organization_name) as SignalFormControl);
+  readonly committeeNameControl = computed(
+    () => this.form().get(this.templateMap().committee_name) as SignalFormControl,
+  );
+
+  constructor() {
+    super();
+    effect(() => {
+      if (
+        this.orgNameControl() &&
+        this.committeeNameControl() &&
+        this.transaction()?.transactionType?.synchronizeOrgComNameValues
+      ) {
+        const value = this.orgNameControl().valueChangeSignal();
+        this.committeeNameControl().setValue(value);
+      }
+    });
   }
 }

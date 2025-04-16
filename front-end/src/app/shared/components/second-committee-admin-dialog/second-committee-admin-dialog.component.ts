@@ -9,7 +9,7 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 @Component({
   selector: 'app-second-committee-admin-dialog',
@@ -24,8 +24,8 @@ export class SecondCommitteeAdminDialogComponent extends FormComponent {
   readonly form = signal(
     new FormGroup(
       {
-        role: new SubscriptionFormControl({ value: Roles.COMMITTEE_ADMINISTRATOR, disabled: true }),
-        email: new SubscriptionFormControl('', {
+        role: new SignalFormControl(this.injector, { value: Roles.COMMITTEE_ADMINISTRATOR, disabled: true }),
+        email: new SignalFormControl(this.injector, '', {
           validators: [Validators.required, emailValidator],
           asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
           updateOn: 'change',

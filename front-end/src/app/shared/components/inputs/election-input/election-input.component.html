@@ -21,7 +21,7 @@
           </ng-template>
         </p-select>
         <app-error-messages
-          [control]="form().get('electionType')!"
+          [control]="getControl('electionType')"
           fieldName="electionType"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
@@ -40,7 +40,7 @@
         />
 
         <app-error-messages
-          [control]="form().get('electionYear')!"
+          [control]="getControl('electionYear')"
           [formSubmitted]="formSubmitted()"
           patternErrorMessage="This field requires a 4-digit year. (YYYY)"
         ></app-error-messages>
@@ -58,7 +58,7 @@
           [formControlName]="templateMap()['election_other_description']"
         />
         <app-error-messages
-          [control]="form().get(templateMap()['election_other_description'])!"
+          [control]="getControl(templateMap()['election_other_description'])"
           [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>

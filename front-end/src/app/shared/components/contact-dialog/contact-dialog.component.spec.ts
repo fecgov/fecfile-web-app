@@ -24,7 +24,7 @@ import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
