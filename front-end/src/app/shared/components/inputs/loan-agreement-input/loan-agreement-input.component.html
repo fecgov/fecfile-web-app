@@ -32,7 +32,7 @@
     ariaLabelYes="This loan has been restructured"
     ariaLabelNo="This loan has not been restructured"
   ></app-yes-no-radio-input>
-  @if (showLoanRestructured) {
+  @if (showLoanRestructured()) {
     <div class="grid">
       <div class="col-4">
         <app-calendar
@@ -52,7 +52,7 @@
     ariaLabelYes="There is a line of credit"
     ariaLabelNo="There is not a line of credit"
   ></app-yes-no-radio-input>
-  @if (showLineOfCredit) {
+  @if (showLineOfCredit()) {
     <div class="grid">
       <div class="col-4">
         <div class="field">
@@ -96,7 +96,7 @@
     ariaLabelYes="Other parties are secondarily liable"
     ariaLabelNo="Other parties are not secondarily liable"
   ></app-yes-no-radio-input>
-  @if (showOthersLiable) {
+  @if (showOthersLiable()) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -117,7 +117,7 @@
     ariaLabelYes="Collateral has been pledged"
     ariaLabelNo="Collateral has not been pledged"
   ></app-yes-no-radio-input>
-  @if (showSecured) {
+  @if (showSecured()) {
     <div class="grid">
       <div class="col-12">
         <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
@@ -173,7 +173,7 @@
     ariaLabelYes="Future income has been pledged"
     ariaLabelNo="Future income has not been pledged"
   ></app-yes-no-radio-input>
-  @if (showFutureIncome) {
+  @if (showFutureIncome()) {
     <div class="grid">
       <div class="col-12">
         <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
@@ -234,7 +234,7 @@
         </div>
       </div>
     </div>
-    @if (showLocationOfAccount) {
+    @if (showLocationOfAccount()) {
       <div class="grid">
         <div class="col-12">
           <div class="field">

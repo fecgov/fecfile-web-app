@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, input, model, output, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -45,6 +45,7 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 export class TransactionData {
   id: string;
@@ -205,30 +206,34 @@ export class ContactDialogComponent extends FormComponent {
 
   constructor() {
     super();
-    this.form()
-      ?.get('country')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (value !== 'USA') {
-          this.form().patchValue({
-            state: 'ZZ',
-          });
-          // ajv does not un-require zip when country is not USA
-          this.form().patchValue({ zip: this.form().get('zip')?.value || '' });
-          this.form().get('state')?.disable();
-        } else {
-          this.form().patchValue({ zip: this.form().get('zip')?.value || null });
-          this.form().get('state')?.enable();
-        }
-      });
+    effect(() => {
+      const value = this.getControl('country')?.valueChangeSignal();
+      if (value !== 'USA') {
+        this.form().patchValue({
+          state: 'ZZ',
+        });
+        // ajv does not un-require zip when country is not USA
+        this.form().patchValue({ zip: this.form().get('zip')?.value || '' });
+        this.form().get('state')?.disable();
+      } else {
+        this.form().patchValue({ zip: this.form().get('zip')?.value || null });
+        this.form().get('state')?.enable();
+      }
+    });
 
     // If there is a default candidate office (e.g. 'P') set, then make the
     // candidate office select read-only disabled.
-    if (this.defaultCandidateOffice()) {
-      this.form().get('candidate_office')?.disable();
-    }
+    effectOnceIf(
+      () => this.defaultCandidateOffice() && this.form().get('candidate_office'),
+      () => {
+        this.form().get('candidate_office')?.disable();
+      },
+    );
 
-    this.contactTypeChanged(this.contactType());
+    effectOnceIf(
+      () => this.contactType() && this.contactTypeOptions(),
+      () => this.contactTypeChanged(this.contactType()),
+    );
   }
   /**
    * On ngOnInit and when a user changes the selection of the ContactType for the contact

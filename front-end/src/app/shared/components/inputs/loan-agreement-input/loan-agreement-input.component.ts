@@ -1,4 +1,4 @@
-import { Component, OnInit, output } from '@angular/core';
+import { Component, computed, effect, OnInit, output } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
@@ -34,113 +34,83 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TextareaModule,
   ],
 })
-export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
+export class LoanAgreementInputComponent extends BaseInputComponent {
   contactSelect = output<SelectItem<Contact>>();
 
   // Switches to show/hide groups of form input values
-  showLoanRestructured = false;
-  showLineOfCredit = false;
-  showOthersLiable = false;
-  showSecured = false;
-  showFutureIncome = false;
-  showLocationOfAccount = false;
+  readonly showLoanRestructured = computed(() => !!this.getControl('loan_restructured')?.valueChangeSignal());
+  readonly showLineOfCredit = computed(() => !!this.getControl('line_of_credit')?.valueChangeSignal());
+  readonly showOthersLiable = computed(() => !!this.getControl('others_liable')?.valueChangeSignal());
+  readonly showSecured = computed(() => !!this.getControl(this.templateMap()['secured'])?.valueChangeSignal());
+  readonly showFutureIncome = computed(() => !!this.getControl('future_income')?.valueChangeSignal());
+  readonly showLocationOfAccount = computed(() => !!this.getControl(this.templateMap()['secondary_name']));
 
-  contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION); // Options for contact lookup component
+  readonly contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION); // Options for contact lookup component
 
   locationOfAccountHelpText =
     'Provide the full name and address of the depository institution where the account was established.';
 
-  ngOnInit(): void {
-    this.form()
-      .get('loan_restructured')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showLoanRestructured = value;
-        if (!value) {
-          this.form().get('loan_originally_incurred_date')?.setValue(null);
-        }
-      });
-    this.form().get('loan_restructured')?.updateValueAndValidity();
+  constructor() {
+    super();
+    effect(() => {
+      const value = this.getControl('loan_restructured')?.valueChangeSignal();
+      if (!value) {
+        this.form().get('loan_originally_incurred_date')?.setValue(null);
+      }
+    });
 
-    this.form()
-      .get('line_of_credit')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showLineOfCredit = value;
-        if (!value) {
-          this.form().patchValue({
-            credit_amount_this_draw: null,
-            [this.templateMap()['balance']]: null,
-          });
-        }
-      });
-    this.form().get('line_of_credit')?.updateValueAndValidity();
+    effect(() => {
+      const value = this.getControl('line_of_credit')?.valueChangeSignal();
+      if (!value) {
+        this.form().patchValue({
+          credit_amount_this_draw: null,
+          [this.templateMap()['balance']]: null,
+        });
+      }
+    });
 
     // We need to update the TOTAL OUTSTANDING BALANCE field when
     // the CREDIT AMOUNT THIS DRAW field is updated to ensure validation
     // keeps in the former keeps up with changes in the latter.
-    this.form()
-      .get('credit_amount_this_draw')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.form().get(this.templateMap()['balance'])?.updateValueAndValidity();
-      });
+    effect(() => {
+      this.getControl('credit_amount_this_draw')?.valueChangeSignal();
+      this.form().get(this.templateMap()['balance'])?.updateValueAndValidity();
+    });
 
-    this.form()
-      .get('others_liable')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showOthersLiable = value;
-      });
-    this.form().get('others_liable')?.updateValueAndValidity();
+    effect(() => {
+      const value = this.getControl(this.templateMap()['secured'])?.valueChangeSignal();
+      if (!value) {
+        this.form().patchValue({
+          desc_collateral: null,
+          collateral_value_amount: null,
+          perfected_interest: null,
+        });
+      }
+    });
 
-    this.form()
-      .get(this.templateMap()['secured'])
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showSecured = value;
-        if (!value) {
-          this.form().patchValue({
-            desc_collateral: null,
-            collateral_value_amount: null,
-            perfected_interest: null,
-          });
-        }
-      });
-    this.form().get(this.templateMap()['secured'])?.updateValueAndValidity();
+    effect(() => {
+      const value = this.getControl('future_income')?.valueChangeSignal();
+      if (!value) {
+        this.form().patchValue({
+          desc_specification_of_the_above: null,
+          estimated_value: null,
+          depository_account_established_date: null,
+          [this.templateMap()['secondary_name']]: null,
+          [this.templateMap()['secondary_street_1']]: null,
+          [this.templateMap()['secondary_street_2']]: null,
+          [this.templateMap()['secondary_city']]: null,
+          [this.templateMap()['secondary_state']]: null,
+          [this.templateMap()['secondary_zip']]: null,
+        });
+      }
+    });
 
-    this.form()
-      .get('future_income')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showFutureIncome = value;
-        if (!value) {
-          this.form().patchValue({
-            desc_specification_of_the_above: null,
-            estimated_value: null,
-            depository_account_established_date: null,
-            [this.templateMap()['secondary_name']]: null,
-            [this.templateMap()['secondary_street_1']]: null,
-            [this.templateMap()['secondary_street_2']]: null,
-            [this.templateMap()['secondary_city']]: null,
-            [this.templateMap()['secondary_state']]: null,
-            [this.templateMap()['secondary_zip']]: null,
-          });
-        }
-      });
-    this.form().get('future_income')?.updateValueAndValidity();
-
-    // Watch the Location of Account org name for changes and open the
-    // container holding the input forms when an org has been selected
-    this.form()
-      .get(this.templateMap()['secondary_name'])
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value) {
-          this.showLocationOfAccount = true;
-        }
-      });
-    this.form().get(this.templateMap()['secondary_name'])?.updateValueAndValidity();
+    // this.form().get('loan_restructured')?.updateValueAndValidity();
+    // this.form().get('line_of_credit')?.updateValueAndValidity();
+    // this.form().get('others_liable')?.updateValueAndValidity();
+    // this.form().get(this.templateMap()['secured'])?.updateValueAndValidity();
+    // this.form().get('future_income')?.updateValueAndValidity();
+    // this.form().get(this.templateMap()['secondary_name'])?.updateValueAndValidity();
   }
 
   updateFormWithLocationOfAccountContact(selectItem: SelectItem<Contact>) {

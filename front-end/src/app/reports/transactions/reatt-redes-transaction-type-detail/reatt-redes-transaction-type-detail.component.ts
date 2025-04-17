@@ -23,7 +23,7 @@ export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransact
   constructor() {
     super();
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
+    if (transactionId && this.childTransaction()?.id === transactionId) {
       this.accordion().value.set(1);
     }
   }

@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, Signal } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
@@ -23,7 +23,7 @@ interface AccordionData {
   formProperties: string[];
   contactTypeOptions: PrimeOptions;
   form: FormGroup;
-  memoCodeCheckboxLabel$: Observable<string>;
+  memoCodeCheckboxLabel: string;
   contactIdMap: ContactIdMapType;
 }
 
@@ -61,7 +61,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTrans
       this.form(),
       this.transaction() as SchATransaction | SchBTransaction,
       this.childForm(),
-      this.childTransaction as SchATransaction | SchBTransaction,
+      this.childTransaction() as SchATransaction | SchBTransaction,
     );
   }
 
@@ -181,7 +181,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTrans
   }
 
   updateElectionData() {
-    const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
+    const schedB = this.childTransaction()?.reatt_redes as SchBTransaction;
     if (!schedB) return;
     const forms = [this.form(), this.childForm()];
     forms.forEach((form) => {
@@ -224,7 +224,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent extends DoubleTrans
       },
     );
     this.reattributedData.contactIdMap = {};
-    this.reattributedData.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
+    this.reattributedData.memoCodeCheckboxLabel = this.getMemoCodeCheckboxLabel(
       this.reattributedData.form,
       reatRedes.transactionType,
     );

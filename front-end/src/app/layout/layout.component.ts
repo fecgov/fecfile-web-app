@@ -1,6 +1,5 @@
-import { Component, ElementRef, inject, viewChild, signal, effect, AfterViewChecked } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, signal, effect, AfterViewChecked, computed } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderStyles, HeaderComponent } from './header/header.component';
@@ -10,6 +9,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { ButtonDirective } from 'primeng/button';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
+import { toSignal } from '@angular/core/rxjs-interop';
 export enum BackgroundStyles {
   'DEFAULT' = '',
   'LOGIN' = 'login-background',
@@ -31,27 +31,21 @@ export enum BackgroundStyles {
     FeedbackOverlayComponent,
   ],
 })
-export class LayoutComponent extends DestroyerComponent implements AfterViewChecked {
+export class LayoutComponent implements AfterViewChecked {
   private readonly route = inject(ActivatedRoute);
+  private readonly source = toSignal(injectNavigationEnd());
   readonly feedbackOverlay = viewChild.required<FeedbackOverlayComponent>(FeedbackOverlayComponent);
   readonly footer = viewChild<FooterComponent>('footerRef');
   readonly contentOffset = viewChild<ElementRef>('contentOffset');
   readonly banner = viewChild.required<BannerComponent>('bannerRef');
 
-  readonly layoutControls = signal(new LayoutControls());
+  readonly layoutControls = computed(() => {
+    this.source();
+    return new LayoutControls(collectRouteData(this.route.snapshot));
+  });
 
   readonly BackgroundStyles = BackgroundStyles;
 
-  constructor() {
-    super();
-
-    const source$ = injectNavigationEnd();
-    source$.subscribe(() => this.layoutControls.set(new LayoutControls(collectRouteData(this.route.snapshot))));
-
-    effect(() => {
-      this.updateContentOffset();
-    });
-  }
   ngAfterViewChecked(): void {
     this.updateContentOffset();
   }

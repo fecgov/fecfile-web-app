@@ -1,5 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { combineLatestWith, startWith, takeUntil } from 'rxjs';
+import { Component, effect, inject } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { Report, ReportTypes } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
@@ -19,7 +18,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   templateUrl: './linked-report-input.component.html',
   imports: [ReactiveFormsModule, Tooltip, InputText, ErrorMessagesComponent],
 })
-export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
+export class LinkedReportInputComponent extends BaseInputComponent {
   private readonly reportService = inject(ReportService);
   private readonly datePipe = inject(FecDatePipe);
   committeeF3xReports: Promise<Report[]> = this.reportService.getAllReports();
@@ -31,27 +30,28 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
     'corresponding coverage dates.';
 
-  ngOnInit(): void {
+  constructor() {
+    super();
     this.form().addControl('linkedF3x', this.linkedF3xControl);
     this.form().addControl('linkedF3xId', new SignalFormControl(this.injector));
     const dateControl =
-      (this.form().get(this.templateMap()['date']) as SignalFormControl) ?? new SignalFormControl(this.injector);
+      (this.form().get(this.templateMap()['date']) as SignalFormControl<Date>) ??
+      new SignalFormControl<Date>(this.injector);
     const date2Control =
-      (this.form().get(this.templateMap()['date2']) as SignalFormControl) ?? new SignalFormControl(this.injector);
+      (this.form().get(this.templateMap()['date2']) as SignalFormControl<Date>) ??
+      new SignalFormControl<Date>(this.injector);
     this.linkedF3xControl.addValidators(
       buildCorrespondingForm3XValidator(this.form(), this.templateMap()['date'], this.templateMap()['date2']),
     );
 
-    dateControl.valueChanges
-      .pipe(
-        startWith(dateControl.value),
-        combineLatestWith(date2Control.valueChanges.pipe(startWith(date2Control.value))),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(this.setLinkedForm3X.bind(this));
+    effect(() => {
+      const date = dateControl.valueChangeSignal();
+      const date2 = date2Control.valueChangeSignal();
+      this.setLinkedForm3X(date, date2);
+    });
   }
 
-  setLinkedForm3X([disbursementDate, disseminationDate]: (Date | undefined)[]): void {
+  setLinkedForm3X(disbursementDate: Date, disseminationDate: Date): void {
     this.getLinkedForm3X(disbursementDate, disseminationDate).then((report) => {
       this.form().get('linkedF3x')?.setValue(this.getForm3XLabel(report));
       this.form().get('linkedF3xId')?.setValue(report?.id);

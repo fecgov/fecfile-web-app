@@ -1,6 +1,6 @@
 <div [formGroup]="form()">
   <div class="grid memo-container">
-    @if (memoCodeMapOptions.length === 0) {
+    @if (memoCodeMapOptions().length === 0) {
       <div class="col-12 field-row">
         <p-checkbox
           #memoCode
@@ -10,11 +10,11 @@
           ariaLabel="have memo item"
           [trueValue]="true"
           [falseValue]="false"
-          [readonly]="memoControl().disabled"
+          [readonly]="memoControl()?.disabled"
           (click)="onMemoItemClick()"
           (keydown.enter)="onMemoItemClick()"
         ></p-checkbox>
-        <label for="memo_code" [class.p-disabled]="memoControl().disabled" class="ml-2">{{ checkboxLabel() }}</label>
+        <label for="memo_code" [class.p-disabled]="memoControl()?.disabled" class="ml-2">{{ checkboxLabel() }}</label>
         <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
       <div class="col-12">
@@ -26,19 +26,19 @@
           #memoCode
           inputId="memo_code"
           [formControlName]="templateMap()['memo_code']"
-          [options]="memoCodeMapOptions"
+          [options]="memoCodeMapOptions()"
           optionLabel="label"
           optionValue="value"
         ></p-selectButton>
       </div>
       <div class="col-12">
-        @if (memoControl().value) {
+        @if (memoControl()?.value) {
           <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM
         }
-        @if (memoControl().value !== undefined) {
+        @if (memoControl()?.value !== undefined) {
           <span
             class="pi pi-info-circle"
             style="font-size: 1.5rem; margin-left: 0.5rem"
@@ -61,7 +61,7 @@
     </ng-template>
     <p id="out-of-date-dialog-text">
       <b>
-        {{ coverageDate | fecDate }}
+        {{ coverageDate() | fecDate }}
       </b>
       falls outside the report coverages dates of
       <b> {{ coverageFrom() | fecDate }}-{{ coverageThrough() | fecDate }}</b

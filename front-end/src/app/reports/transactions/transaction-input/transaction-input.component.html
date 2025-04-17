@@ -71,7 +71,7 @@
       [showAggregate]="!!transactionType()?.showAggregate"
       [showCalendarYTD]="!!transactionType()?.showCalendarYTD"
       [transaction]="transaction()"
-      [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$() | async)!"
+      [memoCodeCheckboxLabel]="memoCodeCheckboxLabel()!"
     ></app-amount-input>
   }
   @if (transactionType()?.hasDebtInput) {

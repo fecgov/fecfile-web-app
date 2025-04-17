@@ -1,5 +1,5 @@
-import { Component, computed } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, computed, signal } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -14,6 +14,8 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -38,16 +40,12 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   readonly childContactTypeOptions_2 = computed(() =>
     getContactTypeOptions(this.childTransactionType_2()?.contactTypeOptions ?? []),
   );
-  childForm_2: FormGroup = this.fb.group({}, { updateOn: 'blur' });
-  childContactIdMap_2: ContactIdMapType = {};
-  readonly childTemplateMap_2 = computed(
-    () => this.childTransactionType_2()?.templateMap ?? ({} as TransactionTemplateMapType),
-  );
-  childMemoCodeCheckboxLabel_2$ = of('');
-
-  constructor() {
-    super();
-    this.childForm_2 = this.fb.group(
+  readonly childForm_2 = computed(() => {
+    const props = this.childFormProperties_2();
+    if (props.length < 1) return undefined;
+    const transType = this.childTransactionType_2();
+    if (!transType) return undefined;
+    return this.fb.group(
       SchemaUtils.getFormGroupFieldsNoBlur(
         this.injector,
         this.childFormProperties_2(),
@@ -57,41 +55,61 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
         updateOn: 'blur',
       },
     );
-
+  });
+  childContactIdMap_2: ContactIdMapType = {};
+  readonly childTemplateMap_2 = computed(
+    () => this.childTransactionType_2()?.templateMap ?? ({} as TransactionTemplateMapType),
+  );
+  readonly childMemoCodeCheckboxLabel_2 = computed(() => {
+    const childTrans2 = this.childTransaction_2();
+    const childTransType2 = this.childTransactionType_2();
+    if (!childTrans2 || !childTransType2) return '';
     if (
-      this.childTransactionType_2()
-        ?.getInheritedFields(this.childTransaction_2()!)
-        ?.includes('memo_code' as TemplateMapKeyType) &&
+      childTransType2?.getInheritedFields(childTrans2)?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType()
     ) {
-      this.childMemoCodeCheckboxLabel_2$ = this.memoCodeCheckboxLabel$;
+      return this.memoCodeCheckboxLabel();
     } else {
-      this.childMemoCodeCheckboxLabel_2$ = this.getMemoCodeCheckboxLabel$(
-        this.childForm_2,
-        this.childTransactionType_2()!,
-      );
+      return this.getMemoCodeCheckboxLabel(this.childForm_2()!, childTransType2);
     }
+  });
 
-    TransactionFormUtils.onInit(
-      this,
-      this.childForm_2,
-      this.childTransaction_2(),
-      this.childContactIdMap_2,
-      this.contactService,
-      this.injector,
+  constructor() {
+    super();
+
+    effectOnceIf(
+      () => this.childForm_2() && this.childTransaction_2(),
+      () => {
+        const form = this.childForm_2();
+        const trans = this.childTransaction_2();
+        if (!form || !trans) return;
+        TransactionFormUtils.onInit(
+          this,
+          form,
+          this.childTransaction_2(),
+          this.childContactIdMap_2,
+          this.contactService,
+          this.injector,
+        );
+        TransactionChildFormUtils.childOnInit(this, form, trans, this.injector);
+      },
     );
-    TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2()!, this.injector);
   }
 
   override async save(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
-    if (this.transaction() && this.childTransaction && this.childTransaction_2) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction()!, this.templateMap()!, this.form());
-      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm());
+    const transaction = this.transaction();
+    const childTransaction = this.childTransaction();
+    const childTransaction_2 = this.childTransaction_2();
+    const templateMap = this.templateMap();
+    const childTemplatMap = this.childTemplateMap();
+    if (transaction && childTransaction && childTransaction_2 && templateMap && childTemplatMap) {
+      TransactionContactUtils.updateContactsWithForm(transaction, templateMap, this.form());
+      TransactionContactUtils.updateContactsWithForm(childTransaction, childTemplatMap, this.childForm());
       TransactionContactUtils.updateContactsWithForm(
-        this.childTransaction_2()!,
+        childTransaction_2,
         this.childTemplateMap_2(),
-        this.childForm_2,
+        this.childForm_2()!,
       );
     } else {
       this.store.dispatch(singleClickEnableAction());
@@ -107,15 +125,15 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
 
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(
-        this.childTransaction,
+        this.childTransaction(),
         this.activeReportId,
         this.childForm(),
-        this.childFormProperties,
+        this.childFormProperties(),
       ),
       TransactionFormUtils.getPayloadTransaction(
         this.childTransaction_2(),
         this.activeReportId,
-        this.childForm_2,
+        this.childForm_2()!,
         this.childFormProperties_2(),
       ),
     ];
@@ -126,8 +144,8 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   }
 
   override isInvalid(): boolean {
-    blurActiveInput(this.childForm_2);
-    return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
+    blurActiveInput(this.childForm_2()!);
+    return super.isInvalid() || this.childForm_2()!.invalid || !this.childTransaction_2;
   }
 
   override async getConfirmations(): Promise<boolean> {
@@ -135,7 +153,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
     const result = await super.getConfirmations();
     if (!result) return false;
     return this.confirmationService.confirmWithUser(
-      this.childForm_2,
+      this.childForm_2()!,
       this.childTransaction_2()?.transactionType?.contactConfig ?? {},
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
@@ -147,7 +165,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   override resetForm() {
     super.resetForm();
     TransactionFormUtils.resetForm(
-      this.childForm_2,
+      this.childForm_2()!,
       this.childTransaction_2(),
       this.childContactTypeOptions_2(),
       this.committeeAccount(),
@@ -161,20 +179,20 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
       this.transaction()?.contact_1
     ) {
       this.childTransaction_2()!.contact_1 = this.transaction()?.contact_1;
-      this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
+      this.childForm_2()!.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
 
   childUpdateFormWithPrimaryContact_2(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithPrimaryContact(
       selectItem,
-      this.childForm_2,
+      this.childForm_2()!,
       this.childTransaction_2(),
       this.childContactIdMap_2['contact_1'],
     );
 
     if (this.childTransaction_2) {
-      this.updateInheritedFields(this.childForm_2, this.childTransaction_2()!);
+      this.updateInheritedFields(this.childForm_2()!, this.childTransaction_2()!);
     } else {
       throw new Error('Fecfile: Missing child transaction.');
     }
@@ -183,7 +201,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   childUpdateFormWithCandidateContact_2(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithCandidateContact(
       selectItem,
-      this.childForm_2,
+      this.childForm_2()!,
       this.childTransaction_2(),
       this.childContactIdMap_2['contact_2'],
     );
@@ -192,7 +210,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   childUpdateFormWithSecondaryContact_2(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithSecondaryContact(
       selectItem,
-      this.childForm_2,
+      this.childForm_2()!,
       this.childTransaction_2(),
       this.childContactIdMap_2['contact_2'],
     );
@@ -201,7 +219,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   childUpdateFormWithTertiaryContact_2(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithSecondaryContact(
       selectItem,
-      this.childForm_2,
+      this.childForm_2()!,
       this.childTransaction_2(),
       this.childContactIdMap_2['contact_3'],
     );

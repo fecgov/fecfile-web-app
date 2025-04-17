@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -9,7 +9,6 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { takeUntil } from 'rxjs';
 import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
@@ -61,7 +60,7 @@ export class SubmitReportStep2Component extends FormComponent {
   loading: 0 | 1 | 2 = 0;
   backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
-  showBackdoorCode = false;
+  readonly showBackdoorCode = computed(() => !!this.getControl('backdoorYesNo')?.valueChangeSignal());
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
 
@@ -78,20 +77,18 @@ export class SubmitReportStep2Component extends FormComponent {
     this.form().addControl('backdoorYesNo', new SignalFormControl(this.injector));
     this.form().controls['filingPassword'].addValidators(passwordValidator);
     this.form().controls['userCertified'].addValidators(Validators.requiredTrue);
-    this.form()
-      .get('backdoorYesNo')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showBackdoorCode = value;
-        if (value) {
-          this.form().addControl(
-            'backdoor_code',
-            new SignalFormControl(this.injector, '', [Validators.required, Validators.maxLength(16)]),
-          );
-        } else {
-          this.form().removeControl('backdoor_code');
-        }
-      });
+
+    effect(() => {
+      if (this.showBackdoorCode()) {
+        this.form().addControl(
+          'backdoor_code',
+          new SignalFormControl(this.injector, '', [Validators.required, Validators.maxLength(16)]),
+        );
+      } else {
+        this.form().removeControl('backdoor_code');
+      }
+    });
+
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
       this.getBackUrl = getBackUrl;
       this.getContinueUrl = getContinueUrl;

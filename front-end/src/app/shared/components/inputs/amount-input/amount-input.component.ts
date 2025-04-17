@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, OnInit, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, viewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
@@ -15,6 +15,7 @@ import { LinkedReportInputComponent } from '../linked-report-input/linked-report
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-amount-input',
@@ -30,7 +31,7 @@ import { Store } from '@ngrx/store';
     ErrorMessagesComponent,
   ],
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit {
+export class AmountInputComponent extends BaseInputComponent {
   private readonly store = inject(Store);
   readonly report = this.store.selectSignal(selectActiveReport);
 
@@ -42,19 +43,31 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   readonly memoCodeCheckboxLabel = input('');
   readonly memoItemHelpText = input<string>();
 
-  memoCode = viewChild.required<MemoCodeInputComponent>('memoCode');
+  readonly memoCode = viewChild.required<MemoCodeInputComponent>('memoCode');
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
-  reportTypes = ReportTypes;
+  readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
+  readonly reportTypes = ReportTypes;
 
   readonly dateControl = computed(() => this.form().get(this.templateMap().date) as SignalFormControl);
   readonly date2Control = computed(() => this.form().get(this.templateMap().date2) as SignalFormControl);
 
   constructor() {
     super();
-    effect(() => {
-      if (isDebtRepayment(this.transaction()) || isLoanRepayment(this.transaction())) {
+    effectOnceIf(
+      () => this.form() && this.transaction(),
+      () => {
+        const transaction = this.transaction();
+        if (transaction?.transactionType.inheritCalendarYTD) {
+          this.form()
+            .get(transaction.transactionType.templateMap.calendar_ytd)
+            ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
+        }
+      },
+    );
+    effectOnceIf(
+      () => (isDebtRepayment(this.transaction()) || isLoanRepayment(this.transaction())) && this.dateControl(),
+      () => {
         this.dateControl().addValidators((control: AbstractControl): ValidationErrors | null => {
           const date = control.value;
           if (
@@ -70,38 +83,30 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
           }
           return null;
         });
-      }
-    });
-  }
+      },
+    );
 
-  ngOnInit(): void {
-    // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
-    // and set up the "Just checking..." pop-up as needed.
-    if (this.templateMap().date2) {
-      this.dateControl().valueChanges.subscribe(() => {
-        this.date2Control().updateValueAndValidity({ emitEvent: false });
-        this.memoCode().coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
-      });
+    effectOnceIf(
+      () => this.transaction() && this.date2Control() && this.dateControl() && this.templateMap().date2,
+      () => {
+        effect(() => {
+          this.dateControl().valueChangeSignal();
+          this.date2Control().updateValueAndValidity({ emitEvent: false });
+          this.memoCode().coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
+        });
 
-      this.date2Control().valueChanges.subscribe((date: Date) => {
-        this.dateControl().updateValueAndValidity({ emitEvent: false });
-        // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
-        if (!this.dateControl().value) {
-          this.memoCode().coverageDate = date;
-          this.memoCode().coverageDateQuestion =
-            'Did you mean to enter a disbursement date outside of the report coverage period?';
-          this.memoCode().updateMemoItemWithDate(date);
-        }
-      });
-    }
-
-    // For Schedule E memos, insert the calendar_ytd from the parent into the form control
-    const transaction = this.transaction();
-    if (transaction?.transactionType.inheritCalendarYTD) {
-      this.form()
-        .get(transaction.transactionType.templateMap.calendar_ytd)
-        ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
-    }
+        effect(() => {
+          const date = this.date2Control().valueChangeSignal();
+          this.dateControl().updateValueAndValidity({ emitEvent: false });
+          // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
+          if (!this.dateControl().value) {
+            this.memoCode().coverageDateQuestion =
+              'Did you mean to enter a disbursement date outside of the report coverage period?';
+            this.memoCode().updateMemoItemWithDate(date);
+          }
+        });
+      },
+    );
   }
 
   protected readonly isLoanRepayment = isLoanRepayment;

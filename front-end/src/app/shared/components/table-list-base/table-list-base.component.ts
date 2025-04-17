@@ -2,7 +2,6 @@
 import { AfterViewInit, Component, ElementRef, inject, output } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
-import { DestroyerComponent } from '../app-destroyer.component';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ListRestResponse } from 'app/shared/models';
@@ -10,7 +9,7 @@ import { ListRestResponse } from 'app/shared/models';
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> extends DestroyerComponent implements AfterViewInit {
+export abstract class TableListBaseComponent<T> implements AfterViewInit {
   readonly messageService = inject(MessageService);
   readonly confirmationService = inject(ConfirmationService);
   protected readonly elementRef = inject(ElementRef);

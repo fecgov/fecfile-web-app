@@ -7,7 +7,7 @@ import { injectNavigationEnd } from 'ngxtension/navigation-end';
   styleUrls: ['./banner.component.scss'],
 })
 export class BannerComponent {
-  private readonly bannerElement = viewChild.required<ElementRef>('banner');
+  readonly bannerElement = viewChild.required<ElementRef>('banner');
   readonly expanded = signal(false);
 
   constructor() {

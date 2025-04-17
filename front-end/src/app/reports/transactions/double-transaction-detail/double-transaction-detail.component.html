@@ -35,7 +35,7 @@
           [formSubmitted]="formSubmitted"
           [transaction]="transaction()"
           [contactTypeOptions]="contactTypeOptions()"
-          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+          [memoCodeCheckboxLabel]="memoCodeCheckboxLabel()"
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
@@ -49,29 +49,29 @@
   <p-accordion-panel value="1">
     <p-accordion-header>
       <div class="flex align-items-center">
-        <strong>{{ childTransactionType?.accordionTitle }}:</strong>
+        <strong>{{ childTransactionType()?.accordionTitle }}:</strong>
         <p class="accordion-subtext">
-          {{ childTransactionType?.accordionSubText }}
+          {{ childTransactionType()?.accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      <h2>{{ childTransaction?.transactionType?.title }}</h2>
-      @if (childTransactionType?.description) {
+      <h2>{{ childTransactionType()?.title }}</h2>
+      @if (childTransactionType()?.description) {
         <p>
-          <em [innerHtml]="childTransactionType?.description"></em>
+          <em [innerHtml]="childTransactionType()?.description"></em>
         </p>
       }
 
-      <h3>{{ childTransactionType?.contactTitle }}</h3>
+      <h3>{{ childTransactionType()?.contactTitle }}</h3>
       <form id="childForm" [formGroup]="childForm()" [class.ng-submitted]="formSubmitted">
         <app-transaction-input
           [isEditable]="isEditable()"
           [form]="childForm()"
           [formSubmitted]="formSubmitted"
-          [transaction]="childTransaction"
-          [contactTypeOptions]="childContactTypeOptions"
-          [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
+          [transaction]="childTransaction()"
+          [contactTypeOptions]="childContactTypeOptions()"
+          [memoCodeCheckboxLabel]="childMemoCodeCheckboxLabel()"
           [contributionAmountReadOnly]="true"
           (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
           (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"

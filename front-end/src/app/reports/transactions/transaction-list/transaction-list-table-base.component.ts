@@ -20,6 +20,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { take } from 'rxjs';
+import { injectDestroy } from 'ngxtension/inject-destroy';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
 const loansDebts = [
@@ -38,6 +39,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
   protected readonly activatedRoute = inject(ActivatedRoute);
+  private readonly destroy$ = injectDestroy();
 
   readonly report = this.store.selectSignal(selectActiveReport);
   abstract scheduleTransactionTypeLabels: LabelList;

@@ -5,7 +5,6 @@ import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -19,7 +18,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   styleUrls: ['./form-type-dialog.component.scss'],
   imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, SelectButtonModule],
 })
-export class FormTypeDialogComponent extends DestroyerComponent {
+export class FormTypeDialogComponent {
   public readonly router = inject(Router);
   private readonly form24Service = inject(Form24Service);
   private readonly store = inject(Store);
@@ -30,14 +29,14 @@ export class FormTypeDialogComponent extends DestroyerComponent {
   readonly dialogClose = output<void>();
   readonly refreshReports = output<void>();
 
-  formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
+  readonly formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
-  committeeAccount = this.store.selectSignal(selectCommitteeAccount);
+  readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   street = undefined;
 
   selectedForm24Type: '24' | '48' | null = null;
 
-  form24Options = [
+  readonly form24Options = [
     { label: '24 Hour ', value: '24' },
     { label: '48 Hour', value: '48' },
   ];

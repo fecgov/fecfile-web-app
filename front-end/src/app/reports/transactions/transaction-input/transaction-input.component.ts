@@ -1,24 +1,11 @@
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  effect,
-  EventEmitter,
-  input,
-  Input,
-  model,
-  OnInit,
-  output,
-  Output,
-} from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, computed, effect, input, model, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
-import { Observable } from 'rxjs';
 import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
 import { AmountInputComponent } from '../../../shared/components/inputs/amount-input/amount-input.component';
@@ -35,6 +22,7 @@ import { SignatureInputComponent } from '../../../shared/components/inputs/signa
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-transaction-input',
@@ -58,16 +46,15 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
     SupportOpposeInputComponent,
     CandidateInputComponent,
     ElectionInputComponent,
-    AsyncPipe,
   ],
 })
-export class TransactionInputComponent implements AfterViewInit {
+export class TransactionInputComponent {
   readonly form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
   readonly formSubmitted = input(false);
   readonly transaction = input<Transaction>();
   readonly isEditable = input(true);
   readonly contactTypeOptions = input(LabelUtils.getPrimeOptions(ContactTypeLabels));
-  readonly memoCodeCheckboxLabel$ = input<Observable<string>>();
+  readonly memoCodeCheckboxLabel = input<string>();
   readonly contributionAmountReadOnly = input(false);
   readonly candidateInfoPosition = model('low');
   readonly isSingle = input(false);
@@ -91,15 +78,18 @@ export class TransactionInputComponent implements AfterViewInit {
     effect(() => {
       this.candidateInfoPosition.set(this.transactionType()?.candidateInfoPosition ?? 'low');
     });
-  }
 
-  ngAfterViewInit() {
-    const type = this.transactionType();
-    if (!type) return;
-    for (const field in type.mandatoryFormValues) {
-      this.form().get(field)?.setValue(type.mandatoryFormValues[field]);
-      this.form().get(field)?.disable();
-    }
+    effectOnceIf(
+      () => this.transactionType(),
+      () => {
+        const type = this.transactionType();
+        if (!type) return;
+        for (const field in type.mandatoryFormValues) {
+          this.form().get(field)?.setValue(type.mandatoryFormValues[field]);
+          this.form().get(field)?.disable();
+        }
+      },
+    );
   }
 
   contactTypeSelected(contactType: ContactTypes) {

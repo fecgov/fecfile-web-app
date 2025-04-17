@@ -39,7 +39,7 @@
           [formSubmitted]="formSubmitted"
           [form]="form()"
           [isEditable]="isEditable()"
-          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+          [memoCodeCheckboxLabel]="memoCodeCheckboxLabel()"
           [transaction]="transaction()"
         >
         </app-transaction-input>
@@ -50,35 +50,35 @@
   <p-accordion-panel value="1">
     <p-accordion-header>
       <div class="flex align-items-center">
-        <strong>{{ childTransactionType?.accordionTitle }}:</strong>
+        <strong>{{ childTransactionType()?.accordionTitle }}:</strong>
         <p class="accordion-subtext">
-          {{ childTransactionType?.accordionSubText }}
+          {{ childTransactionType()?.accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      <h2>{{ childTransaction?.transactionType?.formTitle }}</h2>
-      @if (childTransactionType?.description) {
+      <h2>{{ childTransaction()?.transactionType?.formTitle }}</h2>
+      @if (childTransactionType()?.description) {
         <p>
-          <em [innerHtml]="childTransactionType?.description"></em>
+          <em [innerHtml]="childTransactionType()?.description"></em>
         </p>
       }
 
-      <h3>{{ childTransactionType?.contactTitle }}</h3>
+      <h3>{{ childTransactionType()?.contactTitle }}</h3>
       <form [formGroup]="childForm()" [class.ng-submitted]="formSubmitted" id="childForm">
-        @if (childTransaction) {
+        @if (childTransaction()) {
           <app-transaction-input
             (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
             (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
             (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
             (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
-            [contactTypeOptions]="childContactTypeOptions"
+            [contactTypeOptions]="childContactTypeOptions()"
             [contributionAmountReadOnly]="true"
             [formSubmitted]="formSubmitted"
             [form]="childForm()"
             [isEditable]="isEditable()"
-            [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
-            [transaction]="childTransaction"
+            [memoCodeCheckboxLabel]="childMemoCodeCheckboxLabel()"
+            [transaction]="childTransaction()"
           >
           </app-transaction-input>
         }
@@ -115,7 +115,7 @@
             [formSubmitted]="formSubmitted"
             [form]="reattributedData.form"
             [isEditable]="false"
-            [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
+            [memoCodeCheckboxLabel]="reattributedData.memoCodeCheckboxLabel"
             [transaction]="transaction()?.reatt_redes"
           >
           </app-transaction-input>

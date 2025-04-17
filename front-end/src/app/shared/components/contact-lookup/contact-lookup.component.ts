@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Injector, input, model, OnInit, output, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, Injector, input, model, output, viewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -17,9 +17,8 @@ import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
 import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
-import { DestroyerComponent } from '../app-destroyer.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -27,7 +26,7 @@ import { DestroyerComponent } from '../app-destroyer.component';
   styleUrls: ['./contact-lookup.component.scss'],
   imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
 })
-export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+export class ContactLookupComponent {
   readonly injector = inject(Injector);
   public readonly contactService = inject(ContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
@@ -64,7 +63,6 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   searchTerm = '';
 
   constructor() {
-    super();
     effect(() => {
       const ac = this.autoComplete();
       if (ac?.dropdownButton) {
@@ -73,18 +71,20 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
         });
       }
     });
-  }
 
-  ngOnInit(): void {
-    this.contactTypeFormControl.setValue(this.contactType());
+    effect(() => {
+      const contactType = this.contactTypeFormControl?.valueChangeSignal();
+      if (!contactType) return;
+      this.contactType.set(contactType);
+      this.contactTypeSelect.emit(contactType);
+    });
 
-    this.contactTypeFormControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((contactType: ContactTypes | null) => {
-        if (!contactType) return;
-        this.contactType.set(contactType);
-        this.contactTypeSelect.emit(contactType);
-      });
+    effectOnceIf(
+      () => this.contactTypeFormControl && this.contactType(),
+      () => {
+        this.contactTypeFormControl.setValue(this.contactType());
+      },
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -22,7 +22,6 @@ import {
   TransactionTypeUtils,
   getTransactionTypeClass,
 } from 'app/shared/utils/transaction-type.utils';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import {
   ScheduleCTransactionGroups,
   ScheduleCTransactionTypeLabels,
@@ -57,7 +56,7 @@ type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
   styleUrls: ['./transaction-type-picker.component.scss'],
   imports: [RouterLink, LabelPipe, AccordionModule],
 })
-export class TransactionTypePickerComponent extends DestroyerComponent {
+export class TransactionTypePickerComponent {
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
   private readonly titleService = inject(Title);
@@ -89,9 +88,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
-  active = model<number>(-1);
+  readonly active = model<number>(-1);
 
-  transactionGroups: Signal<TransactionGroupTypes[]> = computed(() => {
+  readonly transactionGroups: Signal<TransactionGroupTypes[]> = computed(() => {
     if (this.category() === 'disbursement') {
       if (this.report().report_type === ReportTypes.F3) {
         return [
@@ -126,8 +125,33 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
     ];
   });
 
+  private readonly debtPaymentLines = [
+    ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SE', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
+    ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
+  ];
+
+  readonly transactionTypeMap = computed(() => {
+    const map: { [key in TransactionGroupTypes]?: TransactionTypes[] } = {};
+    for (const group of this.transactionGroups()) {
+      let transactionTypes: TransactionTypes[] = this.getByGroup(group);
+
+      if (!this.committeeAccount().isPAC) transactionTypes = transactionTypes.filter((tt) => !PAC_ONLY().includes(tt));
+      if (!this.committeeAccount().isPTY) transactionTypes = transactionTypes.filter((tt) => !PTY_ONLY().includes(tt));
+
+      if (this.debtId()) {
+        map[group] = transactionTypes.filter((transactionType) => {
+          if (this.isTransactionDisabled(transactionType)) return false;
+          const lineNumber = TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '';
+          return this.debtPaymentLines.includes(lineNumber);
+        });
+      } else {
+        map[group] = transactionTypes.filter((transactionType) => this.showTransaction(transactionType));
+      }
+    }
+    return map;
+  });
+
   constructor() {
-    super();
     effect(() => {
       this.titleService.setTitle(this.title());
     });
@@ -136,11 +160,30 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
     });
   }
 
-  getTransactionTypes(group: TransactionGroupTypes): TransactionTypes[] {
-    let transactionTypes: TransactionTypes[] = [];
+  hasTransactions(group: TransactionGroupTypes): boolean {
+    return this.transactionTypeMap()[group] ? this.transactionTypeMap()[group]!.length > 0 : false;
+  }
+
+  isTransactionDisabled(transactionTypeIdentifier: string): boolean {
+    return !getTransactionTypeClass(transactionTypeIdentifier);
+  }
+
+  showTransaction(transactionTypeIdentifier: string): boolean {
+    // currently we only hide SchedF in some ɵnvironments, but in the future?
+    return !(!environment.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
+  }
+
+  getRouterLink(transactionType: string): string | undefined {
+    if (this.report && !this.isTransactionDisabled(transactionType)) {
+      return `/reports/transactions/report/${this.report().id}/create/${transactionType}`;
+    }
+    return undefined;
+  }
+
+  private getByGroup(group: TransactionGroupTypes): TransactionTypes[] {
     switch (group) {
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS:
-        transactionTypes = [
+        return [
           ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECEIPT,
           ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
@@ -151,9 +194,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
           ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
         ];
-        break;
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
-        transactionTypes = [
+        return [
           ScheduleATransactionTypes.PARTY_RECEIPT,
           ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
           ScheduleATransactionTypes.PARTY_RETURN,
@@ -163,9 +205,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
           ScheduleATransactionTypes.PAC_RETURN,
         ];
-        break;
+
       case ScheduleATransactionGroups.TRANSFERS:
-        transactionTypes = [
+        return [
           ScheduleATransactionTypes.TRANSFER,
           ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER,
@@ -174,16 +216,16 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
-        break;
+
       case ScheduleATransactionGroups.REFUNDS:
-        transactionTypes = [
+        return [
           ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
           ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
           ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];
-        break;
+
       case ScheduleATransactionGroups.OTHER:
-        transactionTypes = [
+        return [
           ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
           ScheduleATransactionTypes.OTHER_RECEIPTS,
           ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
@@ -213,18 +255,18 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
-        break;
+
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
-        transactionTypes = [
+        return [
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
         ];
-        break;
+
       case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS:
-        transactionTypes = [
+        return [
           ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
@@ -235,9 +277,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
           ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
         ];
-        break;
+
       case ScheduleBTransactionGroups.OTHER_EXPENDITURES:
-        transactionTypes = [
+        return [
           ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
@@ -264,9 +306,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
         ];
-        break;
+
       case ScheduleBTransactionGroups.REFUND:
-        transactionTypes = [
+        return [
           ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
           ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
@@ -276,31 +318,28 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
         ];
-        break;
+
       case ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES:
-        transactionTypes = [
+        return [
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
         ];
-        break;
+
       case ScheduleCTransactionGroups.LOANS:
-        transactionTypes = [
+        return [
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
           ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
         ];
-        break;
+
       case ScheduleDTransactionGroups.DEBTS:
-        transactionTypes = [
-          ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
-          ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
-        ];
-        break;
+        return [ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE, ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE];
+
       case ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES:
-        transactionTypes = [
+        return [
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
           ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
@@ -308,51 +347,15 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
           ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
         ];
-        break;
+
       case ScheduleFTransactionGroups.COORDINATED_EXPENDITURES:
-        transactionTypes = [
+        return [
           ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
           ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
         ];
-        break;
+
       default:
-        break;
+        return [];
     }
-
-    if (!this.committeeAccount().isPAC) transactionTypes = transactionTypes.filter((tt) => !PAC_ONLY().includes(tt));
-    if (!this.committeeAccount().isPTY) transactionTypes = transactionTypes.filter((tt) => !PTY_ONLY().includes(tt));
-
-    if (this.debtId()) {
-      const debtPaymentLines = [
-        ...['SB21A', 'SB21B', 'SB22', 'SB23', 'SB24', 'SE', 'SB25', 'SB28A', 'SB28B', 'SB28C', 'SB29', 'H6', 'SB30B'],
-        ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
-      ];
-      return transactionTypes.filter((transactionType) => {
-        if (this.isTransactionDisabled(transactionType)) return false;
-        const lineNumber = TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '';
-        return debtPaymentLines.includes(lineNumber);
-      });
-    }
-    return transactionTypes.filter((transactionType) => this.showTransaction(transactionType));
-  }
-
-  hasTransactions(group: TransactionGroupTypes): boolean {
-    return this.getTransactionTypes(group).length > 0;
-  }
-
-  isTransactionDisabled(transactionTypeIdentifier: string): boolean {
-    return !getTransactionTypeClass(transactionTypeIdentifier);
-  }
-
-  showTransaction(transactionTypeIdentifier: string): boolean {
-    // currently we only hide SchedF in some ɵnvironments, but in the future?
-    return !(!environment.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
-  }
-
-  getRouterLink(transactionType: string): string | undefined {
-    if (this.report && !this.isTransactionDisabled(transactionType)) {
-      return `/reports/transactions/report/${this.report().id}/create/${transactionType}`;
-    }
-    return undefined;
   }
 }

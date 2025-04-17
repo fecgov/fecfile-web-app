@@ -1,5 +1,4 @@
 import { Component, computed, inject } from '@angular/core';
-import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 import { MenuItem } from 'primeng/api';
@@ -13,7 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   template: '',
 })
-export abstract class AbstractMenuComponent extends DestroyerComponent {
+export abstract class AbstractMenuComponent {
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);
   private readonly route = inject(ActivatedRoute);
@@ -21,12 +20,12 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
 
   protected abstract readonly reportString: string;
 
-  navEnd = toSignal(injectNavigationEnd());
-  routeData = computed(() => {
+  private readonly navEnd = toSignal(injectNavigationEnd());
+  private readonly routeData = computed(() => {
     this.navEnd();
     return collectRouteData(this.route.snapshot);
   });
-  items = computed(() => {
+  readonly items = computed(() => {
     const sidebarState = new SidebarState(this.routeData()['sidebarSection']);
     const isEditable = this.reportService.isEditable(this.activeReport());
     return this.getMenuItems(sidebarState, isEditable);

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, Signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, Signal, WritableSignal } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -29,6 +29,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 @Component({
   template: '',
@@ -59,7 +60,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
   readonly isEditable = computed(
     () => this.reportService.isEditable(this.report()) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()),
   );
-  memoCodeCheckboxLabel$ = of('');
+  readonly memoCodeCheckboxLabel = computed(() => this.getMemoCodeCheckboxLabel(this.form(), this.transactionType()));
 
   readonly transaction = input<Transaction>();
   readonly transactionType = computed(() => this.transaction()?.transactionType);
@@ -100,8 +101,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
           throw new Error('Fecfile: Template map not found for transaction component');
         }
 
-        this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form(), transaction.transactionType);
-
         TransactionFormUtils.onInit(
           this,
           this.form(),
@@ -113,14 +112,16 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
 
         // Determine if amount should always be negative and then force it to be so if needed
         if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
-          this.form()
-            .get(this.templateMap()!.amount)
-            ?.valueChanges.pipe(takeUntil(this.destroy$))
-            .subscribe((amount) => {
+          const control = this.getControl(this.templateMap()!.amount);
+          effect(
+            () => {
+              const amount = control?.valueChangeSignal();
               if (+amount > 0) {
                 this.form().patchValue({ [this.templateMap()!.amount]: -1 * amount });
               }
-            });
+            },
+            { injector: this.injector },
+          );
         }
 
         // If this single-entry transaction has inherited fields from its parent, load values
@@ -330,21 +331,18 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
     TransactionContactUtils.clearFormQuinaryContact(this.form(), this.transaction(), this.contactIdMap['contact_5']);
   }
 
-  getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
+  getMemoCodeCheckboxLabel(form: FormGroup, transactionType: TransactionType | undefined): string {
     const requiredLabel = 'MEMO ITEM';
     const optionalLabel = requiredLabel + ' (OPTIONAL)';
 
-    const memoControl = form.get(transactionType?.templateMap.memo_code);
-    if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) {
-      return of(requiredLabel);
-    }
-    return memoControl.valueChanges.pipe(
-      map(() => {
-        return memoControl.hasValidator(Validators.requiredTrue) ? requiredLabel : optionalLabel;
-      }),
-      startWith(optionalLabel),
-      takeUntil(this.destroy$),
-    );
+    if (!form || !transactionType?.templateMap?.memo_code) return optionalLabel;
+
+    const memoControl = form.get(transactionType.templateMap.memo_code) as SignalFormControl;
+
+    if (!memoControl || TransactionFormUtils.isMemoCodeReadOnly(transactionType)) return requiredLabel;
+
+    const isRequired = memoControl.hasValidator(Validators.requiredTrue);
+    return isRequired ? requiredLabel : optionalLabel;
   }
 
   /**

@@ -1,4 +1,4 @@
-import { computed, Injector, signal } from '@angular/core';
+import { computed, Injector, Signal, signal } from '@angular/core';
 import { connect } from 'ngxtension/connect';
 import {
   AsyncValidatorFn,
@@ -13,7 +13,7 @@ import {
 export class SignalFormControl<TValue = any> extends FormControl {
   readonly errorsSignal = signal<ValidationErrors | null>(null);
   private readonly vChange = signal<TValue | undefined>(undefined);
-  readonly valueChangeSignal = computed(() => {
+  readonly valueChangeSignal: Signal<TValue> = computed(() => {
     this.vChange();
     return this.value;
   });

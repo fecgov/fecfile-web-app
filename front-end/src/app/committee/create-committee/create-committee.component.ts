@@ -1,7 +1,6 @@
 import { Component, inject, Injector } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
@@ -22,7 +21,7 @@ import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions'
   styleUrls: ['./create-committee.component.scss'],
   imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, Dialog, CheckboxModule, ButtonModule],
 })
-export class CreateCommitteeComponent extends DestroyerComponent {
+export class CreateCommitteeComponent {
   private readonly injector = inject(Injector);
   private readonly router = inject(Router);
   protected readonly store = inject(Store);
