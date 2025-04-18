@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, effect, inject, input, model, output, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -20,7 +20,6 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
@@ -95,7 +94,7 @@ export class TransactionData {
     LabelPipe,
   ],
 })
-export class ContactDialogComponent extends FormComponent {
+export class ContactDialogComponent extends FormComponent implements OnInit {
   private readonly contactService = inject(ContactService);
   private readonly transactionService = inject(TransactionService);
   protected readonly confirmationService = inject(ConfirmationService);
@@ -103,13 +102,12 @@ export class ContactDialogComponent extends FormComponent {
   readonly ContactTypes = ContactTypes;
 
   readonly contact = model<Contact>();
-  readonly contactTypeOptions = model<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
+  readonly contactTypeOptions = input.required<PrimeOptions>();
   readonly detailVisible = model(false);
   readonly showHistory = input(false);
   readonly headerTitle = input<string>();
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
 
-  readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
 
   transactions: TransactionData[] = [];
@@ -148,7 +146,6 @@ export class ContactDialogComponent extends FormComponent {
   readonly stateOptions = signal(LabelUtils.getPrimeOptions(StatesCodeLabels));
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
   readonly candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
   emptyMessage = 'No data available in table';
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -226,15 +223,20 @@ export class ContactDialogComponent extends FormComponent {
     effectOnceIf(
       () => this.defaultCandidateOffice() && this.form().get('candidate_office'),
       () => {
-        this.form().get('candidate_office')?.disable();
+        this.form().get('candidate_office')!.disable();
       },
     );
 
-    effectOnceIf(
-      () => this.contactType() && this.contactTypeOptions(),
-      () => this.contactTypeChanged(this.contactType()),
-    );
+    effect(() => {
+      const type = this.contactType();
+      console.log(type);
+    });
   }
+
+  ngOnInit() {
+    this.contactTypeChanged(this.contactType());
+  }
+
   /**
    * On ngOnInit and when a user changes the selection of the ContactType for the contact
    * entry form (as known by the emitter from the contact-lookup component), update the necessary
@@ -298,17 +300,8 @@ export class ContactDialogComponent extends FormComponent {
       // so we need to directly update the lookup "type" form control value
       this.contactLookup().contactTypeFormControl.setValue(this.contact()?.type);
       this.contactLookup().contactTypeFormControl.enable();
-    } else if (this.contactTypeOptions.length === 1) {
+    } else if (this.contactTypeOptions().length === 1) {
       this.contactLookup().contactTypeFormControl.enable();
-    }
-    this.dialogVisible = true;
-  }
-
-  public closeDialog(visibleChangeFlag = false) {
-    if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.detailVisible.set(false);
-      this.dialogVisible = false;
     }
   }
 
@@ -330,9 +323,9 @@ export class ContactDialogComponent extends FormComponent {
   updateContact(contact: Contact) {
     this.contact.set(contact);
     this.contactType.set(contact.type);
-    this.contactTypeOptions.set(
-      LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type),
-    );
+    // this.contactTypeOptions.set(
+    //   LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type),
+    // );
     this.form().patchValue(contact);
   }
 
@@ -378,7 +371,7 @@ export class ContactDialogComponent extends FormComponent {
     this.savedContact.emit(contact);
 
     if (closeDialog) {
-      this.closeDialog();
+      this.detailVisible.set(false);
     }
     this.resetForm();
   }

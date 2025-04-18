@@ -6,7 +6,7 @@
         <input type="text" pInputText id="candidate_id" [formControlName]="templateMap()['candidate_fec_id']" />
         <app-error-messages
           [control]="getControl(templateMap()['candidate_fec_id'])"
-          [formSubmitted]()="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -72,6 +72,7 @@
       [transaction]="transaction()"
       [form]="form()"
       [formSubmitted]="formSubmitted()"
+      [templateMap]="templateMap()"
       [officeFormControlName]="templateMap()['candidate_office']"
       [stateFormControlName]="templateMap()['candidate_state']"
       [districtFormControlName]="templateMap()['candidate_district']"

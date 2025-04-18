@@ -71,8 +71,12 @@ export class TransactionInputComponent {
   readonly ContactTypes = ContactTypes;
   readonly transactionType = computed(() => this.transaction()?.transactionType);
   readonly templateMap = computed(() => this.transactionType()?.templateMap ?? ({} as TransactionTemplateMapType));
-  candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
-  committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  readonly candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.CANDIDATE,
+  ]);
+  readonly committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+  ]);
 
   constructor() {
     effect(() => {

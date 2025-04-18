@@ -9,10 +9,10 @@ import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 })
 export abstract class BaseInputComponent {
   protected readonly injector = inject(Injector);
-  transaction = input<Transaction>();
-  form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
-  formSubmitted = input(false);
-  templateMap = input<TransactionTemplateMapType>({} as TransactionTemplateMapType);
+  readonly transaction = input<Transaction>();
+  readonly form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
+  readonly formSubmitted = input(false);
+  readonly templateMap = input<TransactionTemplateMapType>({} as TransactionTemplateMapType);
 
   getControl(field: string) {
     const control = this.form().get(field);

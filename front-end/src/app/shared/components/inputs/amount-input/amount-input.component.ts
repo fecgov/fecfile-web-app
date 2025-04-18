@@ -43,7 +43,7 @@ export class AmountInputComponent extends BaseInputComponent {
   readonly memoCodeCheckboxLabel = input('');
   readonly memoItemHelpText = input<string>();
 
-  readonly memoCode = viewChild.required<MemoCodeInputComponent>('memoCode');
+  readonly memoCode = viewChild<MemoCodeInputComponent>('memoCode');
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
@@ -85,27 +85,33 @@ export class AmountInputComponent extends BaseInputComponent {
         });
       },
     );
+  }
 
-    effectOnceIf(
-      () => this.transaction() && this.date2Control() && this.dateControl() && this.templateMap().date2,
+  ngOnInit() {
+    effect(
       () => {
-        effect(() => {
-          this.dateControl().valueChangeSignal();
-          this.date2Control().updateValueAndValidity({ emitEvent: false });
-          this.memoCode().coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
-        });
-
-        effect(() => {
-          const date = this.date2Control().valueChangeSignal();
-          this.dateControl().updateValueAndValidity({ emitEvent: false });
-          // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
-          if (!this.dateControl().value) {
-            this.memoCode().coverageDateQuestion =
-              'Did you mean to enter a disbursement date outside of the report coverage period?';
-            this.memoCode().updateMemoItemWithDate(date);
-          }
-        });
+        this.dateControl().valueChangeSignal();
+        this.date2Control().updateValueAndValidity({ emitEvent: false });
+        const memoCode = this.memoCode();
+        if (memoCode)
+          memoCode.coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
       },
+      { injector: this.injector },
+    );
+
+    effect(
+      () => {
+        const date = this.date2Control().valueChangeSignal();
+        this.dateControl().updateValueAndValidity({ emitEvent: false });
+        const memoCode = this.memoCode();
+        // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
+        if (!this.dateControl().value && memoCode) {
+          memoCode.coverageDateQuestion =
+            'Did you mean to enter a disbursement date outside of the report coverage period?';
+          memoCode.updateMemoItemWithDate(date);
+        }
+      },
+      { injector: this.injector },
     );
   }
 

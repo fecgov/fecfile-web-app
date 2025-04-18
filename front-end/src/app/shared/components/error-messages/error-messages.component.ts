@@ -1,6 +1,5 @@
 import { Component, computed, inject, input, LOCALE_ID } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { AbstractControl, FormControl } from '@angular/forms';
 import { NgxControlError } from 'ngxtension/control-error';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 

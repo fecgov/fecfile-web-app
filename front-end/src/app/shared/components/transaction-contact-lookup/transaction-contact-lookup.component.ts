@@ -1,4 +1,17 @@
-import { Component, inject, Injector, input, model, OnInit, output, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  Injector,
+  input,
+  model,
+  OnInit,
+  output,
+  signal,
+  Signal,
+  viewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -22,6 +35,7 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 export class TransactionContactLookupComponent implements OnInit {
   private readonly injector = inject(Injector);
   private readonly formBuilder = inject(FormBuilder);
+
   readonly contactProperty = input('contact_1');
   readonly transaction = input<Transaction>();
   readonly form = input<FormGroup>(new FormGroup({}, { updateOn: 'blur' }));
@@ -33,11 +47,11 @@ export class TransactionContactLookupComponent implements OnInit {
   readonly contactTypeSelect = output<ContactTypes>();
   readonly contactSelect = output<SelectItem<Contact>>();
 
-  contactDialog = viewChild(ContactDialogComponent);
+  readonly contactDialog = viewChild(ContactDialogComponent);
 
   detailVisible = false;
-  dialogContactTypeOptions: PrimeOptions = [];
-  createContactForm: FormGroup = this.formBuilder.group(
+
+  readonly createContactForm: FormGroup = this.formBuilder.group(
     SchemaUtils.getFormGroupFields(this.injector, [
       ...new Set([
         ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
@@ -47,79 +61,57 @@ export class TransactionContactLookupComponent implements OnInit {
       ]),
     ]),
   );
+
+  readonly selectedOption = signal<{ label: string; value: string }>({
+    value: ContactTypeLabels[0][0],
+    label: ContactTypeLabels[0][1],
+  });
+  readonly currentContactLabel = computed(() => this.selectedOption().label);
+  readonly currentType = computed(() => this.selectedOption().value as ContactTypes);
+
+  readonly mandatoryCandidateOffice = computed(() => {
+    const tx = this.transaction();
+    const candidateKey = tx?.transactionType?.templateMap?.candidate_office;
+    if (!candidateKey) return undefined;
+    return tx?.transactionType?.mandatoryFormValues?.[candidateKey] as CandidateOfficeType;
+  });
+
   errorMessageFormControl?: SignalFormControl;
-  currentContactLabel = 'Individual';
-  currentType = ContactTypes.INDIVIDUAL;
-  mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
   ngOnInit(): void {
-    // Set the contact type options in the child dialog component to the first contact type option
-    // listed in the child lookup component. This will automatically select the correct
-    // content type from the transaction contact lookup and make the second in the lookup in the dialog to readonly.
-    this.dialogContactTypeOptions = [this.contactTypeOptions()[0]];
-    this.currentContactLabel = this.contactTypeOptions()[0].label;
-    this.currentType = this.contactTypeOptions()[0].value as ContactTypes;
-
+    const tx = this.transaction();
     // Limit contact type options in contact lookup to one when editing a transaction
-    if (this.transaction()?.id) {
-      this.contactTypeOptions.set(
-        LabelUtils.getPrimeOptions(ContactTypeLabels, [
-          (this.transaction()![this.contactProperty() as keyof Transaction] as Contact).type as ContactTypes,
-        ]),
-      );
-    }
-
-    // Determine from manitoryFields if candidate results are limited to a particular office
-    if (
-      this.transaction()?.transactionType.templateMap.candidate_office &&
-      this.transaction()!.transactionType.mandatoryFormValues &&
-      this.transaction()!.transactionType.templateMap.candidate_office in
-        this.transaction()!.transactionType.mandatoryFormValues
-    ) {
-      this.mandatoryCandidateOffice = this.transaction()?.transactionType.mandatoryFormValues[
-        this.transaction()!.transactionType.templateMap.candidate_office
-      ] as CandidateOfficeType;
+    if (tx?.id) {
+      const contact = tx[this.contactProperty() as keyof Transaction] as Contact;
+      this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
+      this.selectedOption.set(this.contactTypeOptions()[0]);
     }
 
     // If needed, create a local form control to manage validation and add the
     // new form control to the parent form so that a validation check occurs
     // when the parent form is submitted and blocks submit if validation fails.
     if (this.contactProperty() === 'contact_2') {
-      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
-        if (!this.transaction()?.contact_2 && this.transaction()?.transactionType?.contact2IsRequired(this.form())) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form().addControl('contact_2_lookup', this.errorMessageFormControl);
+      this.createLookupValidator('contact_2', () =>
+        !tx?.contact_2 && tx?.transactionType?.contact2IsRequired(this.form()) ? { required: true } : null,
+      );
+    } else if (this.contactProperty() === 'contact_3') {
+      this.createLookupValidator('contact_3', () =>
+        !tx?.contact_3 && tx?.transactionType?.contact3IsRequired ? { required: true } : null,
+      );
+    } else if (this.contactProperty() === 'contact_4') {
+      this.createLookupValidator('contact_4', () =>
+        !tx?.contact_4 && tx?.transactionType?.contact4IsRequired(this.form()) ? { required: true } : null,
+      );
+    } else if (this.contactProperty() === 'contact_5') {
+      this.createLookupValidator('contact_5', () =>
+        !tx?.contact_5 && tx?.transactionType?.contact5IsRequired(this.form()) ? { required: true } : null,
+      );
     }
-    if (this.contactProperty() === 'contact_3') {
-      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
-        if (!this.transaction()?.contact_3 && this.transaction()?.transactionType?.contact3IsRequired) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form().addControl('contact_3_lookup', this.errorMessageFormControl);
-    }
-    if (this.contactProperty() === 'contact_4') {
-      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
-        if (!this.transaction()?.contact_4 && this.transaction()?.transactionType?.contact4IsRequired(this.form())) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form().addControl('contact_4_lookup', this.errorMessageFormControl);
-    }
-    if (this.contactProperty() === 'contact_5') {
-      this.errorMessageFormControl = new SignalFormControl(this.injector, null, () => {
-        if (!this.transaction()?.contact_5 && this.transaction()?.transactionType?.contact5IsRequired(this.form())) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form().addControl('contact_5_lookup', this.errorMessageFormControl);
-    }
+  }
+
+  private createLookupValidator(key: string, validatorFn: () => any) {
+    this.errorMessageFormControl = new SignalFormControl(this.injector, null, validatorFn);
+    this.form().addControl(`${key}_lookup`, this.errorMessageFormControl);
   }
 
   /**
@@ -129,17 +121,13 @@ export class TransactionContactLookupComponent implements OnInit {
    * @param contactType
    */
   contactTypeSelected(contactType: ContactTypes) {
-    this.contactDialog()!.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]));
-    this.currentContactLabel = this.contactDialog()!.contactTypeOptions()[0].label;
-    this.currentType = this.contactDialog()!.contactTypeOptions()[0].value as ContactTypes;
+    this.selectedOption.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType])[0]);
     this.contactTypeSelect.emit(contactType);
   }
 
   contactLookupSelected(contact: Contact) {
     if (contact.id) {
-      this.contactSelect.emit({
-        value: contact,
-      });
+      this.contactSelect.emit({ value: contact });
     } else {
       this.contactDialog()?.updateContact(contact);
       this.detailVisible = true;
@@ -147,14 +135,12 @@ export class TransactionContactLookupComponent implements OnInit {
   }
 
   createNewContactSelected() {
-    this.contactDialog()?.updateContact(Contact.fromJSON({ type: this.currentType }));
+    this.contactDialog()?.updateContact(Contact.fromJSON({ type: this.currentType() }));
     this.detailVisible = true;
   }
 
   saveContact(contact: Contact) {
-    this.contactSelect.emit({
-      value: contact,
-    });
+    this.contactSelect.emit({ value: contact });
     this.detailVisible = false;
   }
 }

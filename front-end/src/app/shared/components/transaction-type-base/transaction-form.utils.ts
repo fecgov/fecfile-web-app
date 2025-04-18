@@ -17,7 +17,7 @@ import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { computed, effect, Injector, runInInjectionContext, signal } from '@angular/core';
+import { effect, Injector, runInInjectionContext, signal } from '@angular/core';
 
 export type DateType = Date | string | undefined;
 
@@ -86,9 +86,9 @@ export class TransactionFormUtils {
         ? templateMap.aggregate
         : templateMap.amount;
 
-      const validationTrigger = form.get(watchField) as SignalFormControl<unknown>;
       effect(() => {
-        validationTrigger.valueChangeSignal(); // triggers effect
+        const validationTrigger = component.getControl(watchField);
+        validationTrigger?.valueChangeSignal(); // triggers effect
         form.get(templateMap.employer)?.updateValueAndValidity();
         form.get(templateMap.occupation)?.updateValueAndValidity();
       });
@@ -148,11 +148,23 @@ export class TransactionFormUtils {
         effect(() => {
           const disbursement_date = dateCtrl.valueChangeSignal();
           const dissemination_date = date2Ctrl.valueChangeSignal();
-          const election_code = electionCodeCtrl.valueChangeSignal();
+          const election_code: string = electionCodeCtrl.valueChangeSignal();
           const candidate_office = officeCtrl.valueChangeSignal();
           const candidate_state = stateCtrl.valueChangeSignal();
           const candidate_district = districtCtrl.valueChangeSignal();
           const amount = amountCtrl.valueChangeSignal();
+
+          // Only call backend once all fields are filled
+          if (
+            (!disbursement_date && !dissemination_date) ||
+            !election_code ||
+            election_code.length === 1 ||
+            !candidate_office ||
+            !candidate_state ||
+            !candidate_district ||
+            !amount
+          )
+            return;
 
           component.transactionService
             .getPreviousTransactionForCalendarYTD(

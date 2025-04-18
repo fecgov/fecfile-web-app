@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Injector, input, model, output, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, Injector, input, model, OnInit, output, viewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -26,7 +26,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
   styleUrls: ['./contact-lookup.component.scss'],
   imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
 })
-export class ContactLookupComponent {
+export class ContactLookupComponent implements OnInit {
   readonly injector = inject(Injector);
   public readonly contactService = inject(ContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
@@ -78,13 +78,11 @@ export class ContactLookupComponent {
       this.contactType.set(contactType);
       this.contactTypeSelect.emit(contactType);
     });
+  }
 
-    effectOnceIf(
-      () => this.contactTypeFormControl && this.contactType(),
-      () => {
-        this.contactTypeFormControl.setValue(this.contactType());
-      },
-    );
+  ngOnInit() {
+    this.contactType.set(this.contactTypeOptions()[0].value as ContactTypes);
+    this.contactTypeFormControl.setValue(this.contactType());
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
