@@ -20,13 +20,7 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { TableLazyLoadEvent } from 'primeng/table';
-import {
-  CandidateOfficeTypeLabels,
-  CandidateOfficeTypes,
-  Contact,
-  ContactTypeLabels,
-  ContactTypes,
-} from '../../models/contact.model';
+import { CandidateOfficeTypeLabels, CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';

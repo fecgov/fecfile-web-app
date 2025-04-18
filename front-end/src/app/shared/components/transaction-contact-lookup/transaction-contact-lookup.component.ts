@@ -1,17 +1,5 @@
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  Injector,
-  input,
-  model,
-  OnInit,
-  output,
-  signal,
-  Signal,
-  viewChild,
-} from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, computed, inject, Injector, input, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal, Signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, inject, input, Signal } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -9,7 +9,6 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';

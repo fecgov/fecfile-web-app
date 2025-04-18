@@ -1,12 +1,10 @@
-import { Component, computed, signal } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Component, computed } from '@angular/core';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
@@ -15,7 +13,6 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
-import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the

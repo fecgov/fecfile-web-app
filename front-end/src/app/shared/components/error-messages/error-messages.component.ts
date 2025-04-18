@@ -23,10 +23,10 @@ export class ErrorMessagesComponent {
   readonly uniqueFecIdMessage = input('FEC IDs must be unique');
   readonly isAfterMessage = input('TO date must fall chronologically after FROM date');
 
-  readonly emailErrorMessageInput = input<string>('', { alias: 'emailErrorMessage' });
-  readonly emailErrorMessage = computed(() => {
+  readonly emailErrorMessage = input<string>('');
+  readonly _emailErrorMessage = computed(() => {
     this.control()?.valueChangeSignal();
-    const customMessage = this.emailErrorMessageInput();
+    const customMessage = this.emailErrorMessage();
     if (customMessage) return customMessage;
 
     const emailErrors = this.control()?.errors?.['email'];
@@ -42,24 +42,24 @@ export class ErrorMessagesComponent {
     }
   });
 
-  readonly minLengthErrorMessageInput = input<string>('', { alias: 'minLengthErrorMessage' });
-  readonly minLengthErrorMessage = computed(
+  readonly minLengthErrorMessage = input<string>('');
+  readonly _minLengthErrorMessage = computed(
     () =>
-      this.minLengthErrorMessageInput() ||
+      this.minLengthErrorMessage() ||
       `This field must contain at least ${this.control()?.errors?.['minlength']?.requiredLength} alphanumeric characters.`,
   );
 
-  readonly maxLengthErrorMessageInput = input<string>('', { alias: 'maxLengthErrorMessage' });
-  readonly maxLengthErrorMessage = computed(
+  readonly maxLengthErrorMessage = input<string>('');
+  readonly _maxLengthErrorMessage = computed(
     () =>
-      this.maxLengthErrorMessageInput() ||
+      this.maxLengthErrorMessage() ||
       `This field cannot contain more than ${this.control()?.errors?.['maxlength']?.requiredLength} alphanumeric characters.`,
   );
 
-  readonly minErrorMessageInput = input<string>('', { alias: 'minErrorMessage' });
-  readonly minErrorMessage = computed(
+  readonly minErrorMessage = input<string>('');
+  readonly _minErrorMessage = computed(
     () =>
-      this.minErrorMessageInput() ||
+      this.minErrorMessage() ||
       `This field must be greater than or equal to ${formatCurrency(
         this.control()?.errors?.['min']?.min,
         this.localeId,
@@ -67,10 +67,10 @@ export class ErrorMessagesComponent {
       )}.`,
   );
 
-  readonly exclusiveMinErrorMessageInput = input<string>('', { alias: 'exclusiveMinErrorMessage' });
-  readonly exclusiveMinErrorMessage = computed(() => {
-    if (this.exclusiveMinErrorMessageInput()) {
-      return this.exclusiveMinErrorMessageInput();
+  readonly exclusiveMinErrorMessage = input<string>('');
+  readonly _exclusiveMinErrorMessage = computed(() => {
+    if (this.exclusiveMinErrorMessage()) {
+      return this.exclusiveMinErrorMessage();
     }
 
     const exclusiveMin = this.control()?.errors?.['exclusiveMin']?.exclusiveMin;
@@ -81,18 +81,18 @@ export class ErrorMessagesComponent {
     return `This field must be less than ${formatCurrency(exclusiveMin, this.localeId, '$')}.`;
   });
 
-  readonly maxErrorMessageInput = input<string>('', { alias: 'maxErrorMessage' });
-  readonly maxErrorMessage = computed(() => {
-    if (this.maxErrorMessageInput()) return this.maxErrorMessageInput();
+  readonly maxErrorMessage = input<string>('');
+  readonly _maxErrorMessage = computed(() => {
+    if (this.maxErrorMessage()) return this.maxErrorMessage();
 
     const error = this.control()?.errors?.['max'];
     const msgPrefix = error?.msgPrefix ?? 'This field must be less than or equal to';
     return `${msgPrefix} ${formatCurrency(error?.max, this.localeId, '$')}.`;
   });
 
-  readonly exclusiveMaxErrorMessageInput = input<string>('', { alias: 'exclusiveMaxErrorMessage' });
-  readonly exclusiveMaxErrorMessage = computed(() => {
-    if (this.exclusiveMaxErrorMessageInput()) return this.exclusiveMaxErrorMessageInput();
+  readonly exclusiveMaxErrorMessage = input<string>('');
+  readonly _exclusiveMaxErrorMessage = computed(() => {
+    if (this.exclusiveMaxErrorMessage()) return this.exclusiveMaxErrorMessage();
 
     const exclusiveMax = this.control()?.errors?.['exclusiveMax']?.exclusiveMax;
     if (exclusiveMax === 0) {
@@ -102,22 +102,22 @@ export class ErrorMessagesComponent {
     return `This field must be less than ${formatCurrency(exclusiveMax, this.localeId, '$')}.`;
   });
 
-  readonly invalidDateErrorMessageInput = input<string>('', { alias: 'invalidDateErrorMessage' });
-  readonly invalidDateErrorMessage = computed(
-    () => this.invalidDateErrorMessageInput() || this.control()?.errors?.['invaliddate']?.msg,
+  readonly invalidDateErrorMessage = input<string>('');
+  readonly _invalidDateErrorMessage = computed(
+    () => this.invalidDateErrorMessage() || this.control()?.errors?.['invaliddate']?.msg,
   );
 
-  readonly noDateProvidedErrorMessageInput = input<string>('', { alias: 'noDateProvidedErrorMessage' });
-  readonly noDateProvidedErrorMessage = computed(
+  readonly noDateProvidedErrorMessage = input<string>('');
+  readonly _noDateProvidedErrorMessage = computed(
     () =>
-      this.noDateProvidedErrorMessageInput() ||
+      this.noDateProvidedErrorMessage() ||
       'A disbursement or dissemination date is required to provide a linked report.',
   );
 
-  readonly noCorrespondingForm3XErrorMessageInput = input<string>('', { alias: 'noCorrespondingForm3XErrorMessage' });
-  readonly noCorrespondingForm3XErrorMessage = computed(
+  readonly noCorrespondingForm3XErrorMessage = input<string>('');
+  readonly _noCorrespondingForm3XErrorMessage = computed(
     () =>
-      this.noCorrespondingForm3XErrorMessageInput() ||
+      this.noCorrespondingForm3XErrorMessage() ||
       'There is no Form 3X with corresponding coverage dates currently in progress. Create a new Form 3X to save this transaction.',
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, TemplateRef, input, output, viewChild, contentChild, computed, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table, TableModule } from 'primeng/table';
@@ -49,7 +50,6 @@ export class TableComponent<T> {
 
   readonly dt = viewChild<Table>('dt');
 
-  readonly toolbar = contentChild<TemplateRef<any>>('tooldbar');
   readonly caption = contentChild<TemplateRef<any>>('caption');
   readonly header = contentChild<TemplateRef<any>>('header');
   readonly body = contentChild<TemplateRef<any>>('body');

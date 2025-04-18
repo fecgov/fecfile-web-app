@@ -1,10 +1,6 @@
-import { FormGroup, Validators } from '@angular/forms';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
-import { SignalFormControl } from '../signal-form-control';
-import { effect } from '@angular/core';
 
 export class RedesignationFromUtils {
   static readonly readOnlyFields = [

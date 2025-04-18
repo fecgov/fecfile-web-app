@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild, signal, effect, AfterViewChecked, computed } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, AfterViewChecked, computed } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';

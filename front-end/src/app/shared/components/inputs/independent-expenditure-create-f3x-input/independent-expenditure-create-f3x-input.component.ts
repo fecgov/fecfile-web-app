@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
 import { Router } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
 
@@ -9,7 +8,7 @@ import { ButtonDirective } from 'primeng/button';
   templateUrl: './independent-expenditure-create-f3x-input.component.html',
   imports: [ButtonDirective],
 })
-export class IndependentExpenditureCreateF3xInputComponent extends BaseInputComponent {
+export class IndependentExpenditureCreateF3xInputComponent {
   private readonly router = inject(Router);
 
   cancel(): void {

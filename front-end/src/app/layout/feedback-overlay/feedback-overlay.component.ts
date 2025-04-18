@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild, ViewChild } from '@angular/core';
+import { Component, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';

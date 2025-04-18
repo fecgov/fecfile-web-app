@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, runInInjectionContext } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -6,7 +6,6 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Tooltip } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';

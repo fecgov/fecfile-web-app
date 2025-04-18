@@ -1,5 +1,5 @@
-import { Component, computed, ElementRef, inject, Injector, input, output, signal, viewChild } from '@angular/core';
-import { FormGroup, Validators, ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
+import { Component, computed, ElementRef, inject, Injector, input, output, viewChild } from '@angular/core';
+import { FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService } from 'primeng/api';
@@ -88,7 +88,11 @@ export class CommitteeMemberDialogComponent {
 
   public submit() {
     this.formSubmitted = true;
-    this.member().id ? this.editRole() : this.addUser();
+    if (this.member().id !== '') {
+      this.editRole();
+    } else {
+      this.addUser();
+    }
   }
 
   resetForm() {

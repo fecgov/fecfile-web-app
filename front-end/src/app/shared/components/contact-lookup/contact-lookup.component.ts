@@ -18,7 +18,6 @@ import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-contact-lookup',

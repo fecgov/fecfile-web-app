@@ -10,7 +10,7 @@ import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 export abstract class BaseInputComponent {
   protected readonly injector = inject(Injector);
   readonly transaction = input<Transaction>();
-  readonly form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
+  readonly form = input.required<FormGroup>();
   readonly formSubmitted = input(false);
   readonly templateMap = input<TransactionTemplateMapType>({} as TransactionTemplateMapType);
 

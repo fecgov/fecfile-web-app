@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, viewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
@@ -31,7 +31,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
     ErrorMessagesComponent,
   ],
 })
-export class AmountInputComponent extends BaseInputComponent {
+export class AmountInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);
   readonly report = this.store.selectSignal(selectActiveReport);
 
@@ -54,17 +54,7 @@ export class AmountInputComponent extends BaseInputComponent {
 
   constructor() {
     super();
-    effectOnceIf(
-      () => this.form() && this.transaction(),
-      () => {
-        const transaction = this.transaction();
-        if (transaction?.transactionType.inheritCalendarYTD) {
-          this.form()
-            .get(transaction.transactionType.templateMap.calendar_ytd)
-            ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
-        }
-      },
-    );
+
     effectOnceIf(
       () => (isDebtRepayment(this.transaction()) || isLoanRepayment(this.transaction())) && this.dateControl(),
       () => {
@@ -88,6 +78,13 @@ export class AmountInputComponent extends BaseInputComponent {
   }
 
   ngOnInit() {
+    const transaction = this.transaction()!;
+    if (transaction.transactionType.inheritCalendarYTD) {
+      this.form()
+        .get(transaction.transactionType.templateMap.calendar_ytd)
+        ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
+    }
+
     effect(
       () => {
         this.dateControl().valueChangeSignal();

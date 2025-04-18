@@ -14,7 +14,7 @@ export class PollerComponent implements OnInit, OnDestroy {
   readonly deploymentUrl = computed(() => {
     const currentUrl = window.location.href;
     const index = currentUrl.indexOf(this.location.path());
-    let baseUrl = index === 0 ? currentUrl : currentUrl.substring(0, index);
+    const baseUrl = index === 0 ? currentUrl : currentUrl.substring(0, index);
     return baseUrl.endsWith('/') ? baseUrl + 'index.html' : baseUrl + '/index.html';
   });
 

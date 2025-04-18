@@ -1,18 +1,12 @@
 import { Component, computed, signal, viewChild } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import {
-  TemplateMapKeyType,
-  TransactionTemplateMapType,
-  TransactionType,
-} from 'app/shared/models/transaction-type.model';
+import { TemplateMapKeyType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { Contact } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -21,7 +15,6 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
-import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the

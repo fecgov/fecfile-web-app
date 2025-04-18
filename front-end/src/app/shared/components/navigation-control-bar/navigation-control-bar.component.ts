@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Transaction } from 'app/shared/models/transaction.model';
 import {
   NavigationControl,

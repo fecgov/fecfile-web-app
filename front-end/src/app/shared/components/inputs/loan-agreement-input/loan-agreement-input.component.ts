@@ -1,6 +1,5 @@
-import { Component, computed, effect, OnInit, output } from '@angular/core';
+import { Component, computed, effect, output } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
 import { Contact } from 'app/shared/models/contact.model';
 import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';

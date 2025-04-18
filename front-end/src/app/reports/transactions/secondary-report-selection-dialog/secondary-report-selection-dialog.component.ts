@@ -42,7 +42,7 @@ export class SecondaryReportSelectionDialogComponent {
   readonly reportType = input<ReportTypes | undefined>();
   readonly reports = derivedAsync(
     async () => {
-      let reports = await this.reportService.getAllReports();
+      const reports = await this.reportService.getAllReports();
       return reports.filter((report) => {
         return report.report_type === this.reportType() && report.report_status === ReportStatus.IN_PROGRESS;
       });

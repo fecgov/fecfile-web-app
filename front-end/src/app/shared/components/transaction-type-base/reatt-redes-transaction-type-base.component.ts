@@ -1,4 +1,4 @@
-import { Component, effect, Signal } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
@@ -10,7 +10,7 @@ import { SchemaUtils } from '../../utils/schema.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { PrimeOptions } from '../../utils/label.utils';
 import { FormGroup, Validators } from '@angular/forms';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { RedesignationFromUtils } from 'app/shared/utils/reatt-redes/redesignation-from.utils';

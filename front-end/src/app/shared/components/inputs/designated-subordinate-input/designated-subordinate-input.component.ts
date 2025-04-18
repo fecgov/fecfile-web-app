@@ -1,4 +1,4 @@
-import { Component, EventEmitter, output, Output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';

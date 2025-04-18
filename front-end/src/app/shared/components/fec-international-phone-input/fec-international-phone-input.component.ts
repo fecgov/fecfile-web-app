@@ -1,4 +1,15 @@
-import { Component, ElementRef, effect, input, viewChild, OnDestroy, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  effect,
+  input,
+  viewChild,
+  OnDestroy,
+  inject,
+  signal,
+  computed,
+  AfterViewInit,
+} from '@angular/core';
 import intlTelInput, { Iti } from 'intl-tel-input';
 import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 
@@ -9,7 +20,7 @@ import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
   templateUrl: './fec-international-phone-input.component.html',
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
-export class FecInternationalPhoneInputComponent implements OnDestroy {
+export class FecInternationalPhoneInputComponent implements OnDestroy, AfterViewInit {
   readonly id = input('telephone');
   readonly disabled = input(false);
   readonly labelName = input('');

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, Signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';

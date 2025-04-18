@@ -31,7 +31,7 @@ export abstract class AbstractMenuComponent {
     return this.getMenuItems(sidebarState, isEditable);
   });
 
-  createReport(sidebarState: SidebarState, activeReport: Report | undefined): MenuItem {
+  createReport(sidebarState: SidebarState): MenuItem {
     return {
       label: 'CREATE A REPORT',
       expanded: sidebarState?.section == ReportSidebarSection.CREATE,
