@@ -1,56 +1,69 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, interval, Subscription, switchMap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PollerService {
   private readonly http = inject(HttpClient);
-  private readonly isNewVersionAvailable = new BehaviorSubject<boolean>(false);
-  readonly isNewVersionAvailable$ = this.isNewVersionAvailable.asObservable();
-  versionCheckSubscription?: Subscription;
+  private readonly deploymentUrl = signal<string | null>(null);
+  private readonly currentMainScript = signal<string | null>(null);
+  private readonly remoteMainScript = signal<string | null>(null);
 
-  startPolling(deploymentUrl: string) {
-    this.versionCheckSubscription = interval(5000)
-      .pipe(switchMap(() => this.compareVersions(deploymentUrl)))
-      .subscribe();
+  readonly isNewVersionAvailable = computed(() => {
+    const current = this.currentMainScript();
+    const remote = this.remoteMainScript();
+    return !!current && !!remote && current !== remote;
+  });
+
+  constructor() {
+    this.initCurrentMainScript();
+
+    effect((onCleanup) => {
+      const url = this.deploymentUrl();
+      if (!url) return;
+
+      const intervalId = setInterval(() => {
+        this.fetchRemoteMainScript(url);
+      }, 5000);
+
+      onCleanup(() => {
+        clearTimeout(intervalId);
+      });
+    });
   }
 
-  async compareVersions(deploymentUrl: string) {
-    try {
-      const fetchedPage = await firstValueFrom(this.http.get(deploymentUrl, { responseType: 'text' }));
-      const loadedText = fetchedPage as string;
-      const mainScriptRegex = /<script\s+src="(main\.[^"]+\.js)"\s+type="module"><\/script>/gim;
-      const matchResponses = mainScriptRegex.exec(loadedText);
-      const remoteMainScript = matchResponses && matchResponses.length > 0 ? matchResponses[1] : undefined;
-
-      if (!remoteMainScript) {
-        this.isNewVersionAvailable.next(false);
-        return;
-      }
-
-      const scriptTags = document.getElementsByTagName('script');
-      let currentMainScript: string | undefined = undefined;
-      for (let i = 0; i < scriptTags.length; i++) {
-        const scriptTag = scriptTags[i];
-        const match = /^.*\/(main.*\.js).*$/gim.exec(scriptTag.src);
-        if (match) {
-          currentMainScript = match[1];
-          break;
-        }
-      }
-
-      this.isNewVersionAvailable.next(
-        !!currentMainScript && !!remoteMainScript && currentMainScript !== remoteMainScript,
-      );
-    } catch (error) {
-      console.error('Error fetching deployment URL', error);
-      this.isNewVersionAvailable.next(false);
-    }
+  startPolling(deploymentUrl: string) {
+    this.deploymentUrl.set(deploymentUrl);
   }
 
   stopPolling() {
-    this.versionCheckSubscription?.unsubscribe();
+    this.deploymentUrl.set(null);
+  }
+
+  private initCurrentMainScript() {
+    const scriptTags = document.getElementsByTagName('script');
+    for (const scriptTag of Array.from(scriptTags)) {
+      const match = /^.*\/(main.*\.js).*$/gim.exec(scriptTag.src);
+      if (match) {
+        this.currentMainScript.set(match[1]);
+        return;
+      }
+    }
+    this.currentMainScript.set(null);
+  }
+
+  private async fetchRemoteMainScript(deploymentUrl: string) {
+    try {
+      const loadedText = await firstValueFrom(this.http.get(deploymentUrl, { responseType: 'text' }));
+      const mainScriptRegex = /<script\s+src="(main\.[^"]+\.js)"\s+type="module"><\/script>/gim;
+      const matchResponses = mainScriptRegex.exec(loadedText);
+      const remoteScript = matchResponses && matchResponses.length > 0 ? matchResponses[1] : null;
+      this.remoteMainScript.set(remoteScript);
+    } catch (error) {
+      console.error('Error fetching deployment URL', error);
+      this.remoteMainScript.set(null);
+    }
   }
 }

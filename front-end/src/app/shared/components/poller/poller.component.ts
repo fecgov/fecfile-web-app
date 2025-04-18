@@ -1,6 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { PollerService } from 'app/shared/services/poller.service';
-import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 
 @Component({
@@ -11,21 +10,24 @@ import { Location } from '@angular/common';
 export class PollerComponent implements OnInit, OnDestroy {
   private readonly pollerService = inject(PollerService);
   private readonly location = inject(Location);
-  private subscription!: Subscription;
 
-  ngOnInit() {
+  readonly deploymentUrl = computed(() => {
     const currentUrl = window.location.href;
     const index = currentUrl.indexOf(this.location.path());
+    let baseUrl = index === 0 ? currentUrl : currentUrl.substring(0, index);
+    return baseUrl.endsWith('/') ? baseUrl + 'index.html' : baseUrl + '/index.html';
+  });
 
-    let deploymentUrl = index === 0 ? currentUrl : currentUrl.substring(0, index);
-    deploymentUrl += deploymentUrl.endsWith('/') ? 'index.html' : '/index.html';
-
-    this.pollerService.startPolling(deploymentUrl);
-    this.subscription = this.pollerService.isNewVersionAvailable$.subscribe((isNewVersionAvailable) => {
-      if (isNewVersionAvailable) {
+  constructor() {
+    effect(() => {
+      if (this.pollerService.isNewVersionAvailable()) {
         this.reload();
       }
     });
+  }
+
+  ngOnInit() {
+    this.pollerService.startPolling(this.deploymentUrl());
   }
 
   reload() {
@@ -33,13 +35,6 @@ export class PollerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.stopPolling();
-  }
-
-  stopPolling() {
     this.pollerService.stopPolling();
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }
