@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, forwardRef, inject, input, OnInit } from '@angular/core';
+import { Component, forwardRef, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -31,7 +31,7 @@ import { MemoCodePipe } from '../transaction-list.component';
     forwardRef(() => MemoCodePipe),
   ],
 })
-export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleBTransactionTypeLabels,
@@ -64,9 +64,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
         { field: 'amount', label: 'Amount' },
       ],
     );
-  }
 
-  ngOnInit(): void {
     this.rowActions.push(
       new TableAction(
         'Add to Form24 Report',

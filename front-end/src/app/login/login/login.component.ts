@@ -14,12 +14,11 @@ import { NgOptimizedImage } from '@angular/common';
 export class LoginComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly cookieService = inject(CookieService);
-  public loginDotGovAuthUrl: string | undefined;
+  public loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
 
   ngOnInit() {
     this.cookieService.deleteAll();
     this.store.dispatch(userLoginDataDiscardedAction());
-    this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   }
 
   navigateToLoginDotGov() {

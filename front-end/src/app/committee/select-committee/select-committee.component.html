@@ -9,7 +9,7 @@
   <div class="col-6 right-side">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
-      @if (committees?.length === 0) {
+      @if (committees().length === 0) {
         <div class="committee-card empty-card">
           <div class="empty-lens-img">
             <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg" />
@@ -18,10 +18,14 @@
             <p class="font-karla-bold">Not currently active in any FECFile committee accounts</p>
           </div>
         </div>
-      } @else if (committees?.length) {
+      } @else {
         <div class="committee-list">
-          @for (committee of committees; track committee) {
-            <div class="committee-card" (click)="activateCommittee(committee)">
+          @for (committee of committees(); track committee) {
+            <div
+              class="committee-card"
+              (click)="activateCommittee(committee)"
+              ((keydown.enter))="activateCommittee(committee)"
+            >
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
               <div class="committee-info">
                 <h3>

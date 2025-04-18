@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -6,6 +6,7 @@ import { CommitteeAccountService } from 'app/shared/services/committee-account.s
 import { UsersService } from 'app/shared/services/users.service';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   selector: 'app-select-committee',
@@ -13,16 +14,12 @@ import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions'
   styleUrls: ['./select-committee.component.scss'],
   imports: [RouterLink],
 })
-export class SelectCommitteeComponent implements OnInit {
+export class SelectCommitteeComponent {
   protected readonly committeeAccountService = inject(CommitteeAccountService);
   protected readonly store = inject(Store);
   protected readonly router = inject(Router);
   private readonly userService = inject(UsersService);
-  committees?: CommitteeAccount[];
-
-  ngOnInit(): void {
-    this.committeeAccountService.getCommittees().then((committees) => (this.committees = committees));
-  }
+  readonly committees = derivedAsync(() => this.committeeAccountService.getCommittees(), { initialValue: [] });
 
   async activateCommittee(committee: CommitteeAccount): Promise<void> {
     await this.committeeAccountService.activateCommittee(committee.id);

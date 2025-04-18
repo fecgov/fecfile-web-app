@@ -21,7 +21,7 @@
           [formControlName]="stateFormControlName()"
           [options]="candidateStateOptions()"
           [autoDisplayFirst]="false"
-          [class.disabled]="stateFormControl().disabled"
+          [class.disabled]="stateFormControl()?.disabled"
           appendTo="body"
         ></p-select>
         <app-error-messages [control]="stateFormControl()" [formSubmitted]="formSubmitted()"></app-error-messages>
@@ -43,7 +43,7 @@
             inputId="candidate_district"
             [formControlName]="districtFormControlName()"
             [options]="candidateDistrictOptions()"
-            [class.disabled]="districtFormControl().disabled"
+            [class.disabled]="districtFormControl()?.disabled"
             appendTo="body"
             [autoDisplayFirst]="false"
           ></p-select>

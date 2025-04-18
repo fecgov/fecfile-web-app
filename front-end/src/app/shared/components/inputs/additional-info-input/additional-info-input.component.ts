@@ -24,7 +24,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   readonly subordinateCommitteeSelect = output<SelectItem<Contact>>();
   readonly subordinateCommitteeClear = output<void>();
 
-  categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
+  readonly categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {
     SchemaUtils.addJsonSchemaValidators(this.form(), memoTextSchema, false);
