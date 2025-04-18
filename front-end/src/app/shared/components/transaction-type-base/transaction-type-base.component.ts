@@ -14,7 +14,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
-import { FormComponent } from '../app-destroyer.component';
+import { FormComponent } from '../app-form.component';
 import {
   TransactionType,
   ReportTypes,

@@ -86,7 +86,7 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  @if (pullForward) {
+  @if (pullForward()) {
     <p-accordion-panel>
       <p-accordion-header>
         <strong>AUTO-POPULATED:</strong>
@@ -109,13 +109,13 @@
         }
 
         <h3>{{ transaction()?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
-        <form [formGroup]="reattributedData.form" [class.ng-submitted]="formSubmitted" id="pull-forward-form">
+        <form [formGroup]="reattributedData()!.form" [class.ng-submitted]="formSubmitted" id="pull-forward-form">
           <app-transaction-input
-            [contactTypeOptions]="reattributedData.contactTypeOptions"
+            [contactTypeOptions]="reattributedData()!.contactTypeOptions"
             [formSubmitted]="formSubmitted"
-            [form]="reattributedData.form"
+            [form]="reattributedData()!.form"
             [isEditable]="false"
-            [memoCodeCheckboxLabel]="reattributedData.memoCodeCheckboxLabel"
+            [memoCodeCheckboxLabel]="reattributedData()!.memoCodeCheckboxLabel"
             [transaction]="transaction()?.reatt_redes"
           >
           </app-transaction-input>

@@ -15,6 +15,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -254,5 +255,11 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
       this.childTransaction(),
       this.childContactIdMap['contact_3'],
     );
+  }
+
+  protected getChildControl(field: string) {
+    const control = this.childForm().get(field);
+    if (!control) return undefined;
+    return control as SignalFormControl;
   }
 }

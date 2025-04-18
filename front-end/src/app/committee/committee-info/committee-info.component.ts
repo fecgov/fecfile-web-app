@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-form.component';
 import { environment } from 'environments/environment';
 import { Select } from 'primeng/select';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';

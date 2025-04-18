@@ -5,17 +5,6 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SignalFormControl } from '../utils/signal-form-control';
 
-// @Component({
-//   template: '',
-// })
-// export abstract class DestroyerComponent implements OnDestroy {
-//   destroy$ = new Subject<undefined>();
-//   ngOnDestroy(): void {
-//     this.destroy$.next(undefined);
-//     this.destroy$.complete();
-//   }
-// }
-
 @Component({
   template: '',
 })

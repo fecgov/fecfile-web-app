@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-form.component';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { singleClickEnableAction } from 'app/store/single-click.actions';

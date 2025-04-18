@@ -17,7 +17,7 @@ import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { combineLatest, startWith } from 'rxjs';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-form.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';

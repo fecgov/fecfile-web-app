@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/app-form.component';
 import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
