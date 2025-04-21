@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, computed, effect, input, model, output } from '@angular/core';
+import { Component, computed, effect, input, model, OnInit, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
@@ -22,7 +22,6 @@ import { SignatureInputComponent } from '../../../shared/components/inputs/signa
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-transaction-input',
@@ -48,7 +47,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
     ElectionInputComponent,
   ],
 })
-export class TransactionInputComponent {
+export class TransactionInputComponent implements OnInit {
   readonly form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
   readonly formSubmitted = input(false);
   readonly transaction = input<Transaction>();
@@ -82,18 +81,15 @@ export class TransactionInputComponent {
     effect(() => {
       this.candidateInfoPosition.set(this.transactionType()?.candidateInfoPosition ?? 'low');
     });
+  }
 
-    effectOnceIf(
-      () => this.transactionType(),
-      () => {
-        const type = this.transactionType();
-        if (!type) return;
-        for (const field in type.mandatoryFormValues) {
-          this.form().get(field)?.setValue(type.mandatoryFormValues[field]);
-          this.form().get(field)?.disable();
-        }
-      },
-    );
+  ngOnInit() {
+    const type = this.transactionType();
+    if (!type) return;
+    for (const field in type.mandatoryFormValues) {
+      this.form().get(field)?.setValue(type.mandatoryFormValues[field]);
+      this.form().get(field)?.disable();
+    }
   }
 
   contactTypeSelected(contactType: ContactTypes) {

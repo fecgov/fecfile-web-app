@@ -1,4 +1,4 @@
-import { Component, inject, Pipe, PipeTransform, viewChild } from '@angular/core';
+import { Component, inject, Pipe, PipeTransform, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -41,15 +41,13 @@ export class TransactionListComponent {
 
   readonly selectActiveReport = this.store.selectSignal(selectActiveReport);
 
-  reportSelectDialogVisible = false;
+  readonly reportSelectDialogVisible = signal(false);
   reportSelectFormType: ReportTypes | undefined;
   reportSelectionTransaction: Transaction | undefined;
   reportSelectionCreateMethod = () => {
     return;
   };
-  openReportSelectDialog = this.openSecondaryReportSelectionDialog.bind(this);
 
-  availableReports: Report[] = [];
   public tableActions: TableAction[] = [
     new TableAction(
       'Add a receipt',
@@ -104,7 +102,6 @@ export class TransactionListComponent {
       () => true,
     ),
   ];
-  transaction?: Transaction;
 
   readonly receipts = viewChild.required(TransactionReceiptsComponent);
   readonly disbursements = viewChild.required(TransactionDisbursementsComponent);
@@ -119,7 +116,7 @@ export class TransactionListComponent {
   }
 
   public openSecondaryReportSelectionDialog(transaction: Transaction, formType: ReportTypes, createMethod: () => void) {
-    this.reportSelectDialogVisible = true;
+    this.reportSelectDialogVisible.set(true);
     this.reportSelectFormType = formType;
     this.reportSelectionTransaction = transaction;
     this.reportSelectionCreateMethod = createMethod;

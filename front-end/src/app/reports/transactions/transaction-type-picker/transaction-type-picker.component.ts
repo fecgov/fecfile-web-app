@@ -70,9 +70,9 @@ export class TransactionTypePickerComponent {
     ...ScheduleFTransactionTypeLabels,
   ];
   private readonly report = this.store.selectSignal(selectActiveReport);
-  private readonly params$ = toSignal(this.route.params, { initialValue: { category: 'receipt' } });
-  private readonly queryParams$ = toSignal(this.route.queryParamMap);
-  readonly category: Signal<Categories> = computed(() => this.params$().category);
+  private readonly params = toSignal(this.route.params, { initialValue: { category: 'receipt' } });
+  private readonly queryParams = toSignal(this.route.queryParamMap);
+  readonly category: Signal<Categories> = computed(() => this.params().category);
   readonly title: Signal<string> = computed(() => {
     switch (this.category()) {
       case 'receipt':
@@ -85,7 +85,7 @@ export class TransactionTypePickerComponent {
         return this.category();
     }
   });
-  readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
+  readonly debtId: Signal<string | undefined> = computed(() => this.queryParams()?.get('debt') ?? undefined);
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly active = model<number>(-1);
@@ -156,7 +156,7 @@ export class TransactionTypePickerComponent {
       this.titleService.setTitle(this.title());
     });
     effect(() => {
-      if (this.params$() || this.queryParams$()) this.active.set(-1);
+      if (this.params() || this.queryParams()) this.active.set(-1);
     });
   }
 

@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, forwardRef, inject, input } from '@angular/core';
+import { Component, forwardRef, inject, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -42,18 +42,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
 
-  readonly openReportSelectionDialog = input(
-    (
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _transaction: Transaction,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _formType: ReportTypes,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _createMethod: () => void,
-    ) => {
-      return;
-    },
-  );
+  readonly requestReportSelection = output<{
+    transaction: Transaction;
+    formType: ReportTypes;
+    createMethod: () => Promise<void>;
+  }>();
 
   constructor() {
     super();
@@ -69,7 +62,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
       new TableAction(
         'Add to Form24 Report',
         (transaction) => {
-          this.openReportSelectionDialog()(transaction as Transaction, ReportTypes.F24, this.refreshTable.bind(this));
+          this.requestReportSelection.emit({
+            transaction: transaction as Transaction,
+            formType: ReportTypes.F24,
+            createMethod: this.refreshTable.bind(this),
+          });
         },
         (transaction) => {
           return (

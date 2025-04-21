@@ -32,12 +32,10 @@ export class SecondaryReportSelectionDialogComponent {
   private readonly select = viewChild.required<Select>('select');
 
   readonly transaction = input<Transaction>();
-  readonly dialogVisible = input(false);
+  readonly dialogVisible = model.required<boolean>();
   readonly createEventMethod = input(() => {
     return;
   });
-
-  readonly dialogClose = output<undefined>();
 
   readonly reportType = input<ReportTypes | undefined>();
   readonly reports = derivedAsync(
@@ -95,7 +93,6 @@ export class SecondaryReportSelectionDialogComponent {
     if (!report || !transaction) return;
     const response = await this.transactionService.addToReport(transaction, report);
     this.createEventMethod();
-    this.closeDialog();
     if (response.status === 200) {
       this.messageService.add({
         severity: 'success',
@@ -113,10 +110,6 @@ export class SecondaryReportSelectionDialogComponent {
         life: 3000,
       });
     }
-  }
-
-  closeDialog() {
-    this.dialogClose.emit(undefined);
   }
 
   showDialog() {

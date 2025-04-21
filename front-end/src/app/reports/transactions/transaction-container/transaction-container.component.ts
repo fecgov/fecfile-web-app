@@ -46,19 +46,7 @@ export class TransactionContainerComponent {
   });
   readonly isEditableTransaction = computed(() => !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()));
 
-  constructor() {
-    effect(() => {
-      if (!this.routeData()) return;
-      const transaction = this.transaction();
-      if (!transaction) {
-        throw new Error('Fecfile: No transaction found in TransactionContainerComponent');
-      }
-      const title: string = transaction.transactionType?.title ?? '';
-      this.titleService.setTitle(title);
-    });
-  }
-
-  transactionCardinality = computed(() => {
+  readonly transactionCardinality = computed(() => {
     if (
       ReattRedesUtils.isReattRedes(this.transaction()) &&
       !(
@@ -74,4 +62,16 @@ export class TransactionContainerComponent {
     }
     return (this.transaction()?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;
   });
+
+  constructor() {
+    effect(() => {
+      if (!this.routeData()) return;
+      const transaction = this.transaction();
+      if (!transaction) {
+        throw new Error('Fecfile: No transaction found in TransactionContainerComponent');
+      }
+      const title: string = transaction.transactionType?.title ?? '';
+      this.titleService.setTitle(title);
+    });
+  }
 }

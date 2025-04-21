@@ -1,4 +1,4 @@
-import { Component, computed, signal, viewChild } from '@angular/core';
+import { Component, computed, OnInit, signal, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { TemplateMapKeyType } from 'app/shared/models/transaction-type.model';
@@ -14,7 +14,6 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 /**
@@ -28,7 +27,7 @@ import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 @Component({
   template: '',
 })
-export abstract class DoubleTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
+export abstract class DoubleTransactionTypeBaseComponent extends TransactionTypeBaseComponent implements OnInit {
   readonly accordion = viewChild.required(Accordion);
   readonly childFormProperties = computed(() => this.childTransactionType()?.getFormControlNames() ?? []);
   readonly childTransactionType = computed(() => this.childTransaction()?.transactionType);
@@ -57,47 +56,37 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     }
   });
 
-  constructor() {
-    super();
-    // Initialize child form.
-    effectOnceIf(
-      () => this.childTransactionType() && this.childTransaction(),
-      () => {
-        const childTransactionType = this.childTransactionType();
-        const childTransaction = this.childTransaction();
+  override ngOnInit() {
+    super.ngOnInit();
+    const childTransactionType = this.childTransactionType();
+    const childTransaction = this.childTransaction();
 
-        if (!childTransaction || !childTransactionType?.templateMap) {
-          throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
-        }
-        this.childForm.set(
-          this.fb.group(
-            SchemaUtils.getFormGroupFieldsNoBlur(
-              this.injector,
-              this.childFormProperties(),
-              childTransactionType.schema,
-            ),
-            {
-              updateOn: 'blur',
-            },
-          ),
-        );
-
-        TransactionFormUtils.onInit(
-          this,
-          this.childForm(),
-          this.childTransaction(),
-          this.childContactIdMap,
-          this.contactService,
-          this.injector,
-        );
-        TransactionChildFormUtils.childOnInit(this, this.childForm(), childTransaction, this.injector);
-        // Determine which accordion pane to open initially based on transaction id in page URL
-        const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-        if (childTransaction && transactionId && childTransaction?.id === transactionId && this.accordion) {
-          this.accordion().value.set(1);
-        }
-      },
+    if (!childTransaction || !childTransactionType?.templateMap) {
+      throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
+    }
+    this.childForm.set(
+      this.fb.group(
+        SchemaUtils.getFormGroupFieldsNoBlur(this.injector, this.childFormProperties(), childTransactionType.schema),
+        {
+          updateOn: 'blur',
+        },
+      ),
     );
+
+    TransactionFormUtils.onInit(
+      this,
+      this.childForm(),
+      this.childTransaction(),
+      this.childContactIdMap,
+      this.contactService,
+      this.injector,
+    );
+    TransactionChildFormUtils.childOnInit(this, this.childForm(), childTransaction, this.injector);
+    // Determine which accordion pane to open initially based on transaction id in page URL
+    const transactionId = this.activatedRoute.snapshot.params['transactionId'];
+    if (childTransaction && transactionId && childTransaction?.id === transactionId && this.accordion) {
+      this.accordion().value.set(1);
+    }
   }
 
   /**

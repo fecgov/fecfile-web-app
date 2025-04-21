@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, Signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, Signal } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -27,13 +27,12 @@ import {
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 @Component({
   template: '',
 })
-export abstract class TransactionTypeBaseComponent extends FormComponent {
+export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit {
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -91,48 +90,38 @@ export abstract class TransactionTypeBaseComponent extends FormComponent {
         this.store.dispatch(navigationEventClearAction());
       }
     });
+  }
 
-    effectOnceIf(
-      () => this.transaction(),
-      () => {
-        const transaction = this.transaction();
-        if (!transaction?.transactionType?.templateMap) {
-          throw new Error('Fecfile: Template map not found for transaction component');
-        }
+  ngOnInit() {
+    const transaction = this.transaction();
+    if (!transaction?.transactionType?.templateMap) {
+      throw new Error('Fecfile: Template map not found for transaction component');
+    }
 
-        TransactionFormUtils.onInit(
-          this,
-          this.form(),
-          transaction,
-          this.contactIdMap,
-          this.contactService,
-          this.injector,
-        );
+    TransactionFormUtils.onInit(this, this.form(), transaction, this.contactIdMap, this.contactService, this.injector);
 
-        // Determine if amount should always be negative and then force it to be so if needed
-        if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
-          const control = this.getControl(this.templateMap()!.amount);
-          effect(
-            () => {
-              const amount = control?.valueChangeSignal();
-              if (+amount > 0) {
-                this.form().patchValue({ [this.templateMap()!.amount]: -1 * amount });
-              }
-            },
-            { injector: this.injector },
-          );
-        }
+    // Determine if amount should always be negative and then force it to be so if needed
+    if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
+      const control = this.getControl(this.templateMap()!.amount);
+      effect(
+        () => {
+          const amount = control?.valueChangeSignal();
+          if (+amount > 0) {
+            this.form().patchValue({ [this.templateMap()!.amount]: -1 * amount });
+          }
+        },
+        { injector: this.injector },
+      );
+    }
 
-        // If this single-entry transaction has inherited fields from its parent, load values
-        // from parent on create and set field to read-only. For edit, just make
-        // the fields read-only
-        if (transaction.transactionType?.getInheritedFields(transaction)) {
-          this.initInheritedFieldsFromParent();
-        }
+    // If this single-entry transaction has inherited fields from its parent, load values
+    // from parent on create and set field to read-only. For edit, just make
+    // the fields read-only
+    if (transaction.transactionType?.getInheritedFields(transaction)) {
+      this.initInheritedFieldsFromParent();
+    }
 
-        this.store.dispatch(navigationEventClearAction());
-      },
-    );
+    this.store.dispatch(navigationEventClearAction());
   }
 
   writeToApi(payload: Transaction): Promise<Transaction> {

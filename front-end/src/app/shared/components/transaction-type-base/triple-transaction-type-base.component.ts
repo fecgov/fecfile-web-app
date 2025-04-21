@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -12,7 +12,6 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -26,7 +25,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
 @Component({
   template: '',
 })
-export abstract class TripleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
+export abstract class TripleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent implements OnInit {
   readonly childFormProperties_2 = computed(() => this.childTransactionType_2()?.getFormControlNames() ?? []);
   readonly childTransactionType_2 = computed(() => this.childTransaction_2()?.transactionType);
   readonly childTransaction_2 = computed(() => {
@@ -71,26 +70,20 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
     }
   });
 
-  constructor() {
-    super();
-
-    effectOnceIf(
-      () => this.childForm_2() && this.childTransaction_2(),
-      () => {
-        const form = this.childForm_2();
-        const trans = this.childTransaction_2();
-        if (!form || !trans) return;
-        TransactionFormUtils.onInit(
-          this,
-          form,
-          this.childTransaction_2(),
-          this.childContactIdMap_2,
-          this.contactService,
-          this.injector,
-        );
-        TransactionChildFormUtils.childOnInit(this, form, trans, this.injector);
-      },
+  override ngOnInit() {
+    super.ngOnInit();
+    const form = this.childForm_2();
+    const trans = this.childTransaction_2();
+    if (!form || !trans) return;
+    TransactionFormUtils.onInit(
+      this,
+      form,
+      this.childTransaction_2(),
+      this.childContactIdMap_2,
+      this.contactService,
+      this.injector,
     );
+    TransactionChildFormUtils.childOnInit(this, form, trans, this.injector);
   }
 
   override async save(navigationEvent: NavigationEvent): Promise<void> {

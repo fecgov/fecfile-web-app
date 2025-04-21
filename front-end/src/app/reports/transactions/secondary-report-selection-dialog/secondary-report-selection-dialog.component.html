@@ -1,10 +1,4 @@
-<p-dialog
-  [modal]="true"
-  [visible]="dialogVisible()"
-  (onHide)="closeDialog()"
-  [style]="{ width: '512px' }"
-  (onShow)="showDialog()"
->
+<p-dialog [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '512px' }" (onShow)="showDialog()">
   <ng-template #header>
     <h1>Confirm</h1>
   </ng-template>
@@ -58,7 +52,7 @@
         class="p-button-primary"
         (click)="linkToSelectedReport()"
       ></button>
-      <button pButton pRipple [text]="true" (click)="closeDialog()" label="Cancel"></button>
+      <button pButton pRipple [text]="true" (click)="dialogVisible.set(false)" label="Cancel"></button>
     </div>
   </ng-template>
 </p-dialog>

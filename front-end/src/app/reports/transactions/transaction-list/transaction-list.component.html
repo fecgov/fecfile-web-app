@@ -29,7 +29,9 @@
   }
 
   <app-transaction-disbursements
-    [openReportSelectionDialog]="openReportSelectDialog"
+    (requestReportSelection)="
+      openSecondaryReportSelectionDialog($event.transaction, $event.formType, $event.createMethod)
+    "
     (reloadTables)="refreshTables()"
   ></app-transaction-disbursements>
   @if (selectActiveReport().report_type !== reportTypes.F24) {
@@ -63,8 +65,7 @@
 <app-select-report-dialog></app-select-report-dialog>
 
 <app-secondary-report-selection-dialog
-  (dialogClose)="reportSelectDialogVisible = false"
-  [dialogVisible]="reportSelectDialogVisible"
+  [(dialogVisible)]="reportSelectDialogVisible"
   [reportType]="reportSelectFormType"
   [transaction]="reportSelectionTransaction"
   [createEventMethod]="reportSelectionCreateMethod"

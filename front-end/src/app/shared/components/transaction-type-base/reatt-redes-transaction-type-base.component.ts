@@ -63,7 +63,8 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     };
   });
 
-  ngOnInit() {
+  override ngOnInit() {
+    super.ngOnInit();
     const tx = this.transaction() as SchATransaction | SchBTransaction;
     this.childUpdateFormWithPrimaryContact({
       value: tx.reatt_redes?.contact_1,
@@ -96,32 +97,30 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     }
   }
 
-  private reatToOverlayForm(transaction: SchATransaction) {
-    this.getChildControl(transaction.transactionType.templateMap.amount)?.addValidators([
-      buildReattRedesTransactionValidator(transaction),
+  private reatToOverlayForm(toTx: SchATransaction) {
+    this.getControl(toTx.transactionType.templateMap.amount)?.addValidators([
+      buildReattRedesTransactionValidator(toTx),
     ]);
-    this.getChildControl('contribution_purpose_descrip')?.clearAsyncValidators();
-    const memoCode = this.getChildControl('memo_code');
+    this.getControl('contribution_purpose_descrip')?.clearAsyncValidators();
+    const memoCode = this.getControl('memo_code');
     memoCode?.clearAsyncValidators();
     memoCode?.setValue(true);
     memoCode?.disable();
   }
 
   private reatFromOverlayForm(transaction: SchATransaction) {
-    const purpose = this.getControl(transaction.transactionType.templateMap.purpose_description);
+    const purpose = this.getChildControl(transaction.transactionType.templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.
     purpose?.clearAsyncValidators();
-    this.getControl('memo_code')?.clearAsyncValidators();
+    this.getChildControl('memo_code')?.clearAsyncValidators();
 
     // Watch for changes to the "TO" transaction entity name and then update the "FROM" transaction expenditure purpose description.
     effect(
       () => {
-        const org = this.getChildControl(
-          transaction.transactionType.templateMap.organization_name,
-        )?.valueChangeSignal();
-        const first = this.getChildControl(transaction.transactionType.templateMap.first_name)?.valueChangeSignal();
-        const last = this.getChildControl(transaction.transactionType.templateMap.last_name)?.valueChangeSignal();
-        const isIndividual = this.getChildControl('entity_type')?.value === ContactTypes.INDIVIDUAL;
+        const org = this.getControl(transaction.transactionType.templateMap.organization_name)?.valueChangeSignal();
+        const first = this.getControl(transaction.transactionType.templateMap.first_name)?.valueChangeSignal();
+        const last = this.getControl(transaction.transactionType.templateMap.last_name)?.valueChangeSignal();
+        const isIndividual = this.getControl('entity_type')?.value === ContactTypes.INDIVIDUAL;
         const name = isIndividual ? `Reattribution to ${first} ${last}` : `Reattribution to ${org}`;
         purpose?.setValue(name);
       },
@@ -131,38 +130,39 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
     effect(
       () => {
-        const amount = this.getChildControl(transaction.transactionType.templateMap.amount)?.valueChangeSignal();
-        this.getControl(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
+        const amount = this.getControl(transaction.transactionType.templateMap.amount)?.valueChangeSignal();
+        if (amount)
+          this.getChildControl(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
       },
       { injector: this.injector },
     );
 
     ReattributionFromUtils.readOnlyFields.forEach((field) =>
-      this.getControl(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
+      this.getChildControl(transaction.transactionType.templateMap[field])?.disable(),
     );
   }
 
   private redesToOverlayForm(toTx: SchBTransaction) {
     // Add additional amount validation
-    this.getChildControl(toTx.transactionType.templateMap.amount)?.addValidators([
+    this.getControl(toTx.transactionType.templateMap.amount)?.addValidators([
       buildReattRedesTransactionValidator(toTx),
     ]);
 
     // Clear normal schema validation from redesignation TO form
-    this.getChildControl(toTx.transactionType.templateMap.purpose_description)?.clearAsyncValidators();
-    const memoCode = this.getChildControl('memo_code');
+    this.getControl(toTx.transactionType.templateMap.purpose_description)?.clearAsyncValidators();
+    const memoCode = this.getControl('memo_code');
     memoCode?.clearAsyncValidators();
     memoCode?.setValue(true);
 
     RedesignationToUtils.readOnlyFields.forEach((field) =>
-      this.getChildControl(toTx.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
+      this.getControl(toTx.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
     );
   }
 
   private redesFromOverlayForm(transaction: SchBTransaction) {
     const template = transaction.transactionType.templateMap;
-    const purpose = this.getControl(template.purpose_description);
-    const memoCode = this.getControl('memo_code');
+    const purpose = this.getChildControl(template.purpose_description);
+    const memoCode = this.getChildControl('memo_code');
     // Update purpose description for rules that are independent of the transaction date being in the report.
     purpose?.clearAsyncValidators();
     memoCode?.clearAsyncValidators();
@@ -171,16 +171,16 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
     // Watch for changes to the "TO" transaction amount and copy the negative of it to the "FROM" transaction amount.
     effect(() => {
-      const amount = this.getChildControl(template.amount)?.valueChangeSignal();
-      this.getControl(template.amount)?.setValue(-1 * parseFloat(amount));
+      const amount = this.getControl(template.amount)?.valueChangeSignal();
+      if (amount) this.getChildControl(template.amount)?.setValue(-1 * parseFloat(amount));
     });
     effect(() => {
-      const date = this.getChildControl(template.date)?.valueChangeSignal();
-      this.getControl(template.date)?.setValue(date);
+      const date = this.getControl(template.date)?.valueChangeSignal();
+      this.getChildControl(template.date)?.setValue(date);
     });
 
     RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      this.getControl(template[field as TemplateMapKeyType])?.disable(),
+      this.getChildControl(template[field as TemplateMapKeyType])?.disable(),
     );
   }
 

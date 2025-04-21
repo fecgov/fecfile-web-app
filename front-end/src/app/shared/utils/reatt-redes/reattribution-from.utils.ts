@@ -3,7 +3,7 @@ import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 
 export class ReattributionFromUtils {
-  static readonly readOnlyFields = [
+  static readonly readOnlyFields: TemplateMapKeyType[] = [
     'organization_name',
     'last_name',
     'first_name',
