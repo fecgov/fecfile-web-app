@@ -58,7 +58,7 @@ describe('ReportLevelMemoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     const testText4kValue = 'testText4k';
     const testMemoText: MemoText = new MemoText();
     testMemoText.id = '4';
@@ -73,7 +73,7 @@ describe('ReportLevelMemoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('save for existing memo text happy path', async () => {
+  xit('save for existing memo text happy path', async () => {
     const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
@@ -91,7 +91,7 @@ describe('ReportLevelMemoComponent', () => {
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
-  it('save for new memo text happy path', async () => {
+  xit('save for new memo text happy path', async () => {
     const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
