@@ -1,5 +1,8 @@
 <div class="login-page container">
   <div class="text-center top-section">
+    @if (disableLogin) {
+      <h1 class="login-box-header header-comming-soon">Coming Soon&nbsp;</h1>
+    }
     <div class="">
       <h1 class="login-box-header header-filers">Made for filers.&nbsp;</h1>
       <h1 class="login-box-header header-productivity">Built to work anywhere.</h1>
@@ -13,13 +16,17 @@
         You and your team can create, review and submit your reports from anywhere.
       </span>
     </p>
-    <div class="button-container">
-      <button (click)="navigateToLoginDotGov()" class="login-button" type="button" id="loginButton">
-        Sign in with Login.gov
-      </button>
-    </div>
-    <div class="">
-      <a class="learn-more-link" href="https://www.login.gov/what-is-login/">Learn more about Login.gov</a>
+    <div>
+      @if (!disableLogin) {
+        <div class="button-container">
+          <button (click)="navigateToLoginDotGov()" class="login-button" type="button" id="loginButton">
+            Sign in with Login.gov
+          </button>
+        </div>
+        <div class="">
+          <a class="learn-more-link" href="https://www.login.gov/what-is-login/">Learn more about Login.gov</a>
+        </div>
+      }
     </div>
   </div>
   <div class="bottom-section">
