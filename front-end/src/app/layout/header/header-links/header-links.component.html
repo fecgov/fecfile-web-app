@@ -58,14 +58,16 @@
       </li>
     }
     @case (headerStyles.LOGIN) {
-      <li
-        class="nav-item"
-        (click)="navigateToLoginDotGov()"
-        (keydown.enter)="navigateToLoginDotGov()"
-        [style.fontSize]="fontSize"
-      >
-        SIGN IN
-      </li>
+      @if (!disableLogin) {
+        <li
+          class="nav-item"
+          (click)="navigateToLoginDotGov()"
+          (keydown.enter)="navigateToLoginDotGov()"
+          [style.fontSize]="fontSize"
+        >
+          SIGN IN
+        </li>
+      }
     }
     @case (headerStyles.LOGOUT) {
       <li class="nav-item" (click)="logOut()" (keydown.enter)="logOut()" [style.fontSize]="fontSize">Log Out</li>
