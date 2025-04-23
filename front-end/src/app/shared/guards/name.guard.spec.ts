@@ -31,7 +31,7 @@ describe('nameGuard', () => {
   it('should return false without notice', () => {
     const router = TestBed.inject(Router);
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasProfileData').and.returnValue(Promise.resolve(false));
+    spyOn(loginService, 'userHasProfileData').and.returnValue(false);
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
@@ -42,7 +42,7 @@ describe('nameGuard', () => {
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasProfileData').and.returnValue(Promise.resolve(true));
+    spyOn(loginService, 'userHasProfileData').and.returnValue(true);
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toBeTrue();
     });

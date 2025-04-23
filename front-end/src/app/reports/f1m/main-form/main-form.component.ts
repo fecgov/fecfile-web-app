@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, runInInjectionContext } from '@angular/core';
+import { Component, computed, effect, inject, runInInjectionContext, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -23,8 +23,7 @@ import { NameInputComponent } from '../../../shared/components/inputs/name-input
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
-import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { ConfirmationContext, ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   selector: 'app-main-form',
@@ -125,8 +124,8 @@ export class MainFormComponent extends MainFormBaseComponent {
     zip: 'zip',
   } as TransactionTemplateMapType;
 
-  contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
-  templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
+  readonly contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
+  readonly templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
 
   readonly committeeTypeControl = computed(() => {
     const control = this.form().get('committee_type');
@@ -138,72 +137,94 @@ export class MainFormComponent extends MainFormBaseComponent {
     if (!control) return undefined;
     return control as SignalFormControl;
   });
-  affiliatedContact = new AffiliatedContact(this, this.injector);
-  candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this, this.injector));
-  excludeFecIds: string[] = [];
-  excludeIds: string[] = [];
+  readonly affiliatedContact = new AffiliatedContact(this, this.injector);
+  readonly candidateContacts = f1mCandidateTags.map(
+    (tag: F1MCandidateTag) => new CandidateContact(tag, this, this.injector),
+  );
 
-  form1M = new Form1M();
+  readonly excludeFecIds = signal<string[]>([]);
 
-  constructor() {
-    super();
+  readonly excludeIds = signal<string[]>([]);
 
-    effectOnceIf(
-      () => this.reportId && this.report(),
-      () => {
-        // A deep copy of activeReport has to be made because the actual activeReport
-        // object is set to read-only by the NgRx store.
-        this.form1M = Form1M.fromJSON(JSON.parse(JSON.stringify(this.report())));
+  // A deep copy of activeReport has to be made because the actual activeReport
+  // object is set to read-only by the NgRx store.
+  readonly form1M = computed(() => Form1M.fromJSON(JSON.parse(JSON.stringify(this.report()))));
 
-        // Set the statusBy radio button based on form values
-        if (this.form1M.affiliated_committee_name) {
-          this.statusByControl()?.setValue('affiliation');
-        } else {
-          this.statusByControl()?.setValue('qualification');
-        }
+  override ngOnInit(): void {
+    super.ngOnInit();
 
-        // If this is an edit, update the lookup ids to exclude
-        if (this.form1M.id) {
-          if (this.form1M.affiliated_committee_name) {
-            if (this.form1M?.contact_affiliated?.committee_id)
-              this.excludeFecIds.push(this.form1M.contact_affiliated.committee_id);
-            if (this.form1M.contact_affiliated_id) this.excludeIds.push(this.form1M.contact_affiliated_id);
-          } else {
-            f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-              if (this.form1M[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
-                this.excludeFecIds.push(this.form1M[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
-              if (this.form1M[`contact_candidate_${tag}_id` as keyof Form1M])
-                this.excludeIds.push(this.form1M[`contact_candidate_${tag}_id` as keyof Form1M]);
-            });
-          }
-        }
-      },
-    );
+    const f1m = this.form1M();
+    // Set the statusBy radio button based on form values
+    if (f1m.affiliated_committee_name) {
+      this.statusByControl()?.setValue('affiliation');
+    } else {
+      this.statusByControl()?.setValue('qualification');
+    }
 
-    effectOnceIf(
-      () => this.statusByControl(),
-      () => {
-        this.statusByControl()!.addValidators(Validators.required);
-        this.statusByControl()!.updateValueAndValidity();
-        this.setupStatusBySub();
-      },
-    );
+    this.statusByControl()!.addValidators(Validators.required);
+    this.statusByControl()!.updateValueAndValidity();
+    this.setupStatusBySub();
 
-    effectOnceIf(
-      () => this.form(),
-      () => {
-        // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
-        f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-          const signalControl = this.form().get(`${tag}_candidate_id_number`) as SignalFormControl;
-          if (!signalControl) return;
-          this.setupTagSignal(signalControl, tag);
-        });
-      },
-    );
+    // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
+    f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+      const signalControl = this.form().get(`${tag}_candidate_id_number`) as SignalFormControl;
+      if (!signalControl) return;
+      this.setupTagSignal(signalControl, tag);
+    });
+
+    this.computeInitialExcludeIds();
+    this.computeInitialExludeFecIds();
   }
+
+  private computeInitialExludeFecIds(): void {
+    const form = this.form1M();
+    const fecIds: string[] = [];
+
+    if (!form.id) {
+      this.excludeFecIds.set([]);
+      return;
+    }
+
+    if (form.affiliated_committee_name) {
+      if (form.contact_affiliated?.committee_id) {
+        fecIds.push(form.contact_affiliated.committee_id);
+      }
+    } else {
+      f1mCandidateTags.forEach((tag) => {
+        const candidate = form[`contact_candidate_${tag}` as keyof Form1M] as { candidate_id?: string };
+        if (candidate?.candidate_id) fecIds.push(candidate.candidate_id);
+      });
+    }
+
+    this.excludeFecIds.set(fecIds);
+  }
+
+  private computeInitialExcludeIds(): void {
+    const form = this.form1M();
+    const ids: string[] = [];
+
+    if (!form.id) {
+      this.excludeIds.set(ids);
+      return;
+    }
+
+    if (form.affiliated_committee_name) {
+      if (form.contact_affiliated_id) {
+        ids.push(form.contact_affiliated_id);
+      }
+    } else {
+      f1mCandidateTags.forEach((tag) => {
+        const candidateId = form[`contact_candidate_${tag}_id` as keyof Form1M] as string | undefined;
+        if (candidateId) ids.push(candidateId);
+      });
+    }
+
+    this.excludeIds.set(ids);
+  }
+
   private setupStatusBySub() {
-    runInInjectionContext(this.injector, () => {
-      effect(() => {
+    effect(
+      () => {
         const control = this.statusByControl();
         if (!control) return;
         const value = control.valueChangeSignal();
@@ -224,18 +245,18 @@ export class MainFormComponent extends MainFormBaseComponent {
           this.form().get('date_committee_met_requirements')?.addValidators(Validators.required);
           this.disableValidation([this.affiliatedContact]);
         }
-        this.excludeIds = [];
-        this.excludeFecIds = [];
+
         this.form().get('date_of_original_registration')?.updateValueAndValidity();
         this.form().get('date_of_51st_contributor')?.updateValueAndValidity();
         this.form().get('date_committee_met_requirements')?.updateValueAndValidity();
-      });
-    });
+      },
+      { injector: this.injector },
+    );
   }
 
   private setupTagSignal(signalControl: SignalFormControl, tag: F1MCandidateTag) {
-    runInInjectionContext(this.injector, () => {
-      effect(() => {
+    effect(
+      () => {
         signalControl.valueChangeSignal();
         f1mCandidateTags
           .filter((t) => t !== tag)
@@ -245,29 +266,24 @@ export class MainFormComponent extends MainFormBaseComponent {
               this.form().get(`${t}_candidate_id_number`)?.updateValueAndValidity();
             }
           });
-      });
-    });
-  }
-
-  async getConfirmations(): Promise<boolean> {
-    if (!this.report) return false;
-    return this.confirmationService.confirmWithUser(
-      this.form(),
-      this.contactConfigs,
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
+      },
+      { injector: this.injector },
     );
   }
 
-  getContact(contactKey: string) {
-    if (this.form1M[contactKey as keyof Form1M]) {
-      return this.form1M[contactKey as keyof Form1M] as Contact;
-    }
-    return null;
-  }
+  readonly confirmationContext: ConfirmationContext = {
+    getContact: (contactKey: string) => {
+      const f1m = this.form1M();
+      return (f1m[contactKey as keyof Form1M] as Contact) ?? null;
+    },
+    getTemplateMap: (contactKey: string) => {
+      return this.templateMapConfigs[contactKey];
+    },
+  };
 
-  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
-    return this.templateMapConfigs[contactKey];
+  async getConfirmations(): Promise<boolean> {
+    if (!this.report) return false;
+    return this.confirmationService.confirmWithUser(this.form(), this.contactConfigs, this.confirmationContext);
   }
 
   enableValidation(contacts: F1MContact[]) {
@@ -280,8 +296,8 @@ export class MainFormComponent extends MainFormBaseComponent {
 
   getReportPayload(): Report {
     const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form(), this.schema, this.formProperties));
-    this.updateContactsWithForm(this.form1M, this.form());
-    return Object.assign(this.report, formValues);
+    this.updateContactsWithForm(this.form1M(), this.form());
+    return Object.assign(this.report(), formValues);
   }
 
   public override async save(jump: 'continue' | undefined = undefined): Promise<void> {

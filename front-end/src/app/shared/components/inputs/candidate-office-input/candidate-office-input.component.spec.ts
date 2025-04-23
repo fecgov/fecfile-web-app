@@ -6,12 +6,15 @@ import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from './candidate-office-input.component';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { testScheduleATransaction, testIndependentExpenditure } from 'app/shared/utils/unit-test.utils';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('CandidateOfficeInputComponent', () => {
   let component: CandidateOfficeInputComponent;
   let fixture: ComponentFixture<CandidateOfficeInputComponent>;
+  let injector: Injector;
 
   const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
   const testCandidateStateFormControlName = 'testCandidateStateFormControlName';
@@ -28,26 +31,29 @@ describe('CandidateOfficeInputComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(CandidateOfficeInputComponent);
     component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction;
-    component.form = new FormGroup({
-      donor_candidate_last_name: new SubscriptionFormControl(''),
-      donor_candidate_first_name: new SubscriptionFormControl(''),
-      donor_candidate_middle_name: new SubscriptionFormControl(''),
-      donor_candidate_prefix: new SubscriptionFormControl(''),
-      donor_candidate_suffix: new SubscriptionFormControl(''),
-      election_code: new SubscriptionFormControl(''),
-    });
+    (component.transaction as any) = createSignal(testScheduleATransaction);
+    (component.form as any) = createSignal(
+      new FormGroup({
+        donor_candidate_last_name: new SignalFormControl(injector, ''),
+        donor_candidate_first_name: new SignalFormControl(injector, ''),
+        donor_candidate_middle_name: new SignalFormControl(injector, ''),
+        donor_candidate_prefix: new SignalFormControl(injector, ''),
+        donor_candidate_suffix: new SignalFormControl(injector, ''),
+        election_code: new SignalFormControl(injector, ''),
+      }),
+    );
 
-    component.form.addControl(testCandidateOfficeFormControlName, new SubscriptionFormControl());
-    component.officeFormControlName = testCandidateOfficeFormControlName;
+    component.form().addControl(testCandidateOfficeFormControlName, new SignalFormControl(injector));
+    (component.officeFormControlName as any) = createSignal(testCandidateOfficeFormControlName);
 
-    component.form.addControl(testCandidateStateFormControlName, new SubscriptionFormControl());
-    component.stateFormControlName = testCandidateStateFormControlName;
+    component.form().addControl(testCandidateStateFormControlName, new SignalFormControl(injector));
+    (component.stateFormControlName as any) = createSignal(testCandidateStateFormControlName);
 
-    component.form.addControl(districtFormControlName, new SubscriptionFormControl());
-    component.districtFormControlName = districtFormControlName;
+    component.form().addControl(districtFormControlName, new SignalFormControl(injector));
+    (component.districtFormControlName as any) = createSignal(districtFormControlName);
 
     fixture.detectChanges();
   });
@@ -57,11 +63,11 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('test PRESIDENTIAL office', () => {
-    component.form.patchValue({
+    component.form().patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL,
     });
-    const stateFormControl = component.form.get(component.stateFormControlName);
-    const districtFormControl = component.form.get(component.districtFormControlName);
+    const stateFormControl = component.form().get(component.stateFormControlName());
+    const districtFormControl = component.form().get(component.districtFormControlName());
 
     expect(stateFormControl?.value).toBeNull();
     expect(stateFormControl?.disabled).toBe(true);
@@ -71,11 +77,11 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('test SENATE office', () => {
-    component.form.patchValue({
+    component.form().patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.SENATE,
     });
-    const stateFormControl = component.form.get(component.stateFormControlName);
-    const districtFormControl = component.form.get(component.districtFormControlName);
+    const stateFormControl = component.form().get(component.stateFormControlName());
+    const districtFormControl = component.form().get(component.districtFormControlName());
 
     expect(stateFormControl?.disabled).toBe(false);
 
@@ -84,14 +90,14 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('test HOUSE office', () => {
-    component.form.patchValue({
+    component.form().patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.HOUSE,
     });
-    component.form.patchValue({
+    component.form().patchValue({
       [testCandidateStateFormControlName]: 'FL',
     });
-    const stateFormControl = component.form.get(component.stateFormControlName);
-    const districtFormControl = component.form.get(component.districtFormControlName);
+    const stateFormControl = component.form().get(component.stateFormControlName());
+    const districtFormControl = component.form().get(component.districtFormControlName());
 
     expect(stateFormControl?.disabled).toBe(false);
     expect(districtFormControl?.disabled).toBe(false);
@@ -101,32 +107,21 @@ describe('CandidateOfficeInputComponent', () => {
     );
   });
 
-  it('adds subscription to election_code for Schedule E transactions', () => {
-    component.transaction = testIndependentExpenditure;
-    component.ngOnInit();
-
-    const electionCodeControl = component.form.get(
-      component.transaction.transactionType.templateMap.election_code,
-    ) as SubscriptionFormControl;
-    expect(electionCodeControl.subscriptions).toHaveSize(1);
-  });
-
   it('updates state availability for SchE transactions in Presidential Primary elections', () => {
-    component.transaction = testIndependentExpenditure;
-    component.ngOnInit();
+    (component.transaction as any) = createSignal(testIndependentExpenditure);
 
-    component.form.patchValue({ [component.officeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL });
-    component.form.patchValue({ election_code: 'P2025' });
-    expect(component.form.get(component.stateFormControlName)?.disabled).toBeFalse();
+    component.form().patchValue({ [component.officeFormControlName()]: CandidateOfficeTypes.PRESIDENTIAL });
+    component.form().patchValue({ election_code: 'P2025' });
+    expect(component.form().get(component.stateFormControlName())?.disabled).toBeFalse();
 
-    component.form.patchValue({ election_code: 'G2025' });
-    expect(component.form.get(component.stateFormControlName)?.disabled).toBeTrue();
+    component.form().patchValue({ election_code: 'G2025' });
+    expect(component.form().get(component.stateFormControlName())?.disabled).toBeTrue();
   });
 
   it('updates the district field correctly while switching between states', () => {
-    const stateField = component.form.get(component.stateFormControlName) as SubscriptionFormControl;
-    const districtField = component.form.get(component.districtFormControlName) as SubscriptionFormControl;
-    const officeField = component.form.get(component.officeFormControlName) as SubscriptionFormControl;
+    const stateField = component.form().get(component.stateFormControlName()) as SignalFormControl;
+    const districtField = component.form().get(component.districtFormControlName()) as SignalFormControl;
+    const officeField = component.form().get(component.officeFormControlName()) as SignalFormControl;
 
     officeField.setValue(CandidateOfficeTypes.HOUSE);
     expect(districtField.disabled).toBeFalse();

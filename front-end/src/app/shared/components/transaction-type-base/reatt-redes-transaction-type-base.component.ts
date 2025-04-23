@@ -86,7 +86,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     this.overlayForms(tx, this.childTransaction() as SchATransaction | SchBTransaction);
   }
 
-  private overlayForms(toTx: SchATransaction | SchBTransaction, fromTx: SchATransaction | SchBTransaction): void {
+  overlayForms(toTx: SchATransaction | SchBTransaction, fromTx: SchATransaction | SchBTransaction): void {
     if (toTx.reattribution_redesignation_tag === ReattRedesTypes.REATTRIBUTION_TO) {
       this.reatToOverlayForm(toTx as SchATransaction);
       this.reatFromOverlayForm(fromTx as SchATransaction);

@@ -13,14 +13,14 @@ export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
 
 export abstract class F1MContact {
-  contactKey: keyof Form1M;
+  readonly contactKey: keyof Form1M;
   get contactLookupKey(): string {
     return `${this.contactKey}_lookup`;
   }
-  abstract contactTypeOptions: PrimeOptions;
-  abstract formFields: string[];
-  component: MainFormComponent;
-  control: AbstractControl | null;
+  abstract readonly contactTypeOptions: PrimeOptions;
+  abstract readonly formFields: string[];
+  readonly component: MainFormComponent;
+  readonly control: AbstractControl | null;
   abstract enableValidation(): void;
 
   constructor(contactKey: keyof Form1M, component: MainFormComponent, injector: Injector) {
@@ -37,31 +37,31 @@ export abstract class F1MContact {
    */
   update($event: SelectItem<Contact>) {
     // If this is updating a previously selected candidate, remove it from the exclusion list.
-    const previousId = this.component.form1M[`${this.contactKey}_id` as keyof Form1M] as string | null;
-    this.component.excludeIds = this.component.excludeIds.filter((id: string) => id !== previousId);
+    const previousId = this.component.form1M()[`${this.contactKey}_id` as keyof Form1M] as string | null;
+    this.component.excludeIds.update((ids) => ids.filter((id) => id !== previousId));
     const currentId = $event.value.id ?? null;
     if (currentId) {
-      this.component.excludeIds.push(currentId);
+      this.component.excludeIds.update((ids) => [...ids, currentId]);
     }
-    if (this.component.form1M[this.contactKey]?.committee_id) {
-      this.component.excludeFecIds = this.component.excludeFecIds.filter(
-        (id: string) => id !== this.component.form1M[this.contactKey].committee_id,
-      );
+    const oldCommittee = this.component.form1M()[this.contactKey]?.committee_id;
+    if (oldCommittee) {
+      this.component.excludeFecIds.update((ids) => ids.filter((id) => id !== oldCommittee));
     }
-    if ($event.value.committee_id) {
-      this.component.excludeFecIds.push($event.value.committee_id);
+    const newCommittee = $event.value.committee_id;
+    if (newCommittee) {
+      this.component.excludeFecIds.update((ids) => [...ids, newCommittee]);
     }
-    if (this.component.form1M[this.contactKey]?.candidate_id) {
-      this.component.excludeFecIds = this.component.excludeFecIds.filter(
-        (id: string) => id !== this.component.form1M[this.contactKey].candidate_id,
-      );
+    const oldCandidate = this.component.form1M()[this.contactKey]?.candidate_id;
+    if (oldCandidate) {
+      this.component.excludeFecIds.update((ids) => ids.filter((id) => id !== oldCandidate));
     }
-    if ($event.value.candidate_id) {
-      this.component.excludeFecIds.push($event.value.candidate_id);
+    const newCandidate = $event.value.candidate_id;
+    if (newCandidate) {
+      this.component.excludeFecIds.update((ids) => [...ids, newCandidate]);
     }
 
-    (this.component.form1M[this.contactKey] as Contact) = $event.value;
-    (this.component.form1M[`${this.contactKey}_id` as keyof Form1M] as string | null) = currentId;
+    (this.component.form1M()[this.contactKey] as Contact) = $event.value;
+    (this.component.form1M()[`${this.contactKey}_id` as keyof Form1M] as string | null) = currentId;
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.contactKey])) {
       this.component
         .form()
@@ -83,11 +83,11 @@ export abstract class F1MContact {
 
   disableValidation() {
     this.control?.clearValidators();
-    (this.component.form1M[this.contactKey] as Contact | undefined) = undefined;
-    (this.component.form1M[`${this.contactKey}_id` as keyof Form1M] as string | null) = null;
+    (this.component.form1M()[this.contactKey] as Contact | undefined) = undefined;
+    (this.component.form1M()[`${this.contactKey}_id` as keyof Form1M] as string | null) = null;
 
     this.formFields.forEach((field: string) => {
-      (this.component.form1M[field as keyof Form1M] as string | undefined) = undefined;
+      (this.component.form1M()[field as keyof Form1M] as string | undefined) = undefined;
       this.component.form().get(field)?.clearValidators();
       this.component.form().get(field)?.setValue(undefined);
     });
@@ -102,8 +102,8 @@ export abstract class F1MContact {
 }
 
 export class AffiliatedContact extends F1MContact {
-  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
-  formFields = ['affiliated_date_form_f1_filed', 'affiliated_committee_fec_id', 'affiliated_committee_name'];
+  readonly contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  readonly formFields = ['affiliated_date_form_f1_filed', 'affiliated_committee_fec_id', 'affiliated_committee_name'];
 
   constructor(component: MainFormComponent, injector: Injector) {
     super('contact_affiliated', component, injector);
@@ -121,7 +121,7 @@ export class AffiliatedContact extends F1MContact {
 
   enableValidation() {
     // Enable validation to lookup control if missing contact info
-    if (!this.component.form1M.contact_affiliated) {
+    if (!this.component.form1M().contact_affiliated) {
       this.control?.addValidators(Validators.required);
     }
 
@@ -131,9 +131,9 @@ export class AffiliatedContact extends F1MContact {
 }
 
 export class CandidateContact extends F1MContact {
-  tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
-  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
-  formFields: string[] = [];
+  readonly tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
+  readonly contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  readonly formFields: string[] = [];
 
   get dateOfContributionField() {
     return `${this.tag}_date_of_contribution`;
@@ -188,7 +188,7 @@ export class CandidateContact extends F1MContact {
 
   enableValidation() {
     // Enable validation to lookup control if missing contact info
-    if (!this.component.form1M[`contact_candidate_${this.tag}`]) {
+    if (!this.component.form1M()[`contact_candidate_${this.tag}`]) {
       this.control?.addValidators(Validators.required);
     }
 

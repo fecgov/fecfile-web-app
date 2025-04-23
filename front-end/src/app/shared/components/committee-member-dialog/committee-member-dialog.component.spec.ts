@@ -12,7 +12,9 @@ import { CommitteeMember, Roles } from 'app/shared/models';
 import { firstValueFrom, of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',
@@ -27,6 +29,7 @@ describe('CommitteeMemberDialogComponent', () => {
   let component: CommitteeMemberDialogComponent;
   let fixture: ComponentFixture<CommitteeMemberDialogComponent>;
   let testCommitteeService: CommitteeMemberService;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -47,6 +50,7 @@ describe('CommitteeMemberDialogComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     TestBed.inject(ConfirmationService);
     testCommitteeService = TestBed.inject(CommitteeMemberService);
     fixture = TestBed.createComponent(CommitteeMemberDialogComponent);
@@ -84,8 +88,7 @@ describe('CommitteeMemberDialogComponent', () => {
   });
 
   it('should default role to first in list', () => {
-    component.detailVisible = true;
-    component.ngOnChanges();
+    (component.detailVisible as any) = createSignal(true);
     expect(component.form.get('role')?.value).toBe('COMMITTEE_ADMINISTRATOR');
   });
 
@@ -97,14 +100,14 @@ describe('CommitteeMemberDialogComponent', () => {
 
     it('should call editRole when member is defined', () => {
       spyOn(component, 'editRole');
-      component.member = { role: 'MANAGER' } as CommitteeMember;
+      (component.member as any) = createSignal({ role: 'MANAGER' } as CommitteeMember);
       component.submit();
       expect(component.editRole).toHaveBeenCalled();
     });
 
     it('should call addUser when member is undefined', () => {
       spyOn(component, 'addUser');
-      component.member = undefined;
+      (component.member as any) = createSignal(undefined);
       component.submit();
       expect(component.addUser).toHaveBeenCalled();
     });
@@ -112,7 +115,7 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('editRole', () => {
     beforeEach(() => {
-      component.member = { role: 'MANAGER' } as CommitteeMember;
+      (component.member as any) = createSignal({ role: 'MANAGER' } as CommitteeMember);
       component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
     });
 
@@ -126,7 +129,7 @@ describe('CommitteeMemberDialogComponent', () => {
     it('should call committeeMemberService.update when role is valid', async () => {
       const updateSpy = spyOn(testCommitteeService, 'update').and.returnValue(Promise.resolve(johnSmith));
       const resetSpy = spyOn(component, 'resetForm');
-      component.member = johnSmith;
+      (component.member as any) = createSignal(johnSmith);
       component.form.get('role')?.setValue('MANAGER');
       await component.editRole();
 
@@ -159,8 +162,8 @@ describe('CommitteeMemberDialogComponent', () => {
       const addMemberSpy = spyOn(testCommitteeService, 'addMember').and.returnValue(Promise.resolve(johnSmith));
       const resetSpy = spyOn(component, 'resetForm').and.callThrough();
       const updateSpy = spyOn(component.form, 'updateValueAndValidity').and.callThrough();
-      component.form.setControl('email', new SubscriptionFormControl('test@example.com'));
-      component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
+      component.form.setControl('email', new SignalFormControl(injector, 'test@example.com'));
+      component.form.setControl('role', new SignalFormControl(injector, 'MANAGER'));
       const manager = component.form.get('role')?.value;
 
       await component.addUser();
@@ -175,8 +178,8 @@ describe('CommitteeMemberDialogComponent', () => {
       const addSpy = spyOn(testCommitteeService, 'addMember').and.returnValue(Promise.reject(error));
       const resetSpy = spyOn(component, 'resetForm').and.callThrough();
       const consoleSpy = spyOn(console, 'error');
-      component.form.setControl('email', new SubscriptionFormControl('test@example.com'));
-      component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
+      component.form.setControl('email', new SignalFormControl(injector, 'test@example.com'));
+      component.form.setControl('role', new SignalFormControl(injector, 'MANAGER'));
       await component.addUser();
       expect(consoleSpy).toHaveBeenCalledWith('Error adding member', error);
       expect(addSpy).toHaveBeenCalled();
@@ -186,12 +189,12 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('role getter', () => {
     it('should return empty string if member is undefined', () => {
-      component.member = undefined;
+      (component.member as any) = createSignal(undefined);
       expect(component.role).toBe('');
     });
 
     it('should return the role label from Roles enum', () => {
-      component.member = { role: 'MANAGER' } as CommitteeMember;
+      (component.member as any) = createSignal({ role: 'MANAGER' } as CommitteeMember);
       expect(component.role).toBe(Roles.MANAGER);
     });
   });

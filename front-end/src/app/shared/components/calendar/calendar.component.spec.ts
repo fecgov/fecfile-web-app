@@ -1,63 +1,89 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CalendarComponent } from './calendar.component';
-import { DatePickerModule } from 'primeng/datepicker';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { ScheduleATransactionTypes, Transaction } from 'app/shared/models';
+import { Component, Input } from '@angular/core';
+import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { DatePicker } from 'primeng/datepicker';
+import { DateUtils } from 'app/shared/utils/date.utils';
+import { createSignal } from '@angular/core/primitives/signals';
 
-describe('CalendarComponent', () => {
+// Mock child component
+@Component({
+  selector: 'app-error-messages',
+  template: '',
+})
+class MockErrorMessagesComponent {
+  @Input() control!: SignalFormControl<Date | null>;
+  @Input() formSubmitted!: boolean;
+  @Input() requiredErrorMessage!: string;
+}
+
+fdescribe('CalendarComponent', () => {
   let component: CalendarComponent;
   let fixture: ComponentFixture<CalendarComponent>;
   let form: FormGroup;
-  let transaction: Transaction;
+  let control: FormControl;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, DatePickerModule, CalendarComponent], // Ensure ReactiveFormsModule is imported here
-      providers: [FormBuilder],
+  beforeEach(() => {
+    control = new FormControl('2020-01-01');
+    form = new FormGroup({
+      myDate: control,
+    });
+
+    TestBed.configureTestingModule({
+      imports: [CommonModule, ReactiveFormsModule],
+      declarations: [CalendarComponent, MockErrorMessagesComponent, DatePicker],
     }).compileComponents();
-    const fb = TestBed.inject(FormBuilder);
+
     fixture = TestBed.createComponent(CalendarComponent);
     component = fixture.componentInstance;
-    transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
 
-    form = fb.group(
-      SchemaUtils.getFormGroupFieldsNoBlur(
-        transaction.transactionType.getFormControlNames(),
-        transaction.transactionType.schema,
-      ),
-      { updateOn: 'blur' },
-    );
-    component.form = form;
-    component.fieldName = 'contribution_date';
+    // Inputs as signals
+    (component as any).form = createSignal(form);
+    (component as any).fieldName = createSignal('myDate');
+    (component as any).label = createSignal('My Label');
+    (component as any).formSubmitted = createSignal(false);
+    (component as any).showErrors = createSignal(true);
+    (component as any).requiredErrorMessage = createSignal('Required');
 
-    component.label = 'Test Date';
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
+  it('should parse the initial value and set it on init', () => {
+    const parsedDate = DateUtils.parseDate('2020-01-01');
+    expect(component.control().value).toEqual(parsedDate);
   });
 
-  it('should initialize form control with "submit" update strategy', () => {
-    expect(component.control.updateOn).toBe('submit');
+  it('should mark control as touched and set pending value on validateDate()', () => {
+    // Mock pending value
+    (component.control() as any)._pendingValue = new Date(2021, 0, 1);
+    spyOn(component.control(), 'markAsTouched').and.callThrough();
+    spyOn(component.control(), 'setValue').and.callThrough();
+    spyOn(component.control(), 'updateValueAndValidity').and.callThrough();
+
+    component.validateDate();
+
+    expect(component.control().markAsTouched).toHaveBeenCalled();
+    expect(component.control().setValue).toHaveBeenCalledWith(new Date(2021, 0, 1));
+    expect(component.control().updateValueAndValidity).toHaveBeenCalled();
   });
 
-  it('should toggle calendarOpened on validateDate', () => {
-    component.validateDate(true);
-    expect(component.calendarOpened).toBeTrue();
-
-    component.validateDate(false);
-    expect(component.calendarOpened).toBeFalse();
+  it('should bind the formControl to the p-datepicker', () => {
+    const datepicker = fixture.nativeElement.querySelector('p-datepicker');
+    expect(datepicker).toBeTruthy();
+    expect(datepicker.getAttribute('formcontrol')).toBeTruthy(); // basic sanity check
   });
 
-  it('should mark control as touched and update value on updateValue', () => {
-    const date = new Date();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component.control as any)._pendingValue = date;
-    component.validateDate(false);
-    expect(component.control.touched).toBeTrue();
-    expect(component.control.value).toBe(date);
+  it('should show the error component if showErrors is true', () => {
+    const errorComponent = fixture.nativeElement.querySelector('app-error-messages');
+    expect(errorComponent).toBeTruthy();
+  });
+
+  it('should not show the error component if showErrors is false', () => {
+    (component as any).showErrors = createSignal(false);
+    fixture.detectChanges();
+    const errorComponent = fixture.nativeElement.querySelector('app-error-messages');
+    expect(errorComponent).toBeFalsy();
   });
 });

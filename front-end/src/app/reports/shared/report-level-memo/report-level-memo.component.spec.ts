@@ -66,7 +66,7 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.rec_type = 'test_rec_type';
     testMemoText.transaction_id_number = 'test_tin';
     testMemoText.text4000 = 'test_text4k';
-    component.form.addControl('text4000', new SubscriptionFormControl());
+    component.form.addControl('text4000', new SignalFormControl(injector));
     component.form.get('text4000')?.setValue(testText4kValue);
     spyOn(testMemoTextService, 'getForReportId').and.returnValue(Promise.resolve([testMemoText]));
     component.ngOnInit();

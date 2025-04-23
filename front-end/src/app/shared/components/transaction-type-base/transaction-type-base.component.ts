@@ -22,10 +22,9 @@ import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-  TransactionTemplateMapType,
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { ConfirmationContext, ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
@@ -75,12 +74,22 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     ),
   );
 
+  readonly confirmationContext: ConfirmationContext = {
+    getContact: (contactKey: string, tx?: Transaction) => {
+      if (!tx) return null;
+      if (tx.transactionType?.getUseParentContact(tx) && contactKey === 'contact_1') {
+        return null;
+      }
+      return (tx[contactKey as keyof Transaction] as Contact) ?? null;
+    },
+    getTemplateMap: (contactKey: string, tx?: Transaction) => {
+      return tx?.transactionType?.templateMap;
+    },
+  };
+
   constructor() {
     super();
     this.store.dispatch(navigationEventClearAction());
-    effect(() => {
-      if (!this.isEditable()) this.form().disable();
-    });
 
     effect(() => {
       const navEvent = this.navigationEventSignal();
@@ -97,6 +106,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     if (!transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
+
+    if (!this.isEditable()) this.form().disable();
 
     TransactionFormUtils.onInit(this, this.form(), transaction, this.contactIdMap, this.contactService, this.injector);
 
@@ -169,31 +180,13 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   async getConfirmations(): Promise<boolean> {
-    if (!this.transaction()) return false;
     return this.confirmationService.confirmWithUser(
       this.form(),
       this.transaction()!.transactionType?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
+      this.confirmationContext,
       'dialog',
       this.transaction(),
     );
-  }
-
-  getContact(contactKey: string, transaction?: Transaction) {
-    if (!transaction) return null;
-    if (transaction[contactKey as keyof Transaction]) {
-      if (transaction.transactionType?.getUseParentContact(transaction) && contactKey === 'contact_1') {
-        return null;
-      }
-
-      return transaction[contactKey as keyof Transaction] as Contact;
-    }
-    return null;
-  }
-
-  getTemplateMap(contactKey: string, transaction?: Transaction): TransactionTemplateMapType | undefined {
-    return transaction?.transactionType?.templateMap;
   }
 
   async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {

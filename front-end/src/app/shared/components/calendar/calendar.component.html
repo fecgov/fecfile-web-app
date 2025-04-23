@@ -5,17 +5,15 @@
     [inputId]="fieldName()"
     [id]="fieldName()"
     [name]="fieldName()"
-    [formControl]="control"
+    [formControl]="control()"
     [attr.data-cy]="fieldName()"
-    (onFocus)="calendarOpened = true"
-    (onClose)="validateDate(false)"
-    (onBlur)="validateDate(calendarOpened)"
+    (onClose)="validateDate()"
   ></p-datepicker>
 
-  @if (control && showErrors()) {
+  @if (showErrors()) {
     <app-error-messages
       [attr.data-cy]="fieldName() + '-error'"
-      [control]="control"
+      [control]="control()"
       [formSubmitted]="formSubmitted()"
       [requiredErrorMessage]="requiredErrorMessage()"
     ></app-error-messages>

@@ -5,61 +5,64 @@ import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { TestBed } from '@angular/core/testing';
+import { Injector, signal, WritableSignal } from '@angular/core';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
   let selectItem: SelectItem<Contact>;
-  let contactId$: Subject<string>;
-
+  let contactId = signal('');
+  let injector: Injector;
   beforeEach(() => {
+    injector = TestBed.inject(Injector);
     form = new FormGroup(
       {
-        contributor_last_name: new SubscriptionFormControl('test_ln'),
-        contributor_first_name: new SubscriptionFormControl('test_fn'),
-        contributor_middle_name: new SubscriptionFormControl(''),
-        contributor_prefix: new SubscriptionFormControl(''),
-        contributor_suffix: new SubscriptionFormControl(''),
-        contributor_street_1: new SubscriptionFormControl(''),
-        contributor_street_2: new SubscriptionFormControl(''),
-        contributor_city: new SubscriptionFormControl(''),
-        contributor_state: new SubscriptionFormControl(''),
-        contributor_zip: new SubscriptionFormControl(''),
-        contributor_employer: new SubscriptionFormControl(''),
-        contributor_occupation: new SubscriptionFormControl(''),
-        contributor_organization_name: new SubscriptionFormControl('test_org_name'),
-        donor_candidate_last_name: new SubscriptionFormControl('test_candidate_ln'),
-        donor_candidate_first_name: new SubscriptionFormControl('test_candidate_fn'),
-        donor_committee_fec_id: new SubscriptionFormControl(''),
-        donor_committee_name: new SubscriptionFormControl('test_com_name'),
-        donor_candidate_fec_id: new SubscriptionFormControl(''),
-        donor_candidate_middle_name: new SubscriptionFormControl(''),
-        donor_candidate_prefix: new SubscriptionFormControl(''),
-        donor_candidate_suffix: new SubscriptionFormControl(''),
-        donor_candidate_office: new SubscriptionFormControl(''),
-        donor_candidate_state: new SubscriptionFormControl(''),
-        donor_candidate_district: new SubscriptionFormControl(''),
-        ind_name_account_location: new SubscriptionFormControl('secondary_org_name'),
-        account_street_1: new SubscriptionFormControl(''),
-        account_street_2: new SubscriptionFormControl(''),
-        account_city: new SubscriptionFormControl(''),
-        account_state: new SubscriptionFormControl(''),
-        account_zip: new SubscriptionFormControl(''),
-        beneficiary_committee_fec_id: new SubscriptionFormControl(''),
-        beneficiary_committee_name: new SubscriptionFormControl(''),
-        designating_committee_id_number: new SubscriptionFormControl(''),
-        designating_committee_name: new SubscriptionFormControl('test_designating_com_name'),
-        subordinate_committee_id_number: new SubscriptionFormControl(''),
-        subordinate_committee_name: new SubscriptionFormControl('test_subordinate_com_name'),
-        subordinate_street_1: new SubscriptionFormControl(''),
-        subordinate_street_2: new SubscriptionFormControl(''),
-        subordinate_city: new SubscriptionFormControl(''),
-        subordinate_state: new SubscriptionFormControl(''),
-        subordinate_zip: new SubscriptionFormControl(''),
+        contributor_last_name: new SignalFormControl(injector, 'test_ln'),
+        contributor_first_name: new SignalFormControl(injector, 'test_fn'),
+        contributor_middle_name: new SignalFormControl(injector, ''),
+        contributor_prefix: new SignalFormControl(injector, ''),
+        contributor_suffix: new SignalFormControl(injector, ''),
+        contributor_street_1: new SignalFormControl(injector, ''),
+        contributor_street_2: new SignalFormControl(injector, ''),
+        contributor_city: new SignalFormControl(injector, ''),
+        contributor_state: new SignalFormControl(injector, ''),
+        contributor_zip: new SignalFormControl(injector, ''),
+        contributor_employer: new SignalFormControl(injector, ''),
+        contributor_occupation: new SignalFormControl(injector, ''),
+        contributor_organization_name: new SignalFormControl(injector, 'test_org_name'),
+        donor_candidate_last_name: new SignalFormControl(injector, 'test_candidate_ln'),
+        donor_candidate_first_name: new SignalFormControl(injector, 'test_candidate_fn'),
+        donor_committee_fec_id: new SignalFormControl(injector, ''),
+        donor_committee_name: new SignalFormControl(injector, 'test_com_name'),
+        donor_candidate_fec_id: new SignalFormControl(injector, ''),
+        donor_candidate_middle_name: new SignalFormControl(injector, ''),
+        donor_candidate_prefix: new SignalFormControl(injector, ''),
+        donor_candidate_suffix: new SignalFormControl(injector, ''),
+        donor_candidate_office: new SignalFormControl(injector, ''),
+        donor_candidate_state: new SignalFormControl(injector, ''),
+        donor_candidate_district: new SignalFormControl(injector, ''),
+        ind_name_account_location: new SignalFormControl(injector, 'secondary_org_name'),
+        account_street_1: new SignalFormControl(injector, ''),
+        account_street_2: new SignalFormControl(injector, ''),
+        account_city: new SignalFormControl(injector, ''),
+        account_state: new SignalFormControl(injector, ''),
+        account_zip: new SignalFormControl(injector, ''),
+        beneficiary_committee_fec_id: new SignalFormControl(injector, ''),
+        beneficiary_committee_name: new SignalFormControl(injector, ''),
+        designating_committee_id_number: new SignalFormControl(injector, ''),
+        designating_committee_name: new SignalFormControl(injector, 'test_designating_com_name'),
+        subordinate_committee_id_number: new SignalFormControl(injector, ''),
+        subordinate_committee_name: new SignalFormControl(injector, 'test_subordinate_com_name'),
+        subordinate_street_1: new SignalFormControl(injector, ''),
+        subordinate_street_2: new SignalFormControl(injector, ''),
+        subordinate_city: new SignalFormControl(injector, ''),
+        subordinate_state: new SignalFormControl(injector, ''),
+        subordinate_zip: new SignalFormControl(injector, ''),
       },
       { updateOn: 'blur' },
     );
@@ -72,12 +75,10 @@ describe('ContactUtils', () => {
       title: '',
       disabled: false,
     };
-
-    contactId$ = new Subject();
   });
 
   it('test updateFormWithPrimaryContact', () => {
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId);
     expect(form.get('contributor_last_name')?.value).toBe('Smith');
     expect(form.get('contributor_first_name')?.value).toBe('Joe');
     expect(form.get('contributor_middle_name')?.value).toBe('James');
@@ -92,23 +93,18 @@ describe('ContactUtils', () => {
     expect(form.get('contributor_zip')?.value).toBe('22201');
 
     selectItem.value.type = ContactTypes.COMMITTEE;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
     expect(form.get('donor_committee_fec_id')?.value).toBe('888');
     expect(form.get('donor_committee_name')?.value).toBe('Organization LLC');
 
     selectItem.value.type = ContactTypes.ORGANIZATION;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
   });
 
   it('test updateFormWithCandidateContact', () => {
-    TransactionContactUtils.updateFormWithCandidateContact(
-      selectItem,
-      form,
-      testScheduleATransaction,
-      new Subject<string>(),
-    );
+    TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, testScheduleATransaction, signal(''));
     expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Smith');
     expect(form.get('donor_candidate_first_name')?.value).toBe('Joe');
@@ -123,7 +119,7 @@ describe('ContactUtils', () => {
 
   it('test updateFormWithSecondaryContact', () => {
     const transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
-    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction, signal(''));
     expect(form.get('ind_name_account_location')?.value).toBe('Organization LLC');
     expect(form.get('account_street_1')?.value).toBe('123 Main St');
     expect(form.get('account_street_2')?.value).toBe('Apt B');
@@ -137,7 +133,7 @@ describe('ContactUtils', () => {
     const transaction = getTestTransactionByType(
       ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
     ) as SchBTransaction;
-    TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, signal(''));
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
     expect(transaction.contact_3).toBeTruthy();
@@ -147,7 +143,7 @@ describe('ContactUtils', () => {
     const transaction = getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
-    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, signal(''));
     expect(form.get('designating_committee_id_number')?.value).toBe('888');
     expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
     expect(transaction.contact_4).toBeTruthy();
@@ -158,12 +154,12 @@ describe('ContactUtils', () => {
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
     // updateFormWithQuaternaryContact
-    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, signal(''));
     expect(form.get('designating_committee_id_number')?.value).toBe('888');
     expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
     expect(transaction.contact_4).toBeTruthy();
     // clearFormQuaternaryContact
-    TransactionContactUtils.clearFormQuaternaryContact(form, transaction, new Subject<string>());
+    TransactionContactUtils.clearFormQuaternaryContact(form, transaction, signal(''));
     expect(form.get('designating_committee_id_number')?.value).toBe(null);
     expect(form.get('designating_committee_name')?.value).toBe(null);
     expect(transaction.contact_4).toBeFalsy();
@@ -174,7 +170,7 @@ describe('ContactUtils', () => {
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
     // updateFormWithQuaternaryContact
-    TransactionContactUtils.updateFormWithQuinaryContact(selectItem, form, transaction, new Subject<string>());
+    TransactionContactUtils.updateFormWithQuinaryContact(selectItem, form, transaction, signal(''));
     expect(form.get('subordinate_committee_id_number')?.value).toBe('888');
     expect(form.get('subordinate_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('subordinate_street_1')?.value).toBe('123 Main St');
@@ -184,7 +180,7 @@ describe('ContactUtils', () => {
     expect(form.get('subordinate_zip')?.value).toBe('22201');
     expect(transaction.contact_5).toBeTruthy();
     // clearFormQuaternaryContact
-    TransactionContactUtils.clearFormQuinaryContact(form, transaction, new Subject<string>());
+    TransactionContactUtils.clearFormQuinaryContact(form, transaction, signal(''));
     expect(form.get('subordinate_committee_id_number')?.value).toBe(null);
     expect(form.get('subordinate_committee_name')?.value).toBe(null);
     expect(form.get('subordinate_street_1')?.value).toBe(null);
@@ -199,7 +195,7 @@ describe('ContactUtils', () => {
     const transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE) as SchETransaction;
     const formProperties = transaction.transactionType.getFormControlNames();
     const formBuilder = new FormBuilder();
-    const form = formBuilder.group(SchemaUtils.getFormGroupFields(formProperties));
+    const form = formBuilder.group(SchemaUtils.getFormGroupFields(injector, formProperties));
     transaction.contact_2 = Contact.fromJSON({
       first_name: 'Changed',
       candidate_state: 'GA',

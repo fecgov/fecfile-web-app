@@ -78,7 +78,7 @@ describe('TransactionDetailComponent', () => {
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = transaction;
-    component.templateMap = testTemplateMap;
+    (component.templateMap as any) = createSignal(testTemplateMap);
     component.ngOnInit();
   });
 

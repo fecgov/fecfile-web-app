@@ -4,30 +4,36 @@ import { LoanTermsInputComponent } from './loan-terms-input.component';
 
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('LoanTermsInputComponent', () => {
   let component: LoanTermsInputComponent;
   let fixture: ComponentFixture<LoanTermsInputComponent>;
+  let injector: Injector;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [LoanTermsInputComponent],
       providers: [provideMockStore(testMockStore)],
     });
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(LoanTermsInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap;
-    component.form = new FormGroup(
-      {
-        loan_incurred_date: new SubscriptionFormControl(''),
-        loan_interest_rate: new SubscriptionFormControl(''),
-        loan_due_date: new SubscriptionFormControl(''),
-        collateral: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.templateMap as any) = createSignal(testTemplateMap);
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          loan_incurred_date: new SignalFormControl(injector, ''),
+          loan_interest_rate: new SignalFormControl(injector, ''),
+          loan_due_date: new SignalFormControl(injector, ''),
+          collateral: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.templateMap = {
+    (component.templateMap as any) = createSignal({
       ...testTemplateMap,
       ...{
         interest_rate: 'loan_interest_rate',
@@ -35,7 +41,7 @@ describe('LoanTermsInputComponent', () => {
         due_date: 'loan_due_date',
         secured: 'collateral',
       },
-    };
+    });
     fixture.detectChanges();
   });
 

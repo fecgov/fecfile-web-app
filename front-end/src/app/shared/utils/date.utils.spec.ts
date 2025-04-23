@@ -1,10 +1,16 @@
+import { TestBed } from '@angular/core/testing';
 import { DateUtils } from './date.utils';
 
 import { buildAfterDateValidator } from './validators.utils';
-import { SubscriptionFormControl } from './signal-form-control';
 import { FormGroup } from '@angular/forms';
+import { Injector } from '@angular/core';
+import { SignalFormControl } from './signal-form-control';
 
+let injector: Injector;
 describe('DateUtils', () => {
+  beforeEach(() => {
+    injector = TestBed.inject(Injector);
+  });
   it('should create an instance', () => {
     expect(new DateUtils()).toBeTruthy();
   });
@@ -81,9 +87,9 @@ describe('DateUtils', () => {
   describe('dateBefore', () => {
     it('should not check if either date is null', () => {
       const form = new FormGroup({});
-      const otherControl = new SubscriptionFormControl<Date>(new Date());
+      const otherControl = new SignalFormControl<Date>(injector, new Date());
       form.addControl('other', otherControl);
-      const control = new SubscriptionFormControl<Date>(new Date(), [buildAfterDateValidator(form, 'other')]);
+      const control = new SignalFormControl<Date>(injector, new Date(), [buildAfterDateValidator(form, 'other')]);
       otherControl.setValue(null);
       control.updateValueAndValidity();
       expect(control.valid).toBeTrue();
@@ -96,9 +102,9 @@ describe('DateUtils', () => {
 
     it("should verify that the control's date comes after the date of the other control", () => {
       const form = new FormGroup({});
-      const otherControl = new SubscriptionFormControl<Date>(new Date(2024, 1, 2));
+      const otherControl = new SignalFormControl<Date>(injector, new Date(2024, 1, 2));
       form.addControl('other', otherControl);
-      const control = new SubscriptionFormControl<Date>(new Date(2024, 1, 1), {
+      const control = new SignalFormControl<Date>(injector, new Date(2024, 1, 1), {
         validators: [buildAfterDateValidator(form, 'other')],
         nonNullable: true,
       });

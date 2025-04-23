@@ -4,10 +4,17 @@ import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/sc
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { TestBed } from '@angular/core/testing';
+import { Injector } from '@angular/core';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
+  let injector: Injector;
+
+  beforeEach(() => {
+    injector = TestBed.inject(Injector);
+  });
 
   it('should be truthy', () => {
     expect(t).toBeTruthy();
@@ -15,9 +22,9 @@ describe('FormUtils', () => {
 
   it('should add the amount for not-refunds', () => {
     const form = new FormGroup({
-      contribution_amount: new SubscriptionFormControl(),
-      contribution_aggregate: new SubscriptionFormControl(),
-      expenditure_amount: new SubscriptionFormControl(),
+      contribution_amount: new SignalFormControl(injector),
+      contribution_aggregate: new SignalFormControl(injector),
+      expenditure_amount: new SignalFormControl(injector),
     });
 
     const transaction = SchATransaction.fromJSON({
@@ -42,16 +49,16 @@ describe('FormUtils', () => {
       transaction.contribution_amount as number,
     );
 
-    const aggregateFormControl = form.get('contribution_aggregate') as SubscriptionFormControl;
+    const aggregateFormControl = form.get('contribution_aggregate') as SignalFormControl;
     expect(aggregateFormControl.value).toEqual(150);
   });
 
   it('should add the amount for refunds', () => {
     const form = new FormGroup(
       {
-        contribution_amount: new SubscriptionFormControl(),
-        aggregate_amount: new SubscriptionFormControl(),
-        expenditure_amount: new SubscriptionFormControl(),
+        contribution_amount: new SignalFormControl(injector),
+        aggregate_amount: new SignalFormControl(injector),
+        expenditure_amount: new SignalFormControl(injector),
       },
       { updateOn: 'blur' },
     );
@@ -78,42 +85,42 @@ describe('FormUtils', () => {
       transaction.expenditure_amount as number,
     );
 
-    const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
+    const aggregateFormControl = form.get('aggregate_amount') as SignalFormControl;
     expect(aggregateFormControl.value).toEqual(50);
   });
-});
 
-it('should add the amount for calendar YTD', () => {
-  const form = new FormGroup(
-    {
-      expenditure_amount: new SubscriptionFormControl(),
-      calendar_ytd_per_election_office: new SubscriptionFormControl(),
-    },
-    { updateOn: 'blur' },
-  );
+  it('should add the amount for calendar YTD', () => {
+    const form = new FormGroup(
+      {
+        expenditure_amount: new SignalFormControl(injector),
+        calendar_ytd_per_election_office: new SignalFormControl(injector),
+      },
+      { updateOn: 'blur' },
+    );
 
-  const transaction = SchETransaction.fromJSON({
-    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-    expenditure_amount: 50,
+    const transaction = SchETransaction.fromJSON({
+      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      expenditure_amount: 50,
+    });
+
+    const previous_transaction = SchETransaction.fromJSON({
+      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      expenditure_amount: 100,
+      calendar_ytd_per_election_office: 100,
+    });
+
+    TransactionFormUtils.updateAggregate(
+      form,
+      'calendar_ytd',
+      transaction.transactionType.templateMap,
+      transaction,
+      previous_transaction,
+      transaction.expenditure_amount as number,
+    );
+
+    const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as SignalFormControl;
+    expect(calendarYTDFormControl.value).toEqual(150);
   });
-
-  const previous_transaction = SchETransaction.fromJSON({
-    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-    expenditure_amount: 100,
-    calendar_ytd_per_election_office: 100,
-  });
-
-  TransactionFormUtils.updateAggregate(
-    form,
-    'calendar_ytd',
-    transaction.transactionType.templateMap,
-    transaction,
-    previous_transaction,
-    transaction.expenditure_amount as number,
-  );
-
-  const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as SubscriptionFormControl;
-  expect(calendarYTDFormControl.value).toEqual(150);
 });

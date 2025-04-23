@@ -20,10 +20,12 @@ import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-fr
 import { ReattRedesTransactionTypeDetailComponent } from '../../../reports/transactions/reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { ReattributedUtils } from '../../utils/reatt-redes/reattributed.utils';
 import { provideRouter } from '@angular/router';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -32,6 +34,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
   let reportService: ReportService;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -63,6 +66,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
 
+    injector = TestBed.inject(Injector);
     reportService = TestBed.inject(ReportService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
@@ -73,12 +77,12 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
     fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = testTransaction;
-    component.childTransaction = testTransaction;
+    (component.transaction as any) = createSignal(testTransaction);
+    (component.childTransaction as any) = createSignal(testTransaction);
     let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
     reattRedes.reports = [testActiveReport];
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
-    component.transaction.reatt_redes = reattRedes;
+    component.transaction()!.reatt_redes = reattRedes;
     component.ngOnInit();
   });
 
@@ -89,12 +93,12 @@ describe('ReattTransactionTypeBaseComponent', () => {
   describe('reattribution and redesignation', () => {
     it('should update child primary contacts', () => {
       if (!component.transaction) throw Error('Bad test setup');
-      const overlaySpy = spyOn(ReattRedesUtils, 'overlayForms').and.callThrough();
+      const overlaySpy = spyOn(component, 'overlayForms').and.callThrough();
       const childFormSpy = spyOn(component, 'childUpdateFormWithPrimaryContact');
       const primaryContactSpy = spyOn(component, 'updateFormWithPrimaryContact');
       const updateElectionDataSpy = spyOn(component, 'updateElectionData');
 
-      (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      (component.transaction() as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
       component.ngOnInit();
       expect(overlaySpy).toHaveBeenCalledTimes(1);
       expect(childFormSpy).toHaveBeenCalledTimes(1);
@@ -111,7 +115,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       const navSpy = spyOn(component, 'navigateTo').and.callFake(async () => true);
       component.ngOnInit();
       await component.save(
-        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()),
       );
 
       expect(multiSaveSpy).toHaveBeenCalledTimes(1);
@@ -121,9 +125,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   describe('updateElectionData', () => {
     it("should bail if no templatemap or it's not schedule B", () => {
-      component.childTransaction = undefined;
+      (component.childTransaction as any) = createSignal(undefined);
       component.updateElectionData();
-      expect(component.childForm.get('election_code')).toBeFalsy();
+      expect(component.childForm().get('election_code')).toBeFalsy();
     });
 
     it('should update election and candidate data for primary and child forms', () => {
@@ -145,48 +149,52 @@ describe('ReattTransactionTypeBaseComponent', () => {
         beneficiary_candidate_district: 'A',
         category_code: 'A',
       };
-      component.transaction = RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      expect(component.transaction.transactionType.templateMap).toBeTruthy();
-      component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      component.childTransaction.reatt_redes = SchBTransaction.fromJSON(data);
-      component.childForm.addControl('election_code', new SubscriptionFormControl(''));
-      component.childForm.addControl('election_other_description', new SubscriptionFormControl(''));
-      component.childForm.addControl('category_code', new SubscriptionFormControl(''));
-      component.childForm.addControl('beneficiary_candidate_fec_id', new SubscriptionFormControl(''));
-      component.childForm.addControl('beneficiary_candidate_last_name', new SubscriptionFormControl(''));
-      component.childForm.addControl('beneficiary_candidate_first_name', new SubscriptionFormControl(''));
-      component.childForm.addControl('beneficiary_candidate_office', new SubscriptionFormControl(''));
-      component.childForm.addControl('beneficiary_candidate_state', new SubscriptionFormControl(''));
-      component.childForm.addControl('beneficiary_candidate_district', new SubscriptionFormControl(''));
+      (component.transaction as any) = createSignal(
+        RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data)),
+      );
+      expect(component.transaction()!.transactionType.templateMap).toBeTruthy();
+      (component.childTransaction as any) = createSignal(
+        RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data)),
+      );
+      component.childTransaction()!.reatt_redes = SchBTransaction.fromJSON(data);
+      component.childForm().addControl('election_code', new SignalFormControl(injector, ''));
+      component.childForm().addControl('election_other_description', new SignalFormControl(injector, ''));
+      component.childForm().addControl('category_code', new SignalFormControl(injector, ''));
+      component.childForm().addControl('beneficiary_candidate_fec_id', new SignalFormControl(injector, ''));
+      component.childForm().addControl('beneficiary_candidate_last_name', new SignalFormControl(injector, ''));
+      component.childForm().addControl('beneficiary_candidate_first_name', new SignalFormControl(injector, ''));
+      component.childForm().addControl('beneficiary_candidate_office', new SignalFormControl(injector, ''));
+      component.childForm().addControl('beneficiary_candidate_state', new SignalFormControl(injector, ''));
+      component.childForm().addControl('beneficiary_candidate_district', new SignalFormControl(injector, ''));
 
-      component.form.addControl('category_code', new SubscriptionFormControl(''));
-      component.form.addControl('beneficiary_candidate_fec_id', new SubscriptionFormControl(''));
-      component.form.addControl('beneficiary_candidate_last_name', new SubscriptionFormControl(''));
-      component.form.addControl('beneficiary_candidate_first_name', new SubscriptionFormControl(''));
-      component.form.addControl('beneficiary_candidate_office', new SubscriptionFormControl(''));
-      component.form.addControl('beneficiary_candidate_state', new SubscriptionFormControl(''));
-      component.form.addControl('beneficiary_candidate_district', new SubscriptionFormControl(''));
+      component.form().addControl('category_code', new SignalFormControl(injector, ''));
+      component.form().addControl('beneficiary_candidate_fec_id', new SignalFormControl(injector, ''));
+      component.form().addControl('beneficiary_candidate_last_name', new SignalFormControl(injector, ''));
+      component.form().addControl('beneficiary_candidate_first_name', new SignalFormControl(injector, ''));
+      component.form().addControl('beneficiary_candidate_office', new SignalFormControl(injector, ''));
+      component.form().addControl('beneficiary_candidate_state', new SignalFormControl(injector, ''));
+      component.form().addControl('beneficiary_candidate_district', new SignalFormControl(injector, ''));
 
-      expect(Object.keys(component.childForm.controls)).toContain('election_code');
+      expect(Object.keys(component.childForm().controls)).toContain('election_code');
 
       component.updateElectionData();
-      expect(component.childForm.get('election_code')?.value).toBe('A');
-      expect(component.childForm.get('election_other_description')?.value).toBe('A');
-      expect(component.childForm.get('category_code')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_fec_id')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_last_name')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_first_name')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_office')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_state')?.value).toBe('A');
-      expect(component.childForm.get('beneficiary_candidate_district')?.value).toBe('A');
+      expect(component.childForm().get('election_code')?.value).toBe('A');
+      expect(component.childForm().get('election_other_description')?.value).toBe('A');
+      expect(component.childForm().get('category_code')?.value).toBe('A');
+      expect(component.childForm().get('beneficiary_candidate_fec_id')?.value).toBe('A');
+      expect(component.childForm().get('beneficiary_candidate_last_name')?.value).toBe('A');
+      expect(component.childForm().get('beneficiary_candidate_first_name')?.value).toBe('A');
+      expect(component.childForm().get('beneficiary_candidate_office')?.value).toBe('A');
+      expect(component.childForm().get('beneficiary_candidate_state')?.value).toBe('A');
+      expect(component.childForm().get('beneficiary_candidate_district')?.value).toBe('A');
 
-      expect(component.form.get('category_code')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_fec_id')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_last_name')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_first_name')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_office')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_state')?.value).toBe('A');
-      expect(component.form.get('beneficiary_candidate_district')?.value).toBe('A');
+      expect(component.form().get('category_code')?.value).toBe('A');
+      expect(component.form().get('beneficiary_candidate_fec_id')?.value).toBe('A');
+      expect(component.form().get('beneficiary_candidate_last_name')?.value).toBe('A');
+      expect(component.form().get('beneficiary_candidate_first_name')?.value).toBe('A');
+      expect(component.form().get('beneficiary_candidate_office')?.value).toBe('A');
+      expect(component.form().get('beneficiary_candidate_state')?.value).toBe('A');
+      expect(component.form().get('beneficiary_candidate_district')?.value).toBe('A');
     });
   });
 });

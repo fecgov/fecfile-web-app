@@ -16,7 +16,6 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { combineLatest, startWith } from 'rxjs';
 import { FormComponent } from 'app/shared/components/app-form.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
@@ -76,15 +75,13 @@ export class CreateF3XStep1Component extends FormComponent {
   readonly usedReportCodes = derivedAsync(() => this.getUsedReportCodes(this.form3XService.existingCoverage()));
 
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
-  private readonly filingFrequencySignal = computed(() =>
-    this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q',
-  );
+  private readonly filingFrequency = computed(() => (this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q'));
 
   constructor() {
     super();
     const reportId = this.activatedRoute.snapshot.data['reportId'];
     effectOnceIf(
-      () => this.report() && reportId,
+      () => this.report() && reportId && this.form(),
       () => this.form().patchValue(this.report()),
     );
 
@@ -114,15 +111,10 @@ export class CreateF3XStep1Component extends FormComponent {
       this.getControl('coverage_through_date')?.updateValueAndValidity();
     });
     // Prepopulate coverage dates if the report code has rules to do so
-    combineLatest([
-      this.form().controls['report_code'].valueChanges.pipe(startWith(this.form().controls['report_code'].value)),
-      this.form().controls['filing_frequency'].valueChanges.pipe(
-        startWith(this.form().controls['filing_frequency'].value),
-      ),
-      this.form().controls['report_type_category'].valueChanges.pipe(
-        startWith(this.form().controls['report_type_category'].value),
-      ),
-    ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
+    effect(() => {
+      const reportCode = this.getControl('report_code')?.valueChangeSignal();
+      const filingFrequency = this.getControl('filing_frequency')?.valueChangeSignal();
+      const reportTypeCategory = this.getControl('report_type_category')?.valueChangeSignal();
       const coverageDatesFunction = getCoverageDatesFunction(reportCode);
       if (coverageDatesFunction) {
         const isElectionYear = F3xReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
@@ -143,26 +135,35 @@ export class CreateF3XStep1Component extends FormComponent {
   private addReportTypeCategory() {
     const reportTypeControl = new SignalFormControl(this.injector);
     this.form().addControl('report_type_category', reportTypeControl);
-    effect(() => {
-      reportTypeControl.valueChangeSignal();
-      this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
-    });
+    effect(
+      () => {
+        reportTypeControl.valueChangeSignal();
+        this.form().patchValue({ report_code: this.getFirstEnabledReportCode() });
+      },
+      { injector: this.injector },
+    );
   }
 
   private addFilingFrequency() {
     const filingFrequencyControl = new SignalFormControl(this.injector);
     this.form().addControl('filing_frequency', filingFrequencyControl);
-    effect(() => {
-      filingFrequencyControl.valueChangeSignal();
-      this.form().patchValue({
-        report_type_category: this.reportTypeCategories[0],
-        report_code: this.getFirstEnabledReportCode(),
-      });
-    });
+    effect(
+      () => {
+        filingFrequencyControl.valueChangeSignal();
+        this.form().patchValue({
+          report_type_category: this.reportTypeCategories[0],
+          report_code: this.getFirstEnabledReportCode(),
+        });
+      },
+      { injector: this.injector },
+    );
 
-    effect(() => {
-      this.form().patchValue({ filing_frequency: this.filingFrequencySignal(), form_type: 'F3XN' });
-    });
+    effect(
+      () => {
+        this.form().patchValue({ filing_frequency: this.filingFrequency(), form_type: 'F3XN' });
+      },
+      { injector: this.injector },
+    );
   }
 
   public getReportCodes(): ReportCodes[] {

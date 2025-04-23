@@ -74,7 +74,7 @@ describe('SelectReportDialogComponent', () => {
   describe('createReattribution', () => {
     it('should throw error if no base transaction', async () => {
       component.ngOnInit();
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
       try {
         expect(component.transaction).toBeFalsy();
         await component.createReattribution();

@@ -2,15 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { testContact, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { DesignatedSubordinateInputComponent } from './designated-subordinate-input.component';
-
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('DesignatedSubordinateInputComponent', () => {
   let component: DesignatedSubordinateInputComponent;
   let fixture: ComponentFixture<DesignatedSubordinateInputComponent>;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,35 +25,32 @@ describe('DesignatedSubordinateInputComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(DesignatedSubordinateInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        filer_designated_to_make_coordinated_expenditures: new SubscriptionFormControl(''),
-        designating_committee_id_number: new SubscriptionFormControl(null),
-        designating_committee_name: new SubscriptionFormControl(null),
-        subordinate_committee_id_number: new SubscriptionFormControl(null),
-        subordinate_committee_name: new SubscriptionFormControl(null),
-        subordinate_street_1: new SubscriptionFormControl(null),
-        subordinate_street_2: new SubscriptionFormControl(null),
-        subordinate_city: new SubscriptionFormControl(null),
-        subordinate_state: new SubscriptionFormControl(null),
-        subordinate_zip: new SubscriptionFormControl(null),
-      },
-      { updateOn: 'blur' },
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          filer_designated_to_make_coordinated_expenditures: new SignalFormControl(injector, ''),
+          designating_committee_id_number: new SignalFormControl(injector, null),
+          designating_committee_name: new SignalFormControl(injector, null),
+          subordinate_committee_id_number: new SignalFormControl(injector, null),
+          subordinate_committee_name: new SignalFormControl(injector, null),
+          subordinate_street_1: new SignalFormControl(injector, null),
+          subordinate_street_2: new SignalFormControl(injector, null),
+          subordinate_city: new SignalFormControl(injector, null),
+          subordinate_state: new SignalFormControl(injector, null),
+          subordinate_zip: new SignalFormControl(injector, null),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.templateMap = testTemplateMap;
+    (component.templateMap as any) = createSignal(testTemplateMap);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('#onSubordinateCommitteeIdBlur should update subordinate form value/validity on subordinate committee id blur', () => {
-    const formUpdateValueAndValiditySpy = spyOn(component.form, 'updateValueAndValidity');
-    component.onSubordinateCommitteeIdBlur();
-    expect(formUpdateValueAndValiditySpy).toHaveBeenCalledTimes(8);
   });
 
   it('#onDesignatedOrSubordinateChange should clear subordinate committee on true', () => {

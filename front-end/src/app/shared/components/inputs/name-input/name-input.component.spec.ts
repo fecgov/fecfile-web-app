@@ -5,34 +5,40 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 
 import { NameInputComponent } from './name-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('NameInputComponent', () => {
   let component: NameInputComponent;
   let fixture: ComponentFixture<NameInputComponent>;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [InputTextModule, ReactiveFormsModule, NameInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(NameInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap;
-    component.form = new FormGroup(
-      {
-        contributor_last_name: new SubscriptionFormControl(''),
-        contributor_first_name: new SubscriptionFormControl(''),
-        contributor_middle_name: new SubscriptionFormControl(''),
-        contributor_prefix: new SubscriptionFormControl(''),
-        contributor_suffix: new SubscriptionFormControl(''),
-        treasurer_last_name: new SubscriptionFormControl(''),
-        treasurer_first_name: new SubscriptionFormControl(''),
-        treasurer_middle_name: new SubscriptionFormControl(''),
-        treasurer_prefix: new SubscriptionFormControl(''),
-        treasurer_suffix: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.templateMap as any) = createSignal(testTemplateMap);
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          contributor_last_name: new SignalFormControl(injector, ''),
+          contributor_first_name: new SignalFormControl(injector, ''),
+          contributor_middle_name: new SignalFormControl(injector, ''),
+          contributor_prefix: new SignalFormControl(injector, ''),
+          contributor_suffix: new SignalFormControl(injector, ''),
+          treasurer_last_name: new SignalFormControl(injector, ''),
+          treasurer_first_name: new SignalFormControl(injector, ''),
+          treasurer_middle_name: new SignalFormControl(injector, ''),
+          treasurer_prefix: new SignalFormControl(injector, ''),
+          treasurer_suffix: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
     fixture.detectChanges();
   });
@@ -42,7 +48,7 @@ describe('NameInputComponent', () => {
   });
 
   it('should create signatory_1', () => {
-    component.templateMapKeyPrefix = 'signatory_1';
+    (component.templateMapKeyPrefix as any) = createSignal('signatory_1');
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });

@@ -14,6 +14,7 @@ import { testMockStore } from '../../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -54,15 +55,17 @@ describe('NavigationControlComponent', () => {
     beforeEach(async () => {
       fixture = TestBed.createComponent(NavigationControlComponent);
       component = fixture.componentInstance;
-      component.navigationControl = new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add memo',
-        '',
-        () => false,
-        () => true,
-        'pi pi-plus',
-        ControlType.DROPDOWN,
+      (component.navigationControl as any) = createSignal(
+        new NavigationControl(
+          NavigationAction.SAVE,
+          NavigationDestination.ANOTHER,
+          'Save & add memo',
+          '',
+          () => false,
+          () => true,
+          'pi pi-plus',
+          ControlType.DROPDOWN,
+        ),
       );
       fixture.detectChanges();
     });

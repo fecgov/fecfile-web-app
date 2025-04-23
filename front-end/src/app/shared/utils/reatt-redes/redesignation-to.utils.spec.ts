@@ -2,9 +2,16 @@ import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test
 import { FormGroup } from '@angular/forms';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
-import { SubscriptionFormControl } from '../signal-form-control';
+import { SignalFormControl } from '../signal-form-control';
+import { Injector } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
+let injector: Injector;
 
 describe('RedesignationToUtils', () => {
+  beforeEach(() => {
+    injector = TestBed.inject(Injector);
+  });
   describe('overlayTransactionProperties', () => {
     it('should override default properties', () => {
       const origTransaction = { ...testScheduleBTransaction } as SchBTransaction;
@@ -29,8 +36,8 @@ describe('RedesignationToUtils', () => {
       } as unknown as SchBTransaction;
       const toForm = new FormGroup(
         {
-          contribution_purpose_descrip: new SubscriptionFormControl(''),
-          memo_code: new SubscriptionFormControl(''),
+          contribution_purpose_descrip: new SignalFormControl(injector, ''),
+          memo_code: new SignalFormControl(injector, ''),
         },
         { updateOn: 'blur' },
       );

@@ -11,7 +11,6 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
@@ -20,6 +19,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { firstValueFrom, of } from 'rxjs';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -27,6 +28,7 @@ describe('CreateF3XStep1Component', () => {
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let form3XService: Form3XService;
   let reportService: ReportService;
+  let injector: Injector;
 
   const f3x: Form3X = Form3X.fromJSON({
     id: '999',
@@ -88,11 +90,10 @@ describe('CreateF3XStep1Component', () => {
 
     router = TestBed.inject(Router);
     form3XService = TestBed.inject(Form3XService);
-    form3XService.getF3xCoverageDates = () => firstValueFrom(of([]));
     reportService = TestBed.inject(ReportService);
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
-    component.ngOnInit();
 
     fixture.detectChanges();
   });
@@ -102,27 +103,26 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('should update form when filing frequency changes', () => {
-    component.form.controls['filing_frequency'].setValue('M');
+    component.form().controls['filing_frequency'].setValue('M');
     fixture.detectChanges();
-    expect(component.form.controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
+    expect(component.form().controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
   });
 
   it('should update codes when report_type_category changes', () => {
-    component.form.controls['filing_frequency'].setValue('Q');
+    component.form().controls['filing_frequency'].setValue('Q');
     fixture.detectChanges();
-    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    component.form().controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
     fixture.detectChanges();
-    expect(component.form.controls['report_code'].value).toEqual(ReportCodes.MY);
-    component.form.controls['report_type_category'].setValue(undefined);
+    expect(component.form().controls['report_code'].value).toEqual(ReportCodes.MY);
+    component.form().controls['report_type_category'].setValue(undefined);
     fixture.detectChanges();
-    expect(component.form.controls['report_code'].value).toEqual(undefined);
+    expect(component.form().controls['report_code'].value).toEqual(undefined);
   });
 
   describe('with existing coverage', () => {
     beforeEach(async () => {
       router = TestBed.inject(Router);
       form3XService = TestBed.inject(Form3XService);
-      form3XService.getF3xCoverageDates = () => firstValueFrom(of([thirdThroughFifth]));
       reportService = TestBed.inject(ReportService);
       fixture = TestBed.createComponent(CreateF3XStep1Component);
       component = fixture.componentInstance;
@@ -130,10 +130,10 @@ describe('CreateF3XStep1Component', () => {
       fixture.detectChanges();
     });
     it('should pick first unused report code', () => {
-      component.form.controls['filing_frequency'].setValue('Q');
-      component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
+      component.form().controls['filing_frequency'].setValue('Q');
+      component.form().controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
       fixture.detectChanges();
-      expect(component.form.controls['report_code'].value).toEqual(ReportCodes.Q2);
+      expect(component.form().controls['report_code'].value).toEqual(ReportCodes.Q2);
     });
   });
 
@@ -149,28 +149,28 @@ describe('CreateF3XStep1Component', () => {
     spyOn(reportService, 'getTableData').and.returnValue(Promise.resolve(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.form.patchValue({ ...f3x });
+    component.form().patchValue({ ...f3x });
     await component.save();
-    expect(component.form.invalid).toBe(false);
+    expect(component.form().invalid).toBe(false);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
-    component.form.patchValue({ ...f3x });
+    component.form().patchValue({ ...f3x });
     await component.save('continue');
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 
   xit('#save should not save with invalid f3x record', () => {
     spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
-    component.form.patchValue({ ...f3x });
-    component.form.patchValue({ form_type: 'NO-GOOD' });
-    component.form.updateValueAndValidity();
+    component.form().patchValue({ ...f3x });
+    component.form().patchValue({ form_type: 'NO-GOOD' });
+    component.form().updateValueAndValidity();
     flush();
     tick(1000);
     component.save();
     flush();
     tick(1000);
-    expect(component.form.invalid).toBe(true);
+    expect(component.form().invalid).toBe(true);
   });
 
   it('back button should go back to report list page', () => {
@@ -190,8 +190,8 @@ describe('CreateF3XStep1Component', () => {
       const validator = buildNonOverlappingCoverageValidator(existingCoverage);
       const group = new FormGroup(
         {
-          coverage_from_date: new SubscriptionFormControl(controlFromDate),
-          coverage_through_date: new SubscriptionFormControl(controlThroughDate),
+          coverage_from_date: new SignalFormControl(injector, controlFromDate),
+          coverage_through_date: new SignalFormControl(injector, controlThroughDate),
         },
         { updateOn: 'blur' },
       );

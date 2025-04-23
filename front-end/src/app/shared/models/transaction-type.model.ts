@@ -12,7 +12,7 @@ import {
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
 } from '../utils/transaction-type-properties';
-import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
+import { ContactConfig, ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
@@ -25,7 +25,7 @@ export abstract class TransactionType {
   apiEndpoint = '/transactions'; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
   abstract contactTypeOptions?: ContactType[];
-  contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
+  contactConfig: ContactConfig = STANDARD_SINGLE_CONTACT;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type

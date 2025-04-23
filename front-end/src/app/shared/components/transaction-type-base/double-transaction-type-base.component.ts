@@ -155,8 +155,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     return this.confirmationService.confirmWithUser(
       this.childForm(),
       this.childTransactionType()?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
+      this.confirmationContext,
       'childDialog',
       this.childTransaction(),
     );

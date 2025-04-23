@@ -1,33 +1,50 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormControl, FormsModule, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FecInternationalPhoneInputComponent } from './fec-international-phone-input.component';
+import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 import { ElementRef } from '@angular/core';
-
-class MockNgControl extends NgControl {
-  control = new FormControl<string | undefined>('', Validators.pattern(/^\+\d{1,3} \d{10}$/));
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  viewToModelUpdate(value: any): void {
-    // No-op for testing
-  }
-}
 
 describe('FecInternationalPhoneInputComponent', () => {
   let component: FecInternationalPhoneInputComponent;
   let fixture: ComponentFixture<FecInternationalPhoneInputComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [{ provide: NgControl, useClass: MockNgControl }],
-      imports: [FormsModule, ReactiveFormsModule, FecInternationalPhoneInputComponent],
-    }).compileComponents();
-  });
+  let mockInputElement: HTMLInputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    mockInputElement = document.createElement('input');
+    mockInputElement.type = 'tel';
+
+    await TestBed.configureTestingModule({
+      imports: [FecInternationalPhoneInputComponent],
+      providers: [
+        {
+          provide: NgxControlValueAccessor,
+          useValue: {
+            value: '',
+            value$: jasmine.createSpy('value$').and.returnValue(''),
+            markAsTouched: jasmine.createSpy('markAsTouched'),
+          },
+        },
+      ],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(FecInternationalPhoneInputComponent);
     component = fixture.componentInstance;
-    component.internationalPhoneInputChild = new ElementRef(document.createElement('input'));
+
+    // Mock the viewChild input
+    (component as any).internationalPhoneInput = () => new ElementRef<HTMLInputElement>(mockInputElement);
+
+    spyOn(mockInputElement, 'addEventListener').and.callFake((event: any, callback: any) => {
+      if (event === 'countrychange') {
+        // Simulate dial code change
+        (component as any).intlTelInput = {
+          getSelectedCountryData: () => ({ dialCode: '1' }),
+          setNumber: jasmine.createSpy('setNumber'),
+          destroy: jasmine.createSpy('destroy'),
+        };
+        callback(); // trigger the listener
+      }
+    });
+
     fixture.detectChanges();
   });
 
@@ -35,77 +52,32 @@ describe('FecInternationalPhoneInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('writeValue() happy path', () => {
-    const setNumberSpy = spyOn<any>(component['intlTelInput'], 'setNumber');
-    const onChangeSpy = spyOn<any>(component, 'onChange');
-    const testString = 'testString';
-    component.writeValue(testString);
+  it('should initialize intlTelInput and set country code on init', () => {
+    component.ngAfterViewInit();
 
-    expect(setNumberSpy).toHaveBeenCalledOnceWith(testString);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith(testString);
+    expect((component as any).intlTelInput?.getSelectedCountryData().dialCode).toBe('1');
   });
 
-  it('registerOnChange() happy path', () => {
-    const testFunction = () => {
-      return;
-    };
-    component.registerOnChange(testFunction);
-    const onChangeSpy = spyOn<any>(component, 'onChange');
-    const testValue = 'testValue';
-    const testTarget = { value: testValue } as HTMLInputElement;
-    const testEvent = { target: testTarget } as unknown as KeyboardEvent;
-    component.onKey(testEvent);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + component['countryCode'] + ' ' + component['number']);
+  it('should update number signal on keyup event', () => {
+    const testValue = '5551234';
+    mockInputElement.value = testValue;
+
+    const keyupEvent = new KeyboardEvent('keyup', { key: '4' });
+    component.onKey(keyupEvent);
+
+    expect((component as any).number()).toBe(testValue);
   });
 
-  it('onKey() happy path', () => {
-    const onChangeSpy = spyOn<any>(component, 'onChange');
-    const testValue = 'testValue';
-    const testTarget = { value: testValue } as HTMLInputElement;
-    const testEvent = { target: testTarget } as unknown as KeyboardEvent;
-    component.onKey(testEvent);
-
-    expect(component['number']).toEqual(testValue);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + component['countryCode'] + ' ' + component['number']);
+  it('should mark control as touched on blur', () => {
+    component.onBlur();
+    const cva = TestBed.inject(NgxControlValueAccessor);
+    expect(cva.markAsTouched).toHaveBeenCalled();
   });
 
-  it('afterViewInit() happy path', fakeAsync(() => {
-    const testDialCode = '123';
-    spyOn<any>(component['intlTelInput'], 'getSelectedCountryData').and.returnValue({ dialCode: testDialCode });
-    const onChangeSpy = spyOn<any>(component, 'onChange');
+  it('should call destroy on ngOnDestroy', () => {
+    component.ngAfterViewInit(); // sets up mock intlTelInput
+    component.ngOnDestroy();
 
-    component.internationalPhoneInputChild?.nativeElement.dispatchEvent(new Event('countrychange'));
-    tick();
-    expect(component['countryCode']).toEqual(testDialCode);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + testDialCode + ' ' + component['number']);
-  }));
-
-  it('should blur properly', () => {
-    component.ngControl = new MockNgControl();
-    const control = (component.ngControl as MockNgControl).control;
-
-    spyOn(control, 'setValue').and.callThrough();
-    spyOn(control, 'markAsTouched').and.callThrough();
-    spyOn(control, 'markAsDirty').and.callThrough();
-    spyOn(control, 'updateValueAndValidity').and.callThrough();
-
-    let event: FocusEvent = {
-      target: { value: '' } as HTMLInputElement,
-    } as unknown as FocusEvent;
-
-    component.onBlur(event);
-    expect(control.setValue).toHaveBeenCalledWith(null, { emitEvent: false });
-    expect(control.markAsTouched).toHaveBeenCalled();
-    expect(control.markAsDirty).toHaveBeenCalled();
-    expect(control.updateValueAndValidity).toHaveBeenCalled();
-    expect(control.valid).toBeTrue();
-
-    event = {
-      target: { value: '123' } as HTMLInputElement,
-    } as unknown as FocusEvent;
-
-    component.onBlur(event);
-    expect(control.setValue).toHaveBeenCalledWith('+1 123', { emitEvent: false });
-    expect(control.valid).toBeFalse();
+    expect((component as any).intlTelInput.destroy).toHaveBeenCalled();
   });
 });

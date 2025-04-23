@@ -4,11 +4,14 @@ import { FormGroup } from '@angular/forms';
 import { LoanAgreementInputComponent } from './loan-agreement-input.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('LoanAgreementInputComponent', () => {
   let component: LoanAgreementInputComponent;
   let fixture: ComponentFixture<LoanAgreementInputComponent>;
+  let injector: Injector;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,62 +20,63 @@ describe('LoanAgreementInputComponent', () => {
     });
     fixture = TestBed.createComponent(LoanAgreementInputComponent);
     component = fixture.componentInstance;
+    injector = TestBed.inject(Injector);
 
     // Set up component with form control
     const form = new FormGroup(
       {
-        lender_organization_name: new SubscriptionFormControl(),
-        loan_interest_rate: new SubscriptionFormControl(),
-        loan_interest_rate_field_setting: new SubscriptionFormControl(),
-        loan_due_date: new SubscriptionFormControl(),
-        loan_due_date_field_setting: new SubscriptionFormControl(),
-        collateral: new SubscriptionFormControl(),
-        ind_name_account_location: new SubscriptionFormControl(),
-        account_street_1: new SubscriptionFormControl(),
-        account_street_2: new SubscriptionFormControl(),
-        account_city: new SubscriptionFormControl(),
-        account_state: new SubscriptionFormControl(),
-        account_zip: new SubscriptionFormControl(),
-        treasurer_last_name: new SubscriptionFormControl(),
-        treasurer_first_name: new SubscriptionFormControl(),
-        treasurer_middle_name: new SubscriptionFormControl(),
-        treasurer_prefix: new SubscriptionFormControl(),
-        treasurer_suffix: new SubscriptionFormControl(),
-        treasurer_date_signed: new SubscriptionFormControl(),
-        authorized_last_name: new SubscriptionFormControl(),
-        authorized_first_name: new SubscriptionFormControl(),
-        authorized_middle_name: new SubscriptionFormControl(),
-        authorized_prefix: new SubscriptionFormControl(),
-        authorized_suffix: new SubscriptionFormControl(),
-        authorized_title: new SubscriptionFormControl(),
-        authorized_date_signed: new SubscriptionFormControl(),
-        lender_street_1: new SubscriptionFormControl(),
-        lender_street_2: new SubscriptionFormControl(),
-        lender_city: new SubscriptionFormControl(),
-        lender_state: new SubscriptionFormControl(),
-        lender_zip: new SubscriptionFormControl(),
-        loan_incurred_date: new SubscriptionFormControl(),
-        loan_amount: new SubscriptionFormControl(),
-        total_balance: new SubscriptionFormControl(),
-        loan_restructured: new SubscriptionFormControl(),
-        loan_originally_incurred_date: new SubscriptionFormControl(),
-        credit_amount_this_draw: new SubscriptionFormControl(),
-        others_liable: new SubscriptionFormControl(),
-        desc_collateral: new SubscriptionFormControl(),
-        collateral_value_amount: new SubscriptionFormControl(),
-        perfected_interest: new SubscriptionFormControl(),
-        future_income: new SubscriptionFormControl(),
-        desc_specification_of_the_above: new SubscriptionFormControl(),
-        estimated_value: new SubscriptionFormControl(),
-        depository_account_established_date: new SubscriptionFormControl(),
-        basis_of_loan_description: new SubscriptionFormControl(),
-        line_of_credit: new SubscriptionFormControl(),
-        entity_type: new SubscriptionFormControl(),
+        lender_organization_name: new SignalFormControl(injector),
+        loan_interest_rate: new SignalFormControl(injector),
+        loan_interest_rate_field_setting: new SignalFormControl(injector),
+        loan_due_date: new SignalFormControl(injector),
+        loan_due_date_field_setting: new SignalFormControl(injector),
+        collateral: new SignalFormControl(injector),
+        ind_name_account_location: new SignalFormControl(injector),
+        account_street_1: new SignalFormControl(injector),
+        account_street_2: new SignalFormControl(injector),
+        account_city: new SignalFormControl(injector),
+        account_state: new SignalFormControl(injector),
+        account_zip: new SignalFormControl(injector),
+        treasurer_last_name: new SignalFormControl(injector),
+        treasurer_first_name: new SignalFormControl(injector),
+        treasurer_middle_name: new SignalFormControl(injector),
+        treasurer_prefix: new SignalFormControl(injector),
+        treasurer_suffix: new SignalFormControl(injector),
+        treasurer_date_signed: new SignalFormControl(injector),
+        authorized_last_name: new SignalFormControl(injector),
+        authorized_first_name: new SignalFormControl(injector),
+        authorized_middle_name: new SignalFormControl(injector),
+        authorized_prefix: new SignalFormControl(injector),
+        authorized_suffix: new SignalFormControl(injector),
+        authorized_title: new SignalFormControl(injector),
+        authorized_date_signed: new SignalFormControl(injector),
+        lender_street_1: new SignalFormControl(injector),
+        lender_street_2: new SignalFormControl(injector),
+        lender_city: new SignalFormControl(injector),
+        lender_state: new SignalFormControl(injector),
+        lender_zip: new SignalFormControl(injector),
+        loan_incurred_date: new SignalFormControl(injector),
+        loan_amount: new SignalFormControl(injector),
+        total_balance: new SignalFormControl(injector),
+        loan_restructured: new SignalFormControl(injector),
+        loan_originally_incurred_date: new SignalFormControl(injector),
+        credit_amount_this_draw: new SignalFormControl(injector),
+        others_liable: new SignalFormControl(injector),
+        desc_collateral: new SignalFormControl(injector),
+        collateral_value_amount: new SignalFormControl(injector),
+        perfected_interest: new SignalFormControl(injector),
+        future_income: new SignalFormControl(injector),
+        desc_specification_of_the_above: new SignalFormControl(injector),
+        estimated_value: new SignalFormControl(injector),
+        depository_account_established_date: new SignalFormControl(injector),
+        basis_of_loan_description: new SignalFormControl(injector),
+        line_of_credit: new SignalFormControl(injector),
+        entity_type: new SignalFormControl(injector),
       },
       { updateOn: 'blur' },
     );
-    component.form = form;
-    component.templateMap = {
+    (component.form as any) = createSignal(form);
+    (component.templateMap as any) = createSignal({
       ...testTemplateMap,
       ...{
         organization_name: 'lender_organization_name',
@@ -109,7 +113,7 @@ describe('LoanAgreementInputComponent', () => {
         amount: 'loan_amount',
         balance: 'total_balance',
       },
-    };
+    });
     fixture.detectChanges();
   });
 

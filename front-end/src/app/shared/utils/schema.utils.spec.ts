@@ -2,14 +2,21 @@ import { AsyncValidatorFn, FormBuilder, ValidationErrors } from '@angular/forms'
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { SchemaUtils } from './schema.utils';
-import { SubscriptionFormControl } from './signal-form-control';
+import { Injector } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { SignalFormControl } from './signal-form-control';
 
 describe('ValidateUtils', () => {
+  let injector: Injector;
+
+  beforeEach(() => {
+    injector = TestBed.inject(Injector);
+  });
   it('#formValidator should validate properties correctly', async () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorSchema = contactCandidateSchema;
     const formValidatorForm = fb.group(
-      SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(contactCandidateSchema)),
+      SchemaUtils.getFormGroupFields(injector, SchemaUtils.getSchemaProperties(contactCandidateSchema)),
     );
     formValidatorForm.patchValue({
       telephone: '12345678910',
@@ -22,30 +29,30 @@ describe('ValidateUtils', () => {
       formValidatorForm,
       formValidatorSchema,
     );
-    let result: ValidationErrors | null = await validator(
-      formValidatorForm.get('telephone') as SubscriptionFormControl,
-    );
+    let result: ValidationErrors | null = await validator(formValidatorForm.get('telephone') as SignalFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
     }
 
     validator = SchemaUtils.jsonSchemaValidator('candidate_state', formValidatorForm, formValidatorSchema);
-    result = await validator(formValidatorForm.get('candidate_state') as SubscriptionFormControl);
+    result = await validator(formValidatorForm.get('candidate_state') as SignalFormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['required']).toBe(true);
     }
 
     validator = SchemaUtils.jsonSchemaValidator('last_name', formValidatorForm, formValidatorSchema);
-    result = await validator(formValidatorForm.get('last_name') as SubscriptionFormControl);
+    result = await validator(formValidatorForm.get('last_name') as SignalFormControl);
     expect(result).toBe(null);
   });
 
   it('#formValidator should validate boolean properties correctly', async () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorSchema = f3xSchema;
-    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(f3xSchema)));
+    const formValidatorForm = fb.group(
+      SchemaUtils.getFormGroupFields(injector, SchemaUtils.getSchemaProperties(f3xSchema)),
+    );
     formValidatorForm.patchValue({
       change_of_address: 'A',
     });
@@ -56,7 +63,7 @@ describe('ValidateUtils', () => {
       formValidatorSchema,
     );
     let result: ValidationErrors | null = await validator(
-      formValidatorForm.get('change_of_address') as SubscriptionFormControl,
+      formValidatorForm.get('change_of_address') as SignalFormControl,
     );
     expect(result).not.toBe(null);
     if (result) {
@@ -67,14 +74,16 @@ describe('ValidateUtils', () => {
       change_of_address: true,
     });
     validator = SchemaUtils.jsonSchemaValidator('change_of_address', formValidatorForm, formValidatorSchema);
-    result = await validator(formValidatorForm.get('change_of_address') as SubscriptionFormControl);
+    result = await validator(formValidatorForm.get('change_of_address') as SignalFormControl);
     expect(result).toBe(null);
   });
 
   it('#formValidator should validate min/max numeric properties correctly', async () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorSchema = f3xSchema;
-    const formValidatorForm = fb.group(SchemaUtils.getFormGroupFields(SchemaUtils.getSchemaProperties(f3xSchema)));
+    const formValidatorForm = fb.group(
+      SchemaUtils.getFormGroupFields(injector, SchemaUtils.getSchemaProperties(f3xSchema)),
+    );
     formValidatorForm.patchValue({
       L6a_cash_on_hand_jan_1_ytd: 1000000000.0,
     });
@@ -85,7 +94,7 @@ describe('ValidateUtils', () => {
       formValidatorSchema,
     );
     let result: ValidationErrors | null = await validator(
-      formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl,
+      formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SignalFormControl,
     );
     expect(result).not.toEqual(null);
     if (result) {
@@ -96,7 +105,7 @@ describe('ValidateUtils', () => {
       L6a_cash_on_hand_jan_1_ytd: -200.0,
     });
     validator = SchemaUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd', formValidatorForm, formValidatorSchema);
-    result = await validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SubscriptionFormControl);
+    result = await validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as SignalFormControl);
     if (result) {
       expect(result['min'].min).toBe(0);
     }

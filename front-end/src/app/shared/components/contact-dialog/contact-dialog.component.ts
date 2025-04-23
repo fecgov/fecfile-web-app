@@ -204,10 +204,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
           state: 'ZZ',
         });
         // ajv does not un-require zip when country is not USA
-        this.form().patchValue({ zip: this.form().get('zip')?.value || '' });
+        this.form().patchValue({ zip: this.form().get('zip')?.value ?? '' });
         this.form().get('state')?.disable();
       } else {
-        this.form().patchValue({ zip: this.form().get('zip')?.value || null });
+        this.form().patchValue({ zip: this.form().get('zip')?.value ?? null });
         this.form().get('state')?.enable();
       }
     });
@@ -220,11 +220,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         this.form().get('candidate_office')!.disable();
       },
     );
-
-    effect(() => {
-      const type = this.contactType();
-      console.log(type);
-    });
   }
 
   ngOnInit() {

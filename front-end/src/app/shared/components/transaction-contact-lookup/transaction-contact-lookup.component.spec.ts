@@ -17,6 +17,7 @@ import { SelectModule } from 'primeng/select';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -56,7 +57,7 @@ describe('TransactionContactLookupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionContactLookupComponent);
     component = fixture.componentInstance;
-    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    (component.contactTypeOptions as any) = createSignal(LabelUtils.getPrimeOptions(ContactTypeLabels));
 
     fixture.detectChanges();
   });
@@ -66,22 +67,22 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('should create a component for "contact_2" or "contact_3', () => {
-    component.contactProperty = 'contact_2';
-    component.transaction = testScheduleATransaction;
+    (component.contactProperty as any) = createSignal('contact_2');
+    (component.transaction as any) = createSignal(testScheduleATransaction);
     component.ngOnInit();
-    expect(component.form.get('contact_2_lookup')).toBeTruthy();
+    expect(component.form().get('contact_2_lookup')).toBeTruthy();
 
-    component.contactProperty = 'contact_3';
+    (component.contactProperty as any) = createSignal('contact_3');
     component.ngOnInit();
-    expect(component.form.get('contact_3_lookup')).toBeTruthy();
+    expect(component.form().get('contact_3_lookup')).toBeTruthy();
 
-    component.contactProperty = 'contact_4';
+    (component.contactProperty as any) = createSignal('contact_4');
     component.ngOnInit();
-    expect(component.form.get('contact_4_lookup')).toBeTruthy();
+    expect(component.form().get('contact_4_lookup')).toBeTruthy();
 
-    component.contactProperty = 'contact_5';
+    (component.contactProperty as any) = createSignal('contact_5');
     component.ngOnInit();
-    expect(component.form.get('contact_5_lookup')).toBeTruthy();
+    expect(component.form().get('contact_5_lookup')).toBeTruthy();
   });
 
   it('selecting a contactType should emit its value', () => {

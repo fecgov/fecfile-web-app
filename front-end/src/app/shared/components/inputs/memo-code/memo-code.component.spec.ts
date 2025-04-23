@@ -18,11 +18,14 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('MemoCodeInputComponent', () => {
   let component: MemoCodeInputComponent;
   let fixture: ComponentFixture<MemoCodeInputComponent>;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,18 +44,21 @@ describe('MemoCodeInputComponent', () => {
       providers: [provideMockStore(testMockStore), ConfirmationService],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(MemoCodeInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contribution_date: new SubscriptionFormControl(''),
-        memo_code: new SubscriptionFormControl(''),
-        contribution_amount: new SubscriptionFormControl(''),
-        contribution_aggregate: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          contribution_date: new SignalFormControl(injector, ''),
+          memo_code: new SignalFormControl(injector, ''),
+          contribution_amount: new SignalFormControl(injector, ''),
+          contribution_aggregate: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.templateMap = testTemplateMap;
+    (component.templateMap as any) = createSignal(testTemplateMap);
     fixture.detectChanges();
   });
 
@@ -66,93 +72,93 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
-    component.report = new Form3X();
+    (component.report as any) = createSignal(new Form3X());
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;
 
-    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    component.form.get('memo_code')?.patchValue(false);
+    component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    component.form().get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeTrue();
 
-    component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
+    component.form().get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeTrue();
   });
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
-    component.report = new Form3X();
+    (component.report as any) = createSignal(new Form3X());
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
 
-    component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
-    component.form.get('memo_code')?.patchValue(false);
+    component.form().get('contribution_date')?.patchValue(new Date('01/15/2020'));
+    component.form().get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
 
   it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
-    component.report = new Form3X();
+    (component.report as any) = createSignal(new Form3X());
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
 
-    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.outOfDateDialogVisible = false;
-    component.form.get('memo_code')?.patchValue(true);
+    component.form().get('memo_code')?.patchValue(true);
     component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeFalse();
 
-    component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
+    component.form().get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.outOfDateDialogVisible = false;
     component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
 
   it('should add and remove the requiredTrue validator when a date is set', () => {
-    component.report = new Form3X();
+    (component.report as any) = createSignal(new Form3X());
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;
 
-    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+    component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    expect(component.form().get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
 
-    component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
+    component.form().get('contribution_date')?.patchValue(new Date('01/15/2020'));
+    expect(component.form().get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
 
-    component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+    component.form().get('contribution_date')?.patchValue(new Date('02/01/2020'));
+    expect(component.form().get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
   });
 
   it('should preserve old validators when clearing an added requiredTrue validator', () => {
-    component.report = new Form3X();
+    (component.report as any) = createSignal(new Form3X());
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;
 
-    component.form.get('memo_code')?.addValidators(Validators.email);
+    component.form().get('memo_code')?.addValidators(Validators.email);
 
-    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+    component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    expect(component.form().get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
 
-    component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
+    component.form().get('contribution_date')?.patchValue(new Date('01/15/2020'));
+    expect(component.form().get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
 
-    expect(component.form.get('memo_code')?.hasValidator(Validators.email)).toBeTrue();
+    expect(component.form().get('memo_code')?.hasValidator(Validators.email)).toBeTrue();
   });
 
   it('should not crash if it tries to update the contribution date without a memo_code formControl', () => {
-    component.report = new Form3X();
+    (component.report as any) = createSignal(new Form3X());
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
     component.transaction = testScheduleATransaction;
-    component.form.removeControl('memo_code');
+    component.form().removeControl('memo_code');
 
-    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
     expect(component.dateIsOutsideReport).toBeTrue();
   });
 

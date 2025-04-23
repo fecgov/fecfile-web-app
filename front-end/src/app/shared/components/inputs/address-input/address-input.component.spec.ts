@@ -5,30 +5,37 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AddressInputComponent } from './address-input.component';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('AddressInputComponent', () => {
   let component: AddressInputComponent;
   let fixture: ComponentFixture<AddressInputComponent>;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SelectModule, InputTextModule, ReactiveFormsModule, AddressInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
+
     fixture = TestBed.createComponent(AddressInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contributor_street_1: new SubscriptionFormControl(''),
-        contributor_street_2: new SubscriptionFormControl(''),
-        contributor_city: new SubscriptionFormControl(''),
-        contributor_state: new SubscriptionFormControl(''),
-        contributor_zip: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          contributor_street_1: new SignalFormControl(injector, ''),
+          contributor_street_2: new SignalFormControl(injector, ''),
+          contributor_city: new SignalFormControl(injector, ''),
+          contributor_state: new SignalFormControl(injector, ''),
+          contributor_zip: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.templateMap = testTemplateMap;
+    (component.templateMap as any) = createSignal(testTemplateMap);
     fixture.detectChanges();
   });
 

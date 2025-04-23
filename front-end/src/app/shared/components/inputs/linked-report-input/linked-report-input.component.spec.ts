@@ -10,13 +10,15 @@ import { ReportService } from 'app/shared/services/report.service';
 import { firstValueFrom, of } from 'rxjs';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Injector } from '@angular/core';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('LinkedReportInputComponent', () => {
   let component: LinkedReportInputComponent;
   let fixture: ComponentFixture<LinkedReportInputComponent>;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,14 +32,17 @@ describe('LinkedReportInputComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(LinkedReportInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = Object.assign(testTemplateMap, {
-      date2: 'other_date',
-    });
+    (component.templateMap as any) = createSignal(
+      Object.assign(testTemplateMap, {
+        date2: 'other_date',
+      }),
+    );
     component.form = new FormGroup({}, { updateOn: 'blur' });
-    component.form.addControl('other_date', new SubscriptionFormControl());
-    component.form.addControl(testTemplateMap['date'], new SubscriptionFormControl());
+    component.form.addControl('other_date', new SignalFormControl(injector));
+    component.form.addControl(testTemplateMap['date'], new SignalFormControl(injector));
     component.ngOnInit();
     fixture.detectChanges();
   });

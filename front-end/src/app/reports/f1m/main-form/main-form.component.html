@@ -201,7 +201,7 @@
           </div>
         </div>
       </div>
-      @if (form1M.contact_affiliated) {
+      @if (form1M().contact_affiliated) {
         <div class="grid">
           <div class="col-9">
             <div class="field">
@@ -303,8 +303,8 @@
                   [form]="form()"
                   [formSubmitted]="formSubmitted"
                   [contactTypeOptions]="candidateContact.contactTypeOptions"
-                  [excludeFecIds]="excludeFecIds"
-                  [excludeIds]="excludeIds"
+                  [excludeFecIds]="excludeFecIds()"
+                  [excludeIds]="excludeIds()"
                   (contactSelect)="candidateContact.update($event)"
                 >
                 </app-transaction-contact-lookup>
@@ -316,7 +316,7 @@
               </div>
             </div>
           </div>
-          @if (form1M[candidateContact.contactKey]) {
+          @if (form1M()[candidateContact.contactKey]) {
             <app-name-input
               [form]="form()"
               [formSubmitted]="formSubmitted"

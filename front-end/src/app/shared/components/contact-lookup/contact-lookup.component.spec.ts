@@ -30,6 +30,7 @@ import { SelectModule } from 'primeng/select';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from './contact-lookup.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -71,8 +72,10 @@ describe('ContactLookupComponent', () => {
   });
 
   it('#ngOnInit', () => {
-    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
-    component.candidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
+    (component.contactTypeOptions as any) = createSignal(
+      LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]),
+    );
+    (component.candidateOffice as any) = createSignal(CandidateOfficeTypes.PRESIDENTIAL);
     component.ngOnInit();
     component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
     expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);

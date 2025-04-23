@@ -18,18 +18,21 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
 
 // Spys
 let confirmSpy: jasmine.Spy;
+let injector: Injector;
 
 describe('TripleTransactionTypeBaseComponent', () => {
   let component: TripleTransactionTypeBaseComponent;
@@ -54,6 +57,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     testConfirmationService = TestBed.inject(ConfirmationService);
     testTransaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction;
     const child1 = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
@@ -66,9 +70,9 @@ describe('TripleTransactionTypeBaseComponent', () => {
     testTransaction.children = [child1, child2];
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = testTransaction;
-    component.childTransaction = child1;
-    component.childTransaction_2 = child2;
+    (component.transaction as any) = createSignal(testTransaction);
+    (component.childTransaction as any) = createSignal(child1);
+    (component.childTransaction_2 as any) = createSignal(child2);
 
     confirmSpy = spyOn(testConfirmationService, 'confirm');
 
@@ -77,24 +81,24 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.transactionType?.title).toBe('Loan Received from Bank');
+    expect(component.transactionType()?.title).toBe('Loan Received from Bank');
   });
 
   describe('getConfirmations()', () => {
     it('should return false if there is not child transaction 2', async () => {
-      component.childTransaction_2 = undefined;
+      (component.childTransaction_2 as any) = createSignal(undefined);
       const res = await component.getConfirmations();
       expect(res).toBeFalse();
     });
 
     it('should return false if not child transaction', async () => {
-      component.childTransaction = undefined;
+      (component.childTransaction as any) = createSignal(undefined);
       const v = await component.getConfirmations();
       expect(v).toBeFalse();
     });
 
     it('should return false if reject parent confirmation', async () => {
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
       const v = await component.getConfirmations();
       expect(v).toBeFalse();
     });
@@ -107,7 +111,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
     it('should confirm with user 1 time if only primary transaction contact updated', fakeAsync(() => {
       if (!component.transaction) throw new Error('Bad test');
-      component.transaction.contact_1 = testContact;
+      component.transaction()!.contact_1 = testContact;
       component.getConfirmations().then((res) => {
         expect(res).toBeTrue();
       });
@@ -118,26 +122,26 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('isInvalid', () => {
     beforeEach(() => {
-      component.childForm = new FormBuilder().group({});
+      (component.childForm as any) = createSignal(new FormBuilder().group({}));
     });
 
     it('should return true if childForm_2 is invalid', () => {
-      component.childForm = new FormBuilder().group({});
-      expect(component.form.invalid).toBeFalse();
-      expect(component.childForm.invalid).toBeFalse();
-      expect(component.transaction).toBeTruthy();
-      expect(component.childTransaction).toBeTruthy();
-      component.childForm_2.addControl('Test', new SubscriptionFormControl(undefined, Validators.required));
-      component.childForm_2.updateValueAndValidity();
-      expect(component.childForm_2.invalid).toBeTrue();
+      (component.childForm as any) = createSignal(new FormBuilder().group({}));
+      expect(component.form().invalid).toBeFalse();
+      expect(component.childForm().invalid).toBeFalse();
+      expect(component.transaction()).toBeTruthy();
+      expect(component.childTransaction()).toBeTruthy();
+      component.childForm_2()!.addControl('Test', new SignalFormControl(injector, undefined, Validators.required));
+      component.childForm_2()!.updateValueAndValidity();
+      expect(component.childForm_2()!.invalid).toBeTrue();
       expect(component.isInvalid()).toBeTrue();
     });
 
     it('should return true if childTransaction_2 is missing', () => {
-      component.childTransaction_2 = undefined;
-      expect(component.form.invalid).toBeFalse();
-      expect(component.childForm.invalid).toBeFalse();
-      expect(component.childForm_2.invalid).toBeFalse();
+      (component.childTransaction_2 as any) = createSignal(undefined);
+      expect(component.form().invalid).toBeFalse();
+      expect(component.childForm().invalid).toBeFalse();
+      expect(component.childForm_2()!.invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeFalsy();
@@ -145,9 +149,9 @@ describe('TripleTransactionTypeBaseComponent', () => {
     });
 
     it('should return false in all other cases', () => {
-      expect(component.form.invalid).toBeFalse();
-      expect(component.childForm.invalid).toBeFalse();
-      expect(component.childForm_2.invalid).toBeFalse();
+      expect(component.form().invalid).toBeFalse();
+      expect(component.childForm().invalid).toBeFalse();
+      expect(component.childForm_2()!.invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeTruthy();
@@ -157,18 +161,18 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('updateFormWithPrimaryContact', () => {
     it('should run the super version and then update data if ', () => {
-      if (!component.childTransaction_2 || !component.transaction) throw new Error('Bad test');
-      component.childTransaction_2.transactionType.useParentContact = true;
-      component.transaction.contact_1 = testContact;
+      if (!component.childTransaction_2() || !component.transaction()) throw new Error('Bad test');
+      component.childTransaction_2()!.transactionType.useParentContact = true;
+      component.transaction()!.contact_1 = testContact;
       expect(
-        component.childTransaction_2?.transactionType?.getUseParentContact(component.childTransaction_2),
+        component.childTransaction_2()!?.transactionType?.getUseParentContact(component.childTransaction_2()!),
       ).toBeTruthy();
-      expect(component.transaction.contact_1).toBeTruthy();
+      expect(component.transaction()!.contact_1).toBeTruthy();
       const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
       const selectItem: SelectItem<Contact> = { value: testContact };
       component.updateFormWithPrimaryContact(selectItem);
       expect(spy).toHaveBeenCalled();
-      expect(component.childTransaction_2.contact_1).toEqual(component.transaction.contact_1);
+      expect(component.childTransaction_2()!.contact_1).toEqual(component.transaction()!.contact_1);
     });
   });
 
@@ -179,8 +183,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithPrimaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2,
-        component.childTransaction_2,
+        component.childForm_2()!,
+        component.childTransaction_2()!,
         component.childContactIdMap_2['contact_1'],
       );
     });
@@ -193,8 +197,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithCandidateContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2,
-        component.childTransaction_2,
+        component.childForm_2()!,
+        component.childTransaction_2()!,
         component.childContactIdMap_2['contact_2'],
       );
     });
@@ -207,8 +211,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithSecondaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2,
-        component.childTransaction_2,
+        component.childForm_2()!,
+        component.childTransaction_2()!,
         component.childContactIdMap_2['contact_2'],
       );
     });
@@ -221,8 +225,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithTertiaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2,
-        component.childTransaction_2,
+        component.childForm_2()!,
+        component.childTransaction_2()!,
         component.childContactIdMap_2['contact_3'],
       );
     });
@@ -230,10 +234,12 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('save', () => {
     it('should bail out if transactions are invalid', async () => {
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
 
       await expectAsync(
-        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction)),
+        component.save(
+          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()!),
+        ),
       ).toBeRejectedWithError('Fecfile: No transactions submitted for triple-entry transaction form.');
     });
   });

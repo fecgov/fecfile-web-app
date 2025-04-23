@@ -3,11 +3,14 @@ import { FormGroup } from '@angular/forms';
 
 import { SignatureInputComponent } from './signature-input.component';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('SignatureInputComponent', () => {
   let component: SignatureInputComponent;
   let fixture: ComponentFixture<SignatureInputComponent>;
+  let injector: Injector;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -15,23 +18,24 @@ describe('SignatureInputComponent', () => {
     });
     fixture = TestBed.createComponent(SignatureInputComponent);
     component = fixture.componentInstance;
+    injector = TestBed.inject(Injector);
 
     // Set up component with form control
     const form = new FormGroup(
       {
-        authorized_last_name: new SubscriptionFormControl(),
-        authorized_first_name: new SubscriptionFormControl(),
-        authorized_middle_name: new SubscriptionFormControl(),
-        authorized_prefix: new SubscriptionFormControl(),
-        authorized_suffix: new SubscriptionFormControl(),
-        authorized_title: new SubscriptionFormControl(),
-        authorized_date_signed: new SubscriptionFormControl(),
+        authorized_last_name: new SignalFormControl(injector),
+        authorized_first_name: new SignalFormControl(injector),
+        authorized_middle_name: new SignalFormControl(injector),
+        authorized_prefix: new SignalFormControl(injector),
+        authorized_suffix: new SignalFormControl(injector),
+        authorized_title: new SignalFormControl(injector),
+        authorized_date_signed: new SignalFormControl(injector),
       },
       { updateOn: 'blur' },
     );
-    component.form = form;
-    component.templateMapKeyPrefix = 'signatory_2';
-    component.templateMap = {
+    (component.form as any) = createSignal(form);
+    (component.templateMapKeyPrefix as any) = createSignal('signatory_2');
+    (component.templateMap as any) = createSignal({
       ...testTemplateMap,
       ...{
         signatory_2_last_name: 'authorized_last_name',
@@ -42,7 +46,7 @@ describe('SignatureInputComponent', () => {
         signatory_2_title: 'authorized_title',
         signatory_2_date: 'authorized_date_signed',
       },
-    };
+    });
     fixture.detectChanges();
   });
 

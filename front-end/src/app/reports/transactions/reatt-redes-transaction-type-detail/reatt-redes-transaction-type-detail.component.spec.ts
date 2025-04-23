@@ -64,7 +64,7 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
     component = fixture.componentInstance;
     spyOn(component, 'getChildTransaction').and.callFake(() => transaction);
     component.transaction = transaction;
-    component.templateMap = testTemplateMap;
+    (component.templateMap as any) = createSignal(testTemplateMap);
     component.ngOnInit();
   });
 

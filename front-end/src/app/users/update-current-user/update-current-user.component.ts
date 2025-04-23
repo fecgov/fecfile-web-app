@@ -27,7 +27,7 @@ export class UpdateCurrentUserComponent extends FormComponent {
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);
   private readonly userSignal = this.store.selectSignal(selectUserLoginData);
-  form = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
+  readonly form = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
 
   constructor() {
     super();

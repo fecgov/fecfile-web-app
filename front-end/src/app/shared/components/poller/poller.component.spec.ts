@@ -1,67 +1,113 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { PollerComponent } from './poller.component';
 import { Location } from '@angular/common';
+import { signal } from '@angular/core';
 import { PollerService } from 'app/shared/services/poller.service';
 
 describe('PollerComponent', () => {
   let component: PollerComponent;
   let fixture: ComponentFixture<PollerComponent>;
-  let pollerServiceMock: {
-    startPolling: jasmine.Spy;
-    stopPolling: jasmine.Spy;
-    isNewVersionAvailable$: Observable<boolean>;
-  };
-  let locationMock: { path: jasmine.Spy };
-  let isNewVersionAvailableSubject: BehaviorSubject<boolean>;
+  let mockPollerService: jasmine.SpyObj<PollerService>;
+  let mockLocation: jasmine.SpyObj<Location>;
 
-  beforeEach(async () => {
-    isNewVersionAvailableSubject = new BehaviorSubject<boolean>(false);
+  beforeEach(() => {
+    mockPollerService = jasmine.createSpyObj('PollerService', ['startPolling', 'stopPolling'], {
+      isNewVersionAvailable: signal(false),
+    });
 
-    // Mocking PollerService
-    pollerServiceMock = {
-      startPolling: jasmine.createSpy('startPolling'),
-      stopPolling: jasmine.createSpy('stopPolling'),
-      isNewVersionAvailable$: isNewVersionAvailableSubject.asObservable(),
-    };
+    mockLocation = jasmine.createSpyObj('Location', ['path']);
+    mockLocation.path.and.returnValue('/app');
 
-    // Mocking Location
-    locationMock = {
-      path: jasmine.createSpy('path').and.returnValue('/current-path'),
-    };
-
-    await TestBed.configureTestingModule({
-      imports: [PollerComponent],
+    TestBed.configureTestingModule({
       providers: [
-        { provide: PollerService, useValue: pollerServiceMock },
-        { provide: Location, useValue: locationMock },
+        { provide: PollerService, useValue: mockPollerService },
+        { provide: Location, useValue: mockLocation },
+        PollerComponent,
       ],
-    }).compileComponents();
+    });
 
+    component = TestBed.inject(PollerComponent);
     fixture = TestBed.createComponent(PollerComponent);
-    component = fixture.componentInstance;
+  });
+  it('should compute deploymentUrl correctly', () => {
+    // Backup original location
+    const originalLocation = window.location;
+
+    // Redefine location with mock href and location.reload
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: 'https://example.com/app',
+        reload: jasmine.createSpy(),
+      },
+      writable: true,
+    });
+
+    mockLocation.path.and.returnValue('/app');
+
+    // Manually trigger the computed signal
+    expect(component.deploymentUrl()).toBe('https://example.com/index.html');
+
+    // Restore original window.location to avoid test bleed
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
   });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
+  it('should call startPolling on init with computed deploymentUrl', () => {
+    // Backup the original window.location
+    const originalLocation = window.location;
+
+    // Redefine window.location with a mock href
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: 'https://example.com/app',
+        reload: jasmine.createSpy(), // add this if reload is called elsewhere
+      },
+      writable: true,
+    });
+
+    // Make sure the injected Location service returns the expected path
+    mockLocation.path.and.returnValue('/app');
+
+    // Call ngOnInit to trigger polling logic
+    component.ngOnInit();
+
+    // Verify the polling was started with the correct URL
+    expect(mockPollerService.startPolling).toHaveBeenCalledWith('https://example.com/index.html');
+
+    // Restore original window.location after the test
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
   });
 
-  it('should call reload when new version', () => {
+  it('should call stopPolling on destroy', () => {
+    component.ngOnDestroy();
+    expect(mockPollerService.stopPolling).toHaveBeenCalled();
+  });
+
+  it('should reload page if isNewVersionAvailable is true', () => {
     spyOn(component, 'reload');
 
-    // Simulate new version being available
-    isNewVersionAvailableSubject.next(true);
+    // Override the computed getter on the mock service
+    Object.defineProperty(mockPollerService, 'isNewVersionAvailable', {
+      get: () => true,
+    });
 
-    fixture.detectChanges();
-    expect(component['reload']).toHaveBeenCalled();
+    // Re-create component to trigger constructor effect
+    component = TestBed.inject(PollerComponent);
+
+    expect(component.reload).toHaveBeenCalled();
   });
 
-  it('should stop polling when component is destroyed', () => {
-    spyOn(component, 'stopPolling').and.callThrough();
-
-    component.ngOnDestroy();
-
-    expect(component.stopPolling).toHaveBeenCalled();
-    expect(pollerServiceMock.stopPolling).toHaveBeenCalled();
+  it('reload should call window.location.reload', () => {
+    const reloadSpy = jasmine.createSpy();
+    spyOnProperty(window, 'location').and.returnValue({
+      reload: reloadSpy,
+    } as any);
+    component.reload();
+    expect(reloadSpy).toHaveBeenCalled();
   });
 });

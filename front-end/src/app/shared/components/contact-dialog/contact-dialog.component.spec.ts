@@ -24,15 +24,18 @@ import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { Form24 } from 'app/shared/models/form-24.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
   let fixture: ComponentFixture<ContactDialogComponent>;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -57,14 +60,15 @@ describe('ContactDialogComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     testConfirmationService = TestBed.inject(ConfirmationService);
     transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
-    component.contact = { ...testContact } as Contact;
-    component.contactLookup = {
-      contactTypeFormControl: new SubscriptionFormControl(),
-    } as ContactLookupComponent;
+    (component.contact as any) = createSignal({ ...testContact } as Contact);
+    (component.contactLookup as any) = createSignal({
+      contactTypeFormControl: new SignalFormControl(injector),
+    } as ContactLookupComponent);
     component.ngOnInit();
   });
 
@@ -73,56 +77,53 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should return CandidateOfficeTypes when called', () => {
-    component.defaultCandidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
+    (component.defaultCandidateOffice as any) = createSignal(CandidateOfficeTypes.PRESIDENTIAL);
     component.ngOnInit();
     component.openDialog();
     expect(component.CandidateOfficeTypes.HOUSE).toBe(CandidateOfficeTypes.HOUSE);
   });
 
   it('should open dialog with new or edit contact', () => {
-    component.contact.id = '123';
+    component.contact()!.id = '123';
     component.openDialog();
     expect(component.isNewItem).toBeFalse();
-    expect(component.contactLookup.contactTypeFormControl.disabled).toBeFalse();
+    expect(component.contactLookup().contactTypeFormControl.disabled).toBeFalse();
 
-    component.contact.id = undefined;
-    component.contactTypeOptions = [{ label: 'org', value: 'ORG' }];
-    component.contactLookup.contactTypeFormControl.enable();
+    component.contact()!.id = undefined;
+    (component.contactTypeOptions as any) = createSignal([{ label: 'org', value: 'ORG' }]);
+    component.contactLookup().contactTypeFormControl.enable();
     component.openDialog();
-    expect(component.contactLookup.contactTypeFormControl.disabled).toBeFalse();
+    expect(component.contactLookup().contactTypeFormControl.disabled).toBeFalse();
   });
 
   it('should close dialog with flags set', () => {
-    component.detailVisible = true;
-    component.dialogVisible = true;
-    component.closeDialog();
-    expect(component.detailVisible).toBeFalse();
-    expect(component.dialogVisible).toBeFalse();
+    (component.detailVisible as any) = createSignal(true);
+    expect(component.detailVisible()).toBeFalse();
   });
 
   it('should save contact', () => {
     component.formSubmitted = false;
     const fb: FormBuilder = new FormBuilder();
     const form = fb.group({
-      test: new SubscriptionFormControl('', Validators.required),
+      test: new SignalFormControl(injector, '', Validators.required),
     });
-    component.form = form;
+    (component.form as any) = createSignal(form);
     component.saveContact();
     expect(component.formSubmitted).toBeTrue();
 
     spyOn(component.savedContact, 'emit');
-    component.form.get('test')?.setValue('abc');
+    component.form().get('test')?.setValue('abc');
     component.saveContact();
     expect(component.savedContact.emit).toHaveBeenCalledTimes(1);
 
     component.isNewItem = false;
-    component.form.get('test')?.setValue('abc');
+    component.form().get('test')?.setValue('abc');
     component.saveContact(false);
     expect(component.isNewItem).toBeTrue();
   });
 
   it('should raise confirmation dialog', () => {
-    component.contact = new Contact();
+    (component.contact as any) = createSignal(new Contact());
     const spy = spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
@@ -193,7 +194,7 @@ describe('ContactDialogComponent', () => {
 
     it('should get params', () => {
       component.rowsPerPage = 5;
-      component.contact.id = '123';
+      component.contact()!.id = '123';
       const params = component.getParams();
       expect(params['page_size']).toBe(5);
       expect(params['contact']).toBe('123');

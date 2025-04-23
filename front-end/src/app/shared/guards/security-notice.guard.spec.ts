@@ -37,7 +37,7 @@ describe('securityNoticeGuard', () => {
   it('should return false without notice', () => {
     const router = TestBed.inject(Router);
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasConsented').and.returnValue(Promise.resolve(false));
+    spyOn(loginService, 'userHasConsented').and.returnValue(false);
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
@@ -48,7 +48,7 @@ describe('securityNoticeGuard', () => {
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const loginService = TestBed.inject(LoginService);
-    spyOn(loginService, 'userHasConsented').and.returnValue(Promise.resolve(true));
+    spyOn(loginService, 'userHasConsented').and.returnValue(true);
     return (executeGuard(route, state) as Promise<boolean | UrlTree>).then((safe) => {
       expect(safe).toBeTrue();
     });

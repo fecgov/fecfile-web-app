@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, computed, input, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
@@ -19,28 +19,18 @@ export class CalendarComponent implements OnInit {
   readonly showErrors = input(true);
   readonly requiredErrorMessage = input('This is a required field.');
 
-  calendarOpened = false;
-  control!: SignalFormControl<Date | null>;
+  readonly control = computed(() => this.form().get(this.fieldName()) as SignalFormControl<Date | null>);
 
-  ngOnInit(): void {
-    const form = this.form();
-    const field = this.fieldName();
-
-    this.control = form.get(field) as SignalFormControl;
-
-    const date = DateUtils.parseDate(this.control.value);
-    this.control.setValue(date);
+  ngOnInit() {
+    const parsed = DateUtils.parseDate(this.control().value);
+    this.control().setValue(parsed);
   }
 
-  validateDate(calendarUpdate: boolean) {
-    this.calendarOpened = calendarUpdate;
-
-    if (!this.calendarOpened && this.control) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const pendingValue = (this.control as any)._pendingValue;
-      this.control.markAsTouched();
-      this.control.setValue(pendingValue);
-      this.control.updateValueAndValidity();
-    }
+  validateDate() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pendingValue = (this.control() as any)._pendingValue;
+    this.control().markAsTouched();
+    this.control().setValue(pendingValue);
+    this.control().updateValueAndValidity();
   }
 }

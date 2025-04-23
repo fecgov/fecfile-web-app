@@ -102,12 +102,16 @@ export class Contact extends BaseModel {
   }
 }
 
+export interface ContactConfig {
+  [contactKey: string]: { [formField: string]: string };
+}
+
 /**
  * The following maps have:
  * KEY = the key to a templateMap entry for the transaction forms
  * VALUE = the key to the contact field
  */
-export const STANDARD_SINGLE_CONTACT = {
+export const STANDARD_SINGLE_CONTACT: ContactConfig = {
   contact_1: {
     organization_name: 'name',
     committee_name: 'name',
@@ -127,7 +131,7 @@ export const STANDARD_SINGLE_CONTACT = {
   },
 };
 
-export const STANDARD_AND_CANDIDATE = {
+export const STANDARD_AND_CANDIDATE: ContactConfig = {
   contact_1: {
     organization_name: 'name',
     committee_name: 'name',
@@ -158,7 +162,7 @@ export const STANDARD_AND_CANDIDATE = {
   },
 };
 
-export const STANDARD_AND_SECONDARY = {
+export const STANDARD_AND_SECONDARY: ContactConfig = {
   contact_1: {
     organization_name: 'name',
     committee_name: 'name',
@@ -186,7 +190,7 @@ export const STANDARD_AND_SECONDARY = {
   },
 };
 
-export const STANDARD_AND_TERTIARY = {
+export const STANDARD_AND_TERTIARY: ContactConfig = {
   contact_1: {
     organization_name: 'name',
     last_name: 'last_name',
@@ -208,7 +212,7 @@ export const STANDARD_AND_TERTIARY = {
   },
 };
 
-export const STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE = {
+export const STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE: ContactConfig = {
   contact_1: {
     organization_name: 'name',
     last_name: 'last_name',
@@ -241,7 +245,7 @@ export const STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE = {
   },
 };
 
-export const CONTACTS_ONE_THROUGH_FIVE = {
+export const CONTACTS_ONE_THROUGH_FIVE: ContactConfig = {
   contact_1: {
     organization_name: 'name',
     last_name: 'last_name',

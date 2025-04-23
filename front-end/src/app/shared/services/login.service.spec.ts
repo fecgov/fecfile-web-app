@@ -1,113 +1,88 @@
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testMockStore, testUserLoginData } from '../utils/unit-test.utils';
-import { ApiService } from './api.service';
-
-import { Router } from '@angular/router';
-import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
-import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { CookieService } from 'ngx-cookie-service';
-import { of } from 'rxjs';
 import { LoginService } from './login.service';
-import { provideHttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { UsersService } from '../services/users.service';
+import { signal } from '@angular/core';
+import { environment } from 'environments/environment';
+import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 
 describe('LoginService', () => {
   let service: LoginService;
-  let store: MockStore;
-  let cookieService: CookieService;
+  let mockStore: jasmine.SpyObj<Store<any>>;
+  let mockRouter: jasmine.SpyObj<Router>;
+  let mockCookieService: jasmine.SpyObj<CookieService>;
+  let mockUsersService: jasmine.SpyObj<UsersService>;
+
+  const mockUser = {
+    first_name: 'Jane',
+    last_name: 'Doe',
+    security_consented: true,
+  };
 
   beforeEach(() => {
+    mockStore = jasmine.createSpyObj('Store', ['selectSignal', 'dispatch']);
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    mockCookieService = jasmine.createSpyObj('CookieService', ['get']);
+    mockUsersService = jasmine.createSpyObj('UsersService', ['getCurrentUser']);
+
+    // Mock selectSignal to return a signal with mockUser
+    (mockStore.selectSignal as jasmine.Spy).and.returnValue(signal(mockUser));
+    mockCookieService.get.withArgs(environment.ffapiLoginDotGovCookieName).and.returnValue('true');
+    mockCookieService.get.withArgs('ffapi_timeout').and.returnValue(
+      Math.floor(Date.now() / 1000 + 60).toString(), // timeout 60 seconds in the future
+    );
+
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        ApiService,
+        { provide: Store, useValue: mockStore },
+        { provide: Router, useValue: mockRouter },
+        { provide: CookieService, useValue: mockCookieService },
+        { provide: UsersService, useValue: mockUsersService },
         LoginService,
-        provideMockStore(testMockStore),
       ],
     });
+
     service = TestBed.inject(LoginService);
-    store = TestBed.inject(MockStore);
-    cookieService = TestBed.inject(CookieService);
-    TestBed.inject(Router);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should return true for userHasProfileData if user has first and last name', () => {
+    expect(service.userHasProfileData()).toBeTrue();
   });
 
-  it('#logOut non-login.gov happy path', async () => {
-    TestBed.resetTestingModule();
+  it('should return true for userHasConsented if user has consented', () => {
+    expect(service.userHasConsented()).toBeTrue();
+  });
 
-    const dispatchSpy = spyOn(store, 'dispatch');
+  it('should return true for isLoggedIn if the cookie is "true"', () => {
+    expect(service.isLoggedIn).toBeTrue();
+  });
 
-    service.userLoginData$ = of(testUserLoginData);
+  it('should return true for userIsAuthenticated if ffapi_timeout is in the future', () => {
+    expect(service.userIsAuthenticated).toBeTrue();
+  });
+
+  it('should dispatch discard action and navigate to /login if not logged in', () => {
+    mockCookieService.get.withArgs(environment.ffapiLoginDotGovCookieName).and.returnValue('false');
     service.logOut();
-    expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    expect(mockStore.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  //Can't figure out how to override service's userLoginData
-  xit('#logOut login.gov happy path', () => {
-    TestBed.resetTestingModule();
-
-    spyOn(store, 'dispatch');
-    spyOn(cookieService, 'delete');
-
+  it('should dispatch discard action and redirect if logged in', () => {
+    spyOnProperty(service, 'isLoggedIn').and.returnValue(true);
+    spyOnProperty(window, 'location', 'get').and.returnValue({
+      href: '',
+    } as any);
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
-    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
+    expect(mockStore.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    // Can't test window.location.href without redefining window.location, but we check the dispatch
   });
 
-  it('hasUserLoginData should return true', () => {
-    service.hasUserLoginData().then((userHasProfileData) => {
-      expect(userHasProfileData).toBeTrue();
-    });
-  });
-
-  it('userHasProfileData should return true', () => {
-    service.userHasProfileData().then((userHasProfileData) => {
-      expect(userHasProfileData).toBeTrue();
-    });
-  });
-
-  describe('#userHasConsented should work', () => {
-    it('test undefined security_consented', () => {
-      const one_day_ahead = new Date();
-      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
-
-      store.overrideSelector(selectUserLoginData, {
-        first_name: '',
-        last_name: '',
-        email: '',
-      });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
-    });
-
-    it('test false security_consented', () => {
-      const one_day_ahead = new Date();
-      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
-
-      store.overrideSelector(selectUserLoginData, {
-        first_name: '',
-        last_name: '',
-        email: '',
-        security_consented: false,
-      });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
-    });
-
-    it('test true security_consented', () => {
-      const one_day_ahead = new Date();
-      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
-
-      store.overrideSelector(selectUserLoginData, {
-        first_name: '',
-        last_name: '',
-        email: '',
-        security_consented: true,
-      });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
-    });
+  it('should retrieve user data and dispatch it', async () => {
+    mockUsersService.getCurrentUser.and.returnValue(Promise.resolve(mockUser));
+    await service.retrieveUserLoginData();
+    expect(mockStore.dispatch).toHaveBeenCalledWith(userLoginDataRetrievedAction({ payload: mockUser }));
   });
 });

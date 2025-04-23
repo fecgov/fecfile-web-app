@@ -5,31 +5,37 @@ import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils
 import { LoanTermsDatesInputComponent } from './loan-terms-dates-input.component';
 
 import { percentageValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('LoanTermsDatesInputComponent', () => {
   let component: LoanTermsDatesInputComponent;
   let fixture: ComponentFixture<LoanTermsDatesInputComponent>;
+  let injector: Injector;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [LoanTermsDatesInputComponent],
       providers: [provideMockStore(testMockStore)],
     });
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(LoanTermsDatesInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap;
-    component.form = new FormGroup(
-      {
-        loan_incurred_date: new SubscriptionFormControl(''),
-        loan_interest_rate: new SubscriptionFormControl(''),
-        loan_interest_rate_field_setting: new SubscriptionFormControl(''),
-        loan_due_date: new SubscriptionFormControl(''),
-        loan_due_date_field_setting: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.templateMap as any) = createSignal(testTemplateMap);
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          loan_incurred_date: new SignalFormControl(injector, ''),
+          loan_interest_rate: new SignalFormControl(injector, ''),
+          loan_interest_rate_field_setting: new SignalFormControl(injector, ''),
+          loan_due_date: new SignalFormControl(injector, ''),
+          loan_due_date_field_setting: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.templateMap = {
+    (component.templateMap as any) = createSignal({
       ...testTemplateMap,
       ...{
         interest_rate: 'loan_interest_rate',
@@ -38,7 +44,7 @@ describe('LoanTermsDatesInputComponent', () => {
         due_date: 'loan_due_date',
         due_date_setting: 'loan_due_date_field_setting',
       },
-    };
+    });
     fixture.detectChanges();
   });
 
@@ -54,7 +60,7 @@ describe('LoanTermsDatesInputComponent', () => {
   });
 
   it('should have an invalid INCURRED DATE input if outside the report date range', () => {
-    const control = component.form.get(component.templateMap.date);
+    const control = component.form().get(component.templateMap().date);
     expect(control?.status).toBe('INVALID');
     control?.setValue(new Date('January 1, 2015 00:00:00'));
     expect(control?.status).toBe('INVALID');
@@ -107,9 +113,9 @@ describe('LoanTermsDatesInputComponent', () => {
 
   it('should add and remove the percentage pattern validator', () => {
     component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
-    expect(component.interestRateField?.hasValidator(percentageValidator)).toBeFalse();
+    expect(component.interestRateField()?.hasValidator(percentageValidator)).toBeFalse();
     component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    expect(component.interestRateField?.hasValidator(percentageValidator)).toBeTrue();
+    expect(component.interestRateField()?.hasValidator(percentageValidator)).toBeTrue();
   });
 
   it('should handle due_date inputs correctly when clearValuesOnChange is true', fakeAsync(() => {

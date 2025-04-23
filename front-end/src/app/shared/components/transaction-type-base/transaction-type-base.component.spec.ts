@@ -28,12 +28,14 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
 import { ActivatedRoute, NavigationBehaviorOptions, Router } from '@angular/router';
 import { AggregationGroups, Transaction } from '../../models/transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector, signal } from '@angular/core';
 
 let testTransaction: SchATransaction;
 
@@ -42,6 +44,7 @@ describe('TransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TransactionTypeBaseComponent>;
   let testConfirmationService: ConfirmationService;
   let testwrapperService: ConfirmationWrapperService;
+  let injector: Injector;
 
   // spies
   let navigateToSpy: jasmine.Spy;
@@ -97,11 +100,12 @@ describe('TransactionTypeBaseComponent', () => {
     transactionServiceSpy = TestBed.inject(TransactionService) as jasmine.SpyObj<TransactionService>;
     testConfirmationService = TestBed.inject(ConfirmationService);
     testwrapperService = TestBed.inject(ConfirmationWrapperService);
+    injector = TestBed.inject(Injector);
     messageServiceSpy = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
     testTransaction = getTestIndividualReceipt();
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = testTransaction;
+    (component.transaction as any) = createSignal(testTransaction);
 
     navigateToSpy = spyOn(component, 'navigateTo');
     confirmSpy = spyOn(testConfirmationService, 'confirm');
@@ -112,11 +116,11 @@ describe('TransactionTypeBaseComponent', () => {
     it('should initialize Individual Receipt', () => {
       component.ngOnInit();
       expect(component).toBeTruthy();
-      expect(component.transactionType?.title).toBe('Individual Receipt');
+      expect(component.transactionType()?.title).toBe('Individual Receipt');
     });
 
     it('should throw an error if the transaction template map is unavailable', async () => {
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
       try {
         component.ngOnInit();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,26 +137,30 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overridden when the schema requires a negative value', async () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    (component.transaction as any) = createSignal(
+      getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL),
+    );
     component.ngOnInit();
 
-    component.form.patchValue({ contribution_amount: 2 });
-    expect(component.form.get('contribution_amount')?.value).toBe(-2);
+    component.form().patchValue({ contribution_amount: 2 });
+    expect(component.form().get('contribution_amount')?.value).toBe(-2);
   });
 
   it('inherited fields should use the parent transaction to initialize the form values', async () => {
-    component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
-    component.transaction.parent_transaction = getTestIndividualReceipt();
-    if (component.transaction.parent_transaction.contact_1)
-      component.transaction.parent_transaction.contact_1.street_1 = 'Parent Street 1';
+    (component.transaction as any) = createSignal(
+      getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE),
+    );
+    component.transaction()!.parent_transaction = getTestIndividualReceipt();
+    if (component.transaction()!.parent_transaction!.contact_1)
+      component.transaction()!.parent_transaction!.contact_1!.street_1 = 'Parent Street 1';
     component.ngOnInit();
-    expect(component.transaction.contact_1?.street_1).toBe('Parent Street 1');
-    expect(component.transaction.contact_1_id).toBe('testId');
+    expect(component.transaction()!.contact_1?.street_1).toBe('Parent Street 1');
+    expect(component.transaction()!.contact_1_id).toBe('testId');
   });
 
   describe('save', () => {
     beforeEach(() => {
-      navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+      navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction());
     });
 
     it('should update contacts form if there is a transaction', async () => {
@@ -162,7 +170,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should stop processing and throw an error if there is no transaction', async () => {
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
       await expectAsync(component.save(navEvent)).toBeRejectedWithError(
         'Fecfile: No transactions submitted for single-entry transaction form.',
       );
@@ -171,15 +179,15 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('processPayload', () => {
     beforeEach(() => {
-      navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+      navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction());
     });
 
     it('should set processing to false if no transaction type identifier on payload', async () => {
       const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
+        component.transaction(),
         '999',
-        component.form,
-        component.formProperties,
+        component.form(),
+        component.formProperties(),
       );
       payload.transaction_type_identifier = undefined;
       await component.processPayload(payload, navEvent);
@@ -188,10 +196,10 @@ describe('TransactionTypeBaseComponent', () => {
     it('should update data and then set processing to false', async () => {
       component.ngOnInit();
       const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
+        component.transaction(),
         '999',
-        component.form,
-        component.formProperties,
+        component.form(),
+        component.formProperties(),
       );
       await component.processPayload(payload, navEvent);
       expect(transactionServiceSpy.update).toHaveBeenCalled();
@@ -199,14 +207,14 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should set processing to false if no transaction type identifier on payload', () => {
-      component.form.addControl('linkedF3xId', new SubscriptionFormControl());
-      component.form.get('linkedF3xId')?.setValue('321');
+      component.form().addControl('linkedF3xId', new SignalFormControl(injector));
+      component.form().get('linkedF3xId')?.setValue('321');
 
       const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
+        component.transaction(),
         '999',
-        component.form,
-        component.formProperties,
+        component.form(),
+        component.formProperties(),
       );
       expect(payload.report_ids?.length).toEqual(2);
       expect(payload.report_ids?.includes('321')).toBeTrue();
@@ -215,16 +223,15 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('confirmWithUser', () => {
     it('should throw an error if no template map', async () => {
-      const contactConfig = component.transaction!.transactionType?.contactConfig;
-      component.transaction!.transactionType = {} as TransactionType;
+      const contactConfig = component.transaction()!.transactionType?.contactConfig;
+      component.transaction()!.transactionType = {} as TransactionType;
       await expectAsync(
         testwrapperService.confirmWithUser(
-          component.form,
+          component.form(),
           contactConfig,
-          component.getContact.bind(this),
-          component.getTemplateMap.bind(this),
+          component.confirmationContext,
           'dialog',
-          component.transaction,
+          component.transaction(),
         ),
       ).toBeRejectedWithError('Fecfile: Cannot find template map when confirming transaction');
     });
@@ -232,38 +239,36 @@ describe('TransactionTypeBaseComponent', () => {
     it('should return without confirmation if using parent and contact_1', fakeAsync(async () => {
       if (!component.transaction) throw new Error('Bad test');
       const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
+        component.transaction(),
         '999',
-        component.form,
-        component.formProperties,
+        component.form(),
+        component.formProperties(),
       );
-      expect(Object.keys(component.transaction.transactionType.contactConfig)[0]).toEqual('contact_1');
+      expect(Object.keys(component.transaction()!.transactionType.contactConfig)[0]).toEqual('contact_1');
       payload.transactionType.useParentContact = true;
       testwrapperService.confirmWithUser(
-        component.form,
-        component.transaction.transactionType?.contactConfig ?? {},
-        component.getContact.bind(this),
-        component.getTemplateMap.bind(this),
+        component.form(),
+        component.transaction()!.transactionType?.contactConfig ?? {},
+        component.confirmationContext,
         'dialog',
-        component.transaction,
+        component.transaction(),
       );
       expect(confirmSpy).toHaveBeenCalledTimes(0);
     }));
 
     it('should generate confirm message if there is no contact id', () => {
-      if (!component.transaction) throw new Error('Bad test');
+      if (!component.transaction()) throw new Error('Bad test');
       confirmSpy.and.callFake((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
-      (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
+      (component.transaction()!['contact_1' as keyof Transaction] as Contact).id = undefined;
 
       testwrapperService.confirmWithUser(
-        component.form,
-        component.transaction.transactionType?.contactConfig ?? {},
-        component.getContact.bind(this),
-        component.getTemplateMap.bind(this),
+        component.form(),
+        component.transaction()!.transactionType?.contactConfig ?? {},
+        component.confirmationContext,
         'dialog',
-        component.transaction,
+        component.transaction(),
       );
       expect(createMessageSpy).toHaveBeenCalled();
     });
@@ -278,19 +283,19 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('save navigation', () => {
     beforeEach(() => {
-      navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+      navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction());
     });
 
     it('should exit if form is invalid', () => {
-      component.form.addControl('test', new SubscriptionFormControl(undefined, Validators.required));
-      expect(component.form.invalid).toBeTruthy();
+      component.form().addControl('test', new SignalFormControl(injector, undefined, Validators.required));
+      expect(component.form().invalid).toBeTruthy();
       component.handleNavigate(navEvent);
       expect(navigateToSpy).toHaveBeenCalledTimes(0);
     });
 
     it('should exit if transaction is missing', () => {
-      expect(component.form.invalid).toBeFalsy();
-      component.transaction = undefined;
+      expect(component.form().invalid).toBeFalsy();
+      (component.transaction as any) = createSignal(undefined);
       component.handleNavigate(navEvent);
       expect(navigateToSpy).toHaveBeenCalledTimes(0);
     });
@@ -315,11 +320,12 @@ describe('TransactionTypeBaseComponent', () => {
 
     it('should save on confirmation', async () => {
       component.ngOnInit();
-      if (component.transaction) transactionServiceSpy.update.and.returnValue(Promise.resolve(component.transaction));
+      if (component.transaction)
+        transactionServiceSpy.update.and.returnValue(Promise.resolve(component.transaction()!));
       confirmSpy.and.callFake((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
-      expect(component.form.invalid).toBeFalse();
+      expect(component.form().invalid).toBeFalse();
       await component.handleNavigate(navEvent);
 
       expect(transactionServiceSpy.update).toHaveBeenCalled();
@@ -480,8 +486,8 @@ describe('TransactionTypeBaseComponent', () => {
       component.updateFormWithCandidateContact(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.form,
-        component.transaction,
+        component.form(),
+        component.transaction(),
         component.contactIdMap['contact_2'],
       );
     });
@@ -494,8 +500,8 @@ describe('TransactionTypeBaseComponent', () => {
       component.updateFormWithSecondaryContact(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.form,
-        component.transaction,
+        component.form(),
+        component.transaction(),
         component.contactIdMap['contact_2'],
       );
     });
@@ -508,8 +514,8 @@ describe('TransactionTypeBaseComponent', () => {
       component.updateFormWithTertiaryContact(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.form,
-        component.transaction,
+        component.form(),
+        component.transaction(),
         component.contactIdMap['contact_2'],
       );
     });
@@ -522,9 +528,7 @@ describe('TransactionTypeBaseComponent', () => {
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
         return true;
       });
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual('MEMO ITEM');
-      });
+      expect(component.memoCodeCheckboxLabel()).toEqual('MEMO ITEM');
       expect(spy).toHaveBeenCalled();
     });
 
@@ -534,24 +538,20 @@ describe('TransactionTypeBaseComponent', () => {
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
         return false;
       });
-      const memo = component.form.get(component.transactionType.templateMap.memo_code);
+      const memo = component.form().get(component.transactionType()!.templateMap.memo_code);
       if (!memo) throw new Error('missing memo');
       memo.addValidators([Validators.requiredTrue]);
-      let result = '';
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => (result = res));
       memo.setValue('');
-      expect(result).toEqual('MEMO ITEM');
+      expect(component.memoCodeCheckboxLabel()).toEqual('MEMO ITEM');
       expect(spy).toHaveBeenCalled();
     });
 
     it('should return optional label if memo not required', fakeAsync(() => {
       component.ngOnInit();
       if (!component.transactionType) throw new Error('Bad test');
-      component.form.get(component.transactionType?.templateMap.memo_code)?.clearValidators();
+      component.form().get(component.transactionType()!.templateMap.memo_code)?.clearValidators();
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.returnValue(false);
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual('MEMO ITEM (OPTIONAL)');
-      });
+      expect(component.memoCodeCheckboxLabel()).toEqual('MEMO ITEM (OPTIONAL)');
       tick();
       expect(spy).toHaveBeenCalled();
     }));
@@ -559,7 +559,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('initInheritedFieldsFromParent', () => {
     it('should throw an error when no transaction', () => {
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
       expect(function () {
         component.initInheritedFieldsFromParent();
       }).toThrow(new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent'));
@@ -568,7 +568,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('getConfirmations()', () => {
     it('should return false if no transaction', async () => {
-      component.transaction = undefined;
+      (component.transaction as any) = createSignal(undefined);
       const res = await component.getConfirmations();
       expect(res).toBeFalse();
     });
@@ -585,21 +585,21 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('should populate treasurer data from committee for schedule E', () => {
-    component.transaction = testIndependentExpenditure;
+    (component.transaction as any) = createSignal(testIndependentExpenditure);
     fixture.detectChanges();
-    expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(
+    expect(component.form().get(component.templateMap()!['signatory_1_last_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_2,
     );
-    expect(component.form.get(component.templateMap['signatory_1_first_name'])!.value).toBe(
+    expect(component.form().get(component.templateMap()!['signatory_1_first_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_1,
     );
-    expect(component.form.get(component.templateMap['signatory_1_middle_name'])!.value).toBe(
+    expect(component.form().get(component.templateMap()!['signatory_1_middle_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_middle,
     );
-    expect(component.form.get(component.templateMap['signatory_1_prefix'])!.value).toBe(
+    expect(component.form().get(component.templateMap()!['signatory_1_prefix'])!.value).toBe(
       testCommitteeAccount.treasurer_name_prefix,
     );
-    expect(component.form.get(component.templateMap['signatory_1_suffix'])!.value).toBe(
+    expect(component.form().get(component.templateMap()!['signatory_1_suffix'])!.value).toBe(
       testCommitteeAccount.treasurer_name_suffix,
     );
   });
@@ -608,13 +608,13 @@ describe('TransactionTypeBaseComponent', () => {
     it('should request the previous transaction', fakeAsync(() => {
       const form = new FormGroup(
         {
-          expenditure_amount: new SubscriptionFormControl(),
-          expenditure_date: new SubscriptionFormControl(),
+          expenditure_amount: new SignalFormControl(injector),
+          expenditure_date: new SignalFormControl(injector),
         },
         { updateOn: 'blur' },
       );
-      const contactId$ = new Subject<string>();
-      const contactIdMap: ContactIdMapType = { contact_1: contactId$ };
+      const contactId = signal<string>('');
+      const contactIdMap: ContactIdMapType = { contact_1: contactId };
 
       const transaction = SchETransaction.fromJSON({
         transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
@@ -622,16 +622,23 @@ describe('TransactionTypeBaseComponent', () => {
         expenditure_amount: 50,
       });
 
-      TransactionFormUtils.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, {
-        amount: 'expenditure_amount',
-        date: 'expenditure_date',
-      } as TransactionTemplateMapType);
+      TransactionFormUtils.handleShowAggregateValueChanges(
+        component,
+        form,
+        transaction,
+        contactIdMap,
+        {
+          amount: 'expenditure_amount',
+          date: 'expenditure_date',
+        } as TransactionTemplateMapType,
+        injector,
+      );
 
       form.get('expenditure_amount')?.setValue(25);
       form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
       expect(transactionServiceSpy.getPreviousTransactionForAggregate).not.toHaveBeenCalled();
 
-      contactId$.next('1234-abcd-1234-abcd');
+      contactId.set('1234-abcd-1234-abcd');
       tick();
       expect(transactionServiceSpy.getPreviousTransactionForAggregate).toHaveBeenCalled();
     }));

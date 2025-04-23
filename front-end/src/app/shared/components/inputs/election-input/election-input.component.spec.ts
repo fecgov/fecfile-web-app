@@ -7,11 +7,14 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ElectionInputComponent } from './election-input.component';
 import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('ElectionInputComponent', () => {
   let component: ElectionInputComponent;
   let fixture: ComponentFixture<ElectionInputComponent>;
+  let injector: Injector;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,17 +29,22 @@ describe('ElectionInputComponent', () => {
       ],
     }).compileComponents();
 
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(ElectionInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        election_code: new SubscriptionFormControl(''),
-        election_other_description: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          election_code: new SignalFormControl(injector, ''),
+          election_other_description: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
-    component.templateMap = testTemplateMap;
+    (component.transaction as any) = createSignal(
+      getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE),
+    );
+    (component.templateMap as any) = createSignal(testTemplateMap);
     fixture.detectChanges();
   });
 
@@ -45,40 +53,42 @@ describe('ElectionInputComponent', () => {
   });
 
   it('should update the election_code from the electionType and electionYear', () => {
-    component.form.patchValue({
+    component.form().patchValue({
       electionType: 'G',
       electionYear: '2024',
     });
-    expect(component.form.get('election_code')?.value).toBe('G2024');
+    expect(component.form().get('election_code')?.value).toBe('G2024');
   });
 
   it('should flag missing required fields', () => {
-    component.form.patchValue({
+    component.form().patchValue({
       electionType: 'G',
       electionYear: '2024',
     });
-    expect(component.form.status).toBe('VALID');
+    expect(component.form().status).toBe('VALID');
 
-    component.form.patchValue({
+    component.form().patchValue({
       electionType: 'S',
       electionYear: '',
     });
-    expect(component.form.status).toBe('INVALID');
+    expect(component.form().status).toBe('INVALID');
   });
 
   it('should disable all fields', () => {
     fixture = TestBed.createComponent(ElectionInputComponent);
     component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        election_code: new SubscriptionFormControl(''),
-        election_other_description: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
+    (component.form as any) = createSignal(
+      new FormGroup(
+        {
+          election_code: new SignalFormControl(injector, ''),
+          election_other_description: new SignalFormControl(injector, ''),
+        },
+        { updateOn: 'blur' },
+      ),
     );
-    component.form.disable();
-    component.templateMap = testTemplateMap;
+    component.form().disable();
+    (component.templateMap as any) = createSignal(testTemplateMap);
     fixture.detectChanges();
-    expect(component.form.get('electionYear')?.disabled).toBe(true);
+    expect(component.form().get('electionYear')?.disabled).toBe(true);
   });
 });

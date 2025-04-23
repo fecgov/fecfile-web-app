@@ -145,8 +145,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
     return this.confirmationService.confirmWithUser(
       this.childForm_2()!,
       this.childTransaction_2()?.transactionType?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
+      this.confirmationContext,
       'childDialog_2',
       this.childTransaction_2(),
     );

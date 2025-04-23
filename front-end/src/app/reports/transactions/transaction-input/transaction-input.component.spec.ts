@@ -35,10 +35,10 @@ describe('TransactionInputComponent', () => {
     component.transaction.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };
-    component.form.setControl('loan_balance', new SubscriptionFormControl());
-    component.form.setControl('contribution_amount', new SubscriptionFormControl());
-    component.form.setControl('payment_amount', new SubscriptionFormControl());
-    component.form.setControl('balance_at_close', new SubscriptionFormControl());
+    component.form.setControl('loan_balance', new SignalFormControl(injector));
+    component.form.setControl('contribution_amount', new SignalFormControl(injector));
+    component.form.setControl('payment_amount', new SignalFormControl(injector));
+    component.form.setControl('balance_at_close', new SignalFormControl(injector));
     component.ngOnInit();
   });
 
@@ -72,7 +72,7 @@ describe('TransactionInputComponent', () => {
 
   it('contactTypeSelected should update entity_type form control', () => {
     const fb = new FormBuilder();
-    const form = fb.group({ entity_type: new SubscriptionFormControl() });
+    const form = fb.group({ entity_type: new SignalFormControl(injector) });
     component.form = form;
     component.contactTypeSelected(ContactTypes.ORGANIZATION);
     expect(component.form.get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);

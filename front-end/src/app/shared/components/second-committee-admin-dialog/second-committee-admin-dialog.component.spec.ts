@@ -53,28 +53,28 @@ describe('SecondCommitteeAdminDialogComponent', () => {
   });
 
   it('should initialize the form with default values', () => {
-    expect(component.form.get('role')?.value).toBe(Roles.COMMITTEE_ADMINISTRATOR);
-    expect(component.form.get('email')?.value).toBe('');
+    expect(component.form().get('role')?.value).toBe(Roles.COMMITTEE_ADMINISTRATOR);
+    expect(component.form().get('email')?.value).toBe('');
   });
 
   it('should mark the form as invalid when email is empty', () => {
-    component.form.get('email')?.setValue('');
-    component.form.get('email')?.markAsTouched();
+    component.form().get('email')?.setValue('');
+    component.form().get('email')?.markAsTouched();
     fixture.detectChanges();
-    expect(component.form.invalid).toBeTrue();
+    expect(component.form().invalid).toBeTrue();
   });
 
   it('should dispatch singleClickEnableAction when form is invalid on save', () => {
     spyOn(store, 'dispatch');
-    component.form.get('email')?.setValue('');
+    component.form().get('email')?.setValue('');
     component.save();
     expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
   });
 
   it('should call addMember and show success message on valid form submission', fakeAsync(() => {
     spyOn(store, 'dispatch');
-    component.form.get('email')?.setValue('test@example.com');
-    component.form.updateValueAndValidity();
+    component.form().get('email')?.setValue('test@example.com');
+    component.form().updateValueAndValidity();
     const addMemberSpy = spyOn(component.memberService, 'addMember').and.returnValue(
       Promise.resolve(new CommitteeMember()),
     );

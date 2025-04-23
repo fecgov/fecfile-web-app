@@ -1,10 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TransactionContactUtils } from '../components/transaction-type-base/transaction-contact.utils';
-import { Transaction, Contact, TransactionTemplateMapType, ContactTypes } from '../models';
+import { Transaction, Contact, TransactionTemplateMapType, ContactTypes, ContactConfig } from '../models';
 import { ConfirmationService } from 'primeng/api';
 
 export type dialogs = 'dialog' | 'childDialog' | 'childDialog_2';
+
+export interface ConfirmationContext {
+  getContact(contactKey: string, transaction?: Transaction): Contact | null;
+  getTemplateMap(contactKey: string, transaction?: Transaction): TransactionTemplateMapType | undefined;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -14,23 +19,18 @@ export class ConfirmationWrapperService {
 
   async confirmWithUser(
     form: FormGroup,
-    contactConfig: {
-      [contactKey: string]: {
-        [formField: string]: string;
-      };
-    },
-    getContact: (contactKey: string, transaction?: Transaction) => Contact | null,
-    getTemplateMap: (contactKey: string, transaction?: Transaction) => TransactionTemplateMapType | undefined,
+    contactConfig: ContactConfig,
+    context: ConfirmationContext,
     targetDialog: dialogs = 'dialog',
     transaction?: Transaction,
   ): Promise<boolean> {
     for (const [contactKey, config] of Object.entries(contactConfig)) {
-      const templateMap = getTemplateMap(contactKey, transaction);
+      const templateMap = context.getTemplateMap(contactKey, transaction);
       if (!templateMap) {
         throw new Error('Fecfile: Cannot find template map when confirming transaction');
       }
 
-      const contact = getContact(contactKey, transaction);
+      const contact = context.getContact(contactKey, transaction);
       if (contact === null) continue;
       let result = await this.createContactConfirmation(contact, form, templateMap, contactKey, targetDialog);
       if (!result) return false;
