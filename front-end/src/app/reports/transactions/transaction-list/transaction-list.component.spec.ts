@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -23,7 +24,6 @@ import { createSignal } from '@angular/core/primitives/signals';
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
-  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -74,7 +74,6 @@ describe('TransactionListComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionListComponent);
-    router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

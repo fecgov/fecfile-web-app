@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';

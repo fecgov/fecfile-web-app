@@ -17,7 +17,6 @@ import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { firstValueFrom, of } from 'rxjs';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { Injector } from '@angular/core';

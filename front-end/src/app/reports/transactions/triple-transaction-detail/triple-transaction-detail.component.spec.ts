@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -23,13 +24,11 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { createSignal } from '@angular/core/primitives/signals';
-import { SignalFormControl } from 'app/shared/utils/signal-form-control';
-import { Injector } from '@angular/core';
 
 describe('TripleTransactionDetailComponent', () => {
   let component: TripleTransactionDetailComponent;
   let fixture: ComponentFixture<TripleTransactionDetailComponent>;
-  let injector: Injector;
+
   const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
   transaction.children = [
     getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
@@ -66,7 +65,6 @@ describe('TripleTransactionDetailComponent', () => {
         FecDatePipe,
       ],
     }).compileComponents();
-    injector = TestBed.inject(Injector);
   });
 
   beforeEach(() => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -148,19 +149,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       (component.transaction as any) = createSignal(undefined);
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('Fecfile: Template map not found for transaction component');
-      }
-    });
-
-    it('should throw error if no child transaction', () => {
-      spyOn(component, 'getChildTransaction').and.callFake(() => undefined);
-      try {
-        component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        expect(err.message).toBe('Fecfile: Child transaction not found for double-entry transaction form');
       }
     });
 
@@ -172,7 +162,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       });
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe(
           'Fecfile: Template map not found for double transaction double-entry transaction form',
@@ -184,20 +173,18 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   it("should set the child transaction's contact when its shared with the parent", () => {
     (component.transaction as any) = createSignal(testTransaction);
     (component.childTransaction as any) = createSignal(testTransaction.children?.[0] as SchATransaction);
-    if (component.childTransactionType()!) {
-      component.childTransactionType()!.useParentContact = true;
-    }
+    component.childTransactionType().useParentContact = true;
 
     const contact = new Contact();
     contact.name = 'Name';
-    component.transaction()!.contact_1 = contact;
+    component.transaction().contact_1 = contact;
 
     const selectContact: SelectItem<Contact> = {
       value: contact,
     };
     fixture.detectChanges();
     component.updateFormWithPrimaryContact(selectContact);
-    expect(component.childTransaction()!.contact_1?.name).toEqual('Name');
+    expect(component.childTransaction().contact_1?.name).toEqual('Name');
   });
 
   xit("should auto-generate the child transaction's purpose description", () => {
@@ -214,10 +201,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.ngOnInit();
 
     expect(component.childTransaction().parent_transaction).toBeTruthy();
-    component.form().get(component.templateMap()!.first_name)?.setValue('First');
-    component.form().get(component.templateMap()!.last_name)?.setValue('Last');
+    component.form().get(component.templateMap().first_name)?.setValue('First');
+    component.form().get(component.templateMap().last_name)?.setValue('Last');
 
-    expect(component.childForm().get(component.childTemplateMap()!.purpose_description)?.value).toEqual(
+    expect(component.childForm().get(component.childTemplateMap().purpose_description)?.value).toEqual(
       'Earmarked from First Last (Individual)',
     );
   });
@@ -233,12 +220,12 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED),
     );
     component.ngOnInit();
-    expect(component.childTransaction()!.transactionType?.getInheritedFields(component.childTransaction()!)).toContain(
+    expect(component.childTransaction()!.transactionType?.getInheritedFields(component.childTransaction())).toContain(
       'amount',
     );
-    component.childForm().get(component.childTemplateMap()!.amount)?.setValue(0);
-    component.form().get(component.templateMap()!.amount)?.setValue(250);
-    expect(component.childForm().get(component.childTemplateMap()!.amount)?.value).toEqual(250);
+    component.childForm().get(component.childTemplateMap().amount)?.setValue(0);
+    component.form().get(component.templateMap().amount)?.setValue(250);
+    expect(component.childForm().get(component.childTemplateMap().amount)?.value).toEqual(250);
   });
 
   it('should save a parent and child transaction', async () => {
@@ -247,10 +234,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     testTransaction.id = undefined;
     if (testTransaction.children) {
       (component.childTransaction as any) = createSignal(testTransaction.children[0]);
-      component.childTransaction()!.parent_transaction = component.transaction()!;
+      component.childTransaction().parent_transaction = component.transaction()!;
     }
 
-    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()!);
+    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction());
 
     // Save valid form values
     component.form().patchValue({

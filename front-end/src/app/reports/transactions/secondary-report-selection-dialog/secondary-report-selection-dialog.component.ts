@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, output, viewChild } from '@angular/core';
+import { Component, computed, inject, input, model, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Report, ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/report.model';

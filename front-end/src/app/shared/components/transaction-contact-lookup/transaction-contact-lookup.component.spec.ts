@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -92,7 +93,7 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
-    component.detailVisible = false;
+    component.detailVisible.set(false);
     const contact = Contact.fromJSON({ ...testContact });
     component.contactLookupSelected(contact);
     contact.id = undefined;
@@ -101,7 +102,7 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('selecting create new contact should open the contact dialog', () => {
-    component.detailVisible = false;
+    component.detailVisible.set(false);
     component.createNewContactSelected();
     expect(component.detailVisible).toBeTrue();
   });

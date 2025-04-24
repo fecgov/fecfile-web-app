@@ -1,9 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import {
-  createAction,
-  TableAction,
-  TableListBaseComponent,
-} from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';

@@ -45,51 +45,6 @@ describe('ReattRedesUtils', () => {
     });
   });
 
-  // describe('overlayForms', () => {
-  //   const toForm = new FormGroup(
-  //     {
-  //       contribution_purpose_descip: new SignalFormControl(injector, ''),
-  //       memo_code: new SignalFormControl(injector, ''),
-  //     },
-  //     { updateOn: 'blur' },
-  //   );
-  //   const fromForm = new FormGroup(
-  //     {
-  //       contribution_purpose_descrip: new SignalFormControl(injector, ''),
-  //       memo_code: new SignalFormControl(injector, ''),
-  //       contributor_organization_name: new SignalFormControl(injector, ''),
-  //       contributor_last_name: new SignalFormControl(injector, ''),
-  //       contributor_first_name: new SignalFormControl(injector, ''),
-  //     },
-  //     { updateOn: 'blur' },
-  //   );
-  //   let toTxn: SchATransaction;
-  //   let fromTxn: SchATransaction;
-
-  //   beforeEach(() => {
-  //     toTxn = getTestIndividualReceipt();
-  //     fromTxn = getTestIndividualReceipt();
-  //   });
-
-  //   // it('should overlay reattribution forms correctly', () => {
-  //   //   toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
-  //   //   fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
-
-  //   //   ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-  //   //   expect(toForm.get('memo_code')?.enabled).toBeFalse();
-  //   //   expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
-  //   // });
-
-  //   // it('should overlay redesignation forms correctly', () => {
-  //   //   toTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-  //   //   fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
-
-  //   //   ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-  //   //   expect(toForm.get('memo_code')?.enabled).toBeFalse();
-  //   //   expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
-  //   // });
-  // });
-
   describe('getPayloads', () => {
     it('should reorder payload correctly', () => {
       const reattributed = getTestIndividualReceipt();

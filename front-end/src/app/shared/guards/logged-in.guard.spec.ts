@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
@@ -41,8 +42,8 @@ describe('loggedInGuard', () => {
   it('should continue if logged in', () => {
     (loginService.userIsAuthenticated as any) = true;
     const navigateSpy = spyOn(router, 'navigate');
-    const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {} as any;
     const safe = executeGuard(route, state) as boolean | UrlTree;
     expect(navigateSpy).not.toHaveBeenCalled();
     expect(safe).toEqual(true);
@@ -50,8 +51,8 @@ describe('loggedInGuard', () => {
 
   it('should redirect to login if not logged in', () => {
     (loginService.userIsAuthenticated as any) = false;
-    const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {} as any;
     const safe = executeGuard(route, state) as boolean | UrlTree;
     expect(safe).toEqual(router.createUrlTree(['login']));
   });

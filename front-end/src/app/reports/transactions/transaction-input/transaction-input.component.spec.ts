@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { TransactionInputComponent } from './transaction-input.component';
@@ -36,7 +37,7 @@ describe('TransactionInputComponent', () => {
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;
     (component.transaction as any) = createSignal(testScheduleATransaction);
-    component.transaction()!.transactionType.mandatoryFormValues = {
+    component.transaction().transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };
     component.form().setControl('loan_balance', new SignalFormControl(injector));

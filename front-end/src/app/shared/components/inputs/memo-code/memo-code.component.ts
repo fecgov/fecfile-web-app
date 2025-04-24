@@ -110,11 +110,11 @@ export class MemoCodeInputComponent extends BaseTransactionInputComponent {
     if (this.transactionType()?.memoCodeTransactionTypes) {
       const memo_code = this.memoControl()!.value as boolean;
       if (memo_code) {
-        this.transaction()!.transaction_type_identifier =
-          this.transaction()!.transactionType.memoCodeTransactionTypes!.true;
+        this.transaction().transaction_type_identifier =
+          this.transaction().transactionType.memoCodeTransactionTypes!.true;
       } else {
-        this.transaction()!.transaction_type_identifier =
-          this.transaction()!.transactionType.memoCodeTransactionTypes!.false;
+        this.transaction().transaction_type_identifier =
+          this.transaction().transactionType.memoCodeTransactionTypes!.false;
       }
     }
   }

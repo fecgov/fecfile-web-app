@@ -1,16 +1,8 @@
-import { FormGroup, Validators } from '@angular/forms';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
 import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
-import { Injector } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { SignalFormControl } from '../signal-form-control';
 
-let injector: Injector;
 describe('Redesignation From', () => {
-  beforeEach(() => {
-    injector = TestBed.inject(Injector);
-  });
   describe('overlayTransactionProperties', () => {
     it('should override default properties', () => {
       const fromTransaction = RedesignationFromUtils.overlayTransactionProperties(
@@ -23,45 +15,4 @@ describe('Redesignation From', () => {
       expect(fromTransaction.reatt_redes_id).toBe(testScheduleBTransaction.id);
     });
   });
-
-  // describe('overlayForm', () => {
-  //   it('should update validators and watch for value changes', () => {
-  //     const transaction = { ...testScheduleBTransaction } as SchBTransaction;
-  //     transaction.parent_transaction = {
-  //       id: '888',
-  //       reatt_redes: SchBTransaction.fromJSON({
-  //         id: '999',
-  //         expenditure_amount: 100,
-  //       }),
-  //     } as unknown as SchBTransaction;
-
-  //     const fromForm = new FormGroup(
-  //       {
-  //         expenditure_amount: new SignalFormControl<number | null>(injector, null),
-  //         memo_code: new SignalFormControl(injector, ''),
-  //         expenditure_purpose_descrip: new SignalFormControl(injector, ''),
-  //       },
-  //       { updateOn: 'blur' },
-  //     );
-  //     const toForm = new FormGroup(
-  //       {
-  //         payee_organization_name: new SignalFormControl(injector, 'a'),
-  //         payee_last_name: new SignalFormControl(injector, ''),
-  //         payee_first_name: new SignalFormControl(injector, ''),
-  //         expenditure_amount: new SignalFormControl(injector, '100'),
-  //         expenditure_purpose_descrip: new SignalFormControl(injector, ''),
-  //       },
-  //       { updateOn: 'blur' },
-  //     );
-
-  //     expect(fromForm.get('expenditure_purpose_descrip')?.enabled).toBeTrue();
-  //     RedesignationFromUtils.overlayForm(fromForm, transaction, toForm);
-  //     expect(fromForm.get('expenditure_purpose_descrip')?.enabled).toBeFalse();
-  //     expect(fromForm.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
-  //     expect(fromForm.get('memo_code')?.value).toBeTrue();
-
-  //     toForm.get('expenditure_amount')?.setValue('5');
-  //     expect(fromForm.get('expenditure_amount')?.value).toBe(-5);
-  //   });
-  // });
 });

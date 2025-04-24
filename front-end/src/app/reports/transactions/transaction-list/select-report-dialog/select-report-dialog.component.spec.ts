@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SelectReportDialogComponent } from './select-report-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';

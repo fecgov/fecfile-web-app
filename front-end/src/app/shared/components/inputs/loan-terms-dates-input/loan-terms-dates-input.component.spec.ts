@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';

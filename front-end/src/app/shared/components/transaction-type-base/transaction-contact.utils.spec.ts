@@ -7,16 +7,15 @@ import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/sc
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
-import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TestBed } from '@angular/core/testing';
-import { Injector, signal, WritableSignal } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
   let selectItem: SelectItem<Contact>;
-  let contactId = signal('');
+  const contactId = signal('');
   let injector: Injector;
   beforeEach(() => {
     injector = TestBed.inject(Injector);

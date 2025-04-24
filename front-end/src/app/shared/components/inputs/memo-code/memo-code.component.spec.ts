@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -167,14 +168,14 @@ describe('MemoCodeInputComponent', () => {
       getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT),
     );
 
-    const trueTTI = component.transaction()!.transactionType?.memoCodeTransactionTypes?.true;
-    const falseTTI = component.transaction()!.transactionType?.memoCodeTransactionTypes?.false;
+    const trueTTI = component.transaction().transactionType?.memoCodeTransactionTypes?.true;
+    const falseTTI = component.transaction().transactionType?.memoCodeTransactionTypes?.false;
 
     component.memoControl()!.setValue(true);
-    expect(component.transaction()!.transaction_type_identifier).toEqual(trueTTI);
+    expect(component.transaction().transaction_type_identifier).toEqual(trueTTI);
 
     component.memoControl()!.setValue(false);
-    expect(component.transaction()!.transaction_type_identifier).toEqual(falseTTI);
+    expect(component.transaction().transaction_type_identifier).toEqual(falseTTI);
   });
 
   it('should form the memoCodeMapOptions correctly', () => {
@@ -184,10 +185,10 @@ describe('MemoCodeInputComponent', () => {
 
     for (const option of component.memoCodeMapOptions()) {
       if (option.value === false) {
-        expect(option.label).toEqual(component.transaction()!.transactionType?.memoCodeMap?.false!);
+        expect(option.label).toEqual(component.transactionType().memoCodeMap!.false);
       }
       if (option.value === true) {
-        expect(option.label).toEqual(component.transaction()!.transactionType?.memoCodeMap?.true!);
+        expect(option.label).toEqual(component.transactionType().memoCodeMap!.true);
       }
     }
   });

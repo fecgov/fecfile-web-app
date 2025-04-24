@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TestBed } from '@angular/core/testing';
 import { PollerComponent } from './poller.component';
 import { Location } from '@angular/common';
 import { signal } from '@angular/core';
@@ -6,7 +7,6 @@ import { PollerService } from 'app/shared/services/poller.service';
 
 describe('PollerComponent', () => {
   let component: PollerComponent;
-  let fixture: ComponentFixture<PollerComponent>;
   let mockPollerService: jasmine.SpyObj<PollerService>;
   let mockLocation: jasmine.SpyObj<Location>;
 
@@ -27,7 +27,6 @@ describe('PollerComponent', () => {
     });
 
     component = TestBed.inject(PollerComponent);
-    fixture = TestBed.createComponent(PollerComponent);
   });
   it('should compute deploymentUrl correctly', () => {
     // Backup original location

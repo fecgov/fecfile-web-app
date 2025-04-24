@@ -7,7 +7,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createAction, TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { ReportService } from 'app/shared/services/report.service';

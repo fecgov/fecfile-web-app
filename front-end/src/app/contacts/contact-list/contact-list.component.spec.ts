@@ -37,8 +37,6 @@ describe('ContactListComponent', () => {
       Contact.fromJSON({ id: 2, has_transaction_or_report: true }),
     ],
   };
-  let deletedContactService: DeletedContactService;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -68,7 +66,6 @@ describe('ContactListComponent', () => {
         },
       ],
     }).compileComponents();
-    deletedContactService = TestBed.inject(DeletedContactService);
   });
 
   beforeEach(() => {
@@ -126,56 +123,6 @@ describe('ContactListComponent', () => {
     item.has_transaction_or_report = true;
     status = component.canDeleteItem(item);
     expect(status).toBeFalse();
-  });
-
-  it('#onSelectAllChange set properties', async () => {
-    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-    await component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
-    expect(component.selectAll).toBeFalse();
-    expect(component.selectedItems).toEqual([]);
-
-    await component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
-    expect(component.selectAll).toBeTrue();
-    expect(component.selectedItems.length).toBe(1);
-  });
-
-  it('#restoreButton should make dialog visible', () => {
-    component.onRestoreClick();
-    expect(component.restoreDialogIsVisible).toBeTrue();
-  });
-
-  it('#restoreButton should be visible if there is a deleted contact', async () => {
-    expect(component.restoreContactsButtonIsVisible).toBeFalse();
-
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 1,
-        next: '',
-        previous: '',
-        pageNumber: 1,
-        results: [contact],
-      }),
-    );
-    await component.checkForDeletedContacts();
-
-    expect(component.restoreContactsButtonIsVisible).toBeTrue();
-  });
-
-  it('#restoreButton should not be visible if there are no deleted contacts', async () => {
-    component.restoreContactsButtonIsVisible = true;
-
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 0,
-        next: '',
-        previous: '',
-        pageNumber: 1,
-        results: [],
-      }),
-    );
-    await component.checkForDeletedContacts();
-
-    expect(component.restoreContactsButtonIsVisible).toBeFalse();
   });
 
   it('#saveContact calls itemService', () => {

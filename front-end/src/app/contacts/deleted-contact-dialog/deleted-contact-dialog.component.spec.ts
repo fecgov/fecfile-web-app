@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DeletedContactDialogComponent } from './deleted-contact-dialog.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -45,7 +46,7 @@ describe('DeletedContactDialogComponent', () => {
 
   it('should enable restore', () => {
     (component.visible as any) = createSignal(true);
-    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
+    component.selectedItems.set([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     component.hide();
     expect(component.selectedItems).toEqual([]);
   });
@@ -53,7 +54,7 @@ describe('DeletedContactDialogComponent', () => {
   it('should restore', async () => {
     spyOn(service, 'restore').and.returnValue(Promise.resolve(['1']));
     (component.visible as any) = createSignal(true);
-    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
+    component.selectedItems.set([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     await component.restoreSelected();
 
     expect(component.selectedItems).toEqual([]);

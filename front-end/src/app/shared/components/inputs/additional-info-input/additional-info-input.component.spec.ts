@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';

@@ -13,7 +13,7 @@ export abstract class FormComponent {
   protected readonly fb = inject(FormBuilder);
   protected readonly store = inject(Store);
   protected readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
-  protected readonly report = this.store.selectSignal(selectActiveReport);
+  readonly report = this.store.selectSignal(selectActiveReport);
 
   protected abstract readonly form: Signal<FormGroup>;
   formSubmitted = false;

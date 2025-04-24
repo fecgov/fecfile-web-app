@@ -1,21 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CalendarComponent } from './calendar.component';
-import { Component, Injector, Input } from '@angular/core';
+import { Injector } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { DatePickerModule } from 'primeng/datepicker';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { createSignal } from '@angular/core/primitives/signals';
-
-@Component({
-  selector: 'app-error-messages',
-  template: '',
-})
-class MockErrorMessagesComponent {
-  @Input() control!: SignalFormControl<Date | null>;
-  @Input() formSubmitted!: boolean;
-  @Input() requiredErrorMessage!: string;
-}
 
 describe('CalendarComponent', () => {
   let component: CalendarComponent;

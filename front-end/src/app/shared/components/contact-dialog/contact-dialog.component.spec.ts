@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -28,7 +29,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { createSignal } from '@angular/core/primitives/signals';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
-import { Injector, signal } from '@angular/core';
+import { Injector } from '@angular/core';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 
 describe('ContactDialogComponent', () => {

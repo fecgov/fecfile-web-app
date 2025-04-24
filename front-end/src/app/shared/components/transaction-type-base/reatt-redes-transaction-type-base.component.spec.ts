@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';

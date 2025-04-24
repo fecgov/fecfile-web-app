@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ErrorMessagesComponent } from './error-messages.component';
 import { Injector, LOCALE_ID, Component } from '@angular/core';
@@ -10,7 +11,7 @@ describe('ErrorMessagesComponent', () => {
   let control: SignalFormControl;
 
   @Component({
-    selector: 'test-host',
+    selector: 'app-host',
     template: `<app-error-messages
       [control]="control"
       [formSubmitted]="true"

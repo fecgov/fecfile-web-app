@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -111,7 +112,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
     it('should confirm with user 1 time if only primary transaction contact updated', fakeAsync(() => {
       if (!component.transaction) throw new Error('Bad test');
-      component.transaction()!.contact_1 = testContact;
+      component.transaction().contact_1 = testContact;
       component.getConfirmations().then((res) => {
         expect(res).toBeTrue();
       });
@@ -131,9 +132,9 @@ describe('TripleTransactionTypeBaseComponent', () => {
       expect(component.childForm().invalid).toBeFalse();
       expect(component.transaction()).toBeTruthy();
       expect(component.childTransaction()).toBeTruthy();
-      component.childForm_2()!.addControl('Test', new SignalFormControl(injector, undefined, Validators.required));
-      component.childForm_2()!.updateValueAndValidity();
-      expect(component.childForm_2()!.invalid).toBeTrue();
+      component.childForm_2().addControl('Test', new SignalFormControl(injector, undefined, Validators.required));
+      component.childForm_2().updateValueAndValidity();
+      expect(component.childForm_2().invalid).toBeTrue();
       expect(component.isInvalid()).toBeTrue();
     });
 
@@ -141,7 +142,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       (component.childTransaction_2 as any) = createSignal(undefined);
       expect(component.form().invalid).toBeFalse();
       expect(component.childForm().invalid).toBeFalse();
-      expect(component.childForm_2()!.invalid).toBeFalse();
+      expect(component.childForm_2().invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeFalsy();
@@ -151,7 +152,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
     it('should return false in all other cases', () => {
       expect(component.form().invalid).toBeFalse();
       expect(component.childForm().invalid).toBeFalse();
-      expect(component.childForm_2()!.invalid).toBeFalse();
+      expect(component.childForm_2().invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeTruthy();
@@ -162,17 +163,17 @@ describe('TripleTransactionTypeBaseComponent', () => {
   describe('updateFormWithPrimaryContact', () => {
     it('should run the super version and then update data if ', () => {
       if (!component.childTransaction_2() || !component.transaction()) throw new Error('Bad test');
-      component.childTransaction_2()!.transactionType.useParentContact = true;
-      component.transaction()!.contact_1 = testContact;
+      component.childTransaction_2().transactionType.useParentContact = true;
+      component.transaction().contact_1 = testContact;
       expect(
-        component.childTransaction_2()!?.transactionType?.getUseParentContact(component.childTransaction_2()!),
+        component.childTransaction_2().transactionType?.getUseParentContact(component.childTransaction_2()),
       ).toBeTruthy();
-      expect(component.transaction()!.contact_1).toBeTruthy();
+      expect(component.transaction().contact_1).toBeTruthy();
       const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
       const selectItem: SelectItem<Contact> = { value: testContact };
       component.updateFormWithPrimaryContact(selectItem);
       expect(spy).toHaveBeenCalled();
-      expect(component.childTransaction_2()!.contact_1).toEqual(component.transaction()!.contact_1);
+      expect(component.childTransaction_2().contact_1).toEqual(component.transaction().contact_1);
     });
   });
 
@@ -183,8 +184,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithPrimaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2()!,
-        component.childTransaction_2()!,
+        component.childForm_2(),
+        component.childTransaction_2(),
         component.childContactIdMap_2['contact_1'],
       );
     });
@@ -197,8 +198,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithCandidateContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2()!,
-        component.childTransaction_2()!,
+        component.childForm_2(),
+        component.childTransaction_2(),
         component.childContactIdMap_2['contact_2'],
       );
     });
@@ -211,8 +212,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithSecondaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2()!,
-        component.childTransaction_2()!,
+        component.childForm_2(),
+        component.childTransaction_2(),
         component.childContactIdMap_2['contact_2'],
       );
     });
@@ -225,8 +226,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childUpdateFormWithTertiaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
-        component.childForm_2()!,
-        component.childTransaction_2()!,
+        component.childForm_2(),
+        component.childTransaction_2(),
         component.childContactIdMap_2['contact_3'],
       );
     });
@@ -237,9 +238,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       (component.transaction as any) = createSignal(undefined);
 
       await expectAsync(
-        component.save(
-          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()!),
-        ),
+        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction())),
       ).toBeRejectedWithError('Fecfile: No transactions submitted for triple-entry transaction form.');
     });
   });

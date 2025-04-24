@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -43,7 +43,7 @@ import { ConfirmationContext, ConfirmationWrapperService } from 'app/shared/serv
   ],
   styleUrl: './main-form.component.scss',
 })
-export class MainFormComponent extends MainFormBaseComponent {
+export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   protected override reportService: Form1MService = inject(Form1MService);
   protected readonly confirmationService = inject(ConfirmationWrapperService);
   readonly formProperties: string[] = [

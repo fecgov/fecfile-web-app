@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FecInternationalPhoneInputComponent } from './fec-international-phone-input.component';
 import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -79,9 +80,10 @@ describe('AmountInputComponent', () => {
     (component.transaction as any) = createSignal(transaction);
     (component.templateMap as any) = createSignal(transaction.transactionType.templateMap);
     const checkboxLabel = '';
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     (component.memoCode as any) = createSignal({
       checkboxLabel: createSignal(checkboxLabel),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       updateMemoItemWithDate: (date) => undefined,
     } as MemoCodeInputComponent);
     component.form().patchValue({

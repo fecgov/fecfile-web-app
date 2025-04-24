@@ -4,7 +4,6 @@ import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { PrintPreviewComponent } from './print-preview.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { of } from 'rxjs';
@@ -15,8 +14,6 @@ describe('PrintPreviewComponent', () => {
   let reportService: jasmine.SpyObj<ReportService>;
   let webPrintService: jasmine.SpyObj<WebPrintService>;
   let router: jasmine.SpyObj<Router>;
-  let route: ActivatedRoute;
-  let store: Store;
 
   const mockReport: Report = {
     id: '1',
@@ -59,8 +56,6 @@ describe('PrintPreviewComponent', () => {
     reportService = TestBed.inject(ReportService) as jasmine.SpyObj<ReportService>;
     webPrintService = TestBed.inject(WebPrintService) as jasmine.SpyObj<WebPrintService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    route = TestBed.inject(ActivatedRoute);
-    store = TestBed.inject(Store);
   });
 
   it('should compute downloadURL correctly', () => {

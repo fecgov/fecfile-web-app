@@ -1,16 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Component,
-  TemplateRef,
-  input,
-  output,
-  viewChild,
-  contentChild,
-  computed,
-  model,
-  signal,
-  effect,
-} from '@angular/core';
+import { Component, TemplateRef, input, output, viewChild, contentChild, computed, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
@@ -67,7 +56,7 @@ export class TableComponent<T> {
 
   readonly from = computed(() => (this.totalItems() === 0 ? 0 : this.first() + 1));
   readonly to = computed(() => {
-    let to = this.first() + this.rowsPerPage();
+    const to = this.first() + this.rowsPerPage();
     const total = this.totalItems();
     if (to > total) return total;
     return to;

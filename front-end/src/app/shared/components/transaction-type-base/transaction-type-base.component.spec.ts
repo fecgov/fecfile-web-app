@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +17,7 @@ import {
   testMockStore,
 } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
@@ -123,7 +124,6 @@ describe('TransactionTypeBaseComponent', () => {
       (component.transaction as any) = createSignal(undefined);
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('Fecfile: Template map not found for transaction component');
       }
@@ -150,12 +150,12 @@ describe('TransactionTypeBaseComponent', () => {
     (component.transaction as any) = createSignal(
       getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE),
     );
-    component.transaction()!.parent_transaction = getTestIndividualReceipt();
-    if (component.transaction()!.parent_transaction!.contact_1)
-      component.transaction()!.parent_transaction!.contact_1!.street_1 = 'Parent Street 1';
+    component.transaction().parent_transaction = getTestIndividualReceipt();
+    if (component.transaction().parent_transaction!.contact_1)
+      component.transaction().parent_transaction!.contact_1!.street_1 = 'Parent Street 1';
     component.ngOnInit();
-    expect(component.transaction()!.contact_1?.street_1).toBe('Parent Street 1');
-    expect(component.transaction()!.contact_1_id).toBe('testId');
+    expect(component.transaction().contact_1?.street_1).toBe('Parent Street 1');
+    expect(component.transaction().contact_1_id).toBe('testId');
   });
 
   describe('save', () => {
@@ -223,8 +223,8 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('confirmWithUser', () => {
     it('should throw an error if no template map', async () => {
-      const contactConfig = component.transaction()!.transactionType?.contactConfig;
-      component.transaction()!.transactionType = {} as TransactionType;
+      const contactConfig = component.transaction().transactionType?.contactConfig;
+      component.transaction().transactionType = {} as TransactionType;
       await expectAsync(
         testwrapperService.confirmWithUser(
           component.form(),
@@ -244,11 +244,11 @@ describe('TransactionTypeBaseComponent', () => {
         component.form(),
         component.formProperties(),
       );
-      expect(Object.keys(component.transaction()!.transactionType.contactConfig)[0]).toEqual('contact_1');
+      expect(Object.keys(component.transaction().transactionType.contactConfig)[0]).toEqual('contact_1');
       payload.transactionType.useParentContact = true;
       testwrapperService.confirmWithUser(
         component.form(),
-        component.transaction()!.transactionType?.contactConfig ?? {},
+        component.transaction().transactionType?.contactConfig ?? {},
         component.confirmationContext,
         'dialog',
         component.transaction(),
@@ -261,11 +261,11 @@ describe('TransactionTypeBaseComponent', () => {
       confirmSpy.and.callFake((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
-      (component.transaction()!['contact_1' as keyof Transaction] as Contact).id = undefined;
+      (component.transaction()['contact_1' as keyof Transaction] as Contact).id = undefined;
 
       testwrapperService.confirmWithUser(
         component.form(),
-        component.transaction()!.transactionType?.contactConfig ?? {},
+        component.transaction().transactionType?.contactConfig ?? {},
         component.confirmationContext,
         'dialog',
         component.transaction(),
@@ -320,8 +320,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     it('should save on confirmation', async () => {
       component.ngOnInit();
-      if (component.transaction)
-        transactionServiceSpy.update.and.returnValue(Promise.resolve(component.transaction()!));
+      if (component.transaction) transactionServiceSpy.update.and.returnValue(Promise.resolve(component.transaction()));
       confirmSpy.and.callFake((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
@@ -538,7 +537,7 @@ describe('TransactionTypeBaseComponent', () => {
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
         return false;
       });
-      const memo = component.form().get(component.transactionType()!.templateMap.memo_code);
+      const memo = component.form().get(component.transactionType().templateMap.memo_code);
       if (!memo) throw new Error('missing memo');
       memo.addValidators([Validators.requiredTrue]);
       memo.setValue('');
@@ -549,7 +548,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should return optional label if memo not required', fakeAsync(() => {
       component.ngOnInit();
       if (!component.transactionType) throw new Error('Bad test');
-      component.form().get(component.transactionType()!.templateMap.memo_code)?.clearValidators();
+      component.form().get(component.transactionType().templateMap.memo_code)?.clearValidators();
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.returnValue(false);
       expect(component.memoCodeCheckboxLabel()).toEqual('MEMO ITEM (OPTIONAL)');
       tick();
@@ -587,19 +586,19 @@ describe('TransactionTypeBaseComponent', () => {
   it('should populate treasurer data from committee for schedule E', () => {
     (component.transaction as any) = createSignal(testIndependentExpenditure);
     fixture.detectChanges();
-    expect(component.form().get(component.templateMap()!['signatory_1_last_name'])!.value).toBe(
+    expect(component.form().get(component.templateMap()['signatory_1_last_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_2,
     );
-    expect(component.form().get(component.templateMap()!['signatory_1_first_name'])!.value).toBe(
+    expect(component.form().get(component.templateMap()['signatory_1_first_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_1,
     );
-    expect(component.form().get(component.templateMap()!['signatory_1_middle_name'])!.value).toBe(
+    expect(component.form().get(component.templateMap()['signatory_1_middle_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_middle,
     );
-    expect(component.form().get(component.templateMap()!['signatory_1_prefix'])!.value).toBe(
+    expect(component.form().get(component.templateMap()['signatory_1_prefix'])!.value).toBe(
       testCommitteeAccount.treasurer_name_prefix,
     );
-    expect(component.form().get(component.templateMap()!['signatory_1_suffix'])!.value).toBe(
+    expect(component.form().get(component.templateMap()['signatory_1_suffix'])!.value).toBe(
       testCommitteeAccount.treasurer_name_suffix,
     );
   });

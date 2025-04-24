@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MainFormComponent } from './main-form.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
