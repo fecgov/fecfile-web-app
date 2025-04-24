@@ -111,7 +111,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     this.isNewItem = true;
   }
 
-  public editItem(item: T): Promise<boolean> | void {
+  public editItem(item: T): void | Promise<boolean> {
     this.item = item;
     this.detailVisible = true;
     this.isNewItem = false;
@@ -185,23 +185,25 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   protected abstract getEmptyItem(): T;
 }
 
-export class TableAction {
-  label: string;
-  action: (item?: any) => void | Promise<void> | Promise<boolean>;
+export interface TableAction {
+  readonly label: string;
+  readonly action: (item?: any) => void | Promise<void> | Promise<boolean>;
+  readonly isAvailable: (item?: any) => boolean;
+  readonly isEnabled: (item?: any) => boolean;
+}
 
-  constructor(
-    label: string,
-    action: (item?: any) => void | Promise<void> | Promise<boolean>,
-    isAvailable?: (item?: any) => boolean,
-    isEnabled?: (item?: any) => boolean,
-  ) {
-    this.label = label;
-    this.action = action;
-    this.isAvailable = isAvailable || this.isAvailable;
-    this.isEnabled = isEnabled || this.isEnabled;
-  }
-
-  isAvailable: (item?: any) => boolean = () => true;
-
-  isEnabled: (item?: any) => boolean = () => true;
+export function createAction(
+  label: string,
+  action: (item?: any) => void | Promise<void> | Promise<boolean>,
+  options?: {
+    isAvailable?: (item?: any) => boolean;
+    isEnabled?: (item?: any) => boolean;
+  },
+): TableAction {
+  return {
+    label,
+    action,
+    isAvailable: options?.isAvailable ?? (() => true),
+    isEnabled: options?.isEnabled ?? (() => true),
+  };
 }

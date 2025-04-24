@@ -1,5 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import {
+  createAction,
+  TableAction,
+  TableListBaseComponent,
+} from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
@@ -30,9 +34,9 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
 
-  protected readonly rowActions: TableAction[] = [
-    new TableAction('Edit Role', this.openEdit.bind(this), undefined),
-    new TableAction('Delete', this.confirmDelete.bind(this)),
+  protected readonly rowActions = [
+    createAction('Edit Role', this.openEdit.bind(this)),
+    createAction('Delete', this.confirmDelete.bind(this)),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);

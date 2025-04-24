@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PopoverModule } from 'primeng/popover';
 import { TableActionsButtonComponent } from './table-actions-button.component';
 import { ButtonModule } from 'primeng/button';
-import { TableAction } from '../table-list-base/table-list-base.component';
+import { createAction } from '../table-list-base/table-list-base.component';
 import { Report, ReportStatus } from '../../models/report.model';
 import { createSignal } from '@angular/core/primitives/signals';
 
@@ -29,12 +29,12 @@ describe('TableActionsButtonComponent', () => {
   it('should output an action on click', () => {
     const spy = spyOn(component.tableActionClick, 'emit');
     (component.tableActions as any) = createSignal([
-      new TableAction(
+      createAction(
         'Edit report',
         () => {
           return;
         },
-        (report: Report) => report.report_status === ReportStatus.IN_PROGRESS,
+        { isAvailable: (report: Report) => report.report_status === ReportStatus.IN_PROGRESS },
       ),
     ]);
     (component.actionItem as any) = createSignal({});

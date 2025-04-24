@@ -7,7 +7,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction, TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { ReportService } from 'app/shared/services/report.service';
@@ -103,7 +103,7 @@ describe('ReportListComponent', () => {
   });
   it('#onActionClick should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onRowActionClick(new TableAction('', component.editItem.bind(component)), {
+    component.onRowActionClick(createAction('', component.editItem.bind(component)), {
       id: '888',
       report_type: ReportTypes.F3X,
     } as Report);
@@ -113,7 +113,7 @@ describe('ReportListComponent', () => {
   it('#onDownload should open download panel properly', () => {
     const generateSpy = spyOn(component.dotFecService, 'generateFecFile');
     const report = { id: '888' } as Report;
-    component.onRowActionClick(new TableAction('', component.download.bind(component)), report);
+    component.onRowActionClick(createAction('', component.download.bind(component)), report);
     expect(generateSpy).toHaveBeenCalledWith(report);
   });
 

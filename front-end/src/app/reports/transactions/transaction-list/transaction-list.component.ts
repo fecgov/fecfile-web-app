@@ -2,7 +2,7 @@ import { Component, inject, Pipe, PipeTransform, signal, viewChild } from '@angu
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { Transaction } from '../../../shared/models/transaction.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
@@ -48,59 +48,45 @@ export class TransactionListComponent {
     return;
   };
 
-  public tableActions: TableAction[] = [
-    new TableAction(
-      'Add a receipt',
-      this.createTransactions.bind(this, 'receipt'),
-      (report: Report) => {
+  public tableActions = [
+    createAction('Add a receipt', this.createTransactions.bind(this, 'receipt'), {
+      isAvailable: (report: Report) => {
         return (
           report.report_status === ReportStatus.IN_PROGRESS &&
           [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
         );
       },
-      () => true,
-    ),
-    new TableAction(
-      'Add a disbursement',
-      this.createTransactions.bind(this, 'disbursement'),
-      (report: Report) => {
+    }),
+    createAction('Add a disbursement', this.createTransactions.bind(this, 'disbursement'), {
+      isAvailable: (report: Report) => {
         return (
           report.report_status === ReportStatus.IN_PROGRESS &&
           [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
         );
       },
-      () => true,
-    ),
-    new TableAction(
-      'Add loans and debts',
-      this.createTransactions.bind(this, 'loans-and-debts'),
-      (report: Report) => {
+    }),
+    createAction('Add loans and debts', this.createTransactions.bind(this, 'loans-and-debts'), {
+      isAvailable: (report: Report) => {
         return (
           report.report_status === ReportStatus.IN_PROGRESS &&
           [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
         );
       },
-      () => true,
-    ),
-    new TableAction(
-      'Add other transactions',
-      this.createTransactions.bind(this, 'other-transactions'),
-      (report: Report) => {
+    }),
+    createAction('Add other transactions', this.createTransactions.bind(this, 'other-transactions'), {
+      isAvailable: (report: Report) => {
         return (
           report.report_status === ReportStatus.IN_PROGRESS &&
           [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
         );
       },
-      () => false,
-    ),
-    new TableAction(
-      'Add an independent expenditure',
-      this.createF24Transactions.bind(this),
-      (report: Report) => {
+      isEnabled: () => false,
+    }),
+    createAction('Add an independent expenditure', this.createF24Transactions.bind(this), {
+      isAvailable: (report: Report) => {
         return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F24;
       },
-      () => true,
-    ),
+    }),
   ];
 
   readonly receipts = viewChild.required(TransactionReceiptsComponent);
@@ -120,10 +106,6 @@ export class TransactionListComponent {
     this.reportSelectFormType = formType;
     this.reportSelectionTransaction = transaction;
     this.reportSelectionCreateMethod = createMethod;
-  }
-
-  public onTableActionClick(action: TableAction, report?: Report) {
-    action.action(report);
   }
 
   refreshTables() {

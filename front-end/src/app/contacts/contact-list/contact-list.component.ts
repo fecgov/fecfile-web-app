@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { Component, inject, resource, signal } from '@angular/core';
+import { createAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
@@ -30,15 +30,19 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
     LabelPipe,
   ],
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
+export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
   readonly restoreDialogIsVisible = signal(false);
-  restoreContactsButtonIsVisible = false;
-  searchTerm = '';
+  readonly restoreContactsButtonIsVisible = resource({
+    loader: async () => {
+      const response = await this.deletedContactService.getTableData();
+      return response.count > 0;
+    },
+  });
 
   // contact lookup
   readonly contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
@@ -46,14 +50,11 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     ContactTypes.INDIVIDUAL,
   ]);
 
-  public rowActions: TableAction[] = [
-    new TableAction('Edit', this.editItem.bind(this)),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      () => true,
-      (contact: Contact) => this.canDeleteItem(contact),
-    ),
+  public rowActions = [
+    createAction('Edit', this.editItem.bind(this)),
+    createAction('Delete', this.deleteItem.bind(this), {
+      isEnabled: (contact: Contact) => this.canDeleteItem(contact),
+    }),
   ];
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -64,20 +65,9 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  ngOnInit() {
-    this.checkForDeletedContacts();
-  }
-
-  public async checkForDeletedContacts() {
-    const contactListResponse = await this.deletedContactService.getTableData();
-    const deletedContactsExist = contactListResponse.count > 0;
-    this.restoreContactsButtonIsVisible = deletedContactsExist;
-    return deletedContactsExist;
-  }
-
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     super.loadTableItems(event);
-    this.checkForDeletedContacts();
+    this.restoreContactsButtonIsVisible.reload();
   }
 
   protected getEmptyItem(): Contact {
@@ -92,7 +82,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   public override editItem(item: Contact) {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
     super.editItem(item);
-    this.isNewItem = false;
   }
 
   /**

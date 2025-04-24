@@ -15,7 +15,7 @@
           [tableActions]="tableActions"
           [actionItem]="selectActiveReport()"
           [rounded]="false"
-          (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
+          (tableActionClick)="$event.action.action($event.actionItem)"
           buttonIcon="pi pi-plus"
           buttonLabel="Add transaction"
           buttonStyleClass="add-button"

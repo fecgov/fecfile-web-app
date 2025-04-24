@@ -1,7 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, forwardRef, inject, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
@@ -59,7 +59,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     );
 
     this.rowActions.push(
-      new TableAction(
+      createAction(
         'Add to Form24 Report',
         (transaction) => {
           this.requestReportSelection.emit({
@@ -68,14 +68,15 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
             createMethod: this.refreshTable.bind(this),
           });
         },
-        (transaction) => {
-          return (
-            this.report().report_type === ReportTypes.F3X &&
-            transaction.report_ids?.length === 1 &&
-            transaction.transactionType?.scheduleId === ScheduleIds.E
-          );
+        {
+          isAvailable: (transaction) => {
+            return (
+              this.report().report_type === ReportTypes.F3X &&
+              transaction.report_ids?.length === 1 &&
+              transaction.transactionType?.scheduleId === ScheduleIds.E
+            );
+          },
         },
-        () => true,
       ),
     );
   }

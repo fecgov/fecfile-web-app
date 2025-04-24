@@ -16,7 +16,7 @@
         <h1 class="m-0">Manage contacts</h1>
       </ng-template>
       <ng-template pTemplate="right">
-        @if (restoreContactsButtonIsVisible) {
+        @if (restoreContactsButtonIsVisible.value()) {
           <button
             pButton
             pRipple

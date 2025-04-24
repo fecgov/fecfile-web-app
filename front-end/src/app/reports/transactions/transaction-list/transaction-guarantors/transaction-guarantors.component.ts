@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
@@ -48,24 +48,9 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     }
   }
 
-  override rowActions: TableAction[] = [
-    new TableAction(
-      'View',
-      this.editItem.bind(this),
-      () => !this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      () => this.reportIsEditable(),
-      () => true,
-    ),
+  override rowActions = [
+    createAction('View', this.editItem.bind(this), { isAvailable: () => !this.reportIsEditable() }),
+    createAction('Edit', this.editItem.bind(this), { isAvailable: () => this.reportIsEditable() }),
+    createAction('Delete', this.deleteItem.bind(this), { isAvailable: () => this.reportIsEditable() }),
   ];
 }

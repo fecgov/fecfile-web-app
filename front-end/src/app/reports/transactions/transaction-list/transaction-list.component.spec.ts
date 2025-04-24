@@ -91,26 +91,6 @@ describe('TransactionListComponent', () => {
     expect(result).toBe('-');
   });
 
-  it('should navigate to create receipt', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onTableActionClick(component.tableActions[0], { id: '999' } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/receipt`);
-  });
-  it('should navigate to create disbursement', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onTableActionClick(component.tableActions[1], { id: '999' } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/disbursement`);
-  });
-  it('should navigate to create loans & debts', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onTableActionClick(component.tableActions[2], { id: '999' } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/loans-and-debts`);
-  });
-  it('should navigate to create other transactions', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onTableActionClick(component.tableActions[3], { id: '999' } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/other-transactions`);
-  });
   it('should show the correct table actions', () => {
     const f3x_params = {
       report_status: ReportStatus.IN_PROGRESS,
