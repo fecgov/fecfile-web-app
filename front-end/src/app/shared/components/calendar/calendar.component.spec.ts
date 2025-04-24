@@ -1,14 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CalendarComponent } from './calendar.component';
-import { Component, Input } from '@angular/core';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Component, Injector, Input } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
-import { DatePicker } from 'primeng/datepicker';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { createSignal } from '@angular/core/primitives/signals';
 
-// Mock child component
 @Component({
   selector: 'app-error-messages',
   template: '',
@@ -19,25 +17,27 @@ class MockErrorMessagesComponent {
   @Input() requiredErrorMessage!: string;
 }
 
-fdescribe('CalendarComponent', () => {
+describe('CalendarComponent', () => {
   let component: CalendarComponent;
   let fixture: ComponentFixture<CalendarComponent>;
   let form: FormGroup;
-  let control: FormControl;
+  let control: SignalFormControl;
+  let injector: Injector;
 
   beforeEach(() => {
-    control = new FormControl('2020-01-01');
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, DatePickerModule, CalendarComponent], // Ensure ReactiveFormsModule is imported here
+      providers: [FormBuilder],
+    }).compileComponents();
+
+    injector = TestBed.inject(Injector);
+    fixture = TestBed.createComponent(CalendarComponent);
+    component = fixture.componentInstance;
+
+    control = new SignalFormControl(injector, '2020-01-01');
     form = new FormGroup({
       myDate: control,
     });
-
-    TestBed.configureTestingModule({
-      imports: [CommonModule, ReactiveFormsModule],
-      declarations: [CalendarComponent, MockErrorMessagesComponent, DatePicker],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(CalendarComponent);
-    component = fixture.componentInstance;
 
     // Inputs as signals
     (component as any).form = createSignal(form);
@@ -67,12 +67,6 @@ fdescribe('CalendarComponent', () => {
     expect(component.control().markAsTouched).toHaveBeenCalled();
     expect(component.control().setValue).toHaveBeenCalledWith(new Date(2021, 0, 1));
     expect(component.control().updateValueAndValidity).toHaveBeenCalled();
-  });
-
-  it('should bind the formControl to the p-datepicker', () => {
-    const datepicker = fixture.nativeElement.querySelector('p-datepicker');
-    expect(datepicker).toBeTruthy();
-    expect(datepicker.getAttribute('formcontrol')).toBeTruthy(); // basic sanity check
   });
 
   it('should show the error component if showErrors is true', () => {

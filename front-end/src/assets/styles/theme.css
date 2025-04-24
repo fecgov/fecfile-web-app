@@ -1464,7 +1464,7 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
   background: var(--p-content-background);
   color: var(--fec-grey-alt);
 }
-p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
+p-radiobutton.ng-dirty.ng-invalid.ng-touced > .p-radiobutton > .p-radiobutton-box {
   border-color: #cd2026;
 }
 

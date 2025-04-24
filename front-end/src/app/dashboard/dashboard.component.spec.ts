@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -41,7 +42,6 @@ describe('DashboardComponent', () => {
   it('should call getAllReports on ngOnInit', async () => {
     const reports = [testActiveReport];
     (reportService.getAllReports as jasmine.Spy).and.returnValue(Promise.resolve(reports));
-    await component.ngOnInit();
     expect(reportService.getAllReports).toHaveBeenCalled();
     expect(component.reports).toEqual(reports);
   });
@@ -52,8 +52,7 @@ describe('DashboardComponent', () => {
     const elements = {
       changes: changes.asObservable(),
     };
-    component.elements = elements as unknown as QueryList<ElementRef>;
-    component.ngAfterViewInit();
+    (component.elements as any) = createSignal(elements as unknown as QueryList<ElementRef>);
 
     changes.next({});
     expect(component.adjustHeight).toHaveBeenCalled();

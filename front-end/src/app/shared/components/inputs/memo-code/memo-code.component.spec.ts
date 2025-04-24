@@ -73,10 +73,10 @@ describe('MemoCodeInputComponent', () => {
 
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
     (component.report as any) = createSignal(new Form3X());
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    component.templateMap().memo_code = 'memo_code';
+    component.report().coverage_from_date = new Date('01/01/2020');
+    component.report().coverage_through_date = new Date('01/31/2020');
+    (component.transaction as any) = createSignal(testScheduleATransaction);
 
     component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.form().get('memo_code')?.patchValue(false);
@@ -90,9 +90,9 @@ describe('MemoCodeInputComponent', () => {
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
     (component.report as any) = createSignal(new Form3X());
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
+    component.templateMap().memo_code = 'memo_code';
+    component.report().coverage_from_date = new Date('01/01/2020');
+    component.report().coverage_through_date = new Date('01/31/2020');
 
     component.form().get('contribution_date')?.patchValue(new Date('01/15/2020'));
     component.form().get('memo_code')?.patchValue(false);
@@ -102,9 +102,9 @@ describe('MemoCodeInputComponent', () => {
 
   it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
     (component.report as any) = createSignal(new Form3X());
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
+    component.templateMap().memo_code = 'memo_code';
+    component.report().coverage_from_date = new Date('01/01/2020');
+    component.report().coverage_through_date = new Date('01/31/2020');
 
     component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.outOfDateDialogVisible = false;
@@ -120,9 +120,9 @@ describe('MemoCodeInputComponent', () => {
 
   it('should add and remove the requiredTrue validator when a date is set', () => {
     (component.report as any) = createSignal(new Form3X());
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    component.report().coverage_from_date = new Date('01/01/2020');
+    component.report().coverage_through_date = new Date('01/31/2020');
+    (component.transaction as any) = createSignal(testScheduleATransaction);
 
     component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
     expect(component.form().get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
@@ -136,9 +136,9 @@ describe('MemoCodeInputComponent', () => {
 
   it('should preserve old validators when clearing an added requiredTrue validator', () => {
     (component.report as any) = createSignal(new Form3X());
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    component.report().coverage_from_date = new Date('01/01/2020');
+    component.report().coverage_through_date = new Date('01/31/2020');
+    (component.transaction as any) = createSignal(testScheduleATransaction);
 
     component.form().get('memo_code')?.addValidators(Validators.email);
 
@@ -153,9 +153,9 @@ describe('MemoCodeInputComponent', () => {
 
   it('should not crash if it tries to update the contribution date without a memo_code formControl', () => {
     (component.report as any) = createSignal(new Form3X());
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    component.report().coverage_from_date = new Date('01/01/2020');
+    component.report().coverage_through_date = new Date('01/31/2020');
+    (component.transaction as any) = createSignal(testScheduleATransaction);
     component.form().removeControl('memo_code');
 
     component.form().get('contribution_date')?.patchValue(new Date('12/25/2019'));
@@ -163,29 +163,31 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should update transaction type identifiers correctly based on the TransactionType', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
-    component.ngOnInit();
+    (component.transaction as any) = createSignal(
+      getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT),
+    );
 
-    const trueTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.true;
-    const falseTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.false;
+    const trueTTI = component.transaction()!.transactionType?.memoCodeTransactionTypes?.true;
+    const falseTTI = component.transaction()!.transactionType?.memoCodeTransactionTypes?.false;
 
-    component.memoControl.setValue(true);
-    expect(component.transaction.transaction_type_identifier).toEqual(trueTTI);
+    component.memoControl()!.setValue(true);
+    expect(component.transaction()!.transaction_type_identifier).toEqual(trueTTI);
 
-    component.memoControl.setValue(false);
-    expect(component.transaction.transaction_type_identifier).toEqual(falseTTI);
+    component.memoControl()!.setValue(false);
+    expect(component.transaction()!.transaction_type_identifier).toEqual(falseTTI);
   });
 
   it('should form the memoCodeMapOptions correctly', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
-    component.ngOnInit();
+    (component.transaction as any) = createSignal(
+      getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT),
+    );
 
-    for (const option of component.memoCodeMapOptions) {
+    for (const option of component.memoCodeMapOptions()) {
       if (option.value === false) {
-        expect(option.label).toEqual(component.transaction.transactionType?.memoCodeMap?.false);
+        expect(option.label).toEqual(component.transaction()!.transactionType?.memoCodeMap?.false!);
       }
       if (option.value === true) {
-        expect(option.label).toEqual(component.transaction.transactionType?.memoCodeMap?.true);
+        expect(option.label).toEqual(component.transaction()!.transactionType?.memoCodeMap?.true!);
       }
     }
   });

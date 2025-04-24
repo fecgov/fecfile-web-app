@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, inject, OnInit, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
@@ -26,7 +26,7 @@ enum LoanTermsFieldSettings {
   templateUrl: './loan-terms-dates-input.component.html',
   imports: [ReactiveFormsModule, CalendarComponent, Select, ErrorMessagesComponent, InputText],
 })
-export class LoanTermsDatesInputComponent extends BaseInputComponent implements AfterViewInit {
+export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);
   interestInput = viewChild<InputText>('interestRatePercentage');
   clearValuesOnChange = true;
@@ -47,8 +47,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   constructor() {
     super();
-    this.interestRateSettingField()?.addValidators([Validators.required]);
-    this.dueDateSettingField()?.addValidators([Validators.required]);
 
     // Add the date range validation check to the DATE INCURRED input
     effectOnceIf(
@@ -63,54 +61,54 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
           ?.addValidators(buildWithinReportDatesValidator(f3x.coverage_from_date, f3x.coverage_through_date));
       },
     );
-    this.setupDueDate();
-    this.setupInterestRate();
+
+    effect(() => {
+      this.interestRateField()?.valueChangeSignal();
+      this.onInterestRateInput(this.interestRateSetting);
+    });
   }
 
-  setupDueDate() {
-    effectOnceIf(
-      () => this.dueDateSettingField(),
+  ngOnInit() {
+    this.interestRateSettingField()?.addValidators([Validators.required]);
+    this.dueDateSettingField()?.addValidators([Validators.required]);
+
+    this.dueDateSettingField()?.addValidators([Validators.required]);
+    effect(
       () => {
-        this.dueDateSettingField()?.addValidators([Validators.required]);
-        this.dueDateSettingField()?.valueChanges.subscribe((dueDateSetting) => {
-          this.convertDueDate(dueDateSetting);
-        });
+        const dueDateSetting = this.dueDateSettingField().valueChangeSignal();
+        this.convertDueDate(dueDateSetting);
       },
+      { injector: this.injector },
     );
+
+    this.setupInterestRate();
   }
 
   setupInterestRate() {
     this.onInterestRateInput(this.interestRate);
-
-    effectOnceIf(
-      () => this.interestRateSettingField(),
+    const settingField = this.interestRateSettingField();
+    if (!settingField) return;
+    settingField.addValidators([Validators.required]);
+    effect(
       () => {
-        this.interestRateSettingField()!.addValidators([Validators.required]);
-        this.interestRateSettingField()!.valueChanges.subscribe((interestRateSetting) => {
-          const interestRateField = this.interestRateField();
-          if (!interestRateField) return;
-          if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-            interestRateField.addValidators(percentageValidator);
-          } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
-            interestRateField.removeValidators(percentageValidator);
-          }
-          if (this.clearValuesOnChange) {
-            this.interestRate = '';
-            interestRateField.markAsPristine();
-            interestRateField.markAsUntouched();
-          } else {
-            this.onInterestRateInput(interestRateSetting);
-          }
-        });
-      },
-    );
+        const interestRateSetting = settingField.valueChangeSignal();
 
-    // Watch changes to purpose description to make sure prefix is maintained
-    effectOnceIf(
-      () => this.interestRateField(),
-      () => {
-        this.interestRateField()!.valueChanges.subscribe(() => this.onInterestRateInput(this.interestRateSetting));
+        const interestRateField = this.interestRateField();
+        if (!interestRateField) return;
+        if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
+          interestRateField.addValidators(percentageValidator);
+        } else if (interestRateSetting === LoanTermsFieldSettings.USER_DEFINED) {
+          interestRateField.removeValidators(percentageValidator);
+        }
+        if (this.clearValuesOnChange) {
+          this.interestRate = '';
+          interestRateField.markAsPristine();
+          interestRateField.markAsUntouched();
+        } else {
+          this.onInterestRateInput(interestRateSetting);
+        }
       },
+      { injector: this.injector },
     );
   }
 
@@ -249,9 +247,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.dueDateSettingField().setValue(value);
   }
 
-  readonly interestRateField = computed(
-    () => this.form().get(this.templateMap()['interest_rate']) as SignalFormControl,
-  );
+  readonly interestRateField = computed(() => this.getControl(this.templateMap()['interest_rate']));
   get interestRate(): string {
     return this.interestRateField()?.value ?? '';
   }
@@ -260,9 +256,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.interestRateField()?.setValue(value);
   }
 
-  readonly interestRateSettingField = computed(
-    () => this.form().get(this.templateMap()['interest_rate_setting']) as SignalFormControl,
-  );
+  readonly interestRateSettingField = computed(() => this.getControl(this.templateMap()['interest_rate_setting']));
   get interestRateSetting(): string {
     return this.interestRateSettingField()?.value ?? '';
   }

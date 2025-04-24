@@ -1,5 +1,5 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
-import { FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
@@ -7,16 +7,8 @@ import _ from 'lodash';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
-import { SignalFormControl } from '../signal-form-control';
-import { Injector } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
-let injector: Injector;
 describe('ReattRedesUtils', () => {
-  beforeEach(() => {
-    injector = TestBed.inject(Injector);
-  });
-
   describe('isReattRedes', () => {
     it('should test if transaction is reatt/redes', () => {
       const txn = getTestIndividualReceipt();
@@ -53,50 +45,50 @@ describe('ReattRedesUtils', () => {
     });
   });
 
-  describe('overlayForms', () => {
-    const toForm = new FormGroup(
-      {
-        contribution_purpose_descip: new SignalFormControl(injector, ''),
-        memo_code: new SignalFormControl(injector, ''),
-      },
-      { updateOn: 'blur' },
-    );
-    const fromForm = new FormGroup(
-      {
-        contribution_purpose_descrip: new SignalFormControl(injector, ''),
-        memo_code: new SignalFormControl(injector, ''),
-        contributor_organization_name: new SignalFormControl(injector, ''),
-        contributor_last_name: new SignalFormControl(injector, ''),
-        contributor_first_name: new SignalFormControl(injector, ''),
-      },
-      { updateOn: 'blur' },
-    );
-    let toTxn: SchATransaction;
-    let fromTxn: SchATransaction;
+  // describe('overlayForms', () => {
+  //   const toForm = new FormGroup(
+  //     {
+  //       contribution_purpose_descip: new SignalFormControl(injector, ''),
+  //       memo_code: new SignalFormControl(injector, ''),
+  //     },
+  //     { updateOn: 'blur' },
+  //   );
+  //   const fromForm = new FormGroup(
+  //     {
+  //       contribution_purpose_descrip: new SignalFormControl(injector, ''),
+  //       memo_code: new SignalFormControl(injector, ''),
+  //       contributor_organization_name: new SignalFormControl(injector, ''),
+  //       contributor_last_name: new SignalFormControl(injector, ''),
+  //       contributor_first_name: new SignalFormControl(injector, ''),
+  //     },
+  //     { updateOn: 'blur' },
+  //   );
+  //   let toTxn: SchATransaction;
+  //   let fromTxn: SchATransaction;
 
-    beforeEach(() => {
-      toTxn = getTestIndividualReceipt();
-      fromTxn = getTestIndividualReceipt();
-    });
+  //   beforeEach(() => {
+  //     toTxn = getTestIndividualReceipt();
+  //     fromTxn = getTestIndividualReceipt();
+  //   });
 
-    // it('should overlay reattribution forms correctly', () => {
-    //   toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
-    //   fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
+  //   // it('should overlay reattribution forms correctly', () => {
+  //   //   toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+  //   //   fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
 
-    //   ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-    //   expect(toForm.get('memo_code')?.enabled).toBeFalse();
-    //   expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
-    // });
+  //   //   ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
+  //   //   expect(toForm.get('memo_code')?.enabled).toBeFalse();
+  //   //   expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
+  //   // });
 
-    // it('should overlay redesignation forms correctly', () => {
-    //   toTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-    //   fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
+  //   // it('should overlay redesignation forms correctly', () => {
+  //   //   toTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+  //   //   fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
 
-    //   ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-    //   expect(toForm.get('memo_code')?.enabled).toBeFalse();
-    //   expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
-    // });
-  });
+  //   //   ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
+  //   //   expect(toForm.get('memo_code')?.enabled).toBeFalse();
+  //   //   expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
+  //   // });
+  // });
 
   describe('getPayloads', () => {
     it('should reorder payload correctly', () => {
@@ -122,14 +114,14 @@ describe('ReattRedesUtils', () => {
   });
 
   describe('amountValidator', () => {
-    let control: SignalFormControl;
+    let control: FormControl;
     const txn = { ...testScheduleATransaction } as SchATransaction;
     txn.reatt_redes = { ...testScheduleATransaction } as SchATransaction;
     (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
     (txn.reatt_redes as SchATransaction).contribution_amount = 100;
 
     beforeEach(() => {
-      control = new SignalFormControl(injector);
+      control = new FormControl();
     });
 
     it('should limit max value to negative when mustBeNegative is true', () => {

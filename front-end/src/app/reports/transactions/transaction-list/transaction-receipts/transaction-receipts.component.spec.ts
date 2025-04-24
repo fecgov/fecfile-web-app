@@ -13,6 +13,7 @@ import { TransactionSchAService } from 'app/shared/services/transaction-schA.ser
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -94,7 +95,7 @@ describe('TransactionReceiptsComponent', () => {
     ).toBeFalse();
     expect(itemizeAction?.isAvailable({ itemized: false })).toBeFalse();
     expect(unitemizeAction?.isAvailable({ itemized: true })).toBeFalse();
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = createSignal(true);
     expect(viewAction?.isAvailable()).toBeFalse();
     expect(editAction?.isAvailable()).toBeTrue();
     expect(

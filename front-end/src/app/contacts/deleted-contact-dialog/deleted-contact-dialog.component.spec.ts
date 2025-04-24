@@ -12,6 +12,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { DeletedContactService } from 'app/shared/services/contact.service';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('DeletedContactDialogComponent', () => {
   let component: DeletedContactDialogComponent;
@@ -43,7 +44,7 @@ describe('DeletedContactDialogComponent', () => {
   });
 
   it('should enable restore', () => {
-    component.visible = true;
+    (component.visible as any) = createSignal(true);
     component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     component.hide();
     expect(component.selectedItems).toEqual([]);
@@ -51,7 +52,7 @@ describe('DeletedContactDialogComponent', () => {
 
   it('should restore', async () => {
     spyOn(service, 'restore').and.returnValue(Promise.resolve(['1']));
-    component.visible = true;
+    (component.visible as any) = createSignal(true);
     component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     await component.restoreSelected();
 

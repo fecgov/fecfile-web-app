@@ -221,8 +221,10 @@
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="location_of_account">LOCATION OF ACCOUNT</label>
-          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
+          <div class="flex">
+            <label for="location_of_account">LOCATION OF ACCOUNT</label>
+            <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
+          </div>
           <app-transaction-contact-lookup
             contactProperty="contact_2"
             [transaction]="transaction()"

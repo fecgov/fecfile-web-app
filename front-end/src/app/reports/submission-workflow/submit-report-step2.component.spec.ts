@@ -69,25 +69,25 @@ describe('SubmitReportStep2Component', () => {
   });
 
   it('should initialize form with proper controls', () => {
-    expect(component.form.contains('treasurer_first_name')).toBeTrue();
-    expect(component.form.contains('filingPassword')).toBeTrue();
-    expect(component.form.controls['filingPassword'].hasValidator(Validators.required)).toBeFalse();
+    expect(component.form().contains('treasurer_first_name')).toBeTrue();
+    expect(component.form().contains('filingPassword')).toBeTrue();
+    expect(component.form().controls['filingPassword'].hasValidator(Validators.required)).toBeFalse();
   });
 
   it('should add backdoor_code control when backdoorYesNo is true', () => {
-    component.form.get('backdoorYesNo')?.setValue(true);
-    expect(component.form.contains('backdoor_code')).toBeTrue();
+    component.form().get('backdoorYesNo')?.setValue(true);
+    expect(component.form().contains('backdoor_code')).toBeTrue();
   });
 
   it('should remove backdoor_code control when backdoorYesNo is false', () => {
-    component.form.get('backdoorYesNo')?.setValue(true);
-    component.form.get('backdoorYesNo')?.setValue(false);
-    expect(component.form.contains('backdoor_code')).toBeFalse();
+    component.form().get('backdoorYesNo')?.setValue(true);
+    component.form().get('backdoorYesNo')?.setValue(false);
+    expect(component.form().contains('backdoor_code')).toBeFalse();
   });
 
   it('should not submit when form is invalid', async () => {
     spyOn(component, 'saveAndSubmit');
-    component.form.patchValue({ filingPassword: '', userCertified: false });
+    component.form().patchValue({ filingPassword: '', userCertified: false });
     component.submitClicked();
     expect(component.saveAndSubmit).not.toHaveBeenCalled();
   });
@@ -118,7 +118,7 @@ describe('SubmitReportStep2Component', () => {
       reportSpy = spyOn(component.reportService, 'update').and.returnValue(Promise.resolve(new Form3X()));
       apiSpy = spyOn(component.apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse()));
 
-      component.form.patchValue({
+      component.form().patchValue({
         treasurer_name_1: 'name1',
         treasurer_name_2: 'name2',
         treasurer_name_middle: 'm',
@@ -135,7 +135,7 @@ describe('SubmitReportStep2Component', () => {
 
       component.submitClicked();
       tick(100);
-      expect(component.form.invalid).toBeFalse();
+      expect(component.form().invalid).toBeFalse();
       expect(confirmSpy).toHaveBeenCalled();
       expect(saveSepy).toHaveBeenCalled();
       expect(saveTreasurerSpy).toHaveBeenCalled();

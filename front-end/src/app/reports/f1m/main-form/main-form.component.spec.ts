@@ -21,6 +21,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -90,12 +91,12 @@ describe('MainFormComponent', () => {
 
   it('ngOnInit should set up an edited report', () => {
     fixture.detectChanges();
-    expect(component.form.get('statusBy')?.value).toBe('affiliation');
+    expect(component.form().get('statusBy')?.value).toBe('affiliation');
   });
 
   it('ngOnInit should set form controls', fakeAsync(() => {
     fixture.detectChanges();
-    component.form.patchValue({
+    component.form().patchValue({
       committee_type: 'X',
       filer_committee_id_number: 'C000000001',
       committee_name: 'test committee',
@@ -114,25 +115,25 @@ describe('MainFormComponent', () => {
       id: '10',
     });
 
-    component.report = Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' });
-    component.report.contact_affiliated = contact_affiliated;
+    (component.report as any) = createSignal(Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' }));
+    component.form1M().contact_affiliated = contact_affiliated;
 
     component.ngOnInit();
-    component.form.patchValue({ statusBy: 'affiliation' });
-    component.form.patchValue({ affiliated_committee_name: '' });
+    component.form().patchValue({ statusBy: 'affiliation' });
+    component.form().patchValue({ affiliated_committee_name: '' });
     fixture.detectChanges();
-    expect(component.form.get('affiliated_committee_name')?.valid).toBeFalse();
+    expect(component.form().get('affiliated_committee_name')?.valid).toBeFalse();
 
-    component.form.patchValue({ statusBy: 'qualification' });
+    component.form().patchValue({ statusBy: 'qualification' });
     fixture.detectChanges();
     tick(100);
     flush();
-    expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
+    expect(component.form().get('affiliated_committee_name')?.valid).toBeTrue();
   }));
 
   it('getReportPayload should update and return the report properties', () => {
     fixture.detectChanges();
-    component.form.patchValue({
+    component.form().patchValue({
       committee_type: 'X',
       filer_committee_id_number: 'C000000001',
       committee_name: 'test committee',
@@ -151,12 +152,14 @@ describe('MainFormComponent', () => {
       committee_id: 'C000000009',
     });
 
-    component.report = Form1M.fromJSON({
-      id: '99',
-      committee_name: 'replaced committee',
-      contact_affiliated: contact_affiliated,
-    });
-    component.report.contact_affiliated = contact_affiliated;
+    (component.report as any) = createSignal(
+      Form1M.fromJSON({
+        id: '99',
+        committee_name: 'replaced committee',
+        contact_affiliated: contact_affiliated,
+      }),
+    );
+    component.form1M().contact_affiliated = contact_affiliated;
 
     const payload = component.getReportPayload();
     expect((payload as Form1M).contact_affiliated?.name).toBe('affiliated committee');
@@ -166,7 +169,7 @@ describe('MainFormComponent', () => {
 
   it('getSelectedContactIds() should return correct ids', fakeAsync(() => {
     fixture.detectChanges();
-    component.form.patchValue({
+    component.form().patchValue({
       statusBy: 'qualification',
       I_candidate_id_number: 'P00000001',
       II_candidate_id_number: 'P00000002',
@@ -189,7 +192,7 @@ describe('MainFormComponent', () => {
     expect(candidateIds.includes('P00000004')).toBeFalse();
 
     // Verify duplicating a candidtate id invalidates the form control.
-    const control = component.form.get('II_candidate_id_number');
+    const control = component.form().get('II_candidate_id_number');
     expect(control).toBeTruthy();
     expect(control?.valid).toBeTrue();
     control?.setValue('P00000001');
@@ -208,19 +211,19 @@ describe('MainFormComponent', () => {
       name: 'Organization Name',
       type: 'ORG',
     });
-    component.report.contact_affiliated = Contact.fromJSON({
+    component.form1M().contact_affiliated = Contact.fromJSON({
       id: '00000-00000-00000-00000',
       committee_id: 'X000000000',
     });
-    component.report.contact_affiliated_id = '00000-00000-00000-00000';
-    component.excludeIds = ['00000-00000-00000-00000'];
-    component.excludeFecIds = ['X000000000'];
+    component.form1M().contact_affiliated_id = '00000-00000-00000-00000';
+    (component.excludeIds as any) = createSignal(['00000-00000-00000-00000']);
+    (component.excludeFecIds as any) = createSignal(['X000000000']);
     component.affiliatedContact.update({ value: committee } as SelectItem);
-    expect(component.report.contact_affiliated_id).toEqual('11111-2222222-333333-444444444');
-    expect(component.form.get('affiliated_committee_fec_id')?.value).toEqual('C000000001');
-    expect(component.form.get('affiliated_committee_name')?.value).toEqual('Organization Name');
-    expect(component.excludeIds[0]).toEqual('11111-2222222-333333-444444444');
-    expect(component.excludeFecIds[0]).toEqual('C000000001');
+    expect(component.form1M().contact_affiliated_id).toEqual('11111-2222222-333333-444444444');
+    expect(component.form().get('affiliated_committee_fec_id')?.value).toEqual('C000000001');
+    expect(component.form().get('affiliated_committee_name')?.value).toEqual('Organization Name');
+    expect(component.excludeIds()[0]).toEqual('11111-2222222-333333-444444444');
+    expect(component.excludeFecIds()[0]).toEqual('C000000001');
 
     const candidate = Contact.fromJSON({
       id: '11111-2222222-333333-444444444',
@@ -228,19 +231,19 @@ describe('MainFormComponent', () => {
       last_name: 'Smith',
       type: 'CAN',
     });
-    component.report.contact_candidate_I = Contact.fromJSON({
+    component.form1M().contact_candidate_I = Contact.fromJSON({
       id: '00000-00000-00000-00000',
       candidate_id: 'X000000000',
     });
-    component.report.contact_candidate_I_id = '00000-00000-00000-00000';
-    component.excludeIds = ['00000-00000-00000-00000'];
-    component.excludeFecIds = ['X000000000'];
+    component.form1M().contact_candidate_I_id = '00000-00000-00000-00000';
+    (component.excludeIds as any) = createSignal(['00000-00000-00000-00000']);
+    (component.excludeFecIds as any) = createSignal(['X000000000']);
     component.candidateContacts[0].update({ value: candidate } as SelectItem);
-    expect(component.report.contact_candidate_I?.id).toEqual('11111-2222222-333333-444444444');
-    expect(component.form.get('I_candidate_id_number')?.value).toEqual('C000000002');
-    expect(component.form.get('I_candidate_last_name')?.value).toEqual('Smith');
-    expect(component.excludeIds[0]).toEqual('11111-2222222-333333-444444444');
-    expect(component.excludeFecIds[0]).toEqual('C000000002');
+    expect(component.form1M().contact_candidate_I?.id).toEqual('11111-2222222-333333-444444444');
+    expect(component.form().get('I_candidate_id_number')?.value).toEqual('C000000002');
+    expect(component.form().get('I_candidate_last_name')?.value).toEqual('Smith');
+    expect(component.excludeIds()[0]).toEqual('11111-2222222-333333-444444444');
+    expect(component.excludeFecIds()[0]).toEqual('C000000002');
 
     expect(component.candidateContacts[0].dateOfContributionField).toEqual('I_date_of_contribution');
     expect(component.candidateContacts[0].candidateId).toEqual('C000000002');
@@ -250,7 +253,7 @@ describe('MainFormComponent', () => {
   xit('Exclude ids should prepopulate when editing a F1M', () => {
     fixture.detectChanges();
     component.ngOnInit();
-    expect(component.excludeFecIds[0]).toEqual('C000000005');
-    expect(component.excludeIds[0]).toEqual('22222-22222-22222-2222222');
+    expect(component.excludeFecIds()[0]).toEqual('C000000005');
+    expect(component.excludeIds()[0]).toEqual('22222-22222-22222-2222222');
   });
 });

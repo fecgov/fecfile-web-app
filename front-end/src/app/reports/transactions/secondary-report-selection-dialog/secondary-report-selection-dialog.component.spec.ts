@@ -14,6 +14,7 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('SecondaryReportSelectionDialogComponent', () => {
   let component: SecondaryReportSelectionDialogComponent;
@@ -79,55 +80,52 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
   it('should retrieve reports when reportType is set', () => {
     const spy = spyOn(reportService, 'getAllReports').and.returnValue(firstValueFrom(of([])));
-    component.reportType = ReportTypes.F3X;
+    (component.reportType as any) = createSignal(ReportTypes.F3X);
     expect(spy).toHaveBeenCalled();
   });
 
   it('should set related values when reports are retrieved', () => {
     const labelSpy = spyOn(component, 'getReportLabels');
-    component.setReports(testReports);
+    (component.reports as any) = createSignal(testReports);
 
     expect(labelSpy).toHaveBeenCalled();
   });
 
   it('should set the placeholder text correctly', () => {
-    component._reportType = ReportTypes.F3X;
-    component.setReports(testReports);
+    (component.reportType as any) = createSignal(ReportTypes.F3X);
+    (component.reports as any) = createSignal(testReports);
     expect(component.placeholder).toEqual(`Select a ${ReportTypes.F3X} Report`);
   });
 
   it('should generate report labels correctly', () => {
-    component.reports = testReports;
-    component._reportType = ReportTypes.F3X;
-    component.reportLabels = component.getReportLabels();
-    expect(component.reportLabels.length).toEqual(3);
-    expect(component.reportLabels[0][1].endsWith('#1')).toBeTrue();
-    expect(component.reportLabels[0][1].includes('2022')).toBeTrue();
-    expect(component.reportLabels[1][1].endsWith('#2')).toBeTrue();
-    expect(component.reportLabels[2][1].includes('#1')).toBeTrue();
-    expect(component.reportLabels[2][1].endsWith('(Amendment)')).toBeTrue();
-    expect(component.reportLabels[2][1].includes('2023')).toBeTrue();
+    (component.reports as any) = createSignal(testReports);
+    (component.reportType as any) = createSignal(ReportTypes.F3X);
+    expect(component.reportLabels().length).toEqual(3);
+    expect(component.reportLabels()[0][1].endsWith('#1')).toBeTrue();
+    expect(component.reportLabels()[0][1].includes('2022')).toBeTrue();
+    expect(component.reportLabels()[1][1].endsWith('#2')).toBeTrue();
+    expect(component.reportLabels()[2][1].includes('#1')).toBeTrue();
+    expect(component.reportLabels()[2][1].endsWith('(Amendment)')).toBeTrue();
+    expect(component.reportLabels()[2][1].includes('2023')).toBeTrue();
   });
 
   it('should set the dropdown text when choosing a report', () => {
-    component._reportType = ReportTypes.F3X;
-    component.setReports(testReports);
-    component.reportLabels = component.getReportLabels();
-    component.selectedReport.set(component.reports[1]);
+    (component.reportType as any) = createSignal(ReportTypes.F3X);
+    (component.reports as any) = createSignal(testReports);
+    component.selectedReport.set(component.reports()[1]);
 
-    expect(component.selectedReport()).toEqual(component.reports[1]);
-    expect(component.dropDownFieldText).toEqual(`${component.reports[1]?.getLongLabel()} [2022] #2`);
+    expect(component.selectedReport()).toEqual(component.reports()[1]);
+    expect(component.dropDownFieldText).toEqual(`${component.reports()[1]?.getLongLabel()} [2022] #2`);
 
-    component.selectedReport.set(component.reports[2]);
-    expect(component.dropDownFieldText).toEqual(`${component.reports[2]?.getLongLabel()} [2023] #1 (Amendment)`);
+    component.selectedReport.set(component.reports()[2]);
+    expect(component.dropDownFieldText).toEqual(`${component.reports()[2]?.getLongLabel()} [2023] #1 (Amendment)`);
   });
 
   it('should add a transaction to a report', () => {
-    component.reports = testReports;
-    component.transaction = testScheduleATransaction;
-    component._reportType = ReportTypes.F3X;
-    component.reportLabels = component.getReportLabels();
-    component.selectedReport.set(component.reports[1]);
+    (component.reports as any) = createSignal(testReports);
+    (component.transaction as any) = createSignal(testScheduleATransaction);
+    (component.reportType as any) = createSignal(ReportTypes.F3X);
+    component.selectedReport.set(component.reports()[1]);
 
     const transactionSpy = spyOn(transactionService, 'addToReport').and.returnValue(
       firstValueFrom(
@@ -138,12 +136,12 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     );
     component.linkToSelectedReport();
 
-    expect(transactionSpy).toHaveBeenCalledOnceWith(testScheduleATransaction, component.reports[1]);
+    expect(transactionSpy).toHaveBeenCalledOnceWith(testScheduleATransaction, component.reports()[1]);
   });
 
   it('should call applyFocus on select when showDialog is called', () => {
-    component.select = jasmine.createSpyObj('Select', ['applyFocus']);
+    (component.select as any) = jasmine.createSpyObj('Select', ['applyFocus']);
     component.showDialog();
-    expect(component.select.applyFocus).toHaveBeenCalled();
+    expect(component.select().applyFocus).toHaveBeenCalled();
   });
 });

@@ -59,7 +59,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   );
   readonly memoCodeCheckboxLabel = computed(() => this.getMemoCodeCheckboxLabel(this.form(), this.transactionType()));
 
-  readonly transaction = input<Transaction>();
+  readonly transaction = input.required<Transaction>();
   readonly transactionType = computed(() => this.transaction()?.transactionType);
   readonly formProperties = computed(() => this.transactionType()?.getFormControlNames() ?? []);
   readonly contactTypeOptions = computed(() => getContactTypeOptions(this.transactionType()?.contactTypeOptions ?? []));
@@ -113,12 +113,12 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     // Determine if amount should always be negative and then force it to be so if needed
     if (transaction.transactionType.negativeAmountValueOnly && transaction.transactionType.templateMap.amount) {
-      const control = this.getControl(this.templateMap()!.amount);
+      const control = this.getControl(this.templateMap().amount);
       effect(
         () => {
           const amount = control?.valueChangeSignal();
           if (+amount > 0) {
-            this.form().patchValue({ [this.templateMap()!.amount]: -1 * amount });
+            this.form().patchValue({ [this.templateMap().amount]: -1 * amount });
           }
         },
         { injector: this.injector },

@@ -71,7 +71,7 @@ describe('MainFormComponent', () => {
   });
 
   it('should save', fakeAsync(() => {
-    component.form.patchValue({
+    component.form().patchValue({
       message_text: 'message',
     });
     const createSpy = spyOn(form99Service, 'create').and.callFake(async () => Form99.fromJSON({}));
@@ -82,7 +82,7 @@ describe('MainFormComponent', () => {
       expect(navigateSpy).toHaveBeenCalledWith('/reports');
       expect(createSpy).toHaveBeenCalledTimes(1);
 
-      component.reportId = '999';
+      (component.reportId as any) = '999';
       component.save('continue');
 
       expect(navigateSpy).toHaveBeenCalledWith('/reports');

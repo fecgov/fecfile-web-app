@@ -51,9 +51,9 @@ describe('FeedbackOverlayComponent', () => {
     const test_action = 'test_action';
     const test_feedback = 'test_feedback';
     const test_about = 'test_about';
-    component.form.get('action')?.setValue(test_action);
-    component.form.get('feedback')?.setValue(test_feedback);
-    component.form.get('about')?.setValue(test_about);
+    component.form().get('action')?.setValue(test_action);
+    component.form().get('feedback')?.setValue(test_feedback);
+    component.form().get('about')?.setValue(test_about);
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
     component.save();
@@ -72,9 +72,9 @@ describe('FeedbackOverlayComponent', () => {
     const test_action = 'test_action';
     const test_feedback = 'test_feedback';
     const test_about = 'test_about';
-    component.form.get('action')?.setValue(test_action);
-    component.form.get('feedback')?.setValue(test_feedback);
-    component.form.get('about')?.setValue(test_about);
+    component.form().get('action')?.setValue(test_action);
+    component.form().get('feedback')?.setValue(test_feedback);
+    component.form().get('about')?.setValue(test_about);
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
     component.save();

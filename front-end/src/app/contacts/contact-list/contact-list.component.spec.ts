@@ -14,8 +14,9 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
-import { Contact, ContactTypes } from 'app/shared/models';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -74,6 +75,7 @@ describe('ContactListComponent', () => {
     service = TestBed.inject(ContactService);
     fixture = TestBed.createComponent(ContactListComponent);
     component = fixture.componentInstance;
+    component.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     fixture.detectChanges();
   });
 

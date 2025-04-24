@@ -17,6 +17,7 @@ import { of } from 'rxjs';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -92,7 +93,7 @@ describe('TransactionReceiptsComponent', () => {
   it('test editLoanAgreement', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Review loan agreement')[0];
     const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = createSignal(true);
     expect(tableAction.isAvailable(transaction)).toBeFalse();
     transaction.loan_agreement_id = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeTrue();
@@ -107,7 +108,7 @@ describe('TransactionReceiptsComponent', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'New loan agreement')[0];
     const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
     transaction.loan_id = 'testLoanId';
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = createSignal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.loan_agreement_id = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeFalse();
@@ -128,7 +129,7 @@ describe('TransactionReceiptsComponent', () => {
   it('test createDebtRepaymentMade', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[0];
     const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE };
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = createSignal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE;
     expect(tableAction.isAvailable(transaction)).toBeFalse();
@@ -143,7 +144,7 @@ describe('TransactionReceiptsComponent', () => {
   it('test createDebtRepaymentReceived', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
     const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE };
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = createSignal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE;
     expect(tableAction.isAvailable(transaction)).toBeFalse();

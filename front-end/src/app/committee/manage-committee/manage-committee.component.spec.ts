@@ -96,7 +96,7 @@ describe('ManageCommitteeComponent', () => {
   it('should open edit mode and set member', () => {
     component.openEdit(committeeMembers[0]);
 
-    expect(component.member).toEqual(committeeMembers[0]);
+    expect(component.item).toEqual(committeeMembers[0]);
     expect(component.detailVisible).toBeTrue();
   });
 
@@ -117,12 +117,12 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should close detail and clear member', () => {
-    component.member = committeeMembers[0];
+    component.item = committeeMembers[0];
     component.detailVisible = true;
     component.detailClose();
 
     expect(component.detailVisible).toBeFalse();
-    expect(component.member).toBeUndefined();
+    expect(component.item).toBeUndefined();
   });
 
   it("the Committee Member's names should be correct", () => {

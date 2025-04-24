@@ -20,6 +20,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('DoubleTransactionDetailComponent', () => {
   let component: DoubleTransactionDetailComponent;
@@ -63,7 +64,7 @@ describe('DoubleTransactionDetailComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DoubleTransactionDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = transaction;
+    (component.transaction as any) = createSignal(transaction);
     (component.templateMap as any) = createSignal(testTemplateMap);
     component.ngOnInit();
   });

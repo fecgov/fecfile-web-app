@@ -29,7 +29,7 @@ export class SecondaryReportSelectionDialogComponent {
   readonly reportTypeLabels = reportLabelList;
   readonly reportTypes = ReportTypes;
 
-  private readonly select = viewChild.required<Select>('select');
+  readonly select = viewChild.required<Select>('select');
 
   readonly transaction = input<Transaction>();
   readonly dialogVisible = model.required<boolean>();
@@ -63,7 +63,7 @@ export class SecondaryReportSelectionDialogComponent {
     return new LabelPipe().transform(report.id, this.reportLabels());
   });
 
-  private getReportLabels(reports: Report[]): LabelList {
+  getReportLabels(reports: Report[]): LabelList {
     const sortedReports = reports.toSorted(sortReport);
     const labels: LabelList = [];
     let year = 0;

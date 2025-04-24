@@ -15,6 +15,7 @@ import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -72,14 +73,14 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   it('should load items with loan', () => {
-    component.loan = { id: '1' } as Transaction;
+    (component.loan as any) = createSignal({ id: '1' } as Transaction);
     fixture.detectChanges();
     expect(component).toBeTruthy();
     expect(component.getParams()['parent']).toEqual('1');
   });
 
   it('should have delete', () => {
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = createSignal(true);
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
     expect(component.rowActions[2].isAvailable()).toEqual(true);

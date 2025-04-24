@@ -28,6 +28,7 @@ import { TransactionDetailComponent } from './transaction-detail.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
@@ -77,24 +78,24 @@ describe('TransactionDetailComponent', () => {
     spyOn(reportService, 'isEditable').and.returnValue(true);
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = transaction;
+    (component.transaction as any) = createSignal(transaction);
     (component.templateMap as any) = createSignal(testTemplateMap);
     component.ngOnInit();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
+    expect(component.form().get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
   it('#handleNavigate() should not save an invalid record', fakeAsync(() => {
     const navSpy = spyOn(component, 'navigateTo');
     const saveSpy = spyOn(component, 'save');
 
-    component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
+    component.form().patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     tick(100);
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
-    expect(component.form.invalid).toBe(true);
+    expect(component.form().invalid).toBe(true);
     expect(navSpy).not.toHaveBeenCalled();
     expect(saveSpy).not.toHaveBeenCalled();
   }));

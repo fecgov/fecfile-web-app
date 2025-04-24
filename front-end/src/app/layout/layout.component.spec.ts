@@ -10,6 +10,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { createSignal } from '@angular/core/primitives/signals';
+import { ElementRef } from '@angular/core';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -21,9 +23,7 @@ describe('LayoutComponent', () => {
   beforeEach(async () => {
     mockFooter = jasmine.createSpyObj('FooterComponent', ['getFooterElement']);
     mockBanner = jasmine.createSpyObj('BannerComponent', ['getBannerElement']);
-    mockFooter.getFooterElement = () => {
-      return { offsetHeight: 456 } as HTMLElement;
-    };
+    (mockFooter.footerElement as any) = createSignal(new ElementRef({ offsetHeight: 456 } as HTMLElement));
     mockBanner.getBannerElement = () => {
       return { offsetHeight: 35 } as HTMLElement;
     };
@@ -50,8 +50,8 @@ describe('LayoutComponent', () => {
     component = fixture.componentInstance;
 
     // Assign the mock footer and banner to the component's ViewChild properties
-    component.footer = mockFooter;
-    component.banner = mockBanner;
+    (component.footer as any) = createSignal(mockFooter);
+    (component.banner as any) = createSignal(mockBanner);
     fixture.detectChanges();
   });
 
@@ -60,39 +60,26 @@ describe('LayoutComponent', () => {
   });
 
   it('should not update content offset if showSidebar is true', () => {
-    component.contentOffset.nativeElement.style.paddingBottom = '0px';
-    component.layoutControls.showSidebar = true;
+    component.contentOffset()!.nativeElement.style.paddingBottom = '0px';
+    component.layoutControls().showSidebar = true;
     component.updateContentOffset();
     // Expect that paddingBottom has not changed
-    expect(component.contentOffset.nativeElement.style.paddingBottom).toBe('0px');
+    expect(component.contentOffset()!.nativeElement.style.paddingBottom).toBe('0px');
   });
 
   it('should update content offset correctly', () => {
-    component.layoutControls.showSidebar = false;
+    component.layoutControls().showSidebar = false;
     component.updateContentOffset();
 
     const expectedPaddingBottom = Math.max(
       64,
       window.innerHeight -
-        component.contentOffset.nativeElement.offsetHeight -
-        mockFooter.getFooterElement().offsetHeight -
+        component.contentOffset()!.nativeElement.offsetHeight -
+        mockFooter.footerElement().nativeElement.offsetHeight -
         mockBanner.getBannerElement().offsetHeight +
-        parseInt(component.contentOffset.nativeElement.style.paddingBottom, 10),
+        parseInt(component.contentOffset()!.nativeElement.style.paddingBottom, 10),
     );
 
-    expect(component.contentOffset.nativeElement.style.paddingBottom).toBe(expectedPaddingBottom + 'px');
-  });
-
-  it('should call onRouteChange on init', () => {
-    spyOn(component, 'onRouteChange');
-    component.ngOnInit();
-    expect(component.onRouteChange).toHaveBeenCalled();
-  });
-
-  it('should subscribe to router events on init', () => {
-    spyOn(component.router.events, 'pipe').and.callThrough();
-    component.ngOnInit();
-
-    expect(component.router.events.pipe).toHaveBeenCalled();
+    expect(component.contentOffset()!.nativeElement.style.paddingBottom).toBe(expectedPaddingBottom + 'px');
   });
 });

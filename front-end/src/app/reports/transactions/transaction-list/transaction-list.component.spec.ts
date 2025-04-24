@@ -18,6 +18,7 @@ import { TransactionReceiptsComponent } from './transaction-receipts/transaction
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -135,16 +136,18 @@ describe('TransactionListComponent', () => {
   });
 
   it('should call refreshTable on receipts, disbursements, and loans', () => {
-    component.receipts = { refreshTable: jasmine.createSpy('refreshTable') } as unknown as TransactionReceiptsComponent;
-    component.disbursements = {
+    (component.receipts as any) = createSignal({
       refreshTable: jasmine.createSpy('refreshTable'),
-    } as unknown as TransactionDisbursementsComponent;
-    component.loans = {
+    } as unknown as TransactionReceiptsComponent);
+    (component.disbursements as any) = createSignal({
       refreshTable: jasmine.createSpy('refreshTable'),
-    } as unknown as TransactionLoansAndDebtsComponent;
+    } as unknown as TransactionDisbursementsComponent);
+    (component.loans as any) = createSignal({
+      refreshTable: jasmine.createSpy('refreshTable'),
+    } as unknown as TransactionLoansAndDebtsComponent);
     component.refreshTables();
-    expect(component.receipts.refreshTable).toHaveBeenCalled();
-    expect(component.disbursements.refreshTable).toHaveBeenCalled();
-    expect(component.loans.refreshTable).toHaveBeenCalled();
+    expect(component.receipts().refreshTable).toHaveBeenCalled();
+    expect(component.disbursements().refreshTable).toHaveBeenCalled();
+    expect(component.loans().refreshTable).toHaveBeenCalled();
   });
 });

@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('TransactionIndependentExpenditurePickerComponent', () => {
   let component: TransactionIndependentExpenditurePickerComponent;
@@ -45,9 +46,11 @@ describe('TransactionIndependentExpenditurePickerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionIndependentExpenditurePickerComponent);
     component = fixture.componentInstance;
-    component.report = Form3X.fromJSON({
-      report_type: ReportTypes.F3X,
-    });
+    (component.report as any) = createSignal(
+      Form3X.fromJSON({
+        report_type: ReportTypes.F3X,
+      }),
+    );
     fixture.detectChanges();
   });
 

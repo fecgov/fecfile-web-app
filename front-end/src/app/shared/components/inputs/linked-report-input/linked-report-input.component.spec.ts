@@ -14,6 +14,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 
 describe('LinkedReportInputComponent', () => {
   let component: LinkedReportInputComponent;
@@ -40,10 +41,9 @@ describe('LinkedReportInputComponent', () => {
         date2: 'other_date',
       }),
     );
-    component.form = new FormGroup({}, { updateOn: 'blur' });
-    component.form.addControl('other_date', new SignalFormControl(injector));
-    component.form.addControl(testTemplateMap['date'], new SignalFormControl(injector));
-    component.ngOnInit();
+    (component.form as any) = createSignal(new FormGroup({}, { updateOn: 'blur' }));
+    component.form().addControl('other_date', new SignalFormControl(injector));
+    component.form().addControl(testTemplateMap['date'], new SignalFormControl(injector));
     fixture.detectChanges();
   });
 
@@ -54,8 +54,8 @@ describe('LinkedReportInputComponent', () => {
   it('should try to determine the linked F3X report when the dates change', async () => {
     const spy = spyOn(component, 'getLinkedForm3X').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
 
-    component.form.get('other_date')?.setValue('2025-02-12');
-    component.form.get(testTemplateMap['date'])?.setValue('2025-02-12');
+    component.form().get('other_date')?.setValue('2025-02-12');
+    component.form().get(testTemplateMap['date'])?.setValue('2025-02-12');
 
     fixture.detectChanges();
 
@@ -72,13 +72,13 @@ describe('LinkedReportInputComponent', () => {
 
     component.committeeF3xReports = firstValueFrom(of([testF3X]));
 
-    component.form.get('other_date')?.setValue(new Date('2020-02-21'));
+    component.form().get('other_date')?.setValue(new Date('2020-02-21'));
     component.getLinkedForm3X(undefined, new Date('2020-02-21')).then((report) => {
       expect(report).toEqual(testF3X);
       expect(component.getForm3XLabel(report)).toEqual('APRIL 15 (Q1): 01/15/2020 - 04/29/2020');
     });
 
-    component.form.get('other_date')?.setValue(new Date('2022-06-22'));
+    component.form().get('other_date')?.setValue(new Date('2022-06-22'));
     component.getLinkedForm3X(undefined, new Date('2022-06-22')).then((report) => {
       expect(report).toEqual(undefined);
       expect(component.getForm3XLabel(report)).toEqual('');

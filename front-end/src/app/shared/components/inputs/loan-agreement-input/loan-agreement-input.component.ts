@@ -37,7 +37,7 @@ export class LoanAgreementInputComponent extends BaseInputComponent {
   contactSelect = output<SelectItem<Contact>>();
 
   // Switches to show/hide groups of form input values
-  readonly showLoanRestructured = computed(() => !!this.getControl('loan_restructured')?.valueChangeSignal());
+  readonly showLoanRestructured = computed(() => this.getControl('loan_restructured')?.valueChangeSignal() === true);
   readonly showLineOfCredit = computed(() => !!this.getControl('line_of_credit')?.valueChangeSignal());
   readonly showOthersLiable = computed(() => !!this.getControl('others_liable')?.valueChangeSignal());
   readonly showSecured = computed(() => !!this.getControl(this.templateMap()['secured'])?.valueChangeSignal());

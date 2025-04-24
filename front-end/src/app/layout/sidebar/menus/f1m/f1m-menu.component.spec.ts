@@ -48,13 +48,13 @@ describe('F1MMenuComponent', () => {
 
   it('should get report from url', () => {
     router.navigateByUrl('/reports/f1m/edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-    expect(component.report().id).toBe('999');
+    expect(component.activeReport().id).toBe('999');
   });
 
   xit('should set the sidebar state to REVIEW A REPORT', async () => {
     await router.navigateByUrl('edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-    const items = component.itemsSignal();
+    const items = component.items();
     console.log(items);
-    expect(component.itemsSignal()[1].expanded).toBeTrue();
+    expect(component.items()[1].expanded).toBeTrue();
   });
 });

@@ -8,6 +8,7 @@ import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -40,7 +41,6 @@ describe('SelectReportDialogComponent', () => {
   });
 
   it('should get a list of available reports', fakeAsync(() => {
-    component.ngOnInit();
     ReattRedesUtils.selectReportDialog.set([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
     tick(500);
 
@@ -49,7 +49,6 @@ describe('SelectReportDialogComponent', () => {
   }));
 
   it('should clear and close on cancel', async () => {
-    component.ngOnInit();
     ReattRedesUtils.selectReportDialog.set([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
     expect(component.transaction).toBeTruthy();
 
@@ -59,12 +58,12 @@ describe('SelectReportDialogComponent', () => {
 
   describe('reattRedes', () => {
     it("should determine if it's a reattribution of redesignation", () => {
-      component.type = ReattRedesTypes.REATTRIBUTED;
+      (component.type as any) = createSignal(ReattRedesTypes.REATTRIBUTED);
       expect(component.actionLabel).toBe('reattribute');
       expect(component.urlParameter).toBe('reattribution');
       expect(component.actionTargetLabel).toBe('contributor');
 
-      component.type = ReattRedesTypes.REDESIGNATED;
+      (component.type as any) = createSignal(ReattRedesTypes.REDESIGNATED);
       expect(component.actionLabel).toBe('redesignate');
       expect(component.urlParameter).toBe('redesignation');
       expect(component.actionTargetLabel).toBe('election');
@@ -73,7 +72,6 @@ describe('SelectReportDialogComponent', () => {
 
   describe('createReattribution', () => {
     it('should throw error if no base transaction', async () => {
-      component.ngOnInit();
       (component.transaction as any) = createSignal(undefined);
       try {
         expect(component.transaction).toBeFalsy();
@@ -85,14 +83,14 @@ describe('SelectReportDialogComponent', () => {
 
     it('should redirect based on the selected report and transaction', async () => {
       const routerSpy = spyOn(component.router, 'navigateByUrl');
-      component.ngOnInit();
+
       ReattRedesUtils.selectReportDialog.set([testScheduleATransaction, ReattRedesTypes.REATTRIBUTED]);
-      component.selectedReport = component.availableReports[0];
-      component.selectedReport = testActiveReport;
+      component.selectedReport.set(component.availableReports()[0]);
+      component.selectedReport.set(testActiveReport);
       try {
         await component.createReattribution();
       } finally {
-        const route = `/reports/transactions/report/${component.selectedReport.id}/create/${testScheduleATransaction.transaction_type_identifier}?reattribution=${testScheduleATransaction.id}`;
+        const route = `/reports/transactions/report/${component.selectedReport()!.id}/create/${testScheduleATransaction.transaction_type_identifier}?reattribution=${testScheduleATransaction.id}`;
         expect(routerSpy).toHaveBeenCalledWith(route);
       }
     });

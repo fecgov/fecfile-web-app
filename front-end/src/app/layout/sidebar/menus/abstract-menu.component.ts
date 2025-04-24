@@ -16,7 +16,7 @@ export abstract class AbstractMenuComponent {
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);
   private readonly route = inject(ActivatedRoute);
-  protected readonly activeReport = this.store.selectSignal(selectActiveReport);
+  readonly activeReport = this.store.selectSignal(selectActiveReport);
 
   protected abstract readonly reportString: string;
 

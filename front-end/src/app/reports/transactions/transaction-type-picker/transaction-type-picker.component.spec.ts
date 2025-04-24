@@ -90,9 +90,9 @@ describe('TransactionTypePickerComponent', () => {
     const groups = component.transactionGroups();
     expect(groups[0]).toBe(ScheduleCTransactionGroups.LOANS);
 
-    let types = component.getTransactionTypes(groups[0]);
+    let types = component.transactionTypeMap()[groups[0]]!;
     expect(types[0]).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
-    types = component.getTransactionTypes(groups[1]);
+    types = component.transactionTypeMap()[groups[1]]!;
     expect(types[0]).toBe(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
   });
 
@@ -107,12 +107,12 @@ describe('TransactionTypePickerComponent', () => {
 
   describe('getTransactionTypes', () => {
     it('should limit by PACRestricted if Committee type is PAC', fakeAsync(() => {
-      const types = component.getTransactionTypes(ScheduleATransactionGroups.TRANSFERS);
+      const types = component.transactionTypeMap()[ScheduleATransactionGroups.TRANSFERS]!;
       expect(types.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
     }));
 
     it('should limit by PTY_ONLY if Committee type is PTY', fakeAsync(() => {
-      const testTypes = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
+      const testTypes = component.transactionTypeMap()[ScheduleATransactionGroups.OTHER]!;
       expect(testTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
     }));
   });

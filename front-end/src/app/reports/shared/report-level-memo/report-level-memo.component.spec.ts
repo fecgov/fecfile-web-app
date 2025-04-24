@@ -14,14 +14,16 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
   let fixture: ComponentFixture<ReportLevelMemoComponent>;
   let testMemoTextService: MemoTextService;
   let testMessageService: MessageService;
+  let injector: Injector;
 
   let mockRouter: jasmine.SpyObj<Router>;
 
@@ -51,6 +53,7 @@ describe('ReportLevelMemoComponent', () => {
   });
 
   beforeEach(() => {
+    injector = TestBed.inject(Injector);
     testMemoTextService = TestBed.inject(MemoTextService);
     testMessageService = TestBed.inject(MessageService);
     fixture = TestBed.createComponent(ReportLevelMemoComponent);
@@ -66,10 +69,9 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.rec_type = 'test_rec_type';
     testMemoText.transaction_id_number = 'test_tin';
     testMemoText.text4000 = 'test_text4k';
-    component.form.addControl('text4000', new SignalFormControl(injector));
-    component.form.get('text4000')?.setValue(testText4kValue);
+    component.form().addControl('text4000', new SignalFormControl(injector));
+    component.form().get('text4000')?.setValue(testText4kValue);
     spyOn(testMemoTextService, 'getForReportId').and.returnValue(Promise.resolve([testMemoText]));
-    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 

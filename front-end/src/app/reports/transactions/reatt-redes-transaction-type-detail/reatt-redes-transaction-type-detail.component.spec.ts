@@ -21,6 +21,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { createSignal } from '@angular/core/primitives/signals';
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -63,7 +64,7 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
     fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
     spyOn(component, 'getChildTransaction').and.callFake(() => transaction);
-    component.transaction = transaction;
+    (component.transaction as any) = createSignal(transaction);
     (component.templateMap as any) = createSignal(testTemplateMap);
     component.ngOnInit();
   });

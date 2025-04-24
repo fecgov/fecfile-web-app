@@ -5,14 +5,17 @@ import { FormBuilder } from '@angular/forms';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
-import { SubscriptionFormControl } from 'app/shared/utils/signal-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ConfirmationService } from 'primeng/api';
+import { createSignal } from '@angular/core/primitives/signals';
+import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { Injector } from '@angular/core';
 
 describe('TransactionInputComponent', () => {
   let component: TransactionInputComponent;
   let fixture: ComponentFixture<TransactionInputComponent>;
+  let injector: Injector;
 
   const selectItem = {
     value: testContact,
@@ -29,16 +32,17 @@ describe('TransactionInputComponent', () => {
         ReportService,
       ],
     });
+    injector = TestBed.inject(Injector);
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction;
-    component.transaction.transactionType.mandatoryFormValues = {
+    (component.transaction as any) = createSignal(testScheduleATransaction);
+    component.transaction()!.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };
-    component.form.setControl('loan_balance', new SignalFormControl(injector));
-    component.form.setControl('contribution_amount', new SignalFormControl(injector));
-    component.form.setControl('payment_amount', new SignalFormControl(injector));
-    component.form.setControl('balance_at_close', new SignalFormControl(injector));
+    component.form().setControl('loan_balance', new SignalFormControl(injector));
+    component.form().setControl('contribution_amount', new SignalFormControl(injector));
+    component.form().setControl('payment_amount', new SignalFormControl(injector));
+    component.form().setControl('balance_at_close', new SignalFormControl(injector));
     component.ngOnInit();
   });
 
@@ -73,8 +77,8 @@ describe('TransactionInputComponent', () => {
   it('contactTypeSelected should update entity_type form control', () => {
     const fb = new FormBuilder();
     const form = fb.group({ entity_type: new SignalFormControl(injector) });
-    component.form = form;
+    (component.form as any) = createSignal(form);
     component.contactTypeSelected(ContactTypes.ORGANIZATION);
-    expect(component.form.get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);
+    expect(component.form().get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);
   });
 });

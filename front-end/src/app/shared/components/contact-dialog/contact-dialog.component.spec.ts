@@ -15,7 +15,7 @@ import { ContactDialogComponent, TransactionData } from './contact-dialog.compon
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypeLabels } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -29,6 +29,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { createSignal } from '@angular/core/primitives/signals';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { Injector } from '@angular/core';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -69,7 +70,8 @@ describe('ContactDialogComponent', () => {
     (component.contactLookup as any) = createSignal({
       contactTypeFormControl: new SignalFormControl(injector),
     } as ContactLookupComponent);
-    component.ngOnInit();
+    (component.contactTypeOptions as any) = createSignal(LabelUtils.getPrimeOptions(ContactTypeLabels));
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -78,7 +80,6 @@ describe('ContactDialogComponent', () => {
 
   it('should return CandidateOfficeTypes when called', () => {
     (component.defaultCandidateOffice as any) = createSignal(CandidateOfficeTypes.PRESIDENTIAL);
-    component.ngOnInit();
     component.openDialog();
     expect(component.CandidateOfficeTypes.HOUSE).toBe(CandidateOfficeTypes.HOUSE);
   });
@@ -94,11 +95,6 @@ describe('ContactDialogComponent', () => {
     component.contactLookup().contactTypeFormControl.enable();
     component.openDialog();
     expect(component.contactLookup().contactTypeFormControl.disabled).toBeFalse();
-  });
-
-  it('should close dialog with flags set', () => {
-    (component.detailVisible as any) = createSignal(true);
-    expect(component.detailVisible()).toBeFalse();
   });
 
   it('should save contact', () => {

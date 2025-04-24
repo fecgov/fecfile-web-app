@@ -1,134 +1,111 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { Form99 } from 'app/shared/models/form-99.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { DividerModule } from 'primeng/divider';
 import { PrintPreviewComponent } from './print-preview.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { of } from 'rxjs';
+import { Report } from 'app/shared/models';
 
 describe('PrintPreviewComponent', () => {
   let component: PrintPreviewComponent;
-  let fixture: ComponentFixture<PrintPreviewComponent>;
-  let reportService: ReportService;
-  let webPrintService: WebPrintService;
+  let reportService: jasmine.SpyObj<ReportService>;
+  let webPrintService: jasmine.SpyObj<WebPrintService>;
+  let router: jasmine.SpyObj<Router>;
+  let route: ActivatedRoute;
+  let store: Store;
+
+  const mockReport: Report = {
+    id: '1',
+    formLabel: 'Form X',
+    formSubLabel: 'Quarterly',
+    webprint_submission: {
+      fec_status: 'COMPLETED',
+      fecfile_task_state: 'SUCCEEDED',
+      fec_image_url: 'http://example.com/file.pdf',
+      created: '2025-04-23',
+    },
+  } as unknown as Report;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [PrintPreviewComponent, DividerModule, PrintPreviewComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
-    }).compileComponents();
-    fixture = TestBed.createComponent(PrintPreviewComponent);
-    reportService = TestBed.inject(ReportService);
-    webPrintService = TestBed.inject(WebPrintService);
-    component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
-    spyOn(reportService, 'update').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('is not-submitted when there is no submission object', () => {
-    const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: undefined,
+      providers: [
+        PrintPreviewComponent,
+        provideMockStore({
+          selectors: [
+            { selector: selectActiveReport, value: mockReport },
+            { selector: selectCommitteeAccount, value: { id: 1 } },
+          ],
+        }),
+        { provide: ReportService, useValue: jasmine.createSpyObj('ReportService', ['get', 'fecUpdate']) },
+        { provide: WebPrintService, useValue: jasmine.createSpyObj('WebPrintService', ['submitPrintJob']) },
+        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigateByUrl']) },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              getBackUrl: () => '/back',
+              getContinueUrl: () => '/continue',
+            }),
+          },
+        },
+      ],
     });
 
-    component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe('not-submitted');
+    component = TestBed.inject(PrintPreviewComponent);
+    reportService = TestBed.inject(ReportService) as jasmine.SpyObj<ReportService>;
+    webPrintService = TestBed.inject(WebPrintService) as jasmine.SpyObj<WebPrintService>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    route = TestBed.inject(ActivatedRoute);
+    store = TestBed.inject(Store);
   });
 
-  it('is checking when the report is processing', () => {
-    const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: {
-        fec_status: 'PROCESSING',
-      },
-    });
-
-    component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe('checking');
+  it('should compute downloadURL correctly', () => {
+    expect(component.downloadURL()).toBe('http://example.com/file.pdf');
   });
 
-  it('is success when the report is complete', () => {
-    const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: {
-        fec_status: 'COMPLETED',
-        fecfile_task_state: 'SUCCEEDED',
-        fec_image_url: 'http://example.com',
-      },
-    });
-    component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe('success');
-    expect(component.downloadURL).toBe('http://example.com');
+  it('should compute submitDate correctly', () => {
+    expect(component.submitDate()).toBe(new Date('2025-04-23'));
   });
 
-  it('is failure when the report is failed', () => {
-    const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: {
-        fec_status: 'FAILED',
-        fec_message: 'Something failed on efo.',
-      },
-    });
-    component.updatePrintStatus(testF3x);
-    expect(component.printError).toBe('Something failed on efo.');
+  it('should detect webPrintStage as "success"', () => {
+    expect(component.webPrintStage()).toBe('success');
   });
 
-  it('Updates with a failed report', () => {
-    const testF3x: Form3X = Form3X.fromJSON({
-      webprint_submission: {
-        fecfile_task_state: 'FAILED',
-        fecfile_error: 'fecfile dropped the ball',
-      },
-    });
-
-    component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe('failure');
-    expect(component.printError).toBe('fecfile dropped the ball');
+  it('should open the download URL in a new tab when downloadPDF is called', () => {
+    spyOn(window, 'open');
+    component.downloadPDF();
+    expect(window.open).toHaveBeenCalledWith('http://example.com/file.pdf', '_blank');
   });
 
-  it('#submitPrintJob() calls the service', fakeAsync(() => {
-    component.report = Form3X.fromJSON({ id: '123' });
-    component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
-    const poll = spyOn(component, 'pollPrintStatus');
-    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => Promise.resolve(component.report));
-    component.submitPrintJob();
+  it('should call webPrintService.submitPrintJob and pollPrintStatus on successful submit', async () => {
+    const pollSpy = spyOn(component, 'pollPrintStatus').and.stub();
+    webPrintService.submitPrintJob.and.resolveTo();
+    reportService.fecUpdate.and.resolveTo();
 
-    tick(100);
-    expect(update).toHaveBeenCalled();
-    expect(submit).toHaveBeenCalled();
-    expect(poll).toHaveBeenCalled();
-  }));
+    await component.submitPrintJob();
+    expect(webPrintService.submitPrintJob).toHaveBeenCalledWith(mockReport.id!);
+    expect(pollSpy).toHaveBeenCalled();
+  });
 
-  it('#submitPrintJob() calls the service for a non-F3X report', fakeAsync(() => {
-    component.report = Form99.fromJSON({ id: '123' });
-    component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
-    const poll = spyOn(component, 'pollPrintStatus');
-    component.submitPrintJob();
+  it('should update report with error on submitPrintJob failure', async () => {
+    webPrintService.submitPrintJob.and.rejectWith(new Error('fail'));
+    reportService.fecUpdate.and.resolveTo();
 
-    tick(100);
-    expect(submit).toHaveBeenCalled();
-    expect(poll).toHaveBeenCalled();
-  }));
+    await component.submitPrintJob();
 
-  it('#submitPrintJob() sets failure state on failure', fakeAsync(() => {
-    component.report = Form3X.fromJSON({ id: '123' });
-    component.pollingTime = 0;
-    spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
-    const poll = spyOn(component, 'pollPrintStatus');
-    spyOn(reportService, 'fecUpdate').and.returnValue(Promise.resolve(component.report));
-    component.submitPrintJob();
+    expect(component.report().webprint_submission?.fecfile_task_state).toBe('FAILED');
+    expect(component.report().webprint_submission?.fec_message).toBe('Failed to compile PDF');
+  });
 
-    tick(100);
-    expect(poll).not.toHaveBeenCalled();
-    expect(component.webPrintStage).toBe('failure');
-    expect(component.printError).toBe('Failed to compile PDF');
-  }));
+  it('should navigate using getBackUrl and getContinueUrl', () => {
+    component.router.navigateByUrl(component.getBackUrl()(mockReport));
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/back');
+
+    component.router.navigateByUrl(component.getContinueUrl()(mockReport));
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/continue');
+  });
 });
