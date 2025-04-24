@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -43,7 +43,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   readonly report = this.store.selectSignal(selectActiveReport);
   abstract scheduleTransactionTypeLabels: LabelList;
-  override rowsPerPage = 5;
+  override rowsPerPage = signal(5);
   paginationPageSizeOptions = [5, 10, 15, 20];
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
 
@@ -212,11 +212,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return {} as Transaction;
   }
 
-  override getParams(): QueryParams {
-    const params: QueryParams = { ...super.getParams(), page_size: this.rowsPerPage };
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.reportId) params['report_id'] = this.reportId;
     return params;
-  }
+  });
 
   override editItem(item: Transaction): Promise<boolean> {
     return this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);

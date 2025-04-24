@@ -7,22 +7,19 @@
 >
   <app-table
     title="Restore deleted contacts"
+    [(first)]="first"
     [items]="items"
     [totalItems]="totalItems"
     [loading]="loading"
     sortField="sort_name"
-    [rowsPerPage]="rowsPerPage"
-    [selectAll]="selectAll"
+    [(rowsPerPage)]="rowsPerPage"
     [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-    [selectedItems]="selectedItems"
+    [(selectedItems)]="selectedItems"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
     [sortableHeaders]="sortableHeaders"
     [hasCheckbox]="true"
     [checkboxLabel]="getCheckboxLabel.bind(this)"
     (loadTableItems)="loadTableItems($event)"
-    (selectionChange)="onSelectionChange($event)"
-    (selectAllChange)="onSelectAllChange($event)"
-    (rowsPerPageChange)="onRowsPerPageChange($event)"
   >
     <ng-template #header> </ng-template>
     <ng-template #body let-item>
@@ -47,7 +44,7 @@
         pButton
         pRipple
         id="restoreButton"
-        [disabled]="selectedItems.length <= 0"
+        [disabled]="selectedItems().length <= 0"
         label="Restore selected"
         icon="pi pi-check"
         class="p-button-primary"

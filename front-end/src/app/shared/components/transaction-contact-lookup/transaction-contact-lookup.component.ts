@@ -37,7 +37,7 @@ export class TransactionContactLookupComponent implements OnInit {
 
   readonly contactDialog = viewChild(ContactDialogComponent);
 
-  detailVisible = false;
+  readonly detailVisible = signal(false);
 
   readonly createContactForm: FormGroup = this.formBuilder.group(
     SchemaUtils.getFormGroupFields(this.injector, [
@@ -118,17 +118,17 @@ export class TransactionContactLookupComponent implements OnInit {
       this.contactSelect.emit({ value: contact });
     } else {
       this.contactDialog()?.updateContact(contact);
-      this.detailVisible = true;
+      this.detailVisible.set(true);
     }
   }
 
   createNewContactSelected() {
     this.contactDialog()?.updateContact(Contact.fromJSON({ type: this.currentType() }));
-    this.detailVisible = true;
+    this.detailVisible.set(true);
   }
 
   saveContact(contact: Contact) {
     this.contactSelect.emit({ value: contact });
-    this.detailVisible = false;
+    this.detailVisible.set(false);
   }
 }

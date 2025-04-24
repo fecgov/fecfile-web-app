@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, Component, ElementRef, inject, output } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, ElementRef, inject, output, Signal, signal } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
-import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
-import { ListRestResponse } from 'app/shared/models';
 
 @Component({
   template: '',
@@ -17,18 +16,28 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
   item!: T;
   items: T[] = [];
-  rowsPerPage = 10;
+  readonly rowsPerPage = signal(10);
   totalItems = 0;
-  pagerState: TableLazyLoadEvent | undefined;
+  pagerState?: TableLazyLoadEvent;
   loading = true;
-  selectAll = false;
-  selectedItems: T[] = [];
+  readonly selectedItems = signal<T[]>([]);
   detailVisible = false;
   isNewItem = true;
+  readonly first = signal(0);
 
   protected caption?: string;
 
   readonly reloadTables = output<void>();
+
+  constructor() {
+    effect(() => {
+      this.rowsPerPage();
+      this.loadTableItems({
+        first: 0,
+        rows: this.rowsPerPage(),
+      });
+    });
+  }
 
   ngAfterViewInit(): void {
     // Fix accessibility issues in paginator buttons.
@@ -64,22 +73,20 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState
-        ? this.pagerState
-        : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+      event = this.pagerState ?? {
+        first: 0,
+        rows: this.rowsPerPage(),
+      };
     }
 
     // Calculate the record page number to retrieve from the API.
-    const first: number = event.first ? event.first : 0;
-    const rows: number = event.rows ? event.rows : 10;
+    const first: number = event.first ?? 0;
+    const rows: number = event.rows ?? 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = this.getParams();
+    const params = this.params();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ?? '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
@@ -96,41 +103,6 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
     this.totalItems = response.count;
     this.loading = false;
-  }
-
-  onRowsPerPageChange(rowsPerPage: number) {
-    this.rowsPerPage = rowsPerPage;
-    this.loadTableItems({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
-  }
-
-  /**
-   * Event listener when user selects table row checkboxes.
-   * @param items
-   */
-  public onSelectionChange(items: T[] = []) {
-    this.selectAll = items.length === this.totalItems;
-    this.selectedItems = items;
-  }
-
-  /**
-   * Event listener when user selects the "all" checkbox to select/deselect row checkboxes.
-   * @param event
-   */
-  public async onSelectAllChange(event: TableSelectAllChangeEvent): Promise<void> {
-    const checked: boolean = event.checked;
-
-    if (checked) {
-      await this.itemService.getTableData(1).then((response: ListRestResponse) => {
-        this.selectedItems = response.results || [];
-        this.selectAll = true;
-      });
-    } else {
-      this.selectedItems = [];
-      this.selectAll = false;
-    }
   }
 
   public addItem() {
@@ -171,12 +143,12 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
   public async deleteSelectedItemsAccept() {
     const obs: Promise<null>[] = [];
-    this.selectedItems.forEach((item: T) => {
+    this.selectedItems().forEach((item: T) => {
       obs.push(this.itemService.delete(item));
     });
     await Promise.all(obs);
-    this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
-    this.selectedItems = [];
+    this.items = this.items.filter((item: T) => !this.selectedItems().includes(item));
+    this.selectedItems.set([]);
     this.refreshTable();
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
   }
@@ -190,7 +162,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   }
 
   /**
-   * getParams() is a method that provides optional parameters that the table-list-base component
+   * params() is a method that provides optional parameters that the table-list-base component
    * will pass in the GET request that loads the table's items, passing the parameters through the
    * itemService and to the api service.  A component extending this component can override this
    * method in order to control the parameters being sent in the GET request without overriding the
@@ -199,9 +171,9 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
    * @return QueryParams
    */
 
-  public getParams(): QueryParams {
-    return { page_size: this.rowsPerPage };
-  }
+  readonly params: Signal<QueryParams> = computed(() => {
+    return { page_size: this.rowsPerPage() };
+  });
 
   public onRowActionClick(action: TableAction, item: T) {
     action.action(item);

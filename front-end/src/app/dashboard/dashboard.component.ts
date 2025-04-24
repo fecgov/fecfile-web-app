@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, viewChildren } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChildren } from '@angular/core';
 import { ReportService } from 'app/shared/services/report.service';
 import { RouterLink } from '@angular/router';
 import { FormTypeDialogComponent } from '../reports/form-type-dialog/form-type-dialog.component';
@@ -16,7 +16,7 @@ export class DashboardComponent {
   readonly reports = derivedAsync(async () => {
     return (await this.reportService.getAllReports()).filter((r) => r.report_status === 'In progress');
   });
-  dialogVisible = false;
+  readonly dialogVisible = signal(false);
   readonly elements = viewChildren<ElementRef<HTMLParagraphElement>>('reportText');
 
   constructor() {

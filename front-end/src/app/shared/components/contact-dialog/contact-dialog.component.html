@@ -259,15 +259,15 @@
       <app-table
         title="Transaction history"
         sortField="transaction_type_identifier"
+        [(first)]="first"
         [items]="transactions"
         [totalItems]="totalTransactions"
         [sortableHeaders]="sortableHeaders"
         [loading]="tableLoading"
-        [rowsPerPage]="rowsPerPage"
+        [(rowsPerPage)]="rowsPerPage"
         itemName="transactions"
         [emptyMessage]="emptyMessage"
         (loadTableItems)="loadTransactions($event)"
-        (rowsPerPageChange)="onRowsPerPageChange($event)"
       >
         <ng-template #header> </ng-template>
         <ng-template #body let-transaction>

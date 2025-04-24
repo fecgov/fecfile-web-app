@@ -112,7 +112,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     const childTransaction = this.childTransaction();
     const childTemplateMap = this.childTemplateMap();
     if (transaction && childTransaction && childTemplateMap) {
-      TransactionContactUtils.updateContactsWithForm(transaction, this.templateMap()!, this.form());
+      TransactionContactUtils.updateContactsWithForm(transaction, this.templateMap(), this.form());
       TransactionContactUtils.updateContactsWithForm(childTransaction, childTemplateMap, this.childForm());
     } else {
       this.store.dispatch(singleClickEnableAction());
@@ -202,7 +202,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
       if (childTransaction.transactionType) {
         const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
         childFieldControl?.enable();
-        const value = this.form().get(this.templateMap()![inherittedField])?.value;
+        const value = this.form().get(this.templateMap()[inherittedField])?.value;
         if (value !== undefined) {
           childFieldControl?.setValue(value);
           childFieldControl?.updateValueAndValidity();

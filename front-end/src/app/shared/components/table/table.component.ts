@@ -1,7 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, TemplateRef, input, output, viewChild, contentChild, computed, model } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  input,
+  output,
+  viewChild,
+  contentChild,
+  computed,
+  model,
+  signal,
+  effect,
+} from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
-import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table, TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
 import { PrimeTemplate } from 'primeng/api';
 import { Select } from 'primeng/select';
@@ -26,54 +37,45 @@ import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.compo
 export class TableComponent<T> {
   readonly title = input<string>();
   readonly itemName = input('entries');
-  readonly items = input<T[]>([]);
+  readonly items = input.required<T[]>();
   readonly globalFilterFields = input(['']);
-  readonly totalItems = model(0);
-  readonly loading = input(false);
-  readonly rowsPerPage = model(5);
-  readonly selectAll = input(false);
-  readonly selectedItems = input<T[]>([]);
+  readonly totalItems = model.required<number>();
+  readonly loading = input.required<boolean>();
+  readonly rowsPerPage = model.required<number>();
+  readonly selectedItems = model<T[]>([]);
   readonly currentPageReportTemplate = input('Showing {first} to {last} of {totalRecords} items');
-  readonly sortField = input('');
+  readonly sortField = input.required<string>();
   readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
   readonly hasCheckbox = input(false);
   readonly checkboxLabel = input<(item: T) => string>();
   readonly emptyMessage = input('No data available in table');
 
   readonly loadTableItems = output<TableLazyLoadEvent>();
-  readonly selectionChange = output<T[]>();
-  readonly selectAllChange = output<TableSelectAllChangeEvent>();
-  readonly rowsPerPageChange = output<number>();
   readonly pageChange = output<PageTransitionEvent>();
 
-  paginationPageSizeOptions = [5, 10, 15, 20];
+  readonly paginationPageSizeOptions = [5, 10, 15, 20];
 
-  readonly dt = viewChild<Table>('dt');
+  readonly dt = viewChild.required<Table>('dt');
 
   readonly caption = contentChild<TemplateRef<any>>('caption');
   readonly header = contentChild<TemplateRef<any>>('header');
   readonly body = contentChild<TemplateRef<any>>('body');
 
   readonly showing = computed(() => {
-    const dt = this.dt();
-    if (!dt) return 'No data available in table';
-    const from = this.totalItems() === 0 ? 0 : this.first + 1;
-    let to = this.first;
-    if (dt.rows) to += dt.rows;
-    const total = dt.totalRecords ?? 0;
-    if (to > total) to = total;
-    return `Showing ${from} to ${to} of ${total} ${this.itemName()}`;
+    return `Showing ${this.from()} to ${this.to()} of ${this.totalItems()} ${this.itemName()}`;
   });
 
-  get first(): number {
-    return this.dt()?.first ?? 0;
-  }
+  readonly from = computed(() => (this.totalItems() === 0 ? 0 : this.first() + 1));
+  readonly to = computed(() => {
+    let to = this.first() + this.rowsPerPage();
+    const total = this.totalItems();
+    if (to > total) return total;
+    return to;
+  });
 
-  set first(first: number) {
-    this.dt()!.first = first;
-  }
+  readonly first = model.required<number>();
 
   changePage(value: PaginatorState) {
-    this.dt()!.onPageChange({ first: value.first ?? 0, rows: value.rows ?? 0 });
+    this.dt().onPageChange(value as TablePageEvent);
   }
 }

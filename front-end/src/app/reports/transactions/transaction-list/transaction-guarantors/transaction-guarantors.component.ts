@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -22,19 +22,21 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   private readonly cdr = inject(ChangeDetectorRef);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 
-  loan = input<Transaction>();
+  readonly loan = input.required<Transaction>();
 
   override sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
     { field: 'amount', label: 'Guaranteed financial information amount' },
   ];
 
-  override getParams(): QueryParams {
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.loan()?.id) {
-      return { ...super.getParams(), parent: this.loan()?.id ?? '' };
+      params['parent'] = this.loan().id ?? '';
     }
-    return super.getParams();
-  }
+    return params;
+  });
+
   override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     if (!this.loan()?.id) {
       this.items = [];

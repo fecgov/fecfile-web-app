@@ -1,18 +1,15 @@
 <app-table
   title="Guarantors"
+  [(first)]="first"
   [items]="items"
   [totalItems]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
   [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
   sortField="name"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #header>
     <th id="buttons" role="columnheader">Actions</th>

@@ -13,8 +13,8 @@ import { Popover, PopoverModule } from 'primeng/popover';
 export class TableActionsButtonComponent<T> {
   readonly popover = viewChild<Popover>(Popover);
 
-  readonly tableActions = input<TableAction[]>([]);
-  readonly actionItem = input<T>();
+  readonly tableActions = input.required<TableAction[]>();
+  readonly actionItem = input.required<T>();
   readonly buttonIcon = input('');
   readonly buttonLabel = input('');
   readonly buttonStyleClass = input('');

@@ -1,22 +1,21 @@
 <div class="card">
   <p-table
     #dt
-    [value]="items()"
-    [lazy]="true"
-    (onLazyLoad)="loadTableItems.emit($event)"
-    responsiveLayout="scroll"
     dataKey="id"
-    [selection]="selectedItems()"
-    (selectionChange)="selectionChange.emit($event)"
-    [selectAll]="selectAll()"
-    (selectAllChange)="selectAllChange.emit($event)"
-    [rows]="rowsPerPage()"
+    [(selection)]="selectedItems"
+    [(rows)]="rowsPerPage"
+    [(first)]="first"
+    [value]="items()"
     [totalRecords]="totalItems()"
     [loading]="loading()"
     [globalFilterFields]="globalFilterFields()"
     [currentPageReportTemplate]="currentPageReportTemplate()"
     [sortField]="sortField()"
+    [lazy]="true"
     [showCurrentPageReport]="true"
+    selectionMode="multiple"
+    responsiveLayout="scroll"
+    (onLazyLoad)="loadTableItems.emit($event)"
     stripedRows
     showGridlines
   >
@@ -66,8 +65,8 @@
           <p-select
             [options]="paginationPageSizeOptions"
             [(ngModel)]="rowsPerPage"
+            appendTo="body"
             class="custom-paginator-dropdown"
-            (onChange)="rowsPerPageChange.emit($event.value)"
           >
             <ng-template pTemplate="dropdownicon">
               <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
@@ -77,9 +76,9 @@
         <div class="responsive-container">
           <span class="paginator-text">{{ showing() }}:</span>
           <p-paginator
-            [rows]="rowsPerPage"
-            [totalRecords]="totalItems"
-            [first]="first"
+            [rows]="rowsPerPage()"
+            [totalRecords]="totalItems()"
+            [first]="first()"
             (onPageChange)="changePage($event)"
           >
             <ng-template pTemplate="firstpagelinkicon">
@@ -104,11 +103,7 @@
     <ng-template pTemplate="paginatorleft">
       <div class="responsive-container">
         <span>Results per table:</span>
-        <p-select
-          [options]="paginationPageSizeOptions"
-          [(ngModel)]="rowsPerPage"
-          (onChange)="rowsPerPageChange.emit($event.value)"
-        >
+        <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
           <ng-template pTemplate="dropdownicon">
             <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
           </ng-template>

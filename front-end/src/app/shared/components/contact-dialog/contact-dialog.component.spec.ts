@@ -28,7 +28,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { createSignal } from '@angular/core/primitives/signals';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 
 describe('ContactDialogComponent', () => {
@@ -189,9 +189,8 @@ describe('ContactDialogComponent', () => {
     });
 
     it('should get params', () => {
-      component.rowsPerPage = 5;
       component.contact()!.id = '123';
-      const params = component.getParams();
+      const params = component.params();
       expect(params['page_size']).toBe(5);
       expect(params['contact']).toBe('123');
     });

@@ -31,7 +31,7 @@
         "@angular/router": "19.2.1",
         "@ngrx/effects": "^19.0.1",
         "@ngrx/store": "^19.0.1",
-        "@primeng/themes": "^19.0.9",
+        "@primeng/themes": "^19.1.0",
         "@types/lodash": "^4.17.14",
         "@types/luxon": "^3.4.2",
         "class-transformer": "^0.5.1",
@@ -45,7 +45,7 @@
         "ngxtension": "^5.0.0",
         "primeflex": "^4.0.0",
         "primeicons": "^7.0.0",
-        "primeng": "^19.0.9"
+        "primeng": "^19.1.0"
     },
     "devDependencies": {
         "@angular-devkit/core": "19.2.1",

@@ -1,4 +1,4 @@
-import { Component, inject, model, output } from '@angular/core';
+import { Component, effect, inject, model, output } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -28,13 +28,23 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     { field: 'occupation', label: 'Occupation' },
   ];
 
+  constructor() {
+    super();
+    effect(() => {
+      if (this.visible()) {
+        this.first.set(0);
+        this.loadTableItems({ first: 0, rows: this.rowsPerPage() });
+      }
+    });
+  }
+
   hide(): void {
-    this.onSelectionChange([]);
+    this.selectedItems.set([]);
     this.visible.set(false);
   }
 
   async restoreSelected(): Promise<void> {
-    const restoredContacts = await this.itemService.restore(this.selectedItems);
+    const restoredContacts = await this.itemService.restore(this.selectedItems());
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',

@@ -38,8 +38,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
 
-  override rowsPerPage = 10;
-
   readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
     { field: 'email', label: 'Email' },
