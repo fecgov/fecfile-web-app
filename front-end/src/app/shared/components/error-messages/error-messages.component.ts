@@ -1,7 +1,8 @@
-import { Component, computed, inject, input, LOCALE_ID } from '@angular/core';
+import { Component, computed, effect, inject, Injector, input, LOCALE_ID } from '@angular/core';
 import { formatCurrency } from '@angular/common';
 import { NgxControlError } from 'ngxtension/control-error';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
+import { allEventsSignal } from 'ngxtension/form-events';
 
 @Component({
   selector: 'app-error-messages',
@@ -9,6 +10,7 @@ import { SignalFormControl } from 'app/shared/utils/signal-form-control';
   imports: [NgxControlError],
 })
 export class ErrorMessagesComponent {
+  private readonly injector = inject(Injector);
   private readonly localeId = inject(LOCALE_ID);
   // Pass the form and fieldName OR pass the formControl itself.
   readonly control = input<SignalFormControl>();
@@ -120,4 +122,16 @@ export class ErrorMessagesComponent {
       this.noCorrespondingForm3XErrorMessage() ||
       'There is no Form 3X with corresponding coverage dates currently in progress. Create a new Form 3X to save this transaction.',
   );
+
+  // formState = allEventsSignal(this.control()!);
+
+  // ngOnInit() {
+  //   effect(
+  //     () => {
+  //       const form = this.formState();
+  //       console.log(form);
+  //     },
+  //     { injector: this.injector },
+  //   );
+  // }
 }

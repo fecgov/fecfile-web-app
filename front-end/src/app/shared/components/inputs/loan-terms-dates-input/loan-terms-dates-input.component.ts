@@ -5,7 +5,7 @@ import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
@@ -26,7 +26,7 @@ enum LoanTermsFieldSettings {
   templateUrl: './loan-terms-dates-input.component.html',
   imports: [ReactiveFormsModule, CalendarComponent, Select, ErrorMessagesComponent, InputText],
 })
-export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
+export class LoanTermsDatesInputComponent extends BaseTransactionInputComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);
   interestInput = viewChild<InputText>('interestRatePercentage');
   clearValuesOnChange = true;
@@ -52,7 +52,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     effectOnceIf(
       () =>
         !isPulledForwardLoan(this.transaction()) &&
-        !isPulledForwardLoan(this.transaction()?.parent_transaction) &&
+        !isPulledForwardLoan(this.transaction().parent_transaction) &&
         this.report(),
       () => {
         const f3x = this.report() as Form3X;

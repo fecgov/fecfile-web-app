@@ -1,5 +1,5 @@
 <div class="p-fluid">
-  <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'">
+  <div [class.transaction-contact-invalid]="errorMessageFormControl()?.status === 'INVALID'">
     <app-contact-lookup
       [contactType]="currentType()"
       [contactTypeOptions]="contactTypeOptions()"
@@ -20,9 +20,9 @@
     (savedContact)="saveContact($event)"
   ></app-contact-dialog>
 </div>
-@if (errorMessageFormControl) {
+@if (errorMessageFormControl()) {
   <app-error-messages
-    [control]="errorMessageFormControl"
+    [control]="errorMessageFormControl()!"
     [formSubmitted]="formSubmitted()"
     [requiredErrorMessage]="currentContactLabel() + ' information is required'"
   ></app-error-messages>

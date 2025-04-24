@@ -1,5 +1,5 @@
 <div [formGroup]="form()">
-  @if (transaction()?.transactionType?.hasDate()) {
+  @if (transactionType().hasDate()) {
     @if (templateMap()['date2']) {
       <div class="grid">
         <div class="col-12">
@@ -15,7 +15,7 @@
             [fieldName]="templateMap()['date2']"
             [form]="form()"
             [formSubmitted]="formSubmitted()"
-            [label]="transaction()?.transactionType?.date2Label || ''"
+            [label]="transactionType().date2Label || ''"
             requiredErrorMessage="At least ONE date field must be entered."
           ></app-calendar>
         </div>
@@ -26,7 +26,7 @@
           [fieldName]="templateMap()['date']"
           [form]="form()"
           [formSubmitted]="formSubmitted()"
-          [label]="transaction()?.transactionType?.dateLabel || ''"
+          [label]="transactionType().dateLabel || ''"
           [showErrors]="!templateMap()['date2']"
         ></app-calendar>
       </div>
@@ -35,7 +35,7 @@
           <app-linked-report-input [form]="form()" [templateMap]="templateMap()"></app-linked-report-input>
         </div>
       }
-      @if (transaction()?.transactionType?.scheduleId === 'F') {
+      @if (transactionType().scheduleId === 'F') {
         <div class="col-4">
           <div class="field">
             <label for="general_election_year">GENERAL ELECTION YEAR</label>
@@ -50,9 +50,7 @@
     </div>
   }
 
-  @if (
-    transaction()?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction()) && !isLoanRepayment(transaction())
-  ) {
+  @if (transactionType().hasMemoCode() && !isDebtRepayment(transaction()) && !isLoanRepayment(transaction())) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -72,7 +70,7 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="amount">{{ transaction()?.transactionType?.amountLabel }}</label>
+        <label for="amount">{{ transactionType().amountLabel }}</label>
         <p-inputnumber
           inputId="amount"
           mode="currency"
@@ -93,7 +91,7 @@
     @if (showAggregate()) {
       <div class="col-6">
         <div class="field">
-          <label for="aggregate">{{ transaction()?.transactionType?.aggregateLabel }}</label>
+          <label for="aggregate">{{ transactionType().aggregateLabel }}</label>
           <p-inputnumber
             inputId="aggregate"
             mode="currency"
@@ -114,7 +112,7 @@
     @if (showCalendarYTD()) {
       <div class="col-6">
         <div class="field">
-          <label for="calendar_ytd">{{ transaction()?.transactionType?.calendarYTDLabel }}</label>
+          <label for="calendar_ytd">{{ transactionType().calendarYTDLabel }}</label>
           <p-inputnumber
             inputId="calendar_ytd"
             mode="currency"

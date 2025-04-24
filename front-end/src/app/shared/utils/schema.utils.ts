@@ -57,7 +57,7 @@ export class SchemaUtils {
     );
     properties.forEach((property) => {
       const updateOn = SchemaUtils.getUpdateOn(property, dateProps);
-      group[property] = new SignalFormControl<string | Date | null | undefined>(injector, '', {
+      group[property] = new SignalFormControl<string | Date | null>(injector, '', {
         updateOn,
       });
     });

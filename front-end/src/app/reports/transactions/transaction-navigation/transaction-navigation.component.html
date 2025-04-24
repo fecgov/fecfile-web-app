@@ -1,4 +1,4 @@
-@if (transaction()?.contact_1 && isEditable() && getInlineControls().length > 0) {
+@if (transaction().contact_1 && isEditable() && getInlineControls().length > 0) {
   @for (control of getInlineControls(); track control) {
     <div class="p-2">
       <app-navigation-control [navigationControl]="control" [transaction]="transaction()"></app-navigation-control>

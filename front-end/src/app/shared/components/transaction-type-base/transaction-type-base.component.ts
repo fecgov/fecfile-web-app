@@ -60,7 +60,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   readonly memoCodeCheckboxLabel = computed(() => this.getMemoCodeCheckboxLabel(this.form(), this.transactionType()));
 
   readonly transaction = input.required<Transaction>();
-  readonly transactionType = computed(() => this.transaction()?.transactionType);
+  readonly transactionType = computed(() => this.transaction().transactionType);
   readonly formProperties = computed(() => this.transactionType()?.getFormControlNames() ?? []);
   readonly contactTypeOptions = computed(() => getContactTypeOptions(this.transactionType()?.contactTypeOptions ?? []));
   readonly templateMap = computed(() => this.transactionType()?.templateMap);
@@ -182,7 +182,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   async getConfirmations(): Promise<boolean> {
     return this.confirmationService.confirmWithUser(
       this.form(),
-      this.transaction()!.transactionType?.contactConfig ?? {},
+      this.transactionType()?.contactConfig ?? {},
       this.confirmationContext,
       'dialog',
       this.transaction(),

@@ -1,15 +1,15 @@
-@if (transactionType()?.showParentTransactionTitle) {
+@if (transactionType().showParentTransactionTitle) {
   <h1>
-    {{ transaction()?.parent_transaction?.transactionType?.title }}
+    {{ transaction().parent_transaction?.transactionType?.title }}
   </h1>
 }
 
-<h1 [class.dark-gray-text]="transactionType()?.showParentTransactionTitle">
-  {{ transactionType()?.title }}
+<h1 [class.dark-gray-text]="transactionType().showParentTransactionTitle">
+  {{ transactionType().title }}
 </h1>
 <hr class="solid" />
-@if (transactionType()?.subTitle) {
-  <div>{{ transactionType()?.subTitle }}</div>
+@if (transactionType().subTitle) {
+  <div>{{ transactionType().subTitle }}</div>
 }
 
 @if (report().report_type === reportTypes.F24) {
@@ -22,7 +22,7 @@
   <h4 class="read-only-tag subtitle">DEBT REPAYMENT</h4>
 }
 
-<h2 class="top-margin-32">{{ transactionType()?.contactTitle || 'Contact' }}</h2>
+<h2 class="top-margin-32">{{ transactionType().contactTitle || 'Contact' }}</h2>
 <form id="form" [formGroup]="form()" [class.ng-submitted]="formSubmitted">
   <app-transaction-input
     [isEditable]="isEditable()"

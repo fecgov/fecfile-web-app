@@ -3,12 +3,12 @@
     <div class="grid">
       <div class="col-12">
         <label for="purpose_description">
-          {{ transaction()?.transactionType?.purposeDescripLabel }}
-          {{ transaction()?.transactionType?.generatePurposeDescriptionLabel() }}
+          {{ transactionType().purposeDescripLabel }}
+          {{ transactionType().generatePurposeDescriptionLabel() }}
         </label>
-        @if (transaction()?.transactionType?.purposeDescriptionLabelNotice) {
+        @if (transactionType().purposeDescriptionLabelNotice) {
           <em>
-            {{ transaction()?.transactionType?.purposeDescriptionLabelNotice }}
+            {{ transactionType().purposeDescriptionLabelNotice }}
           </em>
         }
 
@@ -31,7 +31,7 @@
       </div>
     </div>
   }
-  @if (transaction()?.transactionType?.hasDesignatedSubordinate()) {
+  @if (transactionType().hasDesignatedSubordinate()) {
     <app-designated-subordinate-input
       [form]="form()"
       [formSubmitted]="formSubmitted()"
@@ -43,11 +43,11 @@
       (subordinateCommitteeClear)="onSubordinateCommitteeClear()"
     ></app-designated-subordinate-input>
   }
-  @if (transaction()?.transactionType?.hasMemoText()) {
+  @if (transactionType().hasMemoText()) {
     <div class="grid">
       <div class="col-12">
         <label for="text4000"
-          >NOTE OR MEMO TEXT {{ transaction()?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
+          >NOTE OR MEMO TEXT {{ transactionType().memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
         >
         <div>
           <textarea
@@ -66,7 +66,7 @@
       </div>
     </div>
   }
-  @if (transaction()?.transactionType?.hasCategoryCode()) {
+  @if (transactionType().hasCategoryCode()) {
     <div class="grid">
       <div class="col-6">
         <div class="field flex flex-column">

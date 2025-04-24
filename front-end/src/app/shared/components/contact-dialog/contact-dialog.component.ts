@@ -161,12 +161,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState
-        ? this.pagerState
-        : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+      event = this.pagerState ?? {
+        first: 0,
+        rows: this.rowsPerPage,
+      };
     }
 
     // Calculate the record page number to retrieve from the API.
@@ -176,7 +174,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const params = this.getParams();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ?? '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {

@@ -9,5 +9,5 @@ import { TransactionGuarantorsComponent } from '../transaction-list/transaction-
   imports: [TransactionGuarantorsComponent],
 })
 export class TransactionChildrenListContainerComponent {
-  readonly transaction = input<Transaction>();
+  readonly transaction = input.required<Transaction>();
 }

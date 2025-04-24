@@ -64,7 +64,27 @@ export class TransactionContactLookupComponent implements OnInit {
     return tx?.transactionType?.mandatoryFormValues?.[candidateKey] as CandidateOfficeType;
   });
 
-  errorMessageFormControl?: SignalFormControl;
+  readonly errorMessageFormControl = computed(() => {
+    const tx = this.transaction();
+    if (this.contactProperty() === 'contact_2') {
+      return this.createLookupValidator('contact_2', () =>
+        !tx?.contact_2 && tx?.transactionType?.contact2IsRequired(this.form()) ? { required: true } : null,
+      );
+    } else if (this.contactProperty() === 'contact_3') {
+      return this.createLookupValidator('contact_3', () =>
+        !tx?.contact_3 && tx?.transactionType?.contact3IsRequired ? { required: true } : null,
+      );
+    } else if (this.contactProperty() === 'contact_4') {
+      return this.createLookupValidator('contact_4', () =>
+        !tx?.contact_4 && tx?.transactionType?.contact4IsRequired(this.form()) ? { required: true } : null,
+      );
+    } else if (this.contactProperty() === 'contact_5') {
+      return this.createLookupValidator('contact_5', () =>
+        !tx?.contact_5 && tx?.transactionType?.contact5IsRequired(this.form()) ? { required: true } : null,
+      );
+    }
+    return null;
+  });
 
   ngOnInit(): void {
     const tx = this.transaction();
@@ -74,32 +94,12 @@ export class TransactionContactLookupComponent implements OnInit {
       this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
       this.selectedOption.set(this.contactTypeOptions()[0]);
     }
-
-    // If needed, create a local form control to manage validation and add the
-    // new form control to the parent form so that a validation check occurs
-    // when the parent form is submitted and blocks submit if validation fails.
-    if (this.contactProperty() === 'contact_2') {
-      this.createLookupValidator('contact_2', () =>
-        !tx?.contact_2 && tx?.transactionType?.contact2IsRequired(this.form()) ? { required: true } : null,
-      );
-    } else if (this.contactProperty() === 'contact_3') {
-      this.createLookupValidator('contact_3', () =>
-        !tx?.contact_3 && tx?.transactionType?.contact3IsRequired ? { required: true } : null,
-      );
-    } else if (this.contactProperty() === 'contact_4') {
-      this.createLookupValidator('contact_4', () =>
-        !tx?.contact_4 && tx?.transactionType?.contact4IsRequired(this.form()) ? { required: true } : null,
-      );
-    } else if (this.contactProperty() === 'contact_5') {
-      this.createLookupValidator('contact_5', () =>
-        !tx?.contact_5 && tx?.transactionType?.contact5IsRequired(this.form()) ? { required: true } : null,
-      );
-    }
   }
 
   private createLookupValidator(key: string, validatorFn: () => any) {
-    this.errorMessageFormControl = new SignalFormControl(this.injector, null, validatorFn);
-    this.form().addControl(`${key}_lookup`, this.errorMessageFormControl);
+    const control = new SignalFormControl(this.injector, null, validatorFn);
+    this.form().addControl(`${key}_lookup`, control);
+    return control;
   }
 
   /**

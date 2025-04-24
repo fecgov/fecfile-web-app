@@ -1,6 +1,6 @@
 import { Component, effect, model, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
 import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 import { Select } from 'primeng/select';
@@ -13,7 +13,7 @@ import { InputText } from 'primeng/inputtext';
   templateUrl: './election-input.component.html',
   imports: [ReactiveFormsModule, Select, PrimeTemplate, ErrorMessagesComponent, InputText],
 })
-export class ElectionInputComponent extends BaseInputComponent implements OnInit {
+export class ElectionInputComponent extends BaseTransactionInputComponent implements OnInit {
   readonly labelPrefix = model('');
 
   readonly electionTypeOptions = [
@@ -27,10 +27,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   ];
 
   ngOnInit() {
-    const transaction = this.transaction()!;
+    const transaction = this.transaction();
     const election_code = this.form().get('election_code')!;
-    const electionType: string = election_code?.value?.slice(0, 1) || '';
-    const electionYear: string = election_code?.value?.slice(1, 5) || '';
+    const electionType: string = election_code?.value?.slice(0, 1) ?? '';
+    const electionYear: string = election_code?.value?.slice(1, 5) ?? '';
 
     // Create two additional form controls that will join values to populate the composit election_code form control value
     const electionTypeControl = new SignalFormControl<string>(

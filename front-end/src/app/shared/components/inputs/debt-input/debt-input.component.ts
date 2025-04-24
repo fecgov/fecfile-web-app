@@ -1,5 +1,5 @@
 import { Component, effect } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputNumber } from 'primeng/inputnumber';
@@ -10,13 +10,13 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
   templateUrl: './debt-input.component.html',
   imports: [ReactiveFormsModule, InputNumber, ErrorMessagesComponent],
 })
-export class DebtInputComponent extends BaseInputComponent {
+export class DebtInputComponent extends BaseTransactionInputComponent {
   constructor() {
     super();
     // For new create transactions, the debt calculated amounts are initialized to 0
     // They a calculated fields and not saved to the database
     effectOnceIf(
-      () => this.transaction()?.id,
+      () => this.transaction().id,
       () => {
         this.form().get(this.templateMap().balance)?.setValue(0);
         this.form().get('payment_amount')?.setValue(0);

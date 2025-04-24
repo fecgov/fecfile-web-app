@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Tooltip } from 'primeng/tooltip';
@@ -30,7 +30,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
     CheckboxModule,
   ],
 })
-export class MemoCodeInputComponent extends BaseInputComponent {
+export class MemoCodeInputComponent extends BaseTransactionInputComponent {
   private readonly store = inject(Store);
   readonly overrideMemoItemHelpText = input<string>();
   readonly checkboxLabel = input('');
@@ -39,9 +39,7 @@ export class MemoCodeInputComponent extends BaseInputComponent {
     if (this.overrideMemoItemHelpText()) return this.overrideMemoItemHelpText();
     return 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   });
-  readonly memoCodeReadOnly = computed(() =>
-    TransactionFormUtils.isMemoCodeReadOnly(this.transaction()?.transactionType),
-  );
+  readonly memoCodeReadOnly = computed(() => TransactionFormUtils.isMemoCodeReadOnly(this.transactionType()));
   readonly coverageDate = computed(() => {
     const date2Control = this.date2Control();
     if (date2Control) return (date2Control.valueChangeSignal() as Date) ?? new Date();
@@ -59,7 +57,7 @@ export class MemoCodeInputComponent extends BaseInputComponent {
   readonly memoControl = computed(() => this.getControl(this.templateMap().memo_code));
   outOfDateDialogVisible = false;
   readonly memoCodeMapOptions = computed(() => {
-    const memoCodeMap = this.transaction()?.transactionType.memoCodeMap;
+    const memoCodeMap = this.transactionType().memoCodeMap;
     if (!memoCodeMap) return [];
     return [
       {
@@ -94,7 +92,7 @@ export class MemoCodeInputComponent extends BaseInputComponent {
     });
 
     effectOnceIf(
-      () => this.transaction()?.transactionType?.memoCodeTransactionTypes && this.memoControl(),
+      () => this.transactionType()?.memoCodeTransactionTypes && this.memoControl(),
       () => {
         this.updateTransactionTypeIdentifier();
         effect(
@@ -109,7 +107,7 @@ export class MemoCodeInputComponent extends BaseInputComponent {
   }
 
   private updateTransactionTypeIdentifier(): void {
-    if (this.transaction()?.transactionType?.memoCodeTransactionTypes) {
+    if (this.transactionType()?.memoCodeTransactionTypes) {
       const memo_code = this.memoControl()!.value as boolean;
       if (memo_code) {
         this.transaction()!.transaction_type_identifier =
@@ -135,7 +133,7 @@ export class MemoCodeInputComponent extends BaseInputComponent {
     const coverageFrom = this.coverageFrom();
     const coverageThrough = this.coverageThrough();
     const memoControl = this.memoControl();
-    if (this.transaction()?.transactionType?.doMemoCodeDateCheck && coverageFrom && coverageThrough && memoControl) {
+    if (this.transactionType()?.doMemoCodeDateCheck && coverageFrom && coverageThrough && memoControl) {
       if (
         date &&
         !memoControl.hasValidator(Validators.requiredTrue) &&

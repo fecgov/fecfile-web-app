@@ -29,19 +29,15 @@ import { SignalFormControl } from 'app/shared/utils/signal-form-control';
 })
 export abstract class DoubleTransactionTypeBaseComponent extends TransactionTypeBaseComponent implements OnInit {
   readonly accordion = viewChild.required(Accordion);
-  readonly childFormProperties = computed(() => this.childTransactionType()?.getFormControlNames() ?? []);
-  readonly childTransactionType = computed(() => this.childTransaction()?.transactionType);
-  readonly childTransaction = computed(() => {
-    const transaction = this.transaction();
-    if (!transaction) return undefined;
-    return this.getChildTransaction(transaction, 0);
-  });
+  readonly childFormProperties = computed(() => this.childTransactionType().getFormControlNames() ?? []);
+  readonly childTransactionType = computed(() => this.childTransaction().transactionType);
+  readonly childTransaction = computed(() => this.getChildTransaction(this.transaction(), 0));
   readonly childContactTypeOptions = computed(() =>
-    getContactTypeOptions(this.childTransactionType()?.contactTypeOptions ?? []),
+    getContactTypeOptions(this.childTransactionType().contactTypeOptions ?? []),
   );
   readonly childForm = signal<FormGroup>(this.fb.group({}, { updateOn: 'blur' }));
   childContactIdMap: ContactIdMapType = {};
-  readonly childTemplateMap = computed(() => this.childTransactionType()?.templateMap);
+  readonly childTemplateMap = computed(() => this.childTransactionType().templateMap);
   readonly childMemoCodeCheckboxLabel = computed(() => {
     const childTransaction = this.childTransaction();
     const childTransactionType = this.childTransactionType();
@@ -61,7 +57,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     const childTransactionType = this.childTransactionType();
     const childTransaction = this.childTransaction();
 
-    if (!childTransaction || !childTransactionType?.templateMap) {
+    if (!childTransaction || !childTransactionType.templateMap) {
       throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
     }
     this.childForm.set(
@@ -98,8 +94,8 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
    * @param index
    * @returns
    */
-  getChildTransaction(transaction: Transaction, index: number): Transaction | undefined {
-    return transaction?.children?.filter((child) => {
+  getChildTransaction(transaction: Transaction, index: number): Transaction {
+    return transaction.children.filter((child) => {
       const transactionTypeId = transaction?.transactionType?.dependentChildTransactionTypes?.[index];
       const transactionTypeIdVariations = [
         transactionTypeId,
@@ -154,7 +150,7 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     if (!result) return false;
     return this.confirmationService.confirmWithUser(
       this.childForm(),
-      this.childTransactionType()?.contactConfig ?? {},
+      this.childTransactionType().contactConfig ?? {},
       this.confirmationContext,
       'childDialog',
       this.childTransaction(),
@@ -175,8 +171,8 @@ export abstract class DoubleTransactionTypeBaseComponent extends TransactionType
     super.updateFormWithPrimaryContact(selectItem);
     const childTransaction = this.childTransaction();
     if (!childTransaction) return;
-    if (this.childTransactionType()?.getUseParentContact(childTransaction) && this.transaction()?.contact_1) {
-      childTransaction.contact_1 = this.transaction()?.contact_1;
+    if (this.childTransactionType().getUseParentContact(childTransaction) && this.transaction().contact_1) {
+      childTransaction.contact_1 = this.transaction().contact_1;
       this.childForm().get('entity_type')?.setValue(selectItem.value.type);
     }
   }

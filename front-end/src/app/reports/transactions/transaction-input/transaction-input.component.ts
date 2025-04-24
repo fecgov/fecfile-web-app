@@ -50,7 +50,7 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
 export class TransactionInputComponent implements OnInit {
   readonly form = input<FormGroup>(new FormGroup([], { updateOn: 'blur' }));
   readonly formSubmitted = input(false);
-  readonly transaction = input<Transaction>();
+  readonly transaction = input.required<Transaction>();
   readonly isEditable = input(true);
   readonly contactTypeOptions = input(LabelUtils.getPrimeOptions(ContactTypeLabels));
   readonly memoCodeCheckboxLabel = input<string>();
@@ -68,7 +68,7 @@ export class TransactionInputComponent implements OnInit {
   readonly quinaryContactClear = output<void>();
 
   readonly ContactTypes = ContactTypes;
-  readonly transactionType = computed(() => this.transaction()?.transactionType);
+  readonly transactionType = computed(() => this.transaction().transactionType);
   readonly templateMap = computed(() => this.transactionType()?.templateMap ?? ({} as TransactionTemplateMapType));
   readonly candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
     ContactTypes.CANDIDATE,

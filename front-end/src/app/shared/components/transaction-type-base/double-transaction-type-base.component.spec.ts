@@ -213,7 +213,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     });
     component.ngOnInit();
 
-    expect(component.childTransaction()?.parent_transaction).toBeTruthy();
+    expect(component.childTransaction().parent_transaction).toBeTruthy();
     component.form().get(component.templateMap()!.first_name)?.setValue('First');
     component.form().get(component.templateMap()!.last_name)?.setValue('Last');
 

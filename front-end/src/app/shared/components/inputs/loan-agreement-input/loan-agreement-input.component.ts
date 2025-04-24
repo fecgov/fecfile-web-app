@@ -1,5 +1,5 @@
 import { Component, computed, effect, output } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { SelectItem } from 'primeng/api';
 import { Contact } from 'app/shared/models/contact.model';
 import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
@@ -33,7 +33,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TextareaModule,
   ],
 })
-export class LoanAgreementInputComponent extends BaseInputComponent {
+export class LoanAgreementInputComponent extends BaseTransactionInputComponent {
   contactSelect = output<SelectItem<Contact>>();
 
   // Switches to show/hide groups of form input values

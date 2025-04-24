@@ -5,7 +5,7 @@ import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
 import { InputText } from 'primeng/inputtext';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -29,7 +29,7 @@ import { Store } from '@ngrx/store';
     ErrorMessagesComponent,
   ],
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit {
+export class AmountInputComponent extends BaseTransactionInputComponent implements OnInit {
   private readonly store = inject(Store);
   readonly report = this.store.selectSignal(selectActiveReport);
 
@@ -50,7 +50,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   readonly date2Control = computed(() => this.getControl(this.templateMap().date2));
 
   ngOnInit() {
-    const transaction = this.transaction()!;
+    const transaction = this.transaction();
     if (transaction.transactionType.inheritCalendarYTD) {
       this.form()
         .get(transaction.transactionType.templateMap.calendar_ytd)

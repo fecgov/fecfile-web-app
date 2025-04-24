@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
@@ -38,10 +38,9 @@ export class TransactionContainerComponent {
   readonly report = this.store.selectSignal(selectActiveReport);
   readonly isEditableReport = computed(() => this.reportService.isEditable(this.report()));
 
-  readonly routeData = toSignal(this.activatedRoute.data);
+  readonly routeData = toSignal(this.activatedRoute.data, { requireSync: true });
   readonly transaction = computed(() => {
     const data = this.routeData();
-    if (!data) return undefined;
     return data['transaction'] as Transaction;
   });
   readonly isEditableTransaction = computed(() => !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()));
@@ -53,14 +52,14 @@ export class TransactionContainerComponent {
         ReattRedesUtils.isReattRedes(this.transaction(), [
           ReattRedesTypes.REATTRIBUTED,
           ReattRedesTypes.REDESIGNATED,
-        ]) && this.transaction()?.id
+        ]) && this.transaction().id
       )
     )
       return -1;
     if (isPulledForwardLoan(this.transaction())) {
       return 1;
     }
-    return (this.transaction()?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;
+    return (this.transaction().transactionType.dependentChildTransactionTypes?.length ?? 0) + 1;
   });
 
   constructor() {

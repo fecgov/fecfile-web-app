@@ -26,26 +26,20 @@ import { blurActiveInput } from 'app/shared/utils/form.utils';
   template: '',
 })
 export abstract class TripleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent implements OnInit {
-  readonly childFormProperties_2 = computed(() => this.childTransactionType_2()?.getFormControlNames() ?? []);
-  readonly childTransactionType_2 = computed(() => this.childTransaction_2()?.transactionType);
-  readonly childTransaction_2 = computed(() => {
-    const transaction = this.transaction();
-    if (!transaction) return undefined;
-    return this.getChildTransaction(transaction, 1);
-  });
+  readonly childFormProperties_2 = computed(() => this.childTransactionType_2().getFormControlNames());
+  readonly childTransactionType_2 = computed(() => this.childTransaction_2().transactionType);
+  readonly childTransaction_2 = computed(() => this.getChildTransaction(this.transaction(), 1));
   readonly childContactTypeOptions_2 = computed(() =>
-    getContactTypeOptions(this.childTransactionType_2()?.contactTypeOptions ?? []),
+    getContactTypeOptions(this.childTransactionType_2().contactTypeOptions ?? []),
   );
   readonly childForm_2 = computed(() => {
     const props = this.childFormProperties_2();
     if (props.length < 1) return undefined;
-    const transType = this.childTransactionType_2();
-    if (!transType) return undefined;
     return this.fb.group(
       SchemaUtils.getFormGroupFieldsNoBlur(
         this.injector,
         this.childFormProperties_2(),
-        this.childTransactionType_2()?.schema,
+        this.childTransactionType_2().schema,
       ),
       {
         updateOn: 'blur',
@@ -54,7 +48,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
   });
   childContactIdMap_2: ContactIdMapType = {};
   readonly childTemplateMap_2 = computed(
-    () => this.childTransactionType_2()?.templateMap ?? ({} as TransactionTemplateMapType),
+    () => this.childTransactionType_2().templateMap ?? ({} as TransactionTemplateMapType),
   );
   readonly childMemoCodeCheckboxLabel_2 = computed(() => {
     const childTrans2 = this.childTransaction_2();
@@ -165,9 +159,9 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
     super.updateFormWithPrimaryContact(selectItem);
     if (
       this.childTransaction_2()?.transactionType?.getUseParentContact(this.childTransaction_2()) &&
-      this.transaction()?.contact_1
+      this.transaction().contact_1
     ) {
-      this.childTransaction_2()!.contact_1 = this.transaction()?.contact_1;
+      this.childTransaction_2().contact_1 = this.transaction().contact_1;
       this.childForm_2()!.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
@@ -181,7 +175,7 @@ export abstract class TripleTransactionTypeBaseComponent extends DoubleTransacti
     );
 
     if (this.childTransaction_2) {
-      this.updateInheritedFields(this.childForm_2()!, this.childTransaction_2()!);
+      this.updateInheritedFields(this.childForm_2()!, this.childTransaction_2());
     } else {
       throw new Error('Fecfile: Missing child transaction.');
     }

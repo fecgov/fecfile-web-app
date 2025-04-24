@@ -9,7 +9,7 @@ import { SelectItem } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 
 @Component({
@@ -18,7 +18,7 @@ import { DesignatedSubordinateInputComponent } from '../designated-subordinate-i
   styleUrls: ['./additional-info-input.component.scss'],
   imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule, DesignatedSubordinateInputComponent],
 })
-export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
+export class AdditionalInfoInputComponent extends BaseTransactionInputComponent implements OnInit {
   readonly designatingCommitteeSelect = output<SelectItem<Contact>>();
   readonly designatingCommitteeClear = output<void>();
   readonly subordinateCommitteeSelect = output<SelectItem<Contact>>();
@@ -30,15 +30,11 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     SchemaUtils.addJsonSchemaValidators(this.form(), memoTextSchema, false);
     this.form().updateValueAndValidity();
 
-    if (this.transaction()?.transactionType?.purposeDescriptionPrefix) {
-      this.initPrefix(
-        this.templateMap().purpose_description,
-        this.transaction()!.transactionType.purposeDescriptionPrefix!,
-      );
+    if (this.transactionType()?.purposeDescriptionPrefix) {
+      this.initPrefix(this.templateMap().purpose_description, this.transactionType().purposeDescriptionPrefix!);
     }
 
-    const text_prefix =
-      this.transaction()?.memo_text?.text_prefix ?? this.transaction()?.transactionType?.memoTextPrefix;
+    const text_prefix = this.transaction().memo_text?.text_prefix ?? this.transactionType()?.memoTextPrefix;
 
     if (text_prefix && text_prefix.length > 0) {
       this.initPrefix(this.templateMap().text4000, text_prefix + ' ');
@@ -47,7 +43,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
 
   isDescriptionSystemGenerated(): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return this.transaction()?.transactionType?.generatePurposeDescription !== undefined;
+    return this.transactionType()?.generatePurposeDescription !== undefined;
   }
 
   initPrefix(field: string, prefix: string) {

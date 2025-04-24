@@ -2,7 +2,7 @@ import { Component, computed, effect, input, signal } from '@angular/core';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { BaseInputComponent } from '../base-input.component';
-import { ScheduleIds } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -16,6 +16,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
   imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText],
 })
 export class CandidateOfficeInputComponent extends BaseInputComponent {
+  readonly transaction = input<Transaction>();
   readonly officeFormControlName = input.required<string>();
   readonly stateFormControlName = input.required<string>();
   readonly districtFormControlName = input.required<string>();
@@ -24,7 +25,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent {
   readonly candidateStateOptions = signal(LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary()));
   readonly candidateDistrictOptions = signal<PrimeOptions>([]);
 
-  readonly electionCodeField = this.transaction()?.transactionType.templateMap.election_code;
+  readonly electionCodeField = computed(() => this.transaction()?.transactionType.templateMap.election_code);
 
   readonly officeFormControl = computed(() => this.getControl(this.officeFormControlName()));
   readonly stateFormControl = computed(() => this.getControl(this.stateFormControlName()));
@@ -45,7 +46,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent {
       () => {
         effect(
           () => {
-            this.getControl(this.electionCodeField!)?.valueChangeSignal();
+            this.getControl(this.electionCodeField()!)?.valueChangeSignal();
             this.updateCandidateFieldAvailability();
           },
           { injector: this.injector },
@@ -92,12 +93,12 @@ export class CandidateOfficeInputComponent extends BaseInputComponent {
     const officeValue = (this.officeFormControl()?.value ?? '') as string;
     let electionCode: string = '';
     if (this.electionCodeField) {
-      electionCode = (this.form().get(this.electionCodeField)?.value ?? '') as string;
+      electionCode = (this.form().get(this.electionCodeField()!)?.value ?? '') as string;
     }
 
     if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
       // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
-      if (this.transaction()?.transactionType.scheduleId === ScheduleIds.E && electionCode.startsWith('P')) {
+      if (this.transaction()!.transactionType.scheduleId === ScheduleIds.E && electionCode.startsWith('P')) {
         this.form().patchValue({
           [this.districtFormControlName()]: null,
         });
@@ -117,7 +118,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent {
       });
       this.stateFormControl()?.enable();
       this.districtFormControl()?.disable();
-    } else if (!this.transaction()?.reatt_redes) {
+    } else if (!this.transaction()!.reatt_redes) {
       this.stateFormControl()?.enable();
       this.districtFormControl()?.enable();
     }

@@ -37,16 +37,14 @@ export class NavigationControlComponent {
   private readonly injector = inject(Injector);
   private readonly store = inject(Store);
   readonly navigationControl = input.required<NavigationControl>();
-  readonly transaction = input<Transaction>();
+  readonly transaction = input.required<Transaction>();
+  readonly transactionType = computed(() => this.transaction().transactionType);
   readonly controlType = computed(() =>
     this.navigationControl().controlType == ControlType.DROPDOWN ? 'dropdown' : 'button',
   );
   public dropdownOptions = computed(() => {
     if (this.navigationControl().controlType != ControlType.DROPDOWN) return undefined;
-    return this.getOptions(
-      this.transaction()?.transactionType,
-      this.transaction()?.parent_transaction?.transactionType,
-    );
+    return this.getOptions(this.transactionType(), this.transaction().parent_transaction?.transactionType);
   });
   dropdownControl = new SignalFormControl(this.injector, '');
 
@@ -68,17 +66,17 @@ export class NavigationControlComponent {
     // Handle CHILD case by determining child TransactionType
     if (
       this.navigationControl().navigationDestination === NavigationDestination.CHILD &&
-      this.transaction()?.transactionType.subTransactionConfig
+      this.transactionType().subTransactionConfig
     ) {
-      destinationTransactionType = (this.transaction()?.transactionType.subTransactionConfig as TransactionTypes[])[0];
+      destinationTransactionType = (this.transactionType().subTransactionConfig as TransactionTypes[])[0];
     }
 
     // Handle ANOTHER case by determining child TransactionType
     if (
       this.navigationControl().navigationDestination === NavigationDestination.ANOTHER &&
-      this.transaction()?.transaction_type_identifier
+      this.transaction().transaction_type_identifier
     ) {
-      destinationTransactionType = this.transaction()?.transaction_type_identifier as TransactionTypes;
+      destinationTransactionType = this.transaction().transaction_type_identifier as TransactionTypes;
     }
 
     const navigationEvent = new NavigationEvent(

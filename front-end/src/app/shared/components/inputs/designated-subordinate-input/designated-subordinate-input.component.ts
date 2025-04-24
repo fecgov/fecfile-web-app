@@ -8,7 +8,7 @@ import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionContactLookupComponent } from '../../transaction-contact-lookup/transaction-contact-lookup.component';
 import { AddressInputComponent } from '../address-input/address-input.component';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-designated-subordinate-input',
@@ -22,7 +22,7 @@ import { BaseInputComponent } from '../base-input.component';
     InputText,
   ],
 })
-export class DesignatedSubordinateInputComponent extends BaseInputComponent {
+export class DesignatedSubordinateInputComponent extends BaseTransactionInputComponent {
   readonly designatingCommitteeSelect = output<SelectItem<Contact>>();
   readonly designatingCommitteeClear = output<void>();
   readonly subordinateCommitteeSelect = output<SelectItem<Contact>>();

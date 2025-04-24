@@ -41,7 +41,7 @@ export class TransactionChildFormUtils {
       }
 
       // --- 2. Trigger parent purpose description when child fields change ---
-      component.transaction()?.transactionType?.childTriggerFields?.forEach((triggerField) => {
+      component.transactionType()?.childTriggerFields?.forEach((triggerField) => {
         const control = childForm.get(templateMap[triggerField]) as SignalFormControl<string>;
         if (control) {
           effect(() => {
@@ -52,7 +52,7 @@ export class TransactionChildFormUtils {
             (childTransaction as ScheduleTransaction).entity_type = childForm.get('entity_type')?.value;
 
             if (component.transaction()) {
-              updatePurposeDescription(component.form(), component.transaction()!);
+              updatePurposeDescription(component.form(), component.transaction());
             } else {
               throw new Error('Fecfile: Parent transaction not found for component');
             }
@@ -62,7 +62,7 @@ export class TransactionChildFormUtils {
 
       // --- 3. Trigger child purpose description when parent fields change ---
       transactionType.parentTriggerFields?.forEach((triggerField) => {
-        const key = component.templateMap()![triggerField] as keyof ScheduleTransaction;
+        const key = component.templateMap()[triggerField] as keyof ScheduleTransaction;
         const control = component.form().get(key) as SignalFormControl<string>;
 
         if (control) {
@@ -79,7 +79,7 @@ export class TransactionChildFormUtils {
 
       // --- 4. Sync inherited fields from parent -> child ---
       transactionType.getInheritedFields(childTransaction)?.forEach((inheritedField) => {
-        const parentControl = component.form().get(component.templateMap()![inheritedField]) as SignalFormControl;
+        const parentControl = component.form().get(component.templateMap()[inheritedField]) as SignalFormControl;
         const childControl = childForm.get(templateMap[inheritedField]) as SignalFormControl;
 
         if (!parentControl || !childControl) {

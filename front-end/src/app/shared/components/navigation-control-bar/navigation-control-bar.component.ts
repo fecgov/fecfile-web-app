@@ -14,7 +14,7 @@ import { NavigationControlComponent } from '../navigation-control/navigation-con
 })
 export class NavigationControlBarComponent {
   readonly navigationControls = input(new TransactionNavigationControls());
-  readonly transaction = input<Transaction>();
+  readonly transaction = input.required<Transaction>();
 
   getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {
     return this.navigationControls().getNavigationControls(section, this.transaction());

@@ -1,5 +1,5 @@
 import { Component, computed, effect, input } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
+import { BaseTransactionInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
@@ -10,14 +10,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
   templateUrl: './loan-info-input.component.html',
   imports: [ReactiveFormsModule, InputNumberModule, ErrorMessagesComponent, MemoCodeInputComponent],
 })
-export class LoanInfoInputComponent extends BaseInputComponent {
+export class LoanInfoInputComponent extends BaseTransactionInputComponent {
   readonly readonly = input(false);
   readonly memoItemHelpText = input<string>();
 
   readonly paymentControl = computed(() => {
     const control = this.form().get(this.templateMap().payment_to_date);
     if (control) {
-      if (!this.transaction()?.id || !control.value) {
+      if (!this.transaction().id || !control.value) {
         control.setValue(0);
       }
     }

@@ -195,7 +195,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   }
 
   updateElectionData() {
-    const schedB = this.childTransaction()?.reatt_redes as SchBTransaction;
+    const schedB = this.childTransaction().reatt_redes as SchBTransaction;
     if (!schedB) return;
     const forms = [this.form(), this.childForm()];
     forms.forEach((form) => {

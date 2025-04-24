@@ -23,7 +23,7 @@ export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransact
   override ngOnInit(): void {
     super.ngOnInit();
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (transactionId && this.childTransaction()?.id === transactionId) {
+    if (transactionId && this.childTransaction().id === transactionId) {
       this.accordion().value.set(1);
     }
   }

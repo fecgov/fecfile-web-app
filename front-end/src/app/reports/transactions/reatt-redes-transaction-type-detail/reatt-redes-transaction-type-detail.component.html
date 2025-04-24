@@ -1,30 +1,30 @@
-<h1>{{ transactionType()?.title }}</h1>
-@if (transactionType()?.subTitle) {
-  <div>{{ transactionType()?.subTitle }}</div>
+<h1>{{ transactionType().title }}</h1>
+@if (transactionType().subTitle) {
+  <div>{{ transactionType().subTitle }}</div>
 }
 @if (!isEditable()) {
   <h4 class="read-only-tag subtitle">READ ONLY</h4>
 }
 
-<p class="group-description">{{ transactionType()?.description }}</p>
+<p class="group-description">{{ transactionType().description }}</p>
 <p-accordion expandIcon="pi pi-angle-right" value="0">
   <p-accordion-panel value="0">
     <p-accordion-header>
       <div class="flex align-items-center">
-        <strong>{{ transactionType()?.accordionTitle }}:</strong>
+        <strong>{{ transactionType().accordionTitle }}:</strong>
         <p class="accordion-subtext">
-          {{ transactionType()?.accordionSubText }}
+          {{ transactionType().accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      @if (transactionType()?.formTitle) {
+      @if (transactionType().formTitle) {
         <h2>
-          {{ transactionType()?.formTitle }}
+          {{ transactionType().formTitle }}
         </h2>
       }
 
-      <h3>{{ transactionType()?.contactTitle }}</h3>
+      <h3>{{ transactionType().contactTitle }}</h3>
       <form [formGroup]="form()" [class.ng-submitted]="formSubmitted" id="form">
         <app-transaction-input
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
@@ -50,21 +50,21 @@
   <p-accordion-panel value="1">
     <p-accordion-header>
       <div class="flex align-items-center">
-        <strong>{{ childTransactionType()?.accordionTitle }}:</strong>
+        <strong>{{ childTransactionType().accordionTitle }}:</strong>
         <p class="accordion-subtext">
-          {{ childTransactionType()?.accordionSubText }}
+          {{ childTransactionType().accordionSubText }}
         </p>
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      <h2>{{ childTransaction()?.transactionType?.formTitle }}</h2>
-      @if (childTransactionType()?.description) {
+      <h2>{{ childTransactionType().formTitle }}</h2>
+      @if (childTransactionType().description) {
         <p>
-          <em [innerHtml]="childTransactionType()?.description"></em>
+          <em [innerHtml]="childTransactionType().description"></em>
         </p>
       }
 
-      <h3>{{ childTransactionType()?.contactTitle }}</h3>
+      <h3>{{ childTransactionType().contactTitle }}</h3>
       <form [formGroup]="childForm()" [class.ng-submitted]="formSubmitted" id="childForm">
         @if (childTransaction()) {
           <app-transaction-input
@@ -93,22 +93,22 @@
         <p style="font-weight: normal">Duplicate of the original transaction</p>
       </p-accordion-header>
       <p-accordion-content>
-        @if (transaction()?.reatt_redes?.transactionType?.showParentTransactionTitle) {
+        @if (transaction().reatt_redes?.transactionType?.showParentTransactionTitle) {
           <h2>
-            {{ transaction()?.reatt_redes?.parent_transaction?.transactionType?.title }}
+            {{ transaction().reatt_redes?.parent_transaction?.transactionType?.title }}
           </h2>
         }
 
-        <h2 [class.dark-gray-text]="transaction()?.reatt_redes?.transactionType?.showParentTransactionTitle">
-          {{ transaction()?.reatt_redes?.transactionType?.title }}
+        <h2 [class.dark-gray-text]="transaction().reatt_redes?.transactionType?.showParentTransactionTitle">
+          {{ transaction().reatt_redes?.transactionType?.title }}
         </h2>
-        @if (transaction()?.reatt_redes?.transactionType?.subTitle) {
+        @if (transaction().reatt_redes?.transactionType?.subTitle) {
           <div>
-            {{ transaction()?.reatt_redes?.transactionType?.subTitle }}
+            {{ transaction().reatt_redes?.transactionType?.subTitle }}
           </div>
         }
 
-        <h3>{{ transaction()?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
+        <h3>{{ transaction().reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
         <form [formGroup]="reattributedData()!.form" [class.ng-submitted]="formSubmitted" id="pull-forward-form">
           <app-transaction-input
             [contactTypeOptions]="reattributedData()!.contactTypeOptions"
@@ -116,7 +116,7 @@
             [form]="reattributedData()!.form"
             [isEditable]="false"
             [memoCodeCheckboxLabel]="reattributedData()!.memoCodeCheckboxLabel"
-            [transaction]="transaction()?.reatt_redes"
+            [transaction]="transaction().reatt_redes!"
           >
           </app-transaction-input>
         </form>
