@@ -151,6 +151,8 @@ jobs:
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end-cypress/videos/. /tmp/cypress/results/videos
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end-cypress/screenshots/. /tmp/cypress/results/screenshots
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results
@@ -220,7 +222,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+              only: /test-e2e-with-video|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
