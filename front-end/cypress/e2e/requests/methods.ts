@@ -9,7 +9,6 @@ export function makeRequestToAPI(
   callback = (response: Cypress.Response<any>) => {},
   request_name: string = 'request',
 ) {
-  cy.intercept(url).as(request_name);
   cy.getAllCookies().then((cookies: Cypress.ObjectLike[]) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let cookie_obj: any = {};
@@ -29,10 +28,9 @@ export function makeRequestToAPI(
       },
     }).then(callback);
   });
-  const wait_start = Date.now();
-  cy.wait(`@${request_name}`);
-  console.log(`${request_name} waited for ${Date.now() - wait_start}`);
 }
+
+// EVERYTHING AFTER THIS POINT IS NON-FUNCTIONING PROTOTYPE
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function setupTestingData(report: any, contacts: any[], transactions: any[]) {
