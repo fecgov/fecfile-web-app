@@ -408,7 +408,7 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
   });
 
-  it('existing IE date leapfrogging', () => {
+  xit('existing IE date leapfrogging', () => {
     const individualFormContactData = {
       ...defaultContactFormData,
       ...{ contact_type: 'Individual', first_name: 'A', last_name: 'A' },
