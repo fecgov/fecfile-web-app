@@ -1,5 +1,3 @@
-import { buildScheduleA } from './library/transactions';
-
 export function makeRequestToAPI(
   method: string,
   url: string,
@@ -7,7 +5,6 @@ export function makeRequestToAPI(
   body: any,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   callback = (response: Cypress.Response<any>) => {},
-  request_name: string = 'request',
 ) {
   cy.getAllCookies().then((cookies: Cypress.ObjectLike[]) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,6 +29,7 @@ export function makeRequestToAPI(
 
 // EVERYTHING AFTER THIS POINT IS NON-FUNCTIONING PROTOTYPE
 
+/*
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function setupTestingData(report: any, contacts: any[], transactions: any[]) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -74,3 +72,4 @@ export function setupTestingData(report: any, contacts: any[], transactions: any
     },
   );
 }
+*/
