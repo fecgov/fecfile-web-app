@@ -14,9 +14,7 @@ describe('Manage profile', () => {
     const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 225.14, '2025-04-12', Individual_A_A);
     const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 174.86, '2025-04-15', Individual_A_A);
 
-    setupTestingData(F3X_Q2, [Individual_A_A], [transaction_a, transaction_b]);
-
-    /*makeRequestToAPI(
+    makeRequestToAPI(
       'POST',
       'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
       F3X_Q2,
@@ -30,7 +28,7 @@ describe('Manage profile', () => {
           });
         });
       },
-    );*/
+    );
     ReportListPage.goToPage();
   });
 });
