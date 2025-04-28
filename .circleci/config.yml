@@ -136,7 +136,7 @@ jobs:
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
-              git checkout develop \
+              git checkout ${CIRCLE_BRANCH}; \
               npm install; \
               node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/F3X/aggregate-calculation.cy.ts" --headless --watch=false --browser chrome;'\
       - run:
