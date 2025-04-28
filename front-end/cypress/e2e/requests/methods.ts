@@ -9,6 +9,7 @@ export function makeRequestToAPI(
   callback = (response: Cypress.Response<any>) => {},
   request_name: string = 'request',
 ) {
+  cy.intercept(url).as(request_name);
   cy.getAllCookies().then((cookies: Cypress.ObjectLike[]) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let cookie_obj: any = {};
@@ -26,10 +27,11 @@ export function makeRequestToAPI(
         Cookie: cookie_obj,
         'x-csrftoken': cookie_obj.csrftoken,
       },
-    })
-      .as(request_name)
-      .then(callback);
+    }).then(callback);
   });
+  const wait_start = Date.now();
+  cy.wait(`@${request_name}`);
+  console.log(`${request_name} waited for ${Date.now() - wait_start}`);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,10 +53,6 @@ export function setupTestingData(report: any, contacts: any[], transactions: any
           saved_contacts.push(response.body);
           console.log('PUSH', saved_contacts);
         });
-      }
-
-      while (saved_contacts.length < contacts.length) {
-        console.log('HERE', saved_contacts);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
