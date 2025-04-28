@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly cookieService = inject(CookieService);
   public loginDotGovAuthUrl: string | undefined;
+  readonly disableLogin: boolean = environment.disableLogin;
 
   ngOnInit() {
     this.cookieService.deleteAll();
