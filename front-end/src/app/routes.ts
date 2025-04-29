@@ -7,6 +7,7 @@ import { loggedInGuard } from './shared/guards/logged-in.guard';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
+import { showDashboardGuard } from './shared/guards/show-dashboard.guard';
 
 export const ROUTES: Route[] = [
   {
@@ -29,7 +30,7 @@ export const ROUTES: Route[] = [
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
+        canActivate: [showDashboardGuard, loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
       {
         path: 'login',
