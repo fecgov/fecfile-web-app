@@ -33,14 +33,14 @@ export enum BackgroundStyles {
 })
 export class LayoutComponent implements AfterViewChecked {
   private readonly route = inject(ActivatedRoute);
-  private readonly source = toSignal(injectNavigationEnd());
+  private readonly navEnd = toSignal(injectNavigationEnd());
   readonly feedbackOverlay = viewChild.required<FeedbackOverlayComponent>(FeedbackOverlayComponent);
   readonly footer = viewChild<FooterComponent>('footerRef');
   readonly contentOffset = viewChild<ElementRef>('contentOffset');
   readonly banner = viewChild.required<BannerComponent>('bannerRef');
 
   readonly layoutControls = computed(() => {
-    this.source();
+    this.navEnd();
     return new LayoutControls(collectRouteData(this.route.snapshot));
   });
 

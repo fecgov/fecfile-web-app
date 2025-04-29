@@ -35,9 +35,9 @@ export class ReportLevelMemoComponent extends FormComponent {
     this.fb.group(SchemaUtils.getFormGroupFields(this.injector, this.formProperties), { updateOn: 'blur' }),
   );
 
-  committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
-  routeDataSignal = toSignal(this.route.data);
-  nextUrlSignal = computed(() => {
+  readonly committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
+  readonly routeDataSignal = toSignal(this.route.data);
+  readonly nextUrlSignal = computed(() => {
     const getNextUrl = this.routeDataSignal()?.['getNextUrl'];
     if (!getNextUrl) return '';
     return getNextUrl(this.report());
