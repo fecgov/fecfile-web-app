@@ -30,7 +30,14 @@ export const ROUTES: Route[] = [
         path: 'dashboard',
         component: DashboardComponent,
         title: 'FECFile Dashboard',
-        canActivate: [showDashboardGuard, loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
+        canActivate: [
+          showDashboardGuard,
+          loggedInGuard,
+          nameGuard,
+          securityNoticeGuard,
+          committeeGuard,
+          committeeOwnerGuard,
+        ],
       },
       {
         path: 'login',
