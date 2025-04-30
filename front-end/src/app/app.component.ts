@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PollerComponent } from './shared/components/poller/poller.component';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Toast } from 'primeng/toast';
 import { DownloadTrayComponent } from './shared/components/download-tray/download-tray.component';
 import { RouterOutlet } from '@angular/router';
 import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
+import { FeedbackService } from './shared/services/feedback.service';
 
 @Component({
   selector: 'app-root',
@@ -19,4 +20,6 @@ import { SecondCommitteeAdminDialogComponent } from './shared/components/second-
     SecondCommitteeAdminDialogComponent,
   ],
 })
-export class AppComponent {}
+export class AppComponent {
+  readonly feedbackService = inject(FeedbackService);
+}
