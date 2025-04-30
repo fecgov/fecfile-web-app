@@ -20,7 +20,6 @@ export const environment = {
   showForm3: true,
   showSchedF: true,
   disableLogin: false,
-  showDashboard: true,
 };
 
 /*

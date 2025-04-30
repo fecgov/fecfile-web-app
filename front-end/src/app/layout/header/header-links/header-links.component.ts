@@ -21,7 +21,6 @@ export class HeaderLinksComponent {
   readonly store = inject(Store);
   readonly loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   readonly disableLogin = environment.disableLogin;
-  readonly showDashboard = environment.showDashboard;
   @Input() ratio = 1;
   @Input() full = false;
   @Input() headerStyle = HeaderStyles.DEFAULT;

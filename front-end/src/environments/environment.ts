@@ -19,7 +19,6 @@ export const environment = {
   showForm3: false,
   showSchedF: false,
   disableLogin: false,
-  showDashboard: false,
 };
 
 /*

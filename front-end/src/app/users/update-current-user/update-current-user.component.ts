@@ -56,7 +56,7 @@ export class UpdateCurrentUserComponent extends FormComponent {
     } as UserLoginData;
     const response = await this.usersService.updateCurrentUser(updatedUserLoginData);
     this.store.dispatch(userLoginDataUpdatedAction({ payload: response }));
-    this.router.navigate(['dashboard']);
+    this.router.navigate(['reports']);
   }
 
   cancel() {

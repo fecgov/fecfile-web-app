@@ -1,9 +1,6 @@
 <ul class="flex">
   @switch (headerStyle) {
     @case (headerStyles.DEFAULT) {
-      @if (showDashboard) {
-        <li class="nav-item" routerLink="/dashboard" [style.fontSize]="fontSize">Dashboard</li>
-      }
       <li class="nav-item" routerLink="/reports" [style.fontSize]="fontSize">Reports</li>
       <li class="nav-item" routerLink="/contacts" [style.fontSize]="fontSize">Contacts</li>
       <li class="nav-item" (click)="op.toggle($event)" (keydown.enter)="op.toggle($event)" [style.fontSize]="fontSize">
