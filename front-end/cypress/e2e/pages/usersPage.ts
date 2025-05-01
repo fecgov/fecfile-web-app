@@ -4,7 +4,7 @@ import { PageUtils } from './pageUtils';
 export class UsersPage {
   static goToPage(alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.visit('/dashboard');
+    cy.visit('/reports');
     cy.get('#navbarProfileDropdownMenuLink').click();
     cy.get(alias).find('.p-popover').contains('Users').click();
   }

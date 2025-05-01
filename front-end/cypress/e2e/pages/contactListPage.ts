@@ -9,7 +9,7 @@ import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
   static goToPage() {
-    cy.visit('/dashboard');
+    cy.visit('/reports');
     cy.get('nav').find('.nav-item').contains('Contacts').click();
   }
 
