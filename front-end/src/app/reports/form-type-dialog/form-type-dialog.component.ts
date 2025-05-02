@@ -1,13 +1,11 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form24 } from 'app/shared/models/form-24.model';
-import { Observable, filter, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -21,14 +19,14 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   styleUrls: ['./form-type-dialog.component.scss'],
   imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, SelectButtonModule],
 })
-export class FormTypeDialogComponent extends DestroyerComponent implements OnInit {
+export class FormTypeDialogComponent extends DestroyerComponent {
   public readonly router = inject(Router);
   private readonly form24Service = inject(Form24Service);
   private readonly store = inject(Store);
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   readonly formTypes = FormTypes;
   selectedType?: FormTypes;
-  committeeAccount$?: Observable<CommitteeAccount>;
+  committeeAccountSignal = this.store.selectSignal(selectCommitteeAccount);
   street = undefined;
   @Input() noReports = true;
   @Input() dialogVisible = false;
@@ -42,13 +40,6 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnIni
     { label: '24 Hour ', value: '24' },
     { label: '48 Hour', value: '48' },
   ];
-
-  ngOnInit(): void {
-    this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(
-      takeUntil(this.destroy$),
-      filter((committeeAccount) => !!committeeAccount),
-    );
-  }
 
   goToReportForm(): void {
     this.closeDialog();
@@ -68,25 +59,23 @@ export class FormTypeDialogComponent extends DestroyerComponent implements OnIni
   }
 
   createForm24() {
-    this.committeeAccount$?.subscribe((committeeAccount) => {
-      const form24 = Form24.fromJSON({
-        report_type_24_48: this.selectedForm24Type,
-        street_1: committeeAccount.street_1,
-        street_2: committeeAccount.street_2,
-        city: committeeAccount.city,
-        state: committeeAccount.state,
-        zip: committeeAccount.zip,
-        filer_committee_id_number: committeeAccount.committee_id,
-        committee_name: committeeAccount.name,
-      });
-      const create$ = this.form24Service.create(form24, ['report_type_24_48']);
-
-      create$.then((report) => {
-        this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-      });
-
-      this.selectedType = undefined;
+    const form24 = Form24.fromJSON({
+      report_type_24_48: this.selectedForm24Type,
+      street_1: this.committeeAccountSignal().street_1,
+      street_2: this.committeeAccountSignal().street_2,
+      city: this.committeeAccountSignal().city,
+      state: this.committeeAccountSignal().state,
+      zip: this.committeeAccountSignal().zip,
+      filer_committee_id_number: this.committeeAccountSignal().committee_id,
+      committee_name: this.committeeAccountSignal().name,
     });
+    const create$ = this.form24Service.create(form24, ['report_type_24_48']);
+
+    create$.then((report) => {
+      this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+    });
+
+    this.selectedType = undefined;
   }
 
   closeDialog() {

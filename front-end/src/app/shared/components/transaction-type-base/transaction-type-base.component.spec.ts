@@ -33,6 +33,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 let testTransaction: SchATransaction;
 
@@ -40,11 +41,13 @@ describe('TransactionTypeBaseComponent', () => {
   let component: TransactionTypeBaseComponent;
   let fixture: ComponentFixture<TransactionTypeBaseComponent>;
   let testConfirmationService: ConfirmationService;
+  let testwrapperService: ConfirmationWrapperService;
 
   // spies
   let navigateToSpy: jasmine.Spy;
   let transactionServiceSpy: jasmine.SpyObj<TransactionService>;
   let confirmSpy: jasmine.Spy;
+  let createMessageSpy: jasmine.Spy;
   let messageServiceSpy: jasmine.SpyObj<MessageService>;
 
   let navEvent: NavigationEvent;
@@ -93,6 +96,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     transactionServiceSpy = TestBed.inject(TransactionService) as jasmine.SpyObj<TransactionService>;
     testConfirmationService = TestBed.inject(ConfirmationService);
+    testwrapperService = TestBed.inject(ConfirmationWrapperService);
     messageServiceSpy = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
     testTransaction = getTestIndividualReceipt();
     fixture = TestBed.createComponent(TransactionDetailComponent);
@@ -101,6 +105,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     navigateToSpy = spyOn(component, 'navigateTo');
     confirmSpy = spyOn(testConfirmationService, 'confirm');
+    createMessageSpy = spyOn(testwrapperService, 'getCreateTransactionContactConfirmationMessage');
   });
 
   describe('init', () => {
@@ -210,16 +215,18 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('confirmWithUser', () => {
     it('should throw an error if no template map', async () => {
-      const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
-        '999',
-        component.form,
-        component.formProperties,
-      );
-      payload.transactionType = {} as TransactionType;
-      await expectAsync(component.confirmWithUser(payload, component.form)).toBeRejectedWithError(
-        'Fecfile: Cannot find template map when confirming transaction',
-      );
+      const contactConfig = component.transaction!.transactionType?.contactConfig;
+      component.transaction!.transactionType = {} as TransactionType;
+      await expectAsync(
+        testwrapperService.confirmWithUser(
+          component.form,
+          contactConfig,
+          component.getContact.bind(this),
+          component.getTemplateMap.bind(this),
+          'dialog',
+          component.transaction,
+        ),
+      ).toBeRejectedWithError('Fecfile: Cannot find template map when confirming transaction');
     });
 
     it('should return without confirmation if using parent and contact_1', fakeAsync(async () => {
@@ -232,7 +239,14 @@ describe('TransactionTypeBaseComponent', () => {
       );
       expect(Object.keys(component.transaction.transactionType.contactConfig)[0]).toEqual('contact_1');
       payload.transactionType.useParentContact = true;
-      component.confirmWithUser(payload, component.form);
+      testwrapperService.confirmWithUser(
+        component.form,
+        component.transaction.transactionType?.contactConfig ?? {},
+        component.getContact.bind(this),
+        component.getTemplateMap.bind(this),
+        'dialog',
+        component.transaction,
+      );
       expect(confirmSpy).toHaveBeenCalledTimes(0);
     }));
 
@@ -242,16 +256,16 @@ describe('TransactionTypeBaseComponent', () => {
         if (confirmation.accept) return confirmation?.accept();
       });
       (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
-      const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
-        '999',
-        component.form,
-        component.formProperties,
-      );
 
-      const confirmMessageSpy = spyOn(TransactionContactUtils, 'getCreateTransactionContactConfirmationMessage');
-      component.confirmWithUser(payload, component.form);
-      expect(confirmMessageSpy).toHaveBeenCalled();
+      testwrapperService.confirmWithUser(
+        component.form,
+        component.transaction.transactionType?.contactConfig ?? {},
+        component.getContact.bind(this),
+        component.getTemplateMap.bind(this),
+        'dialog',
+        component.transaction,
+      );
+      expect(createMessageSpy).toHaveBeenCalled();
     });
   });
 
@@ -538,7 +552,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
         expect(res).toEqual('MEMO ITEM (OPTIONAL)');
       });
-      tick(500);
+      tick();
       expect(spy).toHaveBeenCalled();
     }));
   });
@@ -552,10 +566,10 @@ describe('TransactionTypeBaseComponent', () => {
     });
   });
 
-  describe('confirmation$', () => {
+  describe('getConfirmations()', () => {
     it('should return false if no transaction', async () => {
       component.transaction = undefined;
-      const res = await component.confirmation$;
+      const res = await component.getConfirmations();
       expect(res).toBeFalse();
     });
 
@@ -564,7 +578,7 @@ describe('TransactionTypeBaseComponent', () => {
         if (confirmation.accept) return confirmation?.accept();
       });
       component.ngOnInit();
-      const res = await component.confirmation$;
+      const res = await component.getConfirmations();
       expect(res).toBeTruthy();
       expect(confirmSpy).toHaveBeenCalled();
     });
@@ -572,7 +586,6 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('should populate treasurer data from committee for schedule E', () => {
     component.transaction = testIndependentExpenditure;
-    component.committeeAccount = testCommitteeAccount;
     fixture.detectChanges();
     expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(
       testCommitteeAccount.treasurer_name_2,
@@ -592,7 +605,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   describe('aggregate calculation', () => {
-    it('should request the previous transaction', async () => {
+    it('should request the previous transaction', fakeAsync(() => {
       const form = new FormGroup(
         {
           expenditure_amount: new SubscriptionFormControl(),
@@ -618,8 +631,9 @@ describe('TransactionTypeBaseComponent', () => {
       form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
       expect(transactionServiceSpy.getPreviousTransactionForAggregate).not.toHaveBeenCalled();
 
-      await contactId$.next('1234-abcd-1234-abcd');
+      contactId$.next('1234-abcd-1234-abcd');
+      tick();
       expect(transactionServiceSpy.getPreviousTransactionForAggregate).toHaveBeenCalled();
-    });
+    }));
   });
 });

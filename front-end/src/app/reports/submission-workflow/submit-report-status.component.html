@@ -1,20 +1,18 @@
 <h1>Report status</h1>
 <h5>
-  <strong>{{ report?.formLabel }}:</strong> {{ report?.formSubLabel }}
+  <strong>{{ activeReportSignal().formLabel }}:</strong> {{ activeReportSignal().formSubLabel }}
 </h5>
 <hr type="solid" />
 <p-card>
   <div class="grid">
     <div class="col-12">
-      @if (report?.upload_submission?.fec_status === 'ACCEPTED') {
+      @if (fecStatusSignal() === 'ACCEPTED') {
         <h2 class="super-header">Congratulations. Your report was accepted by the FEC.</h2>
-      } @else if (report?.upload_submission?.fec_status === 'REJECTED') {
+      } @else if (fecStatusSignal() === 'REJECTED') {
         <h2 class="super-header">Your report has been rejected.</h2>
       } @else if (
-        report?.upload_submission?.fec_status === 'PROCESSING' ||
-        (!report?.upload_submission?.fec_status &&
-          report?.upload_submission?.fecfile_task_state &&
-          report?.upload_submission?.fecfile_task_state !== 'FAILED')
+        fecStatusSignal() === 'PROCESSING' ||
+        (!fecStatusSignal() && taskStateSignal() && taskStateSignal() !== 'FAILED')
       ) {
         <h2 class="super-header">Thank you for submitting your report. It is currently being processed.</h2>
       }
@@ -26,26 +24,26 @@
         <div class="col-12">
           <h5>YOUR FORM TYPE:</h5>
           <h3>
-            {{ report?.formLabel }}
+            {{ activeReportSignal().formLabel }}
           </h3>
           <br />
         </div>
-        @if (reportCode) {
+        @if (reportCodeSignal()) {
           <div class="col-12">
             <h5>YOUR REPORT TYPE:</h5>
             <h3>
-              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
+              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCodeSignal()] : '' }}
             </h3>
             <br />
           </div>
         }
-        @if (coverageDates) {
+        @if (coverageDatesSignal()) {
           <div class="col-12">
             <h5>YOUR COVERAGE DATES:</h5>
             <h3 class="no-wrap">
-              {{ coverageDates['coverage_from_date'] || null | longDate }} —
+              {{ coverageDatesSignal()!['coverage_from_date'] || null | longDate }} —
               <wbr />
-              {{ coverageDates['coverage_through_date'] || null | longDate }}
+              {{ coverageDatesSignal()!['coverage_through_date'] || null | longDate }}
             </h3>
             <br />
           </div>
@@ -54,23 +52,23 @@
         <div class="col-12">
           <h5 class="word-break">CONFIRMATION EMAILS:</h5>
           <h3 class="word-break">
-            {{ report?.confirmation_email_1 }} <br />
-            {{ report?.confirmation_email_2 }}
+            {{ activeReportSignal().confirmation_email_1 }} <br />
+            {{ activeReportSignal().confirmation_email_2 }}
           </h3>
           <br />
         </div>
-        @if (report?.upload_submission?.fec_report_id) {
+        @if (activeReportSignal().upload_submission?.fec_report_id) {
           <div class="col-12">
             <h5>FILING ID:</h5>
             <h3>
-              {{ report?.upload_submission?.fec_report_id }}
+              {{ activeReportSignal().upload_submission?.fec_report_id }}
             </h3>
           </div>
         }
       </div>
     </div>
     <div class="col-8">
-      @switch (report?.upload_submission?.fec_status) {
+      @switch (fecStatusSignal()) {
         @case ('ACCEPTED') {
           <img
             class="image-max-width"
@@ -106,15 +104,15 @@
   </div>
   <div class="grid">
     <div class="col-12">
-      @if (!['ACCEPTED', 'REJECTED'].includes(report?.upload_submission?.fec_status || '')) {
+      @if (!['ACCEPTED', 'REJECTED'].includes(fecStatusSignal() || '')) {
         <p>
           The FEC will send a report status message to the confirmation emails you provided during the submission
           process. If any problems are encountered during the process, Web Upload will terminate the upload session and
           relay the specifics of the error.
         </p>
       }
-      @if (report?.upload_submission?.fec_status === 'REJECTED' && report?.upload_submission?.fec_message) {
-        <p>FEC Error Message: {{ report?.upload_submission?.fec_message }}</p>
+      @if (fecStatusSignal() === 'REJECTED' && fecMessageSignal()) {
+        <p>FEC Error Message: {{ fecMessageSignal() }}</p>
       }
     </div>
   </div>

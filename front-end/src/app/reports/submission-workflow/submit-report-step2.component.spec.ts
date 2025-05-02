@@ -130,7 +130,6 @@ describe('SubmitReportStep2Component', () => {
     });
 
     it('should call saveAndSubmit when form is valid', fakeAsync(async () => {
-      if (component.report) component.report.id = '999';
       component.getContinueUrl = () => `/reports/f3x/submit/status/999/`;
       const saveSepy = spyOn(component, 'saveAndSubmit').and.callThrough();
 
