@@ -24,7 +24,7 @@ export class LoginService extends DestroyerComponent {
 
   public logOut() {
     this.store.dispatch(userLoginDataDiscardedAction());
-    if (!this.isLoggedIn()) {
+    if (!this.isLoggedIn() || !this.userIsAuthenticated()) {
       this.router.navigate(['/login']);
     } else {
       window.location.href = environment.loginDotGovLogoutUrl;
