@@ -18,7 +18,7 @@
     Please add the committee administrator to proceed.
   </p>
   <h2>Add a second committee administrator</h2>
-  <form [formGroup]="form">
+  <form id="second-committee-admin-dialog" [formGroup]="form">
     <div class="field">
       <label for="role">Role</label>
       <input class="p-disabled" id="role" name="role" pInputText formControlName="role" readonly />
@@ -32,6 +32,7 @@
   <ng-template #footer>
     <div class="flex w-full justify-content-end">
       <p-button
+        id="save"
         type="submit"
         (keydown.enter)="save()"
         (click)="save()"

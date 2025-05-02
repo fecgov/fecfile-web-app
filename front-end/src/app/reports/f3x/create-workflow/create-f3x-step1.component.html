@@ -57,7 +57,7 @@
         <label for="report_type_category">TIME PERIOD</label>
         <p-selectButton
           data-cy="report-type-category"
-          [options]="getReportTypeCategories()"
+          [options]="reportTypeCategories"
           [allowEmpty]="false"
           formControlName="report_type_category"
         ></p-selectButton>
@@ -75,13 +75,13 @@
               name="report_code"
               [value]="reportCode"
               [class]="
-                usedReportCodes?.includes(reportCode)
+                usedReportCodes().includes(reportCode)
                   ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
                   : ''
               "
               formControlName="report_code"
             ></p-radioButton>
-            <label [for]="reportCode" class="ml-2" [class]="usedReportCodes?.includes(reportCode) ? 'p-disabled' : ''">
+            <label [for]="reportCode" class="ml-2" [class]="usedReportCodes().includes(reportCode) ? 'p-disabled' : ''">
               {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
             </label>
           </div>
@@ -126,7 +126,7 @@
       <span>Please verify coverage dates since the dates cannot be changed once the report is created.</span>
     </div>
   </div>
-  <div class="grid">
+  <div class="grid no-expand">
     <div class="col-6">
       <app-calendar
         fieldName="coverage_from_date"

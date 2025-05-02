@@ -1,5 +1,5 @@
 <div class="sidebar">
-  @switch ((activeReport$ | async)?.report_type) {
+  @switch (activeReportSignal().report_type) {
     @case (reportTypes.F3) {
       <app-f3-menu></app-f3-menu>
     }

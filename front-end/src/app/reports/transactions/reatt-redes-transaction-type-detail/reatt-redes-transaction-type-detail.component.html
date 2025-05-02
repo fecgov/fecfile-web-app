@@ -2,7 +2,7 @@
 @if (transactionType?.subTitle) {
   <div>{{ transactionType?.subTitle }}</div>
 }
-@if (!isEditable) {
+@if (!isEditable()) {
   <h4 class="read-only-tag subtitle">READ ONLY</h4>
 }
 
@@ -27,7 +27,6 @@
       <h3>{{ transactionType?.contactTitle }}</h3>
       <form [formGroup]="form" [class.ng-submitted]="formSubmitted" id="form">
         <app-transaction-input
-          [activeReport$]="activeReport$"
           (candidateContactSelect)="updateFormWithCandidateContact($event)"
           (primaryContactSelect)="updateFormWithPrimaryContact($event)"
           (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
@@ -39,7 +38,7 @@
           [contactTypeOptions]="contactTypeOptions"
           [formSubmitted]="formSubmitted"
           [form]="form"
-          [isEditable]="isEditable"
+          [isEditable]="isEditable()"
           [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
           [transaction]="transaction"
         >
@@ -77,7 +76,7 @@
             [contributionAmountReadOnly]="true"
             [formSubmitted]="formSubmitted"
             [form]="childForm"
-            [isEditable]="isEditable"
+            [isEditable]="isEditable()"
             [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
             [transaction]="childTransaction"
           >
@@ -91,7 +90,7 @@
     <p-accordion-panel>
       <p-accordion-header>
         <strong>AUTO-POPULATED:</strong>
-        <p style="font-weight: normal">Duplicate of the original transaction</p>
+        <p class="accordion-subtext">Duplicate of the original transaction</p>
       </p-accordion-header>
       <p-accordion-content>
         @if (transaction?.reatt_redes?.transactionType?.showParentTransactionTitle) {
@@ -115,7 +114,6 @@
             [contactTypeOptions]="reattributedData.contactTypeOptions"
             [formSubmitted]="formSubmitted"
             [form]="reattributedData.form"
-            [activeReport$]="activeReport$"
             [isEditable]="false"
             [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
             [transaction]="transaction?.reatt_redes"

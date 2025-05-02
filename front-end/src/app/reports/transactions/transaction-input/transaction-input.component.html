@@ -10,6 +10,7 @@
       <div class="field">
         <label for="entity_type">LOOKUP</label>
         <app-transaction-contact-lookup
+          id="contact_1_lookup"
           contactProperty="contact_1"
           [transaction]="transaction"
           [form]="form"
@@ -58,7 +59,6 @@
       [text]="transaction?.transactionType?.amountInputHeader"
     ></app-section-header>
     <app-amount-input
-      [activeReport$]="activeReport$"
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
@@ -172,6 +172,7 @@
       <div class="candidate_committee_lookup">
         <label for="contact_3">LOOKUP </label>
         <app-transaction-contact-lookup
+          id="contact_3_lookup"
           contactProperty="contact_3"
           [transaction]="transaction"
           [form]="form"
@@ -217,6 +218,7 @@
             }
           </label>
           <app-transaction-contact-lookup
+            id="contact_2_lookup"
             contactProperty="contact_2"
             [transaction]="transaction"
             [form]="form"

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -10,14 +10,11 @@ import { Form1MService } from 'app/shared/services/form-1m.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputText } from 'primeng/inputtext';
 import { RadioButton } from 'primeng/radiobutton';
-import { concatAll, from, Observable, of, reduce, takeUntil } from 'rxjs';
 import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
@@ -26,6 +23,7 @@ import { NameInputComponent } from '../../../shared/components/inputs/name-input
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   selector: 'app-main-form',
@@ -45,9 +43,9 @@ import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags,
   ],
   styleUrl: './main-form.component.scss',
 })
-export class MainFormComponent extends MainFormBaseComponent implements OnInit {
+export class MainFormComponent extends MainFormBaseComponent {
   protected override reportService: Form1MService = inject(Form1MService);
-  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly confirmationService = inject(ConfirmationWrapperService);
   readonly formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',
@@ -116,9 +114,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
     'statusBy',
   ];
-  contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
-  templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
-  schema = f1mSchema;
+  readonly schema = f1mSchema;
   readonly webprintURL = '/reports/f1m/web-print/';
   readonly templateMap = {
     street_1: 'street_1',
@@ -127,6 +123,9 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     state: 'state',
     zip: 'zip',
   } as TransactionTemplateMapType;
+
+  contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
+  templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
 
   committeeTypeControl: AbstractControl | null = null;
   statusByControl: AbstractControl | null = null;
@@ -137,48 +136,64 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   report = new Form1M();
 
-  get confirmation$(): Observable<boolean> {
-    if (!this.report) return of(false);
-    return this.confirmWithUser(this.report, this.form);
-  }
+  constructor() {
+    super();
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+    effect(() => {
+      if (this.reportId) {
+        // A deep copy of activeReport has to be made because the actual activeReport
+        // object is set to read-only by the NgRx store.
+        this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReportSignal())));
 
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((activeReport) => {
-        if (this.reportId) {
-          // A deep copy of activeReport has to be made because the actual activeReport
-          // object is set to read-only by the NgRx store.
-          this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(activeReport)));
+        // Set the statusBy radio button based on form values
+        if (this.report.affiliated_committee_name) {
+          this.form.get('statusBy')?.setValue('affiliation');
+        } else {
+          this.form.get('statusBy')?.setValue('qualification');
+        }
 
-          // Set the statusBy radio button based on form values
+        // If this is an edit, update the lookup ids to exclude
+        if (this.report.id) {
           if (this.report.affiliated_committee_name) {
-            this.form.get('statusBy')?.setValue('affiliation');
+            if (this.report?.contact_affiliated?.committee_id)
+              this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
+            if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
           } else {
-            this.form.get('statusBy')?.setValue('qualification');
-          }
-
-          // If this is an edit, update the lookup ids to exclude
-          if (this.report.id) {
-            if (this.report.affiliated_committee_name) {
-              if (this.report?.contact_affiliated?.committee_id)
-                this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
-              if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
-            } else {
-              f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-                if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
-                  this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
-                if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
-                  this.excludeIds.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
-              });
-            }
+            f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+              if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
+                this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
+              if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
+                this.excludeIds.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
+            });
           }
         }
-      });
+      }
+    });
+  }
 
+  async getConfirmations(): Promise<boolean> {
+    if (!this.report) return false;
+    return this.confirmationService.confirmWithUser(
+      this.form,
+      this.contactConfigs,
+      this.getContact.bind(this),
+      this.getTemplateMap.bind(this),
+    );
+  }
+
+  getContact(contactKey: string) {
+    if (this.report[contactKey as keyof Form1M]) {
+      return this.report[contactKey as keyof Form1M] as Contact;
+    }
+    return null;
+  }
+
+  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
+    return this.templateMapConfigs[contactKey];
+  }
+
+  override initForm() {
+    super.initForm();
     this.committeeTypeControl = this.form.get('committee_type');
     this.statusByControl = this.form.get('statusBy');
     this.statusByControl?.addValidators(Validators.required);
@@ -250,48 +265,10 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       return;
     }
 
-    this.confirmation$.subscribe((confirmed: boolean) => {
-      // if every confirmation was accepted
-      if (confirmed) super.save(jump);
-      else this.store.dispatch(singleClickEnableAction());
-    });
-  }
-
-  confirmWithUser(report: Form1M, form: FormGroup) {
-    const confirmations$ = Object.entries(this.contactConfigs)
-      .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
-        if (report[contactKey as keyof Form1M]) {
-          const contact = report[contactKey as keyof Form1M] as Contact;
-          if (!contact.id) {
-            return TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
-              contact.type,
-              form,
-              this.templateMapConfigs[contactKey],
-              contactKey,
-              'By saving this report',
-            );
-          }
-          const changes = TransactionContactUtils.getContactChanges(
-            form,
-            contact,
-            this.templateMapConfigs[contactKey],
-            config,
-          );
-          if (changes.length > 0) {
-            return TransactionContactUtils.getContactChangesMessage(contact, changes);
-          }
-        }
-        return '';
-      })
-      .filter((message) => !!message)
-      .map((message: string) => {
-        return TransactionContactUtils.displayConfirmationPopup(message, this.confirmationService, 'dialog');
-      });
-
-    return from([of(true), ...confirmations$]).pipe(
-      concatAll(),
-      reduce((accumulator, confirmed) => accumulator && confirmed),
-    );
+    const confirmed = await this.getConfirmations();
+    // if every confirmation was accepted
+    if (confirmed) super.save(jump);
+    else this.store.dispatch(singleClickEnableAction());
   }
 
   updateContactsWithForm(report: Form1M, form: FormGroup) {

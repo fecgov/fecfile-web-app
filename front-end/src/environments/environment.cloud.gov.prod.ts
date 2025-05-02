@@ -19,6 +19,7 @@ export const environment = {
   form1m_link: 'https://webforms.fec.gov/webforms/form1/index.htm',
   showForm3: false,
   showSchedF: false,
+  disableLogin: true,
 };
 
 /*
