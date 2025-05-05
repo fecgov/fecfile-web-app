@@ -19,6 +19,7 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
   imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, LongDatePipe],
 })
 export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
+  reportStatus = ReportStatus;
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   private readonly form3XService = inject(Form3XService);
