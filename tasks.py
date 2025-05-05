@@ -81,6 +81,10 @@ def _prep_distribution_directory(ctx):
         os.path.join(nginx_config_dir, "mime.types"),
         os.path.join(dist_directory, "mime.types"),
     )
+    copyfile(
+        os.path.join(nginx_config_dir, "buildpack.yml"),
+        os.path.join(dist_directory, "buildpack.yml"),
+    )
 
 
 def _login_to_cf(ctx, space):
