@@ -1,22 +1,39 @@
-h5,
-h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-family:
-    karla,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    Apple Color Emoji,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
+.submission-status-heading {
+  font-family: ghandi-bold, serif;
+  font-size: 36px;
 }
 
-h2 {
-  margin: 0;
-  font-family: var(--gandhi-bold);
-  font-weight: 700;
-  line-height: 1.2;
+.submission-status-text {
+  font-family: karla, sans-serif;
+  font-size: 20px;
+}
+
+.submission-info-heading {
+  font-family: karla-bold, serif;
+  font-size: 20px;
+}
+
+.submission-info-text {
+  font-family: karla, sans-serif;
+  font-size: 14px;
+}
+
+.assistance-heading {
+  font-family: karla-bold, serif;
+  font-size: 16px;
+}
+
+.assistance-text {
+  font-family: karla, sans-serif;
+  font-size: 14px;
+}
+
+.error-text {
+  font-family: karla, sans-serif;
+  font-size: 16px;
+}
+
+.status-page-button {
+  font-family: karla, sans-serif;
+  font-size: 14px;
 }
