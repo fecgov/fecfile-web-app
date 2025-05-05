@@ -24,7 +24,7 @@ export class LoginService extends DestroyerComponent {
 
   public logOut() {
     this.store.dispatch(userLoginDataDiscardedAction());
-    if (!this.isLoggedIn() || !this.userIsAuthenticated()) {
+    if (!this.userIsAuthenticated()) {
       this.router.navigate(['/login']);
     } else {
       window.location.href = environment.loginDotGovLogoutUrl;
@@ -40,10 +40,6 @@ export class LoginService extends DestroyerComponent {
     return this.usersService.getCurrentUser().then((userLoginData) => {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });
-  }
-
-  public isLoggedIn() {
-    return this.cookieService.get(environment.ffapiLoginDotGovCookieName) === 'true';
   }
 
   public async userHasProfileData(): Promise<boolean> {
