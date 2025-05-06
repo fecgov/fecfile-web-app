@@ -69,9 +69,12 @@ def _build_angular_app(ctx, space):
 # copies a few nginx config files into the Angualr app distribution directory
 def _prep_distribution_directory(ctx):
     dist_directory = os.path.join(os.getcwd(), "front-end", "dist")
+    modules_directory = os.path.join(os.getcwd(), "front-end", "dist", "modules")
     nginx_config_dir = os.path.join(
         os.getcwd(), "deploy-config", "front-end-nginx-config"
     )
+
+    os.makedirs(modules_directory, exist_ok=True)
 
     copyfile(
         os.path.join(nginx_config_dir, "nginx.conf"),
@@ -82,9 +85,10 @@ def _prep_distribution_directory(ctx):
         os.path.join(dist_directory, "mime.types"),
     )
     copyfile(
-        os.path.join(nginx_config_dir, "buildpack.yml"),
-        os.path.join(dist_directory, "buildpack.yml"),
+        os.path.join(nginx_config_dir, "ngx_http_lua_module.so"),
+        os.path.join(modules_directory, "ngx_http_lua_module.so"),
     )
+
 
 
 def _login_to_cf(ctx, space):
@@ -105,22 +109,22 @@ def _login_to_cf(ctx, space):
             print(f"    - {pass_var_name}")
         else:
             print(f"You must set the {user_var_name} and {pass_var_name} environment ")
-            print(f"variables with space-deployer service account credentials")
-            print(f"")
+            print("variables with space-deployer service account credentials")
+            print("")
             print(
-                f"If you don't have a service account, you can create one with the following commands:"
+                "If you don't have a service account, you can create one with the following commands:"
             )
             print(
                 f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso"
             )
             print(f"   cf target -o {ORG_NAME} -s {space}")
             print(
-                f"   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]"
+                "   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]"
             )
             print(
-                f"   cf create-service-key  [my-server-account-name] [my-service-key-name]"
+                "   cf create-service-key  [my-server-account-name] [my-service-key-name]"
             )
-            print(f"   cf service-key  [my-server-account-name] [my-service-key-name]")
+            print("   cf service-key  [my-server-account-name] [my-service-key-name]")
 
         exit(1)
 
