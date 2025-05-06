@@ -5,7 +5,7 @@
   </span>
   <hr type="solid" />
   <div class="flex">
-    <div class="col-6 pl-0 left-side">
+    <div class="col-4 pl-0">
       @if (reportStatusSignal() === reportStatus.SUBMIT_FAILURE) {
         <h2 class="submission-status-heading">Report submission failed</h2>
         <p class="submission-status-text">Please contact the Electronic Filing Office or visit FEC.gov for help.</p>
@@ -81,23 +81,18 @@
         </button>
       }
     </div>
-    <div class="col-6 right-side img-container">
+    <div class="col-4 img-container">
       @if (reportStatusSignal() === reportStatus.SUBMIT_SUCCESS) {
         <img
-          class="image-max-width"
-          ngSrc="assets/img/report-submission-received.png"
-          draggable="false"
+          class="status-image"
+          src="assets/img/report-submission-received.svg"
           alt="Report submission received image"
-          height="271"
-          width="450"
         />
       } @else {
         <img
-          ngSrc="assets/img/report-submission-not-received.png"
-          draggable="false"
+        class="status-image"
+          src="assets/img/report-submission-not-received.svg"
           alt="Report submission not received image"
-          height="271"
-          width="450"
         />
       }
     </div>
