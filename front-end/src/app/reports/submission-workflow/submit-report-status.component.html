@@ -26,6 +26,13 @@
         <p class="assistance-text">1-800-424-9530, menu option 4 202-694-1307 efiletechsupport&#64;fec.gov</p>
         <h3 class="assistance-heading">Support Hours of Operation</h3>
         <p class="assistance-text">Monday through Friday from 9:00 a.m. to 5:30 p.m. Eastern Time</p>
+        <button 
+          pButton 
+          pRipple 
+          class="p-button-primary failure-return-button" 
+          label="Return to reports" 
+          (click)="backToReports()">
+        </button>
       } @else {
         @if (reportStatusSignal() === reportStatus.SUBMIT_PENDING) {
           <h2 class="submission-status-heading">Report submission pending</h2>
@@ -60,13 +67,19 @@
           {{ activeReportSignal().confirmation_email_2 }}
         </p>
         @if (reportStatusSignal() === reportStatus.SUBMIT_SUCCESS) {
-          <h2 class="submission-status-heading">E-filing ID:</h2>
-          <p class="submission-status-text">
+          <h2 class="submission-info-heading">E-filing ID:</h2>
+          <p class="submission-info-text">
             {{ activeReportSignal().upload_submission?.fec_report_id }}
           </p>
         }
+        <button 
+          pButton 
+          pRipple 
+          class="p-button-primary success-return-button" 
+          label="Return to reports" 
+          (click)="backToReports()">
+        </button>
       }
-      <button pButton pRipple class="p-button-primary return-to-button" label="Return to reports" (click)="backToReports()"></button>
     </div>
     <div class="col-6 right-side img-container">
       @if (reportStatusSignal() === reportStatus.SUBMIT_SUCCESS) {

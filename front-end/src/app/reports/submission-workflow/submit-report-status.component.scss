@@ -13,11 +13,13 @@
 .submission-info-heading {
   font-family: karla-bold, serif;
   font-size: 20px;
+  margin: 0px;
 }
 
 .submission-info-text {
   font-family: karla, sans-serif;
   font-size: 14px;
+  margin-bottom: 14px;
 }
 
 .assistance-heading {
@@ -43,8 +45,12 @@
   margin-bottom: 28px;
 }
 
-.return-to-button {
+.failure-return-button {
   margin-top: 18px;
+}
+
+.success-return-button {
+  margin-top: 34px;
 }
 
 .img-container {
