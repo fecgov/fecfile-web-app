@@ -7,7 +7,6 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { SubmitReportStatusComponent } from './submit-report-status.component';
 
@@ -23,7 +22,7 @@ describe('SubmitReportStatusComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DividerModule, CardModule, SubmitReportStatusComponent],
+      imports: [DividerModule, SubmitReportStatusComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

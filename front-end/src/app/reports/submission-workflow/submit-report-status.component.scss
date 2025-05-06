@@ -1,11 +1,13 @@
 .submission-status-heading {
-  font-family: ghandi-bold, serif;
+  font-family: ghandi, serif;
   font-size: 36px;
+  margin-bottom: 14px;
 }
 
 .submission-status-text {
   font-family: karla, sans-serif;
   font-size: 20px;
+  margin-bottom: 18px;
 }
 
 .submission-info-heading {
@@ -21,19 +23,30 @@
 .assistance-heading {
   font-family: karla-bold, serif;
   font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 6px;
 }
 
 .assistance-text {
   font-family: karla, sans-serif;
   font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.learn-more-button {
+  margin-bottom: 30px;
 }
 
 .error-text {
   font-family: karla, sans-serif;
   font-size: 16px;
+  margin-bottom: 28px;
 }
 
-.status-page-button {
-  font-family: karla, sans-serif;
-  font-size: 14px;
+.return-to-button {
+  margin-top: 18px;
+}
+
+p {
+  line-height: normal;
 }

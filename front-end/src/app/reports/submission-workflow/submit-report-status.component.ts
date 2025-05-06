@@ -8,7 +8,6 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
-import { Card } from 'primeng/card';
 import { Ripple } from 'primeng/ripple';
 import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
 
@@ -16,7 +15,7 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
   selector: 'app-report-summary',
   templateUrl: './submit-report-status.component.html',
   styleUrls: ['./submit-report-status.component.scss'],
-  imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, LongDatePipe],
+  imports: [NgOptimizedImage, ButtonDirective, Ripple, LongDatePipe],
 })
 export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
   reportStatus = ReportStatus;

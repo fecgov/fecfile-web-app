@@ -4,7 +4,7 @@
     <strong>{{ activeReportSignal().formLabel }}: </strong>{{ activeReportSignal().formSubLabel }}
   </span>
   <hr type="solid" />
-  <div class="col-6 pl-0">
+  <div class="col-9 pl-0">
     @if (reportStatusSignal() === reportStatus.SUBMIT_FAILURE) {
       <h2 class="submission-status-heading">Report submission failed</h2>
       <p class="submission-status-text">Please contact the Electronic Filing Office or visit FEC.gov for help.</p>
@@ -13,15 +13,16 @@
       }
       <h3 class="assistance-heading">Need help?</h3>
       <a
+        pButton
         href="https://www.fec.gov/help-candidates-and-committees/filing-reports/upload-errors/"
         target="_blank"
         rel="noopener"
-        class="p-button-secondary decline-button"
+        class="p-button-secondary learn-more-button"
       >
         Learn more about your submission error
       </a>
       <h3 class="assistance-heading">Electronic Filing Office</h3>
-      <p class="assistance-text">1-800-424-9530, menu option 4 202-694-1307 eFiletechsupport&#64;fec.gov</p>
+      <p class="assistance-text">1-800-424-9530, menu option 4 202-694-1307 efiletechsupport&#64;fec.gov</p>
       <h3 class="assistance-heading">Support Hours of Operation</h3>
       <p class="assistance-text">Monday through Friday from 9:00 a.m. to 5:30 p.m. Eastern Time</p>
     } @else {
@@ -64,9 +65,9 @@
         </p>
       }
     }
-    <button pButton pRipple class="p-button-primary" label="Return to reports" (click)="backToReports()"></button>
+    <button pButton pRipple class="p-button-primary return-to-button" label="Return to reports" (click)="backToReports()"></button>
   </div>
-  <div class="col-6 pl-0 right-side">
+  <div class="col-3">
     @if (reportStatusSignal() === reportStatus.SUBMIT_SUCCESS) {
       <img
         class="image-max-width"
