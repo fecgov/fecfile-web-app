@@ -136,7 +136,6 @@ describe('ReportListComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
   });
 
-
   it('#amend should hit service', fakeAsync(async () => {
     const amendSpy = spyOn(reportService, 'startAmendment').and.returnValue(Promise.resolve(''));
     await component.amendReport({ id: '999' } as Report);
