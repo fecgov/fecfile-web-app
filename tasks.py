@@ -48,7 +48,7 @@ DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("test", lambda _, branch: branch == "release/test"),
     ("stage", lambda _, branch: branch.startswith("release/sprint")),
-    ("dev", lambda _, branch: branch == "feature/2136-report-to"),
+    ("dev", lambda _, branch: branch == "develop"),
 )
 
 
@@ -69,12 +69,10 @@ def _build_angular_app(ctx, space):
 # copies a few nginx config files into the Angualr app distribution directory
 def _prep_distribution_directory(ctx):
     dist_directory = os.path.join(os.getcwd(), "front-end", "dist")
-    modules_directory = os.path.join(os.getcwd(), "front-end", "dist", "modules")
     nginx_config_dir = os.path.join(
         os.getcwd(), "deploy-config", "front-end-nginx-config"
     )
 
-    os.makedirs(modules_directory, exist_ok=True)
 
     copyfile(
         os.path.join(nginx_config_dir, "nginx.conf"),
@@ -85,8 +83,8 @@ def _prep_distribution_directory(ctx):
         os.path.join(dist_directory, "mime.types"),
     )
     copyfile(
-        os.path.join(nginx_config_dir, "ngx_http_lua_module.so"),
-        os.path.join(modules_directory, "ngx_http_lua_module.so"),
+        os.path.join(nginx_config_dir, "buildpack.yml"),
+        os.path.join(dist_directory, "buildpack.yml"),
     )
 
 

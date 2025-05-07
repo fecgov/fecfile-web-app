@@ -227,7 +227,9 @@ workflows:
             - lint
             - test
             - dependency-check
-
+          filters:
+            branches:
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
