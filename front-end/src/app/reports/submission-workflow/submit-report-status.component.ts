@@ -1,4 +1,3 @@
-import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -15,10 +14,10 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
   selector: 'app-report-summary',
   templateUrl: './submit-report-status.component.html',
   styleUrls: ['./submit-report-status.component.scss'],
-  imports: [NgOptimizedImage, ButtonDirective, Ripple, LongDatePipe],
+  imports: [ButtonDirective, Ripple, LongDatePipe],
 })
 export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
-  reportStatus = ReportStatus;
+  reportStatusEnum = ReportStatus;
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   private readonly form3XService = inject(Form3XService);
