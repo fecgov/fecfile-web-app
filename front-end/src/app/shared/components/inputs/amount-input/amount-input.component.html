@@ -90,7 +90,7 @@
         ></app-error-messages>
       </div>
     </div>
-    @if (showAggregate) {
+    @if (showAggregate || showPayeeCandidateYTD) {
       <div class="col-6">
         <div class="field">
           <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
