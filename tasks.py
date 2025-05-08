@@ -48,7 +48,7 @@ DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("test", lambda _, branch: branch == "release/test"),
     ("stage", lambda _, branch: branch.startswith("release/sprint")),
-    ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "testing-2136"),
 )
 
 
@@ -73,7 +73,6 @@ def _prep_distribution_directory(ctx):
         os.getcwd(), "deploy-config", "front-end-nginx-config"
     )
 
-
     copyfile(
         os.path.join(nginx_config_dir, "nginx.conf"),
         os.path.join(dist_directory, "nginx.conf"),
@@ -86,7 +85,6 @@ def _prep_distribution_directory(ctx):
         os.path.join(nginx_config_dir, "buildpack.yml"),
         os.path.join(dist_directory, "buildpack.yml"),
     )
-
 
 
 def _login_to_cf(ctx, space):
