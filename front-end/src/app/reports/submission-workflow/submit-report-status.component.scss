@@ -1,22 +1,67 @@
-h5,
-h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-family:
-    karla,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    Apple Color Emoji,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
+.submission-status-heading {
+  font-family: ghandi, serif;
+  font-size: 36px;
+  margin-bottom: 14px;
 }
 
-h2 {
-  margin: 0;
-  font-family: var(--gandhi-bold);
-  font-weight: 700;
-  line-height: 1.2;
+.submission-status-text {
+  font-family: karla, sans-serif;
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.submission-info-heading {
+  font-family: karla-bold, serif;
+  font-size: 20px;
+  margin: 0px;
+}
+
+.submission-info-text {
+  font-family: karla, sans-serif;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.assistance-heading {
+  font-family: karla-bold, serif;
+  font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 6px;
+}
+
+.assistance-text {
+  font-family: karla, sans-serif;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.learn-more-button {
+  margin-bottom: 30px;
+}
+
+.error-text {
+  font-family: karla, sans-serif;
+  font-size: 16px;
+  margin-bottom: 28px;
+}
+
+.failure-return-button {
+  margin-top: 18px;
+}
+
+.success-return-button {
+  margin-top: 34px;
+}
+
+.img-container {
+  margin-top: 80px;
+}
+
+p {
+  line-height: normal;
+}
+
+.status-image {
+  max-width: 40vw;
+  max-height: 40vh;
 }

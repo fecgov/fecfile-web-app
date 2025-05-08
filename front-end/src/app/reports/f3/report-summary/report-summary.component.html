@@ -1,0 +1,144 @@
+<div class="summary-container">
+  <p-card>
+    <div class="summary-header">
+      <h1>Summary page</h1>
+      <div>
+        <strong>{{ report.formLabel }}</strong
+        >{{ report.formSubLabel }}
+      </div>
+    </div>
+
+    @if (calculationFinished$ | async) {
+      <div>
+        <table>
+          <caption>
+            Report Summary
+          </caption>
+          <tr>
+            <th class="right-border">LINE NUMBER</th>
+            <th class="justify-left right-border">LINE DESCRIPTION</th>
+            <th class="right-border">THIS PERIOD</th>
+            <th>ELECTION CYCLE-TO-DATE</th>
+          </tr>
+
+          <tr class="gray">
+            <td class="right-border bold">6</td>
+            <td class="justify-left right-border bold">NET CONTRIBUTIONS (OTHER THAN LOANS)</td>
+            <td class="right-border"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="right-border">(a)</td>
+            <td class="justify-left right-border indent-1">Total contributions (other than loans)(from Line 11(e))</td>
+            <td class="right-border">{{ report.L6a_total_contributions_period | defaultZero | currency }}</td>
+            <td>{{ report.L6a_total_contributions_ytd | defaultZero | currency }}</td>
+          </tr>
+          <tr>
+            <td class="right-border">(b)</td>
+            <td class="justify-left right-border indent-1">Total contribution refunds (from Line 20(d))</td>
+            <td class="right-border">{{ report.L6b_total_contribution_refunds_period | defaultZero | currency }}</td>
+            <td>{{ report.L6b_total_contribution_refunds_ytd | defaultZero | currency }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="right-border">(c)</td>
+            <td class="justify-left right-border indent-1">Net contributions (other than loans)</td>
+            <td class="right-border">{{ report.L6c_net_contributions_period | defaultZero | currency }}</td>
+            <td>{{ report.L6c_net_contributions_ytd | defaultZero | currency }}</td>
+          </tr>
+
+          <tr class="gray">
+            <td class="right-border bold">7</td>
+            <td class="justify-left right-border bold">NET OPERATING EXPENDITURES</td>
+            <td class="right-border"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="right-border">(a)</td>
+            <td class="justify-left right-border indent-1">Total Operating Expenditures (from Line 17)</td>
+            <td class="right-border">{{ report.L7a_total_operating_expenditures_period | defaultZero | currency }}</td>
+            <td>{{ report.L7a_total_operating_expenditures_ytd | defaultZero | currency }}</td>
+          </tr>
+          <tr>
+            <td class="right-border">(b)</td>
+            <td class="justify-left right-border indent-1">Total Offsets to Operating Expenditures (from Line 14)</td>
+            <td class="right-border">
+              {{ report.L7b_total_offsets_to_operating_expenditures_period | defaultZero | currency }}
+            </td>
+            <td>{{ report.L7b_total_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="right-border">(c)</td>
+            <td class="justify-left right-border indent-1 cell-with-overlay">
+              Net Operating Expenditures<app-calculation-overlay
+                >Lines 7(a) <b>-</b> 7(b) <b>=</b> Line 7(c)</app-calculation-overlay
+              >
+            </td>
+            <td class="right-border">{{ report.L7c_net_operating_expenditures_period | defaultZero | currency }}</td>
+            <td>{{ report.L7c_net_operating_expenditures_ytd | defaultZero | currency }}</td>
+          </tr>
+          <tr class="gray">
+            <td class="right-border">8</td>
+            <td class="justify-left right-border bold">Cash on Hand at Close of Reporting Period (from Line 27)</td>
+            <td class="right-border">{{ report.L8_cash_on_hand_at_close_period | defaultZero | currency }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="right-border">9</td>
+            <td class="justify-left right-border bold">
+              Debts and Obligations Owed <strong>TO</strong>
+              the Committee (Itemize all on Schedule C and/or Schedule D)
+            </td>
+            <td class="right-border">{{ report.L9_debts_owed_to_committee_period | defaultZero | currency }}</td>
+            <td></td>
+          </tr>
+          <tr class="gray last">
+            <td class="right-border">10</td>
+            <td class="justify-left right-border bold">
+              Debts and Obligations Owed <strong>BY</strong>
+              the Committee (Itemize all on Schedule C and/or Schedule D)
+            </td>
+            <td class="right-border">{{ report.L10_debts_owed_by_committee_period | defaultZero | currency }}</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    } @else {
+      <div class="fec-loader-div col-12">
+        <img
+          class="image-max-width fec-loader-image"
+          src="assets/img/fec-loading-flag.gif"
+          draggable="false"
+          alt="The report's summary is loading..."
+        />
+      </div>
+    }
+
+    <div class="grid">
+      <div class="col-4">
+        <div>
+          <button
+            pButton
+            pRipple
+            label="Back"
+            class="p-button-secondary"
+            (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
+          ></button>
+        </div>
+      </div>
+      <div class="col-4"></div>
+      <div class="col-4 align-right">
+        <div>
+          <button
+            pButton
+            pRipple
+            label="Review detailed summary page"
+            class="p-button-primary"
+            (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>

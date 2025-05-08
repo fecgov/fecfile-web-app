@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { committeeGuard } from './shared/guards/committee.guard';
 import { nameGuard } from './shared/guards/name.guard';
@@ -24,12 +23,6 @@ export const ROUTES: Route[] = [
         path: '',
         pathMatch: 'full',
         redirectTo: 'reports',
-      },
-      {
-        path: 'dashboard',
-        component: DashboardComponent,
-        title: 'FECFile Dashboard',
-        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
       },
       {
         path: 'login',

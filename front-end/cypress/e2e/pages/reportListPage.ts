@@ -4,7 +4,7 @@ import { PageUtils } from './pageUtils';
 
 export class ReportListPage {
   static goToPage() {
-    cy.visit('/dashboard');
+    cy.visit('/contacts');
     cy.get('nav').find('.nav-item').contains('Reports').click();
   }
 

@@ -9,6 +9,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import { collectRouteData } from 'app/shared/utils/route.utils';
 import { NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ReportStatus } from 'app/shared/models';
 
 @Component({
   template: '',
@@ -138,16 +139,16 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
     };
   }
 
-  reportStatus(isEditable: boolean): MenuItem {
+  reportStatus(): MenuItem {
     return {
       label: 'Report Status',
       routerLink: `/reports/${this.reportString}/submit/status/${this.activeReportSignal().id}`,
-      visible: !isEditable,
+      visible: this.activeReportSignal().report_status !== ReportStatus.IN_PROGRESS,
     };
   }
 
   submitReportArray(isEditable: boolean): MenuItem[] {
-    return [this.confirmInformation(isEditable), this.submitReport(isEditable), this.reportStatus(isEditable)];
+    return [this.confirmInformation(isEditable), this.submitReport(isEditable), this.reportStatus()];
   }
 
   abstract getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[];
