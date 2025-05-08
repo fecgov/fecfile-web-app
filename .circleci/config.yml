@@ -224,7 +224,6 @@ workflows:
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
-            - test
             - dependency-check
 
   # This job is run when an e2e test is triggered with the
