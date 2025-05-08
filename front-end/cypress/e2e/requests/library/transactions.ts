@@ -80,7 +80,7 @@ export function buildScheduleF(
     schedule_id: 'F',
     form_type: 'SF',
     entity_type: contact_1.type,
-    aggregation_group: 'COORDINATED_PARTY_EXPENDITURE',
+    aggregation_group: 'COORDINATED_PARTY_EXPENDITURES',
 
     transaction_type_identifier: 'COORDINATED_PARTY_EXPENDITURE',
     schema_name: 'COORDINATED_PARTY_EXPENDITURES',
@@ -88,6 +88,7 @@ export function buildScheduleF(
     expenditure_amount: amount,
     expenditure_date: date,
     general_election_year: '2024',
+    expenditure_purpose_descrip: 'Test Data',
 
     children: [],
     report_ids: [report_id],
@@ -122,7 +123,6 @@ const f = {
   payee_candidate_state: 'NH',
   payee_committee_id_number: 'C00412304',
   payee_committee_name: 'MONTANANS FOR TESTER',
-  expenditure_purpose_descrip: 'T',
   memo_text_description: null,
   designating_committee_id_number: null,
   designating_committee_name: null,
