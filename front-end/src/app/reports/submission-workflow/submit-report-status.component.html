@@ -1,133 +1,108 @@
-<h1>Report status</h1>
-<h5>
-  <strong>{{ activeReportSignal().formLabel }}:</strong> {{ activeReportSignal().formSubLabel }}
-</h5>
-<hr type="solid" />
-<p-card>
-  <div class="grid">
-    <div class="col-12">
-      @if (fecStatusSignal() === 'ACCEPTED') {
-        <h2 class="super-header">Congratulations. Your report was accepted by the FEC.</h2>
-      } @else if (fecStatusSignal() === 'REJECTED') {
-        <h2 class="super-header">Your report has been rejected.</h2>
-      } @else if (
-        fecStatusSignal() === 'PROCESSING' ||
-        (!fecStatusSignal() && taskStateSignal() && taskStateSignal() !== 'FAILED')
-      ) {
-        <h2 class="super-header">Thank you for submitting your report. It is currently being processed.</h2>
-      }
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-4">
-      <div class="grid">
-        <div class="col-12">
-          <h5>YOUR FORM TYPE:</h5>
-          <h3>
-            {{ activeReportSignal().formLabel }}
-          </h3>
-          <br />
-        </div>
-        @if (reportCodeSignal()) {
-          <div class="col-12">
-            <h5>YOUR REPORT TYPE:</h5>
-            <h3>
-              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCodeSignal()] : '' }}
-            </h3>
-            <br />
-          </div>
-        }
-        @if (coverageDatesSignal()) {
-          <div class="col-12">
-            <h5>YOUR COVERAGE DATES:</h5>
-            <h3 class="no-wrap">
-              {{ coverageDatesSignal()!['coverage_from_date'] || null | longDate }} —
-              <wbr />
-              {{ coverageDatesSignal()!['coverage_through_date'] || null | longDate }}
-            </h3>
-            <br />
-          </div>
-        }
-
-        <div class="col-12">
-          <h5 class="word-break">CONFIRMATION EMAILS:</h5>
-          <h3 class="word-break">
-            {{ activeReportSignal().confirmation_email_1 }} <br />
-            {{ activeReportSignal().confirmation_email_2 }}
-          </h3>
-          <br />
-        </div>
-        @if (activeReportSignal().upload_submission?.fec_report_id) {
-          <div class="col-12">
-            <h5>FILING ID:</h5>
-            <h3>
-              {{ activeReportSignal().upload_submission?.fec_report_id }}
-            </h3>
-          </div>
-        }
-      </div>
-    </div>
-    <div class="col-8">
-      @switch (fecStatusSignal()) {
-        @case ('ACCEPTED') {
-          <img
-            class="image-max-width"
-            ngSrc="assets/img/Report-status--Congratulations.png"
-            draggable="false"
-            alt="Form submitted success image"
-            height="271"
-            width="450"
-          />
-        }
-        @case ('PROCESSING') {
-          <img
-            class="image-max-width"
-            ngSrc="assets/img/Report-status--Submitted.png"
-            draggable="false"
-            alt="Form submitted success image"
-            height="271"
-            width="450"
-          />
-        }
-        @case ('REJECTED') {
-          <img
-            class="image-max-width"
-            ngSrc="assets/img/Report-status--Rejected.png"
-            draggable="false"
-            alt="Form submitted success image"
-            height="271"
-            width="450"
-          />
-        }
-      }
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      @if (!['ACCEPTED', 'REJECTED'].includes(fecStatusSignal() || '')) {
-        <p>
-          The FEC will send a report status message to the confirmation emails you provided during the submission
-          process. If any problems are encountered during the process, Web Upload will terminate the upload session and
-          relay the specifics of the error.
-        </p>
-      }
-      @if (fecStatusSignal() === 'REJECTED' && fecMessageSignal()) {
-        <p>FEC Error Message: {{ fecMessageSignal() }}</p>
-      }
-    </div>
-  </div>
-
+<div class="mt-5 ml-2 p-component">
+  <h1>Report status</h1>
+  <span class="subtitle">
+    <strong>{{ activeReportSignal().formLabel }}: </strong>{{ activeReportSignal().formSubLabel }}
+  </span>
   <hr type="solid" />
-  <div class="grid">
-    <div class="col-4"></div>
-    <div class="col-4">
-      <button
-        pButton
-        pRipple
-        label="Close & return to manage reports"
-        class="p-button-primary button-full-width"
-        (click)="backToReports()"
-      ></button>
+  <div class="flex">
+    <div class="col-4 pl-0">
+      @if (reportStatusSignal() === reportStatusEnum.SUBMIT_FAILURE) {
+        <h2 class="submission-status-heading">Report submission failed</h2>
+        <p class="submission-status-text">Please contact the Electronic Filing Office or visit FEC.gov for help.</p>
+        @if (fecStatusSignal() === 'REJECTED' && fecMessageSignal()) {
+          <p class="error-text">Error Message: {{ fecMessageSignal() }}</p>
+        }
+        <h3 class="assistance-heading">Need help?</h3>
+        <a
+          pButton
+          href="https://www.fec.gov/help-candidates-and-committees/filing-reports/upload-errors/"
+          target="_blank"
+          rel="noopener"
+          class="p-button-secondary learn-more-button"
+        >
+          Learn more about your submission error
+        </a>
+        <h3 class="assistance-heading">Electronic Filing Office</h3>
+        <p class="assistance-text">
+          Electronic Filing Office
+          <br />
+          1-800-424-9530, menu option 4
+          <br />
+          202-694-1307
+          <br />
+          <a href="mailto:eFiletechsupport@fec.gov">eFiletechsupport&#64;fec.gov</a>
+        </p>
+        <h3 class="assistance-heading">Support Hours of Operation</h3>
+        <p class="assistance-text">Monday through Friday from 9:00 a.m. to 5:30 p.m. Eastern Time</p>
+        <button
+          pButton
+          pRipple
+          class="p-button-primary failure-return-button"
+          label="Return to reports"
+          (click)="backToReports()"
+        ></button>
+      } @else {
+        @if (reportStatusSignal() === reportStatusEnum.SUBMIT_PENDING) {
+          <h2 class="submission-status-heading">Report submission pending</h2>
+          <p class="submission-status-text">Your submission has been sent to the FEC.</p>
+        } @else if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
+          <h2 class="submission-status-heading">Report submission received</h2>
+          <p class="submission-status-text">Your submission to the FEC has been received.</p>
+        } @else {
+          <h2 class="submission-status-heading">
+            Thank you for submitting your report. It is currently being processed.
+          </h2>
+        }
+        <h3 class="submission-info-heading">Form Type:</h3>
+        <p class="submission-info-text">
+          {{ activeReportSignal().formLabel }}
+        </p>
+        <h3 class="submission-info-heading">Report Type:</h3>
+        <p class="submission-info-text">
+          {{ reportCodeLabelMap ? reportCodeLabelMap[reportCodeSignal()] : '' }}
+        </p>
+        <h3 class="submission-info-heading">Coverage Dates:</h3>
+        @if (coverageDatesSignal()) {
+          <p class="submission-info-text no-wrap">
+            {{ coverageDatesSignal()!['coverage_from_date'] || null | longDate }} —
+            <wbr />
+            {{ coverageDatesSignal()!['coverage_through_date'] || null | longDate }}
+          </p>
+        }
+        <h3 class="submission-info-heading">Confirmation Emails:</h3>
+        <p class="submission-info-text word-break">
+          {{ activeReportSignal().confirmation_email_1 }} <br />
+          {{ activeReportSignal().confirmation_email_2 }}
+        </p>
+        @if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
+          <h2 class="submission-info-heading">E-filing ID:</h2>
+          <p class="submission-info-text">
+            {{ activeReportSignal().upload_submission?.fec_report_id }}
+          </p>
+        }
+        <button
+          pButton
+          pRipple
+          class="p-button-primary success-return-button"
+          label="Return to reports"
+          (click)="backToReports()"
+        ></button>
+      }
+    </div>
+    <div class="col-4 img-container">
+      @if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
+        <img
+          class="status-image"
+          src="assets/img/report-submission-received.svg"
+          alt="Report submission received image"
+        />
+      } @else {
+        <img
+          class="status-image"
+          src="assets/img/report-submission-not-received.svg"
+          alt="Report submission not received image"
+        />
+      }
     </div>
   </div>
-</p-card>
+</div>

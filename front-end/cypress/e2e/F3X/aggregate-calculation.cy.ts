@@ -418,7 +418,7 @@ describe('Tests transaction form aggregate calculation', () => {
       ...{ contact_type: 'Individual', first_name: 'Z', last_name: 'Z' },
     };
 
-    cy.visit('/dashboard');
+    cy.visit('/reports');
     ContactListPage.createIndividual(individualFormContactData);
     ContactListPage.createIndividual(individualTwoFormContactData);
 

@@ -6,3 +6,5 @@ applications:
     stack: cflinuxfs4
     routes:
       - route: stage.fecfile.fec.gov
+    env:
+      FECFILE_API_URL: https://stage-api.fecfile.fec.gov

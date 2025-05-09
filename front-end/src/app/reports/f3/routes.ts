@@ -9,6 +9,8 @@ import { Report } from 'app/shared/models/report.model';
 import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { CreateF3Step1Component } from './create-workflow/create-f3-step1.component';
+import { ReportSummaryComponent } from './report-summary/report-summary.component';
+import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -34,22 +36,22 @@ export const F3_ROUTES: Route[] = [
     canActivate: [ReportIsEditableGuard],
     runGuardsAndResolvers: 'always',
   },
-  // {
-  //   path: 'summary/:reportId',
-  //   title: 'View summary page',
-  //   component: ReportSummaryComponent,
-  //   resolve: { report: ReportResolver },
-  //   data: { sidebarSection: ReportSidebarSection.REVIEW },
-  //   runGuardsAndResolvers: 'always',
-  // },
-  // {
-  //   path: 'detailed-summary/:reportId',
-  //   title: 'View detailed summary page',
-  //   component: ReportDetailedSummaryComponent,
-  //   resolve: { report: ReportResolver },
-  //   data: { sidebarSection: ReportSidebarSection.REVIEW },
-  //   runGuardsAndResolvers: 'always',
-  // },
+  {
+    path: 'summary/:reportId',
+    title: 'View summary page',
+    component: ReportSummaryComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'detailed-summary/:reportId',
+    title: 'View detailed summary page',
+    component: ReportDetailedSummaryComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.REVIEW },
+    runGuardsAndResolvers: 'always',
+  },
   {
     path: 'web-print/:reportId',
     title: 'Print preview',

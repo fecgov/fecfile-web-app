@@ -109,7 +109,7 @@ input[type='file'] {
 }
 label {
   margin: 0;
-  font-family: karla-bold, sans-serif;
+  font-family: var(--karla-bold);
 }
 input,
 select,

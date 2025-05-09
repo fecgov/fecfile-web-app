@@ -1,21 +1,21 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ApiService } from 'app/shared/services/api.service';
-import { ReportListComponent } from './report-list.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { ReportService } from 'app/shared/services/report.service';
-import { of, Subject } from 'rxjs';
-import { Actions } from '@ngrx/effects';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Report, ReportTypes, UploadSubmission, Form3X, F3xFormTypes, Form24, Form1M } from 'app/shared/models';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Actions } from '@ngrx/effects';
+import { provideMockStore } from '@ngrx/store/testing';
+import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { F3xFormTypes, Form1M, Form24, Form3X, Report, ReportStatus, ReportTypes } from 'app/shared/models';
+import { ApiService } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Dialog, DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { of, Subject } from 'rxjs';
+import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
+import { ReportListComponent } from './report-list.component';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -76,14 +76,62 @@ describe('ReportListComponent', () => {
     expect(item.id).toBe(undefined);
   });
 
-  it('#editItem should route properly', async () => {
+  it('#editItem should route properly for report_status undefined', async () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    await component.editItem({ id: '888', report_type: ReportTypes.F3X } as Report);
+    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
     component.editItem({
       id: '777',
       report_type: ReportTypes.F3X,
-      upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
+      report_status: undefined,
+    } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/777/list');
+  });
+
+  it('#editItem should route properly for in-progress report', async () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
+    component.editItem({
+      id: '777',
+      report_type: ReportTypes.F3X,
+      report_status: ReportStatus.IN_PROGRESS,
+    } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/777/list');
+  });
+
+  it('#editItem should route properly for report with submission pending', async () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
+    component.editItem({
+      id: '777',
+      report_type: ReportTypes.F3X,
+      report_status: ReportStatus.SUBMIT_PENDING,
+    } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+  });
+
+  it('#editItem should route properly for report with submission success', async () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
+    component.editItem({
+      id: '777',
+      report_type: ReportTypes.F3X,
+      report_status: ReportStatus.SUBMIT_SUCCESS,
+    } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+  });
+
+  it('#editItem should route properly for report with submission failure', async () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Report);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
+    component.editItem({
+      id: '777',
+      report_type: ReportTypes.F3X,
+      report_status: ReportStatus.SUBMIT_FAILURE,
     } as Report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
   });

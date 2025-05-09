@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { DashboardComponent } from 'app/dashboard/dashboard.component';
+import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 import { BannerComponent } from 'app/layout/banner/banner.component';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
@@ -25,8 +25,8 @@ describe('LoginComponent', () => {
         provideMockStore(testMockStore),
         provideRouter([
           {
-            path: 'dashboard',
-            component: DashboardComponent,
+            path: 'reports',
+            component: ReportListComponent,
           },
         ]),
       ],

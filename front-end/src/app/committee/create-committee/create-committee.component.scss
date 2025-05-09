@@ -79,14 +79,14 @@
 }
 .unable-verbiage-p1 {
   text-align: center;
-  font-family: karla-bold, serif;
+  font-family: var(--karla-bold);
   font-size: x-large;
   line-height: normal;
   margin-bottom: 10px;
 }
 .unable-verbiage-p2 {
   text-align: center;
-  font-family: karla-bold, serif;
+  font-family: var(--karla-bold);
   font-size: small;
   line-height: normal;
 }

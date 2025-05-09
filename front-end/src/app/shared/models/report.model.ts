@@ -78,7 +78,9 @@ export const reportLabelList: LabelList = [
 
 export enum ReportStatus {
   IN_PROGRESS = 'In progress',
+  SUBMIT_PENDING = 'Submission pending',
   SUBMIT_SUCCESS = 'Submission success',
+  SUBMIT_FAILURE = 'Submission failure',
 }
 
 export class CoverageDates {
