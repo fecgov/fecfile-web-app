@@ -66,6 +66,7 @@
       [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
       [showAggregate]="!!transaction?.transactionType?.showAggregate"
       [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
+      [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
       [transaction]="transaction"
       [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
     ></app-amount-input>

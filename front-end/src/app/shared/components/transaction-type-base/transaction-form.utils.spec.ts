@@ -5,6 +5,7 @@ import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -116,4 +117,39 @@ it('should add the amount for calendar YTD', () => {
 
   const calendarYTDFormControl = form.get('calendar_ytd_per_election_office') as SubscriptionFormControl;
   expect(calendarYTDFormControl.value).toEqual(150);
+});
+
+it('should add the amount for payee candidate YTD', () => {
+  const form = new FormGroup(
+    {
+      expenditure_amount: new SubscriptionFormControl(),
+      aggregate_general_elec_expended: new SubscriptionFormControl(),
+    },
+    { updateOn: 'blur' },
+  );
+
+  const transaction = SchFTransaction.fromJSON({
+    transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+    aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
+    expenditure_amount: 50,
+  });
+
+  const previous_transaction = SchFTransaction.fromJSON({
+    transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+    aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
+    expenditure_amount: 100,
+    aggregate_general_elec_expended: 100,
+  });
+
+  TransactionFormUtils.updateAggregate(
+    form,
+    'aggregate',
+    transaction.transactionType.templateMap,
+    transaction,
+    previous_transaction,
+    transaction.expenditure_amount as number,
+  );
+
+  const aggregateFormControl = form.get('aggregate_general_elec_expended') as SubscriptionFormControl;
+  expect(aggregateFormControl.value).toEqual(150);
 });
