@@ -1,9 +1,8 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -100,20 +99,21 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   private readonly transactionService = inject(TransactionService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
-  readonly ContactTypes = ContactTypes;
-  @Input() contact: Contact = new Contact();
-  @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() detailVisible = false;
-  @Input() showHistory = false;
-  @Input() headerTitle?: string;
-  @Input() defaultCandidateOffice?: CandidateOfficeTypes;
-  @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
+
+  readonly contact = input<Contact>();
+  readonly contactTypeOptions = model.required<PrimeOptions>();
+  readonly detailVisible = model.required<boolean>();
+  readonly showHistory = input(false);
+  readonly headerTitle = input<string>();
+  readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
+
+  readonly contactSaved = output<Contact>();
+  readonly current = signal<Contact>(new Contact());
 
   transactions: TransactionData[] = [];
   tableLoading = true;
   totalTransactions = 0;
-  rowsPerPage = 5;
+  readonly rowsPerPage = signal(5);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
     ScheduleCTransactionTypeLabels,
@@ -123,9 +123,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     ScheduleETransactionTypeLabels,
   );
 
-  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
+  readonly contactLookup = viewChild.required(ContactLookupComponent);
 
-  form: FormGroup = this.fb.group(
+  readonly form: FormGroup = this.fb.group(
     SchemaUtils.getFormGroupFields([
       ...new Set([
         ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
@@ -139,17 +139,16 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   formSubmitted = false;
 
   isNewItem = true;
-  contactType = ContactTypes.INDIVIDUAL;
+  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
 
-  candidateOfficeTypeOptions: PrimeOptions = [];
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
-  candidateStateOptions: PrimeOptions = [];
+  readonly candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
+  stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+  readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
+  readonly candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   candidateDistrictOptions: PrimeOptions = [];
-  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
   emptyMessage = 'No data available in table';
 
-  sortableHeaders: { field: string; label: string }[] = [
+  readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'transaction_type_identifier', label: 'Type' },
     { field: 'form_type', label: 'Form' },
     { field: 'report_code_label', label: 'Report' },
@@ -158,6 +157,77 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   ];
 
   pagerState?: TableLazyLoadEvent;
+
+  readonly isCandidate = computed(() => this.contactType() === ContactTypes.CANDIDATE);
+  readonly isIndividual = computed(() => this.contactType() === ContactTypes.INDIVIDUAL);
+  readonly isCommittee = computed(() => this.contactType() === ContactTypes.COMMITTEE);
+  readonly isOrganization = computed(() => this.contactType() === ContactTypes.ORGANIZATION);
+  readonly params = computed(() => {
+    return { page_size: this.rowsPerPage(), contact: this.current().id ?? '' };
+  });
+
+  constructor() {
+    super();
+
+    effect(() => {
+      this.loadTransactions({
+        first: 0,
+        rows: this.rowsPerPage(),
+      });
+    });
+
+    effect(() => {
+      this.form.patchValue(this.current());
+    });
+
+    // When selected contact type changes, update form
+    effect(() => {
+      const contactType = this.contactType();
+      this.current.set(new Contact());
+      // The type form control is not displayed on the form page because we are
+      // displaying the contact lookup component which operates independently, so
+      // we keep the 'type' value on the contact dialog form up-to-date in the background.
+      this.form.get('type')?.setValue(contactType);
+
+      const schema = ContactService.getSchemaByType(contactType);
+      SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
+      switch (contactType) {
+        case ContactTypes.CANDIDATE:
+          this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.current().id));
+          break;
+        case ContactTypes.COMMITTEE:
+          this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.current().id));
+          break;
+      }
+      this.form.updateValueAndValidity();
+
+      // Clear out non-schema form values
+      const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const schemaProperties: string[] = SchemaUtils.getSchemaProperties(schema);
+      Object.keys(this.form.controls).forEach((property: string) => {
+        if (!schemaProperties.includes(property)) {
+          formValues[property] = null;
+        }
+      });
+      this.form.patchValue(formValues);
+
+      if (contactType === ContactTypes.CANDIDATE) {
+        this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+      } else {
+        this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+      }
+    });
+
+    // When contact change
+    // effect(() => {
+    //   const contact = this.contact();
+    //   // this.contactType = contact.type;
+    //   this.contactTypeOptions.set(
+    //     LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type),
+    //   );
+    //   this.form.patchValue(contact);
+    // });
+  }
 
   async loadTransactions(event: TableLazyLoadEvent) {
     this.tableLoading = true;
@@ -168,22 +238,20 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState
-        ? this.pagerState
-        : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+      event = this.pagerState ?? {
+        first: 0,
+        rows: this.rowsPerPage(),
+      };
     }
 
     // Calculate the record page number to retrieve from the API.
     const first: number = event.first ?? 0;
-    const rows: number = event.rows ?? this.rowsPerPage;
+    const rows: number = event.rows ?? this.rowsPerPage();
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = this.getParams();
+    const params = this.params();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ?? '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
@@ -203,14 +271,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    if (this.contactTypeOptions.length === 0) {
-      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    if (this.contactTypeOptions().length === 0) {
+      this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels));
     }
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
-    this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+    this.contactType.set(this.contactTypeOptions()[0].value as ContactTypes);
 
     this.form
       ?.get('country')
@@ -221,10 +285,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
             state: 'ZZ',
           });
           // ajv does not un-require zip when country is not USA
-          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
+          this.form.patchValue({ zip: this.form.get('zip')?.value ?? '' });
           this.form.get('state')?.disable();
         } else {
-          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
+          this.form.patchValue({ zip: this.form.get('zip')?.value ?? null });
           this.form.get('state')?.enable();
         }
       });
@@ -242,55 +306,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
     // If there is a default candidate office (e.g. 'P') set, then make the
     // candidate office select read-only disabled.
-    if (this.defaultCandidateOffice) {
+    if (this.defaultCandidateOffice()) {
       this.form.get('candidate_office')?.disable();
-    }
-
-    this.contactTypeChanged(this.contactType);
-  }
-
-  /**
-   * On ngOnInit and when a user changes the selection of the ContactType for the contact
-   * entry form (as known by the emitter from the contact-lookup component), update the necessary
-   * FormControl elements for the ContactType selected by the user.
-   * @param contactType
-   */
-  contactTypeChanged(contactType: ContactTypes) {
-    if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
-    this.contactType = contactType;
-    if (!this.contact) this.contact = new Contact();
-
-    // The type form control is not displayed on the form page because we are
-    // displaying the contact lookup component which operates independently, so
-    // we keep the 'type' value on the contact dialog form up-to-date in the background.
-    this.form.get('type')?.setValue(contactType);
-
-    const schema = ContactService.getSchemaByType(contactType);
-    SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
-    switch (contactType) {
-      case ContactTypes.CANDIDATE:
-        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
-        break;
-      case ContactTypes.COMMITTEE:
-        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
-        break;
-    }
-    this.form.updateValueAndValidity();
-
-    // Clear out non-schema form values
-    const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const schemaProperties: string[] = SchemaUtils.getSchemaProperties(schema);
-    Object.keys(this.form.controls).forEach((property: string) => {
-      if (!schemaProperties.includes(property)) {
-        formValues[property] = null;
-      }
-    });
-    this.form.patchValue(formValues);
-
-    if (contactType === ContactTypes.CANDIDATE) {
-      this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-    } else {
-      this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     }
   }
 
@@ -303,34 +320,23 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   public openDialog() {
     this.resetForm();
-    this.form.patchValue(this.contact);
-    if (this.contact.id) {
+    this.form.patchValue(this.current());
+    if (this.current().id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
       // component because the Contact Dialog is hidden and not destroyed on close,
       // so we need to directly update the lookup "type" form control value
-      this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup().contactTypeFormControl.setValue(this.current().type);
+      this.contactLookup().contactTypeFormControl.enable();
     } else if (this.contactTypeOptions.length === 1) {
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup().contactTypeFormControl.enable();
     }
-    this.dialogVisible = true;
   }
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.detailVisible = false;
-      this.dialogVisible = false;
+      this.detailVisible.set(false);
     }
-  }
-
-  /**
-   * Callback passed to the contact-lookup component to show/hide lookup input box
-   * @returns boolean
-   */
-  public showSearchBox() {
-    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
   }
 
   private resetForm() {
@@ -338,32 +344,25 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
     this.isNewItem = true;
-    this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
-    if (this.defaultCandidateOffice) {
-      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
+    this.contactLookup().contactTypeFormControl.enable();
+    this.contactLookup().contactTypeFormControl.setValue(this.contactType);
+    if (this.defaultCandidateOffice()) {
+      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice());
     }
     this.formSubmitted = false;
-  }
-
-  updateContact(contact: Contact) {
-    this.contact = contact;
-    this.contactType = contact.type;
-    this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type);
-    this.form.patchValue(contact);
   }
 
   public confirmPropagation() {
     const changes = Object.entries(this.form.controls)
       .map(([field, control]: [string, AbstractControl]) => {
-        const contactValue = this.contact[field as keyof Contact];
+        const contactValue = this.current()[field as keyof Contact];
         if (control?.value !== contactValue) {
           return [field, control.value];
         }
         return undefined;
       })
       .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact, changes);
+    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.current(), changes);
     this.confirmationService.confirm({
       key: 'contactDialogDialog',
       header: 'Confirm',
@@ -386,11 +385,11 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     }
 
     const contact: Contact = Contact.fromJSON({
-      ...this.contact,
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
+      ...this.contact(),
+      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
     });
-    contact.type = this.contactType;
-    this.savedContact.emit(contact);
+    contact.type = this.contactType();
+    this.contactSaved.emit(contact);
 
     if (closeDialog) {
       this.closeDialog();
@@ -400,17 +399,5 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   async openTransaction(transaction: TransactionData) {
     await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
-  }
-
-  onRowsPerPageChange(rowsPerPage: number) {
-    this.rowsPerPage = rowsPerPage;
-    this.loadTransactions({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
-  }
-
-  getParams(): QueryParams {
-    return { page_size: this.rowsPerPage, contact: this.contact.id ?? '' };
   }
 }

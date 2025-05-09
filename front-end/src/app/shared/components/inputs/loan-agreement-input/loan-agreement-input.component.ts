@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, model } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
@@ -35,8 +35,7 @@ import { TextareaModule } from 'primeng/textarea';
   ],
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
-  @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
-
+  readonly contact = model<Contact>(new Contact());
   // Switches to show/hide groups of form input values
   showLoanRestructured = false;
   showLineOfCredit = false;
@@ -141,9 +140,5 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
         }
       });
     this.form.get(this.templateMap['secondary_name'])?.updateValueAndValidity();
-  }
-
-  updateFormWithLocationOfAccountContact(selectItem: SelectItem<Contact>) {
-    this.contactSelect.emit(selectItem);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -64,6 +64,34 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
+  constructor() {
+    super();
+    effect(() => {
+      const contact = this.item();
+      if (contact.id) {
+        this.itemService.update(contact).then(() => {
+          this.loadTableItems({});
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Contact Updated',
+            life: 3000,
+          });
+        });
+      } else {
+        this.itemService.create(contact).then(() => {
+          this.loadTableItems({});
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Contact Created',
+            life: 3000,
+          });
+        });
+      }
+    })
+  }
+
   ngOnInit() {
     this.checkForDeletedContacts();
   }
@@ -105,7 +133,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
       return `${item.last_name}, ${item.first_name}`;
     } else {
-      return item.name || '';
+      return item.name ?? '';
     }
   }
 
@@ -127,30 +155,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     } else {
       this.selectedItems = [];
       this.selectAll = false;
-    }
-  }
-
-  saveContact(contact: Contact) {
-    if (contact.id) {
-      this.itemService.update(contact).then(() => {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Updated',
-          life: 3000,
-        });
-      });
-    } else {
-      this.itemService.create(contact).then(() => {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Created',
-          life: 3000,
-        });
-      });
     }
   }
 }

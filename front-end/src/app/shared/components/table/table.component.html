@@ -11,7 +11,7 @@
     (selectionChange)="selectionChange.emit($event)"
     [selectAll]="selectAll"
     (selectAllChange)="selectAllChange.emit($event)"
-    [rows]="rowsPerPage"
+    [(rows)]="rowsPerPage"
     [totalRecords]="totalItems"
     [loading]="loading"
     [globalFilterFields]="globalFilterFields"
@@ -64,12 +64,7 @@
       <div class="flex justify-content-between">
         <div class="responsive-container left-container">
           <span class="paginator-text">Results per page:</span>
-          <p-select
-            [options]="paginationPageSizeOptions"
-            [(ngModel)]="rowsPerPage"
-            class="custom-paginator-dropdown"
-            (onChange)="rowsPerPageChange.emit($event.value)"
-          >
+          <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" class="custom-paginator-dropdown">
             <ng-template pTemplate="dropdownicon">
               <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
             </ng-template>
@@ -78,7 +73,7 @@
         <div class="responsive-container">
           <span class="paginator-text">{{ showing }}:</span>
           <p-paginator
-            [rows]="rowsPerPage"
+            [rows]="rowsPerPage()"
             [totalRecords]="totalItems"
             [first]="first"
             (onPageChange)="changePage($event)"
@@ -105,7 +100,7 @@
     <ng-template pTemplate="paginatorleft">
       <div class="responsive-container">
         <span>Results per table:</span>
-        <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" (onChange)="rowsPerPageChange.emit()">
+        <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
           <ng-template pTemplate="dropdownicon">
             <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
           </ng-template>

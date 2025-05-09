@@ -167,56 +167,56 @@ export abstract class TripleTransactionTypeBaseComponent
     );
   }
 
-  override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
-    super.updateFormWithPrimaryContact(selectItem);
-    if (
-      this.childTransaction_2?.transactionType?.getUseParentContact(this.childTransaction_2) &&
-      this.transaction?.contact_1
-    ) {
-      this.childTransaction_2.contact_1 = this.transaction.contact_1;
-      this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
-    }
-  }
+  // override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
+  //   super.updateFormWithPrimaryContact(selectItem);
+  //   if (
+  //     this.childTransaction_2?.transactionType?.getUseParentContact(this.childTransaction_2) &&
+  //     this.transaction?.contact_1
+  //   ) {
+  //     this.childTransaction_2.contact_1 = this.transaction.contact_1;
+  //     this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
+  //   }
+  // }
 
-  childUpdateFormWithPrimaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(
-      selectItem,
-      this.childForm_2,
-      this.childTransaction_2,
-      this.childContactIdMap_2['contact_1'],
-    );
+  // childUpdateFormWithPrimaryContact_2(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithPrimaryContact(
+  //     selectItem,
+  //     this.childForm_2,
+  //     this.childTransaction_2,
+  //     this.childContactIdMap_2['contact_1'],
+  //   );
 
-    if (this.childTransaction_2) {
-      this.updateInheritedFields(this.childForm_2, this.childTransaction_2);
-    } else {
-      throw new Error('Fecfile: Missing child transaction.');
-    }
-  }
+  //   if (this.childTransaction_2) {
+  //     this.updateInheritedFields(this.childForm_2, this.childTransaction_2);
+  //   } else {
+  //     throw new Error('Fecfile: Missing child transaction.');
+  //   }
+  // }
 
-  childUpdateFormWithCandidateContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithCandidateContact(
-      selectItem,
-      this.childForm_2,
-      this.childTransaction_2,
-      this.childContactIdMap_2['contact_2'],
-    );
-  }
+  // childUpdateFormWithCandidateContact_2(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithCandidateContact(
+  //     selectItem,
+  //     this.childForm_2,
+  //     this.childTransaction_2,
+  //     this.childContactIdMap_2['contact_2'],
+  //   );
+  // }
 
-  childUpdateFormWithSecondaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.childForm_2,
-      this.childTransaction_2,
-      this.childContactIdMap_2['contact_2'],
-    );
-  }
+  // childUpdateFormWithSecondaryContact_2(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithSecondaryContact(
+  //     selectItem,
+  //     this.childForm_2,
+  //     this.childTransaction_2,
+  //     this.childContactIdMap_2['contact_2'],
+  //   );
+  // }
 
-  childUpdateFormWithTertiaryContact_2(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.childForm_2,
-      this.childTransaction_2,
-      this.childContactIdMap_2['contact_3'],
-    );
-  }
+  // childUpdateFormWithTertiaryContact_2(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithSecondaryContact(
+  //     selectItem,
+  //     this.childForm_2,
+  //     this.childTransaction_2,
+  //     this.childContactIdMap_2['contact_3'],
+  //   );
+  // }
 }

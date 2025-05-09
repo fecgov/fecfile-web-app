@@ -179,31 +179,31 @@ export abstract class DoubleTransactionTypeBaseComponent
     );
   }
 
-  override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
-    super.updateFormWithPrimaryContact(selectItem);
-    if (
-      this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
-      this.transaction?.contact_1
-    ) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
-    }
-  }
+  // override updateFormWithPrimaryContact(selectItem: SelectItem<Contact>): void {
+  //   super.updateFormWithPrimaryContact(selectItem);
+  //   if (
+  //     this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
+  //     this.transaction?.contact_1
+  //   ) {
+  //     this.childTransaction.contact_1 = this.transaction.contact_1;
+  //     this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+  //   }
+  // }
 
-  childUpdateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(
-      selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap['contact_1'],
-    );
+  // childUpdateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithPrimaryContact(
+  //     selectItem,
+  //     this.childForm,
+  //     this.childTransaction,
+  //     this.childContactIdMap['contact_1'],
+  //   );
 
-    if (this.childTransaction) {
-      this.updateInheritedFields(this.childForm, this.childTransaction);
-    } else {
-      throw new Error('Fecfile: Missing child transaction.');
-    }
-  }
+  //   if (this.childTransaction) {
+  //     this.updateInheritedFields(this.childForm, this.childTransaction);
+  //   } else {
+  //     throw new Error('Fecfile: Missing child transaction.');
+  //   }
+  // }
 
   updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inherited fields (such as memo_code) cannot be set before the components are initialized.
@@ -226,30 +226,30 @@ export abstract class DoubleTransactionTypeBaseComponent
     });
   }
 
-  childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithCandidateContact(
-      selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap['contact_2'],
-    );
-  }
+  // childUpdateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithCandidateContact(
+  //     selectItem,
+  //     this.childForm,
+  //     this.childTransaction,
+  //     this.childContactIdMap['contact_2'],
+  //   );
+  // }
 
-  childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap['contact_2'],
-    );
-  }
+  // childUpdateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithSecondaryContact(
+  //     selectItem,
+  //     this.childForm,
+  //     this.childTransaction,
+  //     this.childContactIdMap['contact_2'],
+  //   );
+  // }
 
-  childUpdateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithTertiaryContact(
-      selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactIdMap['contact_3'],
-    );
-  }
+  // childUpdateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
+  //   TransactionContactUtils.updateFormWithTertiaryContact(
+  //     selectItem,
+  //     this.childForm,
+  //     this.childTransaction,
+  //     this.childContactIdMap['contact_3'],
+  //   );
+  // }
 }

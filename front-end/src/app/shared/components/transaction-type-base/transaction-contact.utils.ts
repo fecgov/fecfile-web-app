@@ -131,12 +131,11 @@ export class TransactionContactUtils {
    * @returns
    */
   static updateFormWithPrimaryContact(
-    selectItem: SelectItem<Contact>,
+    contact: Contact,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
   ) {
-    const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
     switch (contact.type) {
@@ -170,38 +169,6 @@ export class TransactionContactUtils {
   }
 
   /**
-   * Update the transaction form values for the second CANDIDATE contact form fields (i.e. 'contact_2')
-   * when a user has selected a contact from a contact lookup on the form.
-   * @param selectItem
-   * @param form
-   * @param transaction
-   * @returns
-   */
-  static updateFormWithCandidateContact(
-    selectItem: SelectItem<Contact>,
-    form: FormGroup,
-    transaction: Transaction | undefined,
-    contactId$: Subject<string>,
-  ) {
-    const contact: Contact = selectItem?.value;
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (!(contact && templateMap)) return;
-    form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
-    form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
-    form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
-    form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
-    form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
-    form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
-    form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
-    form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
-    form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
-    if (transaction) {
-      transaction.contact_2 = contact;
-    }
-    contactId$.next(contact.id ?? '');
-  }
-
-  /**
    * Update the transaction form values for the SECONDARY contact form fields (i.e. 'contact_2')
    * when a user has selected a contact from a contact lookup on the form.
    * @param selectItem
@@ -210,20 +177,32 @@ export class TransactionContactUtils {
    * @returns
    */
   static updateFormWithSecondaryContact(
-    selectItem: SelectItem<Contact>,
+    contact: Contact,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
   ) {
-    const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    form.get(templateMap.secondary_name)?.setValue(contact.name);
-    form.get(templateMap.secondary_street_1)?.setValue(contact.street_1);
-    form.get(templateMap.secondary_street_2)?.setValue(contact.street_2);
-    form.get(templateMap.secondary_city)?.setValue(contact.city);
-    form.get(templateMap.secondary_state)?.setValue(contact.state);
-    form.get(templateMap.secondary_zip)?.setValue(contact.zip);
+    if (contact.candidate_id) {
+      form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
+      form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
+      form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
+      form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
+      form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
+      form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
+      form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
+      form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
+      form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
+    } else {
+      form.get(templateMap.secondary_name)?.setValue(contact.name);
+      form.get(templateMap.secondary_street_1)?.setValue(contact.street_1);
+      form.get(templateMap.secondary_street_2)?.setValue(contact.street_2);
+      form.get(templateMap.secondary_city)?.setValue(contact.city);
+      form.get(templateMap.secondary_state)?.setValue(contact.state);
+      form.get(templateMap.secondary_zip)?.setValue(contact.zip);
+    }
+
     if (transaction) {
       transaction.contact_2 = contact;
     }
@@ -231,12 +210,11 @@ export class TransactionContactUtils {
   }
 
   static updateFormWithTertiaryContact(
-    selectItem: SelectItem<Contact>,
+    contact: Contact,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
   ) {
-    const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
     form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
@@ -248,12 +226,11 @@ export class TransactionContactUtils {
   }
 
   static updateFormWithQuaternaryContact(
-    selectItem: SelectItem<Contact>,
+    contact: Contact,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
   ) {
-    const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
     form.get(templateMap.quaternary_committee_fec_id)?.setValue(contact.committee_id);
@@ -283,12 +260,11 @@ export class TransactionContactUtils {
   }
 
   static updateFormWithQuinaryContact(
-    selectItem: SelectItem<Contact>,
+    contact: Contact,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
   ) {
-    const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
     form.get(templateMap.quinary_committee_fec_id)?.setValue(contact.committee_id);
@@ -320,7 +296,7 @@ export class TransactionContactUtils {
       transaction.contact_5 = null as unknown as undefined;
       transaction.contact_5_id = null as unknown as undefined;
     }
-    contactId$.next('');
+    contactId$?.next('');
   }
 }
 

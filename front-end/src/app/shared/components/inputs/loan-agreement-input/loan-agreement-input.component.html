@@ -212,12 +212,12 @@
           <label for="location_of_account">LOCATION OF ACCOUNT</label>
           <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
           <app-transaction-contact-lookup
+            [(contact)]="contact"
             contactProperty="contact_2"
             [transaction]="transaction"
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
-            (contactSelect)="updateFormWithLocationOfAccountContact($event)"
           ></app-transaction-contact-lookup>
         </div>
       </div>

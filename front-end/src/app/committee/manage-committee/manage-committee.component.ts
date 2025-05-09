@@ -28,7 +28,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   protected readonly itemService = inject(CommitteeMemberService);
   readonly user$ = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
-  override item: CommitteeMember = this.getEmptyItem();
 
   protected readonly rowActions: TableAction[] = [
     new TableAction('Edit Role', this.openEdit.bind(this), undefined),
@@ -38,8 +37,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly currentUserRole = computed(() => Roles[this.user$().role as keyof typeof Roles]);
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
-
-  override rowsPerPage = 10;
 
   readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
@@ -75,7 +72,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   openEdit(member: CommitteeMember) {
     this.member = member;
-    this.detailVisible = true;
+    this.detailVisible.set(true);
   }
 
   roleEdited() {
@@ -90,7 +87,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   detailClose() {
-    this.detailVisible = false;
+    this.detailVisible.set(false);
     this.member = undefined;
   }
 

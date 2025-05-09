@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -9,7 +9,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { map, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -61,6 +61,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     life: 3000,
   };
 
+  readonly contacts = [
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+  ];
+
   contactIdMap: ContactIdMapType = {};
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
@@ -85,6 +93,22 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         this.store.dispatch(navigationEventClearAction());
       }
     });
+
+    for (let i = 0; i < this.contacts.length; i++) {
+      effect(() => {
+        const contact = this.contacts[i]();
+        if (contact) {
+          TransactionContactUtils.updateFormWithPrimaryContact(
+            contact,
+            this.form,
+            this.transaction,
+            this.contactIdMap[`contact_${i}`],
+          );
+        } else if (i === 4) {
+          TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction, this.contactIdMap['contact_5']);
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -262,68 +286,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.contactTypeOptions,
       this.committeeAccountSignal(),
     );
-  }
-
-  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithPrimaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_1'],
-    );
-  }
-
-  updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithCandidateContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_2'],
-    );
-  }
-
-  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithSecondaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_2'],
-    );
-  }
-
-  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithTertiaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_3'],
-    );
-  }
-
-  updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithQuaternaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_4'],
-    );
-  }
-
-  clearFormQuaternaryContact() {
-    TransactionContactUtils.clearFormQuaternaryContact(this.form, this.transaction, this.contactIdMap['contact_4']);
-  }
-
-  updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.updateFormWithQuinaryContact(
-      selectItem,
-      this.form,
-      this.transaction,
-      this.contactIdMap['contact_5'],
-    );
-  }
-
-  clearFormQuinaryContact() {
-    TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction, this.contactIdMap['contact_5']);
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {

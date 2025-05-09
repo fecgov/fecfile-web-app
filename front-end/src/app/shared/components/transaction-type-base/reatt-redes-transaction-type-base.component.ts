@@ -33,24 +33,24 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.childUpdateFormWithPrimaryContact({
-      value: this.transaction?.reatt_redes?.contact_1,
-    } as SelectItem);
-    if (
-      (this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag ===
-      ReattRedesTypes.REDESIGNATION_TO
-    ) {
-      this.updateFormWithPrimaryContact({
-        value: this.transaction?.reatt_redes?.contact_1,
-      } as SelectItem);
-      this.updateFormWithSecondaryContact({
-        value: this.transaction?.reatt_redes?.contact_2,
-      } as SelectItem);
-      this.childUpdateFormWithSecondaryContact({
-        value: this.transaction?.reatt_redes?.contact_2,
-      } as SelectItem);
-      this.updateElectionData();
-    }
+    // this.childUpdateFormWithPrimaryContact({
+    //   value: this.transaction?.reatt_redes?.contact_1,
+    // } as SelectItem);
+    // if (
+    //   (this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag ===
+    //   ReattRedesTypes.REDESIGNATION_TO
+    // ) {
+    //   this.updateFormWithPrimaryContact({
+    //     value: this.transaction?.reatt_redes?.contact_1,
+    //   } as SelectItem);
+    //   this.updateFormWithSecondaryContact({
+    //     value: this.transaction?.reatt_redes?.contact_2,
+    //   } as SelectItem);
+    //   this.childUpdateFormWithSecondaryContact({
+    //     value: this.transaction?.reatt_redes?.contact_2,
+    //   } as SelectItem);
+    //   this.updateElectionData();
+    // }
     this.initializePullForward();
     // If the parent is a reattribution/redesignation transaction, initialize
     // its specialized validation rules and form element behavior.

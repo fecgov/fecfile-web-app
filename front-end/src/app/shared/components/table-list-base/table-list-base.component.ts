@@ -1,5 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Output,
+  Signal,
+  signal,
+} from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { DestroyerComponent } from '../app-destroyer.component';
@@ -16,20 +27,30 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   protected readonly elementRef = inject(ElementRef);
   protected abstract readonly itemService: TableListService<T>;
 
-  item!: T;
+  readonly item = signal<T>(this.getEmptyItem());
   items: T[] = [];
-  rowsPerPage = 10;
+  readonly rowsPerPage = signal(10);
   totalItems = 0;
   pagerState: TableLazyLoadEvent | undefined;
   loading = true;
   selectAll = false;
   selectedItems: T[] = [];
-  detailVisible = false;
+  readonly detailVisible = signal(false);
   isNewItem = true;
 
   protected caption?: string;
 
   @Output() readonly reloadTables = new EventEmitter();
+
+  constructor() {
+    super();
+    effect(() => {
+      this.loadTableItems({
+        first: 0,
+        rows: this.rowsPerPage(),
+      });
+    });
+  }
 
   ngAfterViewInit(): void {
     // Fix accessibility issues in paginator buttons.
@@ -65,29 +86,26 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState
-        ? this.pagerState
-        : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+      event = this.pagerState ?? {
+        first: 0,
+        rows: this.rowsPerPage(),
+      };
     }
 
     // Calculate the record page number to retrieve from the API.
-    const first: number = event.first ? event.first : 0;
-    const rows: number = event.rows ? event.rows : 10;
+    const first: number = event.first ?? 0;
+    const rows: number = event.rows ?? 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = this.getParams();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ?? '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
       ordering = `${ordering}`;
     }
 
-    const response = await this.itemService.getTableData(pageNumber, ordering, params);
+    const response = await this.itemService.getTableData(pageNumber, ordering, this.params());
     try {
       this.items = [...response.results];
     } catch (err) {
@@ -97,14 +115,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
     this.totalItems = response.count;
     this.loading = false;
-  }
-
-  onRowsPerPageChange(rowsPerPage: number) {
-    this.rowsPerPage = rowsPerPage;
-    this.loadTableItems({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
   }
 
   /**
@@ -135,14 +145,14 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   }
 
   public addItem() {
-    this.item = this.getEmptyItem();
-    this.detailVisible = true;
+    this.item.set(this.getEmptyItem());
+    this.detailVisible.set(true);
     this.isNewItem = true;
   }
 
   public editItem(item: T): Promise<boolean> | void {
-    this.item = item;
-    this.detailVisible = true;
+    this.item.set(item);
+    this.detailVisible.set(true);
     this.isNewItem = false;
   }
 
@@ -153,7 +163,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.itemService.delete(item).then(() => {
-          this.item = this.getEmptyItem();
+          this.item.set(this.getEmptyItem());
           this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
@@ -190,19 +200,9 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     return this.loadTableItems({} as TableLazyLoadEvent);
   }
 
-  /**
-   * getParams() is a method that provides optional parameters that the table-list-base component
-   * will pass in the GET request that loads the table's items, passing the parameters through the
-   * itemService and to the api service.  A component extending this component can override this
-   * method in order to control the parameters being sent in the GET request without overriding the
-   * entire loadTableItems() method.
-   *
-   * @return QueryParams
-   */
-
-  public getParams(): QueryParams {
-    return { page_size: this.rowsPerPage };
-  }
+  readonly params: Signal<QueryParams> = computed(() => {
+    return { page_size: this.rowsPerPage() };
+  });
 
   public onRowActionClick(action: TableAction, item: T) {
     action.action(item);

@@ -3,7 +3,7 @@
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
   [totalItems]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
+  [(rowsPerPage)]="rowsPerPage"
   [selectAll]="selectAll"
   [selectedItems]="selectedItems"
   itemName="contacts"
@@ -12,7 +12,6 @@
   (loadTableItems)="loadTableItems($event)"
   (selectionChange)="onSelectionChange($event)"
   (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #caption>
     <p-toolbar>
@@ -68,10 +67,9 @@
 
 <app-contact-dialog
   [contactTypeOptions]="dialogContactTypeOptions"
-  [contact]="item"
+  [contact]="item()"
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
-  (savedContact)="saveContact($event)"
 ></app-contact-dialog>
 
 <app-deleted-contact-dialog

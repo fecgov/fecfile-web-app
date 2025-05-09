@@ -3,7 +3,7 @@
   [totalItems]="totalItems"
   [loading]="loading"
   sortField="name"
-  [rowsPerPage]="rowsPerPage"
+  [(rowsPerPage)]="rowsPerPage"
   [selectAll]="selectAll"
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
   [selectedItems]="selectedItems"
@@ -12,7 +12,6 @@
   (loadTableItems)="loadTableItems($event)"
   (selectionChange)="onSelectionChange($event)"
   (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #caption>
     <p-toolbar>

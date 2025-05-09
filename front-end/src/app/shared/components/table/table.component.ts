@@ -9,6 +9,7 @@ import {
   OnInit,
   OnChanges,
   AfterContentChecked,
+  model,
 } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table, TableModule } from 'primeng/table';
@@ -40,7 +41,7 @@ export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges
   @Input() globalFilterFields = [''];
   @Input() totalItems = 0;
   @Input() loading = false;
-  @Input() rowsPerPage = 5;
+  readonly rowsPerPage = model.required<number>();
   @Input() selectAll = false;
   @Input() selectedItems: T[] = [];
   @Input() currentPageReportTemplate = 'Showing {first} to {last} of {totalRecords} items';
@@ -53,7 +54,6 @@ export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges
   @Output() loadTableItems = new EventEmitter<TableLazyLoadEvent>();
   @Output() selectionChange = new EventEmitter<T[]>();
   @Output() selectAllChange = new EventEmitter<TableSelectAllChangeEvent>();
-  @Output() rowsPerPageChange = new EventEmitter<number>();
   @Output() pageChange = new EventEmitter<PageTransitionEvent>();
 
   paginationPageSizeOptions = [5, 10, 15, 20];

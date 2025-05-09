@@ -38,13 +38,13 @@ export abstract class TransactionType {
   showCalendarYTD = false;
   inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
-  contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
+  contact2IsRequired = (form?: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
+  contact3IsRequired = (form?: FormGroup) => false; // Boolean flag to cause contact_3 required to be added to the form validation
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
+  contact4IsRequired = (form?: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  contact5IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
-  candidateInfoPosition = 'low'; // Position of candidate info in the form. 'low' or 'high'
+  contact5IsRequired = (form?: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
+  candidateInfoPosition: 'high' | 'low' = 'low'; // Position of candidate info in the form. 'low' or 'high'
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
   // Double-entry settings
@@ -176,13 +176,12 @@ export abstract class TransactionType {
     return this.formFields.includes('filer_designated_to_make_coordinated_expenditures');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hasCandidateInformation(form?: FormGroup): boolean {
+  hasCandidateInformation(): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
 
-  hasCommitteeOrCandidateInformation(): boolean {
-    return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired;
+  hasCommitteeOrCandidateInformation(form: FormGroup): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired(form);
   }
 
   hasCommitteeFecId(): boolean {

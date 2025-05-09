@@ -34,11 +34,11 @@ export abstract class F1MContact {
    * report object from the event emitted by the contact lookup component
    * @param $event
    */
-  update($event: SelectItem<Contact>) {
+  update(contact: Contact) {
     // If this is updating a previously selected candidate, remove it from the exclusion list.
     const previousId = this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null;
     this.component.excludeIds = this.component.excludeIds.filter((id: string) => id !== previousId);
-    const currentId = $event.value.id ?? null;
+    const currentId = contact.id ?? null;
     if (currentId) {
       this.component.excludeIds.push(currentId);
     }
@@ -47,24 +47,24 @@ export abstract class F1MContact {
         (id: string) => id !== this.component.report[this.contactKey].committee_id,
       );
     }
-    if ($event.value.committee_id) {
-      this.component.excludeFecIds.push($event.value.committee_id);
+    if (contact.committee_id) {
+      this.component.excludeFecIds.push(contact.committee_id);
     }
     if (this.component.report[this.contactKey]?.candidate_id) {
       this.component.excludeFecIds = this.component.excludeFecIds.filter(
         (id: string) => id !== this.component.report[this.contactKey].candidate_id,
       );
     }
-    if ($event.value.candidate_id) {
-      this.component.excludeFecIds.push($event.value.candidate_id);
+    if (contact.candidate_id) {
+      this.component.excludeFecIds.push(contact.candidate_id);
     }
 
-    (this.component.report[this.contactKey] as Contact) = $event.value;
+    (this.component.report[this.contactKey] as Contact) = contact;
     (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = currentId;
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.contactKey])) {
       this.component.form
         .get(this.component.templateMapConfigs[this.contactKey][key as keyof TransactionTemplateMapType])
-        ?.setValue($event.value[value as keyof Contact]);
+        ?.setValue(contact[value as keyof Contact]);
     }
 
     // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.

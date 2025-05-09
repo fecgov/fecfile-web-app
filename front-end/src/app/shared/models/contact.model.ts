@@ -98,7 +98,7 @@ export class Contact extends BaseModel {
   }
 
   getNameString(): string {
-    return this.name ? this.name : `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
+    return this.name ?? `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
   }
 }
 

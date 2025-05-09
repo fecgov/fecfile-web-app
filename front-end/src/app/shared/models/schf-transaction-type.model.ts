@@ -7,12 +7,12 @@ export abstract class SchFTransactionType extends TransactionType {
 
   // Form layout
   override contact2IsRequired = () => true;
-  override contact3IsRequired = true;
-  override contact4IsRequired = (form: FormGroup) =>
-    form.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
-  override contact5IsRequired = (form: FormGroup) =>
-    form.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
-  override candidateInfoPosition = 'high';
+  override contact3IsRequired = () => true;
+  override contact4IsRequired = (form?: FormGroup) =>
+    form?.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
+  override contact5IsRequired = (form?: FormGroup) =>
+    form?.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
+  override readonly candidateInfoPosition = 'high';
 
   //Labels
   override amountInputHeader = 'Expenditure information';

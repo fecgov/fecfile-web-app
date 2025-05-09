@@ -1,18 +1,24 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Component, computed, inject, input, model, OnInit, signal, untracked } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import {
+  CandidateOfficeType,
+  Contact,
+  ContactType,
+  ContactTypeLabels,
+  ContactTypes,
+} from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-transaction-contact-lookup',
@@ -21,21 +27,21 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 })
 export class TransactionContactLookupComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
-  @Input() contactProperty = 'contact_1';
-  @Input() transaction?: Transaction;
-  @Input() form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
-  @Input() formSubmitted = false;
-  @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() excludeFecIds: string[] = [];
-  @Input() excludeIds: string[] = [];
 
-  @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
-  @Output() readonly contactSelect = new EventEmitter<SelectItem<Contact>>();
+  readonly contactProperty = input('contact_1');
+  readonly transaction = input<Transaction>();
+  readonly form = input.required<FormGroup>();
+  readonly formSubmitted = input(false);
 
-  @ViewChild(ContactDialogComponent) contactDialog!: ContactDialogComponent;
+  readonly excludeFecIds = input<string[]>([]);
+  readonly excludeIds = input<string[]>([]);
 
-  detailVisible = false;
-  dialogContactTypeOptions: PrimeOptions = [];
+  readonly contact = model<Contact | null>(null);
+  readonly contactType = model<ContactType>(ContactTypes.INDIVIDUAL);
+  readonly contactTypeOptions = model.required<PrimeOptions>();
+
+  readonly detailVisible = signal(false);
+  readonly dialogContactTypeOptions = computed(() => [this.contactTypeOptions()[0]]);
   createContactForm: FormGroup = this.formBuilder.group(
     SchemaUtils.getFormGroupFields([
       ...new Set([
@@ -47,111 +53,106 @@ export class TransactionContactLookupComponent implements OnInit {
     ]),
   );
   errorMessageFormControl?: SubscriptionFormControl;
-  currentContactLabel = 'Individual';
-  currentType = ContactTypes.INDIVIDUAL;
-  mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
+  currentContactLabel = computed(() => this.contactTypeOptions()[0].label);
+
+  // currentType = ContactTypes.INDIVIDUAL;
+
+  readonly mandatoryCandidateOffice = computed(() => {
+    const transaction = this.transaction();
+    if (
+      transaction?.transactionType.templateMap.candidate_office &&
+      transaction.transactionType.mandatoryFormValues &&
+      transaction.transactionType.templateMap.candidate_office in transaction.transactionType.mandatoryFormValues
+    ) {
+      return transaction.transactionType.mandatoryFormValues[
+        transaction.transactionType.templateMap.candidate_office
+      ] as CandidateOfficeType;
+    }
+    return undefined;
+  });
+
+  constructor() {
+    // Limit contact type options in contact lookup to one when editing a transaction
+    effectOnceIf(
+      () => this.transaction()?.id,
+      () => {
+        this.contactTypeOptions.set(
+          LabelUtils.getPrimeOptions(ContactTypeLabels, [
+            (this.transaction()![this.contactProperty() as keyof Transaction] as Contact).type as ContactTypes,
+          ]),
+        );
+      },
+    );
+  }
 
   ngOnInit(): void {
     // Set the contact type options in the child dialog component to the first contact type option
     // listed in the child lookup component. This will automatically select the correct
     // content type from the transaction contact lookup and make the second in the lookup in the dialog to readonly.
-    this.dialogContactTypeOptions = [this.contactTypeOptions[0]];
-    this.currentContactLabel = this.contactTypeOptions[0].label;
-    this.currentType = this.contactTypeOptions[0].value as ContactTypes;
-
-    // Limit contact type options in contact lookup to one when editing a transaction
-    if (this.transaction?.id) {
-      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-        (this.transaction[this.contactProperty as keyof Transaction] as Contact).type as ContactTypes,
-      ]);
-    }
+    // this.currentType = this.contactTypeOptions()[0].value as ContactTypes;
 
     // Determine from manitoryFields if candidate results are limited to a particular office
-    if (
-      this.transaction?.transactionType.templateMap.candidate_office &&
-      this.transaction.transactionType.mandatoryFormValues &&
-      this.transaction.transactionType.templateMap.candidate_office in
-        this.transaction.transactionType.mandatoryFormValues
-    ) {
-      this.mandatoryCandidateOffice = this.transaction.transactionType.mandatoryFormValues[
-        this.transaction.transactionType.templateMap.candidate_office
-      ] as CandidateOfficeType;
-    }
 
     // If needed, create a local form control to manage validation and add the
     // new form control to the parent form so that a validation check occurs
     // when the parent form is submitted and blocks submit if validation fails.
-    if (this.contactProperty === 'contact_2') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
-        if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired(this.form)) {
-          return { required: true };
-        }
-        return null;
+    const contactProp = this.contactProperty();
+    if (['contact_2', 'contact_3', 'contact_4', 'contact_5'].includes(contactProp)) {
+      const controlName = `${contactProp}_lookup`;
+      const control = new FormControl(null, {
+        validators: [this.contactValidator(contactProp)],
       });
-      this.form.addControl('contact_2_lookup', this.errorMessageFormControl);
-    }
-    if (this.contactProperty === 'contact_3') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
-        if (!this.transaction?.contact_3 && this.transaction?.transactionType?.contact3IsRequired) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form.addControl('contact_3_lookup', this.errorMessageFormControl);
-    }
-    if (this.contactProperty === 'contact_4') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
-        if (!this.transaction?.contact_4 && this.transaction?.transactionType?.contact4IsRequired(this.form)) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form.addControl('contact_4_lookup', this.errorMessageFormControl);
-    }
-    if (this.contactProperty === 'contact_5') {
-      this.errorMessageFormControl = new SubscriptionFormControl(null, () => {
-        if (!this.transaction?.contact_5 && this.transaction?.transactionType?.contact5IsRequired(this.form)) {
-          return { required: true };
-        }
-        return null;
-      });
-      this.form.addControl('contact_5_lookup', this.errorMessageFormControl);
+      this.form().addControl(controlName, control);
     }
   }
 
-  /**
-   * As the user selects contact types in the lookup, communicate that to the
-   * second contact lookup in the contact dialog so that it can set the selection
-   * value and set its dropdown as readonly.
-   * @param contactType
-   */
-  contactTypeSelected(contactType: ContactTypes) {
-    this.contactDialog.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]);
-    this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
-    this.currentType = this.contactDialog.contactTypeOptions[0].value as ContactTypes;
-    this.contactTypeSelect.emit(contactType);
-  }
-
-  contactLookupSelected(contact: Contact) {
-    if (contact.id) {
-      this.contactSelect.emit({
-        value: contact,
-      });
-    } else {
-      this.contactDialog.updateContact(contact);
-      this.detailVisible = true;
-    }
-  }
+  // contactLookupSelected(contact: Contact) {
+  //   if (contact.id) {
+  //     this.contactSelect.emit({
+  //       value: contact,
+  //     });
+  //   } else {
+  //     this.contactDialog.updateContact(contact);
+  //     this.detailVisible.set(true);
+  //   }
+  // }
 
   createNewContactSelected() {
-    this.contactDialog.updateContact(Contact.fromJSON({ type: this.currentType }));
-    this.detailVisible = true;
+    // this.contact.set(Contact.fromJSON({ type: this.currentType }));
+    this.contact.set(Contact.fromJSON({ type: this.contactType() }));
+    this.detailVisible.set(true);
   }
 
-  saveContact(contact: Contact) {
-    this.contactSelect.emit({
-      value: contact,
-    });
-    this.detailVisible = false;
+  // saveContact(contact: Contact) {
+  //   this.contactSelect.emit({
+  //     value: contact,
+  //   });
+  //   this.detailVisible.set(false);
+  // }
+
+  private contactValidator(contactProp: string): ValidatorFn {
+    return (control: AbstractControl) => {
+      return untracked(() => {
+        const transaction = this.transaction();
+        const form = this.form();
+        if (!transaction) return null;
+        const contact = transaction[contactProp as keyof Transaction] as Contact | null;
+        const contactIsRequiredFnName =
+          `${contactProp.replace('contact_', 'contact')}IsRequired` as ContactIsRequiredFnNames;
+        const contactIsRequiredFn = transaction.transactionType[contactIsRequiredFnName]?.bind(
+          transaction.transactionType,
+        ) as (form: FormGroup) => boolean;
+        if (!contact && contactIsRequiredFn && contactIsRequiredFn(form)) {
+          return { required: true };
+        }
+        return null;
+      });
+    };
   }
 }
+
+type ContactIsRequiredFnNames =
+  | 'contact2IsRequired'
+  | 'contact3IsRequired'
+  | 'contact4IsRequired'
+  | 'contact5IsRequired';

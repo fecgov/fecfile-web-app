@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
+import { Component, Input, OnInit, signal } from '@angular/core';
+import { CandidateOfficeTypeLabels, CandidateOfficeTypes, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { BaseInputComponent } from '../base-input.component';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
@@ -25,6 +25,8 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
   candidateDistrictOptions: PrimeOptions = [];
 
   electionCodeField: string | undefined = undefined;
+
+  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
 
   ngOnInit(): void {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -41,7 +41,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   @Input() report?: Report;
   abstract scheduleTransactionTypeLabels: LabelList;
-  override rowsPerPage = 5;
+  override readonly rowsPerPage = signal(5);
   paginationPageSizeOptions = [5, 10, 15, 20];
   reportIsEditable = false;
 
@@ -222,11 +222,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return {} as Transaction;
   }
 
-  override getParams(): QueryParams {
-    const params: QueryParams = { ...super.getParams(), page_size: this.rowsPerPage };
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.reportId) params['report_id'] = this.reportId;
     return params;
-  }
+  });
 
   override editItem(item: Transaction): Promise<boolean> {
     return this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
@@ -369,7 +369,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         '(such as memos, in-kinds, and transfers). Please note that you cannot undo this action.',
       accept: () => {
         this.itemService.delete(item).then(() => {
-          this.item = this.getEmptyItem();
+          this.item.set(this.getEmptyItem());
           this.refreshAllTables();
           this.messageService.add({
             severity: 'success',

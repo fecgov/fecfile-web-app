@@ -194,7 +194,7 @@ describe('ContactDialogComponent', () => {
     it('should get params', () => {
       component.rowsPerPage = 5;
       component.contact.id = '123';
-      const params = component.getParams();
+      const params = component.params();
       expect(params['page_size']).toBe(5);
       expect(params['contact']).toBe('123');
     });

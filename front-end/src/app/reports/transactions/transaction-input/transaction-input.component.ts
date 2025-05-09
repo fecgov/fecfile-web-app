@@ -1,11 +1,10 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, computed, effect, input, Input, model, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
@@ -50,85 +49,75 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
   ],
 })
 export class TransactionInputComponent implements OnInit {
-  @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
-  @Input() formSubmitted = false;
-  @Input() transaction?: Transaction;
-  @Input() isEditable = true;
-  @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  @Input() memoCodeCheckboxLabel$?: Observable<string>;
-  @Input() contributionAmountReadOnly = false;
-  @Input() candidateInfoPosition = 'low';
-  @Input() isSingle = false;
+  readonly form = input.required<FormGroup>();
+  readonly formSubmitted = input.required<boolean>();
+  readonly transaction = input.required<Transaction>();
+  readonly contactTypeOptions = input.required<PrimeOptions>();
+  readonly isEditable = input(true);
+  readonly memoCodeCheckboxLabel$ = input<Observable<string>>();
+  readonly contributionAmountReadOnly = input(false);
+  readonly isSingle = input(false);
 
-  @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quaternaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quaternaryContactClear = new EventEmitter<void>();
-  @Output() quinaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() quinaryContactClear = new EventEmitter<void>();
+  readonly primaryContact = signal<Contact>(new Contact());
+  readonly secondaryContact = signal<Contact>(new Contact());
+  readonly tertiaryContact = signal<Contact>(new Contact());
+  readonly candidateContact = signal<Contact>(new Contact());
+  readonly designatingCommittee = signal<Contact | null>(null);
+  readonly subordinateCommitee = signal<Contact | null>(null);
 
-  ContactTypes = ContactTypes;
-  transactionType?: TransactionType;
-  templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
-  committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
+  readonly isCandidate = computed(() => this.contactType() === ContactTypes.CANDIDATE);
+  readonly isCommittee = computed(() => this.contactType() === ContactTypes.COMMITTEE);
+  readonly isIndividual = computed(() => this.contactType() === ContactTypes.INDIVIDUAL);
+  readonly isOrganization = computed(() => this.contactType() === ContactTypes.ORGANIZATION);
+
+  readonly transactionType = computed(() => this.transaction().transactionType);
+  readonly templateMap = computed(() => this.transactionType().templateMap);
+  readonly footer = computed(() => this.transactionType().getFooter(this.transaction()));
+  readonly hasSupportOppose = computed(() => this.transactionType().hasSupportOpposeCode());
+  readonly hasCandidateInfo = computed(() => this.transactionType().hasCandidateInformation());
+  readonly hasCandidateOffice = computed(() => this.transactionType().hasCandidateOffice());
+  readonly hasElectionInfo = computed(() => this.transactionType().hasElectionInformation());
+  readonly hasSignature1 = computed(() => this.transactionType().hasSignature1());
+  readonly hasSignature2 = computed(() => this.transactionType().hasSignature2());
+  readonly contact3Required = computed(() => this.transactionType().contact3IsRequired());
+  readonly hasCommitteeFecId = computed(() => this.transactionType().hasCommitteeFecId());
+  readonly mandatoryFormValues = computed(() => this.transactionType()?.mandatoryFormValues);
+  readonly isHigh = computed(() => this.transactionType().candidateInfoPosition === 'high');
+  readonly isLow = computed(() => this.transactionType().candidateInfoPosition === 'low');
+  readonly candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.CANDIDATE,
+  ]);
+  readonly committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+  ]);
+
+  readonly showLookup = computed(
+    () =>
+      this.isEditable() &&
+      !this.transactionType().getUseParentContact(this.transaction()) &&
+      !this.transactionType().hideContactLookup &&
+      this.transaction().transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
+      this.transaction().transaction_type_identifier !== 'LOAN_REPAYMENT_RECEIVED',
+  );
+
+  constructor() {
+    effect(() => {
+      this.form().get('entity_type')?.setValue(this.primaryContact().type);
+    });
+
+    effect(() => {
+      this.form().get('entity_type')?.setValue(this.contactType());
+    });
+  }
 
   ngOnInit(): void {
-    if (this.transaction) {
-      this.transactionType = this.transaction.transactionType;
-      this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
-      this.templateMap = this.transaction.transactionType.templateMap;
-    } else {
-      throw new Error('FECfile: No transaction passed to TransactionInputComponent');
-    }
+    this.contactType.set(this.form().get('entity_type')?.value);
 
     // If there are mandatory values for any form fields, populate the form field and make it read-only
-    for (const field in this.transaction.transactionType.mandatoryFormValues) {
-      this.form.get(field)?.setValue(this.transaction.transactionType.mandatoryFormValues[field]);
-      this.form.get(field)?.disable();
+    for (const field in this.mandatoryFormValues()) {
+      this.form().get(field)?.setValue(this.mandatoryFormValues()[field]);
+      this.form().get(field)?.disable();
     }
-  }
-
-  contactTypeSelected(contactType: ContactTypes) {
-    this.form.get('entity_type')?.setValue(contactType);
-  }
-
-  updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
-    this.form.get('entity_type')?.setValue(selectItem.value.type);
-    this.primaryContactSelect.emit(selectItem);
-  }
-
-  updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
-    this.candidateContactSelect.emit(selectItem);
-  }
-
-  updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
-    this.secondaryContactSelect.emit(selectItem);
-  }
-
-  updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
-    this.tertiaryContactSelect.emit(selectItem);
-  }
-
-  updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
-    this.quaternaryContactSelect.emit(selectItem);
-  }
-
-  clearFormQuaternaryContact() {
-    this.quaternaryContactClear.emit();
-  }
-
-  updateFormWithQuinaryContact(selectItem: SelectItem<Contact>) {
-    this.quinaryContactSelect.emit(selectItem);
-  }
-
-  clearFormQuinaryContact() {
-    this.quinaryContactClear.emit();
-  }
-
-  get entityType(): ContactTypes {
-    return this.form.get('entity_type')?.value;
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, Input, OnInit } from '@angular/core';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -29,12 +29,12 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     { field: 'amount', label: 'Guaranteed financial information amount' },
   ];
 
-  override getParams(): QueryParams {
-    if (this.loan?.id) {
-      return { ...super.getParams(), parent: this.loan.id };
-    }
-    return super.getParams();
-  }
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
+    if (this.loan?.id) params['parent'] = this.loan.id;
+    return params;
+  });
+
   override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     if (!this.loan?.id) {
       this.items = [];

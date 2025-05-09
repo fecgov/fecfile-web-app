@@ -32,13 +32,9 @@
           [isEditable]="isEditable()"
           [form]="form"
           [formSubmitted]="formSubmitted"
-          [transaction]="transaction"
+          [transaction]="transaction!"
           [contactTypeOptions]="contactTypeOptions"
           [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
-          (candidateContactSelect)="updateFormWithCandidateContact($event)"
-          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>
@@ -68,14 +64,10 @@
           [isEditable]="isEditable()"
           [form]="childForm"
           [formSubmitted]="formSubmitted"
-          [transaction]="childTransaction"
+          [transaction]="childTransaction!"
           [contactTypeOptions]="childContactTypeOptions"
           [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
           [contributionAmountReadOnly]="true"
-          (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
-          (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
-          (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
         >
         </app-transaction-input>
       </form>
@@ -104,14 +96,10 @@
           [isEditable]="isEditable()"
           [form]="childForm_2"
           [formSubmitted]="formSubmitted"
-          [transaction]="childTransaction_2"
+          [transaction]="childTransaction_2!"
           [contactTypeOptions]="childContactTypeOptions_2"
           [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel_2$"
           [contributionAmountReadOnly]="true"
-          (primaryContactSelect)="childUpdateFormWithPrimaryContact_2($event)"
-          (candidateContactSelect)="childUpdateFormWithCandidateContact_2($event)"
-          (secondaryContactSelect)="childUpdateFormWithSecondaryContact_2($event)"
-          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact_2($event)"
         >
         </app-transaction-input>
       </form>

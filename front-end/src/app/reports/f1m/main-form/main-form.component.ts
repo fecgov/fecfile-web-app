@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -130,6 +130,14 @@ export class MainFormComponent extends MainFormBaseComponent {
   committeeTypeControl: AbstractControl | null = null;
   statusByControl: AbstractControl | null = null;
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
+  readonly affContact = signal<Contact | null>(null);
+  readonly candidates = [
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+    signal<Contact | null>(null),
+  ];
   candidateContacts: CandidateContact[] = [];
   excludeFecIds: string[] = [];
   excludeIds: string[] = [];
@@ -138,6 +146,23 @@ export class MainFormComponent extends MainFormBaseComponent {
 
   constructor() {
     super();
+
+    effect(() => {
+      const contact = this.affContact();
+      if (contact) this.affiliatedContact.update(contact);
+    });
+
+    effect(() => {
+      const contact = this.affContact();
+      if (contact) this.affiliatedContact.update(contact);
+    });
+
+    for (const i = 0; i < this.candidates.length; ) {
+      effect(() => {
+        const contact = this.candidates[i]();
+        if (contact) this.candidateContacts[i].update(contact);
+      });
+    }
 
     effect(() => {
       if (this.reportId) {
