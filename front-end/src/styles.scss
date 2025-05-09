@@ -29,7 +29,7 @@ hr.black-line {
 }
 
 .p-drawer-header {
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
   font-weight: bold;
   color: #112e51;
   font-size: 16px;
@@ -73,7 +73,7 @@ label.disabled {
 
 .label-note {
   color: grey;
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
 }
 
 .bold {
@@ -128,33 +128,6 @@ label.disabled {
   color: #aeb0b5;
 }
 
-.font-karla {
-  font-family:
-    karla,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    Apple Color Emoji,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
-}
-
-.font-karla-bold {
-  font-family:
-    karla-bold,
-    karla,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    Apple Color Emoji,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
-}
-
 .fec-background-gradient {
   background-image: linear-gradient(to bottom right, #1a4f82, #112e51);
 }
@@ -199,11 +172,6 @@ label.disabled {
 
 .form-type-dialog p-select {
   display: flex;
-}
-
-.title1 {
-  font-family: ghandi-bold, serif;
-  font-size: 32px;
 }
 
 .add-button {
