@@ -34,7 +34,7 @@ p + ul {
 :host ::ng-deep {
   .p-checkbox-label {
     font-style: italic;
-    font-family: gandhi-regular, serif;
+    font-family: var(--gandhi-regular);
   }
 }
 
@@ -43,7 +43,7 @@ p + ul {
   top: 64px;
   right: 32px;
   font-size: 18px;
-  font-family: 'karla-bold', sans-serif;
+  font-family: var(--karla-bold);
   text-transform: uppercase;
   text-shadow: #000000 1px 0 10px;
   color: white !important;
