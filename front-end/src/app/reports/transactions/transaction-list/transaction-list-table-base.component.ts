@@ -1,9 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import {
-  Report,
   Transaction,
   ReportTypes,
   ScheduleIds,
@@ -19,7 +18,8 @@ import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
+import { injectDestroy } from 'ngxtension/inject-destroy';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
 const loansDebts = [
@@ -33,141 +33,98 @@ const loansDebts = [
 @Component({
   template: '',
 })
-export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
+export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> {
   protected readonly reportService = inject(ReportService);
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
   protected readonly activatedRoute = inject(ActivatedRoute);
+  private readonly destroy$ = injectDestroy();
 
-  @Input() report?: Report;
+  readonly report = this.store.selectSignal(selectActiveReport);
   abstract scheduleTransactionTypeLabels: LabelList;
-  override rowsPerPage = 5;
+  override rowsPerPage = signal(5);
   paginationPageSizeOptions = [5, 10, 15, 20];
-  reportIsEditable = false;
+  readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
 
-  public rowActions: TableAction[] = [
-    new TableAction(
-      'View',
-      this.editItem.bind(this),
-      () => !this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      (transaction: Transaction) => this.reportIsEditable && this.canDelete(transaction),
-      () => true,
-    ),
-    new TableAction(
-      'Aggregate',
-      this.forceAggregate.bind(this),
-      (transaction: Transaction) =>
+  public rowActions = [
+    createAction('View', this.editItem.bind(this), { isAvailable: () => !this.reportIsEditable }),
+    createAction('Edit', this.editItem.bind(this), { isAvailable: () => !this.reportIsEditable }),
+    createAction('Delete', this.deleteItem.bind(this), {
+      isAvailable: (transaction: Transaction) => this.reportIsEditable() && this.canDelete(transaction),
+    }),
+    createAction('Aggregate', this.forceAggregate.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         !!transaction.force_unaggregated &&
-        this.reportIsEditable &&
-        this.report?.report_type !== ReportTypes.F24 &&
+        this.reportIsEditable() &&
+        this.report().report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Unaggregate',
-      this.forceUnaggregate.bind(this),
-      (transaction: Transaction) =>
+    }),
+    createAction('Unaggregate', this.forceUnaggregate.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         !transaction.force_unaggregated &&
-        this.reportIsEditable &&
-        this.report?.report_type !== ReportTypes.F24 &&
+        this.reportIsEditable() &&
+        this.report().report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Itemize',
-      this.forceItemize.bind(this),
-      (transaction: Transaction) =>
+    }),
+    createAction('Itemize', this.forceItemize.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         transaction.itemized === false &&
-        this.reportIsEditable &&
-        this.report?.report_type !== ReportTypes.F24 &&
+        this.reportIsEditable() &&
+        this.report().report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Unitemize',
-      this.forceUnitemize.bind(this),
-      (transaction: Transaction) =>
+    }),
+    createAction('Unitemize', this.forceUnitemize.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         transaction.itemized === true &&
-        this.reportIsEditable &&
-        this.report?.report_type !== ReportTypes.F24 &&
+        this.reportIsEditable() &&
+        this.report().report_type !== ReportTypes.F24 &&
         !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Receive loan repayment',
-      this.createLoanRepaymentReceived.bind(this),
-      (transaction: Transaction) =>
-        transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE && this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Review loan agreement',
-      this.editLoanAgreement.bind(this),
-      (transaction: Transaction) =>
-        this.reportIsEditable &&
+    }),
+    createAction('Receive loan repayment', this.createLoanRepaymentReceived.bind(this), {
+      isAvailable: (transaction: Transaction) =>
+        transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE &&
+        this.reportIsEditable(),
+    }),
+    createAction('Review loan agreement', this.editLoanAgreement.bind(this), {
+      isAvailable: (transaction: Transaction) =>
+        this.reportIsEditable() &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         !!transaction.loan_agreement_id,
-      () => true,
-    ),
-    new TableAction(
-      'New loan agreement',
-      this.createLoanAgreement.bind(this),
-      (transaction: Transaction) =>
-        this.reportIsEditable &&
+    }),
+    createAction('New loan agreement', this.createLoanAgreement.bind(this), {
+      isAvailable: (transaction: Transaction) =>
+        this.reportIsEditable() &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         isPulledForwardLoan(transaction) &&
         !transaction.loan_agreement_id,
-      () => true,
-    ),
-    new TableAction(
-      'Make loan repayment',
-      this.createLoanRepaymentMade.bind(this),
-      (transaction: Transaction) =>
+    }),
+    createAction('Make loan repayment', this.createLoanRepaymentMade.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         [
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
-        ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Report debt repayment',
-      this.createDebtRepaymentMade.bind(this),
-      (transaction: Transaction) =>
+        ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable(),
+    }),
+    createAction('Report debt repayment', this.createDebtRepaymentMade.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
-        this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Report debt repayment',
-      this.createDebtRepaymentReceived.bind(this),
-      (transaction: Transaction) =>
+        this.reportIsEditable(),
+    }),
+    createAction('Report debt repayment', this.createDebtRepaymentReceived.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
-        this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Reattribute',
-      this.createReattribution.bind(this),
-      (transaction: Transaction) =>
+        this.reportIsEditable(),
+    }),
+    createAction('Reattribute', this.createReattribution.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.A &&
         !transaction.parent_transaction_id &&
         !ReattRedesUtils.isReattRedes(transaction, [
@@ -175,12 +132,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ReattRedesTypes.REATTRIBUTION_TO,
         ]) &&
         !ReattRedesUtils.isAtAmountLimit(transaction),
-      () => true,
-    ),
-    new TableAction(
-      'Redesignate',
-      this.createRedesignation.bind(this),
-      (transaction: Transaction) =>
+    }),
+    createAction('Redesignate', this.createRedesignation.bind(this), {
+      isAvailable: (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.B &&
         transaction.transactionType.hasElectionInformation() &&
         !transaction.parent_transaction_id &&
@@ -189,8 +143,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
           ReattRedesTypes.REDESIGNATION_TO,
         ]) &&
         !ReattRedesUtils.isAtAmountLimit(transaction),
-      () => true,
-    ),
+    }),
   ];
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -199,34 +152,17 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     { field: 'name', label: 'Name' },
   ];
 
-  reportId: string = this.activatedRoute.snapshot.params['reportId'];
-
-  ngOnInit(): void {
-    if (this.report) {
-      this.reportIsEditable = this.reportService.isEditable(this.report);
-    } else {
-      this.store
-        .select(selectActiveReport)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((report) => {
-          this.reportIsEditable = this.reportService.isEditable(report);
-        });
-    }
-  }
-
-  public onTableActionClick(action: TableAction, report?: Report) {
-    action.action(report);
-  }
+  readonly reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
   protected getEmptyItem(): Transaction {
     return {} as Transaction;
   }
 
-  override getParams(): QueryParams {
-    const params: QueryParams = { ...super.getParams(), page_size: this.rowsPerPage };
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.reportId) params['report_id'] = this.reportId;
     return params;
-  }
+  });
 
   override editItem(item: Transaction): Promise<boolean> {
     return this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
@@ -303,22 +239,22 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   public async createReattribution(transaction: Transaction): Promise<void> {
-    if (this.reportIsEditable) {
+    if (this.reportIsEditable()) {
       await this.router.navigateByUrl(
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
       );
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
+      ReattRedesUtils.selectReportDialog.set([transaction, ReattRedesTypes.REATTRIBUTED]);
     }
   }
 
   public async createRedesignation(transaction: Transaction): Promise<void> {
-    if (this.reportIsEditable) {
+    if (this.reportIsEditable()) {
       await this.router.navigateByUrl(
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
       );
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
+      ReattRedesUtils.selectReportDialog.set([transaction, ReattRedesTypes.REDESIGNATED]);
     }
   }
 

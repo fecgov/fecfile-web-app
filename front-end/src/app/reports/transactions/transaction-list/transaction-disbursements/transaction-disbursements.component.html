@@ -1,18 +1,14 @@
 <app-table
   title="Disbursements"
+  [(first)]="first"
   [items]="items"
   [totalItems]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
   sortField="line_label,created"
   [sortableHeaders]="sortableHeaders"
   itemName="transactions"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #header>
     <th id="transaction_id" role="columnheader">Transaction ID</th>
@@ -29,7 +25,7 @@
         <div><strong>Unaggregated</strong></div>
       }
       <!-- transactions are always itemized on f24 even if they aren't marked as such in the db -->
-      @if (!item?.itemized && report?.report_type !== form24ReportType) {
+      @if (!item?.itemized && report().report_type !== form24ReportType) {
         <div><strong>Unitemized</strong></div>
       }
     </td>

@@ -19,7 +19,7 @@ import { LabelPipe } from '../../../../shared/pipes/label.pipe';
   styleUrls: ['../../transaction.scss'],
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, CurrencyPipe, FecDatePipe, LabelPipe],
 })
-export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchCService);
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleCTransactionTypeLabels,

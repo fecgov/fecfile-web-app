@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
+import { createAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
@@ -17,26 +17,28 @@ import { CurrencyPipe } from '@angular/common';
   styleUrls: ['../../transaction.scss'],
   imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe],
 })
-export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchC2Service);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 
-  @Input() loan?: Transaction;
+  readonly loan = input.required<Transaction>();
 
   override sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
     { field: 'amount', label: 'Guaranteed financial information amount' },
   ];
 
-  override getParams(): QueryParams {
-    if (this.loan?.id) {
-      return { ...super.getParams(), parent: this.loan.id };
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
+    if (this.loan()?.id) {
+      params['parent'] = this.loan().id ?? '';
     }
-    return super.getParams();
-  }
+    return params;
+  });
+
   override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
-    if (!this.loan?.id) {
+    if (!this.loan()?.id) {
       this.items = [];
       this.totalItems = 0;
       this.loading = false;
@@ -46,24 +48,9 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     }
   }
 
-  override rowActions: TableAction[] = [
-    new TableAction(
-      'View',
-      this.editItem.bind(this),
-      () => !this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => this.reportIsEditable,
-      () => true,
-    ),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      () => this.reportIsEditable,
-      () => true,
-    ),
+  override rowActions = [
+    createAction('View', this.editItem.bind(this), { isAvailable: () => !this.reportIsEditable() }),
+    createAction('Edit', this.editItem.bind(this), { isAvailable: () => this.reportIsEditable() }),
+    createAction('Delete', this.deleteItem.bind(this), { isAvailable: () => this.reportIsEditable() }),
   ];
 }

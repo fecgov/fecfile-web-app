@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { Component, inject, resource, signal } from '@angular/core';
+import { createAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
@@ -30,30 +30,31 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
     LabelPipe,
   ],
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
+export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
-  contactTypeLabels: LabelList = ContactTypeLabels;
-  dialogContactTypeOptions: PrimeOptions = [];
+  readonly contactTypeLabels: LabelList = ContactTypeLabels;
+  dialogContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
-  restoreDialogIsVisible = false;
-  restoreContactsButtonIsVisible = false;
-  searchTerm = '';
+  readonly restoreDialogIsVisible = signal(false);
+  readonly restoreContactsButtonIsVisible = resource({
+    loader: async () => {
+      const response = await this.deletedContactService.getTableData();
+      return response.count > 0;
+    },
+  });
 
   // contact lookup
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+  readonly contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
     ContactTypes.COMMITTEE,
     ContactTypes.INDIVIDUAL,
   ]);
 
-  public rowActions: TableAction[] = [
-    new TableAction('Edit', this.editItem.bind(this)),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      () => true,
-      (contact: Contact) => this.canDeleteItem(contact),
-    ),
+  public rowActions = [
+    createAction('Edit', this.editItem.bind(this)),
+    createAction('Delete', this.deleteItem.bind(this), {
+      isEnabled: (contact: Contact) => this.canDeleteItem(contact),
+    }),
   ];
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -64,21 +65,9 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  ngOnInit() {
-    this.checkForDeletedContacts();
-  }
-
-  public async checkForDeletedContacts() {
-    const contactListResponse = await this.deletedContactService.getTableData();
-    const deletedContactsExist = contactListResponse.count > 0;
-    this.restoreContactsButtonIsVisible = deletedContactsExist;
-    return deletedContactsExist;
-  }
-
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
-    await super.loadTableItems(event);
-
-    await this.checkForDeletedContacts();
+    super.loadTableItems(event);
+    this.restoreContactsButtonIsVisible.reload();
   }
 
   protected getEmptyItem(): Contact {
@@ -93,7 +82,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   public override editItem(item: Contact) {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
     super.editItem(item);
-    this.isNewItem = false;
   }
 
   /**
@@ -111,23 +99,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   public canDeleteItem(item: Contact): boolean {
     return !item.has_transaction_or_report;
-  }
-
-  public onRestoreClick() {
-    this.restoreDialogIsVisible = true;
-  }
-
-  public override async onSelectAllChange(event: TableSelectAllChangeEvent) {
-    const checked: boolean = event.checked;
-
-    if (checked) {
-      const response = await this.itemService.getTableData(1);
-      this.selectedItems = response.results.filter((item: Contact) => this.canDeleteItem(item)) || [];
-      this.selectAll = true;
-    } else {
-      this.selectedItems = [];
-      this.selectAll = false;
-    }
   }
 
   saveContact(contact: Contact) {

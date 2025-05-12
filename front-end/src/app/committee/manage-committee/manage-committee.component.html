@@ -3,16 +3,12 @@
   [totalItems]="totalItems"
   [loading]="loading"
   sortField="name"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
+  [(rowsPerPage)]="rowsPerPage"
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-  [selectedItems]="selectedItems"
   itemName="users"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
+  [(first)]="first"
 >
   <ng-template #caption>
     <p-toolbar>
@@ -56,6 +52,6 @@
   (detailClose)="detailClose()"
   (userAdded)="userAdded($event)"
   (roleEdited)="roleEdited()"
-  [(detailVisible)]="detailVisible"
-  [member]="member"
+  [detailVisible]="detailVisible"
+  [member]="item"
 ></app-committee-member-dialog>

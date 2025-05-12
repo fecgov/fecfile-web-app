@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -113,7 +113,8 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   transactions: TransactionData[] = [];
   tableLoading = true;
   totalTransactions = 0;
-  rowsPerPage = 5;
+  readonly first = signal(0);
+  readonly rowsPerPage = signal(5);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
     ScheduleCTransactionTypeLabels,
@@ -159,6 +160,16 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
 
   pagerState?: TableLazyLoadEvent;
 
+  constructor() {
+    super();
+    effect(() => {
+      this.loadTransactions({
+        first: 0,
+        rows: this.rowsPerPage(),
+      });
+    });
+  }
+
   async loadTransactions(event: TableLazyLoadEvent) {
     this.tableLoading = true;
 
@@ -170,13 +181,13 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     } else {
       event = this.pagerState ?? {
         first: 0,
-        rows: this.rowsPerPage,
+        rows: this.rowsPerPage(),
       };
     }
 
     // Calculate the record page number to retrieve from the API.
     const first: number = event.first ?? 0;
-    const rows: number = event.rows ?? this.rowsPerPage;
+    const rows: number = event.rows ?? this.rowsPerPage();
     const pageNumber: number = Math.floor(first / rows) + 1;
     const params = this.getParams();
 
@@ -400,15 +411,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
   }
 
-  onRowsPerPageChange(rowsPerPage: number) {
-    this.rowsPerPage = rowsPerPage;
-    this.loadTransactions({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
-  }
-
   getParams(): QueryParams {
-    return { page_size: this.rowsPerPage, contact: this.contact.id ?? '' };
+    return { page_size: this.rowsPerPage(), contact: this.contact.id ?? '' };
   }
 }

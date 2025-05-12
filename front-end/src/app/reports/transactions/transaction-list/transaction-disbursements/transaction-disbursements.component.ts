@@ -1,7 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, forwardRef, inject, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, inject, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { createAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
@@ -31,7 +31,7 @@ import { MemoCodePipe } from '../transaction-list.component';
     forwardRef(() => MemoCodePipe),
   ],
 })
-export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleBTransactionTypeLabels,
@@ -42,16 +42,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
 
-  @Input() openReportSelectionDialog = (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _transaction: Transaction,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _formType: ReportTypes,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _createMethod: () => void,
-  ) => {
-    return;
-  };
+  readonly requestReportSelection = output<{
+    transaction: Transaction;
+    formType: ReportTypes;
+    createMethod: () => Promise<void>;
+  }>();
 
   constructor() {
     super();
@@ -62,24 +57,26 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
         { field: 'amount', label: 'Amount' },
       ],
     );
-  }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
     this.rowActions.push(
-      new TableAction(
+      createAction(
         'Add to Form24 Report',
         (transaction) => {
-          this.openReportSelectionDialog(transaction as Transaction, ReportTypes.F24, this.refreshTable.bind(this));
+          this.requestReportSelection.emit({
+            transaction: transaction as Transaction,
+            formType: ReportTypes.F24,
+            createMethod: this.refreshTable.bind(this),
+          });
         },
-        (transaction) => {
-          return (
-            this.report?.report_type === ReportTypes.F3X &&
-            transaction.report_ids?.length === 1 &&
-            transaction.transactionType?.scheduleId === ScheduleIds.E
-          );
+        {
+          isAvailable: (transaction) => {
+            return (
+              this.report().report_type === ReportTypes.F3X &&
+              transaction.report_ids?.length === 1 &&
+              transaction.transactionType?.scheduleId === ScheduleIds.E
+            );
+          },
         },
-        () => true,
       ),
     );
   }
