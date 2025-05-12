@@ -37,11 +37,12 @@ export class TransactionContactLookupComponent implements OnInit {
   readonly excludeIds = input<string[]>([]);
 
   readonly contact = model<Contact | null>(null);
+  readonly dialogContact = signal<Contact>(new Contact());
   readonly contactType = model<ContactType>(ContactTypes.INDIVIDUAL);
   readonly contactTypeOptions = model.required<PrimeOptions>();
 
   readonly detailVisible = signal(false);
-  readonly dialogContactTypeOptions = computed(() => [this.contactTypeOptions()[0]]);
+  readonly dialogContactType = computed(() => this.contactTypeOptions()[0]);
   createContactForm: FormGroup = this.formBuilder.group(
     SchemaUtils.getFormGroupFields([
       ...new Set([

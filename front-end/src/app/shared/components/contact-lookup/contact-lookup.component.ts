@@ -58,6 +58,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   readonly maxFecfileCommitteeResults = input(5);
   readonly maxFecfileIndividualResults = input(10);
   readonly maxFecfileOrganizationResults = input(10);
+  readonly contactTypeEnabled = input(true);
 
   readonly createNewContactSelect = output<void>();
 
@@ -77,6 +78,10 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   constructor() {
     super();
+    effect(() => {
+      if (this.contactTypeEnabled()) this.contactTypeFormControl.enable();
+      else this.contactTypeFormControl.disable();
+    });
     effect(() => {
       const ac = this.autoComplete();
       if (ac) {

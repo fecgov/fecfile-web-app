@@ -1,9 +1,4 @@
-<p-dialog
-  [(visible)]="detailVisible"
-  [style]="{ width: '90%' }"
-  [header]="headerTitle() ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
-  [modal]="true"
->
+<p-dialog [(visible)]="detailVisible" [style]="{ width: '90%' }" [header]="headerText()" [modal]="true">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
@@ -15,13 +10,14 @@
         <div class="field">
           <label for="type">CONTACT TYPE</label>
           <app-contact-lookup
-            [(contactType)]="contactType"
-            [(contact)]="current"
+            [(contactType)]="selectedContactType"
+            [contact]="contact()"
             [contactTypeOptions]="contactTypeOptions()"
             [showSearchBox]="isCandidate() || isCommittee()"
             [showCreateNewContactButton]="false"
             [includeFecfileResults]="false"
             [candidateOffice]="defaultCandidateOffice()"
+            [contactTypeEnabled]="contactTypeEnabled()"
           >
           </app-contact-lookup>
         </div>
@@ -174,7 +170,7 @@
           <p-select
             inputId="state"
             formControlName="state"
-            [options]="stateOptions"
+            [options]="stateOptions()"
             [autoDisplayFirst]="false"
             appendTo="body"
           ></p-select>
@@ -258,7 +254,7 @@
     }
   </form>
 
-  @if (showHistory() && !isNewItem) {
+  @if (showHistory() && !isNewItem()) {
     <div>
       <app-table
         title="Transaction history"
@@ -315,9 +311,9 @@
           label="Save"
           icon="pi pi-check"
           class="p-button-primary"
-          (click)="isNewItem ? saveContact() : confirmPropagation()"
+          (click)="isNewItem() ? saveContact() : confirmPropagation()"
         ></button>
-        @if (isNewItem) {
+        @if (isNewItem()) {
           <button
             type="button"
             pButton

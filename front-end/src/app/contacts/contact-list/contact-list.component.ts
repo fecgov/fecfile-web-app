@@ -64,36 +64,15 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
+  ngOnInit() {
+    this.checkForDeletedContacts();
+  }
+
   constructor() {
     super();
     effect(() => {
-      const contact = this.item();
-      if (contact.id) {
-        this.itemService.update(contact).then(() => {
-          this.loadTableItems({});
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Contact Updated',
-            life: 3000,
-          });
-        });
-      } else {
-        this.itemService.create(contact).then(() => {
-          this.loadTableItems({});
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Contact Created',
-            life: 3000,
-          });
-        });
-      }
-    })
-  }
-
-  ngOnInit() {
-    this.checkForDeletedContacts();
+      console.log(this.item());
+    });
   }
 
   public async checkForDeletedContacts() {
@@ -155,6 +134,31 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     } else {
       this.selectedItems = [];
       this.selectAll = false;
+    }
+  }
+
+  saveContact() {
+    const contact = this.item();
+    if (contact.id) {
+      this.itemService.update(contact).then(() => {
+        this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      });
+    } else {
+      this.itemService.create(contact).then(() => {
+        this.loadTableItems({});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Created',
+          life: 3000,
+        });
+      });
     }
   }
 }
