@@ -6,7 +6,7 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
   node: circleci/node@6.3.0
-  python: circleci/python@2.1.1
+  python: circleci/python@3.1.0
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -182,7 +182,7 @@ jobs:
   dependency-check:
     docker:
       - image: cimg/node:lts-browsers
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.12-node
 
     steps:
       - checkout
