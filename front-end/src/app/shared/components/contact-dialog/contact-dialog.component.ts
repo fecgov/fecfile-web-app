@@ -168,12 +168,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState
-        ? this.pagerState
-        : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+      event = this.pagerState ?? {
+        first: 0,
+        rows: this.rowsPerPage,
+      };
     }
 
     // Calculate the record page number to retrieve from the API.
@@ -183,7 +181,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     const params = this.getParams();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ?? '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
@@ -221,10 +219,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
             state: 'ZZ',
           });
           // ajv does not un-require zip when country is not USA
-          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
+          this.form.patchValue({ zip: this.form.get('zip')?.value ?? '' });
           this.form.get('state')?.disable();
         } else {
-          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
+          this.form.patchValue({ zip: this.form.get('zip')?.value ?? null });
           this.form.get('state')?.enable();
         }
       });
