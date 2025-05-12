@@ -1,28 +1,27 @@
 <div class="p-fluid">
-  <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'">
+  <div [class.transaction-contact-invalid]="errorMessageFormControl()?.status === 'INVALID'">
     <app-contact-lookup
-      [contactTypeOptions]="contactTypeOptions"
-      [candidateOffice]="mandatoryCandidateOffice"
-      [excludeFecIds]="excludeFecIds"
-      [excludeIds]="excludeIds"
-      (contactTypeSelect)="contactTypeSelected($event)"
-      (contactLookupSelect)="contactLookupSelected($event)"
-      (createNewContactSelect)="createNewContactSelected()"
+      [contactTypeOptions]="contactTypeOptions()"
+      [candidateOffice]="mandatoryCandidateOffice()"
+      [excludeFecIds]="excludeFecIds()"
+      [excludeIds]="excludeIds()"
+      [(contact)]="contact"
+      [(contactType)]="contactType"
     >
     </app-contact-lookup>
   </div>
   <app-contact-dialog
     headerTitle="Create a new contact"
-    [contactTypeOptions]="dialogContactTypeOptions"
-    [defaultCandidateOffice]="mandatoryCandidateOffice"
+    [contactTypeOptions]="[selectedOption()]"
+    [defaultCandidateOffice]="mandatoryCandidateOffice()"
     [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"
   ></app-contact-dialog>
 </div>
-@if (errorMessageFormControl) {
+@if (errorMessageFormControl()) {
   <app-error-messages
-    [control]="errorMessageFormControl"
-    [formSubmitted]="formSubmitted"
-    [requiredErrorMessage]="currentContactLabel + ' information is required'"
+    [control]="errorMessageFormControl()!"
+    [formSubmitted]="formSubmitted()"
+    [requiredErrorMessage]="currentContactLabel() + ' information is required'"
   ></app-error-messages>
 }

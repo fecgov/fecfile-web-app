@@ -19,7 +19,7 @@ export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override contact3IsRequired = true;
+  override contact3IsRequired = () => true;
   override purposeDescriptionPrefix? = 'In-kind: ';
   override synchronizeOrgComNameValues = false;
 

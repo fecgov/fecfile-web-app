@@ -39,7 +39,7 @@ export abstract class TransactionType {
   inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
-  contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
+  contact3IsRequired = (form?: FormGroup) => false; // Boolean flag to cause contact_3 required to be added to the form validation
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -179,10 +179,6 @@ export abstract class TransactionType {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
-  }
-
-  hasCommitteeOrCandidateInformation(): boolean {
-    return hasFields(this.formFields, CANDIDATE_FIELDS) || this.contact3IsRequired;
   }
 
   hasCommitteeFecId(): boolean {
